@@ -1,0 +1,13 @@
+{
+  "name": "survival-dice-builder",
+  "private": true,
+  "description": "Defend the base, build your dice, survive one more round.",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "verify": "echo \"verify gate not wired yet: phase 2 (plan/phases/phase_2_foundation.md) adds lint, typecheck, test:run, build, e2e\" && exit 1",
+    "deploy:check": "node scripts/deploy-check.mjs"
+  }
+}

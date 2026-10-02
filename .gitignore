@@ -1,1 +1,19 @@
+# secrets
 .env
+.env.local
+setup/bootstrap.local.json
+
+# deps and build output
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+.wrangler/
+
+# Windows hazard: reserved device name created by stray `> nul`
+nul
+
+# editors / OS
+.DS_Store
+Thumbs.db
