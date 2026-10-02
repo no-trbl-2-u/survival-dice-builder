@@ -159,7 +159,7 @@ iterations. Read failures with `gh run view --log-failed`.
 - Hex orientation: flat-top axial `{q, r}`, key `"q,r"` (matches brief data model).
 - Package names: `@survival/content`, `@survival/engine`, `@survival/bot`, `@survival/sim`, `@survival/web`.
 - Packages consumed from source via TS project references + Vite aliases; no publishing.
-- Router: none yet; phase 10 adds routing. `/` shows the tile with the heading "Survival Dice-Builder".
+- Router: none yet; phase 4 (`/tiles`) adds a tiny hand router. `/` shows the tile with the heading "Survival Dice-Builder".
 - Test file naming: `*.test.ts(x)` unit, `*.property.test.ts` property, `e2e/*.spec.ts` Playwright.
 - Test names start with the rule id when they test a rule: `"3.1 neighbours of a hex"`.
 - Line endings: add `.gitattributes` with `* text=auto eol=lf` (Windows dev machine).
@@ -196,4 +196,4 @@ git push origin main
 
 ## Follow-ups (out of scope this phase)
 
-- Content schemas (phase 4). Routing (phase 10). Real tokens (phase 9).
+- Content schemas (phase 4). Routing (phase 4). Real tokens (phase 10).

@@ -3,7 +3,7 @@
 > Agent-facing brief. Concise, opinionated, decisive. Ship
 > without asking; document any judgment calls in the commit
 > body. **This phase establishes the canonical structure every
-> later engine phase (6, 7, 8) mirrors.** Spend extra care here.
+> later engine phase (6, 7, 8, and the bot in 9) mirrors.** Spend extra care here.
 >
 > Source spec: `spec/phases/phase-2-engine-core.md`. Its
 > acceptance criteria are part of this phase's DoD. Rules:
@@ -20,6 +20,26 @@ applyAction(state: GameState, action: Action): { state: GameState; events: GameE
 serialize(state: GameState): string
 deserialize(text: string): GameState
 ```
+
+## Step-by-step decisions (locked in `bearings.md`)
+
+Each `Action` is one atomic choice. `legalActions` never
+enumerates combinations. For this phase:
+
+| Decision | Actions offered |
+|---|---|
+| Prepare hand | `playCard(cardId)` for each card in hand |
+| Roll step | `toggleKeep(dieIndex)` per die, `roll` (while rolls remain), `stopRolling` |
+| Card bottoms | `playCard(cardId)` for each card in hand, in the player's order |
+| Reroll effect | `chooseDie(dieIndex)` until the effect's count is used, or `done` |
+| Assign dice | `assignDie(dieIndex, skillId, slotIndex, asFace)` for each legal placement, `unassignDie(dieIndex)`, `confirmAssignment` |
+
+`asFace` is only a choice for a Star; a slot only accepts a die
+whose face (or Star) matches. Skills with every slot filled
+fire on `confirmAssignment` (7.8 step 7). Whether a card play
+or effect may be declined is an open question (rule 6.2):
+proposed reading "every card is played, optional amounts may be
+reduced to 0", behind `config.mandatoryPlays`.
 
 This phase runs one player against an abstract enemy list (no
 map). Map effects (Move, Gather, Build) emit events and change
@@ -121,10 +141,33 @@ every `violation` it returns. `unclear` items go to
 - RNG: mulberry32, seeded with the game seed; rng state = one uint32 in `GameState`.
 - Shuffle: Fisher-Yates using the engine rng.
 - Serialization: stable JSON (sorted keys) so hashes are deterministic.
-- Star assignment: when the player assigns dice, the action carries the explicit face each Star counts as; `legalActions` enumerates valid assignments (dedupe equivalent ones).
+- Star assignment: `assignDie` carries the face a Star counts as; one die and one slot per action (see "Step-by-step decisions").
 - Skill uses per Combat: once each by default; `config.skillUses = "unlimited"` flag per the rules section 18.
 - Enemy list for this phase: `state.enemies` with `{ id, kind, health }` and no hex; attacks follow the grunt (fixed 2) and elite (6 dice) rules.
 - Events are append-only in the returned `events` array; `state.log` keeps the last 200.
+
+## `/debug` engine console (apps/web)
+
+The only UI work in this phase. Plain, unstyled beyond tokens.
+
+```
+apps/web/src/router.ts               # tiny hand router (record the choice in bearings)
+apps/web/src/debug/DebugPage.tsx     # seed input + "New run", holds { state, actions[] } in useReducer
+apps/web/src/debug/ActionList.tsx    # one <button> per legalActions() entry, label from describeAction
+apps/web/src/debug/EventLog.tsx      # events newest-last, each with its rule id
+apps/web/src/debug/StateView.tsx     # round, phase, pending decision, hand, dice, Skills, health, enemies (text)
+apps/web/src/debug/describeAction.ts # Action -> short label (+ test)
+apps/web/e2e/debug.spec.ts           # seed 1: click the first legal action 30 times, no error, log grows
+```
+
+- No rule logic: the page only calls `createGame`,
+  `legalActions`, `applyAction`, `serialize`.
+- "Copy replay" button puts `{ seed, actions[] }` on the
+  clipboard (this is how golden files and bug reports get made).
+- Later engine phases extend `StateView` and `describeAction`
+  for their new state and actions; phase 6 adds a plain SVG
+  map, phase 9 adds "autoplay".
+- `/debug` stays in the shipped app as a developer tool.
 
 ## Pages × tests matrix
 
@@ -135,6 +178,7 @@ every `violation` it returns. `unclear` items go to
 | skills | canFire, assign, resolve | Star never double-counted | 3 rounds |
 | combat | exchange order, guard, heal, enemy attacks | health ≤ max | 3 rounds |
 | phases | Prepare → Combat → Explore → next round | phase sequence valid | 3 rounds |
+| `/debug` | describeAction labels | — | e2e: 30 clicks from seed 1 |
 
 ## Verify gate
 
@@ -164,10 +208,11 @@ Decisions:
 
 Spec 2 acceptance criteria pass. Flip Phase 5 in the build plan
 with the commit hash; add to "Phase log". `pnpm deploy:check`
-green (the site is unchanged, but the gate still runs).
+green and `/debug` playable on the live site.
 
 ## Follow-ups (out of scope this phase)
 
 - Map, movement, Gather/Build effects (phase 6).
 - Enemy movement, base, waves, exploration (phase 7).
 - XP, Shop, upgrades, draft, end of run (phase 8).
+- Bot policy and batch runs (phase 9).

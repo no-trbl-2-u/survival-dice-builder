@@ -84,12 +84,14 @@ Single-page app, hash-free client routing is not needed for v1.
 /play             The game screen (map, panels, hand, dice tray, Skill board, log)
 /config           Configuration panel (rules section 18 + every number in config.default.json)
 /summary          Run summary + JSON export (also reachable from /play when the run ends)
+/debug            Engine console: legal actions as buttons, event log, state inspector, seed input, autoplay (ships in phase 5; stays as a developer tool)
 /tiles            Tile sheet: the 11 proposed tile layouts as SVG (designer review, Phase 1 spec)
 /credits          Credits generated from ASSETS.md
 ```
 
 Routes are client-side (`react-router` or a 30-line hand router;
-decide in phase 2 and record it here). Cloudflare Pages gets a
+decide in phase 4, the first phase that adds a route, and
+record it here). Cloudflare Pages gets a
 `_redirects` file `/* /index.html 200` so deep links load.
 
 ## Engine API contract (locked)
@@ -107,6 +109,14 @@ deserialize(text: string): GameState
 Every `GameEvent` carries `type`, payload, and the producing
 `rule` id. RNG state lives in `GameState`; same `seed +
 actions[]` = same run.
+
+**Decisions are step-by-step.** Each `Action` is one atomic
+choice: play one card, move one hex, keep or release one die,
+roll or stop, put one die on one Skill slot (naming the face a
+Star counts as), confirm. `legalActions` never enumerates
+combinations (full dice assignments, whole move paths); the
+list stays small enough to render as buttons and for the bot
+to scan.
 
 ## Repository shape
 
@@ -134,10 +144,10 @@ Each package has a `README.md`: purpose, public API, tests.
 
 ## The `design/` folder
 
-Phase B (in loop) writes `design/ART-GUIDE.md`, SVG templates,
+Phase 10 (spec B, in loop) writes `design/ART-GUIDE.md`, SVG templates,
 and mock-ups. If the designer later drops their own exports in
 `design/`, `design/decisions.*` **wins over bearings on
-conflict**. The loop does not wait for design: Phase 5 UI ships
+conflict**. The loop does not wait for design: the UI ships
 with working tokens and integrates the art guide when it lands.
 
 ## Sub-agents
@@ -170,7 +180,9 @@ Working defaults until `design/ART-GUIDE.md` lands:
 
 - **Rule ambiguity:** never ask, never guess silently. Add to `OPEN-QUESTIONS.md` (rule id, proposed reading), implement behind a config flag defaulting to the proposed reading, continue.
 - **Known open items (from the brief), already decided:** defenses may be built on a gathering node hex (node still works); enemy target tie-break = player, then Tower, then Barricade, then base, then lowest health.
-- **Tile layouts:** the loop proposes them (Phase 1 spec) and ships them; designer review is async via `/oversight`, never a blocker.
+- **Tile layouts:** the loop proposes them (phase 4) and ships them; designer review is async via `/oversight`, never a blocker, but best done before phase 7's golden replay.
+- **3D dice:** optional, presentation only. No spike before phase 15; phase 3 does license and library research only. If the phase 15 spike fails, ship without 3D.
+- **Bot batch band (median end round 8–14):** a miss is tuning data, not a failure. File it; never change a rule or a default number to hit the band.
 - **RNG:** mulberry32, state stored in `GameState`.
 - **State hash for golden replays:** SHA-256 of `serialize(state)` (Node `crypto` in tests only; the engine never hashes).
 - **Golden replay files:** `packages/engine/test/golden/*.json` = `{ seed, config, actions[], expectedHash }`. A rule change that alters a hash updates the file in the same commit, with the reason in the commit body.
@@ -267,5 +279,5 @@ pnpm dev              # vite dev server for apps/web
 pnpm test             # vitest watch
 pnpm verify           # the full gate
 pnpm deploy:check     # post-push deploy gate
-pnpm sim -- --runs 200   # batch bot runs (Phase 7+)
+pnpm sim -- --runs 200   # batch bot runs (phase 9+)
 ```

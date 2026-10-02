@@ -28,26 +28,27 @@ Tick in this file in the same commit that ships the phase.
 - [ ] Phase 3 — Asset and library research (spec A, non-code)
 - [ ] Phase 4 — Content and data model + tile proposals (spec 1)
 
-**Headless engine (phases 5–8) — Milestone 1 at phase 8:**
-- [ ] Phase 5 — Engine core: cards, dice, Skills, phases (spec 2) — CANONICAL SIBLING
+**Headless engine (phases 5–9) — Milestone 1 at phase 8:**
+- [ ] Phase 5 — Engine core: cards, dice, Skills, phases + `/debug` engine console (spec 2) — CANONICAL SIBLING
 - [ ] Phase 6 — World I: hex map, tiles, movement, Gather/Build, defenses (spec 3, first half)
 - [ ] Phase 7 — World II: enemies, base, exploration, wave track, co-op order (spec 3, second half)
 - [ ] Phase 8 — Progression: XP, upgrades, Shop, draft, end of run, milestones (spec 4)
+- [ ] Phase 9 — Early bot + batch sanity runs (spec 7, bot half, moved up)
 
-**Playable (phases 9–11) — Milestone 2 at phase 11:**
-- [ ] Phase 9 — Art direction and placeholder art (spec B, non-code)
-- [ ] Phase 10 — Web UI I: map, player panel, hand, dice tray, Skill board, phase bar (spec 5, first half)
-- [ ] Phase 11 — Web UI II: base panel, Shop, draft, tile placement, log, run summary + export, keyboard (spec 5, second half)
+**Playable (phases 10–12) — Milestone 2 at phase 12:**
+- [ ] Phase 10 — Art direction and placeholder art (spec B, non-code)
+- [ ] Phase 11 — Web UI I: map, player panel, hand, dice tray, Skill board, phase bar (spec 5, first half)
+- [ ] Phase 12 — Web UI II: base panel, Shop, draft, tile placement, log, run summary + export, keyboard (spec 5, second half)
 
-**Playtest build (phases 12–13) — Milestone 3 at phase 13:**
-- [ ] Phase 12 — Co-op hot-seat, configuration panel, save and load (spec 6)
-- [ ] Phase 13 — Playtest tooling: bot, batch runs, timing export (spec 7)
+**Playtest build (phases 13–14) — Milestone 3 at phase 14:**
+- [ ] Phase 13 — Co-op hot-seat, configuration panel, save and load (spec 6)
+- [ ] Phase 14 — Playtest tooling: real timing export, tuning report (spec 7, remainder)
 
-**Presentable (phases 14–15) — Milestone 4 at phase 14:**
-- [ ] Phase 14 — Visual polish: icons, art, 3D dice, animation, sound (spec 8)
-- [ ] Phase 15 — Playtest protocol, survey, and analysis kit (spec C, non-code)
+**Presentable (phases 15–16) — Milestone 4 at phase 15:**
+- [ ] Phase 15 — Visual polish: icons, art, 3D dice spike + optional toggle, animation, sound (spec 8)
+- [ ] Phase 16 — Playtest protocol, survey, and analysis kit (spec C, non-code)
 
-> **After phase 15:** the loop transitions to `/iterate`.
+> **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
 > designer runs them and drops run exports in
 > `docs/playtests/runs/`. `/iterate` then fills the report.
@@ -85,11 +86,11 @@ Detailed brief: `phase_2_foundation.md`.
 Source: `spec/phases/phase-A-assets-and-libraries.md`. Non-code
 research run by `scout` + `asset-clerk`. `ASSETS.md` register,
 `assets/` folder, 6 die-face SVGs in one style, the full icon
-list, a 1-page 2D recommendation and a 1-page 3D
-recommendation in `docs/research/`, and a predetermined-face
-3D dice spike under `tools/spikes/dice3d/` (not wired into the
-app; excluded from `pnpm verify` except typecheck). Commit verb
-`docs` for research, `feat` for the spike.
+list, and a 1-page 2D recommendation plus a 1-page 3D
+recommendation (library and license research only) in
+`docs/research/`. **The 3D dice spike is deferred to phase 15**
+(decided 2026-10-02): spec A's spike acceptance criterion is
+met there, not here. Commit verb `docs`.
 
 ### Phase 4 — Content and data model + tile proposals
 
@@ -99,7 +100,9 @@ for every content kind; content JSON from Spec v1 Tables 1–9;
 flags; validating loader with file + field errors; 11 proposed
 tile layouts served at `/tiles` as an SVG sheet;
 `OPEN-QUESTIONS.md` and `RULES-COVERAGE.md` created. Designer
-review of tiles is async (files an AUDIT `[needs-user-call]`).
+review of tiles is async (files an AUDIT `[needs-user-call]`),
+but it should land before phase 7: that phase's full-run golden
+replay locks the layouts in.
 
 ### Phase 5 — Engine core (CANONICAL SIBLING)
 
@@ -107,7 +110,12 @@ Source: `spec/phases/phase-2-engine-core.md`. Seeded RNG in
 state; the five API functions; deck model and orientation;
 Prepare card plays (map effects stubbed as events); Combat
 exchange (7.8) with Star wild; phase machine; golden replay
-harness. **Establishes the template every later engine phase
+harness. Decisions are **step-by-step** (one die, one card, one
+hex per action), never a full enumeration of combinations.
+Also ships the `/debug` engine console in `apps/web`: legal
+actions as buttons, the event log, a state inspector, and a
+seed input, so every engine phase is playable (ugly) on the
+live site. **Establishes the template every later engine phase
 copies:** module layout, TSDoc `@rule` tags, rule-tagged test
 names, property-test helpers, golden replay format,
 `RULES-COVERAGE.md` rows, `rules-lawyer` review before commit.
@@ -120,7 +128,8 @@ math, tile placement, impassable lake/mountain, player movement
 with path choice, extra cost next to enemies (6.9), skirmish
 (6.10–6.13), Gather and Build on the map (6.7), Barricade and
 Tower with placement limits (section 12). Replaces phase 5's
-map stubs.
+map stubs. Movement is one hex per action. `/debug` gains a
+plain SVG map view.
 
 ### Phase 7 — World II
 
@@ -141,7 +150,23 @@ base upgrades I→III, Skill draft on even rounds, bought-card
 mode, end of run, milestones. Headless full run reaches the end
 with correct cause and milestones. **Milestone 1.**
 
-### Phase 9 — Art direction and placeholder art
+### Phase 9 — Early bot + batch sanity runs
+
+Source: `spec/phases/phase-7-playtest-tooling.md` (bot and
+batch items only). `packages/bot`: an autoplay policy that only
+uses `legalActions` (ideas from the simulator bot: gather,
+build upgrades and defenses, return to base, keep dice toward
+Skills). `tools/sim` CLI: run N seeds with a config, output
+CSV/JSON (rounds survived, cause of end, base health curve,
+enemies on map, level, Skills owned, milestones). Acceptance:
+200 bot runs on the default config finish without errors;
+median end round reported against the 8–14 band. A miss does
+**not** block or change rules: it files an AUDIT
+`[needs-user-call]` row with the distribution and an
+`OPEN-QUESTIONS.md` entry, so tuning data reaches the designer
+while the UI is being built. `/debug` gains an "autoplay" button.
+
+### Phase 10 — Art direction and placeholder art
 
 Source: `spec/phases/phase-B-art-direction.md`. Non-code.
 `design/ART-GUIDE.md` (palette tokens light + dark, type scale,
@@ -151,7 +176,7 @@ run summary) as SVG. Contrast verified by script. The
 "2 people can identify at a glance" check is a designer task,
 filed as a `[needs-user-call]` row, not a blocker.
 
-### Phase 10 — Web UI I
+### Phase 11 — Web UI I
 
 Source: `spec/phases/phase-5-web-ui.md` (first half). `/play`
 with the SVG map (pan, zoom, legal-target highlights), player
@@ -160,7 +185,7 @@ toggles and roll counter, Skill board with live can-fire
 highlight, phase bar. Every control is driven by
 `legalActions`. Playwright plays one Prepare + Combat exchange.
 
-### Phase 11 — Web UI II
+### Phase 12 — Web UI II
 
 Source: `spec/phases/phase-5-web-ui.md` (second half). Base
 panel (upgrade tracks, Shop offers), draft dialog, tile
@@ -169,31 +194,36 @@ JSON export (seed + actions, replayable), full keyboard
 operation, reduced motion. Playwright plays a full seeded solo
 run to the end. **Milestone 2.**
 
-### Phase 12 — Co-op, config, save/load
+### Phase 13 — Co-op, config, save/load
 
 Source: `spec/phases/phase-6-coop-config-save.md`. 1–4 players
 hot-seat, `/config` panel over every config value with reset,
 save/load file, `localStorage` autosave, developer undo via
 replay.
 
-### Phase 13 — Playtest tooling
+### Phase 14 — Playtest tooling (remainder)
 
-Source: `spec/phases/phase-7-playtest-tooling.md`.
-`packages/bot` policy over `legalActions`, `tools/sim` CLI
-(CSV/JSON), real wall-clock timing per phase and decision type
-in the export, config comparison report. 200-run batch median
-end round 8–14 (regression check; a miss files an AUDIT row
-and an OPEN-QUESTIONS entry, it does not change rules).
+Source: `spec/phases/phase-7-playtest-tooling.md` (items not
+shipped in phase 9). Real wall-clock timing per phase and per
+decision type in the web app's run export (sums to session
+length within 5%), and the tuning report script comparing two
+configs (median end round, middle half, minutes per round).
+Re-run the 200-run batch as the regression check.
 **Milestone 3.**
 
-### Phase 14 — Visual polish
+### Phase 15 — Visual polish
 
 Source: `spec/phases/phase-8-visual-polish.md`. Swap in
-phase 3/9 assets, `/credits` from `ASSETS.md`, optional 3D dice
-toggle (presentation only, state-hash-identical), event-driven
-animations, sound with mute. **Milestone 4.**
+phase 3/10 assets, `/credits` from `ASSETS.md`, event-driven
+animations, sound with mute. 3D dice: first the deferred spike
+(one d6 with custom faces landing on a face chosen by code,
+using the library recommended in phase 3, with frame-rate
+notes). If the spike works, ship the optional 3D toggle
+(presentation only, state-hash-identical, 2D stays default).
+If it does not, record why in `docs/research/` and ship
+without 3D; that is not a blocker. **Milestone 4.**
 
-### Phase 15 — Playtest protocol and analysis kit
+### Phase 16 — Playtest protocol and analysis kit
 
 Source: `spec/phases/phase-C-playtests.md`. Non-code where it
 can be. `docs/playtests/PROTOCOL.md` (one-page script),
