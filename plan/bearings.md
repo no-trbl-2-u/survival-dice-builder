@@ -178,7 +178,10 @@ Working defaults until `design/ART-GUIDE.md` lands:
 
 ## Decisions standing for the autonomous loop
 
-- **Rule ambiguity:** never ask, never guess silently. Add to `OPEN-QUESTIONS.md` (rule id, proposed reading), implement behind a config flag defaulting to the proposed reading, continue.
+- **Physical edition constraint.** The designer intends a physical board game. Every rule reading must be trackable with miniatures, tokens, and printed boards: no hidden counters, no fractional values, no unlimited piles on one hex, no per-hex state a player could not see. Prefer the reading a table could play.
+- **Rule ambiguity:** never ask, never guess silently. Add a row to `OPEN-QUESTIONS.md` (rule id, reading, flag, status), implement behind a config flag defaulting to that reading, continue. **Rows marked `decided` are designer rulings and bind the engine even where the Issue 005 text differs**; the spec text is being updated to match.
+- **Designer rulings (2026-10-02), in force now:** one enemy per hex with spill-over to the nearest empty hex; a blocked enemy heads for its next nearest target; 9 tiles (Broken Village + 3 countryside + 5 core), setup = base + 1 countryside, 7-tile deck; fixed tile rotation, player picks the slot; co-op Prepare alternates hands of 3; failed skirmish = stay outside, Move spent; 4 fixed starter Skills + at most 6 drafted; cards may be discarded unplayed; Shop buys any time on the base with immediate refill. Detail and flags in `OPEN-QUESTIONS.md`.
+- **Pending from the designer:** structure damage (grunt rolls 1 die; elite special rules). The engine uses the v1 text until the spec carries the new rule.
 - **Known open items (from the brief), already decided:** defenses may be built on a gathering node hex (node still works); enemy target tie-break = player, then Tower, then Barricade, then base, then lowest health.
 - **Tile layouts:** the loop proposes them (phase 4) and ships them; designer review is async via `/oversight`, never a blocker, but best done before phase 7's golden replay.
 - **3D dice:** optional, presentation only. No spike before phase 15; phase 3 does license and library research only. If the phase 15 spike fails, ship without 3D.
