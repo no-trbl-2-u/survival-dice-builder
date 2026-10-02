@@ -1,0 +1,2388 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Survival Dice-Builder Spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: technical-manual data module. Top tabs switch between the specification (index rail + reading column) and the simulator (map stage + player sidebar). */
+:root{
+  --bg:#f3f5f3; --panel:#ffffff; --fg:#17201d; --muted:#57635e; --line:#cfd6d2;
+  --accent:#1f5fbf; --accent-soft:#e3ebf8; --warn:#9a6400; --warn-soft:#fbf0d8;
+  --s1:#1f5fbf; --s2:#c47a00; --bad:#b3362b; --good:#2f7d4f;
+  --p1:#1f5fbf; --p2:#c47a00; --p3:#13806f; --p4:#7a4bb3;
+  --t-plains:#d9e6b0; --t-forest:#9cc286; --t-hills:#dcc394; --t-wasteland:#cbbfb1; --t-lake:#a4c8e6; --t-mountain:#aaa49d;
+  --t-ink:rgb(23 32 29 / .35); --tile-start:#1f5fbf; --tile-country:#3f7f32; --tile-core:#8a5a2b;
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111614; --panel:#18201d; --fg:#e3e9e6; --muted:#9aa6a1; --line:#2c3632;
+  --accent:#6ea2ff; --accent-soft:#1d2a40; --warn:#e0a83a; --warn-soft:#2e2412;
+  --s1:#4f88f0; --s2:#c4861a; --bad:#ef7a6e; --good:#6cc492;
+  --p1:#6ea2ff; --p2:#e0a83a; --p3:#4cc7b2; --p4:#b48ef0;
+  --t-plains:#46552f; --t-forest:#2e5232; --t-hills:#655232; --t-wasteland:#554b42; --t-lake:#2b4c69; --t-mountain:#4e4945;
+  --t-ink:rgb(227 233 230 / .35); --tile-start:#6ea2ff; --tile-country:#79b866; --tile-core:#c99a63; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#111614; --panel:#18201d; --fg:#e3e9e6; --muted:#9aa6a1; --line:#2c3632;
+  --accent:#6ea2ff; --accent-soft:#1d2a40; --warn:#e0a83a; --warn-soft:#2e2412;
+  --s1:#4f88f0; --s2:#c4861a; --bad:#ef7a6e; --good:#6cc492;
+  --p1:#6ea2ff; --p2:#e0a83a; --p3:#4cc7b2; --p4:#b48ef0;
+  --t-plains:#46552f; --t-forest:#2e5232; --t-hills:#655232; --t-wasteland:#554b42; --t-lake:#2b4c69; --t-mountain:#4e4945;
+  --t-ink:rgb(227 233 230 / .35); --tile-start:#6ea2ff; --tile-country:#79b866; --tile-core:#c99a63; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.6 var(--f-body);padding-inline:16px;padding-block:0 64px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.page{max-width:1240px;margin:0 auto}
+header.dm{padding:28px 0 0;display:grid;gap:12px}
+.dmc{font:500 12px/1.4 var(--f-mono);letter-spacing:.04em;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 20px}
+.dmc b{color:var(--fg);font-weight:500}
+h1{font:700 clamp(38px,6.5vw,68px)/.95 var(--f-display);text-transform:uppercase;letter-spacing:.01em;margin:0;text-wrap:balance}
+.lede{max-width:70ch;margin:0;color:var(--muted)}
+.stamp{justify-self:start;font:600 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--accent);color:var(--accent);padding:6px 10px;border-radius:2px}
+.toptabs{display:flex;gap:0;border-bottom:2px solid var(--fg);margin-top:18px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:20}
+.toptabs button{font:600 18px/1 var(--f-display);text-transform:uppercase;letter-spacing:.05em;border:0;background:none;padding:14px 18px 12px;color:var(--muted);cursor:pointer;border-bottom:4px solid transparent;margin-bottom:-2px}
+.toptabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+.wrap{display:grid;grid-template-columns:200px minmax(0,1fr);gap:40px}
+@media (max-width:900px){.wrap{grid-template-columns:minmax(0,1fr)}.rail{display:none}}
+.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 56px);align-self:start;padding-top:24px;font:13px/1.5 var(--f-mono)}
+.rail ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.rail a{display:block;padding:4px 8px;color:var(--muted);text-decoration:none;border-left:2px solid transparent}
+.rail a:hover{color:var(--fg);border-left-color:var(--accent)}
+main{min-width:0}
+section{padding:36px 0 8px;border-bottom:1px solid var(--line);display:grid;gap:16px}
+h2{font:600 30px/1.1 var(--f-display);text-transform:uppercase;letter-spacing:.02em;margin:0;display:flex;gap:14px;align-items:baseline;text-wrap:balance}
+h2 .n{font:500 14px/1 var(--f-mono);color:var(--accent)}
+h3{font:600 20px/1.2 var(--f-display);text-transform:uppercase;letter-spacing:.03em;margin:8px 0 0}
+p{margin:0;max-width:70ch}
+.ste{font:14px/1.6 var(--f-mono);background:var(--panel);border:1px solid var(--line);padding:14px 16px;display:grid;gap:4px;max-width:76ch}
+.ste .p{display:grid;grid-template-columns:3.4em minmax(0,1fr);gap:8px}
+.ste .p i{font-style:normal;color:var(--muted)}
+figure{margin:0;background:var(--panel);border:1px solid var(--line);display:grid;gap:0;min-width:0}
+figure .stage{padding:12px;overflow-x:auto}
+figcaption{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center;padding:10px 14px;border-top:1px solid var(--line);font:12px/1.4 var(--f-mono);color:var(--muted)}
+figcaption b{color:var(--fg);font-weight:500}
+svg text{font-family:var(--f-mono)}
+button,select,input[type=number]{font:500 13px/1 var(--f-mono);color:var(--fg);background:var(--bg);border:1px solid var(--line);padding:8px 10px;border-radius:3px}
+button,select{cursor:pointer}
+button:hover,select:hover{border-color:var(--accent)}
+button:disabled{opacity:.45;cursor:default}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+table{border-collapse:collapse;font-size:14px;width:100%}
+.tbl{overflow-x:auto;max-width:100%}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12px/1.3 var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px}
+.two>*{min-width:0}
+.callout{border-left:3px solid var(--warn);background:var(--warn-soft);padding:10px 14px;font-size:14px;max-width:76ch}
+.callout b{font:600 12px/1 var(--f-mono);letter-spacing:.08em;color:var(--warn);text-transform:uppercase;display:block;margin-bottom:4px}
+.callout.info{border-left-color:var(--accent);background:var(--accent-soft)}
+.callout.info b{color:var(--accent)}
+.conf{font:500 12px/1.3 var(--f-mono);color:var(--muted)}
+.conf b{color:var(--fg)}
+.rec{font:600 10px/1 var(--f-mono);letter-spacing:.08em;color:var(--good);border:1px solid var(--good);padding:2px 5px;border-radius:2px;margin-left:6px;vertical-align:middle}
+
+/* Cards */
+.cardstage{display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:center;padding:20px}
+.card{width:170px;height:238px;border:1.5px solid var(--fg);border-radius:10px;background:var(--panel);display:grid;grid-template-rows:1fr 1fr;transition:transform .9s cubic-bezier(.6,0,.3,1);position:relative}
+.card .half{display:grid;place-content:center;text-align:center;padding:10px;gap:4px}
+.card .half.top{border-bottom:1px dashed var(--line);background:linear-gradient(var(--accent-soft),transparent)}
+.card .half.bot{transform:rotate(180deg);background:linear-gradient(var(--warn-soft),transparent)}
+.card .tag{font:600 10px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.card .fx{font:600 21px/1.1 var(--f-display);text-transform:uppercase}
+.card .band{position:absolute;left:0;width:8px;height:50%}
+.card .band.t{top:0;background:var(--accent);border-radius:8px 0 0 0}
+.card .band.b{bottom:0;background:var(--warn);border-radius:0 0 0 8px}
+.card.flipped{transform:rotate(180deg)}
+.phasepill{font:600 13px/1 var(--f-mono);padding:6px 10px;border-radius:999px;border:1px solid var(--line)}
+
+/* Dice + skills */
+.dice{display:flex;flex-wrap:wrap;gap:8px}
+.die{width:52px;height:52px;border:1.5px solid var(--fg);border-radius:9px;display:grid;place-content:center;text-align:center;background:var(--panel);font:600 10px/1.1 var(--f-mono);text-transform:uppercase;letter-spacing:.03em;position:relative;color:var(--fg);padding:0}
+.die svg{width:22px;height:22px;margin:0 auto 2px}
+.die.kept{background:var(--accent-soft);border-color:var(--accent)}
+.die.kept::after{content:"KEPT";position:absolute;top:-8px;left:50%;transform:translateX(-50%);font:600 9px/1 var(--f-mono);background:var(--accent);color:var(--panel);padding:2px 4px;border-radius:2px}
+.die.blank{border-style:dashed;color:var(--muted)}
+.die.rolling{animation:spin .45s ease-out}
+.die.newdie{animation:pop .7s ease-out}
+@keyframes spin{0%{transform:rotate(-200deg) scale(.7)}100%{transform:none}}
+@keyframes pop{0%{transform:scale(.2)}60%{transform:scale(1.2)}100%{transform:none}}
+.board{display:grid;gap:6px;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr))}
+.act{border:1px solid var(--line);border-radius:4px;padding:7px 9px;display:grid;gap:1px;transition:background .3s,border-color .3s}
+.act .c{font:500 11.5px/1.3 var(--f-mono);color:var(--muted)}
+.act .e{font:600 16px/1.2 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
+.act.on{border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,transparent)}
+.act.on .c{color:var(--good)}
+.act.fire{animation:fire .6s ease-out}
+@keyframes fire{0%{background:color-mix(in srgb,var(--good) 45%,transparent)}100%{background:color-mix(in srgb,var(--good) 14%,transparent)}}
+
+/* Stepper */
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:3px;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:2.4em minmax(0,1fr);gap:8px;padding:5px 10px;border-left:3px solid transparent;color:var(--muted);transition:all .25s;font-size:14px}
+.steps li::before{content:counter(s,decimal-leading-zero);font:500 12px/1.6 var(--f-mono)}
+.steps li.cur{border-left-color:var(--accent);color:var(--fg);background:var(--accent-soft)}
+
+/* Option tabs */
+.optbar{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--line)}
+.optbar button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;padding:10px 14px;color:var(--muted);font:600 16px/1 var(--f-display);text-transform:uppercase;letter-spacing:.04em}
+.optbar button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+
+#specbody{display:grid;gap:10px}
+#specbody h2{font-size:24px;margin-top:18px}
+#specbody .ste{max-width:none}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);padding:6px 8px;font:12px/1.4 var(--f-mono);border-radius:3px;box-shadow:0 2px 8px rgb(0 0 0/.15);z-index:5}
+.chartbox{position:relative}
+
+/* ---------------- Simulator ---------------- */
+.simwrap{display:grid;gap:16px;padding-top:20px}
+.params{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:10px 14px;background:var(--panel);border:1px solid var(--line);padding:14px}
+.params label{display:grid;gap:4px;font:500 11px/1.3 var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.params select,.params input{width:100%}
+.params .hint{font:400 11px/1.3 var(--f-mono);text-transform:none;letter-spacing:0;color:var(--muted)}
+.pgroup{grid-column:1/-1;margin:6px 0 0;font:600 12px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--fg);border-bottom:1px solid var(--line);padding-bottom:6px}
+.paramact{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.simgrid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+@media (max-width:1000px){.simgrid{grid-template-columns:minmax(0,1fr)}}
+.mapfig{position:relative}
+.mapfig svg.map{display:block;width:100%;height:auto;aspect-ratio:4/3;background:var(--bg)}
+.banner{position:absolute;top:10px;left:10px;display:flex;gap:8px;align-items:center;font:600 13px/1 var(--f-mono);pointer-events:none}
+.banner .ph{padding:6px 10px;border-radius:3px;background:var(--panel);border:1.5px solid var(--fg);text-transform:uppercase;letter-spacing:.08em}
+.banner .ph.prepare{border-color:var(--accent);color:var(--accent)}
+.banner .ph.combat{border-color:var(--bad);color:var(--bad)}
+.banner .ph.explore{border-color:var(--good);color:var(--good)}
+.banner .rd{padding:6px 10px;background:var(--panel);border:1px solid var(--line);border-radius:3px}
+.toast{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font:700 26px/1.1 var(--f-display);text-transform:uppercase;letter-spacing:.04em;background:var(--panel);border:2px solid var(--fg);padding:10px 18px;border-radius:4px;pointer-events:none;animation:toast 1.4s ease-out forwards;text-align:center}
+.toast small{display:block;font:500 12px/1.3 var(--f-mono);text-transform:none;letter-spacing:0;color:var(--muted)}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-30%)}15%{opacity:1;transform:translate(-50%,-50%)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-60%)}}
+.over{position:absolute;inset:0;display:grid;place-content:center;text-align:center;background:color-mix(in srgb,var(--bg) 78%,transparent);gap:6px}
+.over b{font:700 34px/1 var(--f-display);text-transform:uppercase}
+.playbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 12px;border-top:1px solid var(--line)}
+.playbar input[type=range]{flex:1 1 200px;min-width:0;accent-color:var(--accent)}
+.side{display:grid;gap:10px;min-width:0}
+.panel{background:var(--panel);border:1px solid var(--line);padding:10px 12px;display:grid;gap:8px;min-width:0}
+.panel h4{margin:0;font:600 12px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.ptabs{display:flex;gap:4px}
+.ptabs button{padding:5px 9px;font-size:12px}
+.ptabs button[aria-pressed="true"]{border-color:var(--fg);background:var(--panel)}
+.bar{height:10px;background:var(--line);border-radius:2px;overflow:hidden;position:relative}
+.bar i{display:block;height:100%;transition:width .35s}
+.stat{display:flex;justify-content:space-between;font:500 13px/1.2 var(--f-mono);font-variant-numeric:tabular-nums}
+.res{display:flex;gap:14px;font:500 13px/1.2 var(--f-mono)}
+.res span{display:flex;gap:5px;align-items:center}
+.res .pulse{animation:pulse .6s ease-out}
+@keyframes pulse{0%{transform:scale(1.5)}100%{transform:none}}
+.hand{display:flex;gap:5px;flex-wrap:wrap}
+.mini{width:56px;height:78px;border:1.2px solid var(--fg);border-radius:6px;background:var(--panel);display:grid;grid-template-rows:1fr 1fr;font:600 8.5px/1.1 var(--f-mono);text-transform:uppercase;text-align:center;transition:transform .6s,opacity .3s;position:relative;overflow:hidden}
+.mini span{display:grid;place-content:center;padding:2px}
+.mini span:first-child{border-bottom:1px dashed var(--line);background:var(--accent-soft)}
+.mini span:last-child{transform:rotate(180deg);background:var(--warn-soft)}
+.mini.bottom{transform:rotate(180deg)}
+.mini.used{opacity:.3}
+.mini.slidein{animation:slidein .35s ease-out}
+@keyframes slidein{0%{transform:translateY(-14px);opacity:0}100%{opacity:1}}
+.mini.bottom.slidein{animation:slidein2 .35s ease-out}
+@keyframes slidein2{0%{transform:rotate(180deg) translateY(14px);opacity:0}100%{transform:rotate(180deg);opacity:1}}
+.deckw{display:flex;gap:12px;align-items:center;font:500 12px/1.3 var(--f-mono)}
+.deckw .stack{width:30px;height:42px;border:1.5px solid var(--fg);border-radius:4px;display:grid;grid-template-rows:1fr 1fr;overflow:hidden;transition:transform .8s cubic-bezier(.6,0,.3,1)}
+.deckw .stack i:first-child{background:var(--accent)}
+.deckw .stack i:last-child{background:var(--warn)}
+.deckw .stack.bottom{transform:rotate(180deg)}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font:500 11px/1.2 var(--f-mono);border:1px solid var(--line);border-radius:3px;padding:4px 6px;display:flex;gap:4px;align-items:center}
+.chip svg{width:12px;height:12px}
+.chip.on{border-color:var(--good);color:var(--good);animation:fire .6s ease-out}
+.chip.new{animation:pop .6s ease-out;border-color:var(--accent)}
+.offers{display:grid;gap:4px;font:500 12px/1.3 var(--f-mono)}
+.offers div{display:flex;justify-content:space-between;gap:8px}
+.ms{list-style:none;margin:0;padding:0;display:grid;gap:2px;font:12px/1.4 var(--f-mono);color:var(--muted)}
+.ms li.done{color:var(--fg)}
+.ms li::before{content:"○ ";color:var(--muted)}
+.ms li.done::before{content:"● ";color:var(--good)}
+.log{font:12px/1.5 var(--f-mono);display:grid;gap:1px;max-height:220px;overflow:auto}
+.log div{padding:2px 8px;color:var(--muted);border-left:2px solid transparent}
+.log div.cur{color:var(--fg);border-left-color:var(--accent);background:var(--accent-soft)}
+.tiles4{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px}
+.kpi{background:var(--panel);border:1px solid var(--line);padding:10px 12px;display:grid;gap:2px}
+.kpi span{font:500 11px/1.2 var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.kpi b{font:700 28px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.multiples{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:12px}
+.fx-float{font:700 13px/1 var(--f-mono);pointer-events:none}
+g.unit{transition:transform var(--mv,300ms) ease-in-out}
+.dropin{animation:dropin .8s ease-out}
+@keyframes dropin{0%{opacity:0;transform:translateY(-30px) scale(.85)}100%{opacity:1;transform:none}}
+.popin{animation:popin .45s ease-out}
+@keyframes popin{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
+.shake{animation:shake .5s}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.dropin,.popin,.shake{transform-box:fill-box;transform-origin:center}
+.floatup{animation:floatup 1s ease-out forwards}
+@keyframes floatup{0%{opacity:0;transform:translateY(4px)}15%{opacity:1}100%{opacity:0;transform:translateY(-16px)}}
+.fadeout{animation:fadeout .8s ease-out forwards}
+@keyframes fadeout{0%{opacity:1}100%{opacity:0}}
+.ringout{animation:ringout .8s ease-out forwards;transform-box:fill-box;transform-origin:center}
+@keyframes ringout{0%{opacity:1;transform:scale(.3)}100%{opacity:0;transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="page">
+<header class="dm">
+  <div class="dmc"><span>DMC <b>SDB-A-00-00-00-00A-040A-A</b></span><span>Issue <b>004</b></span><span>Date <b>2026-10-02</b></span><span>Players <b>1–4</b></span><span>Weight <b>BGG ~2.8</b></span><span>Run <b>60–90 min</b></span></div>
+  <h1>Survival Dice&#8209;Builder</h1>
+  <p class="lede">An open-world survival game on Mage Knight-style hex tiles. A deck of dual-use cards drives building and combat. A growing pool of custom d6 resolves Yahtzee-style Skills. You cannot win. You stay alive as long as possible.</p>
+  <span class="stamp">Written to ASD-STE100 writing rules</span>
+  <div class="callout info"><b>Spec v1 has moved on</b>This page and its simulator follow Issue 004 (locations on tiles, siege ticks). Spec v1 adds a central base, tiered base upgrades, Barricades and Towers, nearest-target enemies, and a wave track. The current rules, build brief, and phased build plan are in the <a href="https://claude.ai/code/artifact/9b522b0b-a7a2-4319-839f-239c1884a7b7">design doc</a>.</div>
+</header>
+<nav class="toptabs" role="tablist" aria-label="Page view">
+  <button role="tab" id="tt-spec" aria-controls="view-spec" aria-selected="true">Specification</button>
+  <button role="tab" id="tt-sim" aria-controls="view-sim" aria-selected="false">Visual simulator</button>
+</nav>
+
+<!-- ======================= SPECIFICATION VIEW ======================= -->
+<div id="view-spec" role="tabpanel" aria-labelledby="tt-spec">
+<div class="wrap">
+<nav class="rail" aria-label="Sections">
+  <ol>
+    <li><a href="#loop">01 Round loop</a></li>
+    <li><a href="#map">02 Map and sites</a></li>
+    <li><a href="#cards">03 Cards</a></li>
+    <li><a href="#dice">04 Dice and Skills</a></li>
+    <li><a href="#enemies">05 Enemies</a></li>
+    <li><a href="#xp">06 Experience</a></li>
+    <li><a href="#economy">07 Economy</a></li>
+    <li><a href="#forks">08 Open option</a></li>
+    <li><a href="#decisions">09 Decisions</a></li>
+    <li><a href="#spec">10 Full specification</a></li>
+  </ol>
+</nav>
+<main>
+
+<section id="loop">
+  <h2><span class="n">01</span>Round loop</h2>
+  <div class="ste">
+    <div class="p"><i>5.1</i><span>Each round has 3 phases in this sequence: Prepare, Combat, Explore.</span></div>
+    <div class="p"><i>5.3</i><span>Each round uses 2 passes through your deck.</span></div>
+    <div class="p"><i>5.4</i><span>Your deck can grow. Each new card makes Prepare longer and Combat longer.</span></div>
+  </div>
+  <figure>
+    <div class="stage">
+      <svg id="loopsvg" viewBox="0 0 720 290" width="100%" style="min-width:560px" role="img" aria-label="Round loop: Prepare, Combat, Explore, with the deck rotated 180 degrees at each phase change">
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
+        <path d="M200 110 H322" stroke="var(--muted)" stroke-width="1.5" fill="none" marker-end="url(#ah)"/>
+        <path d="M440 110 H562" stroke="var(--muted)" stroke-width="1.5" fill="none" marker-end="url(#ah)"/>
+        <path d="M600 140 V230 H120 V148" stroke="var(--muted)" stroke-width="1.5" fill="none" marker-end="url(#ah)"/>
+        <g><rect x="40" y="70" width="160" height="80" rx="6" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.5"/><text x="120" y="98" text-anchor="middle" font-size="16" font-weight="600" fill="var(--fg)">PREPARE</text><text x="120" y="118" text-anchor="middle" font-size="10.5" fill="var(--muted)">move · gather · build</text><text x="120" y="134" text-anchor="middle" font-size="10.5" fill="var(--muted)">deck pass 1 · top halves</text></g>
+        <g><rect x="280" y="70" width="160" height="80" rx="6" fill="var(--panel)" stroke="var(--bad)" stroke-width="1.5"/><text x="360" y="98" text-anchor="middle" font-size="16" font-weight="600" fill="var(--fg)">COMBAT</text><text x="360" y="118" text-anchor="middle" font-size="10.5" fill="var(--muted)">refill · advance · roll</text><text x="360" y="134" text-anchor="middle" font-size="10.5" fill="var(--muted)">deck pass 2 · bottom halves</text></g>
+        <g><rect x="520" y="70" width="160" height="80" rx="6" fill="var(--panel)" stroke="var(--good)" stroke-width="1.5"/><text x="600" y="98" text-anchor="middle" font-size="16" font-weight="600" fill="var(--fg)">EXPLORE</text><text x="600" y="118" text-anchor="middle" font-size="10.5" fill="var(--muted)">siege tick · new tile</text><text x="600" y="134" text-anchor="middle" font-size="10.5" fill="var(--muted)">rotate deck back</text></g>
+        <text x="261" y="98" text-anchor="middle" font-size="10" fill="var(--muted)">deck empty</text>
+        <text x="501" y="98" text-anchor="middle" font-size="10" fill="var(--muted)">deck empty</text>
+        <text x="360" y="252" text-anchor="middle" font-size="10" fill="var(--muted)">round + 1 · new tile adds spawn nodes</text>
+        <g id="hordeDots"></g>
+        <g id="deckTok"><rect x="-14" y="-20" width="28" height="40" rx="4" fill="var(--panel)" stroke="var(--fg)" stroke-width="1.5"/><rect x="-14" y="-20" width="28" height="20" rx="4" fill="var(--accent)" opacity=".85"/><rect x="-14" y="0" width="28" height="20" rx="4" fill="var(--warn)" opacity=".85"/></g>
+        <text id="roundLbl" x="20" y="18" font-size="13" fill="var(--fg)">ROUND 1</text>
+        <text id="phaseLbl" x="700" y="18" text-anchor="end" font-size="13" fill="var(--muted)">deck: top halves up</text>
+      </svg>
+    </div>
+    <figcaption><span><b>Fig. 1</b> The deck token travels the loop and turns 180° at each phase change. Spawn nodes (red) grow as tiles are revealed.</span><button id="loopToggle" aria-pressed="true">Pause</button></figcaption>
+  </figure>
+</section>
+
+<section id="map">
+  <h2><span class="n">02</span>Map and sites</h2>
+  <div class="ste">
+    <div class="p"><i>3.1</i><span>Each map tile has 7 hexes: 1 center hex and 6 outer hexes.</span></div>
+    <div class="p"><i>3.2</i><span>A countryside tile has a green back. A core tile has a brown back.</span></div>
+    <div class="p"><i>3.4</i><span>Figures and enemies cannot enter a lake hex or a mountain hex.</span></div>
+    <div class="p"><i>6.7</i><span>Build: Pay the materials on the reference card. Turn the broken location to its built side.</span></div>
+  </div>
+  <figure>
+    <div class="stage"><svg id="mapDemo" class="map" viewBox="0 0 400 300" style="min-width:460px;width:100%;display:block" role="img" aria-label="Setup map: Start tile and 2 countryside tiles with terrain, gathering nodes, broken locations, and spawn nodes"></svg></div>
+    <figcaption><span><b>Fig. 2</b> Setup map, as in Mage Knight: the Start tile plus 2 countryside tiles. The Start tile holds a broken Shop and a broken Training Ground. The Shop is built and broken again every few seconds.</span><span class="row" id="mapLegend"></span></figcaption>
+  </figure>
+  <div class="two">
+    <div class="tbl"><table><thead><tr><th>Site</th><th>Function</th></tr></thead><tbody>
+      <tr><td>Portal</td><td>Start position</td></tr>
+      <tr><td>Gathering node</td><td>Gather: +2 materials</td></tr>
+      <tr><td>Broken location</td><td>Build with materials (reference card)</td></tr>
+      <tr><td>Spawn node</td><td>Holds 1 grunt; refills when it dies</td></tr>
+      <tr><td>Elite spawn node</td><td>Core tiles only; holds 1 elite</td></tr>
+    </tbody></table></div>
+    <div class="tbl"><table><thead><tr><th>Reference card</th><th>Cost</th><th>Function</th></tr></thead><tbody>
+      <tr><td>Shop</td><td class="num">4</td><td>3 cards, 3 currency each</td></tr>
+      <tr><td>Training Ground</td><td class="num">3</td><td>Hosts the Skill draft every 2nd round. 1 starts on the Start tile</td></tr>
+    </tbody></table></div>
+  </div>
+  <p class="conf">Tile model from Mage Knight: 7-hex tiles, green-back countryside tiles, brown-back core tiles placed after them, and site reference cards beside the board. Sources: <a href="https://www.ultraboardgames.com/mage-knight/game-elements.php">UltraBoardGames, Mage Knight game elements</a>; <a href="https://unofficialmageknighttheboardgame.fandom.com/wiki/Map_tiles">Unofficial Mage Knight wiki, Map tiles</a>.</p>
+</section>
+
+<section id="cards">
+  <h2><span class="n">03</span>Cards</h2>
+  <div class="ste">
+    <div class="p"><i>2.6</i><span>Each card has 2 halves. The top half is the Prepare effect.</span></div>
+    <div class="p"><i>2.7</i><span>The bottom half is upside down. The bottom half is the Combat effect.</span></div>
+    <div class="p"><i>7.2</i><span>Turn the deck 180 degrees. The bottom halves are now up.</span></div>
+  </div>
+  <figure>
+    <div class="cardstage" id="cardstage"></div>
+    <figcaption><span><b>Fig. 3</b> The 4 starter card types (10 cards). Colored edge bands show a card that is in the wrong orientation after a shuffle.</span><span class="row"><span class="phasepill" id="cardPhase">Prepare: top halves up</span><button id="flipBtn">Rotate deck</button></span></figcaption>
+  </figure>
+  <div class="two">
+    <div class="tbl"><table><thead><tr><th>Qty</th><th>Starter card</th><th>Top</th><th>Bottom</th></tr></thead><tbody id="starterRows"></tbody></table></div>
+    <div class="tbl"><table><thead><tr><th>Shop card</th><th>Top</th><th>Bottom</th></tr></thead><tbody id="shopRows"></tbody></table></div>
+  </div>
+</section>
+
+<section id="dice">
+  <h2><span class="n">04</span>Dice and Skills</h2>
+  <div class="ste">
+    <div class="p"><i>2.4</i><span>The Star face is wild. A Star counts as any one face of your choice.</span></div>
+    <div class="p"><i>7.7.3</i><span>Keep the dice that you want. Roll the other dice again.</span></div>
+    <div class="p"><i>7.7.6</i><span>Put dice on your Skills. Use each die 1 time only. Use each Skill 1 time only.</span></div>
+  </div>
+  <figure>
+    <div class="stage" style="display:grid;gap:14px">
+      <div class="row">
+        <label for="diceN" class="conf">Dice in pool</label>
+        <select id="diceN"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option><option>6</option><option>7</option><option>8</option></select>
+        <button class="primary" id="rollBtn">Roll</button>
+        <button id="resetBtn">New exchange</button>
+        <span class="conf" id="rollInfo">Roll 1 of 3</span>
+      </div>
+      <div class="dice" id="diceTray"></div>
+      <div class="board" id="skillBoard"></div>
+    </div>
+    <figcaption><span><b>Fig. 4</b> Select a die to keep it. Green Skills can fire with the current roll (Star wild). Starter Skills plus all Skills in the draft supply are shown.</span></figcaption>
+  </figure>
+  <div class="two">
+    <figure>
+      <div class="stage" style="display:grid;gap:12px">
+        <div class="row">
+          <label for="pAct" class="conf">Skill</label><select id="pAct"></select>
+          <label for="pN" class="conf">Dice</label><select id="pN"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option><option>6</option><option>7</option><option>8</option><option>10</option><option>12</option></select>
+        </div>
+        <div style="font:700 56px/1 var(--f-display)" id="pOut">–</div>
+        <div class="conf" id="pNote">Monte Carlo, 20,000 runs</div>
+      </div>
+      <figcaption><span><b>Fig. 5</b> Probability that one exchange (3 rolls, greedy keep, Star wild) fires the Skill.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="stage"><ol class="steps" id="steps"></ol></div>
+      <figcaption><span><b>Fig. 6</b> Combat exchange sequence (7.7)</span><button id="stepToggle" aria-pressed="true">Pause</button></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="enemies">
+  <h2><span class="n">05</span>Enemies</h2>
+  <div class="ste">
+    <div class="p"><i>9.2</i><span>A spawn node gets a new enemy only when its enemy is defeated.</span></div>
+    <div class="p"><i>7.4</i><span>Each enemy moves 2 hexes toward the nearest player or built location.</span></div>
+    <div class="p"><i>6.11</i><span>Enemies are obstacles in the Prepare phase.</span></div>
+    <div class="p"><i>10.1</i><span>Siege: Each enemy next to a built location gives 1 damage to that location.</span></div>
+    <div class="p"><i>6.12</i><span>Skirmish: If you move into a hex with an enemy, a skirmish starts.</span></div>
+  </div>
+  <figure>
+    <div class="stage"><svg id="enemyDemo" viewBox="0 0 640 230" width="100%" style="min-width:520px" role="img" aria-label="Enemy life cycle: refill, advance, siege, skirmish"></svg></div>
+    <figcaption><span><b>Fig. 7</b> Enemy life cycle across one round: refill on the spawn node, advance, siege tick on the Shop, then a skirmish in the next Prepare phase.</span><button id="enemyToggle" aria-pressed="true">Pause</button></figcaption>
+  </figure>
+  <div class="tbl"><table><thead><tr><th>Enemy</th><th>Health</th><th>Dice</th><th>Spawns on</th><th>XP (all players)</th><th>Currency (killer)</th></tr></thead><tbody>
+    <tr><td>Grunt</td><td class="num">2</td><td class="num">2</td><td>Spawn nodes, countryside and core tiles</td><td class="num">1</td><td class="num">1</td></tr>
+    <tr><td>Elite</td><td class="num">8</td><td class="num">4</td><td>Elite spawn nodes, core tiles only</td><td class="num">4</td><td class="num">4</td></tr>
+  </tbody></table></div>
+  <p class="conf">Enemy die: Sword, Wand, Bow = 1 damage; Star = 2; Shield, Blank = 0. Expected 0.83 damage per die. Miniature limit: 20.</p>
+</section>
+
+<section id="xp">
+  <h2><span class="n">06</span>Experience</h2>
+  <div class="ste">
+    <div class="p"><i>8.1</i><span>Each defeated enemy gives experience to all players.</span></div>
+    <div class="p"><i>8.4</i><span>At each new level, each player gets 1 action die. There is no maximum.</span></div>
+    <div class="p"><i>8.5</i><span>Each threshold is higher than the last.</span></div>
+  </div>
+  <div class="tbl"><table><thead><tr><th>Level</th><th>Total XP needed</th><th>Dice per player</th><th>Grunts to reach</th></tr></thead><tbody id="xpRows"></tbody></table></div>
+  <div class="callout"><b>Simulator finding</b>Escalation comes only from tiles, and the tile deck runs out. Dice have no cap. In the default settings, a player who survives past the last tile usually survives to the round limit. Use the simulator's comparison to see the effect.</div>
+</section>
+
+<section id="economy">
+  <h2><span class="n">07</span>Economy</h2>
+  <figure>
+    <div class="stage">
+      <svg viewBox="0 0 720 280" width="100%" style="min-width:560px" role="img" aria-label="Economy flow: gathering nodes give materials for locations; kills give currency for offers and experience for dice">
+        <style>.flow{stroke-dasharray:6 6;animation:dash 1.2s linear infinite}@keyframes dash{to{stroke-dashoffset:-12}}</style>
+        <g font-size="12" fill="var(--fg)">
+          <rect x="20" y="30" width="130" height="46" rx="5" fill="var(--panel)" stroke="var(--line)"/><text x="85" y="58" text-anchor="middle">Gathering nodes</text>
+          <rect x="210" y="30" width="120" height="46" rx="5" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="270" y="58" text-anchor="middle">Materials</text>
+          <rect x="390" y="12" width="150" height="34" rx="5" fill="var(--panel)" stroke="var(--accent)"/><text x="465" y="34" text-anchor="middle">Build Shop · 4</text>
+          <rect x="390" y="58" width="150" height="34" rx="5" fill="var(--panel)" stroke="var(--accent)"/><text x="465" y="80" text-anchor="middle">Build Training · 3 → draft</text>
+          <rect x="20" y="150" width="130" height="46" rx="5" fill="var(--panel)" stroke="var(--bad)"/><text x="85" y="178" text-anchor="middle">Enemy defeated</text>
+          <rect x="210" y="124" width="120" height="40" rx="5" fill="var(--warn-soft)" stroke="var(--warn)"/><text x="270" y="149" text-anchor="middle">Currency (killer)</text>
+          <rect x="210" y="186" width="120" height="40" rx="5" fill="var(--panel)" stroke="var(--good)"/><text x="270" y="211" text-anchor="middle">XP (all players)</text>
+          <rect x="390" y="124" width="150" height="40" rx="5" fill="var(--panel)" stroke="var(--warn)"/><text x="465" y="149" text-anchor="middle">Offers at built sites</text>
+          <rect x="390" y="186" width="150" height="40" rx="5" fill="var(--panel)" stroke="var(--good)"/><text x="465" y="211" text-anchor="middle">Level up</text>
+          <rect x="590" y="110" width="120" height="30" rx="5" fill="var(--panel)" stroke="var(--line)"/><text x="650" y="130" text-anchor="middle">Cards · 3</text>
+          <rect x="590" y="148" width="120" height="30" rx="5" fill="var(--panel)" stroke="var(--line)"/><text x="650" y="168" text-anchor="middle">Skills · 3–12</text>
+          <rect x="590" y="191" width="120" height="30" rx="5" fill="var(--panel)" stroke="var(--line)"/><text x="650" y="211" text-anchor="middle">+1 die each</text>
+        </g>
+        <g fill="none" stroke-width="2">
+          <path class="flow" d="M150 53 H210" stroke="var(--accent)"/>
+          <path class="flow" d="M330 53 C360 53 360 29 390 29" stroke="var(--accent)"/>
+          <path class="flow" d="M330 53 C360 53 360 75 390 75" stroke="var(--accent)"/>
+          <path class="flow" d="M465 92 V124" stroke="var(--muted)"/>
+          <path class="flow" d="M150 173 C180 173 180 144 210 144" stroke="var(--warn)"/>
+          <path class="flow" d="M150 173 C180 173 180 206 210 206" stroke="var(--good)"/>
+          <path class="flow" d="M330 144 H390" stroke="var(--warn)"/>
+          <path class="flow" d="M330 206 H390" stroke="var(--good)"/>
+          <path class="flow" d="M540 144 C565 144 565 125 590 125" stroke="var(--warn)"/>
+          <path class="flow" d="M540 144 C565 144 565 163 590 163" stroke="var(--warn)"/>
+          <path class="flow" d="M540 206 H590" stroke="var(--good)"/>
+          <path class="flow" d="M85 150 V110 H465 V92" stroke="var(--bad)" stroke-dasharray="2 5" opacity=".7"/>
+        </g>
+        <g font-size="10" fill="var(--muted)"><text x="180" y="46" text-anchor="middle">Gather</text><text x="360" y="22" text-anchor="middle">Build</text><text x="475" y="112">reveal 3</text><text x="200" y="104">siege breaks locations</text><text x="360" y="137" text-anchor="middle">Buy</text></g>
+      </svg>
+    </div>
+    <figcaption><span><b>Fig. 8</b> Three flows. Prepare pays materials. Kills pay currency to the killer and XP to everyone. Siege pushes built locations back to broken.</span></figcaption>
+  </figure>
+</section>
+
+<section id="forks">
+  <h2><span class="n">08</span>Open option: exploration</h2>
+  <p>This decision is deferred to the simulator. Each tab extrapolates one rule over 12 rounds. The Visual simulator runs the full game with each rule.</p>
+  <div class="optbar" role="tablist" aria-label="Exploration options" id="optbar"></div>
+  <div id="optpanels"></div>
+</section>
+
+<section id="decisions">
+  <h2><span class="n">09</span>Decisions</h2>
+  <div class="tbl"><table><thead><tr><th>Topic</th><th>Decision</th></tr></thead><tbody id="decRows"></tbody></table></div>
+  <h3>Values I filled in</h3>
+  <p>Starting points for the simulator. Confidence is 0 to 100: 0 is a guess, 100 is a fact.</p>
+  <div class="tbl"><table><thead><tr><th>Item</th><th>Value</th><th>Basis</th><th>Conf.</th></tr></thead><tbody id="blankRows"></tbody></table></div>
+  <div class="callout"><b>Source note</b>Game comparisons come from training knowledge (cutoff June 2026) except the Mage Knight tile details, which come from the sources in section 02.</div>
+</section>
+
+<section id="spec">
+  <h2><span class="n">10</span>Full specification</h2>
+  <div id="specbody"></div>
+</section>
+</main>
+</div>
+</div>
+
+<!-- ======================= SIMULATOR VIEW ======================= -->
+<div id="view-sim" role="tabpanel" aria-labelledby="tt-sim" hidden>
+<div class="simwrap">
+  <div class="callout info"><b>How to read this</b>A bot plays one run with the rules above. Every step is animated: card plays, movement, gathering, building, spawns, enemy movement, dice rolls, Skills, siege ticks, skirmishes, level-ups, and new tiles. The bot plays simply, so the run shows the shape of the game, not its balance.</div>
+  <form class="params" id="params" autocomplete="off">
+    <h4 class="pgroup">Run</h4>
+    <label>Exploration rule<select id="pRule"><option value="forced">A · Forced reveal</option><option value="optional">B · Optional, nodes deplete</option><option value="auto">C · Automatic reveal</option></select></label>
+    <label>Players<select id="pPlayers"><option>1</option><option>2</option><option>3</option><option>4</option></select></label>
+    <label>Seed<input type="number" id="pSeed" value="13" min="1" max="99999"><span class="hint">Same seed, same run</span></label>
+    <label>Round limit<input type="number" id="pMax" value="30" min="5" max="60"></label>
+    <h4 class="pgroup">Enemies and world</h4>
+    <label>Spawn nodes per countryside tile<select id="pSpawn"><option>1</option><option>2</option><option>3</option></select></label>
+    <label>Enemy speed (hexes)<select id="pSpeed"><option>1</option><option selected>2</option><option>3</option></select></label>
+    <label>Grunt health / dice<span class="row" style="flex-wrap:nowrap"><input type="number" id="pGH" value="2" min="1" max="9" aria-label="Grunt health"><input type="number" id="pGD" value="2" min="1" max="6" aria-label="Grunt dice"></span></label>
+    <label>Elite health / dice<span class="row" style="flex-wrap:nowrap"><input type="number" id="pEH" value="14" min="2" max="30" aria-label="Elite health"><input type="number" id="pED" value="6" min="1" max="10" aria-label="Elite dice"></span></label>
+    <label>Miniature limit<input type="number" id="pCap" value="20" min="5" max="60"></label>
+    <label>Countryside / core tiles<span class="row" style="flex-wrap:nowrap"><input type="number" id="pCT" value="5" min="2" max="20" aria-label="Countryside tiles"><input type="number" id="pCoT" value="5" min="0" max="12" aria-label="Core tiles"></span><span class="hint">Core tiles bring elites</span></label>
+    <h4 class="pgroup">Player growth</h4>
+    <label>XP step per level<input type="number" id="pXp" value="5" min="1" max="10"><span class="hint">Level L needs L × step more</span></label>
+    <label>Max level<input type="number" id="pMaxLvl" value="0" min="0" max="30"><span class="hint">0 = no cap. Each level = 1 die</span></label>
+    <label>Free Skill draft every N rounds<input type="number" id="pDraft" value="2" min="0" max="20"><span class="hint">0 = off. Each draft: see 2, keep 1</span></label>
+    <label>Draft needs a built Training Ground<select id="pHost"><option value="yes" selected>Yes (default)</option><option value="no">No</option></select></label>
+    <label>Training Ground Skill sales<select id="pPrice"><option value="0" selected>Off (default: no Skill sales)</option><option value="1">×1 base price</option><option value="2">×2</option><option value="3">×3</option><option value="4">×4</option></select></label>
+    <label>Bought cards<select id="pDeck"><option value="add" selected>Add to deck (default)</option><option value="replace">Replace a starter card</option></select><span class="hint">Replace keeps the deck at its start size</span></label>
+    <label>Skill uses per exchange<select id="pUses"><option value="once">Once (spec)</option><option value="unlimited">Unlimited</option></select></label>
+    <h4 class="pgroup">Streamlining and time</h4>
+    <label>Starter deck / hand size<select id="pStarter"><option value="10/5">10 cards / hand 5</option><option value="8/4">8 cards / hand 4</option><option value="6/3" selected>6 cards / hand 3 (default)</option></select></label>
+    <label>Quick Prepare<select id="pQuick"><option value="yes" selected>On: no shuffle before Prepare</option><option value="no">Off</option></select></label>
+    <label>Grunt damage<select id="pFixed"><option value="yes" selected>Fixed (no dice for grunts)</option><option value="no">Rolled</option></select></label>
+    <label>Tile sites<select id="pPrinted"><option value="yes" selected>Printed on tiles</option><option value="no">Placed as tokens</option></select></label>
+    <label>Skip Combat with no enemy near<select id="pSkip"><option value="no" selected>Off</option><option value="yes">On</option></select></label>
+    <label>Reveal tiles every N rounds<select id="pExEvery"><option selected>1</option><option>2</option></select></label>
+    <label>Enemy leash<select id="pLeash"><option value="0" selected>Off</option><option value="3">3 hexes</option><option value="4">4 hexes</option><option value="5">5 hexes</option></select><span class="hint">Far enemies do not move</span></label>
+    <label>Table speed<select id="pTable"><option value="0.75">Fast (experienced)</option><option value="1" selected>Normal</option><option value="1.3">Slow (first play)</option></select><span class="hint">Scales the time estimate</span></label>
+    <label>Setup minutes<input type="number" id="pSetup" value="8" min="0" max="60"></label>
+    <div class="paramact">
+      <button type="submit" class="primary" id="runBtn">Run simulation</button>
+      <button type="button" id="seedBtn">New seed</button>
+      <button type="button" id="cmpBtn">Compare 3 exploration rules (20 runs each)</button>
+      <button type="button" id="leverBtn">Measure time levers (20 runs each)</button>
+      <button type="button" id="resetBtn2">Reset to defaults</button>
+      <span class="conf" id="runInfo"></span>
+    </div>
+  </form>
+
+  <div class="simgrid">
+    <figure class="mapfig">
+      <div style="position:relative">
+        <svg class="map" id="simMap" viewBox="-200 -150 400 300" role="img" aria-label="Simulated map"></svg>
+        <div class="banner"><span class="ph" id="bPhase">Setup</span><span class="rd" id="bRound">Round 1</span><span class="rd" id="bClock">≈ 8 min at the table</span></div>
+        <div id="fxHtml"></div>
+      </div>
+      <div class="playbar">
+        <button id="bBack" aria-label="Step back">◀︎</button>
+        <button id="bPlay" class="primary" aria-pressed="false">Play</button>
+        <button id="bFwd" aria-label="Step forward">▶︎</button>
+        <label class="conf" for="bSpeed">Speed</label>
+        <select id="bSpeed"><option value="0.5">0.5×</option><option value="1">1×</option><option value="2" selected>2×</option><option value="4">4×</option><option value="8">8×</option><option value="20">20×</option></select>
+        <label class="conf" for="bRoundSel">Round</label><select id="bRoundSel"></select>
+        <input type="range" id="bScrub" min="0" max="0" value="0" aria-label="Event position">
+        <span class="conf" id="bPos">0 / 0</span>
+      </div>
+      <div class="panel" style="border:0;border-top:1px solid var(--line)"><h4>Event log</h4><div class="log" id="simLog"></div></div>
+    </figure>
+
+    <div class="side" id="side">
+      <div class="panel"><h4><span>Player</span><span class="ptabs" id="pTabs"></span></h4>
+        <div class="stat"><span>Health</span><span id="sHp">15 / 15</span></div><div class="bar"><i id="sHpBar" style="background:var(--good);width:100%"></i></div>
+        <div class="stat"><span>Level <b id="sLvl">1</b> · XP</span><span id="sXp">0 / 3</span></div><div class="bar"><i id="sXpBar" style="background:var(--accent);width:0"></i></div>
+        <div class="res"><span id="sMat">◆ 0 materials</span><span id="sCur">● 0 currency</span><span id="sGuard"></span></div>
+      </div>
+      <div class="panel"><h4><span>Deck</span><span id="sDeckLbl">top halves up</span></h4>
+        <div class="deckw"><div class="stack" id="sStack"><i></i><i></i></div><span id="sDeck">Deck 10 · Discard 0</span></div>
+        <div class="hand" id="sHand"></div>
+      </div>
+      <div class="panel"><h4><span>Dice</span><span id="sDiceN">1 die</span></h4><div class="dice" id="sDice"></div></div>
+      <div class="panel"><h4><span>Skills</span><span id="sSkillN"></span></h4><div class="chips" id="sSkills"></div></div>
+      <div class="panel"><h4><span>Offers at built locations</span></h4><div class="offers" id="sOffers"></div></div>
+      <div class="panel"><h4><span>Milestones</span></h4><ul class="ms" id="sMs"></ul></div>
+    </div>
+  </div>
+
+  <div class="tiles4" id="kpis"></div>
+  <div class="multiples" id="simCharts"></div>
+  <div id="cmpOut"></div>
+  <div id="leverOut"></div>
+</div>
+</div>
+</div>
+
+<script type="text/markdown" id="specmd"># Survival Dice-Builder — Rules Specification (ASD-STE100), Issue 004
+
+Writing standard: ASD-STE100 writing rules. Game terms are technical names.
+Procedural sentences: 20 words maximum. Descriptive sentences: 25 words maximum.
+
+## 1 General
+
+1.1 This specification gives the rules for the game.
+1.2 The players cannot win the game. The players try to stay alive for as many rounds as possible.
+1.3 Milestones show the progress of a run. Section 15 gives the milestones.
+1.4 The game is for 1 to 4 players. Sections 1 to 13 give the rules for 1 player.
+1.5 Section 14 gives the changes for 2 to 4 players.
+1.6 A run is 60 to 90 minutes. No item stays from one run to the next run.
+
+## 2 Components
+
+2.1 Each player has these components:
+- 1 player board with Skill slots.
+- 1 figure.
+- 1 health track. The maximum health is 15.
+- 1 action die (d6) at the start.
+- 6 starter cards.
+
+2.2 The shared components are:
+- Map tiles: 1 Start tile, countryside tiles, and core tiles.
+- 1 reference card for each location type.
+- Enemy miniatures: grunts and elites. The limit is 20 miniatures.
+- 1 experience track.
+- Materials, currency, and damage tokens.
+- The card supply and the Skill supply.
+
+2.3 Each action die has 6 faces: Sword, Wand, Bow, Shield, Star, and Blank.
+2.4 The Star face is wild. A Star counts as any one face of your choice.
+2.5 The Blank face has no effect.
+2.6 Each card has 2 halves. The top half is the Prepare effect.
+2.7 The bottom half is upside down. The bottom half is the Combat effect.
+
+## 3 Map tiles
+
+3.1 Each map tile has 7 hexes: 1 center hex and 6 outer hexes.
+3.2 A countryside tile has a green back. A core tile has a brown back.
+3.3 Each hex has a terrain: plains, forest, hills, wasteland, lake, or mountain.
+3.4 Figures and enemies cannot enter a lake hex or a mountain hex.
+3.5 A hex can have 1 site. Table 1 gives the sites.
+3.6 The sites are printed on the tiles. Only the miniatures are put on the map.
+
+Table 1 — Sites
+
+| Site | Function |
+| --- | --- |
+| Portal | Start position on the Start tile |
+| Gathering node | Gives materials (Gather effect) |
+| Broken location | Becomes a location when you build it |
+| Spawn node | Holds 1 grunt |
+| Elite spawn node | Holds 1 elite. Only on core tiles |
+
+## 4 Setup
+
+4.1 Put the Start tile in the center of the table.
+4.1.1 The Start tile has 1 broken Shop and 1 broken Training Ground.
+4.2 Shuffle 5 countryside tiles. Put 5 shuffled core tiles below them. This stack is the tile deck.
+4.3 Put 2 countryside tiles adjacent to the Start tile.
+4.4 Put 1 enemy on each spawn node.
+4.5 Put your figure on the portal.
+4.6 Get 1 action die.
+4.7 Shuffle your 6 starter cards. Put them face down with the top half up. This stack is your deck.
+4.8 Set your health to 15.
+4.9 Put the 4 starter Skills on your player board (Table 3).
+4.10 Set the experience track to 0. Set the level to 1.
+4.11 Set the round counter to 1.
+
+Table 2 — Starter cards (6)
+
+| Quantity | Top half (Prepare) | Bottom half (Combat) |
+| --- | --- | --- |
+| 2 | Move 2 | Reroll 1 die |
+| 2 | Gather | +1 damage |
+| 1 | Build | +2 guard |
+| 1 | Rest: heal 2 | Reroll all dice |
+
+Table 3 — Starter Skills
+
+| Skill | Faces | Effect |
+| --- | --- | --- |
+| Strike | Sword | 2 damage, range 1 |
+| Shot | Bow | 1 damage, range 2 |
+| Mend | Wand | Heal 1 |
+| Guard | Shield | 2 guard |
+
+## 5 Round sequence
+
+5.1 Each round has 3 phases in this sequence: Prepare, Combat, Explore.
+5.2 Your deck sets the length of the Prepare phase and the Combat phase.
+5.3 Each round uses 2 passes through your deck.
+5.4 Your deck can grow. Each new card makes Prepare longer and Combat longer.
+
+## 6 Prepare phase
+
+6.1 Draw 3 cards from your deck.
+6.2 Play the top half of each card. Do the effect.
+6.3 Put each played card in your discard pile.
+6.4 When your hand is empty, draw 3 cards again.
+6.5 If your deck has fewer than 3 cards, draw all the cards.
+6.6 When your deck is empty and your hand is empty, the Prepare phase stops.
+
+6.7 Top-half effects:
+- Move: Move your figure the number of hexes that the card shows.
+- Gather: Get the materials that the gathering node on your hex gives.
+- Build: Pay the materials on the reference card. Turn the broken location to its built side.
+- Rest: Heal the quantity that the card shows.
+
+6.8 When you build a Shop, reveal 3 card offers next to it.
+6.9 If your figure is on a built location, you can buy its offers. Buying does not use a card.
+6.10 A built Shop sells cards. A built Training Ground hosts the Skill draft (Section 11).
+
+6.11 Enemies are obstacles in the Prepare phase:
+- You cannot gather or build on a hex that has an enemy.
+- A move into a hex next to an enemy costs 2 hexes.
+
+6.12 Skirmish: If you move into a hex with an enemy, a skirmish starts.
+6.13 In a skirmish, roll your dice 1 time. Use only your Skills. Do not use cards.
+6.14 Then each enemy in that hex attacks 1 time.
+6.15 If all enemies in that hex are defeated, move your figure into the hex.
+
+## 7 Combat phase
+
+7.1 Shuffle your discard pile.
+7.2 Turn the deck 180 degrees. The bottom halves are now up.
+7.3 Put 1 enemy on each spawn node whose enemy was defeated.
+7.4 Each enemy moves 2 hexes toward the nearest player or built location.
+7.5 An enemy stops when it is next to a player or a built location.
+7.6 Do combat exchanges until your deck is empty.
+
+7.7 For each combat exchange, do these steps in sequence:
+1. Draw 3 cards.
+2. Roll all your action dice.
+3. Keep the dice that you want. Roll the other dice again.
+4. Do step 3 one more time if necessary. The maximum is 3 rolls.
+5. Play the bottom half of the cards in your hand.
+6. Put dice on your Skills. Use each die 1 time only. Use each Skill 1 time only.
+7. Do the Skills that have all their faces.
+8. Each enemy next to you attacks (Section 9.4).
+9. Apply the enemy damage to your guard first. Apply the remaining damage to your health.
+10. Remove all guard. Put the played cards in your discard pile.
+
+7.8 If no enemy is within 2 hexes, discard your hand. The exchange has no effect.
+7.9 When your deck is empty and your hand is empty, the Combat phase stops.
+
+## 8 Experience and levels
+
+8.1 Each defeated enemy gives experience to all players.
+8.2 The player who defeats the enemy also gets currency (Table 5).
+8.3 When the experience track reaches the next threshold, the level increases by 1.
+8.4 At each new level, each player gets 1 action die. There is no maximum.
+8.5 Each threshold is higher than the last. Level 2 needs 5 experience. Each next level needs 5 more than the last step.
+
+## 9 Enemies
+
+9.1 Enemies stay on the map until a player defeats them.
+9.2 A spawn node gets a new enemy only when its enemy is defeated.
+9.3 New tiles add new spawn nodes. Core tiles add elite spawn nodes.
+9.4 Enemy attack: Each grunt gives 2 damage. Do not roll dice for grunts.
+9.5 Each elite rolls the dice that Table 5 shows. Table 4 gives the result of each die.
+
+Table 4 — Enemy die results
+
+| Face | Result |
+| --- | --- |
+| Sword, Wand, Bow | 1 damage |
+| Star | 2 damage |
+| Shield, Blank | No damage |
+
+Table 5 — Enemies
+
+| Enemy | Health | Dice | Experience | Currency |
+| --- | --- | --- | --- | --- |
+| Grunt | 2 | 0 (2 damage, fixed) | 1 | 1 |
+| Elite | 14 | 6 | 4 | 4 |
+
+## 10 Explore phase
+
+10.1 Siege: Each enemy next to a built location gives 1 damage to that location.
+10.2 A built location has 3 health. At 0 health, turn it to its broken side.
+10.3 Return its offers to the supply. You must pay the full cost to build it again.
+10.4 Reveal 1 map tile. The selected design option gives the rule (Section 16).
+10.5 Put 1 enemy on each spawn node of the new tile.
+10.6 Turn your discard pile 180 degrees. Do not shuffle it. The top halves are now up.
+10.7 This pile is your deck for the next Prepare phase.
+10.8 Add 1 to the round counter.
+10.9 Examine the milestones (Section 15). Record each new milestone.
+
+## 11 Locations
+
+Table 6 — Reference cards
+
+| Location | Build cost (materials) | Function |
+| --- | --- | --- |
+| Shop | 4 | 3 card offers. Each card costs 3 currency. |
+| Training Ground | 3 | Hosts the Skill draft. It does not sell Skills. |
+
+11.1 When you buy a card, replace it with the next card from the supply.
+11.2 Skill draft: At the end of each 2nd round, examine the Training Grounds.
+11.3 If no Training Ground is built, there is no draft.
+11.4 If a Training Ground is built, each player looks at the top 2 Skills of the Skill supply.
+11.5 Keep 1 Skill. It is free. Put the other Skill at the bottom of the supply.
+
+## 12 Cards and Skills
+
+Table 7 — Shop cards
+
+| Card | Top half | Bottom half |
+| --- | --- | --- |
+| Sprint | Move 3 | Reroll 2 dice |
+| Haul | Gather +2 | +2 damage |
+| Mason | Build, cost −1 | +3 guard |
+| Scout | Move 2 | +1 die for this exchange |
+| Bandage | Rest: heal 3 | Heal 2 |
+| Forage | Gather +1 | Heal 1 |
+
+Table 8 — Skill supply (draft)
+
+| Skill | Faces | Effect |
+| --- | --- | --- |
+| Cleave | Sword x2 | 5 damage, range 1 |
+| Bulwark | Shield x2 | 5 guard |
+| Renewal | Wand x2 | Heal 3 |
+| Aimed Shot | Bow x2 | 3 damage, range 2 |
+| Spellblade | Sword + Wand | 4 damage, range 1 |
+| Dodge | Shield + Wand | Ignore 1 enemy hit |
+| Spark Burst | Wand + Bow | 1 damage to each enemy, range 2 |
+| Volley | Bow x3 | 2 damage to each enemy, range 2 |
+| Flurry | Sword x3 | 9 damage, range 1 |
+| Fortress | Shield x3 | 8 guard |
+| Purify | Wand x3 | Heal 6 |
+| Phalanx | Sword x2 + Shield x2 | 7 damage, range 1 |
+| Arcane Rain | Wand x3 + Bow x2 | 4 damage to each enemy, range 2 |
+
+## 13 End of the run
+
+13.1 If your health is 0, the run stops.
+13.2 Record the round number and the milestones.
+
+## 14 Changes for 2 to 4 players
+
+14.1 Each player has a deck, dice, and a player board.
+14.2 All players share the experience track. All players get dice at the same time.
+14.3 All hands are open. Players can discuss all cards.
+14.4 Reveal 1 map tile for each player in the Explore phase.
+14.5 If the health of one player is 0, the run stops for all players.
+
+## 15 Milestones
+
+- Survive to round 5.
+- Survive to round 10.
+- Survive to round 15.
+- Defeat an elite.
+- Fire Arcane Rain.
+- Build 3 locations.
+- Reveal 10 tiles.
+- Reach level 5.
+
+## 16 Design options (open)
+
+16.A Run target: A typical solo run ends in rounds 10 to 12. 12 rounds take about 90 minutes.
+
+16.B Options that the simulator tests. They are off in these rules:
+- Max level: Stop the level at a maximum. Experience still counts.
+- Skip Combat: A player with no enemy within 2 hexes does not do the Combat phase.
+- Slow exploration: Reveal tiles every 2 rounds.
+- Enemy leash: An enemy more than 4 hexes from all players and locations does not move.
+
+16.0 Bought cards. The current rule is Option A. The simulator compares both options.
+- Option A, Add: Put each bought card in your discard pile. Your deck grows by 1.
+- Option B, Replace: Put each bought card in your discard pile. Remove 1 starter card from your deck or discard pile.
+
+16.1 Exploration. The simulator compares these options.
+- Option A, Forced reveal: In each Explore phase, reveal 1 tile. You choose where the tile goes.
+- Option B, Optional reveal: You can reveal 1 tile. A gathering node gives materials 2 times. Then it is empty.
+- Option C, Automatic reveal: Turn the top tile of the tile deck. Roll a die to select the edge.
+</script>
+<script>
+/* =====================================================================
+   SIMULATION ENGINE
+   ---------------------------------------------------------------------
+   simulate(params) -> { events, rounds, summary, world }
+   - Deterministic: the same params (including seed) give the same run.
+   - The run state is private to one simulate() call. Each emitted event
+     carries an immutable snapshot of the visible state, so the renderer
+     can jump to any event without replaying.
+   - Bot players use simple, readable heuristics. The goal is to show
+     how a run unfolds, not to play optimally.
+   ===================================================================== */
+const SIM = (() => {
+
+  /* ---------- Random numbers (mulberry32) ---------- */
+  /** makeRng(seed) -> () => number in [0,1). Deterministic. */
+  const makeRng = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const pick = (r, arr) => arr[Math.floor(r() * arr.length)];
+  /** shuffle(r, arr) -> new shuffled array (Fisher–Yates). */
+  const shuffle = (r, arr) => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+  /* ---------- Hex math (axial coordinates [q, r]) ---------- */
+  const DIRS = [[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
+  const add = (a, b) => [a[0] + b[0], a[1] + b[1]];
+  const key = h => h[0] + "," + h[1];
+  const unkey = k => k.split(",").map(Number);
+  const dist = (a, b) => (Math.abs(a[0]-b[0]) + Math.abs(a[1]-b[1]) + Math.abs(a[0]+a[1]-b[0]-b[1])) / 2;
+  /** A Mage Knight-style tile is a 7-hex "flower": a center hex plus its 6 neighbors. */
+  const FLOWER = [[0,0], ...DIRS];
+  /** Tile centers sit on a lattice; these 6 offsets are the neighboring tile slots (each 3 hexes away). */
+  const TILE_DIRS = [[2,1],[3,-2],[1,-3],[-2,-1],[-3,2],[-1,3]];
+
+  /* ---------- Content definitions (kept deliberately simple) ---------- */
+  /** Die faces. Star is wild. */
+  const FACES = ["Sword","Wand","Bow","Shield","Star","Blank"];
+  /** Enemy die result per face. */
+  const ENEMY_HIT = { Sword:1, Wand:1, Bow:1, Star:2, Shield:0, Blank:0 };
+
+  /**
+   * Cards: every card has a top (Prepare) half and a bottom (Combat) half.
+   * top.k: move | gather | build | rest      bot.k: reroll | rerollAll | dmg | guard | heal | tempDie
+   */
+  const CARDS = {
+    move:    { name:"Trek",     top:{k:"move",   n:2, label:"Move 2"},          bot:{k:"reroll",   n:1, label:"Reroll 1 die"} },
+    gather:  { name:"Harvest",  top:{k:"gather", n:0, label:"Gather"},          bot:{k:"dmg",      n:1, label:"+1 damage"} },
+    build:   { name:"Repair",   top:{k:"build",  n:0, label:"Build"},           bot:{k:"guard",    n:2, label:"+2 guard"} },
+    rest:    { name:"Camp",     top:{k:"rest",   n:2, label:"Rest: heal 2"},    bot:{k:"rerollAll",n:0, label:"Reroll all"} },
+    sprint:  { name:"Sprint",   top:{k:"move",   n:3, label:"Move 3"},          bot:{k:"reroll",   n:2, label:"Reroll 2 dice"} },
+    haul:    { name:"Haul",     top:{k:"gather", n:2, label:"Gather +2"},       bot:{k:"dmg",      n:2, label:"+2 damage"} },
+    mason:   { name:"Mason",    top:{k:"build",  n:1, label:"Build, cost −1"},  bot:{k:"guard",    n:3, label:"+3 guard"} },
+    scout:   { name:"Scout",    top:{k:"move",   n:2, label:"Move 2"},          bot:{k:"tempDie",  n:1, label:"+1 die"} },
+    bandage: { name:"Bandage",  top:{k:"rest",   n:3, label:"Rest: heal 3"},    bot:{k:"heal",     n:2, label:"Heal 2"} },
+    forage:  { name:"Forage",   top:{k:"gather", n:1, label:"Gather +1"},       bot:{k:"heal",     n:1, label:"Heal 1"} }
+  };
+  const STARTER = ["move","move","move","move","gather","gather","gather","build","build","rest"];
+  /** starterDeck(n) — 10 = full list; 8 drops 1 Trek + 1 Harvest; 6 drops 2 Treks + 1 Harvest + 1 Repair. Pure. */
+  const starterDeck = n => n >= 10 ? [...STARTER] : n >= 8 ? ["move","move","move","gather","gather","build","build","rest"] : ["move","move","gather","gather","build","rest"];
+  const SHOP_POOL = ["sprint","sprint","haul","haul","mason","mason","scout","scout","bandage","bandage","forage","forage"];
+
+  /**
+   * Skills (formerly movesets): fire when the roll contains the needed faces.
+   * dmg = single target, aoe = every enemy in range, guard = block, heal, cancel = ignore N enemy hits.
+   */
+  const SKILLS = {
+    strike:  { name:"Strike",      need:{Sword:1},        dmg:2, range:1, cost:0 },
+    shot:    { name:"Shot",        need:{Bow:1},          dmg:1, range:2, cost:0 },
+    mend:    { name:"Mend",        need:{Wand:1},         heal:1,         cost:0 },
+    guard:   { name:"Guard",       need:{Shield:1},       guard:2,        cost:0 },
+    cleave:  { name:"Cleave",      need:{Sword:2},        dmg:5, range:1, cost:4 },
+    bulwark: { name:"Bulwark",     need:{Shield:2},       guard:5,        cost:4 },
+    renewal: { name:"Renewal",     need:{Wand:2},         heal:3,         cost:4 },
+    dodge:   { name:"Dodge",       need:{Shield:1,Wand:1},cancel:1,       cost:3 },
+    volley:  { name:"Volley",      need:{Bow:3},          aoe:2, range:2, cost:7 },
+    flurry:  { name:"Flurry",      need:{Sword:3},        dmg:9, range:1, cost:7 },
+    rain:    { name:"Arcane Rain", need:{Wand:3,Bow:2},   aoe:4, range:2, cost:12 },
+    aimed:   { name:"Aimed Shot",  need:{Bow:2},          dmg:3, range:2, cost:4 },
+    blade:   { name:"Spellblade",  need:{Sword:1,Wand:1}, dmg:4, range:1, cost:4 },
+    spark:   { name:"Spark Burst", need:{Wand:1,Bow:1},   aoe:1, range:2, cost:5 },
+    fortress:{ name:"Fortress",    need:{Shield:3},       guard:8,        cost:7 },
+    purify:  { name:"Purify",      need:{Wand:3},         heal:6,         cost:7 },
+    phalanx: { name:"Phalanx",     need:{Sword:2,Shield:2},dmg:7, range:1, cost:10 }
+  };
+  const STARTER_SKILLS = ["strike","shot","mend","guard"];
+  const TRAIN_POOL = ["cleave","bulwark","renewal","dodge","volley","flurry","rain","aimed","blade","spark","fortress","purify","phalanx"];
+
+  /** Locations start broken. The reference card gives the build cost (materials). */
+  const LOCATIONS = { shop:{ name:"Shop", cost:4 }, train:{ name:"Training Ground", cost:5 } };
+  const LOC_HP = 3;
+  const ENEMIES = { grunt:{ name:"Grunt", hp:2, dice:1, xp:1, coin:1 }, elite:{ name:"Elite", hp:6, dice:3, xp:4, coin:4 } };
+
+  /** Terrain. Lake and mountain block movement (as in Mage Knight). */
+  const TERRAIN_W = {
+    start:   { plains:4, forest:2, hills:1 },
+    country: { plains:4, forest:3, hills:2, wasteland:1, lake:1, mountain:1 },
+    core:    { wasteland:3, hills:2, mountain:2, forest:1, plains:1, lake:1 }
+  };
+  const BLOCKED = new Set(["lake","mountain"]);
+  const weighted = (r, w) => { const tot = Object.values(w).reduce((a,b)=>a+b,0); let x = r()*tot; for (const [k,v] of Object.entries(w)) { x -= v; if (x < 0) return k; } return Object.keys(w)[0]; };
+
+  /* ---------- Default parameters ---------- */
+  const DEFAULTS = {
+    seed: 7, players: 1, maxRounds: 25,
+    exploreRule: "forced",          // forced | optional | auto
+    startDice: 1, startHp: 15, handSize: 3,   // tuned 2026-10-02: 6-card starter, hand of 3
+    countryTiles: 5, coreTiles: 5,            // core tiles (elites) arrive around rounds 6–10
+    spawnPerCountry: 1,             // grunt spawn nodes per countryside tile
+    enemySpeed: 2,                  // hexes per Combat phase
+    enemyCap: 20,                   // miniature limit
+    xpBase: 5,                      // level L→L+1 needs xpBase × L more XP
+    startTraining: true,            // true = the Start tile also has a broken Training Ground
+    trainCost: 3, locHp: 3,         // Training Ground build cost; health of every built location
+    maxLevel: 0,                    // highest level (0 = no cap). XP still counts after the cap
+    offers: 3,                      // offers revealed when a location is built
+    nodeYield: 2, nodeCharges: 2,   // charges only matter for the optional rule
+    skillUses: "once",              // once | unlimited (per exchange)
+    skillDraftEvery: 2,             // every N rounds each player drafts 1 Skill for free (0 = off)
+    draftChoices: 2,                // Skills shown in each draft
+    draftNeedsTraining: true,       // true = the draft only happens while a Training Ground is built
+    deckMode: "add",                // add = bought cards join the deck | replace = each bought card replaces a starter card
+    tableSpeed: 1,                  // time multiplier: 0.75 fast table, 1 normal, 1.3 slow / first play
+    setupMinutes: 8,                // table setup before round 1
+    /* ---- Streamlining rules (each is a rule change, measured by the time model) ---- */
+    quickPrepare: true,             // Prepare: turn the Combat discard pile upright with no shuffle
+    skipEmptyCombat: false,         // a player with no enemy within 2 hexes skips Combat (no shuffle, no exchanges)
+    fixedGruntDamage: true,         // grunts deal fixed damage (no dice); only elites roll
+    starterSize: 6,                 // 10, 8 or 6 starter cards
+    exploreEvery: 1,                // reveal tiles every N rounds
+    printedSites: true,             // tiles have printed sites: placing a tile is faster (time model only)
+    enemyLeash: 0,                  // enemies farther than N hexes from every player and built location do not move (0 = off)
+    skillPriceMult: 0,              // multiplier on Training Ground prices (rounded up)
+    gruntHp: 2, gruntDice: 2,       // enemy strength
+    eliteHp: 14, eliteDice: 6,
+    snapshots: true                 // false = fast batch mode (no events)
+  };
+
+  /* ===================================================================
+     WORLD GENERATION
+     =================================================================== */
+  /**
+   * makeTile(r, kind, num, center, p) -> { tile, hexes }
+   * Places terrain and sites on 7 hexes. At most 1 blocked hex, never the center.
+   */
+  const makeTile = (r, kind, num, center, p, siteSeq) => {
+    const cells = FLOWER.map(off => add(center, off));
+    let blockedUsed = 0;
+    const terr = cells.map((h, i) => {
+      let t = weighted(r, TERRAIN_W[kind]);
+      if (BLOCKED.has(t) && (i === 0 || blockedUsed >= 1)) t = kind === "core" ? "wasteland" : "plains";
+      if (BLOCKED.has(t)) blockedUsed++;
+      return t;
+    });
+    const open = shuffle(r, cells.map((h,i)=>i).filter(i => !BLOCKED.has(terr[i]) && i !== 0));
+    const sites = {};
+    const take = () => open.shift();
+    if (kind === "start") {
+      sites[0] = { type:"portal" };
+      sites[take()] = { type:"node" }; sites[take()] = { type:"node" };
+      sites[take()] = { type:"loc", kind:"shop" };
+      if (p.startTraining) sites[take()] = { type:"loc", kind:"train" };
+    } else if (kind === "country") {
+      sites[0] = siteSeq.loc ? { type:"loc", kind: siteSeq.loc } : { type:"node" };
+      const nodes = r() < 0.5 ? 2 : 1;
+      for (let i = 0; i < nodes && open.length; i++) sites[take()] = { type:"node" };
+      for (let i = 0; i < p.spawnPerCountry && open.length; i++) sites[take()] = { type:"spawn", elite:false };
+    } else {
+      sites[0] = { type:"spawn", elite:true };
+      sites[take()] = { type:"node" };
+      sites[take()] = { type:"spawn", elite:false };
+      if (siteSeq.loc && open.length) sites[take()] = { type:"loc", kind: siteSeq.loc };
+    }
+    const hexes = cells.map((h, i) => ({ h, terrain: terr[i], tile: num, site: sites[i] || null }));
+    return { tile: { num, kind, center }, hexes };
+  };
+
+  /* ===================================================================
+     SIMULATION
+     =================================================================== */
+  const simulate = (userParams = {}) => {
+    const p = { ...DEFAULTS, ...userParams };
+    const r = makeRng(p.seed);
+    /** locCost(kind) — build cost from the reference card (Training Ground cost is a parameter). */
+    const locCost = kind => kind === "train" ? p.trainCost : LOCATIONS[kind].cost;
+    /** Enemy stats for this run (parameters override the defaults). */
+    const EN = { grunt: { ...ENEMIES.grunt, hp: p.gruntHp, dice: p.gruntDice }, elite: { ...ENEMIES.elite, hp: p.eliteHp, dice: p.eliteDice } };
+    const events = [], rounds = [];
+
+    /* ---- Run state (private to this call) ---- */
+    const world = { tiles: [], hexes: {} };          // static terrain, grows as tiles are revealed
+    const S = {
+      round: 1, phase: "setup", sites: {}, enemies: [], players: [],
+      xp: 0, level: 1, nextLevelAt: p.xpBase, kills: 0, eliteKills: 0, builds: 0,
+      milestones: [], over: false, cause: "", tileDeck: [], cardDeck: [], skillDeck: [],
+      nextId: 1, tilesShown: 0, firedRain: false, seconds: p.setupMinutes * 60 * p.tableSpeed
+    };
+    const uid = () => S.nextId++;
+
+    /* ---- Snapshot + event emission ---- */
+    const snapshot = () => ({
+      round: S.round, phase: S.phase, tilesShown: S.tilesShown,
+      sites: JSON.parse(JSON.stringify(S.sites)),
+      enemies: S.enemies.map(e => ({ ...e, h:[...e.h] })),
+      players: S.players.map(pl => ({ id: pl.id, h:[...pl.h], hp: pl.hp, maxHp: pl.maxHp, materials: pl.materials, currency: pl.currency,
+        dice: pl.dice, skills: [...pl.skills], hand: [...pl.hand], deckN: pl.deck.length, discardN: pl.discard.length,
+        orient: pl.orient, faces: [...pl.faces], kept: [...pl.kept], guard: pl.guard, played: [...pl.played] })),
+      xp: S.xp, level: S.level, nextLevelAt: S.nextLevelAt, kills: S.kills, milestones: [...S.milestones], seconds: Math.round(S.seconds)
+    });
+    /** emit(type, payload, log) — records one animation step. */
+    /**
+     * TIME MODEL — estimated seconds a real table spends on each step (normal speed).
+     * Assumptions, not measurements: tune with playtest timings. Pure.
+     */
+    const TIME = {
+      phase: 8,           // announce the phase, reset the table
+      shuffle: e => e.shuffled ? 22 : 6,  // shuffle + rotate the deck, or only rotate it
+      skipCombat: 3,
+      draw: 6, play: 12,  // draw a hand; read and resolve one card half
+      move: 4, gather: 6, build: 25, buy: 30, heal: 3, waste: 3, idle: 3,
+      tile: () => p.printedSites ? 35 : 60,  // place a tile, set out its sites
+      spawn: 6,           // put a miniature on a spawn node
+      advance: e => 3 * e.enemies.length,              // move each miniature 1 hex
+      roll: 8, keep: 4,
+      assign: 20,         // put dice on Skills
+      skill: 5, kill: 6,
+      enemyAttack: e => 4 + 2 * e.rolls.reduce((t, x) => t + x.faces.length, 0) + (e.fixed ? 2 : 0), // gather and read enemy dice
+      skirmish: 20, siege: 6, broken: 15, levelup: 10, milestone: 0,
+      draft: 40, replace: 10, quiet: 4, skipReveal: 10, capped: 2, noTiles: 2, death: 0, end: 0
+    };
+    const timeFor = (type, payload) => { const t = TIME[type]; return (typeof t === "function" ? t(payload) : (t || 0)) * p.tableSpeed; };
+    /** emit(type, payload, log) — adds the step's table time, then records one animation step. */
+    const emit = (type, payload = {}, log = "") => { S.seconds += timeFor(type, payload); if (p.snapshots) events.push({ type, ...payload, log, snap: snapshot() }); };
+
+    /* ---- World helpers ---- */
+    const hexAt = h => world.hexes[key(h)];
+    const passable = h => { const x = hexAt(h); return !!x && !BLOCKED.has(x.terrain); };
+    const neighbors = h => DIRS.map(d => add(h, d)).filter(passable);
+    const enemiesAt = h => S.enemies.filter(e => e.h[0] === h[0] && e.h[1] === h[1]);
+    const builtLocs = () => Object.entries(S.sites).filter(([,s]) => s.type === "loc" && s.built).map(([k,s]) => ({ k, h: unkey(k), s }));
+
+    /** revealTile(center, kind) — adds a tile, its sites, and spawns its enemies at once. */
+    const revealTile = (center, kind, num, siteSeq, reason) => {
+      const { tile, hexes } = makeTile(r, kind, num, center, p, siteSeq);
+      world.tiles.push(tile);
+      hexes.forEach(x => { world.hexes[key(x.h)] = { h: x.h, terrain: x.terrain, tile: x.tile, kind };
+        if (x.site) S.sites[key(x.h)] = { ...x.site, id: uid(), hp: x.site.type === "loc" ? 0 : undefined,
+          built: x.site.type === "loc" ? false : undefined, charges: x.site.type === "node" ? p.nodeCharges : undefined,
+          enemyId: null, offers: [] }; });
+      S.tilesShown = world.tiles.length;
+      emit("tile", { tile: num, center }, reason || `Tile ${num} (${kind}) is revealed.`);
+      hexes.filter(x => x.site && x.site.type === "spawn").forEach(x => spawnAt(key(x.h), "spawn"));
+    };
+
+    /** spawnAt(siteKey) — puts an enemy on a spawn node if the miniature limit allows. */
+    const spawnAt = (k, why) => {
+      const s = S.sites[k];
+      if (S.enemies.length >= p.enemyCap) { emit("capped", { k }, "Miniature limit reached. No spawn."); return; }
+      const def = s.elite ? EN.elite : EN.grunt;
+      const e = { id: uid(), h: unkey(k), hp: def.hp, maxHp: def.hp, elite: !!s.elite, node: k };
+      S.enemies.push(e); s.enemyId = e.id;
+      emit("spawn", { enemy: e.id, k, why }, `${def.name} ${why === "refill" ? "respawns" : "spawns"} on its spawn node.`);
+    };
+
+    /** Open tile slots adjacent to the current map. */
+    const openSlots = () => {
+      const used = new Set(world.tiles.map(t => key(t.center)));
+      const slots = new Map();
+      world.tiles.forEach(t => TILE_DIRS.forEach(d => { const c = add(t.center, d); if (!used.has(key(c))) slots.set(key(c), c); }));
+      return [...slots.values()];
+    };
+
+    /* ---- Pathing ---- */
+    /**
+     * bfsPath(from, goalFn, opts) -> array of hexes (excluding from) or null.
+     * Player cost: entering a hex next to an enemy costs 2 (obstacle rule). Enemy hexes cannot be entered.
+     */
+    const bfsPath = (from, goalFn, opts = {}) => {
+      const startK = key(from), cost = { [startK]: 0 }, prev = {}, frontier = [[0, from]];
+      while (frontier.length) {
+        frontier.sort((a,b) => a[0]-b[0]);
+        const [c, h] = frontier.shift();
+        if (goalFn(h) && key(h) !== startK) { const path = []; let k = key(h); while (k !== startK) { path.unshift(unkey(k)); k = prev[k]; } return path; }
+        for (const n of neighbors(h)) {
+          const nk = key(n);
+          if (opts.player && enemiesAt(n).length && !goalFn(n)) continue;
+          const step = opts.player && S.enemies.some(e => dist(e.h, n) === 1) ? 2 : 1;
+          if (cost[nk] === undefined || c + step < cost[nk]) { cost[nk] = c + step; prev[nk] = key(h); frontier.push([c + step, n]); }
+        }
+      }
+      return null;
+    };
+    const stepCost = n => S.enemies.some(e => dist(e.h, n) === 1) ? 2 : 1;
+
+    /* ---- Experience ---- */
+    /** gainXp(n) — shared track. Each level adds 1 die to every player. Thresholds rise each level. */
+    const gainXp = n => {
+      S.xp += n;
+      while (S.xp >= S.nextLevelAt && (!p.maxLevel || S.level < p.maxLevel)) {
+        S.level++; S.nextLevelAt += p.xpBase * S.level;
+        S.players.forEach(pl => pl.dice++);
+        emit("levelup", { level: S.level }, `Level ${S.level}. Each player gets 1 more die.`);
+        milestone("level5", S.level >= 5, "Reach level 5");
+      }
+    };
+    const milestone = (id, cond, label) => { if (cond && !S.milestones.includes(label)) { S.milestones.push(label); emit("milestone", { label }, `Milestone: ${label}.`); } };
+
+    /** killEnemy(e, pl) — removes the enemy; its node can refill next Combat. Killer gets currency; everyone gets XP. */
+    const killEnemy = (e, pl) => {
+      S.enemies = S.enemies.filter(x => x.id !== e.id);
+      const def = e.elite ? EN.elite : EN.grunt;
+      if (S.sites[e.node]) S.sites[e.node].enemyId = null;
+      pl.currency += def.coin; S.kills++; if (e.elite) S.eliteKills++;
+      emit("kill", { enemy: e.id, h: e.h, player: pl.id, coin: def.coin }, `${def.name} defeated. +${def.coin} currency, +${def.xp} XP.`);
+      gainXp(def.xp);
+      milestone("elite", S.eliteKills >= 1, "Defeat an elite");
+    };
+
+    /* ---- Dice and Skills ---- */
+    const rollFace = () => FACES[Math.floor(r() * 6)];
+    const countFaces = faces => faces.reduce((m, f) => (m[f] = (m[f] || 0) + 1, m), {});
+    /** canFire(pool, need) — pool is face counts. Stars cover missing faces. Pure. */
+    const canFire = (pool, need) => { const miss = Object.entries(need).reduce((s,[f,n]) => s + Math.max(0, n - (pool[f]||0)), 0); return miss <= (pool.Star||0); };
+    /** consume(pool, need) -> new pool with exact faces used first, then Stars. Pure. */
+    const consume = (pool, need) => { const q = { ...pool }; Object.entries(need).forEach(([f,n]) => { const use = Math.min(n, q[f]||0); q[f] = (q[f]||0) - use; q.Star -= (n - use); }); return q; };
+
+    /** skillValue(id, ctx) — how much the bot wants this skill right now. */
+    const skillValue = (id, ctx) => {
+      const s = SKILLS[id];
+      if (s.dmg) return ctx.inRange[s.range] > 0 ? Math.min(s.dmg, ctx.hpInRange[s.range]) + 0.1 : 0;
+      if (s.aoe) return ctx.countInRange[2] * Math.min(s.aoe, 2) + 0.2;
+      if (s.guard) return Math.min(s.guard, ctx.incoming) * 0.9;
+      if (s.heal) return Math.min(s.heal, ctx.missing) * 0.8;
+      if (s.cancel) return ctx.incoming > 0 ? 1.2 : 0;
+      return 0;
+    };
+    /** assign(faces, skills, ctx) -> list of skill ids to fire (greedy by value). Pure. */
+    const assign = (faces, skills, ctx) => {
+      let pool = countFaces(faces); const fired = [];
+      const order = [...skills].sort((a,b) => skillValue(b,ctx) - skillValue(a,ctx));
+      for (const id of order) {
+        if (skillValue(id, ctx) <= 0) continue;
+        let uses = 0;
+        while (canFire(pool, SKILLS[id].need) && (p.skillUses === "unlimited" || uses === 0) && uses < 4) { pool = consume(pool, SKILLS[id].need); fired.push(id); uses++; }
+      }
+      return fired;
+    };
+    /** keepMask(faces, skills, ctx) — keep dice used by the current best assignment, plus dice toward the best missing skill. */
+    const keepMask = (faces, skills, ctx) => {
+      const fired = assign(faces, skills, ctx);
+      const want = {};
+      fired.forEach(id => Object.entries(SKILLS[id].need).forEach(([f,n]) => want[f] = (want[f]||0) + n));
+      const goal = [...skills].filter(id => !fired.includes(id) && Object.values(SKILLS[id].need).reduce((a,b)=>a+b,0) <= faces.length)
+        .sort((a,b) => skillValue(b,ctx) - skillValue(a,ctx))[0];
+      if (goal) Object.entries(SKILLS[goal].need).forEach(([f,n]) => want[f] = (want[f]||0) + n);
+      return faces.map(f => { if (f === "Star") return true; if ((want[f]||0) > 0) { want[f]--; return true; } return false; });
+    };
+
+    /** combatCtx(pl) — what the bot knows when it rolls. */
+    const combatCtx = (pl, enemies) => {
+      const inR = rng => enemies.filter(e => dist(e.h, pl.h) <= rng);
+      const adj = inR(1);
+      return { inRange: { 1: inR(1).length, 2: inR(2).length }, hpInRange: { 1: inR(1).reduce((s,e)=>s+e.hp,0), 2: inR(2).reduce((s,e)=>s+e.hp,0) },
+        countInRange: { 2: inR(2).length }, incoming: adj.reduce((s,e)=>s + (e.elite?EN.elite.dice:EN.grunt.dice)*0.83, 0), missing: pl.maxHp - pl.hp };
+    };
+
+    /**
+     * fireSkills(pl, fired, bonus, enemies) — applies damage/guard/heal. Returns { cancel }.
+     * Single-target damage goes to the weakest enemy in range so kills happen early.
+     */
+    const fireSkills = (pl, fired, bonus, label) => {
+      let cancel = 0, dmgBonus = bonus.dmg || 0;
+      for (const id of fired) {
+        const s = SKILLS[id];
+        if (s.dmg) {
+          const targets = S.enemies.filter(e => dist(e.h, pl.h) <= s.range).sort((a,b) => a.hp - b.hp);
+          if (!targets.length) continue;
+          const t = targets[0]; const d = s.dmg + dmgBonus; dmgBonus = 0; t.hp -= d;
+          emit("skill", { player: pl.id, skill: id, target: t.id, amount: d }, `${label}${s.name} hits for ${d}.`);
+          if (t.hp <= 0) killEnemy(t, pl);
+        } else if (s.aoe) {
+          const targets = S.enemies.filter(e => dist(e.h, pl.h) <= s.range);
+          if (id === "rain") { S.firedRain = true; milestone("rain", true, "Fire Arcane Rain (full house)"); }
+          targets.forEach(t => t.hp -= s.aoe);
+          emit("skill", { player: pl.id, skill: id, targets: targets.map(t=>t.id), amount: s.aoe }, `${label}${s.name} hits ${targets.length} enemies for ${s.aoe}.`);
+          targets.filter(t => t.hp <= 0).forEach(t => killEnemy(t, pl));
+        } else if (s.guard) { pl.guard += s.guard; emit("skill", { player: pl.id, skill: id, amount: s.guard }, `${label}${s.name}: +${s.guard} guard.`); }
+        else if (s.heal) { const h = Math.min(s.heal, pl.maxHp - pl.hp); pl.hp += h; emit("skill", { player: pl.id, skill: id, amount: h }, `${label}${s.name}: heal ${h}.`); }
+        else if (s.cancel) { cancel += s.cancel; emit("skill", { player: pl.id, skill: id }, `${label}${s.name}: ignore ${s.cancel} hit.`); }
+      }
+      return { cancel };
+    };
+
+    /** enemyAttack(pl, enemies, cancel) — adjacent enemies roll their dice. Guard absorbs first. */
+    const enemyAttack = (pl, attackers, cancel) => {
+      if (!attackers.length) return;
+      const fixedOf = e => p.fixedGruntDamage && !e.elite;
+      /** Fixed grunt damage = expected damage of its dice, rounded (2 dice → 2). */
+      const fixedHit = Math.round(EN.grunt.dice * 5 / 6);
+      const rolls = attackers.filter(e => !fixedOf(e)).map(e => ({ id: e.id, faces: Array.from({ length: e.elite ? EN.elite.dice : EN.grunt.dice }, rollFace) }));
+      const fixedN = attackers.filter(fixedOf).length;
+      let hits = [...rolls.flatMap(x => x.faces.map(f => ENEMY_HIT[f])), ...Array.from({ length: fixedN }, () => fixedHit)].sort((a,b) => b - a);
+      hits = hits.slice(cancel);
+      const total = hits.reduce((a,b)=>a+b,0);
+      const blocked = Math.min(pl.guard, total); const dmg = total - blocked;
+      pl.guard -= blocked; pl.hp -= dmg;
+      const nd = rolls.reduce((s,x)=>s+x.faces.length,0);
+      emit("enemyAttack", { player: pl.id, rolls, total, blocked, dmg, fixed: fixedN }, `${fixedN ? `${fixedN} grunts hit for ${fixedN*fixedHit}` : ""}${fixedN && nd ? "; " : ""}${nd ? `enemies roll ${nd} dice` : ""}: ${total} damage, ${blocked} blocked, ${dmg} taken.`);
+      if (pl.hp <= 0) { S.over = true; S.cause = `Player ${pl.id} fell in round ${S.round}.`; emit("death", { player: pl.id }, S.cause); }
+    };
+
+    /**
+     * rollExchange(pl, opts) — Yahtzee-style rolling. Up to 3 rolls (1 for a skirmish).
+     * Card bottoms add dice and rerolls. Emits one event per roll.
+     */
+    const rollExchange = (pl, ctx, bonus, maxRolls, label) => {
+      const n = pl.dice + (bonus.tempDie || 0);
+      pl.faces = Array.from({ length: n }, rollFace); pl.kept = pl.faces.map(() => false);
+      emit("roll", { player: pl.id, roll: 1 }, `${label}Roll 1: ${n} dice.`);
+      for (let k = 2; k <= maxRolls; k++) {
+        const mask = keepMask(pl.faces, pl.skills, ctx);
+        if (mask.every(Boolean)) break;
+        pl.kept = mask; emit("keep", { player: pl.id }, `${label}Keep ${mask.filter(Boolean).length} dice.`);
+        pl.faces = pl.faces.map((f,i) => mask[i] ? f : rollFace());
+        emit("roll", { player: pl.id, roll: k }, `${label}Roll ${k}.`);
+      }
+      // Card rerolls after the normal rolls.
+      const extra = (bonus.reroll || 0) + (bonus.rerollAll ? n : 0);
+      if (extra > 0 && maxRolls > 1) {
+        const mask = keepMask(pl.faces, pl.skills, ctx); let left = extra;
+        const idx = mask.map((m,i) => m ? -1 : i).filter(i => i >= 0).slice(0, left);
+        if (idx.length) { pl.kept = mask; pl.faces = pl.faces.map((f,i) => idx.includes(i) ? rollFace() : f);
+          emit("roll", { player: pl.id, roll: "card" }, `${label}Card reroll: ${idx.length} dice.`); }
+      }
+      pl.kept = pl.faces.map(() => false);
+    };
+
+    /* ---- Deck handling ---- */
+    const draw = pl => { if (!pl.deck.length) return false; pl.hand = pl.deck.splice(0, Math.min(p.handSize, pl.deck.length)); return true; };
+    const reshuffleAndRotate = (pl, orient) => { pl.deck = shuffle(r, [...pl.deck, ...pl.discard, ...pl.hand]); pl.discard = []; pl.hand = []; pl.orient = orient; };
+
+    /** skillPrice(id) — Training Ground price after the price multiplier. */
+    const skillPrice = id => p.skillPriceMult > 0 ? Math.ceil(SKILLS[id].cost * p.skillPriceMult) : Infinity;
+    /**
+     * replaceStarter(pl, boughtId) — Replace mode: remove 1 starter card so deck size stays the same.
+     * The bot removes a starter with the same top-half effect if it has one (Sprint replaces a Trek),
+     * otherwise any starter. It takes the card from the discard pile first, then the deck.
+     * If no starter is left, the deck grows by 1 (nothing to replace).
+     */
+    const replaceStarter = (pl, boughtId) => {
+      const starters = new Set(STARTER);
+      const sameKind = c => starters.has(c) && CARDS[c].top.k === CARDS[boughtId].top.k;
+      const anyStarter = c => starters.has(c);
+      for (const test of [sameKind, anyStarter]) for (const pile of ["discard", "deck"]) {
+        const i = pl[pile].findIndex(test);
+        if (i >= 0) { const [gone] = pl[pile].splice(i, 1);
+          emit("replace", { player: pl.id, removed: gone, added: boughtId }, `Player ${pl.id} removes ${CARDS[gone].name} from the deck. Deck size stays the same.`); return; }
+      }
+      emit("replace", { player: pl.id, removed: null, added: boughtId }, `Player ${pl.id} has no starter card left to replace. The deck grows by 1.`);
+    };
+    /* ---- Shops and training: buying is free when you stand on the built location ---- */
+    const tryBuy = pl => {
+      const s = S.sites[key(pl.h)];
+      if (!s || s.type !== "loc" || !s.built) return;
+      const price = id => s.kind === "shop" ? 3 : skillPrice(id);
+      let bought = true;
+      while (bought) {
+        bought = false;
+        const options = s.offers.filter(id => price(id) <= pl.currency && (s.kind === "shop" || !pl.skills.includes(id)))
+          .sort((a,b) => price(b) - price(a));
+        if (options.length) {
+          const id = options[0]; pl.currency -= price(id); s.offers = s.offers.filter((x,i) => i !== s.offers.indexOf(id));
+          if (s.kind === "shop") {
+            pl.discard.push(id); emit("buy", { player: pl.id, item: id, kind: "card", price: price(id) }, `Player ${pl.id} buys card ${CARDS[id].name} for ${price(id)}.`);
+            if (p.deckMode === "replace") replaceStarter(pl, id);
+          }
+          else { pl.skills.push(id); emit("buy", { player: pl.id, item: id, kind: "skill", price: price(id) }, `Player ${pl.id} learns ${SKILLS[id].name} for ${price(id)}.`); }
+          const deck = s.kind === "shop" ? S.cardDeck : S.skillDeck;
+          if (deck.length) s.offers.push(deck.shift());
+          bought = true;
+        }
+      }
+    };
+
+    /* ---- Skirmish: enter an enemy hex during Prepare. One roll, Skills only, no cards. ---- */
+    const skirmish = (pl, targetHex) => {
+      const foes = enemiesAt(targetHex);
+      emit("skirmish", { player: pl.id, h: targetHex }, `Player ${pl.id} starts a skirmish.`);
+      const ctx = combatCtx(pl, foes);
+      rollExchange(pl, ctx, {}, 1, "Skirmish: ");
+      const fired = assign(pl.faces, pl.skills, ctx);
+      // Only enemies on the target hex can be hit.
+      const others = S.enemies.filter(e => !foes.includes(e)); S.enemies = foes.filter(e => S.enemies.includes(e));
+      const res = fireSkills(pl, fired, {}, "Skirmish: ");
+      const survivors = S.enemies; S.enemies = [...others, ...survivors];
+      enemyAttack(pl, survivors, res.cancel);
+      pl.guard = 0; pl.faces = [];
+      if (!survivors.length && !S.over) { pl.h = targetHex; emit("move", { player: pl.id, h: targetHex }, `Player ${pl.id} enters the cleared hex.`); }
+    };
+
+    /* ---- Prepare phase bot ---- */
+    /** chooseGoal(pl) -> predicate for the hex the bot wants to reach. */
+    const chooseGoal = pl => {
+      const threatened = S.enemies.filter(e => builtLocs().some(b => dist(b.h, e.h) <= 1));
+      if (threatened.length && pl.hp >= 9) return { why: "skirmish", fn: h => threatened.some(e => e.h[0]===h[0] && e.h[1]===h[1]) };
+      const brokenAffordable = Object.entries(S.sites).filter(([k,s]) => s.type === "loc" && !s.built && locCost(s.kind) <= pl.materials && !enemiesAt(unkey(k)).length);
+      if (brokenAffordable.length) return { why: "build", fn: h => brokenAffordable.some(([k]) => k === key(h)) };
+      const shops = builtLocs().filter(b => b.s.offers.some(id => (b.s.kind === "shop" ? 3 : skillPrice(id)) <= pl.currency && (b.s.kind === "shop" || !pl.skills.includes(id))));
+      if (shops.length) return { why: "buy", fn: h => shops.some(b => b.k === key(h)) };
+      return { why: "gather", fn: h => { const s = S.sites[key(h)]; return s && s.type === "node" && (p.exploreRule !== "optional" || s.charges > 0) && !enemiesAt(h).length; } };
+    };
+
+    const doMove = (pl, n) => {
+      const goal = chooseGoal(pl);
+      const here = goal.fn(pl.h) && goal.why !== "skirmish";
+      if (here) { emit("idle", { player: pl.id }, `Player ${pl.id} stays to ${goal.why}.`); return; }
+      const path = bfsPath(pl.h, goal.fn, { player: true });
+      if (!path) { emit("idle", { player: pl.id }, `Player ${pl.id} has no path.`); return; }
+      let pts = n;
+      for (const h of path) {
+        if (enemiesAt(h).length) { skirmish(pl, h); return; }
+        const c = stepCost(h); if (c > pts) break;
+        pts -= c; pl.h = h;
+        emit("move", { player: pl.id, h, obstacle: c > 1 }, c > 1 ? `Player ${pl.id} moves next to an enemy (costs 2).` : `Player ${pl.id} moves 1 hex.`);
+        tryBuy(pl);
+      }
+    };
+
+    const cardUtility = (pl, id) => {
+      const t = CARDS[id].top; const s = S.sites[key(pl.h)]; const blocked = enemiesAt(pl.h).length > 0;
+      if (t.k === "rest") return pl.maxHp - pl.hp >= 3 ? 5 : 0.2;
+      if (t.k === "build") return s && s.type === "loc" && !s.built && !blocked && locCost(s.kind) - t.n <= pl.materials ? 10 : 0.1;
+      if (t.k === "gather") return s && s.type === "node" && !blocked && (p.exploreRule !== "optional" || s.charges > 0) ? 6 : 0.1;
+      if (t.k === "move") return 3;
+      return 0;
+    };
+
+    const playTop = (pl, id) => {
+      const t = CARDS[id].top; const s = S.sites[key(pl.h)];
+      pl.played.push(id);
+      emit("play", { player: pl.id, card: id, half: "top" }, `Player ${pl.id} plays ${CARDS[id].name}: ${t.label}.`);
+      if (t.k === "move") doMove(pl, t.n);
+      else if (t.k === "gather") {
+        if (s && s.type === "node" && !enemiesAt(pl.h).length && (p.exploreRule !== "optional" || s.charges > 0)) {
+          const got = p.nodeYield + t.n; pl.materials += got; if (p.exploreRule === "optional") s.charges--;
+          emit("gather", { player: pl.id, h: pl.h, amount: got }, `Player ${pl.id} gathers ${got} materials.`);
+        } else emit("waste", { player: pl.id }, "No gathering node here. No effect.");
+      } else if (t.k === "build") {
+        const cost = s && s.type === "loc" ? Math.max(0, locCost(s.kind) - t.n) : 0;
+        if (s && s.type === "loc" && !s.built && pl.materials >= cost && !enemiesAt(pl.h).length) {
+          pl.materials -= cost; s.built = true; s.hp = p.locHp; S.builds++;
+          const deck = s.kind === "shop" ? S.cardDeck : S.skillDeck;
+          s.offers = s.kind === "train" && p.skillPriceMult <= 0 ? [] : deck.splice(0, p.offers);
+          emit("build", { player: pl.id, h: pl.h, kind: s.kind, cost }, `Player ${pl.id} builds the ${LOCATIONS[s.kind].name} (${cost} materials). ${s.kind === "train" && p.skillPriceMult <= 0 ? "It hosts the Skill draft." : s.offers.length + " offers revealed."}`);
+          milestone("build3", S.builds >= 3, "Build 3 locations");
+          tryBuy(pl);
+        } else emit("waste", { player: pl.id }, "Nothing to build here. No effect.");
+      } else if (t.k === "rest") {
+        const h = Math.min(t.n, pl.maxHp - pl.hp); pl.hp += h;
+        emit("heal", { player: pl.id, amount: h }, `Player ${pl.id} rests and heals ${h}.`);
+      }
+      pl.hand = pl.hand.filter((x,i) => i !== pl.hand.indexOf(id)); pl.discard.push(id);
+    };
+
+    const preparePhase = () => {
+      S.phase = "prepare";
+      emit("phase", { phase: "prepare" }, `Round ${S.round}: Prepare.`);
+      S.players.forEach(pl => {
+        // Quick Prepare: if every card is in the discard pile, turn it upright with no shuffle (same order as Combat).
+        const quick = p.quickPrepare && !pl.deck.length && !pl.hand.length;
+        if (quick) { pl.deck = [...pl.discard]; pl.discard = []; pl.orient = "top"; }
+        else reshuffleAndRotate(pl, "top");
+        emit("shuffle", { player: pl.id, shuffled: !quick, orient: "top" }, quick ? `Player ${pl.id} turns the deck upright. No shuffle.` : `Player ${pl.id} shuffles and turns the deck: top halves up.`);
+      });
+      for (const pl of S.players) {
+        tryBuy(pl);
+        while (!S.over && draw(pl)) {
+          pl.played = [];
+          emit("draw", { player: pl.id }, `Player ${pl.id} draws ${pl.hand.length} cards.`);
+          while (pl.hand.length && !S.over) {
+            const best = [...pl.hand].sort((a,b) => cardUtility(pl,b) - cardUtility(pl,a))[0];
+            playTop(pl, best);
+          }
+          pl.played = [];
+        }
+      }
+    };
+
+    /* ---- Combat phase ---- */
+    const advanceEnemies = () => {
+      const targets = () => [...S.players.map(pl => pl.h), ...builtLocs().map(b => b.h)];
+      for (let step = 0; step < p.enemySpeed; step++) {
+        const moved = [];
+        for (const e of S.enemies) {
+          const tg = targets(); if (!tg.length) continue;
+          if (tg.some(t => dist(t, e.h) <= 1)) continue;
+          if (p.enemyLeash && !tg.some(t => dist(t, e.h) <= p.enemyLeash)) continue;  // dormant until players come near
+          const path = bfsPath(e.h, h => tg.some(t => dist(t, h) <= 1));
+          if (path && path.length) { e.h = path[0]; moved.push(e.id); }
+        }
+        if (moved.length) emit("advance", { enemies: moved, step: step + 1 }, `${moved.length} enemies advance 1 hex.`);
+      }
+    };
+
+    const combatPhase = () => {
+      S.phase = "combat";
+      emit("phase", { phase: "combat" }, `Round ${S.round}: Combat.`);
+      Object.entries(S.sites).filter(([,s]) => s.type === "spawn" && s.enemyId === null).forEach(([k]) => spawnAt(k, "refill"));
+      advanceEnemies();
+      for (const pl of S.players) {
+        if (p.skipEmptyCombat && !S.enemies.some(e => dist(e.h, pl.h) <= 2)) {
+          pl.discard = [...pl.discard, ...pl.deck, ...pl.hand]; pl.deck = []; pl.hand = [];
+          emit("skipCombat", { player: pl.id }, `Player ${pl.id}: no enemy within 2 hexes. Skip Combat.`);
+          continue;
+        }
+        reshuffleAndRotate(pl, "bottom");
+        emit("shuffle", { player: pl.id, shuffled: true, orient: "bottom" }, `Player ${pl.id} shuffles and turns the deck 180°: bottom halves up.`);
+        let ex = 0;
+        while (!S.over && draw(pl)) {
+          ex++;
+          const foes = S.enemies.filter(e => dist(e.h, pl.h) <= 2);
+          if (!foes.length) {
+            emit("quiet", { player: pl.id }, `Player ${pl.id}: exchange ${ex}, no enemies in range.`);
+            pl.discard.push(...pl.hand); pl.hand = []; continue;
+          }
+          pl.played = [...pl.hand];
+          emit("draw", { player: pl.id, combat: true }, `Player ${pl.id}: exchange ${ex}. Draw ${pl.hand.length} cards (bottom halves).`);
+          const bonus = pl.hand.reduce((b, id) => { const x = CARDS[id].bot; b[x.k] = (b[x.k]||0) + (x.n || 1); return b; }, {});
+          const ctx = combatCtx(pl, S.enemies);
+          rollExchange(pl, ctx, bonus, 3, "");
+          const fired = assign(pl.faces, pl.skills, ctx);
+          pl.guard += bonus.guard || 0;
+          if (bonus.heal) pl.hp = Math.min(pl.maxHp, pl.hp + bonus.heal);
+          emit("assign", { player: pl.id, fired }, fired.length ? `Dice go on: ${fired.map(id => SKILLS[id].name).join(", ")}.` : "No Skill can fire.");
+          const res = fireSkills(pl, fired, bonus, "");
+          if (!S.over) enemyAttack(pl, S.enemies.filter(e => dist(e.h, pl.h) <= 1), res.cancel);
+          pl.guard = 0; pl.faces = []; pl.discard.push(...pl.hand); pl.hand = []; pl.played = [];
+        }
+      }
+    };
+
+    /* ---- Skill draft ---- */
+    /**
+     * draftScore(id, dice) — bot preference: power per face, heavily reduced when the
+     * Skill needs more faces than the player has dice. Pure.
+     */
+    const draftScore = (id, dice) => { const s = SKILLS[id]; const faces = Object.values(s.need).reduce((a,b)=>a+b,0);
+      const power = (s.dmg || 0) + (s.aoe || 0) * 3 + (s.guard || 0) * 0.6 + (s.heal || 0) * 0.6 + (s.cancel || 0) * 2.5;
+      return power / faces * (faces > dice ? 0.2 : 1); };
+    /**
+     * skillDraft() — every p.skillDraftEvery rounds, each player sees p.draftChoices Skills
+     * from the top of the Skill supply, keeps 1 for free, and returns the others to the bottom.
+     */
+    const skillDraft = () => {
+      if (!p.skillDraftEvery || S.round % p.skillDraftEvery !== 0) return;
+      if (p.draftNeedsTraining && !builtLocs().some(b => b.s.kind === "train")) { emit("draft", { player: 0, options: [], pick: null }, "Skill draft skipped: no Training Ground is built."); return; }
+      for (const pl of S.players) {
+        const options = [];
+        for (let i = 0; i < S.skillDeck.length && options.length < p.draftChoices; i++)
+          if (!pl.skills.includes(S.skillDeck[i])) options.push(S.skillDeck[i]);
+        if (!options.length) { emit("draft", { player: pl.id, options: [], pick: null }, `Player ${pl.id}: the Skill supply is empty. No draft.`); continue; }
+        const pick = [...options].sort((a,b) => draftScore(b, pl.dice) - draftScore(a, pl.dice))[0];
+        S.skillDeck = [...S.skillDeck.filter(id => !options.includes(id)), ...options.filter(id => id !== pick)];
+        pl.skills.push(pick);
+        emit("draft", { player: pl.id, options, pick }, `Skill draft: player ${pl.id} chooses ${SKILLS[pick].name} from ${options.map(id => SKILLS[id].name).join(" or ")}.`);
+      }
+    };
+
+    /* ---- Explore phase ---- */
+    const explorePhase = () => {
+      S.phase = "explore";
+      emit("phase", { phase: "explore" }, `Round ${S.round}: Explore.`);
+      // Siege tick: each survivor next to a built location deals 1 damage to it.
+      for (const e of S.enemies) {
+        const b = builtLocs().filter(b => dist(b.h, e.h) <= 1).sort((x,y) => x.s.hp - y.s.hp)[0];
+        if (!b) continue;
+        b.s.hp -= 1;
+        emit("siege", { enemy: e.id, h: b.h }, `Siege: the ${LOCATIONS[b.s.kind].name} takes 1 damage.`);
+        if (b.s.hp <= 0) { b.s.built = false; const deck = b.s.kind === "shop" ? S.cardDeck : S.skillDeck; deck.push(...b.s.offers); b.s.offers = [];
+          emit("broken", { h: b.h }, `The ${LOCATIONS[b.s.kind].name} breaks. Rebuild at full cost.`); }
+      }
+      // Reveal tiles (one per player) according to the selected rule.
+      const revealThisRound = S.round % p.exploreEvery === 0;
+      if (!revealThisRound) emit("skipReveal", {}, `No reveal this round (tiles every ${p.exploreEvery} rounds).`);
+      for (let i = 0; revealThisRound && i < S.players.length; i++) {
+        if (!S.tileDeck.length) { emit("noTiles", {}, "The tile deck is empty. No new tiles."); break; }
+        const slots = openSlots(); if (!slots.length) break;
+        if (p.exploreRule === "optional") {
+          const live = Object.values(S.sites).filter(s => s.type === "node" && s.charges > 0).length;
+          if (live >= 2 * S.players.length) { emit("skipReveal", {}, `Players skip the reveal (${live} gathering nodes still have materials).`); break; }
+        }
+        let slot;
+        if (p.exploreRule === "auto") slot = pick(r, slots);
+        else { // Player chooses: put the new tile far from built locations and from players.
+          const anchors = [...builtLocs().map(b => b.h), ...S.players.map(pl => pl.h)];
+          slot = [...slots].sort((a,b) => Math.min(...anchors.map(x => dist(x,b))) - Math.min(...anchors.map(x => dist(x,a))))[0];
+        }
+        const t = S.tileDeck.shift();
+        revealTile(slot, t.kind, t.num, t, p.exploreRule === "auto" ? `Tile ${t.num} (${t.kind}) is turned and placed by a die roll.` : `Tile ${t.num} (${t.kind}) is revealed and placed by the players.`);
+      }
+      milestone("tiles10", S.tilesShown >= 10, "Reveal 10 tiles");
+      skillDraft();
+    };
+
+    /* ---- Setup ---- */
+    S.cardDeck = shuffle(r, SHOP_POOL); S.skillDeck = shuffle(r, TRAIN_POOL);
+    // Tile deck: countryside tiles, then core tiles. Locations alternate so both kinds appear early.
+    const locSeq = i => i === 0 ? "train" : (i % 3 === 0 ? (i % 2 ? "shop" : "train") : null);
+    S.tileDeck = [
+      ...Array.from({ length: p.countryTiles }, (_, i) => ({ kind: "country", num: i + 1, loc: locSeq(i) })),
+      ...Array.from({ length: p.coreTiles }, (_, i) => ({ kind: "core", num: p.countryTiles + i + 1, loc: i === 1 ? "shop" : null }))
+    ];
+    for (let i = 0; i < p.players; i++) {
+      S.players.push({ id: i + 1, h: [0,0], hp: p.startHp, maxHp: p.startHp, materials: 0, currency: 0, dice: p.startDice,
+        skills: [...STARTER_SKILLS], deck: shuffle(r, starterDeck(p.starterSize)), hand: [], discard: [], orient: "top", faces: [], kept: [], guard: 0, played: [] });
+    }
+    revealTile([0,0], "start", 0, {}, "The Start tile is placed. Players stand on the portal.");
+    // As in Mage Knight setup, 2 countryside tiles start revealed.
+    for (const slot of [[2,1],[-1,3]].slice(0, 2)) { const t = S.tileDeck.shift(); revealTile(slot, t.kind, t.num, t, `Setup: tile ${t.num} is revealed.`); }
+
+    /* ---- Round loop ---- */
+    const recordRound = () => rounds.push({
+      minutes: S.seconds / 60,
+      round: S.round, enemies: S.enemies.length, elites: S.enemies.filter(e => e.elite).length, tiles: S.tilesShown, level: S.level,
+      dice: S.players[0].dice, minHp: Math.max(0, Math.min(...S.players.map(pl => pl.hp))),
+      materials: S.players.reduce((s,pl) => s + pl.materials, 0), currency: S.players.reduce((s,pl) => s + pl.currency, 0),
+      built: builtLocs().length, kills: S.kills, skills: S.players[0].skills.length, skillsAvg: S.players.reduce((t,pl)=>t+pl.skills.length,0)/S.players.length, deck: S.players[0].deck.length + S.players[0].discard.length + S.players[0].hand.length
+    });
+    while (!S.over && S.round <= p.maxRounds) {
+      preparePhase(); if (S.over) break;
+      combatPhase(); if (S.over) break;
+      explorePhase();
+      recordRound();
+      milestone("r5", S.round >= 5, "Survive to round 5");
+      milestone("r10", S.round >= 10, "Survive to round 10");
+      milestone("r15", S.round >= 15, "Survive to round 15");
+      S.round++;
+    }
+    if (S.over) recordRound();
+    if (!S.over) { S.cause = `Simulation limit: ${p.maxRounds} rounds.`; emit("end", {}, S.cause); }
+
+    return { events, rounds, world, params: p,
+      locCost: kind => kind === "train" ? p.trainCost : LOCATIONS[kind].cost,
+      skillPrice: id => p.skillPriceMult > 0 ? Math.ceil(SKILLS[id].cost * p.skillPriceMult) : Infinity,
+      summary: { minutes: S.seconds / 60, rounds: S.over ? S.round : p.maxRounds, survivedFull: !S.over, cause: S.cause, kills: S.kills, level: S.level, milestones: [...S.milestones], tiles: S.tilesShown } };
+  };
+
+  return { simulate, DEFAULTS, CARDS, SKILLS, LOCATIONS, ENEMIES, FACES, key, unkey, dist, FLOWER, DIRS };
+})();
+if (typeof module !== "undefined") module.exports = SIM;
+
+</script>
+<script>
+/* =====================================================================
+   PAGE APPLICATION
+   Pure helpers first; DOM "mount" code after. SIM (the engine) is global.
+   ===================================================================== */
+
+/* ---------------- Shared helpers ---------------- */
+const FACES = SIM.FACES;
+/** Line-icon glyph for each die face. */
+const GLYPH = {
+  Sword:'<path d="M5 19 L17 7 M14 5 L19 5 L19 10 M7 14 L10 17 M4 20 L6 18" />',
+  Wand:'<path d="M5 19 L15 9 M17 3 L18 6 L21 7 L18 8 L17 11 L16 8 L13 7 L16 6 Z" />',
+  Bow:'<path d="M6 4 C18 6 18 18 6 20 M6 4 L6 20 M6 12 L20 12 M17 9 L20 12 L17 15" />',
+  Shield:'<path d="M12 3 L20 6 V12 C20 17 16 20 12 21 C8 20 4 17 4 12 V6 Z" />',
+  Star:'<path d="M12 3 L14.6 9 L21 9.5 L16 13.6 L17.6 20 L12 16.5 L6.4 20 L8 13.6 L3 9.5 L9.4 9 Z" />',
+  Blank:'<rect x="6" y="6" width="12" height="12" rx="2" stroke-dasharray="2 2"/>'
+};
+const glyph = f => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">${GLYPH[f]}</svg>`;
+const needText = need => Object.entries(need).map(([f,n]) => n>1?`${f} ×${n}`:f).join(" + ");
+const needCount = need => Object.values(need).reduce((a,b)=>a+b,0);
+const skillFx = s => s.dmg ? `${s.dmg} damage, range ${s.range}` : s.aoe ? `${s.aoe} to each enemy, range ${s.range}` : s.guard ? `${s.guard} guard` : s.heal ? `Heal ${s.heal}` : `Ignore ${s.cancel} hit`;
+const countFaces = faces => faces.reduce((m,f)=>({...m,[f]:(m[f]||0)+1}),{});
+/** satisfies(faces, need) — Stars cover missing faces. Pure. */
+const satisfies = (faces, need) => { const c = countFaces(faces); const miss = Object.entries(need).reduce((s,[f,n])=>s+Math.max(0,n-(c[f]||0)),0); return needCount(need) <= faces.length && miss <= (c.Star||0); };
+/** Seeded RNG for page demos (separate from the engine). */
+const rng = seed => () => { seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
+const rollFace = r => FACES[Math.floor(r()*6)];
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+/** fmtMin(m) — 135 → "2 h 15 min". Pure. */
+const fmtMin = m => { m = Math.round(m); return m >= 60 ? `${Math.floor(m/60)} h ${String(m%60).padStart(2,"0")} min` : `${m} min`; };
+/** roundAt(rounds, min) — first round whose end time reaches min minutes; "–" if the run ended sooner. Pure. */
+const roundAt = (rounds, min) => { const k = rounds.find(r => r.minutes >= min); return k ? k.round : "–"; };
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = id => document.getElementById(id);
+
+/** loop(ms, draw, startT) — calls draw(t∈[0,1)) every frame; returns {toggle}. */
+const loop = (ms, draw, startT=0) => {
+  let playing = !still, t0 = performance.now() - startT*ms, pausedAt = startT;
+  draw(startT);
+  const frame = now => { if (playing) draw(((now - t0) % ms)/ms); requestAnimationFrame(frame); };
+  requestAnimationFrame(frame);
+  return { toggle(){ if (playing) pausedAt=((performance.now()-t0)%ms)/ms; else t0=performance.now()-pausedAt*ms; playing=!playing; return playing; } };
+};
+const bindToggle = (btn, ctl) => { if (still){ btn.textContent="Play"; btn.setAttribute("aria-pressed","false"); }
+  btn.addEventListener("click", () => { const p = ctl.toggle(); btn.textContent = p?"Pause":"Play"; btn.setAttribute("aria-pressed", String(p)); }); };
+
+/* ---------------- Top-level tabs ---------------- */
+const showView = which => {
+  $("tt-spec").setAttribute("aria-selected", String(which==="spec")); $("tt-sim").setAttribute("aria-selected", String(which==="sim"));
+  $("view-spec").hidden = which!=="spec"; $("view-sim").hidden = which!=="sim";
+  if (which === "sim") SIMUI.ensure();
+};
+$("tt-spec").addEventListener("click", () => showView("spec"));
+$("tt-sim").addEventListener("click", () => showView("sim"));
+$("tt-spec").parentElement.addEventListener("keydown", e => { if (e.key==="ArrowRight"||e.key==="ArrowLeft"){ const n = document.activeElement===$("tt-spec") ? $("tt-sim") : $("tt-spec"); n.focus(); n.click(); } });
+
+/* ---------------- Line chart (one y-axis, direct labels, crosshair tooltip) ---------------- */
+/**
+ * lineChart(el, cfg) — cfg: {xs, series:[{name,color,ys,dash}], yLabel, xLabel, ref:{y,label}, aria, step}
+ */
+const lineChart = (el, cfg) => {
+  const W=680,H=260,m={l:48,r:118,t:16,b:40};
+  const refs = cfg.refs || (cfg.ref ? [cfg.ref] : []);
+  const xs=cfg.xs, all=cfg.series.flatMap(s=>s.ys).concat(refs.map(r=>r.y));
+  const yMax = Math.max(5, Math.ceil(Math.max(...all)/5)*5);
+  const span = Math.max(1, xs[xs.length-1]-xs[0]);
+  const sx = x => m.l + (x-xs[0])/span*(W-m.l-m.r);
+  const sy = y => H-m.b - y/yMax*(H-m.t-m.b);
+  const ticks = Array.from({length:6},(_,i)=>Math.round(yMax*i/5));
+  const every = xs.length > 24 ? 10 : 5;
+  const xt = xs.filter(x=>x===xs[0]||x%every===0);
+  const pathFor = s => s.ys.map((y,i)=> cfg.step && i ? `H${sx(xs[i]).toFixed(1)}V${sy(y).toFixed(1)}` : (i?"L":"M")+sx(xs[i]).toFixed(1)+" "+sy(y).toFixed(1)).join("");
+  const lines = cfg.series.map(s=>`<path d="${pathFor(s)}" fill="none" stroke="${s.color}" stroke-width="2" ${s.dash?'stroke-dasharray="5 4"':''} stroke-linejoin="round"/>`).join("");
+  const ends = cfg.series.map(s=>({s, y:sy(s.ys[s.ys.length-1])})).sort((a,b)=>a.y-b.y);
+  ends.forEach((e,i)=>{ if(i && e.y-ends[i-1].y<16) e.y=ends[i-1].y+16; });
+  const labels = ends.map(e=>`<circle cx="${sx(xs[xs.length-1])}" cy="${sy(e.s.ys[e.s.ys.length-1])}" r="4" fill="${e.s.color}" stroke="var(--panel)" stroke-width="2"/><text x="${sx(xs[xs.length-1])+10}" y="${e.y+4}" font-size="11" fill="var(--fg)">${esc(e.s.name)}</text>`).join("");
+  const ref = refs.map(rf => `<line x1="${m.l}" x2="${W-m.r}" y1="${sy(rf.y)}" y2="${sy(rf.y)}" stroke="var(--muted)" stroke-dasharray="2 4"/><text x="${m.l+6}" y="${sy(rf.y)-6}" font-size="10" fill="var(--muted)">${esc(rf.label)}</text>`).join("");
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:420px;display:block" role="img" aria-label="${esc(cfg.aria)}">
+    ${ticks.map(t=>`<line x1="${m.l}" x2="${W-m.r}" y1="${sy(t)}" y2="${sy(t)}" stroke="var(--line)" stroke-width="1"/><text x="${m.l-8}" y="${sy(t)+4}" text-anchor="end" font-size="10" fill="var(--muted)">${t}</text>`).join("")}
+    ${xt.map(x=>`<text x="${sx(x)}" y="${H-m.b+18}" text-anchor="middle" font-size="10" fill="var(--muted)">${x}</text>`).join("")}
+    <text x="${(m.l+W-m.r)/2}" y="${H-6}" text-anchor="middle" font-size="11" fill="var(--muted)">${esc(cfg.xLabel||"Round")}</text>
+    <text x="12" y="${m.t+4}" font-size="11" fill="var(--muted)" transform="rotate(-90 12 ${m.t+4})" text-anchor="end">${esc(cfg.yLabel)}</text>
+    ${ref}${lines}${labels}
+    <line class="xh" y1="${m.t}" y2="${H-m.b}" stroke="var(--muted)" visibility="hidden"/>
+    <rect class="hit" x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/>
+  </svg><div class="tip" hidden></div>`;
+  const svg = el.querySelector("svg"), tip = el.querySelector(".tip"), xh = el.querySelector(".xh");
+  const move = ev => { const pt = svg.createSVGPoint(); pt.x=ev.clientX; pt.y=ev.clientY; const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+    const i = Math.max(0,Math.min(xs.length-1, Math.round((p.x-m.l)/(W-m.l-m.r)*(xs.length-1)))); const x = sx(xs[i]);
+    xh.setAttribute("x1",x); xh.setAttribute("x2",x); xh.setAttribute("visibility","visible");
+    tip.hidden=false; tip.innerHTML = `${esc(cfg.xLabel||"Round")} ${xs[i]}<br>`+cfg.series.map(s=>`<span style="color:${s.color}">■</span> ${esc(s.name)}: ${(+s.ys[i]).toFixed(s.ys[i]%1?1:0)}`).join("<br>");
+    const box = el.getBoundingClientRect(); tip.style.left = Math.min(ev.clientX-box.left+12, box.width-170)+"px"; tip.style.top = (ev.clientY-box.top-10)+"px"; };
+  svg.querySelector(".hit").addEventListener("pointermove", move);
+  svg.querySelector(".hit").addEventListener("pointerleave", ()=>{ tip.hidden=true; xh.setAttribute("visibility","hidden"); });
+};
+
+/* =====================================================================
+   MAP RENDERER (shared by Fig. 2 and the simulator)
+   ===================================================================== */
+const HEX_R = 16, SQ3 = Math.sqrt(3);
+/** Axial hex → pixel center (pointy-top). Pure. */
+const hexPx = ([q,r]) => [HEX_R*SQ3*(q + r/2), HEX_R*1.5*r];
+/** Corner k of a pointy-top hex (k = 0..5, clockwise from upper-right). */
+const corner = (cx,cy,k,R=HEX_R) => { const a = Math.PI/180*(60*k-30); return [cx+R*Math.cos(a), cy+R*Math.sin(a)]; };
+const hexPoints = (cx,cy,R=HEX_R) => Array.from({length:6},(_,k)=>corner(cx,cy,k,R).map(v=>v.toFixed(1)).join(",")).join(" ");
+/** For each axial direction (SIM.DIRS order), the pair of corners on that edge. */
+const EDGE = [[0,1],[5,0],[4,5],[3,4],[2,3],[1,2]];
+const TERRAIN_FILL = t => `var(--t-${t})`;
+const TILE_STROKE = k => k === "start" ? "var(--tile-start)" : k === "core" ? "var(--tile-core)" : "var(--tile-country)";
+
+/** Small terrain mark drawn on each hex. Pure markup. */
+const terrainMark = (t, x, y) => {
+  const s = `stroke="var(--t-ink)" stroke-width="1.2" fill="none" stroke-linecap="round"`;
+  if (t === "forest") return `<path ${s} d="M${x-6} ${y+5} l3 -7 l3 7 M${x+1} ${y+6} l3 -8 l3 8"/>`;
+  if (t === "hills") return `<path ${s} d="M${x-8} ${y+4} q4 -7 8 0 q4 -6 8 0"/>`;
+  if (t === "mountain") return `<path ${s} stroke-width="1.6" d="M${x-9} ${y+6} l6 -11 l4 6 l3 -4 l5 9"/>`;
+  if (t === "lake") return `<path ${s} d="M${x-8} ${y-1} q2 -2 4 0 t4 0 t4 0 t4 0 M${x-6} ${y+4} q2 -2 4 0 t4 0 t4 0"/>`;
+  if (t === "wasteland") return `<g fill="var(--t-ink)"><circle cx="${x-5}" cy="${y+3}" r="1"/><circle cx="${x+2}" cy="${y+5}" r="1"/><circle cx="${x+5}" cy="${y-2}" r="1"/></g>`;
+  return `<path ${s} stroke-width="1" d="M${x-5} ${y+5} l1 -3 M${x+3} ${y+6} l1 -3"/>`;
+};
+
+/** Site glyph for a hex. Pure markup. */
+const siteMark = (site, x, y, optional) => {
+  if (!site) return "";
+  if (site.type === "portal") return `<circle cx="${x}" cy="${y}" r="7" fill="none" stroke="var(--accent)" stroke-width="2"/><circle cx="${x}" cy="${y}" r="2.5" fill="var(--accent)"/>`;
+  if (site.type === "node") { const empty = optional && site.charges <= 0;
+    return `<path d="M${x} ${y-7} L${x+5} ${y} L${x} ${y+7} L${x-5} ${y} Z" fill="${empty?"none":"var(--accent)"}" stroke="${empty?"var(--muted)":"var(--panel)"}" stroke-width="1.2"/>`; }
+  if (site.type === "spawn") return site.elite
+    ? `<circle cx="${x}" cy="${y}" r="10" fill="none" stroke="var(--bad)" stroke-width="1.4" stroke-dasharray="3 2"/><circle cx="${x}" cy="${y}" r="6.5" fill="none" stroke="var(--bad)" stroke-width="1.4"/>`
+    : `<circle cx="${x}" cy="${y}" r="9" fill="none" stroke="var(--bad)" stroke-width="1.4" stroke-dasharray="3 2"/>`;
+  if (site.type === "loc") {
+    const shop = site.kind === "shop", col = shop ? "var(--warn)" : "var(--accent)", soft = shop ? "var(--warn-soft)" : "var(--accent-soft)";
+    const house = `M${x-7} ${y+6} V${y-2} L${x} ${y-8} L${x+7} ${y-2} V${y+6} Z`;
+    const letter = `<text x="${x}" y="${y+4.5}" text-anchor="middle" font-size="8" font-weight="600" fill="${site.built?"var(--fg)":"var(--muted)"}">${shop?"S":"T"}</text>`;
+    if (!site.built) return `<path d="${house}" fill="var(--panel)" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="2 2"/><path d="M${x+1} ${y-7} l-2 4 l3 2 l-2 4" stroke="var(--muted)" fill="none"/>${letter}`;
+    const pips = Array.from({length:3},(_,i)=>`<rect x="${x-7+i*5}" y="${y+8}" width="4" height="3" fill="${i<site.hp?col:"var(--line)"}"/>`).join("");
+    return `<path d="${house}" fill="${soft}" stroke="${col}" stroke-width="1.8"/>${letter}${pips}`;
+  }
+  return "";
+};
+
+/**
+ * createMap(svg) -> { render(world, snap, opts), fx: {...}, setDur(ms) }
+ * Static terrain is drawn once per tile. Sites, units and effects are redrawn per snapshot.
+ * Units keep their DOM node across snapshots so CSS transitions animate movement.
+ */
+const createMap = svg => {
+  svg.innerHTML = `<g class="L-tiles"></g><g class="L-outline"></g><g class="L-sites"></g><g class="L-units"></g><g class="L-fx"></g>`;
+  const L = n => svg.querySelector(".L-"+n);
+  const drawnTiles = new Set(); const units = new Map();
+  let vb = null, vbAnim = null, dur = 300;
+
+  const drawTile = (world, tile, idx, animate) => {
+    const hexes = SIM.FLOWER.map(o => [tile.center[0]+o[0], tile.center[1]+o[1]]);
+    const inTile = new Set(hexes.map(SIM.key));
+    const g = document.createElementNS("http://www.w3.org/2000/svg","g");
+    g.setAttribute("data-tile", idx);
+    g.innerHTML = hexes.map(h => { const w = world.hexes[SIM.key(h)]; const [x,y] = hexPx(h);
+      return `<polygon points="${hexPoints(x,y)}" fill="${TERRAIN_FILL(w.terrain)}" stroke="var(--t-ink)" stroke-width=".6"/>${terrainMark(w.terrain,x,y-2)}`; }).join("");
+    // Thick tile border: edges whose neighbor is outside the tile.
+    const edges = [];
+    hexes.forEach(h => { const [x,y] = hexPx(h); SIM.DIRS.forEach((d,i) => { const n = [h[0]+d[0], h[1]+d[1]]; if (!inTile.has(SIM.key(n))) { const [a,b] = EDGE[i]; const A = corner(x,y,a), B = corner(x,y,b); edges.push(`M${A[0].toFixed(1)} ${A[1].toFixed(1)}L${B[0].toFixed(1)} ${B[1].toFixed(1)}`); } }); });
+    const [cx,cy] = hexPx(tile.center);
+    g.innerHTML += `<path d="${edges.join("")}" stroke="${TILE_STROKE(tile.kind)}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`
+      + `<text x="${cx}" y="${cy-HEX_R*2.2}" text-anchor="middle" font-size="8" fill="var(--muted)">${tile.kind==="start"?"START":tile.num}</text>`;
+    if (animate && !still) g.classList.add("dropin");
+    L("tiles").appendChild(g);
+  };
+
+  /** Fit the viewBox to the shown tiles (4:3), animated. */
+  const fit = (world, shown, animate) => {
+    const pts = world.tiles.slice(0, shown).flatMap(t => SIM.FLOWER.map(o => hexPx([t.center[0]+o[0], t.center[1]+o[1]])));
+    const xs = pts.map(p=>p[0]), ys = pts.map(p=>p[1]);
+    let x0 = Math.min(...xs)-HEX_R*1.6, x1 = Math.max(...xs)+HEX_R*1.6, y0 = Math.min(...ys)-HEX_R*2.6, y1 = Math.max(...ys)+HEX_R*1.6;
+    let w = x1-x0, h = y1-y0; const ratio = 4/3;
+    if (w/h < ratio){ const nw = h*ratio; x0 -= (nw-w)/2; w = nw; } else { const nh = w/ratio; y0 -= (nh-h)/2; h = nh; }
+    const target = [x0,y0,w,h];
+    if (!vb || !animate || still){ vb = target; svg.setAttribute("viewBox", vb.map(v=>v.toFixed(1)).join(" ")); return; }
+    const from = [...vb], t0 = performance.now(), D = 600; cancelAnimationFrame(vbAnim);
+    const stepF = now => { const f = Math.min(1,(now-t0)/D), e = 1-Math.pow(1-f,3); vb = from.map((v,i)=>v+(target[i]-v)*e); svg.setAttribute("viewBox", vb.map(v=>v.toFixed(1)).join(" ")); if (f<1) vbAnim = requestAnimationFrame(stepF); };
+    vbAnim = requestAnimationFrame(stepF);
+  };
+
+  /** Position of the i-th unit sharing a hex. */
+  const OFF = [[0,0],[7,-6],[-7,6],[7,6],[-7,-6],[0,-9],[0,9]];
+
+  const render = (world, snap, opts = {}) => {
+    const animate = !!opts.animate;
+    // Tiles: add newly shown, remove tiles beyond the snapshot (when scrubbing back).
+    world.tiles.forEach((t, i) => {
+      const shown = i < snap.tilesShown;
+      if (shown && !drawnTiles.has(i)) { drawTile(world, t, i, animate); drawnTiles.add(i); }
+      if (!shown && drawnTiles.has(i)) { L("tiles").querySelector(`[data-tile="${i}"]`)?.remove(); drawnTiles.delete(i); }
+    });
+    fit(world, snap.tilesShown, animate);
+    // Sites (cheap to redraw).
+    L("sites").innerHTML = Object.entries(snap.sites).map(([k,s]) => { const [x,y] = hexPx(SIM.unkey(k)); return siteMark(s, x, y, opts.optional); }).join("");
+    // Units: enemies and players, keyed by id.
+    const perHex = {};
+    const want = [
+      ...snap.enemies.map(e => ({ id:"e"+e.id, h:e.h, kind: e.elite ? "elite" : "grunt", hp:e.hp, maxHp:e.maxHp })),
+      ...snap.players.map(p => ({ id:"p"+p.id, h:p.h, kind:"player", n:p.id }))
+    ];
+    const seen = new Set();
+    want.forEach(u => {
+      const k = SIM.key(u.h); perHex[k] = (perHex[k]||0); const off = OFF[perHex[k]++ % OFF.length];
+      const [x,y] = hexPx(u.h); const tx = x+off[0], ty = y+off[1];
+      let g = units.get(u.id);
+      if (!g) { g = document.createElementNS("http://www.w3.org/2000/svg","g"); g.setAttribute("class","unit"); units.set(u.id, g); L("units").appendChild(g);
+        g.style.transition = "none"; g.style.transform = `translate(${tx}px,${ty}px)`; void g.getBoundingClientRect(); g.style.transition = "";
+        if (animate && u.kind !== "player" && !still) { g.dataset.pop = "1"; } }
+      g.style.transform = `translate(${tx}px,${ty}px)`;
+      if (u.kind === "player") g.innerHTML = `<circle r="7.5" fill="var(--p${u.n})" stroke="var(--panel)" stroke-width="2"/><text y="3.2" text-anchor="middle" font-size="8.5" font-weight="600" fill="var(--panel)">${u.n}</text>`;
+      else if (u.kind === "grunt") g.innerHTML = `<g class="${g.dataset.pop?"popin":""}"><circle r="5.5" fill="var(--bad)" stroke="var(--panel)" stroke-width="1.5"/>${Array.from({length:Math.min(u.maxHp,5)},(_,i)=>`<rect x="${-u.maxHp*1.6+i*3.2}" y="-10" width="2.4" height="2.4" fill="${i<u.hp?"var(--bad)":"var(--line)"}"/>`).join("")}</g>`;
+      else g.innerHTML = `<g class="${g.dataset.pop?"popin":""}"><polygon points="${hexPoints(0,0,8.5)}" fill="var(--bad)" stroke="var(--panel)" stroke-width="1.5"/><text y="3" text-anchor="middle" font-size="7.5" font-weight="600" fill="var(--panel)">${u.hp}</text></g>`;
+      delete g.dataset.pop;
+      seen.add(u.id);
+    });
+    [...units.keys()].forEach(id => { if (!seen.has(id)) { units.get(id).remove(); units.delete(id); } });
+  };
+
+  /* ---- Transient effects ---- */
+  const NS = "http://www.w3.org/2000/svg";
+  const addFx = (markup, ms) => { const g = document.createElementNS(NS,"g"); g.innerHTML = markup; L("fx").appendChild(g); setTimeout(() => g.remove(), ms); return g; };
+  const fx = {
+    float(h, text, color, ms=1100){ const [x,y] = hexPx(h); addFx(`<text class="floatup" x="${x}" y="${y-12}" text-anchor="middle" font-size="9" font-weight="700" fill="${color}" stroke="var(--panel)" stroke-width="2.5" paint-order="stroke" style="animation-duration:${ms}ms">${esc(text)}</text>`, ms); },
+    line(a, b, color, ms=700){ const [x1,y1] = hexPx(a), [x2,y2] = hexPx(b); addFx(`<line class="fadeout" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="2" stroke-dasharray="3 2" style="animation-duration:${ms}ms"/>`, ms); },
+    ring(h, hexes, color, ms=700){ const [x,y] = hexPx(h); addFx(`<circle class="ringout" cx="${x}" cy="${y}" r="${Math.max(6, hexes*HEX_R*1.7)}" fill="none" stroke="${color}" stroke-width="2" style="animation-duration:${ms}ms"/>`, ms); },
+    ghost(h, ms=700){ const [x,y] = hexPx(h); addFx(`<circle class="fadeout" cx="${x}" cy="${y}" r="7" fill="var(--bad)" style="animation-duration:${ms}ms"/>`, ms); },
+    icon(h, glyphName, color, ms=900){ const [x,y] = hexPx(h); addFx(`<g class="fadeout" style="animation-duration:${ms}ms;color:${color}"><svg x="${x-9}" y="${y-22}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">${GLYPH[glyphName]}</svg></g>`, ms); }
+  };
+  return { render, fx, setDur(ms){ dur = ms; svg.style.setProperty("--mv", ms+"ms"); }, reset(){ L("tiles").innerHTML=""; drawnTiles.clear(); units.forEach(g=>g.remove()); units.clear(); vb = null; } };
+};
+
+/* ---------------- Fig 1: round loop ---------------- */
+(() => {
+  const KF = [[0,120,46,0],[.25,120,46,0],[.33,360,46,180],[.58,360,46,180],[.66,600,46,360],[.8,600,46,360],[.85,600,230,360],[.95,120,230,360],[1,120,46,360]];
+  const lerp = (a,b,f) => a+(b-a)*f;
+  const at = t => { const k = KF.findIndex(f=>f[0]>t)-1; const a=KF[Math.max(0,k)], b=KF[Math.max(1,k+1)]; const f=(t-a[0])/(b[0]-a[0]||1);
+    return {x:lerp(a[1],b[1],f), y:lerp(a[2],b[2],f), rot:lerp(a[3],b[3],f)}; };
+  const tok = $("deckTok"), dots = $("hordeDots");
+  let round = 1, last = 0;
+  const drawDots = n => { dots.innerHTML = Array.from({length:Math.min(n+1,12)},(_,i)=>`<circle cx="${300+(i%6)*24}" cy="${172+Math.floor(i/6)*18}" r="6" fill="none" stroke="var(--bad)" stroke-width="1.5" stroke-dasharray="3 2"/><circle cx="${300+(i%6)*24}" cy="${172+Math.floor(i/6)*18}" r="3" fill="var(--bad)"/>`).join(""); };
+  drawDots(round);
+  const ctl = loop(9000, t => {
+    if (t < last){ round = round>=11 ? 1 : round+1; drawDots(round); }
+    last = t;
+    const {x,y,rot} = at(t); const combat = t >= .29 && t < .62;
+    tok.setAttribute("transform", `translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${rot.toFixed(1)})`);
+    $("roundLbl").textContent = `ROUND ${round}`;
+    $("phaseLbl").textContent = combat ? "deck: bottom halves up" : "deck: top halves up";
+  }, 0.08);
+  bindToggle($("loopToggle"), ctl);
+})();
+
+/* ---------------- Fig 2: setup map ---------------- */
+(() => {
+  const res = SIM.simulate({ maxRounds: 0, seed: 4 });
+  const snap = res.events[res.events.length-1].snap;
+  const map = createMap($("mapDemo"));
+  const shopKey = Object.keys(snap.sites).find(k => snap.sites[k].type === "loc" && snap.sites[k].kind === "shop");
+  map.render(res.world, snap);
+  let built = false;
+  if (!still) setInterval(() => { built = !built; const s2 = { ...snap, sites: { ...snap.sites, [shopKey]: { ...snap.sites[shopKey], built, hp: built ? 3 : 0 } } };
+    map.render(res.world, s2); map.fx.float(SIM.unkey(shopKey), built ? "Built" : "Broken", built ? "var(--good)" : "var(--bad)"); }, 3000);
+  const item = (svg, label) => `<span class="conf" style="display:inline-flex;gap:4px;align-items:center"><svg width="16" height="16" viewBox="-10 -10 20 20">${svg}</svg>${label}</span>`;
+  $("mapLegend").innerHTML = [
+    item(siteMark({type:"portal"},0,0), "portal"), item(siteMark({type:"node",charges:2},0,0), "node"),
+    item(siteMark({type:"loc",kind:"shop",built:false},0,-1), "broken"), item(siteMark({type:"spawn"},0,0), "spawn"),
+    item(siteMark({type:"spawn",elite:true},0,0), "elite"), item(`<circle r="5.5" fill="var(--bad)"/>`, "grunt")
+  ].join("");
+})();
+
+/* ---------------- Fig 3: cards ---------------- */
+(() => {
+  const STARTER = [["move",4],["gather",3],["build",2],["rest",1]];
+  const cardHTML = id => { const c = SIM.CARDS[id]; return `<div class="card" role="img" aria-label="${c.name}. Top: ${c.top.label}. Bottom: ${c.bot.label}."><span class="band t"></span><span class="band b"></span>
+    <div class="half top"><span class="tag">Prepare · ${c.name}</span><span class="fx">${c.top.label}</span></div>
+    <div class="half bot"><span class="tag">Combat · ${c.name}</span><span class="fx">${c.bot.label}</span></div></div>`; };
+  $("cardstage").innerHTML = STARTER.map(([id]) => cardHTML(id)).join("");
+  $("starterRows").innerHTML = STARTER.map(([id,q]) => { const c = SIM.CARDS[id]; return `<tr><td class="num">${q}</td><td>${c.name}</td><td>${c.top.label}</td><td>${c.bot.label}</td></tr>`; }).join("");
+  $("shopRows").innerHTML = ["sprint","haul","mason","scout","bandage","forage"].map(id => { const c = SIM.CARDS[id]; return `<tr><td>${c.name}</td><td>${c.top.label}</td><td>${c.bot.label}</td></tr>`; }).join("");
+  let flipped = false;
+  $("flipBtn").addEventListener("click", () => { flipped = !flipped; document.querySelectorAll("#cardstage .card").forEach(c=>c.classList.toggle("flipped",flipped));
+    $("cardPhase").textContent = flipped ? "Combat: bottom halves up" : "Prepare: top halves up"; });
+})();
+
+/* ---------------- Fig 4: dice + Skills ---------------- */
+const SKILL_IDS = Object.keys(SIM.SKILLS);
+(() => {
+  const r = rng(42);
+  let state = { faces: ["Wand","Bow","Wand","Star","Bow"], kept: [false,false,false,false,false], roll: 1 };
+  const render = (animate=[]) => {
+    $("diceTray").innerHTML = state.faces.map((f,i)=>`<button class="die${state.kept[i]?" kept":""}${animate.includes(i)?" rolling":""}" data-i="${i}" aria-pressed="${state.kept[i]}" aria-label="${f}${state.kept[i]?", kept":""}">${glyph(f)}${f}</button>`).join("");
+    $("skillBoard").innerHTML = SKILL_IDS.map(id => { const s = SIM.SKILLS[id]; return `<div class="act${satisfies(state.faces,s.need)?" on":""}"><span class="c">${needText(s.need)} · ${s.cost ? "draft" : "starter"}</span><span class="e">${s.name}</span><span class="c">${skillFx(s)}</span></div>`; }).join("");
+    $("rollInfo").textContent = state.roll>=3 ? "Roll 3 of 3 · resolve Skills" : `Roll ${state.roll} of 3`;
+    $("rollBtn").disabled = state.roll>=3;
+  };
+  const fresh = n => ({ faces: Array.from({length:n},()=>rollFace(r)), kept: Array(n).fill(false), roll: 1 });
+  $("diceTray").addEventListener("click", e => { const b = e.target.closest(".die"); if(!b) return; const i=+b.dataset.i; state = { ...state, kept: state.kept.map((k,j)=> j===i ? !k : k) }; render(); });
+  $("rollBtn").addEventListener("click", () => { const idx = state.kept.map((k,i)=>k?-1:i).filter(i=>i>=0); state = { ...state, faces: state.faces.map((f,i)=> state.kept[i]?f:rollFace(r)), roll: state.roll+1 }; render(idx); });
+  $("resetBtn").addEventListener("click", () => { state = fresh(+$("diceN").value); render(state.faces.map((_,i)=>i)); });
+  $("diceN").addEventListener("change", () => { state = fresh(+$("diceN").value); render(state.faces.map((_,i)=>i)); });
+  render();
+})();
+
+/* ---------------- Fig 5: probability ---------------- */
+(() => {
+  /** tryAction(n, need, r) — greedy keep over 3 rolls; Stars kept while anything is missing. */
+  const tryAction = (n, need, r) => {
+    let kept = [];
+    for (let roll=0; roll<3; roll++){
+      const fresh = Array.from({length:n-kept.length}, () => rollFace(r));
+      const remaining = {...need}; kept.forEach(f => { if (remaining[f]>0) remaining[f]--; });
+      const keepNow = fresh.filter(f => (remaining[f]>0) ? (remaining[f]--, true) : false);
+      const wildNeed = Object.values(remaining).reduce((a,b)=>a+b,0) - kept.filter(f=>f==="Star").length;
+      kept = [...kept, ...keepNow, ...fresh.filter(f => f==="Star").slice(0, Math.max(0,wildNeed))];
+      if (satisfies(kept, need)) return true;
+    }
+    return false;
+  };
+  const probability = (n, need, runs=20000) => { const r = rng(7); let ok=0; for (let i=0;i<runs;i++) if (tryAction(n,need,r)) ok++; return ok/runs; };
+  $("pAct").innerHTML = SKILL_IDS.map(id => `<option value="${id}"${id==="rain"?" selected":""}>${SIM.SKILLS[id].name} (${needText(SIM.SKILLS[id].need)})</option>`).join("");
+  const update = () => { const s = SIM.SKILLS[$("pAct").value], n = +$("pN").value;
+    if (needCount(s.need) > n){ $("pOut").textContent = "0%"; $("pNote").textContent = `Needs ${needCount(s.need)} dice`; return; }
+    $("pOut").textContent = (probability(n,s.need)*100).toFixed(1)+"%"; $("pNote").textContent = "Monte Carlo, 20,000 runs"; };
+  $("pAct").addEventListener("change", update); $("pN").addEventListener("change", update); update();
+})();
+
+/* ---------------- Fig 6: exchange stepper ---------------- */
+(() => {
+  const STEPS = ["Draw 5 cards (bottom halves).","Roll all your action dice.","Keep dice. Roll the other dice again.","Do step 3 one more time if necessary.","Play the bottom halves of your cards.","Put dice on Skills. Each die and Skill 1 time.","Do the Skills that have all their faces.","Each enemy next to you attacks.","Apply damage to guard, then health.","Remove guard. Discard played cards."];
+  const ol = $("steps"); ol.innerHTML = STEPS.map(s=>`<li>${s}</li>`).join("");
+  const lis = [...ol.children];
+  const ctl = loop(STEPS.length*1400, t => { const k = Math.floor(t*STEPS.length); lis.forEach((li,i)=>li.classList.toggle("cur", i===k)); }, 0.2);
+  bindToggle($("stepToggle"), ctl);
+})();
+
+/* ---------------- Fig 7: enemy life cycle ---------------- */
+(() => {
+  const R = 28, Y = 120, X0 = 50, DX = R*SQ3;
+  const hx = i => X0 + i*DX;
+  const svg = $("enemyDemo");
+  const STAGES = [
+    [0.00, "Combat: the empty spawn node refills."],
+    [0.14, "Combat: the enemy advances 2 hexes toward the Shop."],
+    [0.30, "Next Combat: 2 more hexes. It stops next to the Shop."],
+    [0.46, "Explore: siege tick. The Shop takes 1 damage."],
+    [0.60, "Prepare: the player moves next to the enemy. That hex costs 2."],
+    [0.72, "Skirmish: 1 roll, Skills only. Strike deals 2."],
+    [0.86, "The node is empty. It refills at the next Combat."]
+  ];
+  const base = Array.from({length:7},(_,i)=>`<polygon points="${hexPoints(hx(i),Y,R-1)}" fill="${i===2?"var(--t-forest)":i===4?"var(--t-hills)":"var(--t-plains)"}" stroke="var(--t-ink)"/>`).join("")
+    + `<circle cx="${hx(0)}" cy="${Y}" r="15" fill="none" stroke="var(--bad)" stroke-width="2" stroke-dasharray="4 3"/>`
+    + `<text x="${hx(0)}" y="${Y+R+18}" text-anchor="middle" font-size="11" fill="var(--muted)">spawn node</text>`
+    + `<text x="${hx(5)}" y="${Y+R+18}" text-anchor="middle" font-size="11" fill="var(--muted)">Shop</text>`;
+  svg.innerHTML = `<g>${base}</g><g id="ed-shop"></g><g id="ed-enemy"></g><g id="ed-player"></g><g id="ed-fx"></g><text id="ed-cap" x="320" y="30" text-anchor="middle" font-size="13" fill="var(--fg)"></text>`;
+  const house = (x,y,hp) => `<path d="M${x-13} ${y+11} V${y-3} L${x} ${y-15} L${x+13} ${y-3} V${y+11} Z" fill="var(--warn-soft)" stroke="var(--warn)" stroke-width="2"/><text x="${x}" y="${y+7}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--fg)">S</text>`
+    + Array.from({length:3},(_,i)=>`<rect x="${x-12+i*9}" y="${y+15}" width="7" height="5" fill="${i<hp?"var(--warn)":"var(--line)"}"/>`).join("");
+  const lerp = (a,b,f) => a+(b-a)*Math.max(0,Math.min(1,f));
+  const ctl = loop(14000, t => {
+    const stage = [...STAGES].reverse().find(s => t >= s[0]);
+    $("ed-cap").textContent = stage[1];
+    // Enemy position by stage.
+    let ex = hx(0), alive = true, scale = 1;
+    if (t < 0.14) scale = Math.min(1, t/0.05);
+    else if (t < 0.30) ex = lerp(hx(0), hx(2), (t-0.16)/0.1);
+    else if (t < 0.46) ex = lerp(hx(2), hx(4), (t-0.32)/0.1);
+    else ex = hx(4);
+    if (t >= 0.80) alive = false;
+    const hp = t >= 0.5 ? 2 : 3;
+    $("ed-shop").innerHTML = house(hx(5), Y, hp);
+    $("ed-enemy").innerHTML = alive ? `<g transform="translate(${ex},${Y}) scale(${scale})"><circle r="10" fill="var(--bad)" stroke="var(--panel)" stroke-width="2"/><text y="4" text-anchor="middle" font-size="10" font-weight="600" fill="var(--panel)">2</text></g>` : (t < 0.86 ? `<circle cx="${hx(4)}" cy="${Y}" r="10" fill="var(--bad)" opacity="${Math.max(0,1-(t-0.8)/0.06)}"/>` : "");
+    // Player: starts off-map right, steps onto hex 6 then hex 5 (next to the enemy).
+    const px = t < 0.6 ? hx(6)+DX*0.9 : t < 0.66 ? lerp(hx(6)+DX*0.9, hx(6), (t-0.6)/0.06) : lerp(hx(6), hx(5), (t-0.66)/0.05);
+    $("ed-player").innerHTML = t >= 0.56 ? `<g transform="translate(${px},${Y-4})"><circle r="11" fill="var(--p1)" stroke="var(--panel)" stroke-width="2"/><text y="4" text-anchor="middle" font-size="10" font-weight="600" fill="var(--panel)">1</text></g>` : "";
+    let fxm = "";
+    if (t >= 0.46 && t < 0.58) fxm += `<line x1="${hx(4)+8}" y1="${Y}" x2="${hx(5)-12}" y2="${Y}" stroke="var(--bad)" stroke-width="3" stroke-dasharray="4 3"/><text x="${hx(5)}" y="${Y-26}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--bad)">−1</text>`;
+    if (t >= 0.66 && t < 0.72) fxm += `<text x="${(hx(5)+hx(6))/2}" y="${Y-30}" text-anchor="middle" font-size="12" fill="var(--warn)">+1 move cost</text>`;
+    if (t >= 0.72 && t < 0.86) fxm += `<g transform="translate(${hx(5)-14},${Y+40})"><rect width="26" height="26" rx="5" fill="var(--panel)" stroke="var(--fg)"/><svg x="3" y="3" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--fg)" stroke-width="2">${GLYPH.Sword}</svg></g><text x="${hx(4)}" y="${Y-22}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--bad)">−2</text>`;
+    if (t >= 0.86) fxm += `<circle cx="${hx(0)}" cy="${Y}" r="${15 + 8*Math.sin((t-0.86)*40)}" fill="none" stroke="var(--bad)" stroke-width="1.5" opacity=".7"/>`;
+    $("ed-fx").innerHTML = fxm;
+  }, 0.02);
+  bindToggle($("enemyToggle"), ctl);
+})();
+
+/* ---------------- XP table ---------------- */
+$("xpRows").innerHTML = Array.from({length:10},(_,i)=>{ const L = i+1, xp = SIM.DEFAULTS.xpBase*(L-1)*L/2; return `<tr><td class="num">${L}</td><td class="num">${xp}</td><td class="num">${L}</td><td class="num">${xp}</td></tr>`; }).join("");
+
+/* ---------------- Exploration option tabs (12-round extrapolation) ---------------- */
+const HEXDIRS = SIM.DIRS;
+const hexRing = k => { if(!k) return [[0,0]]; let q=-k, r=k; const out=[]; for(const [dq,dr] of HEXDIRS) for(let j=0;j<k;j++){ out.push([q,r]); q+=dq; r+=dr; } return out; };
+const hexPoly = (cx,cy,s) => Array.from({length:6},(_,i)=>{ const a=Math.PI/180*(60*i-30); return `${(cx+s*Math.cos(a)).toFixed(1)},${(cy+s*Math.sin(a)).toFixed(1)}`; }).join(" ");
+const hexXY = ([q,r],s) => [s*SQ3*(q+r/2), s*1.5*r];
+const EX_TYPES = ["res","spawn","res","spawn","res","spawn","spawn","res","elite","spawn","res","elite"];
+const ring1 = hexRing(1), ring2 = hexRing(2);
+const chosenPlacement = types => { let ri=0, si=0; return types.map(t => t==="res" ? ring1[ri++ % 6] : ring2[(si++*5) % 12]); };
+const autoPlacement = n => { const r = rng(23), placed=[[0,0]], seen=new Set(["0,0"]), out=[];
+  const d = ([q,s]) => (Math.abs(q)+Math.abs(s)+Math.abs(q+s))/2;
+  while(out.length<n){ const b = placed[Math.floor(r()*placed.length)], dd = HEXDIRS[Math.floor(r()*6)], h=[b[0]+dd[0],b[1]+dd[1]];
+    if(!seen.has(h.join(",")) && d(h)<=2){ seen.add(h.join(",")); placed.push(h); out.push(h); } } return out; };
+const buildTiles = (revealRounds, placement) => revealRounds.map((round,i)=>({ h: placement[i], type: EX_TYPES[i], round }));
+const EX_PLANS = { forced: buildTiles(EX_TYPES.map((_,i)=>i+1), chosenPlacement(EX_TYPES)), optional: buildTiles([1,2,4,5,7,8,10,11], chosenPlacement(EX_TYPES.slice(0,8))), auto: buildTiles(EX_TYPES.map((_,i)=>i+1), autoPlacement(EX_TYPES.length)) };
+const exState = (plan, depletes, round) => { const shown = plan.filter(t => t.round <= round); const active = t => !(depletes && t.type==="res" && round - t.round >= 2);
+  return { shown, active, spawns: shown.filter(t=>t.type==="spawn").length, elites: shown.filter(t=>t.type==="elite").length, materials: 1 + shown.filter(t=>t.type==="res" && active(t)).length*2 }; };
+const OPTIONS = [
+  { id:"forced", label:"A · Forced reveal", rule:["In each Explore phase, reveal 1 tile.","You choose where the tile goes."],
+    why:"Escalation is guaranteed because each round adds a tile until the tile deck is empty. Placement is the decision: put spawn nodes far from your locations.",
+    prior:"Carcassonne (you must place the tile you draw, but you choose where). Zombicide (spawn zones grow the danger).",
+    risk:"The pace is fixed. A weak start cannot slow down. When the tile deck is empty, escalation stops." },
+  { id:"optional", label:"B · Optional, nodes deplete", rule:["You can reveal 1 tile in the Explore phase.","A gathering node gives materials 2 times. Then it is empty."],
+    why:"Exploring is a push-your-luck choice. Empty nodes push players outward, but they decide when to accept more danger.",
+    prior:"Mage Knight (players choose when to explore). Robinson Crusoe (resource sources run out).",
+    risk:"Turtling. A player can stop exploring and freeze the enemy count. The simulator shows this: the bot stops exploring early and the run stalls." },
+  { id:"auto", label:"C · Automatic reveal", rule:["Turn the top tile of the tile deck.","Roll a die to select the edge. Put the tile there."],
+    why:"The world acts on its own. Danger can appear next to your locations, so every round has a surprise.",
+    prior:"Spirit Island (the invader deck explores new lands every round). Zombicide spawn cards.",
+    risk:"Players lose control of the map. A spawn node next to the Start tile early can end a run with no player error." }
+];
+const exDiagram = (id, host) => {
+  host.innerHTML = `<svg viewBox="-190 -160 540 320" width="100%" style="min-width:480px" role="img" aria-label="Exploration over 12 rounds"><g class="tiles"></g>
+    <g font-size="12" fill="var(--fg)"><text class="r" x="210" y="-120" font-size="20" font-weight="600">ROUND 1</text>
+      <text x="210" y="-86" fill="var(--muted)" font-size="11">TILES</text><text class="tl" x="340" y="-86" text-anchor="end">0</text>
+      <text x="210" y="-62" fill="var(--muted)" font-size="11">SPAWN NODES</text><text class="sp" x="340" y="-62" text-anchor="end">0</text>
+      <text x="210" y="-38" fill="var(--muted)" font-size="11">ELITE NODES</text><text class="el" x="340" y="-38" text-anchor="end">0</text>
+      <text x="210" y="-14" fill="var(--muted)" font-size="11">MATERIALS / ROUND</text><text class="mt" x="340" y="-14" text-anchor="end">0</text>
+      <text x="210" y="26" fill="var(--muted)" font-size="11">ENEMIES ON MAP (MIN.)</text><g class="bars"></g>
+      <text class="note" x="210" y="130" font-size="11" fill="var(--muted)"></text></g>
+    <g font-size="10" fill="var(--muted)" transform="translate(-180,148)"><rect width="10" height="10" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="14" y="9">node tile</text><circle cx="84" cy="5" r="4" fill="var(--bad)"/><text x="92" y="9">spawn</text><rect x="136" width="10" height="10" fill="var(--warn-soft)" stroke="var(--warn)"/><text x="150" y="9">elite</text>${id==="optional"?'<rect x="186" width="10" height="10" fill="var(--line)"/><text x="200" y="9">empty</text>':''}</g></svg>`;
+  const dep = id === "optional", plan = EX_PLANS[id];
+  return t => {
+    const round = Math.min(12, 1+Math.floor(t*14)); const st = exState(plan, dep, round);
+    const fillFor = tile => tile.type==="res" ? (st.active(tile) ? "var(--accent-soft)" : "var(--line)") : tile.type==="elite" ? "var(--warn-soft)" : "var(--panel)";
+    host.querySelector(".tiles").innerHTML = `<polygon points="${hexPoly(0,0,26)}" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.6"/><text x="0" y="4" text-anchor="middle" font-size="9" fill="var(--fg)">START</text>`
+      + st.shown.map(tile => { const [x,y] = hexXY(tile.h,28); const fresh = tile.round===round;
+        return `<polygon points="${hexPoly(x,y,26)}" fill="${fillFor(tile)}" stroke="${fresh?"var(--accent)":"var(--fg)"}" stroke-width="${fresh?2.5:1.2}"/>` + (tile.type==="spawn" ? `<circle cx="${x}" cy="${y}" r="5" fill="var(--bad)"/>` : "") + (tile.type==="elite" ? `<text x="${x}" y="${y+4}" text-anchor="middle" font-size="9" fill="var(--warn)">ELITE</text>` : ""); }).join("");
+    host.querySelector(".r").textContent = `ROUND ${round}`; host.querySelector(".tl").textContent = st.shown.length; host.querySelector(".sp").textContent = st.spawns; host.querySelector(".el").textContent = st.elites; host.querySelector(".mt").textContent = st.materials;
+    const hist = Array.from({length:round},(_,i)=>exState(plan, dep, i+1)).map(s=>s.spawns+s.elites);
+    host.querySelector(".bars").innerHTML = hist.map((v,i)=>`<rect x="${210+i*11}" y="${110-v*9}" width="8" height="${Math.max(1,v*9)}" rx="1" fill="var(--bad)" opacity="${i===round-1?1:.55}"/>`).join("") + `<line x1="210" x2="342" y1="110" y2="110" stroke="var(--line)"/>`;
+    host.querySelector(".note").textContent = { forced:"1 tile every round. You choose the spot.", optional: [3,6,9,12].includes(round) ? "Round skipped: no new tile." : "Reveal taken. Node tiles empty after 2 rounds.", auto:"Tile and spot come from the deck and a die." }[id];
+  };
+};
+(() => {
+  const bar = $("optbar"), panels = $("optpanels");
+  bar.innerHTML = OPTIONS.map((o,i)=>`<button role="tab" aria-selected="${i===0}" data-opt="${o.id}">${o.label}</button>`).join("");
+  panels.innerHTML = OPTIONS.map((o,i)=>`<div class="opt" id="opt-${o.id}" ${i?"hidden":""} style="display:grid;gap:14px;padding-top:14px">
+    <div class="ste">${o.rule.map((s,k)=>`<div class="p"><i>16.1.${k+1}</i><span>${s}</span></div>`).join("")}</div>
+    <figure><div class="stage" id="dg-${o.id}"></div><figcaption><span><b>Fig. 9${"abc"[i]}</b> ${o.label.slice(4)}: 12 rounds, simplified tiles</span><button data-run="${o.id}">Run full game in simulator</button></figcaption></figure>
+    <div class="two"><div><h3>Effect on play</h3><p>${o.why}</p></div><div><h3>Similar games</h3><p>${o.prior}</p></div></div>
+    <div class="callout"><b>Risk</b>${o.risk}</div></div>`).join("");
+  OPTIONS.forEach(o => { const draw = exDiagram(o.id, $(`dg-${o.id}`)); loop(15000, draw, 0.7); });
+  const btns = [...bar.children];
+  btns.forEach(b => b.addEventListener("click", () => { btns.forEach(x => x.setAttribute("aria-selected", String(x===b))); OPTIONS.forEach(o => $(`opt-${o.id}`).hidden = o.id !== b.dataset.opt); }));
+  bar.addEventListener("keydown", e => { const i = btns.indexOf(e.target); if (i<0) return; const d = e.key==="ArrowRight"?1:e.key==="ArrowLeft"?-1:0; if(!d) return; const n = btns[(i+d+btns.length)%btns.length]; n.focus(); n.click(); });
+  panels.addEventListener("click", e => { const b = e.target.closest("[data-run]"); if (!b) return; $("pRule").value = b.dataset.run; showView("sim"); SIMUI.run(); window.scrollTo({top:0}); });
+})();
+
+/* ---------------- Decisions + filled blanks ---------------- */
+const DECISIONS = [
+  ["Run length","60–90 minutes"],["Characters","Blank slate: every player starts identical"],["Progression","None. Each run stands alone; milestones are a scoreboard"],
+  ["Map","Mage Knight-style 7-hex tiles: gathering nodes, broken locations, spawn nodes"],["Locations","Shop (sells cards) and Training Ground (hosts the Skill draft). All start broken; a reference card gives the cost"],
+  ["Spawning","Enemy miniatures on spawn nodes (limit 20). A node refills only when its enemy is defeated"],["Escalation","Tiles only: new tiles add spawn nodes; core tiles add elite nodes"],
+  ["Enemy movement","Advance toward the nearest player or built location; fight enemies within reach"],["Survivors outside Combat","Obstacles in Prepare; siege tick in Explore; players can skirmish"],
+  ["Destroyed location","Back to broken; rebuild at full cost"],["Experience","Shared. Each kill gives XP to all; each level gives every player 1 die; rising thresholds; no cap"],
+  ["Deck size","Grows freely (Add mode). Brake: more cards also means a longer Combat under attack. The simulator also has a Replace mode to compare"],["Dice","Standard 6-face dice only; the market does not sell dice"],
+  ["Skill pace","About 1 new Skill every 3 rounds. The Training Ground hosts a free Skill draft every 2nd round while it stands; it does not sell Skills"],["Run target","A typical solo run ends around rounds 10–12; 12 rounds take about 90 minutes"],["Training Ground","Costs 3 materials. One starts broken on the Start tile so the draft is reachable early (measured: about 1 Skill per 3 rounds)"],["Streamlining (defaults)","6-card starter with hand of 3; no shuffle before Prepare; grunts deal fixed damage; sites printed on tiles"],["Co-op","Open hands"],["Complexity","Medium, BGG weight about 2.8"],["Exploration","Open. Compare forced, optional, and automatic in the simulator"]
+];
+$("decRows").innerHTML = DECISIONS.map(([a,b])=>`<tr><td>${a}</td><td>${b}</td></tr>`).join("");
+const BLANKS = [
+  ["Starting deck","6 cards, hand of 3","Cut from 10/5 to fit 12 rounds in about 90 minutes; each card play is the largest time cost (simulator time model)",45],
+  ["Player health","15","Survives about 3 exchanges against 4 adjacent grunts",45],
+  ["Rolls per exchange","3, keep any","Yahtzee and Dice Throne both use 3 rolls",85],
+  ["Skill use","Each Skill 1 time per exchange","Dice Throne fires 1 ability per roll; a simulator switch tests unlimited",55],
+  ["Grunt / elite","2 health, 2 fixed damage / 14 health, 6 dice","Tuned in the simulator: median solo run ends in round 11 (middle half: 10–12)",50],
+  ["Enemy speed","2 hexes per Combat","Reaches a location 4 hexes away in 2 rounds",50],
+  ["Location cost","Shop 4, Training 5 materials","2–3 Gather actions each",50],
+  ["Location health","3","A siege by 1 enemy breaks it in 3 rounds",45],
+  ["XP curve","Level L needs 5 × L more XP; no max level","Mage Knight Fame track widens each level",50],
+  ["Tile deck","5 countryside + 5 core","Core tiles (elites) arrive around rounds 6–10, which sets the end of a typical run. Mage Knight uses 11 + 8, minus some by player count",50],
+  ["Skill draft","Every 2nd round while a Training Ground stands: see 2 Skills, keep 1","Slay the Spire card reward (choose 1 of a few). Measured average 3.3 rounds per Skill because siege sometimes breaks the Training Ground",60],
+  ["Time model","Seconds per step: card 12, roll 8, place Skills 20, tile 60, phase change 30, enemy attack 6 + 2 per die; setup 8 min","My estimate of a normal table. Replace with playtest timings",35],
+  ["Milestones","Rounds 5/10/15, elite, Arcane Rain, 3 builds, 10 tiles, level 5","Survival, combat, build, and explore goals",50]
+];
+$("blankRows").innerHTML = BLANKS.map(([a,b,c,d])=>`<tr><td>${a}</td><td>${b}</td><td>${c}</td><td class="num">${d}</td></tr>`).join("");
+
+/* ---------------- Full spec (tiny markdown renderer) ---------------- */
+const inline = s => esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");
+const renderSpec = md => {
+  const out = []; const lines = md.trim().split("\n"); let i = 0;
+  while (i < lines.length){
+    const l = lines[i];
+    if (!l.trim()){ i++; continue; }
+    if (l.startsWith("# ")){ i++; continue; }
+    if (l.startsWith("## ")){ out.push(`<h2>${inline(l.slice(3))}</h2>`); i++; continue; }
+    if (l.startsWith("|")){
+      const rows=[]; while(i<lines.length && lines[i].startsWith("|")){ rows.push(lines[i]); i++; }
+      const cells = r => r.split("|").slice(1,-1).map(c=>c.trim()); const [h,,...body] = rows;
+      out.push(`<div class="tbl"><table><thead><tr>${cells(h).map(c=>`<th>${inline(c)}</th>`).join("")}</tr></thead><tbody>${body.map(r=>`<tr>${cells(r).map(c=>`<td>${inline(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`);
+      continue;
+    }
+    const block=[]; while(i<lines.length && lines[i].trim() && !lines[i].startsWith("#") && !lines[i].startsWith("|")){ block.push(lines[i]); i++; }
+    out.push(`<div class="ste">${block.map(b=>{ const m = b.match(/^(\d+(?:\.\d+)+|\d+\.|-)\s+(.*)$/);
+      return m ? `<div class="p"><i>${m[1]==="-"?"–":esc(m[1])}</i><span>${inline(m[2])}</span></div>` : `<div>${inline(b)}</div>`; }).join("")}</div>`);
+  }
+  return out.join("");
+};
+$("specbody").innerHTML = renderSpec($("specmd").textContent);
+
+/* =====================================================================
+   VISUAL SIMULATOR
+   ===================================================================== */
+const SIMUI = (() => {
+  /** Base duration (ms at 1×) for each event type. */
+  const DUR = { tile:900, spawn:380, move:300, gather:500, build:800, buy:600, heal:420, play:260, draw:320, skirmish:600, roll:620, keep:300, assign:420,
+    skill:560, kill:460, enemyAttack:760, advance:480, siege:560, broken:700, levelup:1000, milestone:1000, phase:950, quiet:160, waste:220, idle:160,
+    capped:300, skipReveal:700, noTiles:300, death:1600, end:900, draft:1300, replace:900, shuffle:650, skipCombat:800 };
+  const MILESTONES = ["Survive to round 5","Survive to round 10","Survive to round 15","Defeat an elite","Fire Arcane Rain (full house)","Build 3 locations","Reveal 10 tiles","Reach level 5"];
+  let res = null, idx = 0, playing = false, speed = 2, timer = null, focus = 1, pinned = false, started = false, map = null;
+
+  /** readParams() — form values → engine parameters. Empty fields fall back to engine defaults. */
+  const D = SIM.DEFAULTS;
+  const num = (id, def) => { const v = $(id).value; return v === "" || isNaN(+v) ? def : +v; };
+  const readParams = () => {
+    const [starterSize, handSize] = $("pStarter").value.split("/").map(Number);
+    return {
+      exploreRule: $("pRule").value, players: +$("pPlayers").value, seed: num("pSeed", 1) || 1, maxRounds: Math.min(60, Math.max(5, num("pMax", 30))),
+      spawnPerCountry: +$("pSpawn").value, enemySpeed: +$("pSpeed").value, gruntHp: num("pGH", D.gruntHp), gruntDice: num("pGD", D.gruntDice),
+      eliteHp: num("pEH", D.eliteHp), eliteDice: num("pED", D.eliteDice), enemyCap: num("pCap", D.enemyCap), xpBase: Math.max(1, num("pXp", D.xpBase)),
+      maxLevel: Math.max(0, num("pMaxLvl", 0)), countryTiles: Math.max(1, num("pCT", D.countryTiles)), coreTiles: Math.max(0, num("pCoT", D.coreTiles)), skillUses: $("pUses").value,
+      skillDraftEvery: Math.max(0, num("pDraft", D.skillDraftEvery)), skillPriceMult: +$("pPrice").value, draftNeedsTraining: $("pHost").value === "yes", deckMode: $("pDeck").value,
+      starterSize, handSize, quickPrepare: $("pQuick").value === "yes", fixedGruntDamage: $("pFixed").value === "yes", printedSites: $("pPrinted").value === "yes",
+      skipEmptyCombat: $("pSkip").value === "yes", exploreEvery: +$("pExEvery").value, enemyLeash: +$("pLeash").value,
+      tableSpeed: +$("pTable").value, setupMinutes: Math.max(0, num("pSetup", 8))
+    };
+  };
+
+  /* ---- Sidebar ---- */
+  const renderSide = (snap, ev, animate) => {
+    const pl = snap.players.find(p => p.id === focus) || snap.players[0];
+    $("pTabs").innerHTML = snap.players.length > 1 ? snap.players.map(p => `<button type="button" data-p="${p.id}" aria-pressed="${p.id===pl.id}" style="color:var(--p${p.id})">P${p.id}</button>`).join("") : `<span style="color:var(--p1)">P1</span>`;
+    $("sHp").textContent = `${Math.max(0,pl.hp)} / ${pl.maxHp}`;
+    $("sHpBar").style.width = `${Math.max(0,pl.hp)/pl.maxHp*100}%`;
+    $("sHpBar").style.background = pl.hp <= 5 ? "var(--bad)" : "var(--good)";
+    const prev = snap.nextLevelAt - res.params.xpBase * snap.level;
+    $("sLvl").textContent = snap.level;
+    const capped = res.params.maxLevel && snap.level >= res.params.maxLevel;
+    $("sXp").textContent = capped ? `${snap.xp} XP · max level` : `${snap.xp} / ${snap.nextLevelAt}`;
+    $("sXpBar").style.width = `${Math.min(100, (snap.xp - prev) / Math.max(1, snap.nextLevelAt - prev) * 100)}%`;
+    const pulse = t => animate && ev.player === pl.id && ev.type === t ? " pulse" : "";
+    $("sMat").innerHTML = `<span class="${pulse("gather")}">◆</span> ${pl.materials} materials`;
+    $("sCur").innerHTML = `<span class="${animate && (ev.type==="kill"||ev.type==="buy") && ev.player===pl.id ? "pulse" : ""}">●</span> ${pl.currency} currency`;
+    $("sGuard").textContent = pl.guard ? `⛨ ${pl.guard} guard` : "";
+    // Deck and hand
+    const bottom = pl.orient === "bottom";
+    $("sStack").classList.toggle("bottom", bottom);
+    $("sDeckLbl").textContent = bottom ? "bottom halves up" : "top halves up";
+    $("sDeck").textContent = `Deck ${pl.deckN} · Discard ${pl.discardN}`;
+    const cards = bottom ? pl.hand.map(id => ({ id, used:false })) : [...pl.played.map(id => ({ id, used:true })), ...pl.hand.map(id => ({ id, used:false }))];
+    const slide = animate && ev.type === "draw" && ev.player === pl.id;
+    $("sHand").innerHTML = cards.length ? cards.map(c => { const d = SIM.CARDS[c.id];
+      return `<div class="mini${bottom?" bottom":""}${c.used?" used":""}${slide?" slidein":""}" title="${d.name}: ${d.top.label} / ${d.bot.label}"><span>${d.top.label}</span><span>${d.bot.label}</span></div>`; }).join("") : `<span class="conf">No cards in hand.</span>`;
+    // Dice
+    const rolling = animate && ev.type === "roll" && ev.player === pl.id;
+    const newDie = animate && ev.type === "levelup";
+    $("sDiceN").textContent = `${pl.dice} ${pl.dice===1?"die":"dice"}`;
+    $("sDice").innerHTML = pl.faces.length
+      ? pl.faces.map((f,i) => `<div class="die${pl.kept[i]?" kept":""}${rolling && !pl.kept[i]?" rolling":""}">${glyph(f)}${f}</div>`).join("")
+      : Array.from({length: pl.dice}, (_,i) => `<div class="die blank${newDie && i===pl.dice-1?" newdie":""}">d6</div>`).join("");
+    // Skills
+    const firing = ev.player === pl.id ? (ev.type === "assign" ? ev.fired : ev.type === "skill" ? [ev.skill] : []) : [];
+    const learned = animate && ev.player === pl.id ? (ev.type === "buy" && ev.kind === "skill" ? ev.item : ev.type === "draft" ? ev.pick : null) : null;
+    $("sSkillN").textContent = `${pl.skills.length}`;
+    $("sSkills").innerHTML = pl.skills.map(id => { const s = SIM.SKILLS[id]; const g = Object.entries(s.need).map(([f,n]) => Array.from({length:n},()=>glyph(f)).join("")).join("");
+      return `<span class="chip${firing.includes(id)?" on":""}${learned===id?" new":""}" title="${s.name}: ${needText(s.need)} → ${skillFx(s)}">${g}<b>${s.name}</b></span>`; }).join("");
+    // Offers
+    const locs = Object.values(snap.sites).filter(s => s.type === "loc");
+    $("sOffers").innerHTML = locs.map(s => { const name = s.kind === "shop" ? "Shop" : "Training Ground";
+      if (!s.built) return `<div><span>${name}</span><span class="conf">broken · costs ${res.locCost(s.kind)}</span></div>`;
+      if (s.kind === "train" && res.params.skillPriceMult <= 0) return `<div><b>${name}</b><span class="conf">health ${s.hp}/3</span></div><div style="padding-left:10px" class="conf">Hosts the Skill draft every ${res.params.skillDraftEvery} rounds</div>`;
+      return `<div><b>${name}</b><span class="conf">health ${s.hp}/3</span></div>` + (s.offers.length ? s.offers.map(id => s.kind === "shop"
+        ? `<div style="padding-left:10px"><span>${SIM.CARDS[id].name} <span class="conf">${SIM.CARDS[id].top.label} / ${SIM.CARDS[id].bot.label}</span></span><span>3</span></div>`
+        : `<div style="padding-left:10px"><span>${SIM.SKILLS[id].name} <span class="conf">${needText(SIM.SKILLS[id].need)}</span></span><span>${isFinite(res.skillPrice(id)) ? res.skillPrice(id) : "not for sale"}</span></div>`).join("") : `<div style="padding-left:10px" class="conf">Supply empty</div>`); }).join("") || `<span class="conf">No locations revealed.</span>`;
+    // Milestones
+    $("sMs").innerHTML = MILESTONES.map(m => `<li class="${snap.milestones.includes(m)?"done":""}">${m}</li>`).join("");
+  };
+
+  /* ---- Effects for one event (play mode only) ---- */
+  const toast = (title, sub, ms) => { const d = document.createElement("div"); d.className = "toast"; d.innerHTML = `${esc(title)}${sub?`<small>${esc(sub)}</small>`:""}`; d.style.animationDuration = ms+"ms"; $("fxHtml").appendChild(d); setTimeout(() => d.remove(), ms); };
+  const playFx = (ev, prevSnap, ms) => {
+    const snap = ev.snap, P = id => snap.players.find(p => p.id === id) || snap.players[0];
+    const enemyPos = id => (snap.enemies.find(e => e.id === id) || prevSnap?.enemies.find(e => e.id === id) || {}).h;
+    switch (ev.type) {
+      case "gather": map.fx.float(ev.h, `+${ev.amount} ◆`, "var(--accent)", ms*1.6); break;
+      case "build": map.fx.ring(ev.h, 1, "var(--good)", ms*1.2); map.fx.float(ev.h, ev.kind === "shop" ? "Shop built" : "Training built", "var(--good)", ms*1.6); break;
+      case "buy": map.fx.float(P(ev.player).h, ev.kind === "skill" ? `Learn ${SIM.SKILLS[ev.item].name}` : `Buy ${SIM.CARDS[ev.item].name}`, "var(--warn)", ms*1.8); break;
+      case "heal": if (ev.amount) map.fx.float(P(ev.player).h, `+${ev.amount} ♥`, "var(--good)", ms*1.6); break;
+      case "move": if (ev.obstacle) map.fx.float(ev.h, "cost 2", "var(--warn)", ms*2); break;
+      case "skirmish": map.fx.icon(ev.h, "Sword", "var(--bad)", ms*2); map.fx.line(P(ev.player).h, ev.h, "var(--bad)", ms*1.5); break;
+      case "spawn": { const h = SIM.unkey(ev.k); map.fx.ring(h, 0.6, "var(--bad)", ms*1.3); } break;
+      case "skill": {
+        const pl = P(ev.player);
+        if (ev.targets) { map.fx.ring(pl.h, 2, "var(--accent)", ms*1.3); ev.targets.forEach(id => { const h = enemyPos(id); if (h) map.fx.float(h, `−${ev.amount}`, "var(--bad)", ms*1.6); }); }
+        else if (ev.target) { const h = enemyPos(ev.target); if (h) { map.fx.line(pl.h, h, "var(--accent)", ms); map.fx.float(h, `−${ev.amount}`, "var(--bad)", ms*1.6); } }
+        else if (SIM.SKILLS[ev.skill].guard) map.fx.float(pl.h, `+${ev.amount} guard`, "var(--accent)", ms*1.6);
+        else if (SIM.SKILLS[ev.skill].heal && ev.amount) map.fx.float(pl.h, `+${ev.amount} ♥`, "var(--good)", ms*1.6);
+      } break;
+      case "kill": map.fx.ghost(ev.h, ms*1.4); map.fx.float(ev.h, `+${ev.coin} ●`, "var(--warn)", ms*1.8); break;
+      case "enemyAttack": { const pl = P(ev.player); (prevSnap?.enemies || []).filter(e => SIM.dist(e.h, pl.h) <= 1).forEach(e => map.fx.line(e.h, pl.h, "var(--bad)", ms));
+        map.fx.float(pl.h, ev.dmg ? `−${ev.dmg} ♥` : "blocked", ev.dmg ? "var(--bad)" : "var(--accent)", ms*1.5); } break;
+      case "siege": { const e = (prevSnap?.enemies || []).find(x => x.id === ev.enemy); if (e) map.fx.line(e.h, ev.h, "var(--bad)", ms); map.fx.float(ev.h, "−1", "var(--bad)", ms*1.5); } break;
+      case "broken": map.fx.ring(ev.h, 0.8, "var(--bad)", ms*1.2); map.fx.float(ev.h, "Broken", "var(--bad)", ms*1.6); break;
+      case "levelup": toast(`Level ${ev.level}`, "Every player gets 1 more die", ms*1.4); break;
+      case "milestone": toast("Milestone", ev.label, ms*1.4); break;
+      case "phase": toast(ev.phase, ev.phase === "prepare" ? "Deck turns: top halves up" : ev.phase === "combat" ? "Deck turns 180°: bottom halves up" : "Siege tick, then a new tile", ms*1.1); break;
+      case "skipReveal": toast("No reveal", "Players skip exploring", ms*1.4); break;
+      case "skipCombat": map.fx.float(P(ev.player).h, "No enemy near: skip Combat", "var(--good)", ms*1.6); break;
+      case "shuffle": map.fx.float(P(ev.player).h, ev.shuffled ? "Shuffle + turn deck" : "Turn deck, no shuffle", "var(--muted)", ms*1.4); break;
+      case "replace": if (ev.removed) map.fx.float(P(ev.player).h, `${SIM.CARDS[ev.removed].name} → ${SIM.CARDS[ev.added].name}`, "var(--warn)", ms*1.8); break;
+      case "draft": if (!ev.player) { toast("No Skill draft", "No Training Ground is built", ms*1.2); break; } if (ev.pick) toast(`Skill draft · P${ev.player}`, `${ev.options.map(id => SIM.SKILLS[id].name).join(" or ")} → ${SIM.SKILLS[ev.pick].name}`, ms*1.2); break;
+    }
+  };
+
+  /* ---- Show event i ---- */
+  const show = (i, animate) => {
+    if (!res) return;
+    idx = Math.max(0, Math.min(res.events.length-1, i));
+    const ev = res.events[idx], snap = ev.snap, prev = idx ? res.events[idx-1].snap : null;
+    const ms = (DUR[ev.type] || 300) / speed;
+    map.setDur(animate ? Math.min(ms, 700) : 0);
+    if (!pinned && ev.player) focus = ev.player;
+    map.render(res.world, snap, { animate, optional: res.params.exploreRule === "optional" });
+    if (animate && !still) playFx(ev, prev, ms);
+    renderSide(snap, ev, animate);
+    $("bPhase").textContent = snap.phase; $("bPhase").className = "ph " + snap.phase;
+    $("bRound").textContent = `Round ${snap.round}`;
+    $("bClock").textContent = `≈ ${fmtMin(snap.seconds/60)} at the table`;
+    $("bScrub").value = idx; $("bPos").textContent = `${idx+1} / ${res.events.length}`;
+    $("bRoundSel").value = String(snap.round);
+    // Log: recent lines
+    const from = Math.max(0, idx-11);
+    $("simLog").innerHTML = res.events.slice(from, idx+1).filter(e => e.log).map((e,k,arr) => `<div class="${k===arr.length-1?"cur":""}">R${e.snap.round} · ${esc(e.log)}</div>`).join("");
+    $("simLog").scrollTop = $("simLog").scrollHeight;
+    // End overlay
+    const fig = $("fxHtml"); fig.querySelector(".over")?.remove();
+    if (idx === res.events.length-1) { const o = document.createElement("div"); o.className = "over";
+      o.innerHTML = `<b>${res.summary.survivedFull ? "Round limit reached" : "Run over"}</b><span class="conf">${esc(res.summary.cause)}</span><span class="conf">${res.summary.milestones.length} of 8 milestones · level ${res.summary.level} · ${res.summary.kills} enemies defeated</span>`; fig.appendChild(o); }
+    return ms;
+  };
+
+  const setPlaying = on => { playing = on; $("bPlay").textContent = on ? "Pause" : "Play"; $("bPlay").setAttribute("aria-pressed", String(on)); clearTimeout(timer); if (on) tick(); };
+  const tick = () => { if (!playing) return; if (idx >= res.events.length-1) { setPlaying(false); return; }
+    const ms = show(idx+1, true); timer = setTimeout(tick, ms); };
+
+  /* ---- Charts + KPIs for the run ---- */
+  const renderSummary = () => {
+    const R = res.rounds, xs = R.map(r => r.round), S = res.summary;
+    $("kpis").innerHTML = [
+      ["Estimated time", fmtMin(S.minutes)], ["Round at 60 min", roundAt(R, 60)], ["Round at 90 min", roundAt(R, 90)],
+      ["Rounds", S.survivedFull ? `${res.params.maxRounds}+` : S.rounds], ["Final level (dice)", S.level], ["Enemies defeated", S.kills],
+      ["Tiles revealed", S.tiles], ["Milestones", `${S.milestones.length} / 8`],
+      ["Rounds per new Skill", (() => { const last = R[R.length-1]; const gained = last ? last.skillsAvg - 4 : 0; return gained > 0 ? (last.round / gained).toFixed(1) : "–"; })()]
+    ].map(([a,b]) => `<div class="kpi"><span>${a}</span><b>${b}</b></div>`).join("") + `<div class="kpi" style="grid-column:1/-1"><span>Result</span><span style="font:500 14px/1.4 var(--f-body);text-transform:none;letter-spacing:0;color:var(--fg)">${esc(S.cause)}</span></div>`;
+    if (xs.length < 2) { $("simCharts").innerHTML = ""; return; }
+    const charts = [
+      { t:"Estimated minutes at the table", ys:R.map(r=>r.minutes), refs:[{ y:60, label:"60 min" }, { y:90, label:"90 min (target max)" }] },
+      { t:"Enemies on the map", ys:R.map(r=>r.enemies), ref:{ y: res.params.enemyCap, label:`Miniature limit ${res.params.enemyCap}` } },
+      { t:"Dice per player", ys:R.map(r=>r.dice), step:true },
+      { t:"Lowest player health", ys:R.map(r=>r.minHp), ref:{ y: 15, label:"Maximum 15" } },
+      { t:"Built locations", ys:R.map(r=>r.built), step:true },
+      { t:"Skills owned (average per player)", ys:R.map(r=>r.skillsAvg), step:true, target: R.map(r => 4 + Math.floor(r.round / 3)) },
+      { t:"Tiles revealed", ys:R.map(r=>r.tiles), step:true },
+      { t:"Cards in deck (player 1)", ys:R.map(r=>r.deck), step:true }
+    ];
+    $("simCharts").innerHTML = charts.map((c,i) => `<figure><div class="stage chartbox" id="sc${i}"></div><figcaption><span><b>${c.t}</b> at the end of each round</span></figcaption></figure>`).join("");
+    charts.forEach((c,i) => lineChart($(`sc${i}`), { xs, yLabel:c.t, aria:`${c.t} by round`, step:c.step, ref:c.ref, refs:c.refs,
+      series:[{ name:c.t.split(" (")[0].replace("Lowest player health","Health").replace("Estimated minutes at the table","Minutes"), color:"var(--s1)", ys:c.ys }, ...(c.target ? [{ name:"Target: 1 per 3 rounds", color:"var(--s2)", dash:true, ys:c.target }] : [])] }));
+  };
+
+  /* ---- Run ---- */
+  const run = () => {
+    setPlaying(false);
+    const params = readParams();
+    $("runInfo").textContent = "Running…";
+    setTimeout(() => {
+      res = SIM.simulate(params);
+      map.reset(); pinned = false; focus = 1;
+      $("bScrub").max = res.events.length-1;
+      const rounds = [...new Set(res.events.map(e => e.snap.round))];
+      $("bRoundSel").innerHTML = rounds.map(r => `<option value="${r}">${r}</option>`).join("");
+      $("runInfo").textContent = `${res.events.length} animated steps · ${res.summary.survivedFull ? "reached the round limit" : `ended in round ${res.summary.rounds}`}`;
+      show(0, false); renderSummary();
+    }, 20);
+  };
+
+  /* ---- Compare the 3 exploration rules over 20 seeds each ---- */
+  const compare = () => {
+    const base = readParams(), rules = ["forced","optional","auto"], N = 20, out = { forced:[], optional:[], auto:[] };
+    let k = 0; $("cmpBtn").disabled = true;
+    const stepRun = () => {
+      const rule = rules[Math.floor(k / N)], seed = base.seed + (k % N);
+      const r = SIM.simulate({ ...base, exploreRule: rule, seed, snapshots: false });
+      out[rule].push({ rounds: r.summary.survivedFull ? base.maxRounds + 1 : r.summary.rounds, level: r.summary.level, tiles: r.summary.tiles, end: r.rounds[r.rounds.length-1]?.enemies || 0, minutes: r.summary.minutes, at90: roundAt(r.rounds, 90) });
+      k++; $("runInfo").textContent = `Comparing… ${k} / ${N*3}`;
+      if (k < N*3) setTimeout(stepRun, 0); else { $("cmpBtn").disabled = false; $("runInfo").textContent = `Compared ${N} runs per rule (seeds ${base.seed}–${base.seed+N-1}).`; renderCompare(out, base); }
+    };
+    setTimeout(stepRun, 10);
+  };
+  const median = a => { const s = [...a].sort((x,y)=>x-y); return s[Math.floor(s.length/2)]; };
+  const renderCompare = (out, base) => {
+    const names = { forced:"A · Forced reveal", optional:"B · Optional, nodes deplete", auto:"C · Automatic reveal" };
+    const binW = 5, bins = Math.ceil(base.maxRounds / binW) + 1;
+    const hist = arr => { const h = Array(bins).fill(0); arr.forEach(x => h[Math.min(bins-1, x > base.maxRounds ? bins-1 : Math.floor((x-1)/binW))]++); return h; };
+    const label = b => b === bins-1 ? "limit" : `${b*binW+1}–${(b+1)*binW}`;
+    const bar = (rule) => { const h = hist(out[rule].map(x=>x.rounds)), max = Math.max(...h, 1), W = 340, H = 150, bw = (W-40)/bins;
+      return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Rounds survived histogram for ${names[rule]}">
+        ${h.map((v,b)=>`<g><title>${label(b)} rounds: ${v} runs</title><rect x="${30+b*bw+1}" y="${H-28-(v/max)*(H-48)}" width="${bw-2}" height="${Math.max(0,(v/max)*(H-48))}" rx="2" fill="${b===bins-1?"var(--s2)":"var(--s1)"}"/>${v?`<text x="${30+b*bw+bw/2}" y="${H-32-(v/max)*(H-48)}" text-anchor="middle" font-size="10" fill="var(--fg)">${v}</text>`:""}<text x="${30+b*bw+bw/2}" y="${H-12}" text-anchor="middle" font-size="9" fill="var(--muted)">${label(b)}</text></g>`).join("")}
+        <line x1="30" x2="${W-10}" y1="${H-28}" y2="${H-28}" stroke="var(--line)"/></svg>`; };
+    $("cmpOut").innerHTML = `<section style="border:0;padding-top:8px"><h2><span class="n">SIM</span>Exploration rules compared</h2>
+      <p>Each rule plays ${out.forced.length} runs with your other settings. "Limit" means the run reached round ${base.maxRounds} (blue bars ended earlier).</p>
+      <div class="tbl"><table><thead><tr><th>Rule</th><th>Median rounds</th><th>Reached limit</th><th>Median final level</th><th>Median tiles</th><th>Median time</th><th>Round at 90 min</th></tr></thead><tbody>
+      ${["forced","optional","auto"].map(r => `<tr><td>${names[r]}</td><td class="num">${median(out[r].map(x=>x.rounds)) > base.maxRounds ? base.maxRounds+"+" : median(out[r].map(x=>x.rounds))}</td><td class="num">${Math.round(out[r].filter(x=>x.rounds>base.maxRounds).length/out[r].length*100)}%</td><td class="num">${median(out[r].map(x=>x.level))}</td><td class="num">${median(out[r].map(x=>x.tiles))}</td><td class="num">${fmtMin(median(out[r].map(x=>x.minutes)))}</td><td class="num">${median(out[r].map(x=>typeof x.at90==="number"?x.at90:99)) === 99 ? "–" : median(out[r].map(x=>typeof x.at90==="number"?x.at90:99))}</td></tr>`).join("")}
+      </tbody></table></div>
+      <div class="multiples">${["forced","optional","auto"].map(r => `<figure><div class="stage">${bar(r)}</div><figcaption><span><b>${names[r]}</b> rounds survived</span></figcaption></figure>`).join("")}</div></section>`;
+  };
+
+  /* ---- Time levers: change one rule at a time from the current settings ---- */
+  const LEVERS = [
+    ["Current settings", {}],
+    ["Starter 10 / hand 5", { starterSize: 10, handSize: 5 }],
+    ["Starter 8 / hand 4", { starterSize: 8, handSize: 4 }],
+    ["Starter 6 / hand 3", { starterSize: 6, handSize: 3 }],
+    ["Bought cards replace", { deckMode: "replace" }],
+    ["Quick Prepare off", { quickPrepare: false }],
+    ["Rolled grunt damage", { fixedGruntDamage: false }],
+    ["Sites as tokens", { printedSites: false }],
+    ["Skip Combat with no enemy near", { skipEmptyCombat: true }],
+    ["Reveal tiles every 2 rounds", { exploreEvery: 2 }],
+    ["Enemy leash 4", { enemyLeash: 4 }],
+    ["Enemy speed 1", { enemySpeed: 1 }],
+    ["Max level 5", { maxLevel: 5 }],
+    ["Fast table", { tableSpeed: 0.75 }]
+  ];
+  /** leverStats(params) — 20 seeds: projected minutes for 12 rounds and median final round. Pure given params. */
+  const leverStats = base => { const per = [], end = [];
+    for (let s = 0; s < 20; s++) { const r = SIM.simulate({ ...base, seed: base.seed + s, snapshots: false });
+      const k = r.rounds.filter(x => x.round <= 12), last = k[k.length-1]; if (last) per.push((last.minutes - base.setupMinutes * base.tableSpeed) / last.round);
+      end.push(r.summary.survivedFull ? base.maxRounds + 1 : r.summary.rounds); }
+    const med = a => [...a].sort((x,y)=>x-y)[Math.floor(a.length/2)], q = (a,f) => [...a].sort((x,y)=>x-y)[Math.floor(a.length*f)];
+    return { proj: base.setupMinutes * base.tableSpeed + 12 * med(per), end: med(end), p25: q(end,.25), p75: q(end,.75), limit: end.filter(x => x > base.maxRounds).length / end.length }; };
+  const measureLevers = () => {
+    const base = { ...readParams(), players: +$("pPlayers").value };
+    const rows = []; let i = 0; $("leverBtn").disabled = true;
+    const step = () => { const [name, o] = LEVERS[i]; rows.push({ name, ...leverStats({ ...base, ...o }) }); i++;
+      $("runInfo").textContent = `Measuring time levers… ${i} / ${LEVERS.length}`;
+      if (i < LEVERS.length) setTimeout(step, 0); else { $("leverBtn").disabled = false; $("runInfo").textContent = `Measured ${LEVERS.length} rule changes, 20 runs each.`; renderLevers(rows, base); } };
+    setTimeout(step, 10);
+  };
+  const renderLevers = (rows, base) => {
+    const b = rows[0], W = 340, max = Math.max(...rows.map(r => r.proj), 120);
+    const endTxt = r => r.end > base.maxRounds ? `${base.maxRounds}+` : r.end;
+    $("leverOut").innerHTML = `<section style="border:0;padding-top:8px"><h2><span class="n">SIM</span>Time levers</h2>
+      <p>Each row changes one rule from your current settings. "12 rounds" is setup plus 12 × the median minutes per round. The target is 90 minutes for 12 rounds and a typical run that ends in rounds 10–12.</p>
+      <div class="tbl"><table><thead><tr><th>Rule change</th><th>12 rounds</th><th>vs current</th><th style="min-width:180px">Time</th><th>Run ends (median, middle half)</th><th>Reached limit</th></tr></thead><tbody>
+      ${rows.map(r => { const d = r.proj - b.proj, ok = r.proj <= 90, endOk = r.end >= 10 && r.end <= 12;
+        return `<tr><td>${esc(r.name)}</td><td class="num">${fmtMin(r.proj)}</td><td class="num" style="color:${d < -0.5 ? "var(--good)" : d > 0.5 ? "var(--bad)" : "var(--muted)"}">${r === b ? "–" : (d > 0 ? "+" : "−") + Math.abs(d).toFixed(0) + " min"}</td>
+          <td><svg viewBox="0 0 ${W} 14" width="100%" height="14" aria-hidden="true"><rect x="0" y="3" width="${(r.proj/max*W).toFixed(1)}" height="8" rx="2" fill="${ok ? "var(--good)" : "var(--s1)"}"/><line x1="${(90/max*W).toFixed(1)}" x2="${(90/max*W).toFixed(1)}" y1="0" y2="14" stroke="var(--fg)" stroke-dasharray="2 2"/></svg></td>
+          <td class="num" style="color:${endOk ? "var(--good)" : "var(--fg)"}">${endTxt(r)} <span class="conf">(${r.p25 > base.maxRounds ? base.maxRounds + "+" : r.p25}–${r.p75 > base.maxRounds ? base.maxRounds + "+" : r.p75})</span></td><td class="num">${Math.round(r.limit*100)}%</td></tr>`; }).join("")}
+      </tbody></table></div><p class="conf">Dashed line = 90 minutes. Green time = 12 rounds fit in 90 minutes. Green end = typical run ends in rounds 10–12. With 20 runs per row, differences under about 5 minutes are noise. The time model is an estimate (confidence about 35); replace it with playtest timings.</p></section>`;
+  };
+  /** resetForm() — puts every control back to its default value. */
+  const resetForm = () => { $("params").reset(); };
+
+  /* ---- Wiring ---- */
+  const ensure = () => {
+    if (started) return; started = true;
+    map = createMap($("simMap"));
+    $("params").addEventListener("submit", e => { e.preventDefault(); run(); });
+    $("seedBtn").addEventListener("click", () => { $("pSeed").value = 1 + Math.floor(Math.random()*9999); run(); });
+    $("cmpBtn").addEventListener("click", compare);
+    $("leverBtn").addEventListener("click", measureLevers);
+    $("resetBtn2").addEventListener("click", () => { resetForm(); run(); });
+    $("bPlay").addEventListener("click", () => setPlaying(!playing));
+    $("bFwd").addEventListener("click", () => { setPlaying(false); show(idx+1, true); });
+    $("bBack").addEventListener("click", () => { setPlaying(false); show(idx-1, false); });
+    $("bSpeed").addEventListener("change", () => { speed = +$("bSpeed").value; });
+    $("bScrub").addEventListener("input", () => { setPlaying(false); show(+$("bScrub").value, false); });
+    $("bRoundSel").addEventListener("change", () => { setPlaying(false); const r = +$("bRoundSel").value; const i = res.events.findIndex(e => e.snap.round === r && e.type === "phase"); show(i >= 0 ? i : res.events.findIndex(e => e.snap.round === r), false); });
+    $("pTabs").addEventListener("click", e => { const b = e.target.closest("[data-p]"); if (!b) return; focus = +b.dataset.p; pinned = true; show(idx, false); });
+    run();
+  };
+  return { ensure, run };
+})();
+
+if (location.hash === "#simulator") showView("sim");
+
+</script>
+</body></html>
