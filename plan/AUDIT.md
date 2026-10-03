@@ -29,11 +29,13 @@
 - fixed: 08a5708
 - next: list each tile's 7 hexes as text under the tile; reword the lede
 
-### [ ] [4.8] /tiles: no legend for the 4 site icons (critique MED)
+### [x] [4.8] /tiles: no legend for the 4 site icons (critique MED)
 - category: external-critique (comprehension)
 - impact: 6
 - ease: 8
 - next: add a "Sites" legend row with each icon and name
+- issue: #19
+- fixed: c3497c8
 
 ### [ ] [4.2] /debug: keyboard focus is lost after every action (critique MED)
 - category: external-critique (a11y)

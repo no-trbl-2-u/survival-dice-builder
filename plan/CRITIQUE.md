@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /tiles — no legend for the 4 site icons
-- pass: 1 (commit 70348c1)
-- viewport: desktop
-- category: comprehension
-- observation: The legend covers the 6 terrain colours but not the site icons (castle, rock, cave, ogre). A first-time reviewer cannot tell gathering node, spawn node, and elite spawn node apart without decoding the captions.
-- evidence: legend `<ul aria-label="Terrain legend">` has 6 items, all terrains.
-- suggested fix: add a "Sites" legend row showing each icon with its name (Base, Gathering node, Spawn node, Elite spawn node).
-- source: browser
-
 ### [MED] /tiles — dark-mode terrain colours are hard to tell apart
 - pass: 1 (commit 70348c1)
 - viewport: mobile
@@ -91,6 +82,17 @@
 - source: browser
 
 ## Done
+
+### [x] [MED] /tiles — no legend for the 4 site icons
+- pass: 1 (commit 70348c1)
+- viewport: desktop
+- category: comprehension
+- observation: The legend covers the 6 terrain colours but not the site icons (castle, rock, cave, ogre). A first-time reviewer cannot tell gathering node, spawn node, and elite spawn node apart without decoding the captions.
+- evidence: legend `<ul aria-label="Terrain legend">` has 6 items, all terrains.
+- suggested fix: add a "Sites" legend row showing each icon with its name (Base, Gathering node, Spawn node, Elite spawn node).
+- source: browser
+- issue: #19
+- fixed: c3497c8 (site legend with icons and names)
 
 ### [x] [MED] /play — the log and footer show card ids, rule numbers, and "1 actions"
 - pass: 2 (commit 2f63473)
