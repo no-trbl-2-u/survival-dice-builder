@@ -197,7 +197,8 @@ panel (upgrade tracks, Shop offers), draft dialog, tile
 placement preview, event log with rule ids, run summary with
 JSON export (seed + actions, replayable), full keyboard
 operation, reduced motion. Playwright plays a full seeded solo
-run to the end. **Milestone 2.**
+run to the end. **Milestone 2.** Detailed brief:
+`phase_12_web_ui_2.md`.
 
 ### Phase 13 — Co-op, config, save/load
 
