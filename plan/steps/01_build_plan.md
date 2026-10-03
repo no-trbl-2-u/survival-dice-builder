@@ -33,7 +33,7 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 6 — World I: hex map, tiles, movement, Gather/Build, defenses (spec 3, first half) — f76fc89
 - [x] Phase 7 — World II: enemies, base, exploration, wave track (spec 3, second half; co-op order moved to phase 13) — 2ae8480
 - [x] Phase 8 — Progression: XP, upgrades, Shop, draft, end of run, milestones (spec 4) — 0f8bfc1
-- [ ] Phase 9 — Early bot + batch sanity runs (spec 7, bot half, moved up)
+- [x] Phase 9 — Early bot + batch sanity runs (spec 7, bot half, moved up) — 72198af
 
 **Playable (phases 10–12) — Milestone 2 at phase 12:**
 - [ ] Phase 10 — Art direction and placeholder art (spec B, non-code)
@@ -254,3 +254,4 @@ sessions themselves are filed as a `[needs-user-call]`.
 - phase 6 — f76fc89 — setup tile choice, step-by-step Move, skirmish, Gather, Build defenses, range-aware Combat, /debug SVG map
 - phase 7 — 2ae8480 — refill, waves, enemy targeting and pathing, Towers, structure attacks, base falls (14.1), Explore modes, full-run golden
 - phase 8 — 0f8bfc1 — XP and levels, currency, supplies, Shop, base upgrades, Skill draft, milestones, end-of-run record; Milestone 1 (engine covers Spec v1 solo)
+- phase 9 — 72198af — @survival/bot, pnpm sim batch runner, /debug Autoplay; 200 runs: median end round 14 (band 8-14)
