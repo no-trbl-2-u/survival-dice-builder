@@ -49,7 +49,7 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 16 — Playtest protocol, survey, and analysis kit (spec C, non-code) — a7a0e7f
 
 **Review readiness (phases 17–18) — promoted via oversight 2026-10-03:**
-- [ ] Phase 17 — Accessibility and navigation pass: the pending critique rows on /play, /tiles, /debug, and the shell
+- [x] Phase 17 — Accessibility and navigation pass: the pending critique rows on /play, /tiles, /debug, and the shell — c5a664b
 - [ ] Phase 18 — Designer decision digest: one page for every open reading and pending check
 
 > **After phase 16:** the loop transitions to `/iterate`.
@@ -255,8 +255,8 @@ map text without enemies, /play start panel goal and seed,
 action plus a log live region, /debug lede and wording, and a
 per-route `document.title` with `aria-current` in the nav. Adds
 an e2e keyboard pass over every route. Each fixed row moves to
-Done in `plan/CRITIQUE.md` in the shipping commit. Brief to be
-drafted by `/plan-a-phase`.
+Done in `plan/CRITIQUE.md` in the shipping commit. Detailed brief:
+`phase_17_a11y_navigation.md`.
 
 ### Phase 18 — Designer decision digest
 
@@ -294,3 +294,4 @@ drafted by `/plan-a-phase`.
 - phase 14 — 9e9afba — real timing in run exports (phase, decision, round; sums to session), sim compare and timing reports, 200-run regression identical to phase 9; Milestone 3 (playtest build)
 - phase 15 — 20e9a4e — die-face and resource icons, /credits from ASSETS.md, CSS motion (tiles, movers, Tower shots, hits, level-up, draft reveal), synthesized sound with mute, optional 3D dice (three.js, lands on the engine's face); Milestone 4 (presentable)
 - phase 16 — a7a0e7f — docs/playtests (PROTOCOL, SURVEY, REPORT template, runs/), pnpm sim -- playtests (minutes per round against the 8-9 estimate); sessions filed as a needs-user-call
+- phase 17 — c5a664b — choices and map name places, map hex text lists enemies, /debug focus and lede, per-route titles and aria-current, distinct dark terrain colours (check-design delta E); clears the 7 pending critique rows

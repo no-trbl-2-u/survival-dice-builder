@@ -44,23 +44,29 @@
 - issue: #19
 - fixed: c3497c8
 
-### [ ] [4.2] /debug: keyboard focus is lost after every action (critique MED)
+### [x] [4.2] /debug: keyboard focus is lost after every action (critique MED)
 - category: external-critique (a11y)
 - impact: 6
 - ease: 7
 - next: reuse the /play focus-next-decision effect
+- issue: #21 (phase 17)
+- fixed: c5a664b
 
-### [ ] [3.5] /debug: no explanation; shorthand and grammar slips (critique MED)
+### [x] [3.5] /debug: no explanation; shorthand and grammar slips (critique MED)
 - category: external-critique (voice)
 - impact: 5
 - ease: 7
 - next: a short intro paragraph and plain labels
+- issue: #21 (phase 17)
+- fixed: c5a664b
 
-### [ ] [3.0] /tiles: dark-mode terrain colours are hard to tell apart (critique MED)
+### [x] [3.0] /tiles: dark-mode terrain colours are hard to tell apart (critique MED)
 - category: external-critique (visual)
 - impact: 5
 - ease: 6
 - next: retune dark terrain tokens in design/tokens.json; check-design re-verifies contrast
+- issue: #21 (phase 17)
+- fixed: c5a664b
 
 ## Needs user call (from adoption, 2026-10-02)
 

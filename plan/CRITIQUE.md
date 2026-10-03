@@ -9,7 +9,11 @@
 
 ## Pending
 
-### [MED] /tiles — dark-mode terrain colours are hard to tell apart
+(none)
+
+## Done
+
+### [x] [MED] /tiles — dark-mode terrain colours are hard to tell apart
 - pass: 1 (commit 70348c1)
 - viewport: mobile
 - category: visual
@@ -17,8 +21,10 @@
 - evidence: dark swatches hills rgb(117,96,58), wasteland rgb(107,92,71), plains rgb(93,107,60), forest rgb(53,85,58).
 - suggested fix: spread the dark terrain tokens in `apps/web/src/styles/tokens.css` further apart in lightness and hue (target a visible step between every pair).
 - source: browser
+- issue: #21 (phase 17)
+- fixed: c5a664b (dark terrain tokens retuned, every pair at least 20 apart (delta E), enforced by check-design)
 
-### [MED] /debug — keyboard focus is lost after every action
+### [x] [MED] /debug — keyboard focus is lost after every action
 - pass: 1 (commit 70348c1)
 - viewport: desktop
 - category: a11y
@@ -26,8 +32,10 @@
 - evidence: after Enter on "Play Move (bottom)", `document.activeElement` was BODY; no `aria-live`/`role=log` on the page.
 - suggested fix: after each action, focus the first new action button (or the "Legal actions" heading with `tabIndex={-1}`); give the event log `role="log"` and `aria-live="polite"`.
 - source: browser
+- issue: #21 (phase 17)
+- fixed: c5a664b (focus returns to the Legal actions heading; the log is role=log, aria-live=polite)
 
-### [MED] /debug — no explanation; shorthand and grammar slips
+### [x] [MED] /debug — no explanation; shorthand and grammar slips
 - pass: 1 (commit 70348c1)
 - viewport: desktop
 - category: voice
@@ -35,8 +43,10 @@
 - evidence: H1 "Engine console" is followed directly by the seed input; "15/15 health, 0 guard, 1 dice".
 - suggested fix: add a one-line lede ("Play the rules engine one action at a time. Numbers in [brackets] are rules sections."), write "1 die"/"N dice" and "grunt, 2 health", and use "Discard Build" and "Stop rerolling".
 - source: browser
+- issue: #21 (phase 17)
+- fixed: c5a664b (lede added; "1 die", "grunt, 2 health", "Discard Build", "Stop rerolling")
 
-### [LOW] all pages — same document title everywhere; nav does not mark the current page
+### [x] [LOW] all pages — same document title everywhere; nav does not mark the current page
 - pass: 1 (commit 70348c1)
 - viewport: desktop
 - category: navigation
@@ -44,8 +54,10 @@
 - evidence: titles identical; nav `aria-current` = [null, null, null].
 - suggested fix: set the title per route ("Tile sheet - Survival Dice-Builder"), add `aria-current="page"` plus a visible style on the active link, and show the tagline under the home H1.
 - source: browser
+- issue: #21 (phase 17)
+- fixed: c5a664b (per-route document.title; aria-current plus a visible style in the nav)
 
-### [MED] /play — choice buttons name hexes by axial coordinates and a code slug
+### [x] [MED] /play — choice buttons name hexes by axial coordinates and a code slug
 - pass: 2 (commit 2f63473)
 - viewport: mobile
 - category: comprehension
@@ -53,8 +65,10 @@
 - evidence: The heading says "Place Stony Fields: choose a slot", but the buttons say "Place stony-fields at (2,1)". Move buttons say "Move to (1,0)".
 - suggested fix: Label choices with the display name and terrain plus a direction, for example "Move to Forest (upper right)" or "Place Stony Fields: slot 1 (north-east)". Keep the coordinates in a muted suffix.
 - source: browser
+- issue: #21 (phase 17)
+- fixed: c5a664b (choices name the place and direction; the coordinate is a muted suffix)
 
-### [MED] /play — the map's text alternatives omit enemies
+### [x] [MED] /play — the map's text alternatives omit enemies
 - pass: 2 (commit 2f63473)
 - viewport: mobile
 - category: a11y
@@ -62,8 +76,10 @@
 - evidence: The 14 map `<title>`s are all terrain/site, for example "plains, Spawn node". The log says "A grunt appears at (2,0)", and the header says "Enemies 1/20".
 - suggested fix: Add occupants to each hex title ("Plains, Spawn node, 1 grunt (2/2 health)"), or add a visually hidden "On the board" list.
 - source: browser
+- issue: #21 (phase 17)
+- fixed: c5a664b (hex titles list enemies, defenses, and figures; non-target enemies are named images)
 
-### [MED] /play — the start panel does not explain the goal or the seed
+### [x] [MED] /play — the start panel does not explain the goal or the seed
 - pass: 2 (commit 2f63473)
 - viewport: desktop
 - category: comprehension
@@ -71,8 +87,8 @@
 - evidence: The panel text is "New run / Players 1 2 3 4 / Seed [11998] / Start run / Config: default rules."
 - suggested fix: Add 1 line on the goal ("Keep the base and every player alive as long as you can.") and 1 on the seed ("The same seed gives the same game.").
 - source: browser
-
-## Done
+- issue: #21 (phase 17)
+- fixed: c5a664b (goal line and a seed hint (aria-describedby))
 
 ### [x] [MED] /credits — 18 links are all named "Source", and the licence is stated twice per line
 - pass: 2 (commit 2f63473)
