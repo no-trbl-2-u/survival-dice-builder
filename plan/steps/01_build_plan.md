@@ -37,7 +37,7 @@ Tick in this file in the same commit that ships the phase.
 
 **Playable (phases 10–12) — Milestone 2 at phase 12:**
 - [x] Phase 10 — Art direction and placeholder art (spec B, non-code) — 568c0a5
-- [ ] Phase 11 — Web UI I: map, player panel, hand, dice tray, Skill board, phase bar (spec 5, first half)
+- [x] Phase 11 — Web UI I: map, player panel, hand, dice tray, Skill board, phase bar (spec 5, first half) — cba43e9
 - [ ] Phase 12 — Web UI II: base panel, Shop, draft, tile placement, log, run summary + export, keyboard (spec 5, second half)
 
 **Playtest build (phases 13–14) — Milestone 3 at phase 14:**
@@ -258,3 +258,4 @@ sessions themselves are filed as a `[needs-user-call]`.
 - phase 8 — 0f8bfc1 — XP and levels, currency, supplies, Shop, base upgrades, Skill draft, milestones, end-of-run record; Milestone 1 (engine covers Spec v1 solo)
 - phase 9 — 72198af — @survival/bot, pnpm sim batch runner, /debug Autoplay; 200 runs: median end round 14 (band 8-14)
 - phase 10 — 568c0a5 — ART-GUIDE.md, tokens.json (54 contrast pairs pass), check-design in lint, card/die/tile/base-board templates, main-screen and run-summary mock-ups
+- phase 11 — cba43e9 — /play: map with pan/zoom and legal targets, phase bar, player panel, rotating hand, dice tray, Skill board with can-fire, Choices for the rest
