@@ -21,3 +21,6 @@ Thumbs.db
 # test / tooling output
 *.tsbuildinfo
 .vite/
+
+# Playwright MCP session output (critique reader)
+.playwright-mcp/
