@@ -267,8 +267,8 @@ Promoted from `plan/PHASE_CANDIDATES.md` (expand pass 1, score
 read-only at `/decisions`: each open reading with its rule id,
 the current config value, a link to `/config`, and its evidence
 (bot batch, playtest numbers when present). No rule or config
-default changes; the designer still decides. Brief to be
-drafted by `/plan-a-phase`.
+default changes; the designer still decides. Detailed brief:
+`phase_18_decision_digest.md`.
 
 ---
 
