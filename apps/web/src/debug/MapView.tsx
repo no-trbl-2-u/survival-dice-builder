@@ -45,7 +45,7 @@ export function MapView({ state }: Props) {
       className={styles.map}
       viewBox={`${minX} ${minY} ${width} ${height}`}
       role="img"
-      aria-label={`Map: ${state.map.tiles.length} tiles`}
+      aria-label={`Map: ${state.map.tiles.length} tiles. Letters: B base, g gathering node, s spawn node, S elite spawn node, P player; enemy and defense ids are shown on their hex.`}
       data-testid="map"
     >
       {points.map(({ key, center }) => {

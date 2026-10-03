@@ -21,6 +21,7 @@ test('/debug: clicking the first legal action 30 times plays the engine with no 
   }
 
   expect(await log.count()).toBeGreaterThan(before)
+  await expect(page.getByTestId('log')).not.toContainText('[object Object]')
   await expect(page.getByTestId('state')).toContainText('Round')
   await expect(page.getByTestId('map').locator('polygon')).not.toHaveCount(0)
   expect(errors).toEqual([])

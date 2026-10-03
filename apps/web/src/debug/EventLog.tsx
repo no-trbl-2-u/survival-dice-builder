@@ -2,11 +2,23 @@ import type { GameEvent } from '@survival/engine'
 
 type Props = Readonly<{ events: readonly GameEvent[] }>
 
+/** One payload value: a hex as "(q,r)", a list joined by "/", any other object as JSON. */
+export function showValue(v: unknown): string {
+  if (Array.isArray(v)) return v.map(showValue).join('/')
+  if (v && typeof v === 'object') {
+    const o = v as Record<string, unknown>
+    if (typeof o.q === 'number' && typeof o.r === 'number' && Object.keys(o).length === 2)
+      return `(${o.q},${o.r})`
+    return JSON.stringify(v)
+  }
+  return String(v)
+}
+
 /** Shows an event as `type` plus its payload, without the repeated `type` and `rule` keys. */
 function payload(event: GameEvent): string {
   return Object.entries(event)
     .filter(([k]) => k !== 'type' && k !== 'rule')
-    .map(([k, v]) => `${k}=${Array.isArray(v) ? v.join('/') : String(v)}`)
+    .map(([k, v]) => `${k}=${showValue(v)}`)
     .join(' ')
 }
 
