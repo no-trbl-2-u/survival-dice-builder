@@ -5,6 +5,7 @@ const ROUTES = [
   ['/play', 'Play', 'Play - Survival Dice-Builder'],
   ['/config', 'Config', 'Config - Survival Dice-Builder'],
   ['/tiles', 'Tiles', 'Tile sheet - Survival Dice-Builder'],
+  ['/decisions', 'Decisions', 'Decisions - Survival Dice-Builder'],
   ['/debug', 'Debug', 'Engine console - Survival Dice-Builder'],
   ['/credits', 'Credits', 'Credits - Survival Dice-Builder'],
 ] as const
@@ -56,4 +57,15 @@ test('/play: the start panel says what a run is and what the seed does', async (
   await expect(panel.getByRole('textbox', { name: /Seed/ })).toHaveAccessibleDescription(
     'The same seed and the same choices give the same game.',
   )
+})
+
+test('/decisions: open readings link to their /config field, which takes focus', async ({
+  page,
+}) => {
+  await page.goto('/decisions')
+  await expect(page.getByTestId('readings').locator('li').first()).toContainText('rule 7.11')
+  await expect(page.getByTestId('checks').locator('li')).not.toHaveCount(0)
+  await page.getByRole('link', { name: 'rulings.structureDamage' }).first().click()
+  await expect(page).toHaveURL(/\/config#cfg-rulings-structureDamage$/)
+  await expect(page.locator('#cfg-rulings-structureDamage')).toBeFocused()
 })

@@ -1,4 +1,10 @@
-import { defaultContent, GameConfigSchema } from '@survival/content'
+import {
+  decisionsMarkdown,
+  defaultContent,
+  GameConfigSchema,
+  parseQuestions,
+  parseUserCalls,
+} from '@survival/content'
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, toCsv, toJson } from './format.ts'
@@ -14,12 +20,14 @@ const usage = `Usage:
   pnpm sim -- compare --a <config.json|default> --b <config.json|default> [--runs <n>] [--out report.md]
   pnpm sim -- timing <export.json ...> [--out report.md]
   pnpm sim -- playtests [--dir docs/playtests/runs] [--estimate 8.5] [--out report.md]
+  pnpm sim -- decisions [--out docs/DECISIONS.md]
 
 Plays <n> bot runs (default 200) and prints a summary. --config replaces the default config
 with a full config JSON (validated). --out writes every run as CSV or JSON.
 compare: a bot batch per config, as a markdown table.
 timing: minutes per round and time shares per phase and decision, from real run exports.
-playtests: every run export in a folder, against the 8-9 minutes-per-round estimate.`
+playtests: every run export in a folder, against the 8-9 minutes-per-round estimate.
+decisions: the designer decision digest from OPEN-QUESTIONS.md and plan/AUDIT.md.`
 
 /** Reads `--name value` pairs. */
 function parse(argv: readonly string[]): Map<string, string> {
@@ -36,6 +44,9 @@ function parse(argv: readonly string[]): Map<string, string> {
  * to tools/sim, where `pnpm --filter` runs the script.
  */
 const here = (p: string) => path.resolve(process.env.INIT_CWD ?? process.cwd(), p)
+
+/** The repository root (this file is tools/sim/src/cli.ts). */
+const REPO = path.resolve(import.meta.dirname, '..', '..', '..')
 
 /** A config file, or the default config for `default` or nothing. */
 function readConfig(file: string | undefined) {
@@ -54,7 +65,7 @@ function report(md: string, out: string | undefined): void {
 }
 
 const argv = process.argv.slice(2).filter((a) => a !== '--')
-const COMMANDS = ['compare', 'timing', 'playtests'] as const
+const COMMANDS = ['compare', 'timing', 'playtests', 'decisions'] as const
 const command = COMMANDS.find((c) => c === argv[0]) ?? 'batch'
 const args = parse(argv)
 if (args.has('help')) {
@@ -107,6 +118,20 @@ if (command === 'playtests') {
     data: JSON.parse(fs.readFileSync(path.join(dir, name), 'utf-8')) as PlaytestExport,
   }))
   report(playtestReport(files, Number(args.get('estimate') ?? 8.5)), args.get('out'))
+  process.exit(0)
+}
+
+if (command === 'decisions') {
+  const md = decisionsMarkdown(
+    parseQuestions(fs.readFileSync(path.join(REPO, 'OPEN-QUESTIONS.md'), 'utf-8')),
+    parseUserCalls(fs.readFileSync(path.join(REPO, 'plan', 'AUDIT.md'), 'utf-8')),
+    defaultContent.config,
+  )
+  const out = args.get('out')
+  if (out) {
+    fs.writeFileSync(here(out), md)
+    console.log(`wrote ${out}`)
+  } else console.log(md)
   process.exit(0)
 }
 

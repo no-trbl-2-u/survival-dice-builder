@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { ConfigPage } from './config/ConfigPage.tsx'
 import { CreditsPage } from './credits/CreditsPage.tsx'
 import { DebugPage } from './debug/DebugPage.tsx'
+import { DecisionsPage } from './decisions/DecisionsPage.tsx'
 import { HomePage } from './home/HomePage.tsx'
 import { PlayPage } from './play/PlayPage.tsx'
 import { documentTitle, matchRoute, SITE_NAME, type Route } from './router.tsx'
@@ -13,6 +14,7 @@ const NAV: readonly (readonly [path: string, label: string])[] = [
   ['/play', 'Play'],
   ['/config', 'Config'],
   ['/tiles', 'Tiles'],
+  ['/decisions', 'Decisions'],
   ['/debug', 'Debug'],
   ['/credits', 'Credits'],
 ]
@@ -26,6 +28,7 @@ const routes: readonly Route[] = [
   { path: '/play', title: 'Play', render: () => <PlayPage /> },
   { path: '/config', title: 'Config', render: () => <ConfigPage /> },
   { path: '/tiles', title: 'Tile sheet', render: () => <TileSheet /> },
+  { path: '/decisions', title: 'Decisions', render: () => <DecisionsPage /> },
   { path: '/debug', title: 'Engine console', render: () => <DebugPage /> },
   { path: '/credits', title: 'Credits', render: () => <CreditsPage /> },
 ]

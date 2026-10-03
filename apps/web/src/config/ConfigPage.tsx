@@ -1,5 +1,5 @@
 import { defaultContent, GameConfigSchema, type GameConfig } from '@survival/content'
-import { useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import styles from './ConfigPage.module.css'
 import { browserStorage, loadConfig, resetConfig, saveConfig } from './configStore.ts'
 
@@ -171,6 +171,14 @@ export function ConfigPage() {
   const [message, setMessage] = useState<string | null>(loaded.error)
   const [problems, setProblems] = useState<string[]>([])
   const onChange = (path: Path, next: unknown) => setDraft((d: unknown) => setAt(d, path, next))
+  // A link such as /config#cfg-rulings-enemiesPerHex (from /decisions) lands on that field.
+  useEffect(() => {
+    const id = window.location.hash.slice(1)
+    if (!id.startsWith('cfg-')) return
+    const field = document.getElementById(id)
+    field?.scrollIntoView({ block: 'center' })
+    field?.focus()
+  }, [])
   const save = () => {
     const errors = saveConfig(store, draft)
     setProblems(errors)

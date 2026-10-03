@@ -1,0 +1,37 @@
+.page {
+  display: grid;
+  gap: 1rem;
+}
+
+.list {
+  display: grid;
+  gap: 0.75rem;
+  padding-left: 0;
+  list-style: none;
+}
+
+.item {
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  overflow-wrap: anywhere;
+}
+
+.item p {
+  margin: 0.25rem 0;
+}
+
+.question {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.muted {
+  color: var(--color-text-muted);
+  font-weight: normal;
+}
+
+.differs {
+  color: var(--health);
+}
