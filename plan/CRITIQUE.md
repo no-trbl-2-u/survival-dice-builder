@@ -72,7 +72,9 @@
 - suggested fix: Add 1 line on the goal ("Keep the base and every player alive as long as you can.") and 1 on the seed ("The same seed gives the same game.").
 - source: browser
 
-### [MED] /credits — 18 links are all named "Source", and the licence is stated twice per line
+## Done
+
+### [x] [MED] /credits — 18 links are all named "Source", and the licence is stated twice per line
 - pass: 2 (commit 2f63473)
 - viewport: mobile
 - category: a11y
@@ -80,8 +82,8 @@
 - evidence: "Sword die face: Broadsword icon by Lorc, game-icons.net, CC BY 3.0. Source · CC BY 3.0" (`CreditsPage.tsx:32`).
 - suggested fix: Make the asset name the source link, and state the licence once per line (or once per section).
 - source: browser
-
-## Done
+- issue: #20
+- fixed: 2d542b8 (work names link to sources; shared licence stated once)
 
 ### [x] [MED] /tiles — no legend for the 4 site icons
 - pass: 1 (commit 70348c1)

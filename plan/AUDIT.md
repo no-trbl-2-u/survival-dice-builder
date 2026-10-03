@@ -7,6 +7,13 @@
 
 ## Top 5 findings (scored)
 
+### [x] [4.5] /credits: 18 links all named "Source"; licence stated twice (critique MED)
+- category: external-critique (a11y)
+- impact: 5
+- ease: 9
+- issue: #20
+- fixed: 2d542b8
+
 ### [x] [4.9] /play: the log shows card ids, rule numbers, and "1 actions" (critique MED)
 - category: external-critique (voice)
 - impact: 7
