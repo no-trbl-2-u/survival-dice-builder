@@ -42,7 +42,7 @@ Tick in this file in the same commit that ships the phase.
 
 **Playtest build (phases 13–14) — Milestone 3 at phase 14:**
 - [x] Phase 13 — Co-op hot-seat, configuration panel, save and load (spec 6) — 3007181
-- [ ] Phase 14 — Playtest tooling: real timing export, tuning report (spec 7, remainder)
+- [x] Phase 14 — Playtest tooling: real timing export, tuning report (spec 7, remainder) — 9e9afba
 
 **Presentable (phases 15–16) — Milestone 4 at phase 15:**
 - [ ] Phase 15 — Visual polish: icons, art, 3D dice spike + optional toggle, animation, sound (spec 8)
@@ -262,3 +262,4 @@ sessions themselves are filed as a `[needs-user-call]`.
 - phase 11 — cba43e9 — /play: map with pan/zoom and legal targets, phase bar, player panel, rotating hand, dice tray, Skill board with can-fire, Choices for the rest
 - phase 12 — 4a1b444 — base panel, Shop, draft dialog, tile preview, event log, run summary with replayable export, focus management; Milestone 2 (full solo run in the browser)
 - phase 13 — 3007181 — co-op turn order (16.1-16.8) in the engine, 1-4 player hot-seat, /config panel, save/load by replay, autosave, developer undo
+- phase 14 — 9e9afba — real timing in run exports (phase, decision, round; sums to session), sim compare and timing reports, 200-run regression identical to phase 9; Milestone 3 (playtest build)
