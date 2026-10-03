@@ -187,7 +187,8 @@ with the SVG map (pan, zoom, legal-target highlights), player
 panel, hand with visible 180° rotation, dice tray with keep
 toggles and roll counter, Skill board with live can-fire
 highlight, phase bar. Every control is driven by
-`legalActions`. Playwright plays one Prepare + Combat exchange.
+`legalActions`. Playwright plays one Prepare + Combat exchange. Detailed brief:
+`phase_11_web_ui_1.md`.
 
 ### Phase 12 — Web UI II
 
