@@ -1,6 +1,7 @@
 import { canFire, type Action, type GameState } from '@survival/engine'
 import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
+import { skillText } from './effectText.ts'
 import styles from './Play.module.css'
 import { firstOf, ofType, placementsFor } from './targets.ts'
 
@@ -46,6 +47,7 @@ export function SkillBoard({ state, legal, act, selected, select }: Props) {
                 {skill.name}
                 {fires ? ' — fires' : could && placing ? ' — can fire' : ''}
               </span>
+              <span className={styles.muted}>{skillText(skill.effect)}</span>
               <span className={styles.slots}>
                 {skill.faces.map((face, slot) => {
                   const here = mine.find((a) => a.slot === slot)

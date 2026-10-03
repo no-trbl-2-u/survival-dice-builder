@@ -1,5 +1,6 @@
 import type { Action, GameState } from '@survival/engine'
 import { GameIcon } from '../icons/GameIcon.tsx'
+import { cardText } from './effectText.ts'
 import styles from './Play.module.css'
 import { ofType } from './targets.ts'
 
@@ -68,6 +69,7 @@ export function BasePanel({ state, legal, act }: Props) {
               <li key={`${id}-${i}`} className={styles.offer}>
                 <strong>{def?.name ?? id}</strong>
                 <span className={styles.muted}>Cost {def?.cost ?? '?'}</span>
+                {def ? <span>{cardText(def)}</span> : null}
                 {buy ? (
                   <button type="button" onClick={() => act(buy)}>
                     Buy {def?.name ?? id}

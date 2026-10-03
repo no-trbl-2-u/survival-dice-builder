@@ -1,5 +1,6 @@
 import type { Action, GameState } from '@survival/engine'
 import { useEffect, useRef } from 'react'
+import { skillText } from './effectText.ts'
 import styles from './Play.module.css'
 import { ofType } from './targets.ts'
 
@@ -20,6 +21,11 @@ export function DecisionDialog({ state, legal, act }: Props) {
   }, [open, legal])
   if (!open) return null
   const skill = (id: string) => state.content.skills.find((s) => s.id === id)
+  /** ": 2 damage to 1 enemy within 1 hex", or nothing for an unknown Skill. */
+  const effectOf = (id: string) => {
+    const def = skill(id)
+    return def ? `: ${skillText(def.effect)}` : ''
+  }
   const player = state.players[state.current]
   const card = (id: string) =>
     state.content.cards.find(
@@ -49,6 +55,7 @@ export function DecisionDialog({ state, legal, act }: Props) {
             <li key={a.skill} className={styles.reveal} style={{ animationDelay: `${i * 120}ms` }}>
               <button type="button" onClick={() => act(a)}>
                 Draft {skill(a.skill)?.name} ({skill(a.skill)?.faces.join(' + ')})
+                <span className={styles.muted}>{effectOf(a.skill)}</span>
               </button>
             </li>
           ))}
@@ -56,6 +63,7 @@ export function DecisionDialog({ state, legal, act }: Props) {
             <li key={a.skill}>
               <button type="button" onClick={() => act(a)}>
                 Replace {skill(a.skill)?.name}
+                <span className={styles.muted}>{effectOf(a.skill)}</span>
               </button>
             </li>
           ))}
