@@ -1,0 +1,52 @@
+{
+  "upgrades": [
+    {
+      "id": "shop-1",
+      "track": "shop",
+      "tier": 1,
+      "name": "Shop I",
+      "cost": 4,
+      "opensLevel": 1
+    },
+    {
+      "id": "shop-2",
+      "track": "shop",
+      "tier": 2,
+      "name": "Shop II",
+      "cost": 6,
+      "opensLevel": 2
+    },
+    {
+      "id": "shop-3",
+      "track": "shop",
+      "tier": 3,
+      "name": "Shop III",
+      "cost": 8,
+      "opensLevel": 3
+    },
+    {
+      "id": "training-1",
+      "track": "training",
+      "tier": 1,
+      "name": "Training I",
+      "cost": 3,
+      "opensLevel": 1
+    },
+    {
+      "id": "training-2",
+      "track": "training",
+      "tier": 2,
+      "name": "Training II",
+      "cost": 5,
+      "opensLevel": 2
+    },
+    {
+      "id": "training-3",
+      "track": "training",
+      "tier": 3,
+      "name": "Training III",
+      "cost": 7,
+      "opensLevel": 3
+    }
+  ]
+}

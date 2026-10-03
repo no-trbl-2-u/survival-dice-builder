@@ -1,0 +1,60 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: var(--gutter);
+}
+
+.card {
+  margin: 0;
+}
+
+.card figcaption {
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.kind {
+  text-transform: capitalize;
+  opacity: 0.8;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  text-transform: capitalize;
+}
+
+.swatch {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--color-hex-stroke);
+}
+
+.plains {
+  background: var(--terrain-plains);
+}
+.forest {
+  background: var(--terrain-forest);
+}
+.hills {
+  background: var(--terrain-hills);
+}
+.wasteland {
+  background: var(--terrain-wasteland);
+}
+.lake {
+  background: var(--terrain-lake);
+}
+.mountain {
+  background: var(--terrain-mountain);
+}

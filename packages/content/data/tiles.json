@@ -1,0 +1,319 @@
+{
+  "tiles": [
+    {
+      "id": "broken-village",
+      "name": "Broken Village",
+      "kind": "base",
+      "hexes": [
+        {
+          "terrain": "plains",
+          "site": "base"
+        },
+        {
+          "terrain": "plains",
+          "site": "gathering-node"
+        },
+        {
+          "terrain": "forest",
+          "site": null
+        },
+        {
+          "terrain": "plains",
+          "site": null
+        },
+        {
+          "terrain": "hills",
+          "site": "gathering-node"
+        },
+        {
+          "terrain": "forest",
+          "site": null
+        },
+        {
+          "terrain": "plains",
+          "site": null
+        }
+      ]
+    },
+    {
+      "id": "meadowlands",
+      "name": "Meadowlands",
+      "kind": "countryside",
+      "hexes": [
+        {
+          "terrain": "plains",
+          "site": null
+        },
+        {
+          "terrain": "plains",
+          "site": "gathering-node"
+        },
+        {
+          "terrain": "forest",
+          "site": null
+        },
+        {
+          "terrain": "hills",
+          "site": "spawn-node"
+        },
+        {
+          "terrain": "plains",
+          "site": null
+        },
+        {
+          "terrain": "lake",
+          "site": null
+        },
+        {
+          "terrain": "forest",
+          "site": "gathering-node"
+        }
+      ]
+    },
+    {
+      "id": "old-woods",
+      "name": "Old Woods",
+      "kind": "countryside",
+      "hexes": [
+        {
+          "terrain": "forest",
+          "site": null
+        },
+        {
+          "terrain": "forest",
+          "site": null
+        },
+        {
+          "terrain": "forest",
+          "site": "spawn-node"
+        },
+        {
+          "terrain": "plains",
+          "site": null
+        },
+        {
+          "terrain": "hills",
+          "site": "gathering-node"
+        },
+        {
+          "terrain": "forest",
+          "site": null
+        },
+        {
+          "terrain": "mountain",
+          "site": null
+        }
+      ]
+    },
+    {
+      "id": "stony-fields",
+      "name": "Stony Fields",
+      "kind": "countryside",
+      "hexes": [
+        {
+          "terrain": "hills",
+          "site": "gathering-node"
+        },
+        {
+          "terrain": "plains",
+          "site": null
+        },
+        {
+          "terrain": "wasteland",
+          "site": null
+        },
+        {
+          "terrain": "plains",
+          "site": "spawn-node"
+        },
+        {
+          "terrain": "hills",
+          "site": null
+        },
+        {
+          "terrain": "plains",
+          "site": "gathering-node"
+        },
+        {
+          "terrain": "forest",
+          "site": null
+        }
+      ]
+    },
+    {
+      "id": "ash-waste",
+      "name": "Ash Waste",
+      "kind": "core",
+      "hexes": [
+        {
+          "terrain": "wasteland",
+          "site": "elite-spawn-node"
+        },
+        {
+          "terrain": "wasteland",
+          "site": "spawn-node"
+        },
+        {
+          "terrain": "hills",
+          "site": null
+        },
+        {
+          "terrain": "mountain",
+          "site": null
+        },
+        {
+          "terrain": "wasteland",
+          "site": "gathering-node"
+        },
+        {
+          "terrain": "plains",
+          "site": null
+        },
+        {
+          "terrain": "wasteland",
+          "site": null
+        }
+      ]
+    },
+    {
+      "id": "black-fen",
+      "name": "Black Fen",
+      "kind": "core",
+      "hexes": [
+        {
+          "terrain": "forest",
+          "site": "elite-spawn-node"
+        },
+        {
+          "terrain": "lake",
+          "site": null
+        },
+        {
+          "terrain": "forest",
+          "site": "gathering-node"
+        },
+        {
+          "terrain": "forest",
+          "site": null
+        },
+        {
+          "terrain": "plains",
+          "site": "spawn-node"
+        },
+        {
+          "terrain": "wasteland",
+          "site": null
+        },
+        {
+          "terrain": "forest",
+          "site": null
+        }
+      ]
+    },
+    {
+      "id": "broken-ridge",
+      "name": "Broken Ridge",
+      "kind": "core",
+      "hexes": [
+        {
+          "terrain": "hills",
+          "site": "elite-spawn-node"
+        },
+        {
+          "terrain": "hills",
+          "site": null
+        },
+        {
+          "terrain": "mountain",
+          "site": null
+        },
+        {
+          "terrain": "hills",
+          "site": "spawn-node"
+        },
+        {
+          "terrain": "plains",
+          "site": null
+        },
+        {
+          "terrain": "hills",
+          "site": "gathering-node"
+        },
+        {
+          "terrain": "wasteland",
+          "site": null
+        }
+      ]
+    },
+    {
+      "id": "dead-grove",
+      "name": "Dead Grove",
+      "kind": "core",
+      "hexes": [
+        {
+          "terrain": "forest",
+          "site": "elite-spawn-node"
+        },
+        {
+          "terrain": "wasteland",
+          "site": "gathering-node"
+        },
+        {
+          "terrain": "forest",
+          "site": null
+        },
+        {
+          "terrain": "forest",
+          "site": null
+        },
+        {
+          "terrain": "wasteland",
+          "site": null
+        },
+        {
+          "terrain": "forest",
+          "site": "spawn-node"
+        },
+        {
+          "terrain": "plains",
+          "site": null
+        }
+      ]
+    },
+    {
+      "id": "scorched-plain",
+      "name": "Scorched Plain",
+      "kind": "core",
+      "hexes": [
+        {
+          "terrain": "plains",
+          "site": "elite-spawn-node"
+        },
+        {
+          "terrain": "wasteland",
+          "site": null
+        },
+        {
+          "terrain": "plains",
+          "site": "spawn-node"
+        },
+        {
+          "terrain": "wasteland",
+          "site": null
+        },
+        {
+          "terrain": "lake",
+          "site": null
+        },
+        {
+          "terrain": "wasteland",
+          "site": "gathering-node"
+        },
+        {
+          "terrain": "plains",
+          "site": null
+        }
+      ]
+    }
+  ]
+}

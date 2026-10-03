@@ -12,6 +12,13 @@
   --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-number: ui-monospace, 'Cascadia Mono', Menlo, monospace;
   --gutter: 16px;
+  --terrain-plains: #d8e6b0;
+  --terrain-forest: #8fb67a;
+  --terrain-hills: #d9bf8a;
+  --terrain-wasteland: #c9b59a;
+  --terrain-lake: #8fbfe3;
+  --terrain-mountain: #8b909c;
+  --tile-icon: #1d1b18;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,6 +28,13 @@
     --color-hex-fill: #3b4a2f;
     --color-hex-center: #6b5a36;
     --color-hex-stroke: #c9c3b2;
+    --terrain-plains: #5d6b3c;
+    --terrain-forest: #35553a;
+    --terrain-hills: #75603a;
+    --terrain-wasteland: #6b5c47;
+    --terrain-lake: #2f5674;
+    --terrain-mountain: #3c4252;
+    --tile-icon: #f3efe4;
   }
 }
 
@@ -35,6 +49,15 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav a {
+  color: inherit;
 }
 
 .app {

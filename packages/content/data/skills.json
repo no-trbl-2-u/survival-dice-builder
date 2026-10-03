@@ -1,0 +1,206 @@
+{
+  "skills": [
+    {
+      "id": "strike",
+      "name": "Strike",
+      "level": 0,
+      "faces": ["Sword"],
+      "effect": {
+        "kind": "damage",
+        "amount": 2,
+        "range": 1,
+        "target": "one"
+      }
+    },
+    {
+      "id": "shot",
+      "name": "Shot",
+      "level": 0,
+      "faces": ["Bow"],
+      "effect": {
+        "kind": "damage",
+        "amount": 1,
+        "range": 2,
+        "target": "one"
+      }
+    },
+    {
+      "id": "mend",
+      "name": "Mend",
+      "level": 0,
+      "faces": ["Wand"],
+      "effect": {
+        "kind": "heal",
+        "amount": 1
+      }
+    },
+    {
+      "id": "guard",
+      "name": "Guard",
+      "level": 0,
+      "faces": ["Shield"],
+      "effect": {
+        "kind": "guard",
+        "amount": 2
+      }
+    },
+    {
+      "id": "cleave",
+      "name": "Cleave",
+      "level": 1,
+      "faces": ["Sword", "Sword"],
+      "effect": {
+        "kind": "damage",
+        "amount": 5,
+        "range": 1,
+        "target": "one"
+      }
+    },
+    {
+      "id": "bulwark",
+      "name": "Bulwark",
+      "level": 1,
+      "faces": ["Shield", "Shield"],
+      "effect": {
+        "kind": "guard",
+        "amount": 5
+      }
+    },
+    {
+      "id": "renewal",
+      "name": "Renewal",
+      "level": 1,
+      "faces": ["Wand", "Wand"],
+      "effect": {
+        "kind": "heal",
+        "amount": 3
+      }
+    },
+    {
+      "id": "aimed-shot",
+      "name": "Aimed Shot",
+      "level": 1,
+      "faces": ["Bow", "Bow"],
+      "effect": {
+        "kind": "damage",
+        "amount": 3,
+        "range": 2,
+        "target": "one"
+      }
+    },
+    {
+      "id": "spellblade",
+      "name": "Spellblade",
+      "level": 1,
+      "faces": ["Sword", "Wand"],
+      "effect": {
+        "kind": "damage",
+        "amount": 4,
+        "range": 1,
+        "target": "one"
+      }
+    },
+    {
+      "id": "dodge",
+      "name": "Dodge",
+      "level": 1,
+      "faces": ["Shield", "Wand"],
+      "effect": {
+        "kind": "ignoreHit",
+        "hits": 1
+      }
+    },
+    {
+      "id": "spark-burst",
+      "name": "Spark Burst",
+      "level": 1,
+      "faces": ["Wand", "Bow"],
+      "effect": {
+        "kind": "damage",
+        "amount": 1,
+        "range": 2,
+        "target": "each"
+      }
+    },
+    {
+      "id": "volley",
+      "name": "Volley",
+      "level": 2,
+      "faces": ["Bow", "Bow", "Bow"],
+      "effect": {
+        "kind": "damage",
+        "amount": 2,
+        "range": 2,
+        "target": "each"
+      }
+    },
+    {
+      "id": "flurry",
+      "name": "Flurry",
+      "level": 2,
+      "faces": ["Sword", "Sword", "Sword"],
+      "effect": {
+        "kind": "damage",
+        "amount": 9,
+        "range": 1,
+        "target": "one"
+      }
+    },
+    {
+      "id": "fortress",
+      "name": "Fortress",
+      "level": 2,
+      "faces": ["Shield", "Shield", "Shield"],
+      "effect": {
+        "kind": "guard",
+        "amount": 8
+      }
+    },
+    {
+      "id": "purify",
+      "name": "Purify",
+      "level": 2,
+      "faces": ["Wand", "Wand", "Wand"],
+      "effect": {
+        "kind": "heal",
+        "amount": 6
+      }
+    },
+    {
+      "id": "phalanx",
+      "name": "Phalanx",
+      "level": 3,
+      "faces": ["Sword", "Sword", "Shield", "Shield"],
+      "effect": {
+        "kind": "damage",
+        "amount": 7,
+        "range": 1,
+        "target": "one"
+      }
+    },
+    {
+      "id": "meteor",
+      "name": "Meteor",
+      "level": 3,
+      "faces": ["Wand", "Wand", "Sword", "Sword"],
+      "effect": {
+        "kind": "damage",
+        "amount": 6,
+        "range": 2,
+        "target": "each"
+      }
+    },
+    {
+      "id": "arcane-rain",
+      "name": "Arcane Rain",
+      "level": 3,
+      "faces": ["Wand", "Wand", "Wand", "Bow", "Bow"],
+      "effect": {
+        "kind": "damage",
+        "amount": 4,
+        "range": 2,
+        "target": "each"
+      }
+    }
+  ]
+}

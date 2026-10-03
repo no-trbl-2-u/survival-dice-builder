@@ -89,9 +89,10 @@ Single-page app, hash-free client routing is not needed for v1.
 /credits          Credits generated from ASSETS.md
 ```
 
-Routes are client-side (`react-router` or a 30-line hand router;
-decide in phase 4, the first phase that adds a route, and
-record it here). Cloudflare Pages gets a
+Routes are client-side via a 25-line hand router
+(`apps/web/src/router.tsx`, `matchRoute` on
+`window.location.pathname`, no dependency; decided in phase 4).
+Navigation uses plain `<a href>` links. Cloudflare Pages gets a
 `_redirects` file `/* /index.html 200` so deep links load.
 
 ## Engine API contract (locked)

@@ -4,3 +4,4 @@
  */
 export type { Axial } from './hex.ts'
 export { AXIAL_DIRECTIONS, hexDistance, hexKey, hexNeighbors, tileHexes } from './hex.ts'
+export { experienceForLevel, levelForExperience } from './progression/levels.ts'

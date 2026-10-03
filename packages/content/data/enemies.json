@@ -1,0 +1,34 @@
+{
+  "enemies": [
+    {
+      "id": "grunt",
+      "name": "Grunt",
+      "health": 2,
+      "attack": {
+        "kind": "fixed",
+        "damage": 2
+      },
+      "experience": 1,
+      "currency": 1
+    },
+    {
+      "id": "elite",
+      "name": "Elite",
+      "health": 14,
+      "attack": {
+        "kind": "dice",
+        "dice": 6
+      },
+      "experience": 4,
+      "currency": 4
+    }
+  ],
+  "enemyDieDamage": {
+    "Sword": 1,
+    "Wand": 1,
+    "Bow": 1,
+    "Star": 2,
+    "Shield": 0,
+    "Blank": 0
+  }
+}

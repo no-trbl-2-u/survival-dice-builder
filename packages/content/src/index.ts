@@ -1,5 +1,42 @@
 /**
  * @survival/content — game content and every rule number, as JSON validated by Zod.
- * Phase 4 adds the schemas, the content files, and `config.default.json`.
+ * No rule number lives in code: the engine reads them from `Content.config`.
  */
 export const CONTENT_VERSION = 'spec-v1-issue-006-draft'
+
+export { defaultContent, defaultRawContent } from './content.ts'
+export {
+  formatContentError,
+  loadContent,
+  type Content,
+  type ContentError,
+  type LoadResult,
+  type RawContent,
+} from './load.ts'
+export { CardDefSchema, type CardDef, type DeckEntry } from './schemas/cards.ts'
+export { GameConfigSchema, type GameConfig } from './schemas/config.ts'
+export type { CombatEffect, PrepareEffect, SkillEffect } from './schemas/effects.ts'
+export {
+  EnemyDefSchema,
+  type EnemiesFile,
+  type EnemyAttack,
+  type EnemyDef,
+} from './schemas/enemies.ts'
+export {
+  FaceSchema,
+  SkillFaceSchema,
+  type Face,
+  type Level,
+  type SkillFace,
+} from './schemas/primitives.ts'
+export { SkillDefSchema, type SkillDef } from './schemas/skills.ts'
+export type { DefenseDef, UpgradeDef } from './schemas/structures.ts'
+export {
+  IMPASSABLE,
+  TileDefSchema,
+  type Site,
+  type Terrain,
+  type TileDef,
+  type TileHex,
+  type TileKind,
+} from './schemas/tiles.ts'

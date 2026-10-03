@@ -28,6 +28,12 @@ until then).
 | 13 | 10.5 | Which grunt becomes the elite? | The grunt **nearest the base** (ties: lowest spawn node id). | `eliteReplacement: "nearest-base"` | proposed |
 | 14 | Brief | Defense on a gathering node hex. | **Allowed**; the node still works. | `buildOnNode: true` | decided (brief) |
 | 15 | 9.3 | Enemy target tie-break. | Player, then Tower, then Barricade, then base; then lowest health. | `targetTieBreak` | decided (brief) |
+| 16 | 3.8, 4.6 | Issue 006 rule 3.8 (1 figure per hex) conflicts with 4.6 (every figure starts on the base) in co-op. | The **base hex is exempt** from the 1-figure limit. | `rulings.baseHexFigureLimitExempt: true` | proposed (phase 4) |
+| 17 | 8.5 | "Each next level needs 5 more than the last step." | Steps grow by 5: 5, 10, 15 ... so level 2 at 5, level 3 at 15, level 4 at 30, level 5 at 50. | `experience.firstStep: 5`, `experience.stepIncrease: 5` | proposed (phase 4) |
+| 18 | 2.2, 4.12, Tables 8-9 | How many copies of each supply card and Skill? The tables list each once. | **1 copy each** (6 Level 1 cards, 4 Level 2, 4 Level 3). | `supplies.copiesPerCard: 1`, `supplies.copiesPerSkill: 1` | proposed (phase 4) |
+| 19 | 18.1 | Which cards make the 8-card and 10-card starter decks? | 8 cards: 3 Move, 3 Gather, 1 Build, 1 Rest. 10 cards: 4 Move, 4 Gather, 1 Build, 1 Rest. | `deck.presets` | proposed (phase 4) |
+| 20 | 6.7, Table 8 | "Gather +2" (Haul): node amount plus 2, or 2 total? | **Node amount plus the bonus** (a 2-material node gives 4 with Haul). | `PrepareEffect gather.bonus` | proposed (phase 4) |
+| 21 | Table 1, 9.2 | The elite spawn node "holds 1 elite": does it refill (9.2) like a spawn node? | **Yes**: an elite spawn node gets a new elite only when its elite is defeated, the same as 9.2. | (engine, phase 7) | proposed (phase 4) |
 
 ## Spec amendments owed
 

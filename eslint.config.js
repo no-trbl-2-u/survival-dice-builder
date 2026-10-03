@@ -30,6 +30,11 @@ export default tseslint.config(
     plugins: { 'react-hooks': reactHooks },
     rules: reactHooks.configs.recommended.rules,
   },
+  // Tests index fixtures they just built; `!` is clearer there than a guard.
+  {
+    files: ['**/*.test.{ts,tsx}'],
+    rules: { '@typescript-eslint/no-non-null-assertion': 'off' },
+  },
   // Engine purity (bearings hard rule 10): pure functions over plain data.
   {
     files: ['packages/engine/src/**/*.ts'],

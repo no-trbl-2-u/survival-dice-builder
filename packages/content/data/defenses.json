@@ -1,0 +1,23 @@
+{
+  "defenses": [
+    {
+      "id": "barricade",
+      "name": "Barricade",
+      "cost": 2,
+      "health": 4,
+      "blocksEnemies": true,
+      "attack": null
+    },
+    {
+      "id": "tower",
+      "name": "Tower",
+      "cost": 4,
+      "health": 3,
+      "blocksEnemies": false,
+      "attack": {
+        "damage": 2,
+        "range": 2
+      }
+    }
+  ]
+}

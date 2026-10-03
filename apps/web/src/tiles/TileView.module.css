@@ -1,0 +1,35 @@
+.tile {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hex {
+  stroke: var(--color-hex-stroke);
+  stroke-width: 2;
+}
+
+/* Terrain is also named in each hex's tooltip and in the legend, so colour is never the only signal. */
+.plains {
+  fill: var(--terrain-plains);
+}
+.forest {
+  fill: var(--terrain-forest);
+}
+.hills {
+  fill: var(--terrain-hills);
+}
+.wasteland {
+  fill: var(--terrain-wasteland);
+}
+.lake {
+  fill: var(--terrain-lake);
+}
+.mountain {
+  fill: var(--terrain-mountain);
+}
+
+.icon {
+  color: var(--tile-icon);
+  pointer-events: none;
+}
