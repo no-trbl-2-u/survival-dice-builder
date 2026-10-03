@@ -1,4 +1,8 @@
-# Survival Dice-Builder — Rules Specification (ASD-STE100), Spec v1 (Issue 005)
+# Survival Dice-Builder — Rules Specification (ASD-STE100), Spec v1 (Issue 006 — DRAFT)
+
+> Issue 006 draft, 2026-10-02. Changes from Issue 005 are marked **[006]**.
+> Source: designer rulings recorded in `OPEN-QUESTIONS.md`. The designer
+> reviews this draft, then removes the DRAFT marks and the **[006]** tags.
 
 Writing standard: ASD-STE100 writing rules. Game terms are technical names.
 Procedural sentences: 20 words maximum. Descriptive sentences: 25 words maximum.
@@ -17,14 +21,14 @@ Procedural sentences: 20 words maximum. Descriptive sentences: 25 words maximum.
 ## 2 Components
 
 2.1 Each player has these components:
-- 1 player board with Skill slots.
+- 1 player board with 4 starter Skill slots and 6 draft Skill slots. **[006]**
 - 1 figure.
 - 1 health track. The maximum health is 15.
 - 1 action die (d6) at the start.
 - 6 starter cards.
 
 2.2 The shared components are:
-- Map tiles: 1 Base tile, countryside tiles, and core tiles.
+- Map tiles: 1 Base tile (the Broken Village), 3 countryside tiles, and 5 core tiles. **[006]**
 - 1 base board with a health track and the upgrade track.
 - Enemy miniatures: grunts and elites. The limit is 20 miniatures.
 - Barricade tokens and Tower tokens.
@@ -46,6 +50,8 @@ Procedural sentences: 20 words maximum. Descriptive sentences: 25 words maximum.
 3.4 Figures and enemies cannot enter a lake hex or a mountain hex.
 3.5 The sites are printed on the tiles. Table 1 gives the sites.
 3.6 The center hex of the Base tile is the base.
+3.7 A hex can hold 1 enemy at most. **[006]**
+3.8 A hex can hold 1 figure at most. **[006]**
 
 Table 1 — Sites
 
@@ -59,8 +65,8 @@ Table 1 — Sites
 ## 4 Setup
 
 4.1 Put the Base tile in the center of the table.
-4.2 Shuffle 5 countryside tiles. Put 5 shuffled core tiles below them. This stack is the tile deck.
-4.3 Put 2 countryside tiles adjacent to the Base tile.
+4.2 Shuffle the 3 countryside tiles. Put 1 of them adjacent to the Base tile. **[006]**
+4.3 Put the 2 other countryside tiles on 5 shuffled core tiles. This stack is the tile deck. **[006]**
 4.4 Put 1 enemy on each spawn node.
 4.5 Set the base health to 20. Set the wave track to 0.
 4.6 Put your figure on the base.
@@ -100,7 +106,7 @@ Table 3 — Starter Skills
 ## 6 Prepare phase
 
 6.1 Draw 3 cards from your deck.
-6.2 Play the top half of each card. Do the effect.
+6.2 Play the top half of a card. Do the effect. Or discard the card. Do not do the effect. **[006]**
 6.3 Put each played card in your discard pile.
 6.4 When your hand is empty, draw 3 cards again.
 6.5 If your deck has fewer than 3 cards, draw all the cards.
@@ -113,6 +119,7 @@ Table 3 — Starter Skills
 - Rest: Heal the quantity that the card shows.
 
 6.8 If your figure is on the base and the Shop is open, you can buy cards. Buying does not use a card.
+You can buy in each phase, at each moment that your figure is on the base. **[006]**
 
 6.9 Enemies are obstacles in the Prepare phase:
 - You cannot gather or build on a hex that has an enemy.
@@ -122,6 +129,8 @@ Table 3 — Starter Skills
 6.11 In a skirmish, roll your dice 1 time. Use only your Skills. Do not use cards.
 6.12 Then each enemy in that hex attacks 1 time.
 6.13 If all enemies in that hex are defeated, move your figure into the hex.
+6.14 If an enemy in that hex is not defeated, your figure stays on its hex. The rest of the Move is lost. **[006]**
+6.15 A move into a hex with an enemy must pay the full cost of the move (6.9). **[006]**
 
 ## 7 Combat phase
 
@@ -148,6 +157,7 @@ Table 3 — Starter Skills
 7.9 If no enemy is within 2 hexes, discard your hand. The exchange has no effect.
 7.10 When your deck is empty and your hand is empty, do the structure attack step.
 7.11 Structure attack: Each enemy that is not next to a player attacks 1 adjacent structure.
+**[006: pending. Designer intent: each grunt rolls 1 action die (Table 4). Elites get special rules, not yet written. Until written, 9.5 and 9.6 apply to structures.]**
 7.12 A structure is a Barricade, a Tower, or the base. The enemy attacks the Barricade first, then the Tower, then the base.
 7.13 Then the Combat phase stops.
 
@@ -165,6 +175,8 @@ Table 3 — Starter Skills
 9.2 A spawn node gets a new enemy only when its enemy is defeated.
 9.3 Targets: Each enemy moves toward the nearest player, Barricade, Tower, or base.
 9.4 An enemy stops when it is next to its target. An enemy cannot enter a hex with a Barricade.
+9.7 An enemy cannot enter a hex with an enemy (3.7). If an enemy blocks each path to the nearest target, the enemy moves toward the next nearest target. **[006]**
+9.8 Spill-over: If a spawn node has an enemy, put the new enemy on the nearest empty hex that enemies can enter. If 2 hexes are equally near, use the hex nearest to the base. **[006]**
 9.5 Enemy attack: Each grunt gives 2 damage. Do not roll dice for grunts.
 9.6 Each elite rolls 6 action dice. Table 4 gives the result of each die.
 
@@ -185,10 +197,10 @@ Table 5 — Enemies
 
 ## 10 Explore phase
 
-10.1 Reveal 1 map tile. Put it adjacent to a tile on the map. You choose the position.
+10.1 Reveal 1 map tile. Put it adjacent to a tile on the map. You choose the position. Do not rotate the tile. **[006]**
 10.2 Put 1 enemy on each spawn node of the new tile.
 10.3 If the tile deck is empty, add 1 to the wave track. Do not reveal a tile.
-10.4 Wave step: Put 1 grunt on each spawn node. Do this 1 time for each point on the wave track.
+10.4 Wave step: Put 1 grunt on each spawn node (9.8). Do this 1 time for each point on the wave track. **[006]**
 10.5 If the miniature limit stops a new grunt, replace 1 grunt on the map with 1 elite.
 10.6 Turn your discard pile 180 degrees. Do not shuffle it. The top halves are now up.
 10.7 This pile is your deck for the next Prepare phase.
@@ -214,10 +226,11 @@ Table 6 — Base upgrades (paid with materials)
 | Training II | 5 | The draft uses the Level 2 Skill supply. |
 | Training III | 7 | The draft uses the Level 3 Skill supply. |
 
-11.5 When you buy a card, replace the offer with a card from the highest open level supply.
+11.5 When you buy a card, replace the offer immediately with a card from the highest open level supply. The Shop always shows 3 offers. **[006]**
 11.6 Skill draft: Each player looks at the top 2 Skills of the highest open level Skill supply.
 11.7 Keep 1 Skill. It is free. Put the other Skill at the bottom of its supply.
 11.8 If that supply is empty, use the next lower level supply.
+11.9 A player can have 6 draft Skills at most. If the draft slots are full, the drafted Skill replaces 1 draft Skill. Put the replaced Skill at the bottom of its supply. **[006]**
 
 ## 12 Defenses
 
@@ -293,9 +306,10 @@ Table 9 — Skill supplies (draft)
 16.1 Each player has a deck, dice, and a player board.
 16.2 All players share the experience track. All players get dice at the same time.
 16.3 All hands are open. Players can discuss all cards.
+16.8 Prepare: The players play 1 hand of 3 cards in turn. Start with the first player. Continue clockwise. Continue until each deck is empty. **[006]**
 16.4 Combat: The players do their exchanges in turn. Start with the first player. Continue clockwise.
 16.5 In each exchange of a player, each enemy next to that player attacks that player.
-16.6 Reveal 1 map tile for each player in the Explore phase.
+16.6 Reveal 1 map tile for each player in the Explore phase. **[006: open. With a 7-tile deck, 4 players empty the deck in round 2. Designer to confirm.]**
 16.7 If the health of one player is 0, the run stops for all players.
 
 ## 17 Milestones
@@ -306,7 +320,7 @@ Table 9 — Skill supplies (draft)
 - Defeat an elite.
 - Fire Arcane Rain.
 - Buy 3 base upgrades.
-- Reveal 10 tiles.
+- Reveal 10 tiles. **[006: 8 tiles exist. Designer to set a new number.]**
 - Reach level 5.
 
 ## 18 Configuration options (for playtests)

@@ -15,6 +15,7 @@ Package for the agents building the web prototype. Read in this order:
 
 ## Status
 
+- Rules are at Issue 006 (DRAFT): designer rulings of 2026-10-02 folded in, see `OPEN-QUESTIONS.md`.
 - Spec v1 balance is untested (the simulator predates the base). Phase 7 re-tunes it.
 - Tile layouts are not designed. Phase 1 proposes them for designer review.
 - Source of truth for edits: the design doc in Claude (tabs "Spec v1 — Rules", "Build brief", "Build plan").
