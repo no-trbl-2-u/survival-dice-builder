@@ -27,6 +27,13 @@ Plain commit message bodies. **Never** add a `Co-Authored-By:`
 line, a "Generated with…" footer, or any emoji — in commits,
 in code, in content, in design notes.
 
+**One carve-out:** commits shipped from the cloud loop
+(`.github/workflows/march.yml`) MUST end with a single
+trailer: `Cloud-Run: <run-url>`. The cloud ceiling check
+uses this trailer to distinguish cloud-shipped commits
+from local work. Nothing else is allowed in the footer.
+See `.github/CLOUD_LOOP.md` for the full convention.
+
 ### 3. The verify gate is non-negotiable.
 
 `pnpm verify` runs **before** every commit:
