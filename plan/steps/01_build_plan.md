@@ -166,7 +166,8 @@ median end round reported against the 8–14 band. A miss does
 **not** block or change rules: it files an AUDIT
 `[needs-user-call]` row with the distribution and an
 `OPEN-QUESTIONS.md` entry, so tuning data reaches the designer
-while the UI is being built. `/debug` gains an "autoplay" button.
+while the UI is being built. `/debug` gains an "autoplay" button. Detailed brief:
+`phase_9_bot.md`.
 
 ### Phase 10 — Art direction and placeholder art
 
