@@ -1,7 +1,14 @@
 import type { GameEvent, GameState } from '@survival/engine'
 
-/** Content names for ids that events carry. */
-type Names = Readonly<{ content: GameState['content'] }>
+/** What the log needs to name ids: the content, plus the pieces in play (usually the state). */
+type Names = Readonly<{
+  content: GameState['content']
+  players?: GameState['players']
+  enemies?: GameState['enemies']
+  defenses?: GameState['defenses']
+  /** The log: a defeated enemy's kind is still in its spawn event. */
+  log?: GameState['log']
+}>
 
 const hex = (h: { q: number; r: number }) => `(${h.q},${h.r})`
 const skillName = (n: Names, id: string) => n.content.skills.find((s) => s.id === id)?.name ?? id
@@ -9,8 +16,43 @@ const cardName = (n: Names, id: string) => n.content.cards.find((c) => c.id === 
 const tileName = (n: Names, id: string) => n.content.tiles.find((t) => t.id === id)?.name ?? id
 const upgradeName = (n: Names, id: string) =>
   n.content.upgrades.find((u) => u.id === id)?.name ?? id
-const who = (id: string) => (id === 'p1' ? 'You' : id)
-const whom = (id: string) => (id === 'p1' ? 'you' : id)
+
+/** A card instance (`c3`) by its card name; a returned starter is gone, so it stays generic. */
+function cardLabel(n: Names, instance: string): string {
+  for (const p of n.players ?? []) {
+    const found = [...p.hand, ...p.deck, ...p.discard, ...p.inPlay].find((c) => c.id === instance)
+    if (found) return cardName(n, found.def)
+  }
+  return n.content.cards.some((c) => c.id === instance) ? cardName(n, instance) : 'a card'
+}
+
+/** An enemy's kind: on the map now, or from the event that put it there. */
+function enemyKind(n: Names, id: string): string | undefined {
+  const live = n.enemies?.find((e) => e.id === id)?.kind
+  if (live) return live
+  for (const e of n.log ?? []) {
+    if (e.type === 'enemySpawned' && e.enemy === id) return e.kind
+    if (e.type === 'eliteReplaced' && e.elite === id) return 'elite'
+  }
+  return undefined
+}
+
+/** "grunt e3": an enemy by kind and id (the id tells 2 grunts apart). */
+function enemyLabel(n: Names, id: string, kind?: string): string {
+  return `${kind ?? enemyKind(n, id) ?? 'enemy'} ${id}`
+}
+
+/** "Tower d2": a defense by kind and id. */
+function defenseLabel(n: Names, id: string): string {
+  const kind = n.defenses?.find((d) => d.id === id)?.kind
+  return kind ? `${kind[0]?.toUpperCase()}${kind.slice(1)} ${id}` : `Defense ${id}`
+}
+
+const solo = (n: Names) => (n.players?.length ?? 1) === 1
+/** The subject: "You" in a solo run, "Player 2" in co-op. */
+const seat = (n: Names, id: string) =>
+  solo(n) ? 'You' : `Player ${(n.players?.findIndex((p) => p.id === id) ?? 0) + 1}`
+const upper = (text: string) => `${text[0]?.toUpperCase() ?? ''}${text.slice(1)}`
 
 /**
  * One plain-language line for an event (ASD-STE100 style: short and literal). The rule id is
@@ -20,6 +62,17 @@ const whom = (id: string) => (id === 'p1' ? 'you' : id)
  * @param names - the content, for display names.
  */
 export function describeEvent(event: GameEvent, names: Names): string {
+  const who = (id: string) => seat(names, id)
+  const whom = (id: string) => (solo(names) ? 'you' : seat(names, id))
+  /** Verb agreement: "You gather" but "Player 2 gathers". */
+  const s = (verb: string) => (solo(names) ? verb : `${verb}s`)
+  /** What an enemy heads for: the base, a player, or a defense. */
+  const target = (id: string) =>
+    id === 'base'
+      ? 'the base'
+      : names.players?.some((p) => p.id === id)
+        ? whom(id)
+        : defenseLabel(names, id)
   switch (event.type) {
     case 'gameCreated':
       return `New run, seed ${event.seed}.`
@@ -32,9 +85,9 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'cardsDrawn':
       return `${who(event.player)} drew ${event.cards.length} card${event.cards.length === 1 ? '' : 's'}.`
     case 'cardPlayed':
-      return `${who(event.player)} played card ${event.card} (${event.half} half).`
+      return `${who(event.player)} played ${cardLabel(names, event.card)} (${event.half} half).`
     case 'cardDiscarded':
-      return `${who(event.player)} discarded card ${event.card}${event.unplayed ? ' without its effect' : ''}.`
+      return `${who(event.player)} discarded ${cardLabel(names, event.card)}${event.unplayed ? ' without its effect' : ''}.`
     case 'effectDeferred':
       return `Not yet in the engine: ${event.effect}.`
     case 'healed':
@@ -58,15 +111,15 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'skillFired':
       return `${skillName(names, event.skill)} fires.`
     case 'enemyDamaged':
-      return `Enemy ${event.enemy} takes ${event.amount} damage (health ${event.health}).`
+      return `${upper(enemyLabel(names, event.enemy))} takes ${event.amount} damage (health ${event.health}).`
     case 'enemyDefeated':
-      return `Enemy ${event.enemy} (${event.kind}) is defeated.`
+      return `${upper(enemyLabel(names, event.enemy, event.kind))} is defeated.`
     case 'enemyAttacked':
-      return `Enemy ${event.enemy} attacks ${whom(event.player)} for ${event.damage}${event.faces ? ` (${event.faces.join(', ')})` : ''}.`
+      return `${upper(enemyLabel(names, event.enemy))} attacks ${whom(event.player)} for ${event.damage}${event.faces ? ` (${event.faces.join(', ')})` : ''}.`
     case 'hitIgnored':
-      return `${who(event.player)} ignore${event.player === 'p1' ? '' : 's'} the hit from enemy ${event.enemy}.`
+      return `${who(event.player)} ${s('ignore')} the hit from ${enemyLabel(names, event.enemy)}.`
     case 'playerDamaged':
-      return `${who(event.player)} lose${event.player === 'p1' ? '' : 's'} ${event.toGuard} guard and ${event.toHealth} health (health ${event.health}).`
+      return `${who(event.player)} ${s('lose')} ${event.toGuard} guard and ${event.toHealth} health (health ${event.health}).`
     case 'exchangeSkipped':
       return 'No enemy within 2 hexes: the exchange has no effect.'
     case 'exchangeEnded':
@@ -80,27 +133,29 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'moved':
       return `${who(event.player)} moved to ${hex(event.to)} (cost ${event.cost}, ${event.hexesLeft} left).`
     case 'skirmishStarted':
-      return `Skirmish with enemy ${event.enemy} at ${hex(event.hex)}.`
+      return `Skirmish with ${enemyLabel(names, event.enemy)} at ${hex(event.hex)}.`
     case 'skirmishEnded':
       return event.won
         ? 'Skirmish won: you move into the hex.'
         : 'Skirmish lost: you stay; the Move ends.'
     case 'gathered':
-      return `${who(event.player)} gathered ${event.amount} materials (now ${event.materials}).`
+      return event.amount === 0
+        ? `${who(event.player)} gathered nothing: gather on a Gathering node with no enemy on it.`
+        : `${who(event.player)} gathered ${event.amount} materials (now ${event.materials}).`
     case 'defenseBuilt':
       return `${event.kind[0]?.toUpperCase()}${event.kind.slice(1)} built at ${hex(event.hex)} for ${event.cost} materials.`
     case 'defenseDamaged':
-      return `Defense ${event.defense} takes ${event.amount} damage (health ${event.health}).`
+      return `${defenseLabel(names, event.defense)} takes ${event.amount} damage (health ${event.health}).`
     case 'defenseRemoved':
-      return `Defense ${event.defense} is destroyed.`
+      return `${defenseLabel(names, event.defense)} is destroyed.`
     case 'roundAdvanced':
       return `Round ${event.round}.`
     case 'enemyMoved':
-      return `Enemy ${event.enemy} moves to ${hex(event.to)}${event.target ? ` toward ${event.target === 'p1' ? 'you' : event.target}` : ''}.`
+      return `${upper(enemyLabel(names, event.enemy))} moves to ${hex(event.to)}${event.target ? ` toward ${target(event.target)}` : ''}.`
     case 'towerAttacked':
-      return `Tower ${event.tower} hits enemy ${event.enemy} for ${event.damage}.`
+      return `${defenseLabel(names, event.tower)} hits ${enemyLabel(names, event.enemy)} for ${event.damage}.`
     case 'structureAttacked':
-      return `Enemy ${event.enemy} attacks ${event.structure === 'base' ? 'the base' : event.structure} for ${event.damage}.`
+      return `${upper(enemyLabel(names, event.enemy))} attacks ${event.structure === 'base' ? 'the base' : defenseLabel(names, event.structure)} for ${event.damage}.`
     case 'baseDamaged':
       return `The base takes ${event.amount} damage (health ${event.health}).`
     case 'waveTrackAdvanced':
@@ -116,7 +171,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'levelReached':
       return `Level ${event.level}! Every player gets 1 action die.`
     case 'diceGained':
-      return `${who(event.player)} now ${event.player === 'p1' ? 'have' : 'has'} ${event.dice} action dice.`
+      return `${who(event.player)} now ${solo(names) ? 'have' : 'has'} ${event.dice} action dice.`
     case 'currencyGained':
       return `+${event.amount} currency (${event.currency}).`
     case 'upgradeBought':
@@ -126,7 +181,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'cardBought':
       return `${who(event.player)} bought ${cardName(names, event.card)} for ${event.cost}.`
     case 'starterReturned':
-      return `Starter card ${event.card} leaves the game.`
+      return `Starter card ${cardLabel(names, event.card)} leaves the game.`
     case 'draftStarted':
       return `Skill draft: ${event.options.map((s) => skillName(names, s)).join(' or ')}.`
     case 'skillDrafted':
@@ -142,6 +197,6 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'runEnded':
       return event.because === 'base'
         ? `The base has fallen in round ${event.round}. The run ends.`
-        : `You have fallen in round ${event.round}. The run ends.`
+        : `${solo(names) ? 'You have' : 'A player has'} fallen in round ${event.round}. The run ends.`
   }
 }

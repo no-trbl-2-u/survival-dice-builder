@@ -73,4 +73,28 @@ describe('describeEvent', () => {
     }
     expect(types.size).toBeGreaterThan(20)
   })
+
+  it('names cards and enemies, never bare instance ids', () => {
+    const { run, events } = botRun(2)
+    const played = events.find((e) => e.type === 'cardPlayed')!
+    const line = describeEvent(played, run.state)
+    expect(line).not.toMatch(/\bc\d+\b/)
+    const names = run.state.content.cards.map((c) => c.name)
+    expect(names.some((n) => line.includes(n))).toBe(true)
+    // The log shows the newest 60 events; the engine log keeps enough to name their enemies.
+    const shown = run.state.log.slice(-60).filter((x) => x.type === 'enemyDamaged')
+    expect(shown.length).toBeGreaterThan(0)
+    for (const e of shown) expect(describeEvent(e, run.state)).toMatch(/^(Grunt|Elite) e\d+ /)
+  })
+
+  it('explains a gather of 0 and names co-op seats', () => {
+    const state = botRun(2).run.state
+    const gathered = { type: 'gathered', rule: '6.7', player: 'p1', amount: 0, materials: 0 }
+    expect(describeEvent(gathered as never, state)).toBe(
+      'You gathered nothing: gather on a Gathering node with no enemy on it.',
+    )
+    const coop = { ...state, players: [state.players[0]!, { ...state.players[0]!, id: 'p2' }] }
+    const healed = { type: 'healed', rule: '6.4', player: 'p2', amount: 1, health: 5 }
+    expect(describeEvent(healed as never, coop)).toBe('Player 2 healed 1 (health 5).')
+  })
 })

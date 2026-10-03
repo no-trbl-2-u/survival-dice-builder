@@ -186,7 +186,7 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
       <div className={styles.footer}>
         <span>
           Seed {run.seed} · {run.players} {run.players === 1 ? 'player' : 'players'} ·{' '}
-          {run.actions.length} actions
+          {run.actions.length} {run.actions.length === 1 ? 'action' : 'actions'}
         </span>
         <button type="button" onClick={() => downloadRun(run, Date.now())}>
           Save run (file)

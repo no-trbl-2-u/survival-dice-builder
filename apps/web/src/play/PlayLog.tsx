@@ -6,7 +6,7 @@ const SHOWN = 60
 
 type Props = Readonly<{ state: GameState }>
 
-/** The event log: newest first, each line with the rule that produced it. */
+/** The event log: newest first, each line followed by a muted note of the rule behind it. */
 export function PlayLog({ state }: Props) {
   const events = state.log.slice(-SHOWN).reverse()
   return (
@@ -15,7 +15,10 @@ export function PlayLog({ state }: Props) {
       <ol className={styles.log} data-testid="play-log">
         {events.map((e, i) => (
           <li key={`${state.log.length - i}`}>
-            <span className={styles.rule}>{e.rule}</span> {describeEvent(e, state)}
+            {describeEvent(e, state)}{' '}
+            <span className={styles.rule} title={`Rules section ${e.rule}`}>
+              rule {e.rule}
+            </span>
           </li>
         ))}
       </ol>
