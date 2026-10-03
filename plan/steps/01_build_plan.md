@@ -25,7 +25,7 @@ Tick in this file in the same commit that ships the phase.
 **Substrate (phases 1–4):**
 - [x] Phase 1 — nexus overlay (agents.md, plan/, skills/, .claude/, scripts/, gates specified) — shipped in the `chore: adopt nexus methodology` commit
 - [x] Phase 2 — Foundation + deploy pipeline (spec 0) — 83a4991
-- [ ] Phase 3 — Asset and library research (spec A, non-code)
+- [x] Phase 3 — Asset and library research (spec A, non-code) — b834124
 - [ ] Phase 4 — Content and data model + tile proposals (spec 1)
 
 **Headless engine (phases 5–9) — Milestone 1 at phase 8:**
@@ -243,3 +243,4 @@ sessions themselves are filed as a `[needs-user-call]`.
 
 - phase 1 — (adoption commit) — nexus overlay
 - phase 2 — 83a4991 — pnpm monorepo, 7-hex SVG tile, verify gate green, Cloudflare Pages deploy workflow
+- phase 3 — b834124 — ASSETS.md register, 18 icons (6 die faces), 2D/3D recommendations, register check in lint
