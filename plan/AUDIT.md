@@ -7,6 +7,13 @@
 
 ## Top 5 findings (scored)
 
+### [x] [4.9] /play: the log shows card ids, rule numbers, and "1 actions" (critique MED)
+- category: external-critique (voice)
+- impact: 7
+- ease: 7
+- issue: #18
+- fixed: 77c6b73
+
 ### [x] [8.1] /: the home page does not say what the game is or where to start (critique HIGH)
 - category: external-critique (comprehension)
 - impact: 9

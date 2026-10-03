@@ -54,18 +54,6 @@
 - suggested fix: set the title per route ("Tile sheet - Survival Dice-Builder"), add `aria-current="page"` plus a visible style on the active link, and show the tagline under the home H1.
 - source: browser
 
-### [MED] /play — the log and footer show card ids, rule numbers, and "1 actions"
-- pass: 2 (commit 2f63473)
-- viewport: mobile
-- category: voice
-- observation: The "What happened" log names cards by instance id and starts each line with a rule number. A zero result does not say why. The footer has a plural slip.
-- evidence:
-  - "6.2 You played card c3 (top half)."
-  - "6.7 You gathered 0 materials (now 0)."
-  - The footer reads "Seed 7 · 1 player · 1 actions" (`describeEvent.ts:35` and `PlayPage.tsx:189`).
-- suggested fix: Use card names ("You played Gather (top half)."). Move the rule numbers into a muted prefix or a tooltip. Say why a gather is 0. Pluralise "action".
-- source: browser
-
 ### [MED] /play — choice buttons name hexes by axial coordinates and a code slug
 - pass: 2 (commit 2f63473)
 - viewport: mobile
@@ -103,6 +91,20 @@
 - source: browser
 
 ## Done
+
+### [x] [MED] /play — the log and footer show card ids, rule numbers, and "1 actions"
+- pass: 2 (commit 2f63473)
+- viewport: mobile
+- category: voice
+- observation: The "What happened" log names cards by instance id and starts each line with a rule number. A zero result does not say why. The footer has a plural slip.
+- evidence:
+  - "6.2 You played card c3 (top half)."
+  - "6.7 You gathered 0 materials (now 0)."
+  - The footer reads "Seed 7 · 1 player · 1 actions" (`describeEvent.ts:35` and `PlayPage.tsx:189`).
+- suggested fix: Use card names ("You played Gather (top half)."). Move the rule numbers into a muted prefix or a tooltip. Say why a gather is 0. Pluralise "action".
+- source: browser
+- issue: #18
+- fixed: 77c6b73 (card and enemy names, gather-0 reason, muted rule note, plural)
 
 ### [x] [HIGH] / — the home page does not say what the game is or where to start
 - pass: 2 (commit 2f63473)
