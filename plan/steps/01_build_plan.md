@@ -32,7 +32,7 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 5 — Engine core: cards, dice, Skills, phases + `/debug` engine console (spec 2) — CANONICAL SIBLING — ec56ee6
 - [x] Phase 6 — World I: hex map, tiles, movement, Gather/Build, defenses (spec 3, first half) — f76fc89
 - [x] Phase 7 — World II: enemies, base, exploration, wave track (spec 3, second half; co-op order moved to phase 13) — 2ae8480
-- [ ] Phase 8 — Progression: XP, upgrades, Shop, draft, end of run, milestones (spec 4)
+- [x] Phase 8 — Progression: XP, upgrades, Shop, draft, end of run, milestones (spec 4) — 0f8bfc1
 - [ ] Phase 9 — Early bot + batch sanity runs (spec 7, bot half, moved up)
 
 **Playable (phases 10–12) — Milestone 2 at phase 12:**
@@ -252,3 +252,4 @@ sessions themselves are filed as a `[needs-user-call]`.
 - phase 5 — ec56ee6 — engine API, deck/dice/Skills/exchange, phase machine, properties + golden replay, /debug console
 - phase 6 — f76fc89 — setup tile choice, step-by-step Move, skirmish, Gather, Build defenses, range-aware Combat, /debug SVG map
 - phase 7 — 2ae8480 — refill, waves, enemy targeting and pathing, Towers, structure attacks, base falls (14.1), Explore modes, full-run golden
+- phase 8 — 0f8bfc1 — XP and levels, currency, supplies, Shop, base upgrades, Skill draft, milestones, end-of-run record; Milestone 1 (engine covers Spec v1 solo)
