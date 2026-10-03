@@ -149,7 +149,8 @@ Source: `spec/phases/phase-4-progression.md`. Shared XP and
 levels, +1 die per level, currency to the killer, Shop I–III,
 base upgrades I→III, Skill draft on even rounds, bought-card
 mode, end of run, milestones. Headless full run reaches the end
-with correct cause and milestones. **Milestone 1.**
+with correct cause and milestones. **Milestone 1.** Detailed brief:
+`phase_8_progression.md`.
 
 ### Phase 9 — Early bot + batch sanity runs
 
