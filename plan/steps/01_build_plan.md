@@ -48,6 +48,10 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 15 — Visual polish: icons, art, 3D dice spike + optional toggle, animation, sound (spec 8) — 20e9a4e
 - [x] Phase 16 — Playtest protocol, survey, and analysis kit (spec C, non-code) — a7a0e7f
 
+**Review readiness (phases 17–18) — promoted via oversight 2026-10-03:**
+- [ ] Phase 17 — Accessibility and navigation pass: the pending critique rows on /play, /tiles, /debug, and the shell
+- [ ] Phase 18 — Designer decision digest: one page for every open reading and pending check
+
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
 > designer runs them and drops run exports in
@@ -240,6 +244,31 @@ ingests run exports from `docs/playtests/runs/` and computes
 median rounds/minutes and minutes-per-round vs the simulator
 estimate, and `docs/playtests/REPORT.md` as a template. The
 sessions themselves are filed as a `[needs-user-call]`. Detailed brief: `phase_16_playtest_protocol.md`.
+
+### Phase 17 — Accessibility and navigation pass
+
+Promoted from `plan/PHASE_CANDIDATES.md` (expand pass 1, score
+6.5) via oversight 2026-10-03, rescoped to the critique rows
+still pending: /play choice buttons named by coordinates, /play
+map text without enemies, /play start panel goal and seed,
+/tiles dark-mode terrain colours, /debug focus after each
+action plus a log live region, /debug lede and wording, and a
+per-route `document.title` with `aria-current` in the nav. Adds
+an e2e keyboard pass over every route. Each fixed row moves to
+Done in `plan/CRITIQUE.md` in the shipping commit. Brief to be
+drafted by `/plan-a-phase`.
+
+### Phase 18 — Designer decision digest
+
+Promoted from `plan/PHASE_CANDIDATES.md` (expand pass 1, score
+5.0) via oversight 2026-10-03. A generator reads
+`OPEN-QUESTIONS.md` and the `[needs-user-call]` rows of
+`plan/AUDIT.md` and writes `docs/DECISIONS.md`, also served
+read-only at `/decisions`: each open reading with its rule id,
+the current config value, a link to `/config`, and its evidence
+(bot batch, playtest numbers when present). No rule or config
+default changes; the designer still decides. Brief to be
+drafted by `/plan-a-phase`.
 
 ---
 

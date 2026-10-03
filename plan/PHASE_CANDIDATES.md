@@ -9,7 +9,23 @@
 
 ## Pending
 
-### [ ] [score 6.5] Accessibility and navigation pass for the secondary pages (/tiles, /debug, shell)
+(none)
+
+## Considered (below threshold)
+
+- [score 3.5] **A stronger bot policy for tuning.**
+  - Signals: the phase 9 report calls the bot a floor, and the compare tool (phase 14) can only rank configs by a weak player.
+  - Wait for playtest data to say whether bot numbers matter for tuning.
+- [score 3.0] **Recorded audio and 2D tile art swap.**
+  - Signals: the Kenney rows are still `candidate` in ASSETS.md, and the phase 15 AUDIT feel check is pending.
+  - This needs the designer's verdict on the synthesized sounds first, and a download approval.
+- [score 2.5] **Spec v2 and scenarios (rules 19).**
+  - Gated by the playtest report (phase 16 kit).
+  - Rule 19.4 says to make the base game work first.
+
+## Promoted
+
+### [x] [score 6.5] Accessibility and navigation pass for the secondary pages (/tiles, /debug, shell)
 - proposed: 2026-10-03, expand pass 1
 - source signals:
   - `plan/CRITIQUE.md` pass 1, 5 of 6 pending rows on non-play pages:
@@ -30,8 +46,9 @@
   - An e2e keyboard pass on every route, and a fresh critique of /play and /credits afterwards.
 - estimated phases: 1
 - conflicts: none (bearings: accessibility is a standing rule, not a scope change)
+- promoted: 2026-10-03 via oversight, as phase 17, rescoped to the 7 critique rows still pending (the /tiles hex list and site legend were already fixed by `/iterate`)
 
-### [ ] [score 5.0] Designer decision digest: one page for every open reading and pending check
+### [x] [score 5.0] Designer decision digest: one page for every open reading and pending check
 - proposed: 2026-10-03, expand pass 1
 - source signals:
   - `plan/AUDIT.md`: 9 `[needs-user-call]` rows. Among them, phase 4's proposed readings (OPEN-QUESTIONS 16-21), the tile review, the bot batch review, the art glance check, the polish feel check, and the playtests.
@@ -45,23 +62,7 @@
   - No rule changes: the designer still decides.
 - estimated phases: 1
 - conflicts: must not change any rule or config default (bearings: rule changes are Spec v2 work)
-
-## Considered (below threshold)
-
-- [score 3.5] **A stronger bot policy for tuning.**
-  - Signals: the phase 9 report calls the bot a floor, and the compare tool (phase 14) can only rank configs by a weak player.
-  - Wait for playtest data to say whether bot numbers matter for tuning.
-- [score 3.0] **Recorded audio and 2D tile art swap.**
-  - Signals: the Kenney rows are still `candidate` in ASSETS.md, and the phase 15 AUDIT feel check is pending.
-  - This needs the designer's verdict on the synthesized sounds first, and a download approval.
-- [score 2.5] **Spec v2 and scenarios (rules 19).**
-  - Gated by the playtest report (phase 16 kit).
-  - Rule 19.4 says to make the base game work first.
-
-## Promoted
-
-(empty — populated as `/oversight` promotes candidates to the
-build plan)
+- promoted: 2026-10-03 via oversight, as phase 18
 
 ## Rejected
 
