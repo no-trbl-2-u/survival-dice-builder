@@ -203,6 +203,8 @@ jobs:
 
             Requested verb: ${{ inputs.verb || 'march' }}. If it is not 'march', skip dispatch and execute skills/<verb>.md directly - the user asked for exactly that pass.
 
+            8. The action hides your transcript from the run log (public repo). Before you exit, ALWAYS append a short Markdown tick report to the file named by the GITHUB_STEP_SUMMARY environment variable (append with `>>`; it renders on the run page): the verb dispatched and why, what shipped (commit SHA + subject) or why nothing shipped, gate results (verify, deploy:check), any issue opened, and the /oversight audit briefing. Never write secret values or environment dumps into it.
+
             Begin. One tick. One commit-and-push (or no-op). Then exit.
         env:
           # Add any secrets your verify/deploy gates need. Examples:
