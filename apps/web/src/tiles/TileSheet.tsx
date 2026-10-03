@@ -1,5 +1,5 @@
 import { defaultContent, type Site, type Terrain } from '@survival/content'
-import { SITE_LABEL, TileView } from './TileView.tsx'
+import { HEX_POSITION, hexLabel, SITE_LABEL, TileView } from './TileView.tsx'
 import styles from './TileSheet.module.css'
 
 const TERRAINS: readonly Terrain[] = ['plains', 'forest', 'hills', 'wasteland', 'lake', 'mountain']
@@ -22,8 +22,8 @@ export function TileSheet() {
   return (
     <section aria-labelledby="tiles-intro">
       <p id="tiles-intro">
-        Proposed layouts for review: 1 Base tile, 3 countryside tiles, and 5 core tiles. Hover a hex
-        for its terrain and site.
+        Proposed layouts for review: 1 Base tile, 3 countryside tiles, and 5 core tiles. Under each
+        tile, its 7 hexes are listed by position with their terrain and site.
       </p>
       <ul className={styles.legend} aria-label="Terrain legend">
         {TERRAINS.map((t) => (
@@ -42,6 +42,13 @@ export function TileSheet() {
               <strong>{tile.name}</strong> <span className={styles.kind}>{tile.kind}</span>
               <br />
               {siteSummary(tile.hexes.map((h) => h.site))}
+              <ul className={styles.hexList} aria-label={`${tile.name} hexes`}>
+                {tile.hexes.map((hex, i) => (
+                  <li key={i} data-hex-row={i}>
+                    <span className={styles.position}>{HEX_POSITION[i]}:</span> {hexLabel(hex)}
+                  </li>
+                ))}
+              </ul>
             </figcaption>
           </figure>
         ))}

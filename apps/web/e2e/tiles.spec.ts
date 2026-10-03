@@ -12,6 +12,12 @@ test('/tiles shows the 9 proposed tiles with no console errors', async ({ page }
   await expect(page.locator('[data-tile]')).toHaveCount(9)
   await expect(page.locator('[data-tile] [data-hex]')).toHaveCount(63)
   await expect(page.locator('[data-tile="broken-village"] [data-site="base"]')).toHaveCount(1)
+  // Every hex is also listed as text (touch, keyboard, and screen-reader users).
+  await expect(page.locator('[data-hex-row]')).toHaveCount(63)
+  await expect(page.getByRole('list', { name: 'Broken Village hexes' })).toContainText(
+    'Center: Plains, Base',
+  )
+  await expect(page.locator('#tiles-intro')).not.toContainText('Hover')
   expect(errors).toEqual([])
 })
 

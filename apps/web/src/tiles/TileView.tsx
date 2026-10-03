@@ -23,6 +23,26 @@ export const SITE_LABEL: Record<Site, string> = {
   'elite-spawn-node': 'Elite spawn node',
 }
 
+/**
+ * Where hex `i` of a tile sits, in words: the center, then `AXIAL_DIRECTIONS` order as drawn
+ * with flat-top hexes.
+ */
+export const HEX_POSITION: readonly string[] = [
+  'Center',
+  'Lower right',
+  'Upper right',
+  'Top',
+  'Upper left',
+  'Lower left',
+  'Bottom',
+]
+
+/** "Plains", "Plains, Base": a hex's terrain and site in words. */
+export function hexLabel(hex: Readonly<{ terrain: string; site: Site | null }>): string {
+  const terrain = hex.terrain.charAt(0).toUpperCase() + hex.terrain.slice(1)
+  return hex.site ? `${terrain}, ${SITE_LABEL[hex.site]}` : terrain
+}
+
 type Props = Readonly<{ tile: TileDef }>
 
 /**
@@ -45,7 +65,7 @@ export function TileView({ tile }: Props) {
         const pos = positions[i]
         if (!pos) return null
         const center = hexToPixel(pos, HEX_SIZE)
-        const label = hex.site ? `${hex.terrain}, ${SITE_LABEL[hex.site]}` : hex.terrain
+        const label = hexLabel(hex)
         return (
           <g key={hexKey(pos)} data-hex={i} data-terrain={hex.terrain} data-site={hex.site ?? ''}>
             <title>{label}</title>

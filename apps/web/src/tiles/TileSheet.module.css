@@ -58,3 +58,16 @@
 .mountain {
   background: var(--terrain-mountain);
 }
+
+.hexList {
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.position {
+  color: var(--color-text-muted);
+}
