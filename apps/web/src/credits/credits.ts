@@ -48,6 +48,31 @@ export function assetCredits(text: string): Credit[] {
     )
 }
 
+/** An attribution split into its parts: "Broadsword icon by Lorc, game-icons.net, CC BY 3.0". */
+export type Attribution = Readonly<{ work: string; author: string; site: string }>
+
+/**
+ * Splits an ASSETS.md attribution into the work, the author, and the site (the license is a
+ * column of its own). Null when the text does not have that shape.
+ */
+export function parseAttribution(text: string): Attribution | null {
+  const m = /^(.+?) by (.+?), ([^,]+)(?:, .+)?$/.exec(text.trim())
+  if (!m) return null
+  const [, work = '', author = '', site = ''] = m
+  return { work, author, site }
+}
+
+/** The license most assets share, stated once above the list; null for an empty list. */
+export function commonLicense(
+  credits: readonly Credit[],
+): Pick<Credit, 'license' | 'licenseUrl'> | null {
+  const counts = new Map<string, number>()
+  for (const c of credits) counts.set(c.license, (counts.get(c.license) ?? 0) + 1)
+  const top = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0]
+  const found = credits.find((c) => c.license === top)
+  return found ? { license: found.license, licenseUrl: found.licenseUrl } : null
+}
+
 /** The fonts table: `| Font | Role | License | License URL |`. */
 export function fontCredits(text: string): FontCredit[] {
   const section = text.split(/^## Fonts/m)[1]?.split(/^## /m)[0] ?? ''

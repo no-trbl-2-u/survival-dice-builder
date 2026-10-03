@@ -65,6 +65,13 @@ test('/credits lists every icon author and the fonts', async ({ page }) => {
     await expect(list).toContainText(author)
   }
   await expect(page.locator('main')).toContainText('Atkinson Hyperlegible Next')
+  // Link names are unique: the work name links to its source (no row of "Source" links).
+  await expect(page.getByRole('link', { name: 'Source', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('link', { name: 'CC BY 3.0' })).toHaveCount(1)
+  await expect(list.getByRole('link', { name: 'Broadsword icon' })).toHaveAttribute(
+    'href',
+    /game-icons\.net/,
+  )
   expect(errors).toEqual([])
 })
 

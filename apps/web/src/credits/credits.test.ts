@@ -1,6 +1,6 @@
 import register from '../../../../ASSETS.md?raw'
 import { describe, expect, it } from 'vitest'
-import { assetCredits, fontCredits } from './credits.ts'
+import { assetCredits, commonLicense, fontCredits, parseAttribution } from './credits.ts'
 
 const iconFiles = Object.keys(import.meta.glob('../../../../assets/icons/*/*.svg')).map((p) =>
   p.replace(/^(\.\.\/)+/, ''),
@@ -20,6 +20,23 @@ describe('credits', () => {
     const paths = new Set(assetCredits(register).map((c) => c.path))
     expect(iconFiles.length).toBeGreaterThan(10)
     expect(iconFiles.filter((f) => !paths.has(f))).toEqual([])
+  })
+
+  it('splits an attribution into work, author, and site', () => {
+    expect(parseAttribution('Broadsword icon by Lorc, game-icons.net, CC BY 3.0')).toEqual({
+      work: 'Broadsword icon',
+      author: 'Lorc',
+      site: 'game-icons.net',
+    })
+    expect(parseAttribution('none required')).toBeNull()
+    for (const c of assetCredits(register)) {
+      if (c.attribution !== 'none required') expect(parseAttribution(c.attribution)).not.toBeNull()
+    }
+  })
+
+  it('finds the license most icons share', () => {
+    expect(commonLicense(assetCredits(register))?.license).toBe('CC BY 3.0')
+    expect(commonLicense([])).toBeNull()
   })
 
   it('lists the fonts', () => {

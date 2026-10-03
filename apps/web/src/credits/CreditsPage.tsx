@@ -2,7 +2,14 @@ import register from '../../../../ASSETS.md?raw'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { gameIcons } from '../icons/gameIcons.ts'
 import styles from './CreditsPage.module.css'
-import { assetCredits, fontCredits, SOFTWARE } from './credits.ts'
+import {
+  assetCredits,
+  commonLicense,
+  fontCredits,
+  parseAttribution,
+  SOFTWARE,
+  type Credit,
+} from './credits.ts'
 
 /** The icon name of an asset path (`assets/icons/dice/sword.svg` -> `face-sword`). */
 function iconFor(path: string): string | null {
@@ -12,33 +19,59 @@ function iconFor(path: string): string | null {
   return gameIcons[name] ? name : null
 }
 
+/**
+ * One credit line: the work's name links to its source, the author and site follow, and the
+ * license (linked) is stated once. Every link name is unique, so a links list reads well.
+ */
+function CreditLine({ credit: a, shared }: Readonly<{ credit: Credit; shared: string | null }>) {
+  const parts = parseAttribution(a.attribution)
+  const work = parts?.work ?? a.asset
+  // The shared license is stated once above the list; only a different one is named here.
+  const own =
+    a.license === shared ? null : a.licenseUrl.startsWith('http') ? (
+      <a href={a.licenseUrl}>{a.license}</a>
+    ) : (
+      a.license
+    )
+  const license = own ? <> ({own})</> : null
+  return (
+    <span>
+      <strong>{a.asset}</strong>:{' '}
+      {a.attribution === 'none required' ? (
+        <>drawn for this game{license}</>
+      ) : (
+        <>
+          {a.source.startsWith('http') ? <a href={a.source}>{work}</a> : work}
+          {parts ? ` by ${parts.author}, ${parts.site}` : ''}
+          {license}
+        </>
+      )}
+    </span>
+  )
+}
+
 /** `/credits`: every asset in use, generated from ASSETS.md at build time. */
 export function CreditsPage() {
   const assets = assetCredits(register)
   const fonts = fontCredits(register)
+  const shared = commonLicense(assets)
   return (
     <div className={styles.page}>
       <p>Every asset in the game, with its license. Generated from the project's asset register.</p>
       <h2>Icons</h2>
+      {shared ? (
+        <p>
+          Unless a line says otherwise, every icon is under{' '}
+          <a href={shared.licenseUrl}>{shared.license}</a>. Each name links to its source.
+        </p>
+      ) : null}
       <ul className={styles.list} data-testid="credits-assets">
         {assets.map((a) => {
           const icon = iconFor(a.path)
           return (
             <li key={a.path}>
               {icon ? <GameIcon name={icon} size="1.5rem" /> : null}
-              <span>
-                <strong>{a.asset}</strong>:{' '}
-                {a.attribution === 'none required' ? 'drawn for this game' : a.attribution}.{' '}
-                {a.source.startsWith('http') ? <a href={a.source}>Source</a> : null}
-                {a.licenseUrl.startsWith('http') ? (
-                  <>
-                    {' · '}
-                    <a href={a.licenseUrl}>{a.license}</a>
-                  </>
-                ) : (
-                  ` · ${a.license}`
-                )}
-              </span>
+              <CreditLine credit={a} shared={shared?.license ?? null} />
             </li>
           )
         })}
