@@ -36,7 +36,9 @@
 - suggested fix: At narrow widths, order the active panel (Choices, Hand, or Dice and Skills) directly under the round header, or pin it as a bottom sheet. Raise the map label size to at least 12px rendered.
 - source: browser
 
-### [LOW] /debug — the event log prints [object Object]; the State text starts with stray letters
+## Done
+
+### [x] [LOW] /debug — the event log prints [object Object]; the State text starts with stray letters
 - pass: 3 (commit d6176b7)
 - viewport: desktop
 - category: comprehension
@@ -44,8 +46,8 @@
 - evidence: "[4.1] tilePlaced tile=broken-village center=[object Object]". The State innerText starts with the lines "B", "P", "g", "g".
 - suggested fix: Format `{q,r}` payloads as "(q,r)" in `EventLog.tsx`. Mark the map glyph text aria-hidden, or give the map a single label.
 - source: browser
-
-## Done
+- issue: #25
+- fixed: 6546545 (hex payloads print as (q,r); the map's accessible name explains its letters)
 
 ### [x] [MED] /play — the log and summary use enemy ids, capitalise grunt and elite, and slip on grammar
 - pass: 3 (commit d6176b7)

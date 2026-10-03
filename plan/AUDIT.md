@@ -23,11 +23,13 @@
 - issue: #24
 - fixed: 6828627
 
-### [ ] [3.6] /debug: the event log prints [object Object]; stray glyph letters in State (critique LOW)
+### [x] [3.6] /debug: the event log prints [object Object]; stray glyph letters in State (critique LOW)
 - category: external-critique (comprehension)
 - impact: 4
 - ease: 9
 - next: format {q,r} payloads in EventLog; aria-hidden on the map glyph text
+- issue: #25
+- fixed: 6546545
 
 ### [ ] [3.0] /play: at 375px the controls for the current step sit far below the map (critique MED)
 - category: external-critique (mobile)
