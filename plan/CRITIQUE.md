@@ -1,6 +1,6 @@
 # Critique log
 
-> Last pass: 2026-10-03 at commit 85d1c4d
+> Last pass: 2026-10-03 at commit 2f63473
 > Pass count: 2
 
 > External-observer feedback for Survival Dice-Builder. Populated by
@@ -55,7 +55,7 @@
 - source: browser
 
 ### [HIGH] / — the home page does not say what the game is or where to start
-- pass: 2 (commit 85d1c4d)
+- pass: 2 (commit 2f63473)
 - viewport: mobile
 - category: comprehension
 - observation: At first paint the home page shows only the title and an unlabelled hex tile. It has no pitch and no way into a run other than the nav.
@@ -64,7 +64,7 @@
 - source: browser
 
 ### [MED] /play — the log and footer show card ids, rule numbers, and "1 actions"
-- pass: 2 (commit 85d1c4d)
+- pass: 2 (commit 2f63473)
 - viewport: mobile
 - category: voice
 - observation: The "What happened" log names cards by instance id and starts each line with a rule number. A zero result does not say why. The footer has a plural slip.
@@ -76,7 +76,7 @@
 - source: browser
 
 ### [MED] /play — choice buttons name hexes by axial coordinates and a code slug
-- pass: 2 (commit 85d1c4d)
+- pass: 2 (commit 2f63473)
 - viewport: mobile
 - category: comprehension
 - observation: Move and placement choices read as coordinates, and the tile appears as its id rather than its name, although the map knows each hex's terrain.
@@ -85,7 +85,7 @@
 - source: browser
 
 ### [MED] /play — the map's text alternatives omit enemies
-- pass: 2 (commit 85d1c4d)
+- pass: 2 (commit 2f63473)
 - viewport: mobile
 - category: a11y
 - observation: Each hex's `<title>` gives terrain and site only. An enemy has an accessible name only while it is a legal target, so a screen-reader user cannot find a grunt on the board.
@@ -94,7 +94,7 @@
 - source: browser
 
 ### [MED] /play — the start panel does not explain the goal or the seed
-- pass: 2 (commit 85d1c4d)
+- pass: 2 (commit 2f63473)
 - viewport: desktop
 - category: comprehension
 - observation: "New run" asks for Players and a Seed with no line on what a seed is or how a run ends.
@@ -103,7 +103,7 @@
 - source: browser
 
 ### [MED] /credits — 18 links are all named "Source", and the licence is stated twice per line
-- pass: 2 (commit 85d1c4d)
+- pass: 2 (commit 2f63473)
 - viewport: mobile
 - category: a11y
 - observation: In a screen reader's links list, the 18 "Source" links cannot be told apart (WCAG 2.4.4). Each line repeats "CC BY 3.0".
