@@ -1,16 +1,46 @@
 import type {
   CardDef,
+  DefenseDef,
   EnemiesFile,
   Face,
   GameConfig,
+  Site,
   SkillDef,
   SkillFace,
+  Terrain,
   TileDef,
 } from '@survival/content'
 import type { GameEvent } from '../events/events.ts'
+import type { Axial } from '../hex.ts'
 
-/** Round phases. @rule 5.1, 14 */
-export type Phase = 'prepare' | 'combat' | 'explore' | 'ended'
+/** Round phases. `setup` holds the setup tile choice before round 1. @rule 4, 5.1, 14 */
+export type Phase = 'setup' | 'prepare' | 'combat' | 'explore' | 'ended'
+
+/** One hex on the map, copied from the tile that holds it. @rule 3.3, 3.5 */
+export type MapHex = Readonly<{ terrain: Terrain; site: Site | null; tile: string }>
+
+/** A tile placed on the map, by its center hex. @rule 3.1, 4.1, 4.2, 10.1 */
+export type PlacedTile = Readonly<{ tile: string; center: Axial }>
+
+/** The board. `hexes` is keyed by `hexKey` ("q,r"). @rule 3 */
+export type GameMap = Readonly<{
+  tiles: readonly PlacedTile[]
+  hexes: Readonly<Record<string, MapHex>>
+}>
+
+/** A Barricade or Tower on the map. @rule 12 */
+export type Defense = Readonly<{ id: string; kind: string; hex: Axial; health: number }>
+
+/**
+ * The top-half effect being resolved one step at a time (Prepare): a Move with hexes left, or
+ * a Build with builds left.
+ *
+ * @rule 6.7
+ */
+export type ActiveEffect = Readonly<
+  | { kind: 'move'; hexesLeft: number; ignoreEnemyCost: boolean }
+  | { kind: 'build'; buildsLeft: number; costReduction: number }
+>
 
 /** Which card half is up. Prepare reads the top half; Combat reads the bottom half. @rule 2.6, 2.7, 7.2, 10.6 */
 export type Orientation = 'top' | 'bottom'
@@ -36,12 +66,13 @@ export type Assignment = Readonly<{
   asFace: SkillFace
 }>
 
-/** An enemy on the board. Phase 5 has no map, so enemies are an abstract list. @rule 9 */
-export type Enemy = Readonly<{ id: string; kind: string; health: number }>
+/** An enemy on the board. @rule 9, 3.7 */
+export type Enemy = Readonly<{ id: string; kind: string; health: number; hex: Axial }>
 
 /** A player's board, deck, and tracks. @rule 2.1, 4.6-4.10 */
 export type Player = Readonly<{
   id: string
+  hex: Axial
   health: number
   maxHealth: number
   dice: number
@@ -83,6 +114,8 @@ export type Exchange = Readonly<{
   ignoreHits: number
   assignments: readonly Assignment[]
   queue: readonly QueuedEffect[]
+  /** Set when this is a skirmish (6.10-6.14): the enemy hex entered and the hex left. */
+  skirmish: Readonly<{ hex: Axial; from: Axial }> | null
 }>
 
 /** The content the engine needs, copied into the state so a run replays from the state alone. */
@@ -90,6 +123,7 @@ export type EngineContent = Readonly<{
   cards: readonly CardDef[]
   skills: readonly SkillDef[]
   enemies: EnemiesFile
+  defenses: readonly DefenseDef[]
   tiles: readonly TileDef[]
 }>
 
@@ -110,8 +144,16 @@ export type GameState = Readonly<{
   players: readonly Player[]
   /** Index of the player whose decision it is. */
   current: number
+  map: GameMap
+  /** Tiles not yet placed, top first. @rule 4.2, 4.3 */
+  tileDeck: readonly string[]
+  /** Tiles drawn and waiting for the player to choose their slot (4.2 setup, 10.1 Explore). */
+  revealed: readonly string[]
   enemies: readonly Enemy[]
   nextEnemyId: number
+  defenses: readonly Defense[]
+  nextDefenseId: number
+  active: ActiveEffect | null
   base: Readonly<{ health: number; maxHealth: number }>
   exchange: Exchange | null
   /** The last events, trimmed to `LOG_LIMIT`. */

@@ -1,21 +1,26 @@
 import { defaultContent, type Content, type GameConfig } from '@survival/content'
 import type { GameEvent } from '../events/events.ts'
+import { EMPTY_MAP, placeTile } from '../map/tiles.ts'
 import { advance } from '../phases/advance.ts'
 import { seedRng, shuffle } from '../rng/rng.ts'
 import { withLog } from '../state/helpers.ts'
-import type { CardInstance, Enemy, GameState, Player } from '../state/types.ts'
+import type { CardInstance, GameState, Player } from '../state/types.ts'
+
+/** Where the Base tile and the base hex sit. @rule 4.1, 3.6 */
+export const BASE_HEX = { q: 0, r: 0 } as const
 
 /**
  * Creates a new run. Same config + seed (+ content) = same run.
  *
- * Phase 5 scope: 1 player and an abstract enemy list (no map). The setup countryside tile is
- * drawn from the shuffled countryside tiles (4.2) and 1 grunt is put on each of its spawn
- * nodes (4.4); the tile itself is placed on the map in phase 6.
+ * Setup: the Base tile goes in the center (4.1); the countryside tiles are shuffled, 1 waits
+ * for the player to choose its slot next to the base (4.2 [006]; the first decision), and the
+ * others go on top of the shuffled core tiles to make the tile deck (4.3 [006]). The figure
+ * starts on the base (4.6).
  *
  * @param config - the game configuration (rule numbers and options).
  * @param seed - any integer; it seeds the engine RNG.
- * @param content - cards, Skills, enemies, and tiles; defaults to the validated default content.
- * @returns the state at the first decision (Prepare, round 1, first hand drawn).
+ * @param content - cards, Skills, enemies, defenses, and tiles; defaults to the default content.
+ * @returns the state at the first decision (`setup`: choose the setup tile's slot).
  * @rule 4.1-4.13
  */
 export function createGame(
@@ -34,8 +39,25 @@ export function createGame(
   const [deck, afterDeck] = shuffle(rng, cards)
   rng = afterDeck
 
+  // 4.1-4.3 [006]: base in the center; setup countryside tile(s); tile deck.
+  const baseTile = content.tiles.find((t) => t.kind === 'base')
+  if (!baseTile) throw new Error('Content has no base tile')
+  const [countryside, afterCountry] = shuffle(
+    rng,
+    content.tiles.filter((t) => t.kind === 'countryside').map((t) => t.id),
+  )
+  const [core, afterCore] = shuffle(
+    afterCountry,
+    content.tiles.filter((t) => t.kind === 'core').map((t) => t.id),
+  )
+  rng = afterCore
+  const setupCount = config.tiles.setupCountryside
+  const setupTiles = countryside.slice(0, setupCount)
+  const tileDeck = [...countryside.slice(setupCount), ...core]
+
   const player: Player = {
     id: 'p1',
+    hex: BASE_HEX,
     health: config.player.maxHealth,
     maxHealth: config.player.maxHealth,
     dice: config.player.startingDice,
@@ -50,25 +72,6 @@ export function createGame(
     currency: 0,
   }
 
-  // 4.2-4.4: draw the setup countryside tile(s) and put 1 grunt on each spawn node.
-  const [countryside, afterTiles] = shuffle(
-    rng,
-    content.tiles.filter((t) => t.kind === 'countryside'),
-  )
-  rng = afterTiles
-  const setupTiles = countryside.slice(0, config.tiles.setupCountryside)
-  const spawnNodes = setupTiles
-    .flatMap((t) => t.hexes)
-    .filter((h) => h.site === 'spawn-node').length
-  const grunt = content.enemies.enemies.find((e) => e.id === 'grunt')
-  const enemies: Enemy[] = grunt
-    ? Array.from({ length: spawnNodes }, (_, i) => ({
-        id: `e${i + 1}`,
-        kind: grunt.id,
-        health: grunt.health,
-      }))
-    : []
-
   const state: GameState = {
     version: 1,
     seed,
@@ -77,15 +80,22 @@ export function createGame(
       cards: content.cards,
       skills: content.skills,
       enemies: content.enemies,
+      defenses: content.defenses,
       tiles: content.tiles,
     },
     rng,
     round: 1,
-    phase: 'prepare',
+    phase: setupTiles.length > 0 ? 'setup' : 'prepare',
     players: [player],
     current: 0,
-    enemies,
-    nextEnemyId: enemies.length + 1,
+    map: placeTile(EMPTY_MAP, baseTile, BASE_HEX),
+    tileDeck,
+    revealed: setupTiles,
+    enemies: [],
+    nextEnemyId: 1,
+    defenses: [],
+    nextDefenseId: 1,
+    active: null,
     base: { health: config.base.startingHealth, maxHealth: config.base.startingHealth },
     exchange: null,
     log: [],
@@ -94,8 +104,8 @@ export function createGame(
 
   const setupEvents: GameEvent[] = [
     { type: 'gameCreated', rule: '4', seed },
+    { type: 'tilePlaced', rule: '4.1', tile: baseTile.id, center: BASE_HEX },
     { type: 'deckShuffled', rule: '4.8', player: player.id, cards: deck.length },
-    { type: 'phaseStarted', rule: '5.1', phase: 'prepare', round: 1 },
   ]
   const [ready, events] = advance(state)
   return withLog(ready, [...setupEvents, ...events])

@@ -1,6 +1,7 @@
 import { clearTable, drawHand, rotateDeck } from '../deck/deck.ts'
 import { rerollUnkept, rollDice } from '../dice/dice.ts'
 import type { GameEvent } from '../events/events.ts'
+import { hexDistance } from '../hex.ts'
 import { currentPlayer, handSize, updateCurrentPlayer, type Step } from '../state/helpers.ts'
 import type { GameState } from '../state/types.ts'
 
@@ -30,6 +31,13 @@ function stepOnce(state: GameState): readonly [GameState, readonly GameEvent[], 
   switch (state.phase) {
     case 'ended':
       return [state, [], true]
+    case 'setup':
+      if (state.revealed.length > 0) return [state, [], true]
+      return [
+        { ...state, phase: 'prepare' },
+        [{ type: 'phaseStarted', rule: '5.1', phase: 'prepare', round: state.round }],
+        false,
+      ]
     case 'prepare':
       return prepareStep(state)
     case 'combat':
@@ -48,11 +56,18 @@ function draw(state: GameState, rule: string): Step {
 
 /**
  * Prepare: draw 3, play each card, draw again when the hand is empty; stop when deck and hand
- * are both empty, then start Combat.
+ * are both empty, then start Combat. A Move or Build in progress (and a skirmish) is decided
+ * step by step before the next card.
  *
- * @rule 6.1, 6.4, 6.5, 6.6
+ * @rule 6.1, 6.4, 6.5, 6.6, 6.7-6.15
  */
 function prepareStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
+  if (state.exchange) return exchangeStep(state)
+  const active = state.active
+  if (active) {
+    const done = active.kind === 'move' ? active.hexesLeft <= 0 : active.buildsLeft <= 0
+    return done ? [{ ...state, active: null }, [], false] : [state, [], true]
+  }
   const player = currentPlayer(state)
   if (player.hand.length > 0) return [state, [], true]
   if (player.deck.length > 0) {
@@ -95,9 +110,8 @@ function startCombat(state: GameState): Step {
  * @rule 7.7, 7.8, 7.9, 7.10-7.13
  */
 function combatStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
-  const exchange = state.exchange
   const player = currentPlayer(state)
-  if (!exchange) {
+  if (!state.exchange) {
     if (player.hand.length === 0 && player.deck.length === 0) {
       return [
         { ...state, phase: 'explore' },
@@ -114,7 +128,8 @@ function combatStep(state: GameState): readonly [GameState, readonly GameEvent[]
       ]
     }
     const [drawn, drawEvents] = draw(state, '7.8')
-    if (drawn.enemies.length === 0) {
+    const range = state.config.combat.exchangeRange
+    if (!drawn.enemies.some((e) => hexDistance(e.hex, player.hex) <= range)) {
       const skipped = updateCurrentPlayer(drawn, (p) => clearTable(p))
       return [
         skipped,
@@ -136,6 +151,7 @@ function combatStep(state: GameState): readonly [GameState, readonly GameEvent[]
         ignoreHits: 0,
         assignments: [],
         queue: [],
+        skirmish: null,
       },
     }
     return [
@@ -144,6 +160,14 @@ function combatStep(state: GameState): readonly [GameState, readonly GameEvent[]
       false,
     ]
   }
+  return exchangeStep(state)
+}
+
+/** The automatic steps inside an exchange (or skirmish); the rest are decisions. @rule 7.8 */
+function exchangeStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
+  const exchange = state.exchange
+  if (!exchange) return [state, [], true]
+  const player = currentPlayer(state)
   switch (exchange.step) {
     case 'roll':
       if (exchange.rollsUsed >= state.config.combat.maxRolls) {

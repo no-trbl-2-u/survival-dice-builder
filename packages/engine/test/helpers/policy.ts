@@ -14,6 +14,19 @@ export function scriptedChoice(state: GameState): Action | undefined {
 }
 
 /**
+ * Like `scriptedChoice`, but uses the map: places tiles, walks toward the first offered step,
+ * and builds when it can, so goldens cover Move, Build, and skirmishes.
+ */
+export function explorerChoice(state: GameState): Action | undefined {
+  const actions = legalActions(state)
+  for (const type of ['assignDie', 'build', 'moveTo'] as const) {
+    const found = actions.find((a) => a.type === type)
+    if (found) return found
+  }
+  return actions[0]
+}
+
+/**
  * Picks a uniformly random legal action using a test-side RNG (not the game's), so property
  * tests explore unusual orders: toggling dice, rolling again, discarding, unassigning.
  */

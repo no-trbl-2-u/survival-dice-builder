@@ -1,0 +1,23 @@
+.map {
+  display: block;
+  width: 100%;
+  max-width: 32rem;
+  height: auto;
+}
+
+.site,
+.figure {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+  fill: var(--tile-icon);
+}
+
+.site {
+  font-size: 8px;
+}
+
+.figure {
+  font-size: 9px;
+  font-weight: 700;
+}

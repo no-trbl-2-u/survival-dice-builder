@@ -4,7 +4,7 @@ import type { SkillFace } from '@survival/content'
  * A player decision. Each action is one atomic choice (bearings: step-by-step decisions);
  * `legalActions` never lists combinations.
  *
- * @rule 6.2, 7.8
+ * @rule 4.2, 6.2, 6.8-6.15, 7.8
  */
 export type Action = Readonly<
   | { type: 'playCard'; card: string }
@@ -18,6 +18,11 @@ export type Action = Readonly<
   | { type: 'unassignDie'; die: number }
   | { type: 'confirmAssignment' }
   | { type: 'chooseTarget'; enemy: string }
+  | { type: 'placeTile'; q: number; r: number }
+  | { type: 'moveTo'; q: number; r: number }
+  | { type: 'stopMoving' }
+  | { type: 'build'; defense: string; q: number; r: number }
+  | { type: 'stopBuilding' }
 >
 
 /** Action type names. */

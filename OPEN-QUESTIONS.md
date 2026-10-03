@@ -36,6 +36,14 @@ until then).
 | 21 | Table 1, 9.2 | The elite spawn node "holds 1 elite": does it refill (9.2) like a spawn node? | **Yes**: an elite spawn node gets a new elite only when its elite is defeated, the same as 9.2. | (engine, phase 7) | proposed (phase 4) |
 | 22 | 7.8 step 5, Tables 2, 8 | Where does a card's "+N damage" go? | Added once to the **first damage Skill that fires** this exchange (to each of its targets). Lost if no damage Skill fires. | (engine, `confirmAssignment`) | proposed (phase 5) |
 | 23 | 7.8 step 5 | Order of card bottom halves and their reroll effects. | The player plays cards one at a time in any order; a numbered reroll ("Reroll 2 dice") rerolls that many **different** dice, picked one at a time; the player may stop early. "Reroll all" rerolls every die, kept or not. Card rerolls do **not** count toward the 3-roll maximum (7.8 step 4). A Combat draw with fewer than 3 cards left draws them all, as 6.5. | (engine) | proposed (phase 5) |
+| 24 | 12.2 | How many defenses may stand on one hex? | **1 per hex** (physical edition: one token fits). | (engine, `canBuildOn`) | proposed (phase 6) |
+| 25 | 4.2 [006] | Who chooses where the setup countryside tile goes? | **The player**, from the 6 slots next to the Base tile (the same choice as 10.1 Explore). | (engine, `placeTile`) | proposed (phase 6) |
+| 26 | 6.9, 6.15 | What does it cost to enter a hex that holds an enemy? | The same as a hex next to an enemy: **2** (`combat.moveCostNextToEnemy`), unless the card ignores the surcharge (Blink). The full cost is paid before the skirmish. | (engine, `moveCost`) | proposed (phase 6) |
+| 27 | 9.8 [006] | What is an "empty" hex for spill-over, and how is "nearest" measured? | **Empty** = passable, not the base hex, and no enemy, figure, or defense. **Nearest** = straight hex distance (ties: nearest the base, then a fixed order). | (engine, `spawnHex`) | proposed (phase 6) |
+| 28 | 6.15, Table 8 (Blink) | Does "no extra cost" also apply when entering an enemy's hex? | **Yes**: Blink pays 1 to enter an enemy's hex, then the skirmish starts. | (engine, `moveCost`) | proposed (phase 6) |
+| 29 | 3.4, 12 | May a figure enter a Barricade or Tower hex? | **Yes**: defenses block enemies only. | (engine, `legalMoves`) | proposed (phase 6) |
+| 30 | 6.7, 12.1 | On the base hex, Build is always a base upgrade (never a defense on an adjacent hex)? | **Yes**: on the base hex Build means a base upgrade (11.2). | (engine, `applyTopEffect`) | proposed (phase 6) |
+| 31 | 6.11, Table 9, 8.1 | In a skirmish, does Dodge work, and does a won skirmish give experience and currency? | **Yes to both**: a skirmish uses Skills as an exchange does (Dodge ignores the enemy's 1 attack); defeating the enemy pays as any defeat (from phase 8). | (engine) | proposed (phase 6) |
 
 ## Spec amendments owed
 

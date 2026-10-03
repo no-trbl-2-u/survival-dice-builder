@@ -2,6 +2,8 @@ import { defaultContent } from '@survival/content'
 import fc from 'fast-check'
 import { describe, it } from 'vitest'
 import { ownedCards } from '../src/deck/deck.ts'
+import { hexKey } from '../src/hex.ts'
+import { isPassable } from '../src/map/tiles.ts'
 import { createGame, type GameState } from '../src/index.ts'
 import { randomChoice, walk } from './helpers/policy.ts'
 
@@ -69,6 +71,31 @@ describe('engine properties', () => {
         randomWalk(seed, policy, 150).every(
           (s) => s.phase === 'ended' || legalActions(s).length > 0,
         ),
+      ),
+      { numRuns: 40 },
+    )
+  })
+
+  it('3.4, 3.7 no figure stands on an impassable or off-map hex; at most 1 enemy per hex', () => {
+    fc.assert(
+      fc.property(runs, ([seed, policy]) =>
+        randomWalk(seed, policy, 150).every((s) => {
+          const figures = [...s.players.map((p) => p.hex), ...s.enemies.map((e) => e.hex)]
+          const enemyHexes = s.enemies.map((e) => hexKey(e.hex))
+          return (
+            figures.every((h) => isPassable(s.map, h)) &&
+            new Set(enemyHexes).size === enemyHexes.length
+          )
+        }),
+      ),
+      { numRuns: 40 },
+    )
+  })
+
+  it('12.1 materials never go below 0', () => {
+    fc.assert(
+      fc.property(runs, ([seed, policy]) =>
+        randomWalk(seed, policy, 150).every((s) => s.players.every((p) => p.materials >= 0)),
       ),
       { numRuns: 40 },
     )

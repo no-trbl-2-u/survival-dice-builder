@@ -4,7 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { applyAction, createGame, serialize, type Action, type GameState } from '../src/index.ts'
-import { scriptedChoice, walk } from './helpers/policy.ts'
+import { explorerChoice, scriptedChoice, walk } from './helpers/policy.ts'
 
 /**
  * Golden replays: `seed + actions[]` with the expected SHA-256 of `serialize(finalState)`.
@@ -36,6 +36,15 @@ const GOLDENS = [
     file: 'p5-three-rounds.json',
     description: 'Phase 5: 3 rounds, solo, default config, scripted policy (seed 2026).',
     seed: 2026,
+    policy: scriptedChoice,
+    stop: (s: GameState) => s.round > 3 || s.phase === 'ended',
+  },
+  {
+    file: 'p6-explorer.json',
+    description:
+      'Phase 6: 3 rounds, solo, default config, explorer policy: moves, builds (seed 66).',
+    seed: 66,
+    policy: explorerChoice,
     stop: (s: GameState) => s.round > 3 || s.phase === 'ended',
   },
 ]
@@ -46,7 +55,7 @@ describe('golden replays', () => {
     if (process.env.UPDATE_GOLDEN === '1') {
       it(`regenerates ${g.file}`, () => {
         const config = defaultContent.config
-        const run = walk(createGame(config, g.seed), scriptedChoice, g.stop)
+        const run = walk(createGame(config, g.seed), g.policy, g.stop)
         const golden: Golden = {
           description: g.description,
           seed: g.seed,

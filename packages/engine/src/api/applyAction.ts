@@ -1,8 +1,12 @@
+import { buildDefense, legalBuilds } from '../build/defenses.ts'
 import { applyBottomEffect, applyTopEffect, updateExchange } from '../combat/cardEffects.ts'
 import { chooseTarget, confirmAssignment } from '../combat/resolve.ts'
 import { discardFromHand, playToTable } from '../deck/deck.ts'
 import { rerollOne, toggleKeep } from '../dice/dice.ts'
 import type { GameEvent } from '../events/events.ts'
+import { placeTileAndSpawn } from '../map/spawn.ts'
+import { legalMoves } from '../movement/move.ts'
+import { startSkirmish } from '../movement/skirmish.ts'
 import { advance, rollAgain } from '../phases/advance.ts'
 import {
   cardDef,
@@ -128,7 +132,68 @@ function act(state: GameState, action: Action): Step {
       return confirmAssignment(state)
     case 'chooseTarget':
       return chooseTarget(state, action.enemy)
+    case 'placeTile': {
+      const [tile, ...rest] = state.revealed
+      if (!tile) throw illegalAction(action, 'no tile waiting')
+      const setup = state.phase === 'setup'
+      return placeTileAndSpawn(
+        { ...state, revealed: rest },
+        tile,
+        { q: action.q, r: action.r },
+        setup,
+      )
+    }
+    case 'moveTo':
+      return moveTo(state, action)
+    case 'stopMoving':
+    case 'stopBuilding':
+      return [{ ...state, active: null }, []]
+    case 'build': {
+      const active = state.active
+      if (active?.kind !== 'build') throw illegalAction(action, 'no Build in progress')
+      const hex = { q: action.q, r: action.r }
+      const option = legalBuilds(state, active.costReduction).find(
+        (b) => b.defense === action.defense && b.hex.q === hex.q && b.hex.r === hex.r,
+      )
+      if (!option) throw illegalAction(action, 'not a legal build')
+      const [built, events] = buildDefense(state, action.defense, hex, option.cost)
+      return [{ ...built, active: { ...active, buildsLeft: active.buildsLeft - 1 } }, events]
+    }
   }
+}
+
+/**
+ * One step of a Move: pay the hex's cost (2 next to an enemy, 6.9). Entering an enemy's hex
+ * starts a skirmish instead of moving (6.10).
+ *
+ * @rule 6.7, 6.9, 6.10, 6.15
+ */
+function moveTo(state: GameState, action: Extract<Action, { type: 'moveTo' }>): Step {
+  const active = state.active
+  if (active?.kind !== 'move') throw illegalAction(action, 'no Move in progress')
+  const to = { q: action.q, r: action.r }
+  const option = legalMoves(state, active.hexesLeft, active.ignoreEnemyCost).find(
+    (m) => m.to.q === to.q && m.to.r === to.r,
+  )
+  if (!option) throw illegalAction(action, 'not a legal move')
+  const hexesLeft = active.hexesLeft - option.cost
+  const paid: GameState = { ...state, active: { ...active, hexesLeft } }
+  if (option.skirmish) return startSkirmish(paid, to)
+  const player = currentPlayer(state)
+  return [
+    updateCurrentPlayer(paid, (p) => ({ ...p, hex: to })),
+    [
+      {
+        type: 'moved',
+        rule: '6.7',
+        player: player.id,
+        from: player.hex,
+        to,
+        cost: option.cost,
+        hexesLeft,
+      },
+    ],
+  ]
 }
 
 /** The definition id of a card in the current hand. */

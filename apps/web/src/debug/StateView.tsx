@@ -1,4 +1,5 @@
 import type { GameState } from '@survival/engine'
+import { MapView } from './MapView.tsx'
 
 type Props = Readonly<{ state: GameState }>
 
@@ -7,14 +8,17 @@ export function StateView({ state }: Props) {
   const cardName = (def: string) => state.content.cards.find((c) => c.id === def)?.name ?? def
   const skillName = (id: string) => state.content.skills.find((s) => s.id === id)?.name ?? id
   const ex = state.exchange
+  const at = (h: { q: number; r: number }) => `(${h.q},${h.r})`
+  const active = state.active
   return (
     <section aria-labelledby="state-heading">
       <h2 id="state-heading">State</h2>
+      <MapView state={state} />
       <dl data-testid="state">
         <dt>Round / phase</dt>
         <dd>
           {state.round} / {state.phase}
-          {ex ? ` / exchange: ${ex.step}` : ''}
+          {ex ? ` / ${ex.skirmish ? 'skirmish' : 'exchange'}: ${ex.step}` : ''}
           {state.endedBecause ? ` (ended: ${state.endedBecause})` : ''}
         </dd>
         <dt>Base</dt>
@@ -25,14 +29,39 @@ export function StateView({ state }: Props) {
         <dd>
           {state.enemies.length === 0
             ? 'none'
-            : state.enemies.map((e) => `${e.id} ${e.kind} (${e.health})`).join(', ')}
+            : state.enemies
+                .map((e) => `${e.id} ${e.kind} (${e.health}) at ${at(e.hex)}`)
+                .join(', ')}
         </dd>
+        <dt>Defenses</dt>
+        <dd>
+          {state.defenses.length === 0
+            ? 'none'
+            : state.defenses
+                .map((d) => `${d.id} ${d.kind} (${d.health}) at ${at(d.hex)}`)
+                .join(', ')}
+        </dd>
+        <dt>Tiles</dt>
+        <dd>
+          {state.map.tiles.length} placed, {state.tileDeck.length} in the tile deck
+          {state.revealed.length > 0 ? `, waiting to place: ${state.revealed.join(', ')}` : ''}
+        </dd>
+        {active ? (
+          <>
+            <dt>In progress</dt>
+            <dd>
+              {active.kind === 'move'
+                ? `Move: ${active.hexesLeft} hexes left`
+                : `Build: ${active.buildsLeft} left, cost -${active.costReduction}`}
+            </dd>
+          </>
+        ) : null}
         {state.players.map((p) => (
           <div key={p.id}>
             <dt>Player {p.id}</dt>
             <dd>
-              {p.health}/{p.maxHealth} health, {p.guard} guard, {p.dice} dice, orientation{' '}
-              {p.orientation}
+              at {at(p.hex)}, {p.health}/{p.maxHealth} health, {p.guard} guard, {p.dice} dice,{' '}
+              {p.materials} materials, orientation {p.orientation}
             </dd>
             <dt>Hand</dt>
             <dd>{p.hand.map((c) => `${cardName(c.def)} [${c.id}]`).join(', ') || 'empty'}</dd>

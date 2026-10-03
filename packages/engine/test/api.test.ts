@@ -12,6 +12,18 @@ import { scriptedChoice, walk } from './helpers/policy.ts'
 
 const config = defaultContent.config
 
+/** A new run with the setup tile placed in the first free slot: round 1 Prepare. */
+function started(seed: number, cfg: GameConfig = config): GameState {
+  const s = createGame(cfg, seed)
+  return applyAction(s, legalActions(s)[0]!).state
+}
+
+/** A grunt next to the base hex, where the player starts. */
+const nearGrunt = (id = 'e1') => ({ id, kind: 'grunt', health: 2, hex: { q: 1, r: 0 } })
+
+/** A started run whose only enemy is a grunt next to the player. */
+const withGrunt = (seed: number) => ({ ...started(seed), enemies: [nearGrunt()] })
+
 /** Plays scripted actions until `stop` holds. */
 function until(state: GameState, stop: (s: GameState) => boolean): GameState {
   return walk(state, scriptedChoice, stop).states.at(-1)!
@@ -23,8 +35,23 @@ describe('createGame (section 4)', () => {
     expect(serialize(createGame(config, 7))).not.toBe(serialize(createGame(config, 8)))
   })
 
-  it('4.5-4.11 sets health, dice, Skills, round, and draws the first hand', () => {
+  it('4.1-4.2 [006] places the Base tile and waits for the setup tile slot', () => {
     const s = createGame(config, 1)
+    expect(s.phase).toBe('setup')
+    expect(s.map.tiles).toHaveLength(1)
+    expect(s.players[0]!.hex).toEqual({ q: 0, r: 0 })
+    expect(legalActions(s)).toHaveLength(6)
+    expect(legalActions(s).every((a) => a.type === 'placeTile')).toBe(true)
+  })
+
+  it('4.3 [006] the tile deck holds the other countryside tiles on top of the core tiles', () => {
+    const s = createGame(config, 1)
+    const kind = (id: string) => defaultContent.tiles.find((t) => t.id === id)!.kind
+    expect(s.tileDeck.map(kind)).toEqual(['countryside', 'countryside', ...Array(5).fill('core')])
+  })
+
+  it('4.5-4.11 sets health, dice, Skills, round, and draws the first hand', () => {
+    const s = started(1)
     const p = s.players[0]!
     expect(p.health).toBe(15)
     expect(p.dice).toBe(1)
@@ -38,14 +65,17 @@ describe('createGame (section 4)', () => {
   })
 
   it('4.4 [006] puts 1 grunt on the spawn node of the setup countryside tile', () => {
-    const s = createGame(config, 1)
-    expect(s.enemies).toEqual([{ id: 'e1', kind: 'grunt', health: 2 }])
+    const s = started(1)
+    expect(s.map.tiles).toHaveLength(2)
+    expect(s.enemies).toHaveLength(1)
+    expect(s.enemies[0]).toMatchObject({ id: 'e1', kind: 'grunt', health: 2 })
+    expect(s.map.hexes[`${s.enemies[0]!.hex.q},${s.enemies[0]!.hex.r}`]?.site).toBe('spawn-node')
   })
 })
 
 describe('Prepare (section 6)', () => {
   it('6.2-6.4 playing the hand draws the next 3 cards', () => {
-    let s = createGame(config, 3)
+    let s = started(3)
     for (let i = 0; i < 3; i++) s = applyAction(s, legalActions(s)[0]!).state
     expect(s.phase).toBe('prepare')
     expect(s.players[0]!.hand).toHaveLength(3)
@@ -53,13 +83,13 @@ describe('Prepare (section 6)', () => {
   })
 
   it('6.6, 7.1-7.2 an empty deck and hand end Prepare; Combat shuffles and turns the deck', () => {
-    const s = until(createGame(config, 3), (x) => x.phase === 'combat')
+    const s = until(started(3), (x) => x.phase === 'combat')
     expect(s.players[0]!.orientation).toBe('bottom')
     expect(s.log.some((e) => e.type === 'deckShuffled' && e.rule === '7.1')).toBe(true)
   })
 
   it('6.2 [006] a card may be discarded unplayed', () => {
-    const s = createGame(config, 3)
+    const s = started(3)
     const card = s.players[0]!.hand[0]!.id
     const { events } = applyAction(s, { type: 'discardCard', card })
     expect(events[0]).toMatchObject({ type: 'cardDiscarded', unplayed: true })
@@ -67,11 +97,11 @@ describe('Prepare (section 6)', () => {
 
   it('6.2 discarding is not offered when plays are mandatory', () => {
     const strict: GameConfig = { ...config, rulings: { ...config.rulings, mandatoryPlays: true } }
-    expect(legalActions(createGame(strict, 3)).every((a) => a.type === 'playCard')).toBe(true)
+    expect(legalActions(started(3, strict)).every((a) => a.type === 'playCard')).toBe(true)
   })
 
   it('6.7 Rest heals, never above maximum health', () => {
-    const s = createGame(config, 3)
+    const s = started(3)
     const hurt = { ...s, players: [{ ...s.players[0]!, health: 14 }] }
     const rest = { id: 'c99', def: 'starter-rest' }
     const withRest = { ...hurt, players: [{ ...hurt.players[0]!, hand: [rest] }] }
@@ -81,7 +111,7 @@ describe('Prepare (section 6)', () => {
 })
 
 describe('Combat exchange (7.8)', () => {
-  const inCombat = () => until(createGame(config, 3), (x) => x.exchange?.step === 'roll')
+  const inCombat = () => until(withGrunt(3), (x) => x.exchange?.step === 'roll')
 
   it('7.8 steps 1-2 draw 3 and roll all action dice', () => {
     const s = inCombat()
@@ -144,7 +174,7 @@ describe('Combat exchange (7.8)', () => {
     let s = inCombat()
     s = {
       ...s,
-      enemies: [{ id: 'e9', kind: 'elite', health: 14 }],
+      enemies: [{ id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 } }],
       exchange: {
         ...s.exchange!,
         step: 'assign',
@@ -170,8 +200,8 @@ describe('Combat exchange (7.8)', () => {
     s = {
       ...s,
       enemies: [
-        { id: 'e1', kind: 'grunt', health: 2 },
-        { id: 'e2', kind: 'grunt', health: 2 },
+        { id: 'e1', kind: 'grunt', health: 2, hex: { q: 1, r: 0 } },
+        { id: 'e2', kind: 'grunt', health: 2, hex: { q: 0, r: 1 } },
       ],
       exchange: { ...s.exchange!, step: 'assign', dice: [{ face: 'Sword', kept: false }] },
       players: [{ ...s.players[0]!, hand: [], inPlay: s.players[0]!.hand }],
@@ -197,7 +227,7 @@ describe('Combat exchange (7.8)', () => {
     let s = inCombat()
     s = {
       ...s,
-      enemies: [{ id: 'e9', kind: 'elite', health: 14 }],
+      enemies: [{ id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 } }],
       players: [{ ...s.players[0]!, health: 15 }],
     }
     s = applyAction(s, { type: 'stopRolling' }).state
@@ -212,7 +242,7 @@ describe('Combat exchange (7.8)', () => {
   })
 
   it('7.9 with no enemy in range, the exchange has no effect', () => {
-    const s = { ...createGame(config, 3), enemies: [] }
+    const s = { ...started(3), enemies: [] }
     const after = until(s, (x) => x.phase === 'explore' || x.round === 2)
     expect(after.log.some((e) => e.type === 'exchangeSkipped')).toBe(true)
   })
@@ -221,7 +251,7 @@ describe('Combat exchange (7.8)', () => {
     let s = inCombat()
     s = {
       ...s,
-      enemies: [{ id: 'e9', kind: 'elite', health: 14 }],
+      enemies: [{ id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 } }],
       players: [{ ...s.players[0]!, health: 1 }],
     }
     // Never place dice: the elite survives and keeps attacking.
@@ -238,7 +268,7 @@ describe('Combat exchange (7.8)', () => {
 
 describe('Explore and the round loop (sections 5, 10)', () => {
   it('5.1, 10.6-10.9 after Combat, the discard pile turns top-up and round 2 starts', () => {
-    const s = until(createGame(config, 3), (x) => x.round === 2 || x.phase === 'ended')
+    const s = until(withGrunt(3), (x) => x.round === 2 || x.phase === 'ended')
     expect(s.round).toBe(2)
     expect(s.phase).toBe('prepare')
     expect(s.players[0]!.orientation).toBe('top')
@@ -259,7 +289,7 @@ describe('applyAction contract', () => {
   })
 
   it('serialize then deserialize gives the same state', () => {
-    const s = until(createGame(config, 5), (x) => x.exchange?.step === 'roll')
+    const s = until(withGrunt(5), (x) => x.exchange?.step === 'roll')
     expect(serialize(deserialize(serialize(s)))).toBe(serialize(s))
   })
 
@@ -275,12 +305,12 @@ describe('Combat card effects (7.8 step 5)', () => {
     faces: Array<'Sword' | 'Blank' | 'Star' | 'Shield'>,
     kept = false,
   ): GameState {
-    const s = until(createGame(config, 3), (x) => x.exchange?.step === 'roll')
+    const s = until(withGrunt(3), (x) => x.exchange?.step === 'roll')
     const p = s.players[0]!
     const hand = defs.map((def, i) => ({ id: `x${i}`, def }))
     return {
       ...s,
-      enemies: [{ id: 'e9', kind: 'elite', health: 14 }],
+      enemies: [{ id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 } }],
       players: [{ ...p, hand, discard: [...p.discard, ...p.hand] }],
       exchange: {
         ...s.exchange!,
@@ -344,7 +374,7 @@ describe('Combat card effects (7.8 step 5)', () => {
 describe('deck flow across a round (5.3, 7.9, 10.7)', () => {
   /** The log of round 1 only: everything before the first `roundAdvanced` event. */
   function roundOneLog() {
-    const s = until(createGame(config, 11), (x) => x.round === 2 || x.phase === 'ended')
+    const s = until(withGrunt(11), (x) => x.round === 2 || x.phase === 'ended')
     const end = s.log.findIndex((e) => e.type === 'roundAdvanced')
     return s.log.slice(0, end)
   }
@@ -361,14 +391,14 @@ describe('deck flow across a round (5.3, 7.9, 10.7)', () => {
   })
 
   it('7.9 a skipped exchange rolls no dice and changes no health', () => {
-    const s = { ...createGame(config, 3), enemies: [] }
+    const s = { ...started(3), enemies: [] }
     const after = until(s, (x) => x.round === 2)
     expect(after.log.some((e) => e.type === 'diceRolled')).toBe(false)
     expect(after.players[0]!.health).toBe(15)
   })
 
   it('10.6-10.7 after Combat the discard pile is turned, not shuffled, for the next Prepare', () => {
-    const s = until(createGame(config, 11), (x) => x.round === 2)
+    const s = until(withGrunt(11), (x) => x.round === 2)
     const lastCombat = s.log.findLastIndex((e) => e.type === 'exchangeEnded')
     const between = s.log.slice(lastCombat)
     expect(between.some((e) => e.type === 'deckShuffled')).toBe(false)

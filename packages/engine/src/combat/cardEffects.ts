@@ -1,6 +1,8 @@
 import type { CombatEffect, PrepareEffect } from '@survival/content'
 import { rerollUnkept, rollDice } from '../dice/dice.ts'
 import type { GameEvent } from '../events/events.ts'
+import { gather } from '../gather/gather.ts'
+import { mapHex } from '../map/tiles.ts'
 import { currentPlayer, updateCurrentPlayer, type Step } from '../state/helpers.ts'
 import type { Exchange, GameState } from '../state/types.ts'
 
@@ -20,30 +22,52 @@ export function healCurrent(state: GameState, amount: number, rule: string): Ste
 }
 
 /**
- * Applies a card's top half (Prepare). Move, Gather, and Build need the map and base, which
- * arrive in phases 6-8: until then they resolve as `effectDeferred` events and change nothing.
+ * Applies a card's top half (Prepare). Move and Build open a step-by-step decision (`active`);
+ * Gather and Rest resolve at once. Build on the base hex is a base upgrade (section 11), which
+ * arrives in phase 8: until then it resolves as an `effectDeferred` event.
  *
- * @rule 6.2, 6.7
+ * @rule 6.2, 6.7, 12.1
  */
 export function applyTopEffect(state: GameState, effect: PrepareEffect): Step {
   const player = currentPlayer(state)
   switch (effect.kind) {
     case 'rest':
       return healCurrent(state, effect.amount, '6.7')
-    case 'move':
     case 'gather':
-    case 'build':
+      return gather(state, effect.bonus)
+    case 'move':
       return [
-        state,
-        [
-          {
-            type: 'effectDeferred',
-            rule: '6.7',
-            player: player.id,
-            effect: effect.kind,
-            reason: 'needs the map (phase 6)',
+        {
+          ...state,
+          active: {
+            kind: 'move',
+            hexesLeft: effect.hexes,
+            ignoreEnemyCost: effect.ignoreEnemyCost,
           },
-        ],
+        },
+        [],
+      ]
+    case 'build':
+      if (mapHex(state.map, player.hex)?.site === 'base') {
+        return [
+          state,
+          [
+            {
+              type: 'effectDeferred',
+              rule: '6.7, 11.2',
+              player: player.id,
+              effect: 'base upgrade',
+              reason: 'base upgrades arrive in phase 8',
+            },
+          ],
+        ]
+      }
+      return [
+        {
+          ...state,
+          active: { kind: 'build', buildsLeft: effect.times, costReduction: effect.costReduction },
+        },
+        [],
       ]
   }
 }

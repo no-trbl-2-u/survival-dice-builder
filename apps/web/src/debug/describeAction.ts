@@ -50,5 +50,19 @@ export function describeAction(action: Action, state: GameState): string {
       const enemy = state.enemies.find((e) => e.id === action.enemy)
       return `Target ${action.enemy}${enemy ? ` (${enemy.kind}, ${enemy.health} health)` : ''}`
     }
+    case 'placeTile':
+      return `Place ${state.revealed[0] ?? 'tile'} at (${action.q},${action.r})`
+    case 'moveTo': {
+      const enemy = state.enemies.find((e) => e.hex.q === action.q && e.hex.r === action.r)
+      return `Move to (${action.q},${action.r})${enemy ? ` — skirmish ${enemy.id}` : ''}`
+    }
+    case 'stopMoving':
+      return 'Stop moving'
+    case 'build': {
+      const name = state.content.defenses.find((d) => d.id === action.defense)?.name
+      return `Build ${name ?? action.defense} at (${action.q},${action.r})`
+    }
+    case 'stopBuilding':
+      return 'Stop building'
   }
 }

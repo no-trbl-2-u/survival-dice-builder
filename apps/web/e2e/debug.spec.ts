@@ -22,6 +22,7 @@ test('/debug: clicking the first legal action 30 times plays the engine with no 
 
   expect(await log.count()).toBeGreaterThan(before)
   await expect(page.getByTestId('state')).toContainText('Round')
+  await expect(page.getByTestId('map').locator('polygon')).not.toHaveCount(0)
   expect(errors).toEqual([])
 })
 
@@ -30,5 +31,5 @@ test('/debug: a new seed starts a new run', async ({ page }) => {
   await page.getByLabel('Seed').fill('42')
   await page.getByRole('button', { name: 'New run' }).click()
   await expect(page.getByText('0 actions')).toBeVisible()
-  await expect(page.getByTestId('state')).toContainText('1 / prepare')
+  await expect(page.getByTestId('state')).toContainText('1 / setup')
 })

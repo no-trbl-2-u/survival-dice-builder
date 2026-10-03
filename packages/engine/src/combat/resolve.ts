@@ -2,6 +2,8 @@ import type { Face } from '@survival/content'
 import { clearTable } from '../deck/deck.ts'
 import { rollDice } from '../dice/dice.ts'
 import type { GameEvent } from '../events/events.ts'
+import { hexDistance } from '../hex.ts'
+import { adjacent, sameHex } from '../map/tiles.ts'
 import { firedUses } from '../skills/assign.ts'
 import {
   currentPlayer,
@@ -10,7 +12,7 @@ import {
   updateCurrentPlayer,
   type Step,
 } from '../state/helpers.ts'
-import type { GameState, QueuedEffect } from '../state/types.ts'
+import type { Enemy, GameState, QueuedEffect } from '../state/types.ts'
 import { healCurrent, updateExchange } from './cardEffects.ts'
 
 /**
@@ -37,12 +39,25 @@ export function damageEnemy(state: GameState, enemyId: string, amount: number, b
 }
 
 /**
+ * The enemies a Skill can hit now: within its range of the player. In a skirmish only the
+ * enemy in the entered hex can be hit (6.11).
+ *
+ * @rule 7.8 step 7, 6.11, Table 3, Table 9
+ */
+export function enemiesInRange(state: GameState, range: number): Enemy[] {
+  const skirmish = state.exchange?.skirmish
+  if (skirmish) return state.enemies.filter((e) => sameHex(e.hex, skirmish.hex))
+  const from = currentPlayer(state).hex
+  return state.enemies.filter((e) => hexDistance(from, e.hex) <= range)
+}
+
+/**
  * Confirms the dice on the Skill board: every full Skill use fires, in board order. The card
  * damage bonus (+N damage) is added to the first damage Skill that fires (OPEN-QUESTIONS
  * row 22). Then the effects resolve; a single-target damage Skill waits for a target when more
- * than 1 enemy is in range.
+ * than 1 enemy is in its range.
  *
- * @rule 7.8 step 7
+ * @rule 7.8 step 7, 6.11
  */
 export function confirmAssignment(state: GameState): Step {
   const exchange = state.exchange
@@ -70,7 +85,7 @@ export function confirmAssignment(state: GameState): Step {
 
 /**
  * Resolves queued Skill effects until one needs a target choice or the queue is empty. With
- * an empty queue the exchange finishes (enemy attacks, damage, cleanup).
+ * an empty queue the exchange (or skirmish) finishes.
  *
  * @rule 7.8 steps 7-10
  */
@@ -82,18 +97,35 @@ export function processQueue(state: GameState): Step {
     if (!exchange) return [current, events]
     const [head, ...rest] = exchange.queue
     if (!head) {
-      const [done, more] = finishExchange(current)
+      const [done, more] = exchange.skirmish ? finishSkirmish(current) : finishExchange(current)
       return [done, [...events, ...more]]
     }
     const effect = skillDef(current, head.skill).effect
-    if (effect.kind === 'damage' && effect.target === 'one' && current.enemies.length > 1) {
-      return [updateExchange(current, (e) => ({ ...e, step: 'targets' })), events]
+    let target: string | null = null
+    if (effect.kind === 'damage' && effect.target === 'one') {
+      const targets = enemiesInRange(current, effect.range)
+      if (targets.length > 1) {
+        return [updateExchange(current, (e) => ({ ...e, step: 'targets' })), events]
+      }
+      target = targets[0]?.id ?? null
     }
     const popped = updateExchange(current, (e) => ({ ...e, queue: rest }))
-    const [after, more] = resolveEffect(popped, head, current.enemies[0]?.id ?? null)
+    const [after, more] = resolveEffect(popped, head, target)
     current = after
     events.push(...more)
   }
+}
+
+/**
+ * The legal targets of the Skill at the head of the queue.
+ *
+ * @rule 7.8 step 7
+ */
+export function pendingTargets(state: GameState): Enemy[] {
+  const head = state.exchange?.queue[0]
+  if (!head) return []
+  const effect = skillDef(state, head.skill).effect
+  return effect.kind === 'damage' ? enemiesInRange(state, effect.range) : []
 }
 
 /**
@@ -123,7 +155,7 @@ function resolveEffect(state: GameState, queued: QueuedEffect, target: string | 
       }
       let current = state
       const events: GameEvent[] = []
-      for (const enemy of state.enemies) {
+      for (const enemy of enemiesInRange(state, effect.range)) {
         const [next, more] = damageEnemy(current, enemy.id, amount, player.id)
         current = next
         events.push(...more)
@@ -145,24 +177,26 @@ function resolveEffect(state: GameState, queued: QueuedEffect, target: string | 
 }
 
 /**
- * Steps 8-10: each enemy next to the player attacks (grunts deal a fixed amount; elites roll
- * dice on the enemy die table), damage goes to guard first and then health, guard is removed,
- * and played cards go to the discard pile. A player at 0 health ends the run.
- * Phase 5 has no map: every enemy in the abstract list counts as next to the player.
+ * Each listed enemy attacks the current player once: grunts deal a fixed amount; elites roll
+ * dice on the enemy die table. Damage goes to guard first, then health. "Ignore 1 hit" (Dodge)
+ * skips whole attacks.
  *
- * @rule 7.8 steps 8-10, 9.5, 9.6, 14.2
+ * @rule 7.8 steps 8-9, 6.12, 9.5, 9.6, Table 4
  */
-export function finishExchange(state: GameState): Step {
-  const exchange = state.exchange
-  if (!exchange) throw new Error('No exchange in progress')
+function enemyAttacks(state: GameState, attackers: readonly Enemy[], rule: string): Step {
   const playerId = currentPlayer(state).id
   const events: GameEvent[] = []
   let current = state
-  let ignore = exchange.ignoreHits
-  for (const enemy of state.enemies) {
+  let ignore = state.exchange?.ignoreHits ?? 0
+  for (const enemy of attackers) {
     if (ignore > 0) {
       ignore -= 1
-      events.push({ type: 'hitIgnored', rule: '7.8', enemy: enemy.id, player: playerId })
+      events.push({
+        type: 'hitIgnored',
+        rule: `${rule}, Table 9`,
+        enemy: enemy.id,
+        player: playerId,
+      })
       continue
     }
     const def = enemyDef(current, enemy.kind)
@@ -178,7 +212,7 @@ export function finishExchange(state: GameState): Step {
     }
     events.push({
       type: 'enemyAttacked',
-      rule: def.attack.kind === 'fixed' ? '9.5' : '9.6',
+      rule: def.attack.kind === 'fixed' ? `${rule}, 9.5` : `${rule}, 9.6`,
       enemy: enemy.id,
       player: playerId,
       damage,
@@ -191,12 +225,70 @@ export function finishExchange(state: GameState): Step {
     current = updateCurrentPlayer(current, (p) => ({ ...p, guard: p.guard - toGuard, health }))
     events.push({ type: 'playerDamaged', rule: '7.8', player: playerId, toGuard, toHealth, health })
   }
-  current = updateCurrentPlayer(current, (p) => clearTable({ ...p, guard: 0 }))
-  current = { ...current, exchange: null }
-  events.push({ type: 'exchangeEnded', rule: '7.8', player: playerId })
-  if (currentPlayer(current).health <= 0) {
-    current = { ...current, phase: 'ended', endedBecause: 'player' }
-    events.push({ type: 'runEnded', rule: '14.2', because: 'player', round: current.round })
-  }
   return [current, events]
+}
+
+/** Ends the run when the current player is at 0 health. @rule 14.2 */
+function checkPlayerDown(state: GameState, events: GameEvent[]): GameState {
+  if (currentPlayer(state).health > 0) return state
+  events.push({ type: 'runEnded', rule: '14.2', because: 'player', round: state.round })
+  return { ...state, phase: 'ended', endedBecause: 'player', active: null }
+}
+
+/**
+ * Steps 8-10 of an exchange: each enemy next to the player attacks, guard is removed, and
+ * played cards go to the discard pile. A player at 0 health ends the run.
+ *
+ * @rule 7.8 steps 8-10, 14.2
+ */
+export function finishExchange(state: GameState): Step {
+  const player = currentPlayer(state)
+  const attackers = state.enemies.filter((e) => adjacent(e.hex, player.hex))
+  const [attacked, events] = enemyAttacks(state, attackers, '7.8')
+  const out: GameEvent[] = [...events, { type: 'exchangeEnded', rule: '7.8', player: player.id }]
+  let current: GameState = {
+    ...updateCurrentPlayer(attacked, (p) => clearTable({ ...p, guard: 0 })),
+    exchange: null,
+  }
+  current = checkPlayerDown(current, out)
+  return [current, out]
+}
+
+/**
+ * The end of a skirmish: the enemy in the entered hex attacks 1 time (if it is still there),
+ * guard is removed, and the figure moves in only if that enemy is defeated; otherwise it stays
+ * and the rest of the Move is lost.
+ *
+ * @rule 6.12, 6.13, 6.14, 14.2
+ */
+export function finishSkirmish(state: GameState): Step {
+  const skirmish = state.exchange?.skirmish
+  if (!skirmish) throw new Error('No skirmish in progress')
+  const player = currentPlayer(state)
+  const attackers = state.enemies.filter((e) => sameHex(e.hex, skirmish.hex))
+  const [attacked, events] = enemyAttacks(state, attackers, '6.12')
+  const won = !attacked.enemies.some((e) => sameHex(e.hex, skirmish.hex))
+  let current: GameState = {
+    ...updateCurrentPlayer(attacked, (p) => ({ ...p, guard: 0, hex: won ? skirmish.hex : p.hex })),
+    exchange: null,
+  }
+  const loseMove = current.config.rulings.skirmishFail === 'stay-lose-move'
+  if (!won && loseMove && current.active?.kind === 'move') current = { ...current, active: null }
+  const out: GameEvent[] = [
+    ...events,
+    { type: 'skirmishEnded', rule: won ? '6.13' : '6.14', player: player.id, won },
+  ]
+  if (won) {
+    out.push({
+      type: 'moved',
+      rule: '6.13',
+      player: player.id,
+      from: skirmish.from,
+      to: skirmish.hex,
+      cost: 0,
+      hexesLeft: current.active?.kind === 'move' ? current.active.hexesLeft : 0,
+    })
+  }
+  current = checkPlayerDown(current, out)
+  return [current, out]
 }

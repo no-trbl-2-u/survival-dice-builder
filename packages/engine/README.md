@@ -35,8 +35,13 @@ src/
   phases/     the phase machine (advance)
   events/     the GameEvent union
   progression/ levels (8.3, 8.5)
+  map/        tile placement and slots, passability, spawning with spill-over (3.x, 4.2, 9.8)
+  movement/   step-by-step Move and skirmishes (6.7-6.15)
+  build/      defense placement, cost, damage (12.1-12.4)
+  gather/     Gather on a gathering node (6.7)
 test/
   api.test.ts         rule-tagged scenario tests
+  world.test.ts       map, Move, skirmish, Gather, Build, Combat range (phase 6)
   properties.test.ts  fast-check invariants over random legal walks
   golden.test.ts      seed + actions -> expected state hash (golden/*.json)
   helpers/            scripted and random policies, walk()
@@ -44,12 +49,17 @@ test/
 
 Unit tests sit next to the code (`<module>.test.ts`). Test names start with the rule id.
 
-## Phase 5 scope
+## Scope (phase 6)
 
-One player against an abstract enemy list: every enemy counts as next to the player. Map
-effects (Move, Gather, Build) and map steps (7.3-7.6, 7.10-7.12, 10.1-10.5) resolve as
-`effectDeferred` / `stepDeferred` events until phases 6-7; progression (XP, Shop, draft,
-milestones) arrives in phase 8.
+One player on a real hex map. A run starts in `setup`: the Base tile is at (0,0) and the
+player chooses the setup countryside tile's slot (`placeTile`). Move and Build are decided one
+step at a time (`moveTo` / `stopMoving`, `build` / `stopBuilding`) through `state.active`;
+entering an enemy's hex starts a skirmish, which reuses `state.exchange` with `skirmish` set.
+Combat is range-aware: an exchange is skipped with no enemy within `combat.exchangeRange`, Skills
+hit only within their range, and only adjacent enemies attack.
+
+Still deferred as `stepDeferred` / `effectDeferred` events: enemy movement, spawns, waves,
+Tower and structure attacks, exploration (phase 7); base upgrades and progression (phase 8).
 
 ## Golden replays
 

@@ -14,6 +14,7 @@ const card = (n: number) => ({ id: `c${n}`, def: 'starter-move' })
 function player(deck: number, discard = 0): Player {
   return {
     id: 'p1',
+    hex: { q: 0, r: 0 },
     health: 15,
     maxHealth: 15,
     dice: 1,

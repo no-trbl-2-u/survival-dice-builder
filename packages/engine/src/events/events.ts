@@ -1,4 +1,5 @@
 import type { Face, SkillFace } from '@survival/content'
+import type { Axial } from '../hex.ts'
 import type { Phase } from '../state/types.ts'
 
 /**
@@ -39,6 +40,22 @@ export type GameEvent = Readonly<
     | { type: 'exchangeSkipped'; player: string }
     | { type: 'exchangeEnded'; player: string }
     | { type: 'stepDeferred'; step: string; reason: string }
+    | { type: 'tilePlaced'; tile: string; center: Axial }
+    | { type: 'enemySpawned'; enemy: string; kind: string; hex: Axial; spilled: boolean }
+    | { type: 'moved'; player: string; from: Axial; to: Axial; cost: number; hexesLeft: number }
+    | { type: 'skirmishStarted'; player: string; hex: Axial; enemy: string }
+    | { type: 'skirmishEnded'; player: string; won: boolean }
+    | { type: 'gathered'; player: string; amount: number; materials: number }
+    | {
+        type: 'defenseBuilt'
+        player: string
+        defense: string
+        kind: string
+        hex: Axial
+        cost: number
+      }
+    | { type: 'defenseDamaged'; defense: string; amount: number; health: number }
+    | { type: 'defenseRemoved'; defense: string }
     | { type: 'roundAdvanced'; round: number }
     | { type: 'runEnded'; because: 'base' | 'player'; round: number }
   )
