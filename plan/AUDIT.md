@@ -3,70 +3,44 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
-# Site audit — 2026-10-03
+# Site audit — 2026-10-03 (pass 2, from critique pass 3)
 
 ## Top 5 findings (scored)
 
-### [x] [4.5] /credits: 18 links all named "Source"; licence stated twice (critique MED)
-- category: external-critique (a11y)
-- impact: 5
-- ease: 9
-- issue: #20
-- fixed: 2d542b8
-
-### [x] [4.9] /play: the log shows card ids, rule numbers, and "1 actions" (critique MED)
-- category: external-critique (voice)
-- impact: 7
-- ease: 7
-- issue: #18
-- fixed: 77c6b73
-
-### [x] [8.1] /: the home page does not say what the game is or where to start (critique HIGH)
+### [x] [6.3] /play: Skills, draft options, and Shop offers never say what they do (critique HIGH)
 - category: external-critique (comprehension)
 - impact: 9
-- ease: 9
-- issue: #17
-- fixed: c97d007
-
-### [x] [7.2] /tiles: terrain and site per hex only show on hover (critique HIGH)
-- category: external-critique (a11y)
-- impact: 9
-- ease: 8
-- issue: #16
-- fixed: 08a5708
-- next: list each tile's 7 hexes as text under the tile; reword the lede
-
-### [x] [4.8] /tiles: no legend for the 4 site icons (critique MED)
-- category: external-critique (comprehension)
-- impact: 6
-- ease: 8
-- next: add a "Sites" legend row with each icon and name
-- issue: #19
-- fixed: c3497c8
-
-### [x] [4.2] /debug: keyboard focus is lost after every action (critique MED)
-- category: external-critique (a11y)
-- impact: 6
 - ease: 7
-- next: reuse the /play focus-next-decision effect
-- issue: #21 (phase 17)
-- fixed: c5a664b
+- next: one effect-text function per effect kind (Skill, Prepare, Combat), shown under each Skill, in each draft option, and on each Shop offer
+- issue: #23
+- fixed: 4206ea0
 
-### [x] [3.5] /debug: no explanation; shorthand and grammar slips (critique MED)
+### [ ] [4.2] /play: log and labels use enemy ids, capitalise grunt and elite, and slip on grammar (critique MED)
 - category: external-critique (voice)
-- impact: 5
+- impact: 6
 - ease: 7
-- next: a short intro paragraph and plain labels
-- issue: #21 (phase 17)
-- fixed: c5a664b
+- next: lowercase kinds and place names in describeEvent and describeAction, "an elite", "1 upgrade", "3 hexes"
 
-### [x] [3.0] /tiles: dark-mode terrain colours are hard to tell apart (critique MED)
-- category: external-critique (visual)
+### [ ] [3.6] /debug: the event log prints [object Object]; stray glyph letters in State (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 9
+- next: format {q,r} payloads in EventLog; aria-hidden on the map glyph text
+
+### [ ] [3.0] /play: at 375px the controls for the current step sit far below the map (critique MED)
+- category: external-critique (mobile)
+- impact: 6
+- ease: 5
+- next: order the active panel under the round header at narrow widths; larger map labels
+
+### [ ] [2.5] /config: raw schema errors, unsaved edits lost, Reset unconfirmed (critique MED)
+- category: external-critique (a11y)
 - impact: 5
-- ease: 6
-- next: retune dark terrain tokens in design/tokens.json; check-design re-verifies contrast
-- issue: #21 (phase 17)
-- fixed: c5a664b
+- ease: 5
+- next: covered by the /config candidate in PHASE_CANDIDATES.md (expand pass 2); wait for oversight
+
+The /config labels row (critique MED, impact 6, ease 3, score 1.8) is
+outside the top 5 and is the core of that candidate.
 
 ## Needs user call (from adoption, 2026-10-02)
 

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [HIGH] /play — Skills, draft options, and Shop offers never say what they do
-- pass: 3 (commit d6176b7)
-- viewport: desktop
-- category: comprehension
-- observation: The Skill board shows only a name and its die faces. The draft dialog and the Shop show only a name, faces, and a cost. A first-time player cannot judge which die to assign, which Skill to draft, or which card to buy.
-- evidence: Skills panel: "Strike — can fire", "Shot / Bow", "Mend / Wand", "Guard / Shield". Draft: "Draft Renewal (Wand + Wand)", "Draft Spark Burst (Wand + Bow)". Shop: "Haul / Cost 3", "Bandage / Cost 3". No description, tooltip, or details element in the combat DOM.
-- suggested fix: Generate a one-line effect text from each Skill's and card's structured `effect` in content (for example "2 damage to 1 enemy within 1 hex"). Show it under each Skill, draft option, and Shop offer.
-- source: browser
-
 ### [MED] /play — the log and summary use enemy ids, capitalise grunt and elite, and slip on grammar
 - pass: 3 (commit d6176b7)
 - viewport: desktop
@@ -64,6 +55,17 @@
 - source: browser
 
 ## Done
+
+### [x] [HIGH] /play — Skills, draft options, and Shop offers never say what they do
+- pass: 3 (commit d6176b7)
+- viewport: desktop
+- category: comprehension
+- observation: The Skill board shows only a name and its die faces. The draft dialog and the Shop show only a name, faces, and a cost. A first-time player cannot judge which die to assign, which Skill to draft, or which card to buy.
+- evidence: Skills panel: "Strike — can fire", "Shot / Bow", "Mend / Wand", "Guard / Shield". Draft: "Draft Renewal (Wand + Wand)", "Draft Spark Burst (Wand + Bow)". Shop: "Haul / Cost 3", "Bandage / Cost 3". No description, tooltip, or details element in the combat DOM.
+- suggested fix: Generate a one-line effect text from each Skill's and card's structured `effect` in content (for example "2 damage to 1 enemy within 1 hex"). Show it under each Skill, draft option, and Shop offer.
+- source: browser
+- issue: #23
+- fixed: 4206ea0 (effect text generated from content under each Skill, in each draft option, and on each Shop offer)
 
 ### [x] [MED] /tiles — dark-mode terrain colours are hard to tell apart
 - pass: 1 (commit 70348c1)
