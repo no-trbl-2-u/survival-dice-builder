@@ -9,6 +9,7 @@ import type {
   SkillFace,
   Terrain,
   TileDef,
+  UpgradeDef,
 } from '@survival/content'
 import type { GameEvent } from '../events/events.ts'
 import type { Axial } from '../hex.ts'
@@ -125,6 +126,33 @@ export type Exchange = Readonly<{
   skirmish: Readonly<{ hex: Axial; from: Axial }> | null
 }>
 
+/** Card and Skill supplies by level, top first. @rule 4.12 */
+export type Supplies = Readonly<{
+  cards: Readonly<Record<string, readonly string[]>>
+  skills: Readonly<Record<string, readonly string[]>>
+}>
+
+/**
+ * A Skill draft in progress: the revealed Skills, and the kept one while the player picks a
+ * drafted Skill to replace (full slots, 11.9).
+ *
+ * @rule 11.6-11.9
+ */
+export type Draft = Readonly<{
+  player: string
+  level: string
+  options: readonly string[]
+  kept: string | null
+}>
+
+/** Run counters for the milestones. @rule 17 */
+export type Progress = Readonly<{
+  elitesDefeated: number
+  firedSkills: readonly string[]
+  tilesRevealed: number
+  cardsBought: number
+}>
+
 /** The content the engine needs, copied into the state so a run replays from the state alone. */
 export type EngineContent = Readonly<{
   cards: readonly CardDef[]
@@ -132,6 +160,7 @@ export type EngineContent = Readonly<{
   enemies: EnemiesFile
   defenses: readonly DefenseDef[]
   tiles: readonly TileDef[]
+  upgrades: readonly UpgradeDef[]
 }>
 
 /**
@@ -169,6 +198,27 @@ export type GameState = Readonly<{
   /** Optional exploration (18.1) is waiting for the reveal-or-skip choice. @rule 10.1 */
   revealOffer: boolean
   exchange: Exchange | null
+  /** Shared experience track and level. @rule 8.1, 8.3, 16.2 */
+  experience: number
+  level: number
+  /** Bought base upgrade ids, in purchase order. @rule 11.2, 11.4 */
+  upgrades: readonly string[]
+  /** Card and Skill supplies by level ("1", "2", "3"), top first. @rule 4.12 */
+  supplies: Supplies
+  /** The Shop's offers (card definition ids). Empty while the Shop is closed. @rule 11.5 */
+  shopOffers: readonly string[]
+  /** Next bought card instance number (`c<n>`). */
+  nextCardId: number
+  /** Replace-starter mode (18.1): the player who must return a starter card, if any. */
+  pendingReturn: string | null
+  /** The Skill draft in progress (10.8, 11.6-11.9). */
+  draft: Draft | null
+  /** The round whose draft is done, so a round drafts once. */
+  lastDraftRound: number
+  /** Counters the milestones read. @rule 17 */
+  progress: Progress
+  /** Milestones reached, in order. @rule 10.10, 14.3, 17 */
+  milestones: readonly string[]
   /** The last events, trimmed to `LOG_LIMIT`. */
   log: readonly GameEvent[]
   endedBecause: 'base' | 'player' | null

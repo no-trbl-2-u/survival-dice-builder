@@ -9,6 +9,9 @@ import { placeTileAndSpawn } from '../map/spawn.ts'
 import { legalMoves } from '../movement/move.ts'
 import { startSkirmish } from '../movement/skirmish.ts'
 import { advance, rollAgain } from '../phases/advance.ts'
+import { keepSkill, replaceSkill } from '../progression/draft.ts'
+import { buyCard, returnStarter } from '../progression/shop.ts'
+import { buyUpgrade, legalUpgrades } from '../progression/upgrades.ts'
 import {
   cardDef,
   currentPlayer,
@@ -146,6 +149,24 @@ function act(state: GameState, action: Action): Step {
     }
     case 'moveTo':
       return moveTo(state, action)
+    case 'buyCard':
+      return buyCard(state, action.card)
+    case 'returnStarter':
+      return returnStarter(state, action.card)
+    case 'buyUpgrade': {
+      const active = state.active
+      if (active?.kind !== 'build') throw illegalAction(action, 'no Build in progress')
+      const option = legalUpgrades(state, active.costReduction).find(
+        (u) => u.upgrade === action.upgrade,
+      )
+      if (!option) throw illegalAction(action, 'not a legal upgrade')
+      const [bought, events] = buyUpgrade(state, option.upgrade, option.cost)
+      return [{ ...bought, active: { ...active, buildsLeft: active.buildsLeft - 1 } }, events]
+    }
+    case 'draftSkill':
+      return keepSkill(state, action.skill)
+    case 'replaceSkill':
+      return replaceSkill(state, action.skill)
     case 'revealTile':
       return revealTop(state)
     case 'skipReveal':

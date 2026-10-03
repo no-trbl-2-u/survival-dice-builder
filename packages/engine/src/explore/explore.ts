@@ -10,7 +10,7 @@ import type { GameState } from '../state/types.ts'
  * by `options.exploration` (18.1): forced (default) reveals the top tile for the player to
  * place; automatic places it in the empty slot nearest the base; optional offers the choice.
  *
- * @rule 10.1, 10.2, 10.3, 15.2, 18.1
+ * @rule 10.1, 10.2, 10.3, 15.2, 17, 18.1
  */
 export function startExplore(state: GameState): Step {
   const [top, ...rest] = state.tileDeck
@@ -28,7 +28,8 @@ export function startExplore(state: GameState): Step {
         (a, b) => hexDistance(a, BASE_HEX) - hexDistance(b, BASE_HEX),
       )[0]
       if (!slot) return [state, []]
-      const [placed, events] = placeTileAndSpawn({ ...state, tileDeck: rest }, top, slot)
+      const progress = { ...state.progress, tilesRevealed: state.progress.tilesRevealed + 1 }
+      const [placed, events] = placeTileAndSpawn({ ...state, tileDeck: rest, progress }, top, slot)
       return [placed, [{ type: 'tileRevealed', rule: '10.1', tile: top }, ...events]]
     }
   }
@@ -37,11 +38,12 @@ export function startExplore(state: GameState): Step {
 /**
  * Reveals the top tile of the tile deck; the player then chooses its slot (`placeTile`).
  *
- * @rule 10.1
+ * @rule 10.1, 17
  */
 export function revealTop(state: GameState): Step {
   const [top, ...rest] = state.tileDeck
   if (!top) return [{ ...state, revealOffer: false }, []]
   const events: GameEvent[] = [{ type: 'tileRevealed', rule: '10.1', tile: top }]
-  return [{ ...state, tileDeck: rest, revealed: [top], revealOffer: false }, events]
+  const progress = { ...state.progress, tilesRevealed: state.progress.tilesRevealed + 1 }
+  return [{ ...state, tileDeck: rest, revealed: [top], revealOffer: false, progress }, events]
 }

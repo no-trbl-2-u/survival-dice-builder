@@ -27,6 +27,27 @@ export function explorerChoice(state: GameState): Action | undefined {
 }
 
 /**
+ * A policy that grows: walks to a gathering node next to the base for materials and back to the
+ * base to spend them, buys base upgrades and Shop cards whenever it can, keeps the first
+ * drafted Skill, and otherwise plays like `scriptedChoice`. Used by the full-run golden to cover
+ * progression.
+ */
+export function builderChoice(state: GameState): Action | undefined {
+  const actions = legalActions(state)
+  for (const type of ['assignDie', 'buyUpgrade', 'buyCard', 'draftSkill'] as const) {
+    const found = actions.find((a) => a.type === type)
+    if (found) return found
+  }
+  const player = state.players[state.current]
+  const site = (a: Action) =>
+    a.type === 'moveTo' ? state.map.hexes[`${a.q},${a.r}`]?.site : undefined
+  const wanted = (player?.materials ?? 0) < 3 ? 'gathering-node' : 'base'
+  const move = actions.find((a) => site(a) === wanted)
+  if (move) return move
+  return actions[0]
+}
+
+/**
  * Picks a uniformly random legal action using a test-side RNG (not the game's), so property
  * tests explore unusual orders: toggling dice, rolling again, discarding, unassigning.
  */

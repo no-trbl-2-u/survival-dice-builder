@@ -1,5 +1,6 @@
 import type { Face } from '@survival/content'
 import { clearTable } from '../deck/deck.ts'
+import { gainForDefeat } from '../progression/experience.ts'
 import { rollDice } from '../dice/dice.ts'
 import type { GameEvent } from '../events/events.ts'
 import { hexDistance } from '../hex.ts'
@@ -17,10 +18,9 @@ import { healCurrent, updateExchange } from './cardEffects.ts'
 
 /**
  * Deals damage to one enemy and removes it at 0 health. A defeated enemy's spawn node waits
- * for a refill (9.2).
- * Experience and currency for the defeat arrive in phase 8.
+ * for a refill (9.2); its experience and currency are paid (8.1-8.2).
  *
- * @rule 9.1, 7.8 step 7
+ * @rule 9.1, 7.8 step 7, 8.1, 8.2, 9.2
  */
 export function damageEnemy(
   state: GameState,
@@ -41,7 +41,13 @@ export function damageEnemy(
   }
   events.push({ type: 'enemyDefeated', rule: '9.1', enemy: enemy.id, kind: enemy.kind, by })
   const vacantNodes = enemy.home ? [...state.vacantNodes, enemy.home] : state.vacantNodes
-  return [{ ...state, enemies: state.enemies.filter((e) => e.id !== enemyId), vacantNodes }, events]
+  const removed: GameState = {
+    ...state,
+    enemies: state.enemies.filter((e) => e.id !== enemyId),
+    vacantNodes,
+  }
+  const [rewarded, more] = gainForDefeat(removed, enemy.kind, by)
+  return [rewarded, [...events, ...more]]
 }
 
 /**
@@ -63,7 +69,7 @@ export function enemiesInRange(state: GameState, range: number): Enemy[] {
  * row 22). Then the effects resolve; a single-target damage Skill waits for a target when more
  * than 1 enemy is in its range.
  *
- * @rule 7.8 step 7, 6.11
+ * @rule 7.8 step 7, 6.11, 17 (fired Skills)
  */
 export function confirmAssignment(state: GameState): Step {
   const exchange = state.exchange
@@ -84,7 +90,9 @@ export function confirmAssignment(state: GameState): Step {
     player: player.id,
     skill,
   }))
-  const next = updateExchange(state, (e) => ({ ...e, step: 'targets', queue }))
+  const firedSkills = [...new Set([...state.progress.firedSkills, ...fired.map((f) => f.skill)])]
+  const tracked: GameState = { ...state, progress: { ...state.progress, firedSkills } }
+  const next = updateExchange(tracked, (e) => ({ ...e, step: 'targets', queue }))
   const [resolved, more] = processQueue(next)
   return [resolved, [...events, ...more]]
 }

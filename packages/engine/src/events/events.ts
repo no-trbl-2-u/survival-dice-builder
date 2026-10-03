@@ -71,6 +71,20 @@ export type GameEvent = Readonly<
     | { type: 'eliteReplaced'; grunt: string; elite: string; hex: Axial }
     | { type: 'tileRevealed'; tile: string }
     | { type: 'revealSkipped' }
+    | { type: 'experienceGained'; amount: number; experience: number }
+    | { type: 'levelReached'; level: number }
+    | { type: 'diceGained'; player: string; dice: number }
+    | { type: 'currencyGained'; player: string; amount: number; currency: number }
+    | { type: 'upgradeBought'; player: string; upgrade: string; cost: number; baseHealth: number }
+    | { type: 'offerAdded'; card: string; level: string }
+    | { type: 'cardBought'; player: string; card: string; instance: string; cost: number }
+    | { type: 'starterReturned'; player: string; card: string }
+    | { type: 'draftStarted'; player: string; level: string; options: readonly string[] }
+    | { type: 'skillDrafted'; player: string; skill: string }
+    | { type: 'draftSkipped'; player: string }
+    | { type: 'skillToSupply'; skill: string; level: string }
+    | { type: 'skillReplaced'; player: string; skill: string }
+    | { type: 'milestoneReached'; milestone: string; round: number }
     | { type: 'runEnded'; because: 'base' | 'player'; round: number }
   )
 >

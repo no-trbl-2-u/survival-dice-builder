@@ -34,7 +34,7 @@ src/
   combat/     card effects, Skill resolution, enemy attacks (7.8)
   phases/     the phase machine (advance)
   events/     the GameEvent union
-  progression/ levels (8.3, 8.5)
+  progression/ XP and levels, supplies, Shop, base upgrades, Skill draft, milestones (8, 11, 17)
   map/        tile placement and slots, passability, spawning with spill-over (3.x, 4.2, 9.8)
   movement/   step-by-step Move and skirmishes (6.7-6.15)
   build/      defense placement, cost, damage (12.1-12.4)
@@ -45,6 +45,7 @@ test/
   api.test.ts         rule-tagged scenario tests
   world.test.ts       map, Move, skirmish, Gather, Build, Combat range (phase 6)
   enemies.test.ts     enemy targets and movement, spawns, waves, Towers, structures, Explore (phase 7)
+  progression.test.ts XP, Shop, upgrades, draft, milestones, end of run (phase 8)
   properties.test.ts  fast-check invariants over random legal walks
   golden.test.ts      seed + actions -> expected state hash (golden/*.json)
   helpers/            scripted and random policies, walk()
@@ -52,7 +53,7 @@ test/
 
 Unit tests sit next to the code (`<module>.test.ts`). Test names start with the rule id.
 
-## Scope (phases 6-7)
+## Scope (phases 6-8)
 
 One player on a real hex map. A run starts in `setup`: the Base tile is at (0,0) and the
 player chooses the setup countryside tile's slot (`placeTile`). Move and Build are decided one
@@ -66,8 +67,11 @@ ends with the structure attack step (7.10-7.12); the base at 0 health ends the r
 Explore reveals a tile for the player to place (`placeTile`), or raises the wave track when
 the tile deck is empty.
 
-Still deferred as `stepDeferred` / `effectDeferred` events: base upgrades and progression
-(phase 8). The engine is solo-only until the co-op turn order lands in phase 13.
+Progression (phase 8): defeats pay shared experience and the killer's currency; levels add
+dice; a Build on the base buys upgrades; the Shop sells at any decision while on the base;
+even-round drafts while Training is open; milestones are recorded at 10.10 and at the end.
+The engine is feature-complete for Spec v1 solo (Milestone 1). It is solo-only until the
+co-op turn order lands in phase 13.
 
 ## Golden replays
 

@@ -52,6 +52,17 @@ until then).
 | 37 | 18.1 | Automatic exploration: where does the tile go? | In the **empty slot nearest the base** (ties: slot order). | (engine, `startExplore`) | proposed (phase 7) |
 | 38 | 7.4, 10.3, 10.4 | When does the wave step happen? | In **Combat** (7.4), at the start of each Combat phase while the wave track is above 0. 10.4 defines the step; it is not repeated in Explore. With the 7-tile deck the track first rises in round 8 Explore, so the first wave arrives in round 9 Combat. | (engine, `startCombat`) | proposed (phase 7) |
 | 39 | 9.7 | Which blockers make an enemy switch target? | **Any**: enemies, Barricades, Towers, figures, lake, and mountain. If no open path reaches any target, the enemy waits. | `blockedPathRule` | proposed (phase 7) |
+| 40 | 8.2, 12.3 | Who gets the currency when a Tower defeats an enemy? | **Nobody**: the experience goes to the shared track (8.1), but currency needs a player who defeated it (8.2). | (engine, `gainForDefeat`) | proposed (phase 8) |
+| 41 | 11.5 | The Shop's highest open level supply is empty. | Draw from the **next lower level** (as 11.8 for the draft); no cards left at any open level: fewer than 3 offers. Shop II and III do not replace offers already shown. | (engine, `refillOffers`) | proposed (phase 8) |
+| 42 | 6.7, 11.2, Table 8 | Do Build cost reductions (Mason, Engineer) and Architect's "Build 2 times" apply to base upgrades? | **Yes**: a Build on the base buys upgrades with the same card: the reduction lowers each upgrade's material cost (minimum 0), and Architect buys 2. | (engine, `legalUpgrades`) | proposed (phase 8) |
+| 43 | 6.8 | May a player buy at every decision while on the base, including mid-exchange? | **Yes** ("at each moment", 6.8 [006]): buying is offered at every decision while the figure is on the base, except while a draft or a starter return is waiting. | `shopTiming` | proposed (phase 8) |
+| 44 | 18.1 | Replace-starter mode: which starter card leaves? | The **player chooses** 1 starter card from the deck or discard pile (not hand or table). No starter there: nothing leaves. | `options.boughtCards` | proposed (phase 8) |
+| 45 | 17 | When is "Survive to round N" reached? | When the **round counter reaches N** (10.9), checked at 10.10 and at the end of the run. | (engine, `reachedMilestones`) | proposed (phase 8) |
+| 46 | 11.9, row 9 | With full draft slots, must the kept Skill replace a drafted Skill, or may the player decline? | **Must** (11.9 [006]: "the drafted Skill replaces 1 draft Skill"). To decline, set `fullBoardDraft: "skip"`. Row 9's "may" is read as the choice of which Skill. | `fullBoardDraft` | proposed (phase 8) |
+| 47 | 8.4 | A level reached mid-exchange: when can the new die be used? | From the **next roll of dice** (the next exchange or skirmish); the dice already rolled stay as they are. | (engine, `player.dice`) | proposed (phase 8) |
+| 48 | 17 | Does a Tower's elite defeat count for "Defeat an elite"? | **Yes**: any defeat of an elite counts. | (engine, `progress.elitesDefeated`) | proposed (phase 8) |
+| 49 | 11.4, Table 8 | May Architect ("Build 2 times") buy tier I and tier II of a track with one card? | **Yes**: each Build is a separate purchase in sequence (11.4). | (engine, `legalUpgrades`) | proposed (phase 8) |
+| 50 | 11.8 | Every open Skill supply is empty at a draft. | **No draft** that round (`draftSkipped` event). | (engine, `startDraft`) | proposed (phase 8) |
 
 ## Spec amendments owed
 

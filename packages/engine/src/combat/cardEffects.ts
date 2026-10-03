@@ -2,7 +2,6 @@ import type { CombatEffect, PrepareEffect } from '@survival/content'
 import { rerollUnkept, rollDice } from '../dice/dice.ts'
 import type { GameEvent } from '../events/events.ts'
 import { gather } from '../gather/gather.ts'
-import { mapHex } from '../map/tiles.ts'
 import { currentPlayer, updateCurrentPlayer, type Step } from '../state/helpers.ts'
 import type { Exchange, GameState } from '../state/types.ts'
 
@@ -23,13 +22,12 @@ export function healCurrent(state: GameState, amount: number, rule: string): Ste
 
 /**
  * Applies a card's top half (Prepare). Move and Build open a step-by-step decision (`active`);
- * Gather and Rest resolve at once. Build on the base hex is a base upgrade (section 11), which
- * arrives in phase 8: until then it resolves as an `effectDeferred` event.
+ * Gather and Rest resolve at once. A Build on the base hex buys base upgrades (11.2);
+ * elsewhere it builds defenses (12.1).
  *
- * @rule 6.2, 6.7, 12.1
+ * @rule 6.2, 6.7, 11.2, 12.1
  */
 export function applyTopEffect(state: GameState, effect: PrepareEffect): Step {
-  const player = currentPlayer(state)
   switch (effect.kind) {
     case 'rest':
       return healCurrent(state, effect.amount, '6.7')
@@ -48,20 +46,6 @@ export function applyTopEffect(state: GameState, effect: PrepareEffect): Step {
         [],
       ]
     case 'build':
-      if (mapHex(state.map, player.hex)?.site === 'base') {
-        return [
-          state,
-          [
-            {
-              type: 'effectDeferred',
-              rule: '6.7, 11.2',
-              player: player.id,
-              effect: 'base upgrade',
-              reason: 'base upgrades arrive in phase 8',
-            },
-          ],
-        ]
-      }
       return [
         {
           ...state,

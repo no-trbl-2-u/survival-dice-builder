@@ -4,7 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { applyAction, createGame, serialize, type Action, type GameState } from '../src/index.ts'
-import { explorerChoice, scriptedChoice, walk } from './helpers/policy.ts'
+import { builderChoice, explorerChoice, scriptedChoice, walk } from './helpers/policy.ts'
 
 /**
  * Golden replays: `seed + actions[]` with the expected SHA-256 of `serialize(finalState)`.
@@ -52,6 +52,14 @@ const GOLDENS = [
     description: 'Phase 7: a full solo run to the end, default config, explorer policy (seed 7).',
     seed: 7,
     policy: explorerChoice,
+    stop: (s: GameState) => s.phase === 'ended',
+  },
+  {
+    file: 'p8-builder-run.json',
+    description:
+      'Phase 8: a full solo run to the end, default config, builder policy: upgrades, Shop, draft (seed 8).',
+    seed: 8,
+    policy: builderChoice,
     stop: (s: GameState) => s.phase === 'ended',
   },
 ]

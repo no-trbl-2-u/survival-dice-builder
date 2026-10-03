@@ -208,23 +208,26 @@
     },
     {
       "type": "playCard",
-      "card": "c4"
+      "card": "c2"
+    },
+    {
+      "type": "endReroll"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
     },
     {
       "type": "playCard",
       "card": "c3"
     },
     {
-      "type": "playCard",
-      "card": "c6"
-    },
-    {
       "type": "assignDie",
       "die": 0,
-      "skill": "shot",
+      "skill": "strike",
       "use": 0,
       "slot": 0,
-      "asFace": "Bow"
+      "asFace": "Sword"
     },
     {
       "type": "confirmAssignment"
@@ -236,6 +239,10 @@
     },
     {
       "type": "playCard",
+      "card": "c6"
+    },
+    {
+      "type": "playCard",
       "card": "c1"
     },
     {
@@ -250,17 +257,11 @@
     },
     {
       "type": "playCard",
-      "card": "c2"
+      "card": "c4"
     },
     {
-      "type": "moveTo",
-      "q": 0,
-      "r": -1
-    },
-    {
-      "type": "moveTo",
-      "q": 1,
-      "r": -1
+      "type": "playCard",
+      "card": "c3"
     },
     {
       "type": "playCard",
@@ -271,26 +272,20 @@
     },
     {
       "type": "playCard",
-      "card": "c6"
+      "card": "c2"
     },
     {
-      "type": "playCard",
-      "card": "c3"
+      "type": "moveTo",
+      "q": 0,
+      "r": -1
     },
     {
-      "type": "playCard",
-      "card": "c4"
+      "type": "moveTo",
+      "q": 1,
+      "r": -1
     },
     {
       "type": "stopRolling"
-    },
-    {
-      "type": "playCard",
-      "card": "c6"
-    },
-    {
-      "type": "playCard",
-      "card": "c3"
     },
     {
       "type": "playCard",
@@ -300,22 +295,26 @@
       "type": "endReroll"
     },
     {
+      "type": "playCard",
+      "card": "c3"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
       "type": "assignDie",
       "die": 0,
-      "skill": "mend",
+      "skill": "guard",
       "use": 0,
       "slot": 0,
-      "asFace": "Wand"
+      "asFace": "Shield"
     },
     {
       "type": "confirmAssignment"
     },
     {
       "type": "stopRolling"
-    },
-    {
-      "type": "playCard",
-      "card": "c4"
     },
     {
       "type": "playCard",
@@ -326,15 +325,19 @@
     },
     {
       "type": "playCard",
-      "card": "c5"
+      "card": "c4"
+    },
+    {
+      "type": "playCard",
+      "card": "c6"
     },
     {
       "type": "assignDie",
       "die": 0,
-      "skill": "mend",
+      "skill": "guard",
       "use": 0,
       "slot": 0,
-      "asFace": "Wand"
+      "asFace": "Shield"
     },
     {
       "type": "confirmAssignment"
@@ -346,10 +349,11 @@
     },
     {
       "type": "playCard",
-      "card": "c5"
+      "card": "c6"
     },
     {
-      "type": "stopBuilding"
+      "type": "playCard",
+      "card": "c4"
     },
     {
       "type": "playCard",
@@ -367,7 +371,14 @@
     },
     {
       "type": "playCard",
-      "card": "c4"
+      "card": "c5"
+    },
+    {
+      "type": "stopBuilding"
+    },
+    {
+      "type": "playCard",
+      "card": "c3"
     },
     {
       "type": "playCard",
@@ -379,19 +390,7 @@
       "r": 0
     },
     {
-      "type": "playCard",
-      "card": "c3"
-    },
-    {
-      "type": "playCard",
-      "card": "c6"
-    },
-    {
       "type": "stopRolling"
-    },
-    {
-      "type": "playCard",
-      "card": "c5"
     },
     {
       "type": "playCard",
@@ -402,15 +401,14 @@
     },
     {
       "type": "playCard",
-      "card": "c4"
+      "card": "c6"
     },
     {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "mend",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Wand"
+      "type": "playCard",
+      "card": "c1"
+    },
+    {
+      "type": "endReroll"
     },
     {
       "type": "confirmAssignment"
@@ -424,25 +422,26 @@
     },
     {
       "type": "playCard",
-      "card": "c1"
-    },
-    {
-      "type": "endReroll"
+      "card": "c5"
     },
     {
       "type": "playCard",
-      "card": "c6"
+      "card": "c4"
     },
     {
       "type": "assignDie",
       "die": 0,
-      "skill": "mend",
+      "skill": "strike",
       "use": 0,
       "slot": 0,
-      "asFace": "Wand"
+      "asFace": "Sword"
     },
     {
       "type": "confirmAssignment"
+    },
+    {
+      "type": "chooseTarget",
+      "enemy": "e2"
     },
     {
       "type": "placeTile",
@@ -450,5 +449,5 @@
       "r": -1
     }
   ],
-  "expectedHash": "202ae9f742d18f99ea5ef9c512c19fda8c0e4fb57bdc774bd8ab846121bc0189"
+  "expectedHash": "aa2c1b33d522a29003926c2454a25d0181688077ee56266134bf2fb977ea2e04"
 }

@@ -287,11 +287,13 @@ describe('Build (12.1-12.4)', () => {
     expect(s.active).toBeNull()
   })
 
-  it('11.2 Build on the base hex is a base upgrade (deferred to phase 8)', () => {
-    const s = withPlayer(world(), { hand: [{ id: 'x1', def: 'starter-build' }] })
-    const { state, events } = applyAction(s, { type: 'playCard', card: 'x1' })
-    expect(state.active).toBeNull()
-    expect(events).toContainEqual(expect.objectContaining({ type: 'effectDeferred' }))
+  it('6.7, 11.2 Build on the base hex offers base upgrades, not defenses (row 30)', () => {
+    const s = withPlayer(world(), { materials: 4, hand: [{ id: 'x1', def: 'starter-build' }] })
+    const { state } = applyAction(s, { type: 'playCard', card: 'x1' })
+    expect(state.active).toMatchObject({ kind: 'build' })
+    const types = new Set(legalActions(state).map((a) => a.type))
+    expect(types.has('buyUpgrade')).toBe(true)
+    expect(types.has('build')).toBe(false)
   })
 })
 

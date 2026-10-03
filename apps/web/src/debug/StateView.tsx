@@ -25,6 +25,25 @@ export function StateView({ state }: Props) {
         <dd>
           {state.base.health} / {state.base.maxHealth} health, wave track {state.waveTrack}
         </dd>
+        <dt>Experience / level</dt>
+        <dd>
+          {state.experience} / {state.level}
+        </dd>
+        <dt>Upgrades</dt>
+        <dd>{state.upgrades.join(', ') || 'none'}</dd>
+        <dt>Shop offers</dt>
+        <dd>{state.shopOffers.map(cardName).join(', ') || 'closed'}</dd>
+        {state.draft ? (
+          <>
+            <dt>Draft</dt>
+            <dd>
+              {state.draft.options.map(skillName).join(', ')}
+              {state.draft.kept ? ` (kept ${skillName(state.draft.kept)}: choose a slot)` : ''}
+            </dd>
+          </>
+        ) : null}
+        <dt>Milestones</dt>
+        <dd>{state.milestones.join(', ') || 'none'}</dd>
         <dt>Enemies</dt>
         <dd>
           {state.enemies.length === 0
@@ -61,7 +80,7 @@ export function StateView({ state }: Props) {
             <dt>Player {p.id}</dt>
             <dd>
               at {at(p.hex)}, {p.health}/{p.maxHealth} health, {p.guard} guard, {p.dice} dice,{' '}
-              {p.materials} materials, orientation {p.orientation}
+              {p.materials} materials, {p.currency} currency, orientation {p.orientation}
             </dd>
             <dt>Hand</dt>
             <dd>{p.hand.map((c) => `${cardName(c.def)} [${c.id}]`).join(', ') || 'empty'}</dd>

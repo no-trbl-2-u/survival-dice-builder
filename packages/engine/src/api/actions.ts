@@ -25,6 +25,11 @@ export type Action = Readonly<
   | { type: 'stopBuilding' }
   | { type: 'revealTile' }
   | { type: 'skipReveal' }
+  | { type: 'buyCard'; card: string }
+  | { type: 'returnStarter'; card: string }
+  | { type: 'buyUpgrade'; upgrade: string }
+  | { type: 'draftSkill'; skill: string }
+  | { type: 'replaceSkill'; skill: string }
 >
 
 /** Action type names. */

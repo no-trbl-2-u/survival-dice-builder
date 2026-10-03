@@ -68,5 +68,25 @@ export function describeAction(action: Action, state: GameState): string {
       return `Reveal ${state.tileDeck[0] ?? 'a tile'}`
     case 'skipReveal':
       return 'Skip the reveal'
+    case 'buyCard': {
+      const def = state.content.cards.find((c) => c.id === action.card)
+      return `Buy ${def?.name ?? action.card} (${def?.cost ?? '?'} currency)`
+    }
+    case 'returnStarter': {
+      const player = state.players[state.current]
+      const def = [...(player?.deck ?? []), ...(player?.discard ?? [])].find(
+        (c) => c.id === action.card,
+      )?.def
+      const name = state.content.cards.find((c) => c.id === def)?.name ?? action.card
+      return `Return starter ${name} [${action.card}]`
+    }
+    case 'buyUpgrade': {
+      const def = state.content.upgrades.find((u) => u.id === action.upgrade)
+      return `Buy upgrade ${def?.name ?? action.upgrade}`
+    }
+    case 'draftSkill':
+      return `Draft ${skillName(state, action.skill)}`
+    case 'replaceSkill':
+      return `Replace ${skillName(state, action.skill)}`
   }
 }

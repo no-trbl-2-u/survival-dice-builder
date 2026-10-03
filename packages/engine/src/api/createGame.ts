@@ -2,6 +2,7 @@ import { defaultContent, type Content, type GameConfig } from '@survival/content
 import type { GameEvent } from '../events/events.ts'
 import { BASE_HEX, EMPTY_MAP, placeTile } from '../map/tiles.ts'
 import { advance } from '../phases/advance.ts'
+import { buildSupplies } from '../progression/supplies.ts'
 import { seedRng, shuffle } from '../rng/rng.ts'
 import { withLog } from '../state/helpers.ts'
 import type { CardInstance, GameState, Player } from '../state/types.ts'
@@ -52,6 +53,10 @@ export function createGame(
   const setupTiles = countryside.slice(0, setupCount)
   const tileDeck = [...countryside.slice(setupCount), ...core]
 
+  // 4.12: shuffle each card supply and Skill supply.
+  const [supplies, afterSupplies] = buildSupplies(content, config, rng)
+  rng = afterSupplies
+
   const player: Player = {
     id: 'p1',
     hex: BASE_HEX,
@@ -79,6 +84,7 @@ export function createGame(
       enemies: content.enemies,
       defenses: content.defenses,
       tiles: content.tiles,
+      upgrades: content.upgrades,
     },
     rng,
     round: 1,
@@ -98,6 +104,17 @@ export function createGame(
     vacantNodes: [],
     revealOffer: false,
     exchange: null,
+    experience: 0,
+    level: 1,
+    upgrades: [],
+    supplies,
+    shopOffers: [],
+    nextCardId: cards.length + 1,
+    pendingReturn: null,
+    draft: null,
+    lastDraftRound: 0,
+    progress: { elitesDefeated: 0, firedSkills: [], tilesRevealed: 0, cardsBought: 0 },
+    milestones: [],
     log: [],
     endedBecause: null,
   }

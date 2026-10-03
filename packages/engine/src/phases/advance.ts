@@ -5,6 +5,8 @@ import { refillNodes, waveStep } from '../enemies/spawning.ts'
 import { structureAttacks, towerAttacks } from '../enemies/structures.ts'
 import type { GameEvent } from '../events/events.ts'
 import { startExplore } from '../explore/explore.ts'
+import { draftDue, startDraft } from '../progression/draft.ts'
+import { checkMilestones } from '../progression/milestones.ts'
 import { hexDistance } from '../hex.ts'
 import { currentPlayer, handSize, updateCurrentPlayer, type Step } from '../state/helpers.ts'
 import type { GameState } from '../state/types.ts'
@@ -33,8 +35,11 @@ export function advance(state: GameState): Step {
 /** One automatic step. The third value is true when a decision is now needed. */
 function stepOnce(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   switch (state.phase) {
-    case 'ended':
-      return [state, [], true]
+    case 'ended': {
+      // 14.3: record the milestones reached by the end of the run (once each).
+      const [recorded, events] = checkMilestones(state, '14.3')
+      return [recorded, events, true]
+    }
     case 'setup':
       if (state.revealed.length > 0) return [state, [], true]
       return [
@@ -228,34 +233,31 @@ export function rollAgain(state: GameState): Step {
 }
 
 /**
- * Explore: tile reveal, spawns, and waves need the map (phase 7); the Skill draft and
- * milestones arrive in phase 8. Then turn the discard pile without a shuffle and start the
- * next round.
+ * Explore, after the reveal (`startExplore`, 10.1-10.5): turn the discard pile without a
+ * shuffle (10.6-10.7), do the Skill draft when it is due (10.8), add 1 to the round counter
+ * (10.9), and record new milestones (10.10).
  *
  * @rule 10.1-10.5, 10.6, 10.7, 10.8, 10.9, 10.10
  */
 function exploreStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
-  if (state.revealed.length > 0 || state.revealOffer) return [state, [], true]
+  if (state.revealed.length > 0 || state.revealOffer || state.draft) return [state, [], true]
   const before = currentPlayer(state)
-  const [player, rng] = rotateDeck(before, 'top', state.rng, false)
-  const round = state.round + 1
-  const next: GameState = {
-    ...updateCurrentPlayer(state, () => player),
-    rng,
-    round,
-    phase: 'prepare',
+  if (before.orientation === 'bottom') {
+    const [player, rng] = rotateDeck(before, 'top', state.rng, false)
+    return [
+      { ...updateCurrentPlayer(state, () => player), rng },
+      [{ type: 'deckTurned', rule: '10.6', player: player.id, orientation: 'top' }],
+      false,
+    ]
   }
+  if (draftDue(state)) return [...startDraft(state), false]
+  const round = state.round + 1
+  const [next, milestones] = checkMilestones({ ...state, round, phase: 'prepare' }, '10.10')
   return [
     next,
     [
-      { type: 'deckTurned', rule: '10.6', player: player.id, orientation: 'top' },
-      {
-        type: 'stepDeferred',
-        rule: '10.8, 10.10',
-        step: 'Skill draft, milestones',
-        reason: 'progression (phase 8)',
-      },
       { type: 'roundAdvanced', rule: '10.9', round },
+      ...milestones,
       { type: 'phaseStarted', rule: '5.1', phase: 'prepare', round },
     ],
     false,

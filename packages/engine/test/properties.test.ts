@@ -2,6 +2,7 @@ import { defaultContent } from '@survival/content'
 import fc from 'fast-check'
 import { describe, it } from 'vitest'
 import { ownedCards } from '../src/deck/deck.ts'
+import { levelForExperience } from '../src/progression/levels.ts'
 import { hexKey } from '../src/hex.ts'
 import { isPassable } from '../src/map/tiles.ts'
 import { createGame, type GameState } from '../src/index.ts'
@@ -33,7 +34,8 @@ describe('engine properties', () => {
         randomWalk(seed, policy, 150).every((s) =>
           s.players.every((p) => {
             const owned = ownedCards(p)
-            return owned.length === 6 && new Set(owned.map((c) => c.id)).size === 6
+            const expected = 6 + s.progress.cardsBought
+            return owned.length === expected && new Set(owned.map((c) => c.id)).size === expected
           }),
         ),
       ),
@@ -92,10 +94,14 @@ describe('engine properties', () => {
     )
   })
 
-  it('12.1 materials never go below 0', () => {
+  it('12.1, 8.2, 8.3 materials and currency never go below 0; the level matches the track', () => {
     fc.assert(
       fc.property(runs, ([seed, policy]) =>
-        randomWalk(seed, policy, 150).every((s) => s.players.every((p) => p.materials >= 0)),
+        randomWalk(seed, policy, 150).every(
+          (s) =>
+            s.players.every((p) => p.materials >= 0 && p.currency >= 0) &&
+            s.level === levelForExperience(s.experience, s.config),
+        ),
       ),
       { numRuns: 40 },
     )
