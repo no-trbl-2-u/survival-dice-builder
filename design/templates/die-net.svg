@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 480" width="600" height="480" role="img" aria-label="Action die net">
+<title>Action die net</title>
+<rect width="600" height="480" fill="#f7f5f0"/>
+<text x="40" y="36" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="18" font-weight="700" fill="#1d1b18" text-anchor="start" >Action die — d6 net (Sword, Wand, Bow, Shield, Star, Blank)</text>
+<rect x="160" y="60" width="120" height="120" rx="10" fill="#ffffff" stroke="#4a4639" stroke-width="2"/>
+<image href="../../assets/icons/dice/sword.svg" x="180" y="74" width="80" height="80"/>
+<text x="220.0" y="172" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="14" font-weight="400" fill="#1d1b18" text-anchor="middle" >Sword</text>
+<rect x="40" y="180" width="120" height="120" rx="10" fill="#ffffff" stroke="#4a4639" stroke-width="2"/>
+<image href="../../assets/icons/dice/wand.svg" x="60" y="194" width="80" height="80"/>
+<text x="100.0" y="292" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="14" font-weight="400" fill="#1d1b18" text-anchor="middle" >Wand</text>
+<rect x="160" y="180" width="120" height="120" rx="10" fill="#ffffff" stroke="#4a4639" stroke-width="2"/>
+<image href="../../assets/icons/dice/star.svg" x="180" y="194" width="80" height="80"/>
+<text x="220.0" y="292" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="14" font-weight="400" fill="#1d1b18" text-anchor="middle" >Star</text>
+<rect x="280" y="180" width="120" height="120" rx="10" fill="#ffffff" stroke="#4a4639" stroke-width="2"/>
+<image href="../../assets/icons/dice/bow.svg" x="300" y="194" width="80" height="80"/>
+<text x="340.0" y="292" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="14" font-weight="400" fill="#1d1b18" text-anchor="middle" >Bow</text>
+<rect x="400" y="180" width="120" height="120" rx="10" fill="#ffffff" stroke="#4a4639" stroke-width="2"/>
+<image href="../../assets/icons/dice/shield.svg" x="420" y="194" width="80" height="80"/>
+<text x="460.0" y="292" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="14" font-weight="400" fill="#1d1b18" text-anchor="middle" >Shield</text>
+<rect x="160" y="300" width="120" height="120" rx="10" fill="#ffffff" stroke="#4a4639" stroke-width="2"/>
+<image href="../../assets/icons/dice/blank.svg" x="180" y="314" width="80" height="80"/>
+<text x="220.0" y="412" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="14" font-weight="400" fill="#1d1b18" text-anchor="middle" >Blank</text>
+<text x="40" y="456" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="15" font-weight="400" fill="#1d1b18" text-anchor="start" >Opposite faces: Sword/Blank, Wand/Bow, Star/Shield. Star is wild (counts as any Skill face).</text>
+</svg>

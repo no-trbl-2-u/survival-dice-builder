@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "pnpm --filter @survival/web dev",
-    "lint": "eslint . && prettier --check . && node scripts/check-assets.mjs",
+    "lint": "eslint . && prettier --check . && node scripts/check-assets.mjs && node scripts/check-design.mjs",
     "format": "prettier --write .",
     "typecheck": "pnpm -r typecheck",
     "test": "vitest",

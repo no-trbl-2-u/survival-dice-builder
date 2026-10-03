@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 540" width="760" height="540" role="img" aria-label="Card template">
+<title>Card template</title>
+<rect width="760" height="540" fill="#f7f5f0"/>
+<g transform="translate(40 60)">
+<rect width="315" height="440" rx="12.0" fill="#ffffff" stroke="#857c69" stroke-width="2"/>
+<rect width="315" height="36.0" rx="12.0" fill="#2a59b3"/>
+<rect y="18.0" width="315" height="18.0" fill="#2a59b3"/>
+<text x="12.0" y="24.48" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="14.0" font-weight="700" fill="#ffffff" text-anchor="start" >TOP · PREPARE</text>
+<text x="157.5" y="80.0" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="26.0" font-weight="700" fill="#1d1b18" text-anchor="middle" >Sprint</text>
+<text x="157.5" y="120.0" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="22.0" font-weight="400" fill="#1d1b18" text-anchor="middle" >Move 3</text>
+<line x1="16.0" y1="220.0" x2="299.0" y2="220.0" stroke="#857c69" stroke-dasharray="6 6"/>
+<circle cx="285.0" cy="220.0" r="18.0" fill="#ece7dc" stroke="#857c69"/>
+<text x="285.0" y="226.0" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="16.0" font-weight="700" fill="#1d1b18" text-anchor="middle" >I</text>
+<image href="../../assets/icons/game/currency.svg" x="14.0" y="206.0" width="28.0" height="28.0"/>
+<text x="46.0" y="227.0" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="20.0" font-weight="700" fill="#7a5f00" text-anchor="start" >3</text>
+<g transform="rotate(180 157.5 330.0)">
+<rect y="220.0" width="315" height="36.0" fill="#b02d26"/>
+<text x="12.0" y="244.48" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="14.0" font-weight="700" fill="#ffffff" text-anchor="start" >BOTTOM · COMBAT</text>
+<text x="157.5" y="306.0" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="22.0" font-weight="400" fill="#1d1b18" text-anchor="middle" >Reroll 2 dice</text>
+</g>
+<rect y="404.0" width="315" height="18.0" fill="#b02d26"/>
+</g>
+<text x="40" y="36" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="18" font-weight="700" fill="#1d1b18" text-anchor="start" >Card template — 63 x 88 mm (shown at 5 px/mm)</text>
+<text x="380" y="110" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >Top half: Prepare effect, band on the top edge (blue, "TOP").</text>
+<text x="380" y="138" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >Bottom half: Combat effect, printed upside down,</text>
+<text x="380" y="166" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >band on the bottom edge (red, "BOTTOM").</text>
+<text x="380" y="194" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >Orientation reads from band position + label,</text>
+<text x="380" y="222" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >never from colour alone.</text>
+<text x="380" y="250" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >Divider: level marker (I, II, III) and cost</text>
+<text x="380" y="278" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >(currency icon + number). Starters show "S", no cost.</text>
+</svg>

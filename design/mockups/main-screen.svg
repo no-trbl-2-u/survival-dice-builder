@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-label="Main screen mock-up">
+<title>Main screen mock-up</title>
+<rect width="1280" height="800" fill="#f7f5f0"/>
+<rect width="1280" height="56" fill="#ffffff" stroke="#857c69"/>
+<text x="24" y="36" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="22" font-weight="700" fill="#1d1b18" text-anchor="start" >Round 6</text>
+<rect x="180" y="10" width="156" height="36" rx="18" fill="#ffffff" stroke="#2a59b3" stroke-width="2"/>
+<text x="258" y="34" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="16" font-weight="700" fill="#1d1b18" text-anchor="middle" >PREPARE</text>
+<rect x="350" y="10" width="156" height="36" rx="18" fill="#b02d26" stroke="#b02d26" stroke-width="2"/>
+<text x="428" y="34" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle" >&#9654; COMBAT</text>
+<rect x="520" y="10" width="156" height="36" rx="18" fill="#ffffff" stroke="#2a7344" stroke-width="2"/>
+<text x="598" y="34" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="16" font-weight="700" fill="#1d1b18" text-anchor="middle" >EXPLORE</text>
+<text x="720" y="34" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#5a5448" text-anchor="start" >Exchange 2 — put dice on Skills</text>
+<polygon points="366.0,360.0 348.0,391.2 312.0,391.2 294.0,360.0 312.0,328.8 348.0,328.8" fill="#d8e6b0" stroke="#4a4639" stroke-width="2"/>
+<polygon points="420.0,391.2 402.0,422.4 366.0,422.4 348.0,391.2 366.0,360.0 402.0,360.0" fill="#d8e6b0" stroke="#4a4639" stroke-width="2"/>
+<polygon points="420.0,328.8 402.0,360.0 366.0,360.0 348.0,328.8 366.0,297.6 402.0,297.6" fill="#8fb67a" stroke="#8a3d00" stroke-width="5"/>
+<polygon points="366.0,297.6 348.0,328.8 312.0,328.8 294.0,297.6 312.0,266.5 348.0,266.5" fill="#d8e6b0" stroke="#4a4639" stroke-width="2"/>
+<polygon points="312.0,328.8 294.0,360.0 258.0,360.0 240.0,328.8 258.0,297.6 294.0,297.6" fill="#d9bf8a" stroke="#4a4639" stroke-width="2"/>
+<polygon points="312.0,391.2 294.0,422.4 258.0,422.4 240.0,391.2 258.0,360.0 294.0,360.0" fill="#8fb67a" stroke="#4a4639" stroke-width="2"/>
+<polygon points="366.0,422.4 348.0,453.5 312.0,453.5 294.0,422.4 312.0,391.2 348.0,391.2" fill="#d8e6b0" stroke="#8a3d00" stroke-width="5"/>
+<polygon points="474.0,484.7 456.0,515.9 420.0,515.9 402.0,484.7 420.0,453.5 456.0,453.5" fill="#d9bf8a" stroke="#4a4639" stroke-width="2"/>
+<polygon points="528.0,515.9 510.0,547.1 474.0,547.1 456.0,515.9 474.0,484.7 510.0,484.7" fill="#d8e6b0" stroke="#4a4639" stroke-width="2"/>
+<polygon points="528.0,453.5 510.0,484.7 474.0,484.7 456.0,453.5 474.0,422.4 510.0,422.4" fill="#c9b59a" stroke="#4a4639" stroke-width="2"/>
+<polygon points="474.0,422.4 456.0,453.5 420.0,453.5 402.0,422.4 420.0,391.2 456.0,391.2" fill="#d8e6b0" stroke="#4a4639" stroke-width="2"/>
+<polygon points="420.0,453.5 402.0,484.7 366.0,484.7 348.0,453.5 366.0,422.4 402.0,422.4" fill="#d8e6b0" stroke="#8a3d00" stroke-width="5"/>
+<polygon points="420.0,515.9 402.0,547.1 366.0,547.1 348.0,515.9 366.0,484.7 402.0,484.7" fill="#d8e6b0" stroke="#4a4639" stroke-width="2"/>
+<polygon points="474.0,547.1 456.0,578.2 420.0,578.2 402.0,547.1 420.0,515.9 456.0,515.9" fill="#8fb67a" stroke="#4a4639" stroke-width="2"/>
+<polygon points="258.0,235.3 240.0,266.5 204.0,266.5 186.0,235.3 204.0,204.1 240.0,204.1" fill="#8fb67a" stroke="#4a4639" stroke-width="2"/>
+<polygon points="312.0,266.5 294.0,297.6 258.0,297.6 240.0,266.5 258.0,235.3 294.0,235.3" fill="#8fb67a" stroke="#4a4639" stroke-width="2"/>
+<polygon points="312.0,204.1 294.0,235.3 258.0,235.3 240.0,204.1 258.0,172.9 294.0,172.9" fill="#8fbfe3" stroke="#4a4639" stroke-width="2"/>
+<polygon points="258.0,172.9 240.0,204.1 204.0,204.1 186.0,172.9 204.0,141.8 240.0,141.8" fill="#d8e6b0" stroke="#4a4639" stroke-width="2"/>
+<polygon points="204.0,204.1 186.0,235.3 150.0,235.3 132.0,204.1 150.0,172.9 186.0,172.9" fill="#8b909c" stroke="#4a4639" stroke-width="2"/>
+<polygon points="204.0,266.5 186.0,297.6 150.0,297.6 132.0,266.5 150.0,235.3 186.0,235.3" fill="#d9bf8a" stroke="#4a4639" stroke-width="2"/>
+<polygon points="258.0,297.6 240.0,328.8 204.0,328.8 186.0,297.6 204.0,266.5 240.0,266.5" fill="#8fb67a" stroke="#4a4639" stroke-width="2"/>
+<image href="../../assets/icons/game/base.svg" x="310.0" y="340.0" width="40" height="40"/>
+<circle cx="384.0" cy="391.1769145362398" r="16" fill="#2a59b3" stroke="#1d1b18" stroke-width="2"/>
+<text x="384.0" y="396.1769145362398" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle" >P1</text>
+<circle cx="438.0" cy="422.3538290724796" r="22" fill="#ffffff" stroke="#7a4312" stroke-width="3"/><image href="../../assets/icons/game/grunt.svg" x="422.0" y="404.3538290724796" width="32" height="32"/>
+<rect x="416.0" y="446.3538290724796" width="44" height="14" rx="3" fill="#ffffff" stroke="#b02d26"/><text x="438.0" y="457.3538290724796" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="11" font-weight="700" fill="#b02d26" text-anchor="middle" >2/2</text>
+<rect x="470.0" y="493.88457268119896" width="44" height="44" rx="4" fill="#ffffff" stroke="#6b1f7a" stroke-width="4"/><image href="../../assets/icons/game/elite.svg" x="476.0" y="497.88457268119896" width="32" height="32"/>
+<rect x="470.0" y="539.884572681199" width="44" height="14" rx="3" fill="#ffffff" stroke="#b02d26"/><text x="492.0" y="550.884572681199" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="11" font-weight="700" fill="#b02d26" text-anchor="middle" >9/14</text>
+<circle cx="222.0" cy="235.29234185504083" r="22" fill="#ffffff" stroke="#7a4312" stroke-width="3"/><image href="../../assets/icons/game/grunt.svg" x="206.0" y="217.29234185504083" width="32" height="32"/>
+<rect x="200.0" y="259.29234185504083" width="44" height="14" rx="3" fill="#ffffff" stroke="#b02d26"/><text x="222.0" y="270.29234185504083" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="11" font-weight="700" fill="#b02d26" text-anchor="middle" >1/2</text>
+<image href="../../assets/icons/game/tower.svg" x="258.0" y="371.1769145362398" width="36" height="36"/><text x="276.0" y="419.1769145362398" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="11" font-weight="400" fill="#1d1b18" text-anchor="middle" >3/3</text>
+<text x="330.0" y="427.3538290724796" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="11" font-weight="700" fill="#8a3d00" text-anchor="middle" >cost 2</text>
+<rect x="840" y="72" width="420" height="300" rx="10" fill="#ffffff" stroke="#857c69"/>
+<text x="860" y="104" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="20" font-weight="700" fill="#1d1b18" text-anchor="start" >Player 1 — level 3</text>
+<image href="../../assets/icons/game/health.svg" x="860" y="124" width="30" height="30"/><text x="902" y="146" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >Health</text><text x="1060" y="147" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" font-weight="700" fill="#b02d26" text-anchor="start" >11 / 15</text>
+<image href="../../assets/icons/game/guard.svg" x="860" y="170" width="30" height="30"/><text x="902" y="192" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >Guard</text><text x="1060" y="193" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" font-weight="700" fill="#2a59b3" text-anchor="start" >2</text>
+<image href="../../assets/icons/game/materials.svg" x="860" y="216" width="30" height="30"/><text x="902" y="238" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >Materials</text><text x="1060" y="239" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" font-weight="700" fill="#7a5414" text-anchor="start" >5</text>
+<image href="../../assets/icons/game/currency.svg" x="860" y="262" width="30" height="30"/><text x="902" y="284" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >Currency</text><text x="1060" y="285" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" font-weight="700" fill="#7a5f00" text-anchor="start" >4</text>
+<image href="../../assets/icons/game/experience.svg" x="860" y="308" width="30" height="30"/><text x="902" y="330" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >Experience</text><text x="1060" y="331" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" font-weight="700" fill="#1d1b18" text-anchor="start" >17 / 30</text>
+<rect x="840" y="384" width="420" height="84" rx="10" fill="#ffffff" stroke="#857c69"/>
+<image href="../../assets/icons/game/base.svg" x="860" y="400" width="30" height="30"/><text x="902" y="422" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="16" font-weight="400" fill="#1d1b18" text-anchor="start" >Base</text><text x="1060" y="423" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" font-weight="700" fill="#b02d26" text-anchor="start" >23 / 30</text><text x="860" y="456" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="14" font-weight="400" fill="#5a5448" text-anchor="start" >Wave track 0 · 3 tiles left</text>
+<rect x="24" y="560" width="520" height="220" rx="10" fill="#ffffff" stroke="#857c69"/>
+<text x="44" y="592" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="18" font-weight="700" fill="#1d1b18" text-anchor="start" >Dice — roll 2 of 3</text>
+<rect x="44" y="606" width="64" height="64" rx="8" fill="#ece7dc" stroke="#1d1b18" stroke-width="3"/><image href="../../assets/icons/dice/sword.svg" x="52" y="614" width="48" height="48"/>
+<text x="76" y="690" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="12" font-weight="400" fill="#5a5448" text-anchor="middle" >kept</text>
+<rect x="124" y="606" width="64" height="64" rx="8" fill="#ece7dc" stroke="#1d1b18" stroke-width="3"/><image href="../../assets/icons/dice/sword.svg" x="132" y="614" width="48" height="48"/>
+<text x="156" y="690" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="12" font-weight="400" fill="#5a5448" text-anchor="middle" >kept</text>
+<rect x="204" y="606" width="64" height="64" rx="8" fill="#ece7dc" stroke="#857c69" stroke-width="1"/><image href="../../assets/icons/dice/star.svg" x="212" y="614" width="48" height="48"/>
+<text x="236" y="690" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="12" font-weight="400" fill="#5a5448" text-anchor="middle" ></text>
+<text x="300" y="592" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="18" font-weight="700" fill="#1d1b18" text-anchor="start" >Skills</text>
+<rect x="300" y="604" width="224" height="28" rx="5" fill="#ece7dc" stroke="#857c69"/><text x="310" y="623" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="14" font-weight="700" fill="#1d1b18" text-anchor="start" >Strike</text><text x="514" y="623" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="13" font-weight="400" fill="#5a5448" text-anchor="end" >Sword</text>
+<rect x="300" y="638" width="224" height="28" rx="5" fill="#ece7dc" stroke="#857c69"/><text x="310" y="657" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="14" font-weight="700" fill="#1d1b18" text-anchor="start" >Shot</text><text x="514" y="657" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="13" font-weight="400" fill="#5a5448" text-anchor="end" >Bow</text>
+<rect x="300" y="672" width="224" height="28" rx="5" fill="#ece7dc" stroke="#857c69"/><text x="310" y="691" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="14" font-weight="700" fill="#1d1b18" text-anchor="start" >Mend</text><text x="514" y="691" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="13" font-weight="400" fill="#5a5448" text-anchor="end" >Wand</text>
+<rect x="300" y="706" width="224" height="28" rx="5" fill="#ece7dc" stroke="#857c69"/><text x="310" y="725" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="14" font-weight="700" fill="#1d1b18" text-anchor="start" >Guard</text><text x="514" y="725" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="13" font-weight="400" fill="#5a5448" text-anchor="end" >Shield</text>
+<rect x="300" y="740" width="224" height="28" rx="5" fill="#ece7dc" stroke="#857c69"/><text x="310" y="759" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="14" font-weight="700" fill="#1d1b18" text-anchor="start" >Cleave</text><text x="514" y="759" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="13" font-weight="400" fill="#5a5448" text-anchor="end" >Sword x2</text>
+<text x="580" y="592" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="18" font-weight="700" fill="#1d1b18" text-anchor="start" >Hand — bottom halves up (Combat)</text>
+<rect x="580" y="606" width="210" height="160" rx="10" fill="#ffffff" stroke="#857c69" stroke-width="2"/>
+<rect x="580" y="606" width="210" height="30" rx="10" fill="#b02d26"/><text x="592" y="627" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="13" font-weight="700" fill="#ffffff" text-anchor="start" >BOTTOM · COMBAT</text>
+<text x="685" y="680" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="18" font-weight="400" fill="#1d1b18" text-anchor="middle" >+1 damage</text><text x="685" y="740" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="13" font-weight="400" fill="#5a5448" text-anchor="middle" >Gather (top: Prepare)</text>
+<rect x="810" y="606" width="210" height="160" rx="10" fill="#ffffff" stroke="#857c69" stroke-width="2"/>
+<rect x="810" y="606" width="210" height="30" rx="10" fill="#b02d26"/><text x="822" y="627" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="13" font-weight="700" fill="#ffffff" text-anchor="start" >BOTTOM · COMBAT</text>
+<text x="915" y="680" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="18" font-weight="400" fill="#1d1b18" text-anchor="middle" >Reroll 1 die</text><text x="915" y="740" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="13" font-weight="400" fill="#5a5448" text-anchor="middle" >Move (top: Prepare)</text>
+<rect x="1040" y="606" width="210" height="160" rx="10" fill="#ffffff" stroke="#857c69" stroke-width="2"/>
+<rect x="1040" y="606" width="210" height="30" rx="10" fill="#b02d26"/><text x="1052" y="627" font-family="Oswald, 'Arial Narrow', sans-serif" font-size="13" font-weight="700" fill="#ffffff" text-anchor="start" >BOTTOM · COMBAT</text>
+<text x="1145" y="680" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="18" font-weight="400" fill="#1d1b18" text-anchor="middle" >+2 guard</text><text x="1145" y="740" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" font-size="13" font-weight="400" fill="#5a5448" text-anchor="middle" >Build (top: Prepare)</text>
+</svg>
