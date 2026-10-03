@@ -8,11 +8,14 @@ name: march
 # from bot-author to user-author.
 
 on:
-  schedule:
-    # Every 2h, off-peak UTC (~7 ticks/day, 19:00-07:00 US Eastern).
-    # GH cron always runs in UTC. Comment this out to pause the cloud
-    # loop; the manual "Run workflow" button keeps working.
-    - cron: '0 1,3,5,7,9,11,23 * * *'
+  # PAUSED 2026-10-03: the local /loop 1h /march is the active loop.
+  # Never run both: two loops racing one branch (playbooks/hands-off.md).
+  # To resume the cloud loop, stop the local loop and uncomment schedule.
+  # schedule:
+  #   # Every 2h, off-peak UTC (~7 ticks/day, 19:00-07:00 US Eastern).
+  #   # GH cron always runs in UTC. Comment this out to pause the cloud
+  #   # loop; the manual "Run workflow" button keeps working.
+  #   - cron: '0 1,3,5,7,9,11,23 * * *'
   workflow_dispatch:
     inputs:
       verb:
