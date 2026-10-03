@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — the log and summary use enemy ids, capitalise grunt and elite, and slip on grammar
-- pass: 3 (commit d6176b7)
-- viewport: desktop
-- category: voice
-- observation: Phase 17 labels and the log write "Grunt e1" and "Elite e4", but the rules style keeps grunt and elite lowercase, and an id means nothing to a player. Other slips: an article before a vowel, a plural with 1, and a bare distance number. The log still names places by coordinates only.
-- evidence: "A elite appears at (-5,1).", "Grunt e1 moves to (0,-2) toward you.", "Target Elite e4, 14 of 14 health", summary "1 upgrades", choice "Place Stony Fields 3 south-east of the base (2,1)".
-- suggested fix: Write "an elite", "1 upgrade", and "3 hexes south-east". Use a lowercase kind plus its place ("the grunt on Wasteland, 1 north-west"), keeping the id only as a muted suffix. Name log places with `hexName` and `stepsAway`, as the choices do.
-- source: browser
-
 ### [MED] /config — settings are code keys with no help text
 - pass: 3 (commit d6176b7)
 - viewport: desktop
@@ -55,6 +46,17 @@
 - source: browser
 
 ## Done
+
+### [x] [MED] /play — the log and summary use enemy ids, capitalise grunt and elite, and slip on grammar
+- pass: 3 (commit d6176b7)
+- viewport: desktop
+- category: voice
+- observation: Phase 17 labels and the log write "Grunt e1" and "Elite e4", but the rules style keeps grunt and elite lowercase, and an id means nothing to a player. Other slips: an article before a vowel, a plural with 1, and a bare distance number. The log still names places by coordinates only.
+- evidence: "A elite appears at (-5,1).", "Grunt e1 moves to (0,-2) toward you.", "Target Elite e4, 14 of 14 health", summary "1 upgrades", choice "Place Stony Fields 3 south-east of the base (2,1)".
+- suggested fix: Write "an elite", "1 upgrade", and "3 hexes south-east". Use a lowercase kind plus its place ("the grunt on Wasteland, 1 north-west"), keeping the id only as a muted suffix. Name log places with `hexName` and `stepsAway`, as the choices do.
+- source: browser
+- issue: #24
+- fixed: 6828627 (lowercase game terms, log places named, "an elite", "1 upgrade", "N hexes"; ids kept to tell enemies apart)
 
 ### [x] [HIGH] /play — Skills, draft options, and Shop offers never say what they do
 - pass: 3 (commit d6176b7)

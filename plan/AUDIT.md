@@ -15,11 +15,13 @@
 - issue: #23
 - fixed: 4206ea0
 
-### [ ] [4.2] /play: log and labels use enemy ids, capitalise grunt and elite, and slip on grammar (critique MED)
+### [x] [4.2] /play: log and labels use enemy ids, capitalise grunt and elite, and slip on grammar (critique MED)
 - category: external-critique (voice)
 - impact: 6
 - ease: 7
 - next: lowercase kinds and place names in describeEvent and describeAction, "an elite", "1 upgrade", "3 hexes"
+- issue: #24
+- fixed: 6828627
 
 ### [ ] [3.6] /debug: the event log prints [object Object]; stray glyph letters in State (critique LOW)
 - category: external-critique (comprehension)
