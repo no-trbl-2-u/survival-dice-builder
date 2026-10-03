@@ -47,6 +47,8 @@ const onKey = (run: () => void) => (e: KeyboardEvent) => {
  */
 export function PlayMap({ state, legal, act }: Props) {
   const [view, setView] = useState({ x: 0, y: 0, zoom: 1 })
+  const [preview, setPreview] = useState<string | null>(null)
+  const revealed = state.content.tiles.find((t) => t.id === state.revealed[0])
   const drag = useRef<{ x: number; y: number } | null>(null)
   const svg = useRef<SVGSVGElement>(null)
   const targets = hexTargets(legal)
@@ -158,10 +160,21 @@ export function PlayMap({ state, legal, act }: Props) {
             className={styles.ghost}
             onClick={() => t.place && act(t.place)}
             onKeyDown={onKey(() => t.place && act(t.place))}
+            onMouseEnter={() => setPreview(t.key)}
+            onMouseLeave={() => setPreview(null)}
+            onFocus={() => setPreview(t.key)}
+            onBlur={() => setPreview(null)}
           >
-            {tileHexes(t).map((hx) => (
-              <polygon key={hexKey(hx)} points={hexPolygonPoints(hexToPixel(hx, SIZE), SIZE)} />
-            ))}
+            {tileHexes(t).map((hx, i) => {
+              const terrain = preview === t.key ? revealed?.hexes[i]?.terrain : undefined
+              return (
+                <polygon
+                  key={hexKey(hx)}
+                  className={terrain ? `${styles.preview} ${styles[terrain] ?? ''}` : undefined}
+                  points={hexPolygonPoints(hexToPixel(hx, SIZE), SIZE)}
+                />
+              )
+            })}
           </g>
         ))}
 

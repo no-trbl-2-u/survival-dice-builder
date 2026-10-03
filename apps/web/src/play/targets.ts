@@ -60,4 +60,9 @@ export const COVERED: ReadonlySet<ActionType> = new Set<ActionType>([
   'assignDie',
   'unassignDie',
   'confirmAssignment',
+  'buyCard',
+  'buyUpgrade',
+  'draftSkill',
+  'replaceSkill',
+  'returnStarter',
 ])

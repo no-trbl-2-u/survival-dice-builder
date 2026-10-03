@@ -1,0 +1,62 @@
+import { expect, test, type Page } from '@playwright/test'
+import fs from 'node:fs'
+
+/**
+ * Plays a whole seeded run through the UI only. The order of preference is a simple, weak
+ * policy; buying is skipped. Each step clicks the first visible button that matches.
+ */
+const PREFERENCES: readonly RegExp[] = [
+  /^Draft /,
+  /^Replace /,
+  /^Return /,
+  /^Place /,
+  /^Skip the reveal$/,
+  /^Stop moving$/,
+  /^Stop building$/,
+  /^Stop rolling$/,
+  /^Finish rerolls$/,
+  /^Play /,
+  /^Put die /,
+  /^Select die /,
+  /^Confirm dice and fire Skills$/,
+  /^Target /,
+  /^Discard /,
+]
+
+async function step(page: Page): Promise<boolean> {
+  for (const name of PREFERENCES) {
+    const button = page.getByRole('button', { name }).first()
+    if ((await button.count()) > 0 && (await button.isVisible())) {
+      await button.click()
+      return true
+    }
+  }
+  return false
+}
+
+test('/play: a full seeded solo run to the summary, then a replayable export', async ({ page }) => {
+  test.setTimeout(240_000)
+  const errors: string[] = []
+  page.on('console', (msg) => {
+    if (msg.type() === 'error') errors.push(msg.text())
+  })
+  page.on('pageerror', (err) => errors.push(err.message))
+
+  await page.goto('/play?seed=4')
+  const summary = page.getByTestId('run-summary')
+  for (let i = 0; i < 3000 && (await summary.count()) === 0; i++) {
+    const moved = await step(page)
+    expect(moved, 'no control to press').toBe(true)
+  }
+  await expect(summary).toBeVisible()
+  await expect(summary).toContainText(/fell in round \d+/)
+  await expect(page.getByTestId('play-log')).toContainText('The run ends.')
+
+  const download = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Download run (JSON)' }).click()
+  const file = await (await download).path()
+  const data = JSON.parse(fs.readFileSync(file, 'utf-8'))
+  expect(data.seed).toBe(4)
+  expect(data.actions.length).toBeGreaterThan(50)
+  expect(errors).toEqual([])
+})
