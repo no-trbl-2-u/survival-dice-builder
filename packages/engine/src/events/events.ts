@@ -57,6 +57,20 @@ export type GameEvent = Readonly<
     | { type: 'defenseDamaged'; defense: string; amount: number; health: number }
     | { type: 'defenseRemoved'; defense: string }
     | { type: 'roundAdvanced'; round: number }
+    | { type: 'enemyMoved'; enemy: string; from: Axial; to: Axial; target: string | null }
+    | { type: 'towerAttacked'; tower: string; enemy: string; damage: number }
+    | {
+        type: 'structureAttacked'
+        enemy: string
+        structure: string
+        damage: number
+        faces?: readonly Face[]
+      }
+    | { type: 'baseDamaged'; amount: number; health: number }
+    | { type: 'waveTrackAdvanced'; waveTrack: number }
+    | { type: 'eliteReplaced'; grunt: string; elite: string; hex: Axial }
+    | { type: 'tileRevealed'; tile: string }
+    | { type: 'revealSkipped' }
     | { type: 'runEnded'; because: 'base' | 'player'; round: number }
   )
 >

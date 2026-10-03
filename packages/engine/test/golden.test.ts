@@ -47,6 +47,13 @@ const GOLDENS = [
     policy: explorerChoice,
     stop: (s: GameState) => s.round > 3 || s.phase === 'ended',
   },
+  {
+    file: 'p7-full-run.json',
+    description: 'Phase 7: a full solo run to the end, default config, explorer policy (seed 7).',
+    seed: 7,
+    policy: explorerChoice,
+    stop: (s: GameState) => s.phase === 'ended',
+  },
 ]
 
 describe('golden replays', () => {
@@ -55,7 +62,7 @@ describe('golden replays', () => {
     if (process.env.UPDATE_GOLDEN === '1') {
       it(`regenerates ${g.file}`, () => {
         const config = defaultContent.config
-        const run = walk(createGame(config, g.seed), g.policy, g.stop)
+        const run = walk(createGame(config, g.seed), g.policy, g.stop, 50_000)
         const golden: Golden = {
           description: g.description,
           seed: g.seed,

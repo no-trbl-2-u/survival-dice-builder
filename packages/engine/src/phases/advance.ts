@@ -1,6 +1,10 @@
 import { clearTable, drawHand, rotateDeck } from '../deck/deck.ts'
 import { rerollUnkept, rollDice } from '../dice/dice.ts'
+import { moveEnemies } from '../enemies/movement.ts'
+import { refillNodes, waveStep } from '../enemies/spawning.ts'
+import { structureAttacks, towerAttacks } from '../enemies/structures.ts'
 import type { GameEvent } from '../events/events.ts'
+import { startExplore } from '../explore/explore.ts'
 import { hexDistance } from '../hex.ts'
 import { currentPlayer, handSize, updateCurrentPlayer, type Step } from '../state/helpers.ts'
 import type { GameState } from '../state/types.ts'
@@ -47,6 +51,19 @@ function stepOnce(state: GameState): readonly [GameState, readonly GameEvent[], 
   }
 }
 
+/** Runs steps in sequence, stopping early if one ends the run. */
+function chain(state: GameState, steps: readonly ((s: GameState) => Step)[]): Step {
+  let current = state
+  const events: GameEvent[] = []
+  for (const step of steps) {
+    if (current.phase === 'ended') break
+    const [next, more] = step(current)
+    current = next
+    events.push(...more)
+  }
+  return [current, events]
+}
+
 /** Draws a hand for the current player and records the draw. */
 function draw(state: GameState, rule: string): Step {
   const [player, drawn] = drawHand(currentPlayer(state), handSize(state))
@@ -78,27 +95,28 @@ function prepareStep(state: GameState): readonly [GameState, readonly GameEvent[
 }
 
 /**
- * Combat setup: shuffle the discard pile and turn it bottom-up. Steps 7.3-7.6 (spawns, waves,
- * enemy movement, Tower attacks) need the map and arrive in phase 7.
+ * Combat setup: shuffle the discard pile and turn it bottom-up, refill spawn nodes, do the wave
+ * step, move the enemies, and let the Towers attack.
  *
- * @rule 7.1, 7.2, 7.3-7.6
+ * @rule 7.1, 7.2, 7.3, 7.4, 7.5, 7.6
  */
 function startCombat(state: GameState): Step {
   const before = currentPlayer(state)
   const [player, rng] = rotateDeck(before, 'bottom', state.rng, true)
-  const next: GameState = { ...updateCurrentPlayer(state, () => player), rng, phase: 'combat' }
+  const turned: GameState = { ...updateCurrentPlayer(state, () => player), rng, phase: 'combat' }
+  const [next, events] = chain(turned, [
+    refillNodes,
+    (s) => (s.waveTrack > 0 ? waveStep(s) : [s, []]),
+    moveEnemies,
+    towerAttacks,
+  ])
   return [
     next,
     [
       { type: 'phaseStarted', rule: '5.1', phase: 'combat', round: state.round },
       { type: 'deckShuffled', rule: '7.1', player: player.id, cards: player.deck.length },
       { type: 'deckTurned', rule: '7.2', player: player.id, orientation: 'bottom' },
-      {
-        type: 'stepDeferred',
-        rule: '7.3-7.6',
-        step: 'spawns, wave step, enemy movement, Tower attacks',
-        reason: 'needs the map (phase 7)',
-      },
+      ...events,
     ],
   ]
 }
@@ -113,16 +131,15 @@ function combatStep(state: GameState): readonly [GameState, readonly GameEvent[]
   const player = currentPlayer(state)
   if (!state.exchange) {
     if (player.hand.length === 0 && player.deck.length === 0) {
+      const [attacked, events] = structureAttacks(state)
+      if (attacked.phase === 'ended') return [attacked, events, false]
+      const [exploring, more] = startExplore({ ...attacked, phase: 'explore' })
       return [
-        { ...state, phase: 'explore' },
+        exploring,
         [
-          {
-            type: 'stepDeferred',
-            rule: '7.10-7.12',
-            step: 'structure attack',
-            reason: 'needs the map (phase 7)',
-          },
+          ...events,
           { type: 'phaseStarted', rule: '5.1', phase: 'explore', round: state.round },
+          ...more,
         ],
         false,
       ]
@@ -218,6 +235,7 @@ export function rollAgain(state: GameState): Step {
  * @rule 10.1-10.5, 10.6, 10.7, 10.8, 10.9, 10.10
  */
 function exploreStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
+  if (state.revealed.length > 0 || state.revealOffer) return [state, [], true]
   const before = currentPlayer(state)
   const [player, rng] = rotateDeck(before, 'top', state.rng, false)
   const round = state.round + 1
@@ -230,12 +248,6 @@ function exploreStep(state: GameState): readonly [GameState, readonly GameEvent[
   return [
     next,
     [
-      {
-        type: 'stepDeferred',
-        rule: '10.1-10.5',
-        step: 'tile reveal, spawns, wave track',
-        reason: 'needs the map (phase 7)',
-      },
       { type: 'deckTurned', rule: '10.6', player: player.id, orientation: 'top' },
       {
         type: 'stepDeferred',

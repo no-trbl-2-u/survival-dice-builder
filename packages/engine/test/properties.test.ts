@@ -100,4 +100,34 @@ describe('engine properties', () => {
       { numRuns: 40 },
     )
   })
+
+  it('3.4, 9.4, 12 no enemy stands on the base, a defense, or a figure hex', () => {
+    fc.assert(
+      fc.property(runs, ([seed, policy]) =>
+        randomWalk(seed, policy, 300).every((s) => {
+          const blocked = new Set([
+            '0,0',
+            ...s.defenses.map((d) => hexKey(d.hex)),
+            ...s.players.map((p) => hexKey(p.hex)),
+          ])
+          return s.enemies.every((e) => !blocked.has(hexKey(e.hex)))
+        }),
+      ),
+      { numRuns: 30 },
+    )
+  })
+
+  it('2.2, 10.5 enemy miniatures never exceed the limit; base health stays in range', () => {
+    fc.assert(
+      fc.property(runs, ([seed, policy]) =>
+        randomWalk(seed, policy, 300).every(
+          (s) =>
+            s.enemies.length <= s.config.miniatureLimit &&
+            s.base.health >= 0 &&
+            s.base.health <= s.base.maxHealth,
+        ),
+      ),
+      { numRuns: 30 },
+    )
+  })
 })

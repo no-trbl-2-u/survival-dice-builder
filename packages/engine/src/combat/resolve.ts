@@ -16,18 +16,23 @@ import type { Enemy, GameState, QueuedEffect } from '../state/types.ts'
 import { healCurrent, updateExchange } from './cardEffects.ts'
 
 /**
- * Deals damage to one enemy and removes it at 0 health.
+ * Deals damage to one enemy and removes it at 0 health. A defeated enemy's spawn node waits
+ * for a refill (9.2).
  * Experience and currency for the defeat arrive in phase 8.
  *
  * @rule 9.1, 7.8 step 7
  */
-export function damageEnemy(state: GameState, enemyId: string, amount: number, by: string): Step {
+export function damageEnemy(
+  state: GameState,
+  enemyId: string,
+  amount: number,
+  by: string,
+  rule = '7.8',
+): Step {
   const enemy = state.enemies.find((e) => e.id === enemyId)
   if (!enemy || amount <= 0) return [state, []]
   const health = Math.max(0, enemy.health - amount)
-  const events: GameEvent[] = [
-    { type: 'enemyDamaged', rule: '7.8', enemy: enemy.id, amount, health },
-  ]
+  const events: GameEvent[] = [{ type: 'enemyDamaged', rule, enemy: enemy.id, amount, health }]
   if (health > 0) {
     return [
       { ...state, enemies: state.enemies.map((e) => (e.id === enemyId ? { ...e, health } : e)) },
@@ -35,7 +40,8 @@ export function damageEnemy(state: GameState, enemyId: string, amount: number, b
     ]
   }
   events.push({ type: 'enemyDefeated', rule: '9.1', enemy: enemy.id, kind: enemy.kind, by })
-  return [{ ...state, enemies: state.enemies.filter((e) => e.id !== enemyId) }, events]
+  const vacantNodes = enemy.home ? [...state.vacantNodes, enemy.home] : state.vacantNodes
+  return [{ ...state, enemies: state.enemies.filter((e) => e.id !== enemyId), vacantNodes }, events]
 }
 
 /**
@@ -177,6 +183,28 @@ function resolveEffect(state: GameState, queued: QueuedEffect, target: string | 
 }
 
 /**
+ * The damage of 1 enemy attack: a grunt's fixed amount, or an elite's dice read on Table 4.
+ * Against a structure with `rulings.structureDamage: "grunt-die"` a grunt rolls 1 action die
+ * instead (OPEN-QUESTIONS row 7).
+ *
+ * @rule 9.5, 9.6, 7.11, Table 4
+ */
+export function rollEnemyDamage(
+  state: GameState,
+  kind: string,
+  vsStructure: boolean,
+): readonly [GameState, number, readonly Face[] | undefined] {
+  const attack = enemyDef(state, kind).attack
+  const gruntDie = vsStructure && state.config.rulings.structureDamage === 'grunt-die'
+  const dice = attack.kind === 'dice' ? attack.dice : gruntDie ? 1 : 0
+  if (dice === 0 && attack.kind === 'fixed') return [state, attack.damage, undefined]
+  const [faces, rng] = rollDice(state.rng, dice)
+  const table = state.content.enemies.enemyDieDamage
+  const damage = faces.reduce((sum, f) => sum + (table[f] ?? 0), 0)
+  return [{ ...state, rng }, damage, faces]
+}
+
+/**
  * Each listed enemy attacks the current player once: grunts deal a fixed amount; elites roll
  * dice on the enemy die table. Damage goes to guard first, then health. "Ignore 1 hit" (Dodge)
  * skips whole attacks.
@@ -200,16 +228,8 @@ function enemyAttacks(state: GameState, attackers: readonly Enemy[], rule: strin
       continue
     }
     const def = enemyDef(current, enemy.kind)
-    let damage: number
-    let faces: readonly Face[] | undefined
-    if (def.attack.kind === 'fixed') {
-      damage = def.attack.damage
-    } else {
-      const [rolled, rng] = rollDice(current.rng, def.attack.dice)
-      current = { ...current, rng }
-      faces = rolled
-      damage = rolled.reduce((sum, f) => sum + (current.content.enemies.enemyDieDamage[f] ?? 0), 0)
-    }
+    const [rolled, damage, faces] = rollEnemyDamage(current, enemy.kind, false)
+    current = rolled
     events.push({
       type: 'enemyAttacked',
       rule: def.attack.kind === 'fixed' ? `${rule}, 9.5` : `${rule}, 9.6`,

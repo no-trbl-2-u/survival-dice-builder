@@ -8,6 +8,7 @@ import {
   serialize,
   type GameState,
 } from '../src/index.ts'
+import { noSpawns } from './helpers/fixtures.ts'
 import { scriptedChoice, walk } from './helpers/policy.ts'
 
 const config = defaultContent.config
@@ -22,7 +23,7 @@ function started(seed: number, cfg: GameConfig = config): GameState {
 const nearGrunt = (id = 'e1') => ({ id, kind: 'grunt', health: 2, hex: { q: 1, r: 0 } })
 
 /** A started run whose only enemy is a grunt next to the player. */
-const withGrunt = (seed: number) => ({ ...started(seed), enemies: [nearGrunt()] })
+const withGrunt = (seed: number) => ({ ...noSpawns(started(seed)), enemies: [nearGrunt()] })
 
 /** Plays scripted actions until `stop` holds. */
 function until(state: GameState, stop: (s: GameState) => boolean): GameState {
@@ -242,7 +243,7 @@ describe('Combat exchange (7.8)', () => {
   })
 
   it('7.9 with no enemy in range, the exchange has no effect', () => {
-    const s = { ...started(3), enemies: [] }
+    const s = { ...noSpawns(started(3)), enemies: [] }
     const after = until(s, (x) => x.phase === 'explore' || x.round === 2)
     expect(after.log.some((e) => e.type === 'exchangeSkipped')).toBe(true)
   })
@@ -391,7 +392,7 @@ describe('deck flow across a round (5.3, 7.9, 10.7)', () => {
   })
 
   it('7.9 a skipped exchange rolls no dice and changes no health', () => {
-    const s = { ...started(3), enemies: [] }
+    const s = { ...noSpawns(started(3)), enemies: [] }
     const after = until(s, (x) => x.round === 2)
     expect(after.log.some((e) => e.type === 'diceRolled')).toBe(false)
     expect(after.players[0]!.health).toBe(15)

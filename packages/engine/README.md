@@ -39,9 +39,12 @@ src/
   movement/   step-by-step Move and skirmishes (6.7-6.15)
   build/      defense placement, cost, damage (12.1-12.4)
   gather/     Gather on a gathering node (6.7)
+  enemies/    targets, pathing, movement, refill and waves, Towers and structure attacks (7.3-7.12, 9)
+  explore/    tile reveal and the wave track (10.1-10.3, 18.1)
 test/
   api.test.ts         rule-tagged scenario tests
   world.test.ts       map, Move, skirmish, Gather, Build, Combat range (phase 6)
+  enemies.test.ts     enemy targets and movement, spawns, waves, Towers, structures, Explore (phase 7)
   properties.test.ts  fast-check invariants over random legal walks
   golden.test.ts      seed + actions -> expected state hash (golden/*.json)
   helpers/            scripted and random policies, walk()
@@ -49,7 +52,7 @@ test/
 
 Unit tests sit next to the code (`<module>.test.ts`). Test names start with the rule id.
 
-## Scope (phase 6)
+## Scope (phases 6-7)
 
 One player on a real hex map. A run starts in `setup`: the Base tile is at (0,0) and the
 player chooses the setup countryside tile's slot (`placeTile`). Move and Build are decided one
@@ -58,8 +61,13 @@ entering an enemy's hex starts a skirmish, which reuses `state.exchange` with `s
 Combat is range-aware: an exchange is skipped with no enemy within `combat.exchangeRange`, Skills
 hit only within their range, and only adjacent enemies attack.
 
-Still deferred as `stepDeferred` / `effectDeferred` events: enemy movement, spawns, waves,
-Tower and structure attacks, exploration (phase 7); base upgrades and progression (phase 8).
+Combat starts with refills, the wave step, enemy movement, and Tower attacks (7.3-7.6) and
+ends with the structure attack step (7.10-7.12); the base at 0 health ends the run (14.1).
+Explore reveals a tile for the player to place (`placeTile`), or raises the wave track when
+the tile deck is empty.
+
+Still deferred as `stepDeferred` / `effectDeferred` events: base upgrades and progression
+(phase 8). The engine is solo-only until the co-op turn order lands in phase 13.
 
 ## Golden replays
 

@@ -23,6 +23,8 @@ export type Action = Readonly<
   | { type: 'stopMoving' }
   | { type: 'build'; defense: string; q: number; r: number }
   | { type: 'stopBuilding' }
+  | { type: 'revealTile' }
+  | { type: 'skipReveal' }
 >
 
 /** Action type names. */

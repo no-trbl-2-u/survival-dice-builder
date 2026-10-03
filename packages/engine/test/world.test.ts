@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { hexDistance } from '../src/hex.ts'
 import { applyAction, createGame, legalActions, type GameState } from '../src/index.ts'
 import { spawnEnemy } from '../src/map/spawn.ts'
+import { noSpawns } from './helpers/fixtures.ts'
 
 const config = defaultContent.config
 
@@ -15,7 +16,7 @@ const config = defaultContent.config
  */
 function world(patch: Partial<GameState> = {}): GameState {
   const s = createGame(config, 1)
-  const placed = applyAction(s, legalActions(s)[0]!).state
+  const placed = noSpawns(applyAction(s, legalActions(s)[0]!).state)
   const p = placed.players[0]!
   return {
     ...placed,
@@ -298,13 +299,15 @@ describe('Combat range (7.8, 7.9)', () => {
   /** A Combat exchange at Skill placement with 1 Sword die and the given enemies. */
   function atAssign(enemies: GameState['enemies']): GameState {
     const start = createGame(config, 3)
-    let s: GameState = { ...applyAction(start, legalActions(start)[0]!).state, enemies }
+    let s: GameState = { ...noSpawns(applyAction(start, legalActions(start)[0]!).state), enemies }
     for (let i = 0; i < 50 && s.exchange?.step !== 'roll'; i++) {
       s = applyAction(s, legalActions(s)[0]!).state
     }
     const p = s.players[0]!
     return {
       ...s,
+      // Enemies moved at the start of Combat (7.5): put them back where the test wants them.
+      enemies,
       exchange: { ...s.exchange!, step: 'assign', dice: [{ face: 'Sword', kept: false }] },
       players: [{ ...p, hand: [], inPlay: p.hand }],
     }
@@ -334,8 +337,9 @@ describe('Combat range (7.8, 7.9)', () => {
   it('7.9 an exchange is skipped when no enemy is within exchange range', () => {
     const start = createGame(config, 1)
     let s: GameState = {
-      ...applyAction(start, legalActions(start)[0]!).state,
-      enemies: [grunt('e1', 3, 0)],
+      ...noSpawns(applyAction(start, legalActions(start)[0]!).state),
+      // Off the map: it can never move, so it stays out of range.
+      enemies: [grunt('e1', 10, 0)],
     }
     for (let i = 0; i < 50 && s.round === 1; i++) s = applyAction(s, legalActions(s)[0]!).state
     expect(s.log.some((e) => e.type === 'exchangeSkipped')).toBe(true)

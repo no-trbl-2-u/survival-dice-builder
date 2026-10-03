@@ -12,7 +12,7 @@ import type { Action } from './actions.ts'
  * The action that moves the game forward comes first, so "take the first legal action"
  * always makes progress (used by the debug console and tests).
  *
- * @rule 4.2, 6.2, 6.8-6.15, 7.8
+ * @rule 4.2, 6.2, 6.7-6.15, 7.8, 10.1, 18.1
  */
 export function legalActions(state: GameState): Action[] {
   if (state.phase === 'ended') return []
@@ -23,8 +23,11 @@ export function legalActions(state: GameState): Action[] {
     ...(mayDiscard ? player.hand.map((c): Action => ({ type: 'discardCard', card: c.id })) : []),
   ]
 
-  if (state.phase === 'setup') {
+  if (state.revealed.length > 0 && (state.phase === 'setup' || state.phase === 'explore')) {
     return emptySlots(state.map).map((h): Action => ({ type: 'placeTile', q: h.q, r: h.r }))
+  }
+  if (state.phase === 'explore' && state.revealOffer) {
+    return [{ type: 'skipReveal' }, { type: 'revealTile' }]
   }
 
   const exchange = state.exchange

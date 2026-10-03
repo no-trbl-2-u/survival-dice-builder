@@ -64,5 +64,9 @@ export function describeAction(action: Action, state: GameState): string {
     }
     case 'stopBuilding':
       return 'Stop building'
+    case 'revealTile':
+      return `Reveal ${state.tileDeck[0] ?? 'a tile'}`
+    case 'skipReveal':
+      return 'Skip the reveal'
   }
 }

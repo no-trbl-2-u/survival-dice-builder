@@ -17,6 +17,9 @@ export const TILE_SLOT_OFFSETS: readonly Axial[] = [
   { q: 3, r: -2 },
 ]
 
+/** Where the Base tile's center and the base hex sit. @rule 3.6, 4.1 */
+export const BASE_HEX: Axial = { q: 0, r: 0 }
+
 /** The empty map. */
 export const EMPTY_MAP: GameMap = { tiles: [], hexes: {} }
 

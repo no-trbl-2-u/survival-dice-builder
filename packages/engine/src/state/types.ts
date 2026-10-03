@@ -67,7 +67,14 @@ export type Assignment = Readonly<{
 }>
 
 /** An enemy on the board. @rule 9, 3.7 */
-export type Enemy = Readonly<{ id: string; kind: string; health: number; hex: Axial }>
+export type Enemy = Readonly<{
+  id: string
+  kind: string
+  health: number
+  hex: Axial
+  /** The spawn node that owns this enemy (9.2 refill). Wave grunts have none. */
+  home?: Axial
+}>
 
 /** A player's board, deck, and tracks. @rule 2.1, 4.6-4.10 */
 export type Player = Readonly<{
@@ -155,6 +162,12 @@ export type GameState = Readonly<{
   nextDefenseId: number
   active: ActiveEffect | null
   base: Readonly<{ health: number; maxHealth: number }>
+  /** Spawn nodes whose enemy was defeated and that wait for a refill (7.3, 9.2). */
+  vacantNodes: readonly Axial[]
+  /** The wave track. @rule 4.5, 15 */
+  waveTrack: number
+  /** Optional exploration (18.1) is waiting for the reveal-or-skip choice. @rule 10.1 */
+  revealOffer: boolean
   exchange: Exchange | null
   /** The last events, trimmed to `LOG_LIMIT`. */
   log: readonly GameEvent[]

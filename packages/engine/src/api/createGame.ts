@@ -1,13 +1,10 @@
 import { defaultContent, type Content, type GameConfig } from '@survival/content'
 import type { GameEvent } from '../events/events.ts'
-import { EMPTY_MAP, placeTile } from '../map/tiles.ts'
+import { BASE_HEX, EMPTY_MAP, placeTile } from '../map/tiles.ts'
 import { advance } from '../phases/advance.ts'
 import { seedRng, shuffle } from '../rng/rng.ts'
 import { withLog } from '../state/helpers.ts'
 import type { CardInstance, GameState, Player } from '../state/types.ts'
-
-/** Where the Base tile and the base hex sit. @rule 4.1, 3.6 */
-export const BASE_HEX = { q: 0, r: 0 } as const
 
 /**
  * Creates a new run. Same config + seed (+ content) = same run.
@@ -97,6 +94,9 @@ export function createGame(
     nextDefenseId: 1,
     active: null,
     base: { health: config.base.startingHealth, maxHealth: config.base.startingHealth },
+    waveTrack: config.waveTrackStart,
+    vacantNodes: [],
+    revealOffer: false,
     exchange: null,
     log: [],
     endedBecause: null,

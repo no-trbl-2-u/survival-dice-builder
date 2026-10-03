@@ -23,7 +23,7 @@ export function StateView({ state }: Props) {
         </dd>
         <dt>Base</dt>
         <dd>
-          {state.base.health} / {state.base.maxHealth} health
+          {state.base.health} / {state.base.maxHealth} health, wave track {state.waveTrack}
         </dd>
         <dt>Enemies</dt>
         <dd>

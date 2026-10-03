@@ -4,6 +4,7 @@ import { chooseTarget, confirmAssignment } from '../combat/resolve.ts'
 import { discardFromHand, playToTable } from '../deck/deck.ts'
 import { rerollOne, toggleKeep } from '../dice/dice.ts'
 import type { GameEvent } from '../events/events.ts'
+import { revealTop } from '../explore/explore.ts'
 import { placeTileAndSpawn } from '../map/spawn.ts'
 import { legalMoves } from '../movement/move.ts'
 import { startSkirmish } from '../movement/skirmish.ts'
@@ -145,6 +146,10 @@ function act(state: GameState, action: Action): Step {
     }
     case 'moveTo':
       return moveTo(state, action)
+    case 'revealTile':
+      return revealTop(state)
+    case 'skipReveal':
+      return [{ ...state, revealOffer: false }, [{ type: 'revealSkipped', rule: '18.1' }]]
     case 'stopMoving':
     case 'stopBuilding':
       return [{ ...state, active: null }, []]

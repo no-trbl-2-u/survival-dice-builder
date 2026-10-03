@@ -25,7 +25,7 @@ until then).
 | 10 | 6.2, 7.8 step 5 | Must every card be played (Prepare top halves and Combat bottom halves)? | **A card may be discarded unplayed.** Played effects resolve as written. | `mandatoryPlays: false` | decided 2026-10-02 |
 | 11 | 6.8, 11.5 | Shop timing and refill. | **Buy at any time in any phase while the figure is on the base.** Offers are shared; a bought card is **replaced immediately** so 3 offers are always shown. Assumption to confirm: the on-base requirement from 6.8 still holds. | `shopTiming: "any-time-on-base"`, `shopRefill: "immediate"` | decided 2026-10-02 (on-base assumption: proposed) |
 | 12 | Table 3, 6.7 | Heal targets in co-op (Mend, Rest, Renewal, Purify). | **Self only** for v1. | `healTargets: "self"` | proposed |
-| 13 | 10.5 | Which grunt becomes the elite? | The grunt **nearest the base** (ties: lowest spawn node id). | `eliteReplacement: "nearest-base"` | proposed |
+| 13 | 10.5 | Which grunt becomes the elite? | The grunt **nearest the base** (ties: the oldest grunt; spawn nodes carry no printed id). The elite keeps the grunt's hex and spawn node. | `eliteReplacement: "nearest-base"` | proposed |
 | 14 | Brief | Defense on a gathering node hex. | **Allowed**; the node still works. | `buildOnNode: true` | decided (brief) |
 | 15 | 9.3 | Enemy target tie-break. | Player, then Tower, then Barricade, then base; then lowest health. | `targetTieBreak` | decided (brief) |
 | 16 | 3.8, 4.6 | Issue 006 rule 3.8 (1 figure per hex) conflicts with 4.6 (every figure starts on the base) in co-op. | The **base hex is exempt** from the 1-figure limit. | `rulings.baseHexFigureLimitExempt: true` | proposed (phase 4) |
@@ -44,6 +44,14 @@ until then).
 | 29 | 3.4, 12 | May a figure enter a Barricade or Tower hex? | **Yes**: defenses block enemies only. | (engine, `legalMoves`) | proposed (phase 6) |
 | 30 | 6.7, 12.1 | On the base hex, Build is always a base upgrade (never a defense on an adjacent hex)? | **Yes**: on the base hex Build means a base upgrade (11.2). | (engine, `applyTopEffect`) | proposed (phase 6) |
 | 31 | 6.11, Table 9, 8.1 | In a skirmish, does Dodge work, and does a won skirmish give experience and currency? | **Yes to both**: a skirmish uses Skills as an exchange does (Dodge ignores the enemy's 1 attack); defeating the enemy pays as any defeat (from phase 8). | (engine) | proposed (phase 6) |
+| 32 | 2.2, 10.5 | What does the miniature limit count, and what happens to an elite over it? | **Every enemy miniature** (grunts and elites, 2.2: 20). A grunt the limit stops turns the grunt nearest the base into an elite (10.5); an elite the limit stops is not placed and its node stays vacant until the next refill. | `miniatureLimit` | proposed (phase 7) |
+| 33 | 9.3, 9.4, 12 | May an enemy enter a Tower hex? | **No**: enemies stand only on empty hexes (row 27). A Tower is a target, so enemies stop next to it and attack it in the structure step. | (engine, `enemyCanEnter`) | proposed (phase 7) |
+| 34 | 9.3 | "Nearest" for a target: straight distance or walking distance? In what order do enemies move? | **Straight hex distance** ranks targets; the enemy then walks the shortest open path (9.7 when blocked). Enemies move **oldest first**; Towers attack oldest first. | (engine, `rankTargets`, `moveEnemies`) | proposed (phase 7) |
+| 35 | 12.3 | Which enemy does a Tower hit when 2 are equally near? | The one with the **lowest health**, then the oldest. | (engine, `towerAttacks`) | proposed (phase 7) |
+| 36 | 9.2, 7.3 | Does a spawn node refill when its enemy walked away? | **No**: a node refills only after the enemy it spawned is defeated (9.2), even if the node hex is now empty. Wave grunts belong to no node. An elite that replaced a grunt (10.5) keeps that grunt's node. | (engine, `vacantNodes`, `refillNodes`) | proposed (phase 7) |
+| 37 | 18.1 | Automatic exploration: where does the tile go? | In the **empty slot nearest the base** (ties: slot order). | (engine, `startExplore`) | proposed (phase 7) |
+| 38 | 7.4, 10.3, 10.4 | When does the wave step happen? | In **Combat** (7.4), at the start of each Combat phase while the wave track is above 0. 10.4 defines the step; it is not repeated in Explore. With the 7-tile deck the track first rises in round 8 Explore, so the first wave arrives in round 9 Combat. | (engine, `startCombat`) | proposed (phase 7) |
+| 39 | 9.7 | Which blockers make an enemy switch target? | **Any**: enemies, Barricades, Towers, figures, lake, and mountain. If no open path reaches any target, the enemy waits. | `blockedPathRule` | proposed (phase 7) |
 
 ## Spec amendments owed
 
