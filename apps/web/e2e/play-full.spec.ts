@@ -58,5 +58,10 @@ test('/play: a full seeded solo run to the summary, then a replayable export', a
   const data = JSON.parse(fs.readFileSync(file, 'utf-8'))
   expect(data.seed).toBe(4)
   expect(data.actions.length).toBeGreaterThan(50)
+  // Real timing: the phase buckets sum to the session length (within 5%).
+  const phases = Object.values(data.timing.byPhase as Record<string, number>)
+  const sum = phases.reduce((a, b) => a + b, 0)
+  expect(data.sessionMs).toBeGreaterThan(0)
+  expect(Math.abs(sum - data.sessionMs)).toBeLessThanOrEqual(data.sessionMs * 0.05)
   expect(errors).toEqual([])
 })

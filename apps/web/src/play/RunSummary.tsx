@@ -28,7 +28,7 @@ export function RunSummary({ run, baseCurve, onNewRun }: Props) {
     'reveal-tiles',
     'reach-level',
   ]
-  const download = () => downloadRun(run)
+  const download = () => downloadRun(run, Date.now())
   const max = Math.max(1, ...baseCurve)
   return (
     <section

@@ -17,7 +17,7 @@ function autosaved(store: KeyValue | undefined): Run | null {
   try {
     const raw = store?.getItem(AUTOSAVE_KEY)
     if (!raw) return null
-    const loaded = importRun(raw)
+    const loaded = importRun(raw, Date.now())
     return 'run' in loaded ? loaded.run : null
   } catch {
     return null
@@ -33,7 +33,7 @@ export function StartPanel({ custom, store, onStart, onLoad }: Props) {
   const load = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    const result = importRun(await file.text())
+    const result = importRun(await file.text(), Date.now())
     if ('error' in result) setError(result.error)
     else onLoad(result.run)
   }

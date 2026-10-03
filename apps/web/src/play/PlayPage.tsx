@@ -39,7 +39,7 @@ export function PlayPage() {
     const params = new URLSearchParams(window.location.search)
     const seed = Number.parseInt(params.get('seed') ?? '', 10)
     const players = Number.parseInt(params.get('players') ?? '1', 10) || 1
-    return Number.isFinite(seed) ? newRun(config, seed, players) : null
+    return Number.isFinite(seed) ? newRun(config, seed, players, Date.now()) : null
   })
   const [undoOn, setUndoOn] = useState(false)
 
@@ -58,7 +58,9 @@ export function PlayPage() {
       <StartPanel
         custom={custom}
         store={store}
-        onStart={(players, seed) => dispatch({ kind: 'new', config, seed, players })}
+        onStart={(players, seed) =>
+          dispatch({ kind: 'new', config, seed, players, at: Date.now() })
+        }
         onLoad={(loaded) => dispatch({ kind: 'replace', run: loaded })}
       />
     )
@@ -81,7 +83,7 @@ function Game({ run, dispatch, undoOn, setUndoOn }: GameProps) {
   const legal = legalActions(state)
   const act = (action: Action) => {
     setSelected(null)
-    dispatch({ kind: 'act', action })
+    dispatch({ kind: 'act', action, at: Date.now() })
   }
   const revealed = state.content.tiles.find((t) => t.id === state.revealed[0])
 
@@ -158,7 +160,7 @@ function Game({ run, dispatch, undoOn, setUndoOn }: GameProps) {
           Seed {run.seed} · {run.players} {run.players === 1 ? 'player' : 'players'} ·{' '}
           {run.actions.length} actions
         </span>
-        <button type="button" onClick={() => downloadRun(run)}>
+        <button type="button" onClick={() => downloadRun(run, Date.now())}>
           Save run (file)
         </button>
         <button type="button" onClick={() => dispatch({ kind: 'reset' })}>

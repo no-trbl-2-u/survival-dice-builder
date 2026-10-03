@@ -1,6 +1,7 @@
 import { GameConfigSchema } from '@survival/content'
 import type { Action, GameState } from '@survival/engine'
 import { replay, type Run } from './run.ts'
+import { closeTiming, resumeTiming, sessionMs, type Timing } from './timing.ts'
 
 /** A saved run: enough to replay it exactly. Also the run summary's export. */
 export type RunExport = Readonly<{
@@ -12,10 +13,14 @@ export type RunExport = Readonly<{
   round: number
   endedBecause: GameState['endedBecause']
   milestones: readonly string[]
+  /** Real time per phase, decision type, and round (milliseconds); the parts sum to sessionMs. */
+  timing?: Timing
+  sessionMs?: number
 }>
 
-/** Builds the save file for a run. */
-export function exportRun(run: Run): RunExport {
+/** Builds the save file for a run; `at` closes the open wait (default: the last action). */
+export function exportRun(run: Run, at = run.timing.lastAt): RunExport {
+  const timing = closeTiming(run.timing, at, run.state.phase, run.state.round)
   return {
     version: 1,
     seed: run.seed,
@@ -25,6 +30,8 @@ export function exportRun(run: Run): RunExport {
     round: run.state.round,
     endedBecause: run.state.endedBecause,
     milestones: run.state.milestones,
+    timing,
+    sessionMs: sessionMs(timing),
   }
 }
 
@@ -32,7 +39,7 @@ export function exportRun(run: Run): RunExport {
  * Loads a save file: checks the version and the config, then replays every action through the
  * engine (an illegal action means a bad file). Returns the run or a plain error message.
  */
-export function importRun(text: string): Readonly<{ run: Run } | { error: string }> {
+export function importRun(text: string, at = 0): Readonly<{ run: Run } | { error: string }> {
   try {
     const data = JSON.parse(text) as Partial<RunExport>
     if (data.version !== 1) return { error: 'This is not a version 1 run file.' }
@@ -41,7 +48,8 @@ export function importRun(text: string): Readonly<{ run: Run } | { error: string
     if (typeof data.seed !== 'number' || !Array.isArray(data.actions)) {
       return { error: 'The run file has no seed or no action list.' }
     }
-    return { run: replay(config.data, data.seed, data.players ?? 1, data.actions) }
+    const run = replay(config.data, data.seed, data.players ?? 1, data.actions)
+    return { run: { ...run, timing: resumeTiming(data.timing, at) } }
   } catch (e) {
     return { error: `The run file cannot be loaded: ${e instanceof Error ? e.message : String(e)}` }
   }
@@ -58,8 +66,8 @@ export function exportFileName(data: RunExport): string {
 }
 
 /** Starts a browser download of a run file. */
-export function downloadRun(run: Run): void {
-  const data = exportRun(run)
+export function downloadRun(run: Run, at: number): void {
+  const data = exportRun(run, at)
   const url = URL.createObjectURL(
     new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }),
   )

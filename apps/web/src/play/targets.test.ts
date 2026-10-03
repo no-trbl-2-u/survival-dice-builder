@@ -11,10 +11,10 @@ describe('reduceRun', () => {
     const reduce = reduceRun
     const start = newRun(config, 5)
     const action = legalActions(start.state)[0]!
-    const next = reduce(start, { kind: 'act', action })
+    const next = reduce(start, { kind: 'act', action, at: 0 })
     expect(next.actions).toEqual([action])
     expect(next.state).toEqual(applyAction(start.state, action).state)
-    expect(reduce(next, { kind: 'new', config, seed: 9, players: 1 }).actions).toEqual([])
+    expect(reduce(next, { kind: 'new', config, seed: 9, players: 1, at: 0 }).actions).toEqual([])
   })
 })
 
