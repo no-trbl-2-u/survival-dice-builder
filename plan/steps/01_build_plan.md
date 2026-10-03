@@ -29,7 +29,7 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 4 — Content and data model + tile proposals (spec 1) — b9bdbd8
 
 **Headless engine (phases 5–9) — Milestone 1 at phase 8:**
-- [ ] Phase 5 — Engine core: cards, dice, Skills, phases + `/debug` engine console (spec 2) — CANONICAL SIBLING
+- [x] Phase 5 — Engine core: cards, dice, Skills, phases + `/debug` engine console (spec 2) — CANONICAL SIBLING — ec56ee6
 - [ ] Phase 6 — World I: hex map, tiles, movement, Gather/Build, defenses (spec 3, first half)
 - [ ] Phase 7 — World II: enemies, base, exploration, wave track, co-op order (spec 3, second half)
 - [ ] Phase 8 — Progression: XP, upgrades, Shop, draft, end of run, milestones (spec 4)
@@ -245,3 +245,4 @@ sessions themselves are filed as a `[needs-user-call]`.
 - phase 2 — 83a4991 — pnpm monorepo, 7-hex SVG tile, verify gate green, Cloudflare Pages deploy workflow
 - phase 3 — b834124 — ASSETS.md register, 18 icons (6 die faces), 2D/3D recommendations, register check in lint
 - phase 4 — b9bdbd8 — Zod schemas, Tables 2-9 + config as JSON, validating loader, 9 tiles at /tiles, levelForExperience
+- phase 5 — ec56ee6 — engine API, deck/dice/Skills/exchange, phase machine, properties + golden replay, /debug console
