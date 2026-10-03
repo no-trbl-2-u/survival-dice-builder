@@ -1,5 +1,6 @@
 import { defaultContent, type Site, type Terrain } from '@survival/content'
-import { HEX_POSITION, hexLabel, SITE_LABEL, TileView } from './TileView.tsx'
+import { GameIcon } from '../icons/GameIcon.tsx'
+import { HEX_POSITION, hexLabel, SITE_ICON, SITE_LABEL, TileView } from './TileView.tsx'
 import styles from './TileSheet.module.css'
 
 const TERRAINS: readonly Terrain[] = ['plains', 'forest', 'hills', 'wasteland', 'lake', 'mountain']
@@ -31,6 +32,14 @@ export function TileSheet() {
             <span className={`${styles.swatch} ${styles[t] ?? ''}`} aria-hidden="true" />
             {t}
             {t === 'lake' || t === 'mountain' ? ' (impassable)' : ''}
+          </li>
+        ))}
+      </ul>
+      <ul className={`${styles.legend} ${styles.sites}`} aria-label="Site legend">
+        {SITES.map((s) => (
+          <li key={s} data-site-legend={s}>
+            <GameIcon name={SITE_ICON[s]} className={styles.siteIcon} size="1.25rem" />
+            {SITE_LABEL[s]}
           </li>
         ))}
       </ul>

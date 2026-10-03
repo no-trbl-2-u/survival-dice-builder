@@ -18,6 +18,11 @@ test('/tiles shows the 9 proposed tiles with no console errors', async ({ page }
     'Center: Plains, Base',
   )
   await expect(page.locator('#tiles-intro')).not.toContainText('Hover')
+  // The site icons have a legend, each with its icon and name.
+  const sites = page.getByRole('list', { name: 'Site legend' })
+  await expect(sites.getByRole('listitem')).toHaveCount(4)
+  await expect(sites).toContainText('Elite spawn node')
+  await expect(sites.locator('svg[data-icon]')).toHaveCount(4)
   expect(errors).toEqual([])
 })
 

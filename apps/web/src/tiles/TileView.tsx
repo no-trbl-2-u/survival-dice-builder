@@ -8,7 +8,7 @@ const HEX_SIZE = 40
 const ICON_SIZE = 40
 
 /** Which icon marks each printed site. */
-const SITE_ICON: Record<Site, string> = {
+export const SITE_ICON: Record<Site, string> = {
   base: 'base',
   'gathering-node': 'gathering-node',
   'spawn-node': 'spawn-node',

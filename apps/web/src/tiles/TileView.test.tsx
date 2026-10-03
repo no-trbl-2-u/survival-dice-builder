@@ -47,3 +47,13 @@ describe('TileSheet hex list', () => {
     expect(hexLabel({ terrain: 'lake', site: null })).toBe('Lake')
   })
 })
+
+describe('TileSheet site legend', () => {
+  it('shows each of the 4 site icons with its name', () => {
+    const { container } = render(<TileSheet />)
+    const legend = container.querySelector('[aria-label="Site legend"]')!
+    expect(legend.querySelectorAll('li')).toHaveLength(4)
+    expect(legend.querySelectorAll('svg[data-icon]')).toHaveLength(4)
+    expect(legend.textContent).toBe('BaseGathering nodeSpawn nodeElite spawn node')
+  })
+})

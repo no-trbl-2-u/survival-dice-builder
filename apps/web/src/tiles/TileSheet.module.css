@@ -71,3 +71,12 @@
 .position {
   color: var(--color-text-muted);
 }
+
+.siteIcon {
+  flex: none;
+  color: var(--color-text);
+}
+
+.sites li {
+  text-transform: none;
+}
