@@ -217,7 +217,7 @@ decision type in the web app's run export (sums to session
 length within 5%), and the tuning report script comparing two
 configs (median end round, middle half, minutes per round).
 Re-run the 200-run batch as the regression check.
-**Milestone 3.**
+**Milestone 3.** Detailed brief: `phase_14_playtest_tooling.md`.
 
 ### Phase 15 — Visual polish
 
