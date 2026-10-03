@@ -7,6 +7,13 @@
 
 ## Top 5 findings (scored)
 
+### [x] [8.1] /: the home page does not say what the game is or where to start (critique HIGH)
+- category: external-critique (comprehension)
+- impact: 9
+- ease: 9
+- issue: #17
+- fixed: c97d007
+
 ### [x] [7.2] /tiles: terrain and site per hex only show on hover (critique HIGH)
 - category: external-critique (a11y)
 - impact: 9

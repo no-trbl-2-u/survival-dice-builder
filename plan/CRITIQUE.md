@@ -54,15 +54,6 @@
 - suggested fix: set the title per route ("Tile sheet - Survival Dice-Builder"), add `aria-current="page"` plus a visible style on the active link, and show the tagline under the home H1.
 - source: browser
 
-### [HIGH] / — the home page does not say what the game is or where to start
-- pass: 2 (commit 2f63473)
-- viewport: mobile
-- category: comprehension
-- observation: At first paint the home page shows only the title and an unlabelled hex tile. It has no pitch and no way into a run other than the nav.
-- evidence: The body text is the nav plus "Survival Dice-Builder". The DOM is nav, `<h1>`, and `<svg aria-label="Map tile with 7 hexes">`. The meta description "Defend the base, build your dice, survive one more round." is never shown.
-- suggested fix: Under the H1, add a 1-2 sentence pitch (reuse the meta description) and a primary "Start a run" link to /play.
-- source: browser
-
 ### [MED] /play — the log and footer show card ids, rule numbers, and "1 actions"
 - pass: 2 (commit 2f63473)
 - viewport: mobile
@@ -112,6 +103,17 @@
 - source: browser
 
 ## Done
+
+### [x] [HIGH] / — the home page does not say what the game is or where to start
+- pass: 2 (commit 2f63473)
+- viewport: mobile
+- category: comprehension
+- observation: At first paint the home page shows only the title and an unlabelled hex tile. It has no pitch and no way into a run other than the nav.
+- evidence: The body text is the nav plus "Survival Dice-Builder". The DOM is nav, `<h1>`, and `<svg aria-label="Map tile with 7 hexes">`. The meta description "Defend the base, build your dice, survive one more round." is never shown.
+- suggested fix: Under the H1, add a 1-2 sentence pitch (reuse the meta description) and a primary "Start a run" link to /play.
+- source: browser
+- issue: #17
+- fixed: c97d007 (home page pitch, "Start a run" link, how a run goes)
 
 ### [x] [HIGH] /tiles — terrain and site per hex only shows on hover
 - pass: 1 (commit 70348c1)
