@@ -229,7 +229,7 @@ using the library recommended in phase 3, with frame-rate
 notes). If the spike works, ship the optional 3D toggle
 (presentation only, state-hash-identical, 2D stays default).
 If it does not, record why in `docs/research/` and ship
-without 3D; that is not a blocker. **Milestone 4.**
+without 3D; that is not a blocker. **Milestone 4.** Detailed brief: `phase_15_visual_polish.md`.
 
 ### Phase 16 — Playtest protocol and analysis kit
 
