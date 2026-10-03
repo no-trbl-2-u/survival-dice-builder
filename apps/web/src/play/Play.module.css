@@ -1,0 +1,469 @@
+.page {
+  display: grid;
+  gap: 12px;
+}
+
+.layout {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+}
+
+@media (max-width: 720px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.side {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 12px;
+  min-width: 0;
+}
+
+.panelTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  margin: 0 0 8px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.primary {
+  margin-top: 8px;
+  background: var(--color-accent);
+  color: var(--on-phase);
+  border: none;
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  font-weight: 700;
+}
+
+.footer {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+/* Phase bar */
+.phaseBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+}
+
+.round {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+
+.phases {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.phase {
+  font-family: var(--font-display);
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 2px solid;
+  text-transform: uppercase;
+  font-size: var(--text-sm);
+}
+
+.prepare {
+  border-color: var(--phase-prepare);
+}
+.combat {
+  border-color: var(--phase-combat);
+}
+.explore {
+  border-color: var(--phase-explore);
+}
+
+.current.prepare {
+  background: var(--phase-prepare);
+  color: var(--on-phase);
+}
+.current.combat {
+  background: var(--phase-combat);
+  color: var(--on-phase);
+}
+.current.explore {
+  background: var(--phase-explore);
+  color: var(--on-phase);
+}
+
+.counters,
+.step {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* Map */
+.mapPanel {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.mapTools {
+  display: flex;
+  gap: 6px;
+}
+
+.map {
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  aspect-ratio: 4 / 3;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  touch-action: none;
+  cursor: grab;
+}
+
+.hex {
+  stroke: var(--color-hex-stroke);
+  stroke-width: 1.5;
+}
+.plains {
+  fill: var(--terrain-plains);
+}
+.forest {
+  fill: var(--terrain-forest);
+}
+.hills {
+  fill: var(--terrain-hills);
+}
+.wasteland {
+  fill: var(--terrain-wasteland);
+}
+.lake {
+  fill: var(--terrain-lake);
+}
+.mountain {
+  fill: var(--terrain-mountain);
+}
+
+.mapIcon {
+  color: var(--tile-icon);
+  pointer-events: none;
+}
+
+.ghost polygon {
+  fill: transparent;
+  stroke: var(--legal-move);
+  stroke-width: 3;
+  stroke-dasharray: 6 4;
+}
+
+.ghost,
+.legal,
+.target {
+  cursor: pointer;
+  outline: none;
+}
+
+.ghost:hover polygon,
+.ghost:focus-visible polygon {
+  fill: color-mix(in srgb, var(--legal-move) 20%, transparent);
+}
+
+.legal polygon {
+  fill: transparent;
+  stroke: var(--legal-move);
+  stroke-width: 4;
+}
+
+.legal:hover polygon,
+.legal:focus-visible polygon {
+  fill: color-mix(in srgb, var(--legal-move) 25%, transparent);
+}
+
+.target:focus-visible circle,
+.target:focus-visible rect {
+  stroke-width: 5;
+}
+
+.figure {
+  fill: var(--phase-prepare);
+  stroke: var(--color-text);
+  stroke-width: 2;
+}
+
+.figureText {
+  fill: var(--on-phase);
+  font-size: 9px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.grunt {
+  fill: var(--color-surface);
+  stroke: var(--enemy-grunt);
+  stroke-width: 3;
+}
+
+.elite {
+  fill: var(--color-surface);
+  stroke: var(--enemy-elite);
+  stroke-width: 4;
+}
+
+.hpText {
+  fill: var(--color-text);
+  font-family: var(--font-number);
+  font-size: 9px;
+  font-weight: 700;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+}
+
+/* Player panel */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 6px 12px;
+  margin: 0;
+}
+
+.stat dt {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.stat dd {
+  margin: 0;
+  font-family: var(--font-number);
+  font-weight: 700;
+}
+
+.health {
+  color: var(--health);
+}
+.guard {
+  color: var(--guard);
+}
+.materials {
+  color: var(--materials);
+}
+.currency {
+  color: var(--currency);
+}
+
+/* Hand and cards */
+.hand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.handCard {
+  display: grid;
+  gap: 6px;
+  width: 11rem;
+}
+
+.rotator {
+  transition: transform 400ms ease;
+}
+
+.rotator[data-up='bottom'] {
+  transform: rotate(180deg);
+}
+
+.card {
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  min-height: 15rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.half {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 0 0 8px;
+  text-align: center;
+}
+
+.half > :not(.band) {
+  padding: 0 8px;
+}
+
+.bottomHalf {
+  transform: rotate(180deg);
+}
+
+.band {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  color: var(--on-phase);
+  padding: 4px 8px;
+}
+
+.topHalf .band {
+  background: var(--phase-prepare);
+}
+
+.bottomHalf .band {
+  background: var(--phase-combat);
+}
+
+.cardMeta {
+  display: flex;
+  justify-content: space-between;
+  border-block: 1px dashed var(--color-border);
+  padding: 2px 8px;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.cardButtons {
+  display: grid;
+  gap: 4px;
+}
+
+/* Dice */
+.dice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dieItem {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+}
+
+.die {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface-raised);
+  font-size: var(--text-xl);
+  line-height: 1;
+}
+
+.die small {
+  font-size: var(--text-xs);
+}
+
+.kept {
+  border: 3px solid var(--color-text);
+}
+
+.selected {
+  outline: 3px solid var(--legal-move);
+  outline-offset: 2px;
+}
+
+/* Skills */
+.skills {
+  display: grid;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.skill {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface-raised);
+}
+
+.skillName {
+  font-weight: 700;
+}
+
+.fires {
+  border: 3px solid var(--phase-combat);
+}
+
+.could {
+  border: 2px dashed var(--phase-combat);
+}
+
+.slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.slot,
+.slotFit,
+.slotFilled {
+  font-size: var(--text-sm);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.slotFit {
+  border: 2px solid var(--legal-move);
+  font-weight: 700;
+}
+
+.slotFilled {
+  border: 2px solid var(--color-text);
+}
+
+/* Choices */
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 16rem;
+  overflow-y: auto;
+}

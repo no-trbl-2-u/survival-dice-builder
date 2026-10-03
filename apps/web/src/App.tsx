@@ -1,5 +1,6 @@
 import { DebugPage } from './debug/DebugPage.tsx'
 import { HexTile } from './map/HexTile.tsx'
+import { PlayPage } from './play/PlayPage.tsx'
 import { matchRoute, type Route } from './router.tsx'
 import { TileSheet } from './tiles/TileSheet.tsx'
 
@@ -9,6 +10,7 @@ const routes: readonly Route[] = [
     title: 'Survival Dice-Builder',
     render: () => <HexTile center={{ q: 0, r: 0 }} />,
   },
+  { path: '/play', title: 'Play', render: () => <PlayPage /> },
   { path: '/tiles', title: 'Tile sheet', render: () => <TileSheet /> },
   { path: '/debug', title: 'Engine console', render: () => <DebugPage /> },
 ]
@@ -20,6 +22,7 @@ export function App() {
     <main className="app">
       <nav aria-label="Main" className="nav">
         <a href="/">Home</a>
+        <a href="/play">Play</a>
         <a href="/tiles">Tiles</a>
         <a href="/debug">Debug</a>
       </nav>
