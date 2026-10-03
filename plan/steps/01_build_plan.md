@@ -177,7 +177,8 @@ icon sizes, readability rules, phase colours), SVG templates
 (card, die net, tile, base board), two mock-ups (main screen,
 run summary) as SVG. Contrast verified by script. The
 "2 people can identify at a glance" check is a designer task,
-filed as a `[needs-user-call]` row, not a blocker.
+filed as a `[needs-user-call]` row, not a blocker. Detailed brief:
+`phase_10_art_direction.md`.
 
 ### Phase 11 — Web UI I
 
