@@ -31,7 +31,7 @@ Tick in this file in the same commit that ships the phase.
 **Headless engine (phases 5–9) — Milestone 1 at phase 8:**
 - [x] Phase 5 — Engine core: cards, dice, Skills, phases + `/debug` engine console (spec 2) — CANONICAL SIBLING — ec56ee6
 - [x] Phase 6 — World I: hex map, tiles, movement, Gather/Build, defenses (spec 3, first half) — f76fc89
-- [ ] Phase 7 — World II: enemies, base, exploration, wave track, co-op order (spec 3, second half)
+- [x] Phase 7 — World II: enemies, base, exploration, wave track, co-op order (spec 3, second half) — 2ae8480
 - [ ] Phase 8 — Progression: XP, upgrades, Shop, draft, end of run, milestones (spec 4)
 - [ ] Phase 9 — Early bot + batch sanity runs (spec 7, bot half, moved up)
 
@@ -250,3 +250,4 @@ sessions themselves are filed as a `[needs-user-call]`.
 - phase 4 — b9bdbd8 — Zod schemas, Tables 2-9 + config as JSON, validating loader, 9 tiles at /tiles, levelForExperience
 - phase 5 — ec56ee6 — engine API, deck/dice/Skills/exchange, phase machine, properties + golden replay, /debug console
 - phase 6 — f76fc89 — setup tile choice, step-by-step Move, skirmish, Gather, Build defenses, range-aware Combat, /debug SVG map
+- phase 7 — 2ae8480 — refill, waves, enemy targeting and pathing, Towers, structure attacks, base falls (14.1), Explore modes, full-run golden
