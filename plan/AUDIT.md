@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-03
+
+## Top 5 findings (scored)
+
+### [x] [7.2] /tiles: terrain and site per hex only show on hover (critique HIGH)
+- category: external-critique (a11y)
+- impact: 9
+- ease: 8
+- issue: #16
+- fixed: 08a5708
+- next: list each tile's 7 hexes as text under the tile; reword the lede
+
+### [ ] [4.8] /tiles: no legend for the 4 site icons (critique MED)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: add a "Sites" legend row with each icon and name
+
+### [ ] [4.2] /debug: keyboard focus is lost after every action (critique MED)
+- category: external-critique (a11y)
+- impact: 6
+- ease: 7
+- next: reuse the /play focus-next-decision effect
+
+### [ ] [3.5] /debug: no explanation; shorthand and grammar slips (critique MED)
+- category: external-critique (voice)
+- impact: 5
+- ease: 7
+- next: a short intro paragraph and plain labels
+
+### [ ] [3.0] /tiles: dark-mode terrain colours are hard to tell apart (critique MED)
+- category: external-critique (visual)
+- impact: 5
+- ease: 6
+- next: retune dark terrain tokens in design/tokens.json; check-design re-verifies contrast
+
 ## Needs user call (from adoption, 2026-10-02)
 
 - [needs-user-call] **Set `CLAUDE_CODE_OAUTH_TOKEN`** as a GitHub Actions secret on `no-trbl-2-u/survival-dice-builder` (oversight 2026-10-02). The cloud `/march` cron in `.github/workflows/march.yml` is live (every 2h, off-peak) and every run fails until the secret exists. The loop never sets secrets itself.

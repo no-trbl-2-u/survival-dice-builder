@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [HIGH] /tiles — terrain and site per hex only shows on hover
-- pass: 1 (commit 70348c1)
-- viewport: mobile
-- category: a11y
-- observation: Each hex's terrain and site is only an SVG `<title>` tooltip, reached by hovering. The lede says "Hover a hex", which touch and keyboard users cannot do; each tile is one `role="img"`, so screen readers skip the per-hex titles too. The designer may well review tiles on a phone.
-- evidence: lede "Hover a hex for its terrain and site."; only the 3 nav links are tabbable; hex markup `<g data-terrain="plains" data-site="base"><title>plains, Base</title>`.
-- suggested fix: under each tile, list its 7 hexes as text (position, terrain, site); change the lede to point at that list; capitalise terrain names consistently ("Plains, Base").
-- source: browser
-
 ### [MED] /tiles — no legend for the 4 site icons
 - pass: 1 (commit 70348c1)
 - viewport: desktop
@@ -65,4 +56,14 @@
 
 ## Done
 
-(empty)
+### [x] [HIGH] /tiles — terrain and site per hex only shows on hover
+- pass: 1 (commit 70348c1)
+- viewport: mobile
+- category: a11y
+- observation: Each hex's terrain and site is only an SVG `<title>` tooltip, reached by hovering. The lede says "Hover a hex", which touch and keyboard users cannot do; each tile is one `role="img"`, so screen readers skip the per-hex titles too. The designer may well review tiles on a phone.
+- evidence: lede "Hover a hex for its terrain and site."; only the 3 nav links are tabbable; hex markup `<g data-terrain="plains" data-site="base"><title>plains, Base</title>`.
+- suggested fix: under each tile, list its 7 hexes as text (position, terrain, site); change the lede to point at that list; capitalise terrain names consistently ("Plains, Base").
+- source: browser
+- issue: #16
+- fixed: 08a5708 (each tile lists its 7 hexes as text; lede reworded)
+
