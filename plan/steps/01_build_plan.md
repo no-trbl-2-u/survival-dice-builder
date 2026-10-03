@@ -139,8 +139,9 @@ locked tie-break (9.3–9.4), Barricade blocking, Tower attack
 (12.3), structure attack step (7.11–7.12), base health,
 Explore phase with forced/optional/automatic reveal (18.1),
 wave track, miniature limit, grunt-to-elite (10.3–10.5,
-section 15), co-op exchange order (16.4–16.5). All spec 3
-acceptance criteria, including a full solo golden replay.
+section 15). All spec 3 acceptance criteria, including a full
+solo golden replay. Co-op exchange order (16.4–16.8) moved to
+phase 13. Detailed brief: `phase_7_world_enemies.md`.
 
 ### Phase 8 — Progression
 
@@ -197,7 +198,9 @@ run to the end. **Milestone 2.**
 ### Phase 13 — Co-op, config, save/load
 
 Source: `spec/phases/phase-6-coop-config-save.md`. 1–4 players
-hot-seat, `/config` panel over every config value with reset,
+hot-seat, including the engine's co-op turn order (16.1–16.8,
+moved from phase 7: alternate hands in Prepare, exchanges in
+turn, per-player enemy attacks, reveals per player), `/config` panel over every config value with reset,
 save/load file, `localStorage` autosave, developer undo via
 replay.
 
