@@ -1,6 +1,8 @@
 import { legalActions, type Action } from '@survival/engine'
 import { useEffect, useReducer, useRef, useState } from 'react'
 import { AUTOSAVE_KEY, browserStorage, loadConfig } from '../config/configStore.ts'
+import { cuesFor } from '../sound/cues.ts'
+import { play } from '../sound/sound.ts'
 import { TileView } from '../tiles/TileView.tsx'
 import { BasePanel } from './BasePanel.tsx'
 import { Choices } from './Choices.tsx'
@@ -13,6 +15,7 @@ import styles from './Play.module.css'
 import { PlayerPanel } from './PlayerPanel.tsx'
 import { PlayLog } from './PlayLog.tsx'
 import { PlayMap } from './PlayMap.tsx'
+import { loadPrefs, savePrefs, type Prefs } from './prefs.ts'
 import { newRun, reduceRun, undo, type Run, type RunMsg } from './run.ts'
 import { RunSummary } from './RunSummary.tsx'
 import { SkillBoard } from './SkillBoard.tsx'
@@ -42,6 +45,11 @@ export function PlayPage() {
     return Number.isFinite(seed) ? newRun(config, seed, players, Date.now()) : null
   })
   const [undoOn, setUndoOn] = useState(false)
+  const [prefs, setPrefsState] = useState(() => loadPrefs(store))
+  const setPrefs = (next: Prefs) => {
+    setPrefsState(next)
+    savePrefs(store, next)
+  }
 
   // Autosave after every action (this browser only).
   useEffect(() => {
@@ -65,7 +73,16 @@ export function PlayPage() {
       />
     )
   }
-  return <Game run={run} dispatch={dispatch} undoOn={undoOn} setUndoOn={setUndoOn} />
+  return (
+    <Game
+      run={run}
+      dispatch={dispatch}
+      undoOn={undoOn}
+      setUndoOn={setUndoOn}
+      prefs={prefs}
+      setPrefs={setPrefs}
+    />
+  )
 }
 
 type GameProps = Readonly<{
@@ -73,10 +90,12 @@ type GameProps = Readonly<{
   dispatch: (msg: Msg) => void
   undoOn: boolean
   setUndoOn: (on: boolean) => void
+  prefs: Prefs
+  setPrefs: (prefs: Prefs) => void
 }>
 
 /** The board, panels, and controls of a run in progress (or its summary). */
-function Game({ run, dispatch, undoOn, setUndoOn }: GameProps) {
+function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) {
   const [selected, setSelected] = useState<number | null>(null)
   const main = useRef<HTMLDivElement>(null)
   const { state } = run
@@ -86,6 +105,14 @@ function Game({ run, dispatch, undoOn, setUndoOn }: GameProps) {
     dispatch({ kind: 'act', action, at: Date.now() })
   }
   const revealed = state.content.tiles.find((t) => t.id === state.revealed[0])
+
+  // Sound: the cues of each new action (never on load or undo: those replace the run).
+  const heard = useRef(run.actions.length)
+  useEffect(() => {
+    const fresh = run.actions.length === heard.current + 1
+    heard.current = run.actions.length
+    if (fresh && prefs.sound) play(cuesFor(run.lastEvents))
+  }, [run, prefs.sound])
 
   // Keyboard: when the focused control disappears after an action, move to the next decision.
   useEffect(() => {
@@ -116,7 +143,7 @@ function Game({ run, dispatch, undoOn, setUndoOn }: GameProps) {
       ) : null}
       <DecisionDialog state={state} legal={legal} act={act} />
       <div className={styles.layout}>
-        <PlayMap state={state} legal={legal} act={act} />
+        <PlayMap state={state} legal={legal} act={act} events={run.lastEvents} />
         <div className={styles.side} data-decisions>
           {revealed ? (
             <section className={styles.panel} aria-label="Tile to place">
@@ -138,6 +165,7 @@ function Game({ run, dispatch, undoOn, setUndoOn }: GameProps) {
             act={act}
             selected={selected}
             select={setSelected}
+            dice3d={prefs.dice3d}
           />
           <SkillBoard
             state={state}
@@ -166,6 +194,22 @@ function Game({ run, dispatch, undoOn, setUndoOn }: GameProps) {
         <button type="button" onClick={() => dispatch({ kind: 'reset' })}>
           New run
         </button>
+        <label>
+          <input
+            type="checkbox"
+            checked={prefs.sound}
+            onChange={(e) => setPrefs({ ...prefs, sound: e.target.checked })}
+          />{' '}
+          Sound
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={prefs.dice3d}
+            onChange={(e) => setPrefs({ ...prefs, dice3d: e.target.checked })}
+          />{' '}
+          3D dice
+        </label>
         <label>
           <input type="checkbox" checked={undoOn} onChange={(e) => setUndoOn(e.target.checked)} />{' '}
           Developer: allow undo

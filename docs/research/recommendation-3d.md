@@ -36,3 +36,28 @@ record why here (bearings: a failed spike is not a blocker).
 
 - A 3D board view: the 2D SVG board stays the default; no evidence yet that a tabletop view is
   worth the cost.
+
+## Phase 15 spike result (2026-10-03): it works, shipped as an optional toggle
+
+- **Approach:**
+  - three.js 0.186 alone, without React Three Fiber and without Rapier.
+  - The die does not use physics. It follows a scripted tumble: whole turns about X and Z, plus a drop with 2 small bounces. The spin eases to rest at rotation (0, yaw, 0), so the +Y side is always on top.
+  - The engine's face is put on +Y (`faceLayout`), and the other 5 faces of the action die go on the other sides.
+  - The result is the engine's by construction, not by simulate-and-remap.
+  - Unit tests check every face and many throws (`apps/web/src/dice3d/orientation.test.ts`).
+- **Why not physics:**
+  - The engine already decides the face. Rapier would add a WASM dependency and a simulate-then-remap step, for motion that a player watching a 0.9 s throw cannot tell apart.
+  - Physics stays an option if a tabletop view is ever wanted.
+- **Faces:**
+  - Each face is drawn from the same game-icons.net paths as the 2D tray (`Path2D` on a canvas texture).
+  - No image loading, so it is also safe under strict CSP.
+- **Presentation only:**
+  - The toggle is a browser preference (`survival.dice3d.v1`) and never reaches the run reducer.
+  - The `/play` e2e plays 40 decisions with 3D off and with 3D on, and gets identical actions and round.
+  - The animation uses no randomness (`throwFor(die, roll)`), so it never touches the game RNG.
+- **Cost and frame rate:**
+  - The three.js chunk is about 530 kB (132 kB gzip). It loads only when the toggle is on (dynamic import).
+  - Headless Chromium (SwiftShader, software WebGL) drew one die at about 17 ms per frame, measured from the canvas's `data-frame-ms`.
+  - A mid-range laptop with a GPU should do better.
+  - A designer check is filed in `plan/AUDIT.md`.
+- **No WebGL:** the tray shows a short note and keeps the 2D dice, which are always shown.

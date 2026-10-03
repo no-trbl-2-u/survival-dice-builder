@@ -1,4 +1,5 @@
 import { experienceForLevel, type GameState } from '@survival/engine'
+import { GameIcon } from '../icons/GameIcon.tsx'
 import styles from './Play.module.css'
 
 type Props = Readonly<{ state: GameState }>
@@ -17,18 +18,22 @@ export function PlayerPanel({ state }: Props) {
   return (
     <section className={styles.panel} aria-label="Players">
       <h2 className={styles.panelTitle}>
-        {state.players.length === 1 ? 'You' : 'Players'} · level {state.level} · experience{' '}
-        {state.experience} / {next} · base {state.base.health} / {state.base.maxHealth}
+        {state.players.length === 1 ? 'You' : 'Players'} ·{' '}
+        <span key={state.level} className={state.level > 1 ? styles.levelUp : undefined}>
+          level {state.level}
+        </span>{' '}
+        · <GameIcon name="experience" /> experience {state.experience} / {next} · base{' '}
+        {state.base.health} / {state.base.maxHealth}
       </h2>
       <div data-testid="player-panel" className={styles.playerList}>
         {state.players.map((p, seat) => {
           const current = seat === state.current
-          const rows: [string, string, string][] = [
-            ['Health', `${p.health} / ${p.maxHealth}`, styles.health ?? ''],
-            ['Guard', String(p.guard), styles.guard ?? ''],
-            ['Action dice', String(p.dice), ''],
-            ['Materials', String(p.materials), styles.materials ?? ''],
-            ['Currency', String(p.currency), styles.currency ?? ''],
+          const rows: [string, string, string, string][] = [
+            ['Health', `${p.health} / ${p.maxHealth}`, styles.health ?? '', 'health'],
+            ['Guard', String(p.guard), styles.guard ?? '', 'guard'],
+            ['Action dice', String(p.dice), '', 'face-star'],
+            ['Materials', String(p.materials), styles.materials ?? '', 'materials'],
+            ['Currency', String(p.currency), styles.currency ?? '', 'currency'],
           ]
           return (
             <div
@@ -43,9 +48,11 @@ export function PlayerPanel({ state }: Props) {
                 </h3>
               ) : null}
               <dl className={styles.stats}>
-                {rows.map(([label, value, cls]) => (
+                {rows.map(([label, value, cls, icon]) => (
                   <div key={label} className={styles.stat}>
-                    <dt>{label}</dt>
+                    <dt>
+                      <GameIcon name={icon} className={cls} /> {label}
+                    </dt>
                     <dd className={cls}>{value}</dd>
                   </div>
                 ))}

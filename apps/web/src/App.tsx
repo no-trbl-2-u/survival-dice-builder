@@ -1,4 +1,5 @@
 import { ConfigPage } from './config/ConfigPage.tsx'
+import { CreditsPage } from './credits/CreditsPage.tsx'
 import { DebugPage } from './debug/DebugPage.tsx'
 import { HexTile } from './map/HexTile.tsx'
 import { PlayPage } from './play/PlayPage.tsx'
@@ -15,6 +16,7 @@ const routes: readonly Route[] = [
   { path: '/config', title: 'Config', render: () => <ConfigPage /> },
   { path: '/tiles', title: 'Tile sheet', render: () => <TileSheet /> },
   { path: '/debug', title: 'Engine console', render: () => <DebugPage /> },
+  { path: '/credits', title: 'Credits', render: () => <CreditsPage /> },
 ]
 
 /** App shell: navigation plus the page for the current path. */
@@ -28,6 +30,7 @@ export function App() {
         <a href="/config">Config</a>
         <a href="/tiles">Tiles</a>
         <a href="/debug">Debug</a>
+        <a href="/credits">Credits</a>
       </nav>
       <h1>{route.title}</h1>
       {route.render()}

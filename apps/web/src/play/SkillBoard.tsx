@@ -1,4 +1,6 @@
 import { canFire, type Action, type GameState } from '@survival/engine'
+import { faceIcon } from '../icons/gameIcons.ts'
+import { GameIcon } from '../icons/GameIcon.tsx'
 import styles from './Play.module.css'
 import { firstOf, ofType, placementsFor } from './targets.ts'
 
@@ -78,6 +80,7 @@ export function SkillBoard({ state, legal, act, selected, select }: Props) {
                   }
                   return (
                     <span key={slot} className={styles.slot}>
+                      <GameIcon name={faceIcon(here ? here.asFace : face)} />{' '}
                       {here ? `Die ${here.die + 1}` : face}
                     </span>
                   )

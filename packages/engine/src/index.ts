@@ -24,3 +24,4 @@ export type {
   Phase,
   Player,
 } from './state/types.ts'
+export { DIE_FACES } from './dice/dice.ts'

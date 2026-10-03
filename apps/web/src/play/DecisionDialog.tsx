@@ -45,8 +45,8 @@ export function DecisionDialog({ state, legal, act }: Props) {
           {title}
         </h2>
         <ul className={styles.choices}>
-          {drafts.map((a) => (
-            <li key={a.skill}>
+          {drafts.map((a, i) => (
+            <li key={a.skill} className={styles.reveal} style={{ animationDelay: `${i * 120}ms` }}>
               <button type="button" onClick={() => act(a)}>
                 Draft {skill(a.skill)?.name} ({skill(a.skill)?.faces.join(' + ')})
               </button>

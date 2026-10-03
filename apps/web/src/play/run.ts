@@ -1,5 +1,11 @@
 import { defaultContent, type GameConfig } from '@survival/content'
-import { applyAction, createGame, type Action, type GameState } from '@survival/engine'
+import {
+  applyAction,
+  createGame,
+  type Action,
+  type GameEvent,
+  type GameState,
+} from '@survival/engine'
 import { recordGap, startTiming, type Timing } from './timing.ts'
 
 /** A run as the UI holds it: how it started, the actions taken, and the current engine state. */
@@ -13,6 +19,8 @@ export type Run = Readonly<{
   baseCurve: readonly number[]
   /** Real wall-clock time per phase, decision type, and round. */
   timing: Timing
+  /** The events of the last action (animation and sound cues); empty at the start. */
+  lastEvents: readonly GameEvent[]
 }>
 
 /** Messages the play page sends: start a run, take 1 legal action, or replace the run (load, undo). */
@@ -32,6 +40,7 @@ export function newRun(config: GameConfig, seed: number, players = 1, at = 0): R
     actions: [],
     baseCurve: [],
     timing: startTiming(at),
+    lastEvents: [],
   }
 }
 
@@ -41,7 +50,7 @@ export function newRun(config: GameConfig, seed: number, players = 1, at = 0): R
  */
 export function step(run: Run, action: Action, at = run.timing.lastAt): Run {
   const before = run.state
-  const state = applyAction(before, action).state
+  const { state, events } = applyAction(before, action)
   const newRound = state.phase === 'prepare' && state.round > run.baseCurve.length
   return {
     ...run,
@@ -49,6 +58,7 @@ export function step(run: Run, action: Action, at = run.timing.lastAt): Run {
     actions: [...run.actions, action],
     baseCurve: newRound ? [...run.baseCurve, state.base.health] : run.baseCurve,
     timing: recordGap(run.timing, at, before.phase, action.type, before.round),
+    lastEvents: events,
   }
 }
 

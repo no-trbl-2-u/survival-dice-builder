@@ -1,0 +1,24 @@
+.page {
+  display: grid;
+  gap: var(--space-3, 12px);
+  max-width: 60rem;
+}
+
+.list {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.list li {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.list svg {
+  flex: none;
+  color: var(--color-text);
+}

@@ -1,4 +1,4 @@
-import { hexKey, tileHexes, type Action, type GameState } from '@survival/engine'
+import { hexKey, tileHexes, type Action, type GameEvent, type GameState } from '@survival/engine'
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { gameIcons, ICON_VIEWBOX } from '../icons/gameIcons.ts'
 import { hexPolygonPoints, hexToPixel } from '../map/geometry.ts'
@@ -14,7 +14,16 @@ const SITE_ICON: Record<string, string> = {
   'elite-spawn-node': 'elite',
 }
 
-type Props = Readonly<{ state: GameState; legal: readonly Action[]; act: (a: Action) => void }>
+type Props = Readonly<{
+  state: GameState
+  legal: readonly Action[]
+  act: (a: Action) => void
+  /** The last action's events: Tower shots are drawn from them. */
+  events?: readonly GameEvent[]
+}>
+
+/** A CSS transform that places a piece; a change of hex animates (see `.mover`). */
+const place = (x: number, y: number) => ({ transform: `translate(${x}px, ${y}px)` })
 
 /** An inline game icon centred on a point. */
 function Icon({
@@ -45,7 +54,7 @@ const onKey = (run: () => void) => (e: KeyboardEvent) => {
  * The board: tiles, sites, the figure, enemies (shape + icon + health), defenses, and every
  * legal map target as a focusable SVG button. Drag to pan; wheel or buttons to zoom.
  */
-export function PlayMap({ state, legal, act }: Props) {
+export function PlayMap({ state, legal, act, events = [] }: Props) {
   const [view, setView] = useState({ x: 0, y: 0, zoom: 1 })
   const [preview, setPreview] = useState<string | null>(null)
   const revealed = state.content.tiles.find((t) => t.id === state.revealed[0])
@@ -133,7 +142,7 @@ export function PlayMap({ state, legal, act }: Props) {
         onPointerLeave={() => (drag.current = null)}
       >
         {hexes.map(({ key, hex, center }) => (
-          <g key={key}>
+          <g key={key} className={styles.tileIn}>
             <polygon
               className={`${styles.hex} ${styles[hex.terrain] ?? ''}`}
               points={hexPolygonPoints(center, SIZE)}
@@ -182,7 +191,9 @@ export function PlayMap({ state, legal, act }: Props) {
           const c = hexToPixel(d.hex, SIZE)
           return (
             <g key={d.id}>
-              <Icon name={d.kind} x={c.x} y={c.y} size={SIZE * 0.9} />
+              <g key={d.health} className={styles.hit}>
+                <Icon name={d.kind} x={c.x} y={c.y} size={SIZE * 0.9} />
+              </g>
               <text className={styles.hpText} x={c.x} y={c.y + SIZE * 0.75}>
                 {d.health}
               </text>
@@ -198,15 +209,17 @@ export function PlayMap({ state, legal, act }: Props) {
           return (
             <g
               key={p.id}
+              className={styles.mover}
+              style={place(c.x + offset, c.y + SIZE * 0.25)}
               aria-label={`${label === 'You' ? 'Your' : `${label}'s`} figure at ${p.hex.q},${p.hex.r}`}
             >
               <circle
                 className={`${styles.figure} ${seat === state.current ? styles.figureCurrent : ''}`}
-                cx={c.x + offset}
-                cy={c.y + SIZE * 0.25}
+                cx={0}
+                cy={0}
                 r={SIZE * 0.3}
               />
-              <text className={styles.figureText} x={c.x + offset} y={c.y + SIZE * 0.25}>
+              <text className={styles.figureText} x={0} y={0}>
                 {label}
               </text>
             </g>
@@ -221,7 +234,8 @@ export function PlayMap({ state, legal, act }: Props) {
           return (
             <g
               key={e.id}
-              className={target ? styles.target : undefined}
+              className={`${styles.mover} ${target ? styles.target : ''}`}
+              style={place(c.x, c.y)}
               {...(target
                 ? {
                     role: 'button',
@@ -233,22 +247,34 @@ export function PlayMap({ state, legal, act }: Props) {
                 : {})}
             >
               {e.kind === 'elite' ? (
-                <rect
-                  className={styles.elite}
-                  x={c.x - r}
-                  y={c.y - r}
-                  width={r * 2}
-                  height={r * 2}
-                  rx={3}
-                />
+                <rect className={styles.elite} x={-r} y={-r} width={r * 2} height={r * 2} rx={3} />
               ) : (
-                <circle className={styles.grunt} cx={c.x} cy={c.y} r={r} />
+                <circle className={styles.grunt} cx={0} cy={0} r={r} />
               )}
-              <Icon name={e.kind} x={c.x} y={c.y} size={r * 1.4} />
-              <text className={styles.hpText} x={c.x} y={c.y + r + 8}>
+              <Icon name={e.kind} x={0} y={0} size={r * 1.4} />
+              <text key={e.health} className={`${styles.hpText} ${styles.hit}`} x={0} y={r + 8}>
                 {e.health}/{max}
               </text>
             </g>
+          )
+        })}
+
+        {events.map((ev, i) => {
+          if (ev.type !== 'towerAttacked') return null
+          const tower = state.defenses.find((d) => d.id === ev.tower)
+          const enemy = state.enemies.find((x) => x.id === ev.enemy)
+          if (!tower || !enemy) return null
+          const a = hexToPixel(tower.hex, SIZE)
+          const b = hexToPixel(enemy.hex, SIZE)
+          return (
+            <line
+              key={`shot-${state.log.length}-${i}`}
+              className={styles.shot}
+              x1={a.x}
+              y1={a.y}
+              x2={b.x}
+              y2={b.y}
+            />
           )
         })}
 

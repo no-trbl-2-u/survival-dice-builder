@@ -1,7 +1,12 @@
-import type { Face } from '@survival/content'
 import { sameAction, type Action, type GameState } from '@survival/engine'
+import { lazy, Suspense } from 'react'
+import { faceIcon } from '../icons/gameIcons.ts'
+import { GameIcon } from '../icons/GameIcon.tsx'
 import styles from './Play.module.css'
 import { firstOf } from './targets.ts'
+
+/** Loaded only when 3D dice are on: three.js stays out of the main bundle. */
+const Dice3D = lazy(() => import('../dice3d/Dice3D.tsx'))
 
 type Props = Readonly<{
   state: GameState
@@ -9,22 +14,15 @@ type Props = Readonly<{
   act: (a: Action) => void
   selected: number | null
   select: (die: number | null) => void
+  /** Show the optional 3D dice above the 2D tray (presentation only). */
+  dice3d?: boolean
 }>
-
-const FACE_MARK: Record<Face, string> = {
-  Sword: '⚔',
-  Bow: '➶',
-  Wand: '✦',
-  Shield: '⛨',
-  Star: '★',
-  Blank: '·',
-}
 
 /**
  * The exchange dice: keep toggles while rolling, rerolls from cards, and die selection for
  * Skill placement. The roll counter shows `roll n of max`.
  */
-export function DiceTray({ state, legal, act, selected, select }: Props) {
+export function DiceTray({ state, legal, act, selected, select, dice3d = false }: Props) {
   const ex = state.exchange
   if (!ex) return null
   const has = (a: Action) => legal.find((x) => sameAction(x, a))
@@ -38,6 +36,15 @@ export function DiceTray({ state, legal, act, selected, select }: Props) {
         Dice — roll {ex.rollsUsed} of {state.config.combat.maxRolls}
         {ex.step === 'reroll' ? ` · rerolls left ${ex.rerollsLeft}` : ''}
       </h2>
+      {dice3d && ex.rollsUsed > 0 ? (
+        <Suspense fallback={<p className={styles.muted}>Loading 3D dice…</p>}>
+          <Dice3D
+            faces={ex.dice.map((d) => d.face)}
+            kept={ex.dice.map((d) => d.kept)}
+            roll={ex.rollsUsed * 100 + ex.rerollsLeft}
+          />
+        </Suspense>
+      ) : null}
       <ul className={styles.dice}>
         {ex.dice.map((d, i) => {
           const keep = has({ type: 'toggleKeep', die: i })
@@ -49,7 +56,7 @@ export function DiceTray({ state, legal, act, selected, select }: Props) {
                 className={`${styles.die} ${d.kept ? styles.kept : ''} ${selected === i ? styles.selected : ''}`}
                 aria-label={`Die ${i + 1}: ${d.face}${d.kept ? ', kept' : ''}${placed.has(i) ? ', on a Skill' : ''}`}
               >
-                <span aria-hidden="true">{FACE_MARK[d.face]}</span>
+                <GameIcon name={faceIcon(d.face)} size="1.6rem" />
                 <small>{d.face}</small>
               </span>
               {keep ? (

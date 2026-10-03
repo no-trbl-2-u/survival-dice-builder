@@ -661,3 +661,89 @@
 .figureCurrent {
   stroke-width: 4;
 }
+
+/* Motion (phase 15). Every animation is off under prefers-reduced-motion (tokens.css). */
+
+@keyframes tile-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+.tileIn {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: tile-in 420ms ease-out;
+}
+
+.mover {
+  transition: transform 360ms ease-in-out;
+}
+
+@keyframes hit {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+
+.hit {
+  display: inline-block;
+  transform-box: fill-box;
+  animation: hit 260ms ease-in-out;
+}
+
+@keyframes shot {
+  from {
+    opacity: 1;
+    stroke-dashoffset: 40;
+  }
+  to {
+    opacity: 0;
+    stroke-dashoffset: 0;
+  }
+}
+
+.shot {
+  stroke: var(--color-text);
+  stroke-width: 3;
+  stroke-dasharray: 6 4;
+  stroke-linecap: round;
+  pointer-events: none;
+  opacity: 0;
+  animation: shot 700ms ease-out;
+}
+
+@keyframes level-up {
+  0% {
+    background: var(--color-text);
+    color: var(--color-surface);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+.levelUp {
+  border-radius: 4px;
+  padding: 0 4px;
+  animation: level-up 1200ms ease-out;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px) rotateX(70deg);
+  }
+}
+
+.reveal {
+  animation: reveal 380ms ease-out both;
+}

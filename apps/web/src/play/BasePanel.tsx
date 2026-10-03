@@ -1,4 +1,5 @@
 import type { Action, GameState } from '@survival/engine'
+import { GameIcon } from '../icons/GameIcon.tsx'
 import styles from './Play.module.css'
 import { ofType } from './targets.ts'
 
@@ -15,7 +16,10 @@ export function BasePanel({ state, legal, act }: Props) {
   return (
     <section className={styles.panel} aria-label="Base">
       <h2 className={styles.panelTitle}>
-        Base — {state.base.health} / {state.base.maxHealth} health
+        <GameIcon name="base" />{' '}
+        <span key={state.base.health} className={styles.hit}>
+          Base — {state.base.health} / {state.base.maxHealth} health
+        </span>
       </h2>
       {(['shop', 'training'] as const).map((track) => (
         <div key={track} className={styles.track}>
@@ -45,7 +49,13 @@ export function BasePanel({ state, legal, act }: Props) {
         </div>
       ))}
       <h3 className={styles.subTitle}>
-        Shop offers {player ? `· you have ${player.currency} currency` : ''}
+        Shop offers{' '}
+        {player ? (
+          <>
+            · you have <GameIcon name="currency" className={styles.currency} /> {player.currency}{' '}
+            currency
+          </>
+        ) : null}
       </h3>
       {state.shopOffers.length === 0 ? (
         <p className={styles.muted}>The Shop opens with Shop I.</p>
