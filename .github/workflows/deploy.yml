@@ -1,0 +1,53 @@
+name: deploy
+
+# Publishes apps/web to Cloudflare Pages on every push to main.
+# The deploy gate (pnpm deploy:check) matches the deployment by
+# --commit-hash. Verify ran locally before the push; this job only builds.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          HEAD_SHA: ${{ github.sha }}
+          # Passed through env, never interpolated into the script, so a commit
+          # subject cannot inject shell.
+          HEAD_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          subject="$(printf '%s' "${HEAD_MESSAGE:-manual deploy}" | head -n 1 | cut -c1-200)"
+          pnpm exec wrangler pages deploy apps/web/dist \
+            --project-name=survival-dice-builder \
+            --branch=main \
+            --commit-hash="$HEAD_SHA" \
+            --commit-message="$subject" \
+            --commit-dirty=true

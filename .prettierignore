@@ -1,0 +1,14 @@
+# Docs and kit files are hand-formatted; prettier owns code only.
+*.md
+spec/
+plan/
+skills/
+.claude/
+scripts/
+.github/
+pnpm-lock.yaml
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/

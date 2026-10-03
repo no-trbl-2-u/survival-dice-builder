@@ -2,12 +2,37 @@
   "name": "survival-dice-builder",
   "private": true,
   "description": "Defend the base, build your dice, survive one more round.",
+  "type": "module",
   "packageManager": "pnpm@9.15.0",
   "engines": {
-    "node": ">=20"
+    "node": ">=22.18"
   },
   "scripts": {
-    "verify": "echo \"verify gate not wired yet: phase 2 (plan/phases/phase_2_foundation.md) adds lint, typecheck, test:run, build, e2e\" && exit 1",
+    "dev": "pnpm --filter @survival/web dev",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "typecheck": "pnpm -r typecheck",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "build": "pnpm --filter @survival/web build",
+    "e2e": "pnpm --filter @survival/web e2e",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test:run && pnpm build && pnpm e2e",
+    "sim": "pnpm --filter @survival/sim sim",
     "deploy:check": "node scripts/deploy-check.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@testing-library/react": "16.3.3",
+    "@types/node": "26.6.4",
+    "eslint": "10.12.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "fast-check": "4.10.2",
+    "globals": "17.13.0",
+    "jsdom": "30.1.1",
+    "prettier": "3.9.9",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.0",
+    "vitest": "5.0.3",
+    "wrangler": "4.147.0"
   }
 }

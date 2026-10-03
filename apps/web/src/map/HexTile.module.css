@@ -1,0 +1,20 @@
+.tile {
+  display: block;
+  width: 100%;
+  max-width: 28rem;
+  height: auto;
+}
+
+.hex,
+.centerHex {
+  stroke: var(--color-hex-stroke);
+  stroke-width: 2;
+}
+
+.hex {
+  fill: var(--color-hex-fill);
+}
+
+.centerHex {
+  fill: var(--color-hex-center);
+}

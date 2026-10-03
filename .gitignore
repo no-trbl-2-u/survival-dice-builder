@@ -17,3 +17,7 @@ nul
 # editors / OS
 .DS_Store
 Thumbs.db
+
+# test / tooling output
+*.tsbuildinfo
+.vite/
