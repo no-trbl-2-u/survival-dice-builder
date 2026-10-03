@@ -1,7 +1,7 @@
 # Critique log
 
-> Last pass: 2026-10-03 at commit 2f63473
-> Pass count: 2
+> Last pass: 2026-10-03 at commit d6176b7
+> Pass count: 3
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
@@ -9,7 +9,59 @@
 
 ## Pending
 
-(none)
+### [HIGH] /play — Skills, draft options, and Shop offers never say what they do
+- pass: 3 (commit d6176b7)
+- viewport: desktop
+- category: comprehension
+- observation: The Skill board shows only a name and its die faces. The draft dialog and the Shop show only a name, faces, and a cost. A first-time player cannot judge which die to assign, which Skill to draft, or which card to buy.
+- evidence: Skills panel: "Strike — can fire", "Shot / Bow", "Mend / Wand", "Guard / Shield". Draft: "Draft Renewal (Wand + Wand)", "Draft Spark Burst (Wand + Bow)". Shop: "Haul / Cost 3", "Bandage / Cost 3". No description, tooltip, or details element in the combat DOM.
+- suggested fix: Generate a one-line effect text from each Skill's and card's structured `effect` in content (for example "2 damage to 1 enemy within 1 hex"). Show it under each Skill, draft option, and Shop offer.
+- source: browser
+
+### [MED] /play — the log and summary use enemy ids, capitalise grunt and elite, and slip on grammar
+- pass: 3 (commit d6176b7)
+- viewport: desktop
+- category: voice
+- observation: Phase 17 labels and the log write "Grunt e1" and "Elite e4", but the rules style keeps grunt and elite lowercase, and an id means nothing to a player. Other slips: an article before a vowel, a plural with 1, and a bare distance number. The log still names places by coordinates only.
+- evidence: "A elite appears at (-5,1).", "Grunt e1 moves to (0,-2) toward you.", "Target Elite e4, 14 of 14 health", summary "1 upgrades", choice "Place Stony Fields 3 south-east of the base (2,1)".
+- suggested fix: Write "an elite", "1 upgrade", and "3 hexes south-east". Use a lowercase kind plus its place ("the grunt on Wasteland, 1 north-west"), keeping the id only as a muted suffix. Name log places with `hexName` and `stepsAway`, as the choices do.
+- source: browser
+
+### [MED] /config — settings are code keys with no help text
+- pass: 3 (commit d6176b7)
+- viewport: desktop
+- category: comprehension
+- observation: The designer is this page's user, but the labels are de-camelCased keys, select options are code slugs, no field has help or a rules section, and the deck presets are a raw JSON textarea.
+- evidence: Labels "every nrounds", "base hex figure limit exempt", "move cost next to enemy". Options "v1/grunt-die", "stay-lose-move/stay-keep-move", "next-target/wait". All 54 controls have no aria-describedby.
+- suggested fix: Keep a label, one help line, and the rules section for each field in content (next to the config schema). Render the help through aria-describedby, and show select options as plain phrases.
+- source: browser
+
+### [MED] /config — save errors are raw schema text, unsaved edits vanish, and Reset needs no confirmation
+- pass: 3 (commit d6176b7)
+- viewport: desktop
+- category: a11y
+- observation: Errors appear in a list above the form, not at the field. The only Save button is at the top of a 2777px page. Leaving the page drops edits without a warning, and Reset to defaults applies at once.
+- evidence: "player.maxHealth: Too small: expected number to be >0" in `ul[role=alert]`. `#cfg-player-maxHealth` has no aria-invalid and no min. Max health 20, then Play, then back shows 15. Reset gives the status "Reset to the defaults." with no confirm step.
+- suggested fix: Put each error next to its field in plain words, with aria-invalid and aria-describedby. Make the Save bar sticky, add a beforeunload warning for unsaved edits, and confirm Reset.
+- source: browser
+
+### [MED] /play — at 375px the controls for the current step sit far below the map
+- pass: 3 (commit d6176b7)
+- viewport: mobile
+- category: mobile
+- observation: Each decision means scrolling down past the map and the stats card to act, then back up to see the board. The map's health labels are tiny.
+- evidence: At 375x800 in round 1 Prepare, the first "Play Build" button is at y=1153. In Combat, the Dice and Skills panels start at about y=880. The map renders 343x257px, and the enemy health text is font-size 9px. There is no horizontal overflow.
+- suggested fix: At narrow widths, order the active panel (Choices, Hand, or Dice and Skills) directly under the round header, or pin it as a bottom sheet. Raise the map label size to at least 12px rendered.
+- source: browser
+
+### [LOW] /debug — the event log prints [object Object]; the State text starts with stray letters
+- pass: 3 (commit d6176b7)
+- viewport: desktop
+- category: comprehension
+- observation: Coordinate payloads are not formatted, and the map glyph text leaks into the State section's text.
+- evidence: "[4.1] tilePlaced tile=broken-village center=[object Object]". The State innerText starts with the lines "B", "P", "g", "g".
+- suggested fix: Format `{q,r}` payloads as "(q,r)" in `EventLog.tsx`. Mark the map glyph text aria-hidden, or give the map a single label.
+- source: browser
 
 ## Done
 
