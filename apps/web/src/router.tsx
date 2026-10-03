@@ -18,3 +18,16 @@ export function matchRoute(routes: readonly Route[], pathname: string): Route {
   if (!fallback) throw new Error('matchRoute needs at least 1 route')
   return fallback
 }
+
+/** The site name, used alone on the home page and after every other page's title. */
+export const SITE_NAME = 'Survival Dice-Builder'
+
+/**
+ * The browser tab title for a route: "Tile sheet - Survival Dice-Builder", or the bare site
+ * name on the home page.
+ *
+ * @param route - the current route.
+ */
+export function documentTitle(route: Route): string {
+  return route.title === SITE_NAME ? SITE_NAME : `${route.title} - ${SITE_NAME}`
+}

@@ -49,7 +49,7 @@ export function StateView({ state }: Props) {
           {state.enemies.length === 0
             ? 'none'
             : state.enemies
-                .map((e) => `${e.id} ${e.kind} (${e.health}) at ${at(e.hex)}`)
+                .map((e) => `${e.id} ${e.kind}, ${e.health} health, at ${at(e.hex)}`)
                 .join(', ')}
         </dd>
         <dt>Defenses</dt>
@@ -57,7 +57,7 @@ export function StateView({ state }: Props) {
           {state.defenses.length === 0
             ? 'none'
             : state.defenses
-                .map((d) => `${d.id} ${d.kind} (${d.health}) at ${at(d.hex)}`)
+                .map((d) => `${d.id} ${d.kind}, ${d.health} health, at ${at(d.hex)}`)
                 .join(', ')}
         </dd>
         <dt>Tiles</dt>
@@ -79,8 +79,9 @@ export function StateView({ state }: Props) {
           <div key={p.id}>
             <dt>Player {p.id}</dt>
             <dd>
-              at {at(p.hex)}, {p.health}/{p.maxHealth} health, {p.guard} guard, {p.dice} dice,{' '}
-              {p.materials} materials, {p.currency} currency, orientation {p.orientation}
+              at {at(p.hex)}, {p.health}/{p.maxHealth} health, {p.guard} guard, {p.dice}{' '}
+              {p.dice === 1 ? 'die' : 'dice'}, {p.materials} materials, {p.currency} currency,
+              orientation {p.orientation}
             </dd>
             <dt>Hand</dt>
             <dd>{p.hand.map((c) => `${cardName(c.def)} [${c.id}]`).join(', ') || 'empty'}</dd>

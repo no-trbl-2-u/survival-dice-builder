@@ -24,8 +24,8 @@
   --tile-icon: #1d1b18;
   --terrain-plains: #d8e6b0;
   --terrain-forest: #8fb67a;
-  --terrain-hills: #d9bf8a;
-  --terrain-wasteland: #c9b59a;
+  --terrain-hills: #e1c281;
+  --terrain-wasteland: #c9b59c;
   --terrain-lake: #8fbfe3;
   --terrain-mountain: #8b909c;
   --color-hex-fill: #d9e4c8;
@@ -69,11 +69,11 @@
     --legal-move: #ffb347;
     --color-hex-stroke: #c9c3b2;
     --tile-icon: #f3efe4;
-    --terrain-plains: #5d6b3c;
-    --terrain-forest: #35553a;
-    --terrain-hills: #75603a;
-    --terrain-wasteland: #6b5c47;
-    --terrain-lake: #2f5674;
+    --terrain-plains: #606e3d;
+    --terrain-forest: #2b4f39;
+    --terrain-hills: #80612e;
+    --terrain-wasteland: #6a5c4b;
+    --terrain-lake: #1d6188;
     --terrain-mountain: #3c4252;
     --color-hex-fill: #3b4a2f;
     --color-hex-center: #6b5a36;
@@ -114,6 +114,19 @@ button {
 
 .nav a {
   color: inherit;
+}
+
+.nav a[aria-current='page'] {
+  font-weight: 700;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+
+/* A map coordinate after a place name: kept for replays and reports, but quiet. */
+.coords {
+  color: var(--color-text-muted);
+  font-family: var(--font-number);
+  font-size: 0.875em;
 }
 
 .app {

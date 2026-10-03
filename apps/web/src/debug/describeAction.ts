@@ -1,4 +1,5 @@
-import type { Action, GameState } from '@survival/engine'
+import type { Action, Axial, GameState } from '@survival/engine'
+import { baseHex, hexName, stepsAway } from '../map/places.ts'
 
 /** The printed name of a card instance in the current player's hand. */
 function cardName(state: GameState, cardId: string): string {
@@ -9,6 +10,17 @@ function cardName(state: GameState, cardId: string): string {
 
 function skillName(state: GameState, id: string): string {
   return state.content.skills.find((s) => s.id === id)?.name ?? id
+}
+
+/** An enemy by kind and id ("Grunt e1"). */
+function enemyName(state: GameState, id: string): string {
+  const kind = state.enemies.find((e) => e.id === id)?.kind
+  return kind ? `${kind.charAt(0).toUpperCase()}${kind.slice(1)} ${id}` : id
+}
+
+/** Where the current player stands. */
+function here(state: GameState): Axial {
+  return state.players[state.current]?.hex ?? { q: 0, r: 0 }
 }
 
 /** The face of an exchange die, for labels. */
@@ -29,7 +41,7 @@ export function describeAction(action: Action, state: GameState): string {
     case 'playCard':
       return `Play ${cardName(state, action.card)} (${half})`
     case 'discardCard':
-      return `Discard ${cardName(state, action.card)} unplayed`
+      return `Discard ${cardName(state, action.card)}`
     case 'toggleKeep':
       return `${state.exchange?.dice[action.die]?.kept ? 'Release' : 'Keep'} ${dieLabel(state, action.die)}`
     case 'roll':
@@ -39,7 +51,7 @@ export function describeAction(action: Action, state: GameState): string {
     case 'rerollDie':
       return `Reroll ${dieLabel(state, action.die)}`
     case 'endReroll':
-      return 'Finish rerolls'
+      return 'Stop rerolling'
     case 'assignDie':
       return `Put ${dieLabel(state, action.die)} on ${skillName(state, action.skill)} as ${action.asFace}${action.use > 0 ? ` (use ${action.use + 1})` : ''}`
     case 'unassignDie':
@@ -48,19 +60,24 @@ export function describeAction(action: Action, state: GameState): string {
       return 'Confirm dice and fire Skills'
     case 'chooseTarget': {
       const enemy = state.enemies.find((e) => e.id === action.enemy)
-      return `Target ${action.enemy}${enemy ? ` (${enemy.kind}, ${enemy.health} health)` : ''}`
+      const max = state.content.enemies.enemies.find((x) => x.id === enemy?.kind)?.health
+      return `Target ${enemyName(state, action.enemy)}${enemy ? `, ${enemy.health} of ${max ?? enemy.health} health` : ''}`
     }
-    case 'placeTile':
-      return `Place ${state.revealed[0] ?? 'tile'} at (${action.q},${action.r})`
+    case 'placeTile': {
+      const tile = state.content.tiles.find((t) => t.id === state.revealed[0])
+      const away = stepsAway(baseHex(state), action)
+      return `Place ${tile?.name ?? 'the tile'} ${away === 'here' ? 'at the base' : `${away} of the base`}`
+    }
     case 'moveTo': {
       const enemy = state.enemies.find((e) => e.hex.q === action.q && e.hex.r === action.r)
-      return `Move to (${action.q},${action.r})${enemy ? ` — skirmish ${enemy.id}` : ''}`
+      const where = `${hexName(state, action)}, ${stepsAway(here(state), action)}`
+      return `Move to ${where}${enemy ? `: skirmish ${enemyName(state, enemy.id)}` : ''}`
     }
     case 'stopMoving':
       return 'Stop moving'
     case 'build': {
       const name = state.content.defenses.find((d) => d.id === action.defense)?.name
-      return `Build ${name ?? action.defense} at (${action.q},${action.r})`
+      return `Build ${name ?? action.defense} on ${hexName(state, action)}, ${stepsAway(here(state), action)}`
     }
     case 'stopBuilding':
       return 'Stop building'
@@ -88,5 +105,22 @@ export function describeAction(action: Action, state: GameState): string {
       return `Draft ${skillName(state, action.skill)}`
     case 'replaceSkill':
       return `Replace ${skillName(state, action.skill)}`
+  }
+}
+
+/**
+ * The map hex an action points at, for a muted coordinate suffix next to its label.
+ *
+ * @param action - a legal action.
+ * @returns the hex, or null when the action is not about a place on the map.
+ */
+export function actionHex(action: Action): Axial | null {
+  switch (action.type) {
+    case 'placeTile':
+    case 'moveTo':
+    case 'build':
+      return { q: action.q, r: action.r }
+    default:
+      return null
   }
 }

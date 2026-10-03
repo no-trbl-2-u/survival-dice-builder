@@ -9,7 +9,7 @@ const PREFERENCES: readonly RegExp[] = [
   /^Stop building$/,
   /^Roll unkept dice$/,
   /^Stop rolling$/,
-  /^Finish rerolls$/,
+  /^Stop rerolling$/,
   /^Play /,
   /^Put die /,
   /^Select die /,

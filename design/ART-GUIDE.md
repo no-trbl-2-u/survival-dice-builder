@@ -34,7 +34,7 @@ Light and dark themes follow `prefers-color-scheme`. Every pair below is checked
 | `enemy-grunt` | `#7a4312` | `#e0a46a` | grunt outline |
 | `enemy-elite` | `#6b1f7a` | `#d29be0` | elite outline |
 | `legal-move` | `#8a3d00` | `#ffb347` | legal-move hex outline (3:1 on every passable terrain) |
-| `terrain-*` | see tokens | see tokens | the 6 terrains (phase 4) |
+| `terrain-*` | see tokens | see tokens | the 6 terrains (phase 4); every pair at least 20 apart (delta E) in each theme |
 
 ## Type
 

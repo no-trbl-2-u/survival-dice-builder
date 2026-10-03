@@ -1,8 +1,9 @@
 import { hexKey, tileHexes, type Action, type GameEvent, type GameState } from '@survival/engine'
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { gameIcons, ICON_VIEWBOX } from '../icons/gameIcons.ts'
+import { describeAction } from '../debug/describeAction.ts'
 import { hexPolygonPoints, hexToPixel } from '../map/geometry.ts'
-import { SITE_LABEL } from '../tiles/TileView.tsx'
+import { hexTitle } from '../map/places.ts'
 import styles from './Play.module.css'
 import { hexTargets, ofType } from './targets.ts'
 
@@ -79,7 +80,7 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
 
   const hexes = Object.entries(state.map.hexes).map(([key, hex]) => {
     const [q = 0, r = 0] = key.split(',').map(Number)
-    return { key, hex, center: hexToPixel({ q, r }, SIZE) }
+    return { key, hex, title: hexTitle(state, { q, r }), center: hexToPixel({ q, r }, SIZE) }
   })
   const ghostCenters = [...targets.values()].filter((t) => t.place)
   const all = [
@@ -141,13 +142,13 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
         onPointerUp={() => (drag.current = null)}
         onPointerLeave={() => (drag.current = null)}
       >
-        {hexes.map(({ key, hex, center }) => (
+        {hexes.map(({ key, hex, title, center }) => (
           <g key={key} className={styles.tileIn}>
             <polygon
               className={`${styles.hex} ${styles[hex.terrain] ?? ''}`}
               points={hexPolygonPoints(center, SIZE)}
             >
-              <title>{hex.site ? `${hex.terrain}, ${SITE_LABEL[hex.site]}` : hex.terrain}</title>
+              <title>{title}</title>
             </polygon>
             {hex.site ? (
               <Icon
@@ -165,7 +166,7 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
             key={`ghost-${t.key}`}
             role="button"
             tabIndex={0}
-            aria-label={`Place ${state.revealed[0] ?? 'the tile'} here (${t.q},${t.r})`}
+            aria-label={t.place ? describeAction(t.place, state) : 'Place the tile here'}
             className={styles.ghost}
             onClick={() => t.place && act(t.place)}
             onKeyDown={onKey(() => t.place && act(t.place))}
@@ -231,6 +232,7 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
           const max = state.content.enemies.enemies.find((x) => x.id === e.kind)?.health ?? e.health
           const target = enemyTargets.get(e.id)
           const r = SIZE * 0.55
+          const name = `${e.kind.charAt(0).toUpperCase()}${e.kind.slice(1)} ${e.id}, ${e.health} of ${max} health`
           return (
             <g
               key={e.id}
@@ -240,11 +242,11 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
                 ? {
                     role: 'button',
                     tabIndex: 0,
-                    'aria-label': `Target ${e.kind} ${e.id}, ${e.health} of ${max} health`,
+                    'aria-label': `Target ${name}`,
                     onClick: () => act(target),
                     onKeyDown: onKey(() => act(target)),
                   }
-                : {})}
+                : { role: 'img', 'aria-label': name })}
             >
               {e.kind === 'elite' ? (
                 <rect className={styles.elite} x={-r} y={-r} width={r * 2} height={r * 2} rx={3} />
@@ -285,8 +287,8 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
             const action = t.move ?? t.builds[0]
             if (!action) return null
             const label = t.move
-              ? `Move to ${t.q},${t.r}`
-              : `Build ${t.builds.map((b) => b.defense).join(' or ')} at ${t.q},${t.r}`
+              ? describeAction(t.move, state)
+              : t.builds.map((b) => describeAction(b, state)).join(', or ')
             return (
               <g
                 key={`t-${t.key}`}

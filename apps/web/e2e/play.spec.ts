@@ -22,7 +22,7 @@ test('/play: setup tile, the Prepare hands, and 1 Combat exchange, with no error
   await expect(bar).toContainText('Setup')
 
   // Setup: the map ghost tile and the Choices button are both buttons; use the Choices one.
-  await page.getByRole('button', { name: /^Place stony-fields at \(2,1\)$/ }).click()
+  await page.getByRole('button', { name: /^Place Stony Fields .* \(2,1\)$/ }).click()
   await expect(bar).toContainText('Round 1')
 
   // Prepare: play every card (stop any Move or Build at once) until Combat starts.
@@ -36,7 +36,7 @@ test('/play: setup tile, the Prepare hands, and 1 Combat exchange, with no error
   // Combat exchange: stop rolling, play the bottom halves, put a die on a Skill if one fits.
   await page.getByRole('button', { name: 'Stop rolling' }).click()
   for (let i = 0; i < 10 && /cards|reroll/.test((await bar.textContent()) ?? ''); i++) {
-    if (await clickFirst(page, /^Finish rerolls$/)) continue
+    if (await clickFirst(page, /^Stop rerolling$/)) continue
     await clickFirst(page, /^Play /)
   }
   if (await clickFirst(page, /^Select die 1$/)) await clickFirst(page, /^Put die 1 on /)

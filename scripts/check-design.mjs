@@ -6,7 +6,9 @@
 //      luminance) in the light and the dark theme;
 //   2. apps/web/src/styles/tokens.css carries every token with the same value (light in
 //      :root, dark in the prefers-color-scheme: dark block);
-//   3. every file a design SVG references (href="...") exists and is registered in ASSETS.md.
+//   3. every file a design SVG references (href="...") exists and is registered in ASSETS.md;
+//   4. every pair of terrain colours is at least TERRAIN_MIN_DELTA_E apart (CIE76) in each
+//      theme, so 2 terrains never look alike side by side.
 //
 //   exit 0  ->  all good
 //   exit 1  ->  problems (each printed)
@@ -59,6 +61,44 @@ for (const theme of ['light', 'dark']) {
   }
 }
 
+/** sRGB hex -> CIE L*a*b* (D65). */
+function lab(hex) {
+  const n = hex.replace('#', '')
+  const [r, g, b] = [0, 2, 4].map((i) => {
+    const c = parseInt(n.slice(i, i + 2), 16) / 255
+    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
+  })
+  const xyz = [
+    (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047,
+    r * 0.2126 + g * 0.7152 + b * 0.0722,
+    (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883,
+  ]
+  const [fx, fy, fz] = xyz.map((t) => (t > 0.008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116))
+  return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)]
+}
+
+/** Colour difference between two hex colours (CIE76 delta E). */
+export function deltaE(a, b) {
+  const [p, q] = [lab(a), lab(b)]
+  return Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2])
+}
+
+// 4 (run early, reported with the rest). Terrain colours stay apart.
+const TERRAIN_MIN_DELTA_E = 20
+let terrainPairs = 0
+for (const theme of ['light', 'dark']) {
+  const terrains = Object.entries(tokens[theme]).filter(([name]) => name.startsWith('terrain-'))
+  for (let i = 0; i < terrains.length; i++) {
+    for (let j = i + 1; j < terrains.length; j++) {
+      const [[a, av], [b, bv]] = [terrains[i], terrains[j]]
+      const d = deltaE(av, bv)
+      terrainPairs++
+      if (d < TERRAIN_MIN_DELTA_E)
+        problems.push(`${theme}: ${a} ${av} and ${b} ${bv} differ by ${d.toFixed(1)} < ${TERRAIN_MIN_DELTA_E} (delta E)`)
+    }
+  }
+}
+
 // 2. tokens.css in sync.
 if (fs.existsSync(CSS)) {
   const css = fs.readFileSync(CSS, 'utf-8')
@@ -103,5 +143,5 @@ if (problems.length > 0) {
   process.exit(1)
 }
 console.log(
-  `check-design: ${tokens.checks.length * 2} contrast pairs pass, tokens.css in sync, ${svgs(DESIGN).length} design SVG(s) use registered assets.`,
+  `check-design: ${tokens.checks.length * 2} contrast pairs pass, ${terrainPairs} terrain pairs are distinct, tokens.css in sync, ${svgs(DESIGN).length} design SVG(s) use registered assets.`,
 )

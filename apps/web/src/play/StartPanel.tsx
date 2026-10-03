@@ -42,6 +42,7 @@ export function StartPanel({ custom, store, onStart, onLoad }: Props) {
       <h2 id="start-title" className={styles.panelTitle}>
         New run
       </h2>
+      <p>Keep the base and every player alive for as many rounds as you can.</p>
       <form
         className={styles.startForm}
         onSubmit={(e) => {
@@ -60,12 +61,21 @@ export function StartPanel({ custom, store, onStart, onLoad }: Props) {
           </select>
         </label>
         <label>
-          Seed <input inputMode="numeric" value={seed} onChange={(e) => setSeed(e.target.value)} />
+          Seed{' '}
+          <input
+            inputMode="numeric"
+            value={seed}
+            onChange={(e) => setSeed(e.target.value)}
+            aria-describedby="seed-hint"
+          />
         </label>
         <button type="submit" className={styles.primary}>
           Start run
         </button>
       </form>
+      <p id="seed-hint" className={styles.muted}>
+        The same seed and the same choices give the same game.
+      </p>
       <p className={styles.muted}>
         Config: {custom ? 'custom (changed on the Config page)' : 'default rules'}.{' '}
         <a href="/config">Change the config</a>

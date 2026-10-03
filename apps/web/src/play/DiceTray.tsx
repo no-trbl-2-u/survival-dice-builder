@@ -95,7 +95,7 @@ export function DiceTray({ state, legal, act, selected, select, dice3d = false }
         ) : null}
         {endReroll ? (
           <button type="button" onClick={() => act(endReroll)}>
-            Finish rerolls
+            Stop rerolling
           </button>
         ) : null}
       </div>

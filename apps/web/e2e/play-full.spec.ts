@@ -14,7 +14,7 @@ const PREFERENCES: readonly RegExp[] = [
   /^Stop moving$/,
   /^Stop building$/,
   /^Stop rolling$/,
-  /^Finish rerolls$/,
+  /^Stop rerolling$/,
   /^Play /,
   /^Put die /,
   /^Select die /,

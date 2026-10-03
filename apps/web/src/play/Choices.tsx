@@ -1,5 +1,5 @@
 import type { Action, GameState } from '@survival/engine'
-import { describeAction } from '../debug/describeAction.ts'
+import { ActionLabel } from '../debug/ActionLabel.tsx'
 import styles from './Play.module.css'
 import { COVERED } from './targets.ts'
 
@@ -19,7 +19,7 @@ export function Choices({ state, legal, act }: Props) {
         {rest.map((a) => (
           <li key={JSON.stringify(a)}>
             <button type="button" onClick={() => act(a)}>
-              {describeAction(a, state)}
+              <ActionLabel action={a} state={state} />
             </button>
           </li>
         ))}

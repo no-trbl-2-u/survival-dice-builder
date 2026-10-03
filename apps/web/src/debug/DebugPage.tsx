@@ -7,8 +7,8 @@ import {
   type Action,
   type GameState,
 } from '@survival/engine'
-import { useReducer, useState } from 'react'
-import { describeAction } from './describeAction.ts'
+import { useEffect, useReducer, useRef, useState } from 'react'
+import { ActionLabel } from './ActionLabel.tsx'
 import styles from './DebugPage.module.css'
 import { EventLog } from './EventLog.tsx'
 import { StateView } from './StateView.tsx'
@@ -56,6 +56,20 @@ export function DebugPage() {
   )
   const [copied, setCopied] = useState(false)
   const actions = legalActions(run.state)
+  const heading = useRef<HTMLHeadingElement>(null)
+  const refocus = useRef(false)
+
+  /** Applies a step, then returns focus to the action list (its buttons are all replaced). */
+  const step = (msg: Msg) => {
+    refocus.current = true
+    dispatch(msg)
+  }
+
+  useEffect(() => {
+    if (!refocus.current) return
+    refocus.current = false
+    heading.current?.focus()
+  }, [run])
 
   const copyReplay = async () => {
     await navigator.clipboard.writeText(JSON.stringify({ seed: run.seed, actions: run.actions }))
@@ -64,6 +78,7 @@ export function DebugPage() {
 
   return (
     <div className={styles.page}>
+      <p>Play the rules engine one action at a time. Numbers in [brackets] are rules sections.</p>
       <form
         className={styles.controls}
         onSubmit={(e) => {
@@ -82,10 +97,10 @@ export function DebugPage() {
           />
         </label>
         <button type="submit">New run</button>
-        <button type="button" onClick={() => dispatch({ kind: 'bot', steps: 1 })}>
+        <button type="button" onClick={() => step({ kind: 'bot', steps: 1 })}>
           Bot step
         </button>
-        <button type="button" onClick={() => dispatch({ kind: 'bot', steps: AUTOPLAY_LIMIT })}>
+        <button type="button" onClick={() => step({ kind: 'bot', steps: AUTOPLAY_LIMIT })}>
           Autoplay
         </button>
         <button type="button" onClick={copyReplay}>
@@ -97,15 +112,17 @@ export function DebugPage() {
       </form>
 
       <section aria-labelledby="actions-heading">
-        <h2 id="actions-heading">Legal actions ({actions.length})</h2>
+        <h2 id="actions-heading" ref={heading} tabIndex={-1}>
+          Legal actions ({actions.length})
+        </h2>
         {actions.length === 0 ? (
           <p>The run has ended.</p>
         ) : (
           <ul className={styles.actions} data-testid="actions">
             {actions.map((action) => (
               <li key={JSON.stringify(action)}>
-                <button type="button" onClick={() => dispatch({ kind: 'act', action })}>
-                  {describeAction(action, run.state)}
+                <button type="button" onClick={() => step({ kind: 'act', action })}>
+                  <ActionLabel action={action} state={run.state} />
                 </button>
               </li>
             ))}
