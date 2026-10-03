@@ -239,7 +239,7 @@ can be. `docs/playtests/PROTOCOL.md` (one-page script),
 ingests run exports from `docs/playtests/runs/` and computes
 median rounds/minutes and minutes-per-round vs the simulator
 estimate, and `docs/playtests/REPORT.md` as a template. The
-sessions themselves are filed as a `[needs-user-call]`.
+sessions themselves are filed as a `[needs-user-call]`. Detailed brief: `phase_16_playtest_protocol.md`.
 
 ---
 
