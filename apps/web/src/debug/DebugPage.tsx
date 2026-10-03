@@ -1,3 +1,4 @@
+import { botChoice } from '@survival/bot'
 import { defaultContent } from '@survival/content'
 import {
   applyAction,
@@ -14,12 +15,27 @@ import { StateView } from './StateView.tsx'
 
 type Run = Readonly<{ seed: number; state: GameState; actions: readonly Action[] }>
 
-type Msg = { kind: 'new'; seed: number } | { kind: 'act'; action: Action }
+type Msg =
+  { kind: 'new'; seed: number } | { kind: 'act'; action: Action } | { kind: 'bot'; steps: number }
+
+/** Autoplay stops after this many bot actions (a stuck bot cannot freeze the page). */
+const AUTOPLAY_LIMIT = 5000
 
 /** Holds the run as seed + actions; every state comes from the engine. */
 function reducer(run: Run, msg: Msg): Run {
   if (msg.kind === 'new') {
     return { seed: msg.seed, state: createGame(defaultContent.config, msg.seed), actions: [] }
+  }
+  if (msg.kind === 'bot') {
+    let state = run.state
+    const actions = [...run.actions]
+    for (let i = 0; i < msg.steps; i++) {
+      const action = botChoice(state)
+      if (!action) break
+      state = applyAction(state, action).state
+      actions.push(action)
+    }
+    return { ...run, state, actions }
   }
   return {
     ...run,
@@ -66,6 +82,12 @@ export function DebugPage() {
           />
         </label>
         <button type="submit">New run</button>
+        <button type="button" onClick={() => dispatch({ kind: 'bot', steps: 1 })}>
+          Bot step
+        </button>
+        <button type="button" onClick={() => dispatch({ kind: 'bot', steps: AUTOPLAY_LIMIT })}>
+          Autoplay
+        </button>
         <button type="button" onClick={copyReplay}>
           {copied ? 'Replay copied' : 'Copy replay'}
         </button>

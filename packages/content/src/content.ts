@@ -1,10 +1,10 @@
-import cards from '../data/cards.json'
-import config from '../data/config.default.json'
-import defenses from '../data/defenses.json'
-import enemies from '../data/enemies.json'
-import skills from '../data/skills.json'
-import tiles from '../data/tiles.json'
-import upgrades from '../data/upgrades.json'
+import cards from '../data/cards.json' with { type: 'json' }
+import config from '../data/config.default.json' with { type: 'json' }
+import defenses from '../data/defenses.json' with { type: 'json' }
+import enemies from '../data/enemies.json' with { type: 'json' }
+import skills from '../data/skills.json' with { type: 'json' }
+import tiles from '../data/tiles.json' with { type: 'json' }
+import upgrades from '../data/upgrades.json' with { type: 'json' }
 import { formatContentError, loadContent, type Content, type RawContent } from './load.ts'
 
 /** The raw default content files, before validation. Tests copy and edit this. */

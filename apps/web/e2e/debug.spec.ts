@@ -33,3 +33,17 @@ test('/debug: a new seed starts a new run', async ({ page }) => {
   await expect(page.getByText('0 actions')).toBeVisible()
   await expect(page.getByTestId('state')).toContainText('1 / setup')
 })
+
+test('/debug: Autoplay plays the bot to the end of a run with no errors', async ({ page }) => {
+  const errors: string[] = []
+  page.on('console', (msg) => {
+    if (msg.type() === 'error') errors.push(msg.text())
+  })
+  page.on('pageerror', (err) => errors.push(err.message))
+
+  await page.goto('/debug')
+  await page.getByRole('button', { name: 'Autoplay' }).click()
+  await expect(page.getByText('The run has ended.')).toBeVisible()
+  await expect(page.getByTestId('state')).toContainText('ended')
+  expect(errors).toEqual([])
+})

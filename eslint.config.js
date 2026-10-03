@@ -37,8 +37,8 @@ export default tseslint.config(
   },
   // Engine purity (bearings hard rule 10): pure functions over plain data.
   {
-    files: ['packages/engine/src/**/*.ts'],
-    ignores: ['packages/engine/src/**/*.test.ts'],
+    files: ['packages/engine/src/**/*.ts', 'packages/bot/src/**/*.ts'],
+    ignores: ['packages/engine/src/**/*.test.ts', 'packages/bot/src/**/*.test.ts'],
     rules: {
       'no-restricted-syntax': [
         'error',

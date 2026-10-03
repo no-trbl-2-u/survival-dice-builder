@@ -50,6 +50,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@survival/bot':
+        specifier: workspace:*
+        version: link:../../packages/bot
       '@survival/content':
         specifier: workspace:*
         version: link:../../packages/content
@@ -81,6 +84,9 @@ importers:
 
   packages/bot:
     dependencies:
+      '@survival/content':
+        specifier: workspace:*
+        version: link:../content
       '@survival/engine':
         specifier: workspace:*
         version: link:../engine
@@ -102,6 +108,9 @@ importers:
       '@survival/bot':
         specifier: workspace:*
         version: link:../../packages/bot
+      '@survival/content':
+        specifier: workspace:*
+        version: link:../../packages/content
       '@survival/engine':
         specifier: workspace:*
         version: link:../../packages/engine

@@ -1,4 +1,6 @@
 /**
- * @survival/bot — autoplay policy over `legalActions` for tests and batch runs (phase 9).
+ * @survival/bot — a deterministic autoplay policy over `legalActions`, for tests, batch runs
+ * (`tools/sim`), and the `/debug` Autoplay button. A floor, not a skilled player.
  */
-export const BOT_READY = false
+export { botChoice } from './policy.ts'
+export { goal } from './goals.ts'

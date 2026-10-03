@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@survival/bot": "workspace:*",
+    "@survival/content": "workspace:*",
     "@survival/engine": "workspace:*"
   }
 }
