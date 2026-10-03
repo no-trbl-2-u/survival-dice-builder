@@ -22,7 +22,7 @@ until then).
 | 7 | 7.11, 9.5 | Enemy damage to structures. | Designer intends: **1 die (Table 4) per grunt; elites get special rules** (unwritten). Until the spec carries that text the engine uses the v1 reading: grunt 2 fixed, elite 6 dice. | `structureDamage: "v1"` (future `"grunt-die"`) | pending-spec |
 | 8 | 6.10–6.13 | Skirmish that does not clear the hex. | Figure **stays on the hex it came from**; the rest of the Move is lost. Entering costs movement as normal, including the 6.9 surcharge, and needs the full cost available. | `skirmishFail: "stay-lose-move"` | decided 2026-10-02 |
 | 9 | 2.1 | Skill capacity. | The 4 starter Skills are fixed. **At most 6 drafted Skills.** When full, a draft may replace one drafted Skill (proposed reading of "at most"). | `draftSlots: 6`, `fullBoardDraft: "swap"` | decided 2026-10-02 (swap detail: proposed) |
-| 10 | 6.2 | Must every card be played? | **A card may be discarded unplayed.** Played effects resolve as written. | `mandatoryPlays: false` | decided 2026-10-02 |
+| 10 | 6.2, 7.8 step 5 | Must every card be played (Prepare top halves and Combat bottom halves)? | **A card may be discarded unplayed.** Played effects resolve as written. | `mandatoryPlays: false` | decided 2026-10-02 |
 | 11 | 6.8, 11.5 | Shop timing and refill. | **Buy at any time in any phase while the figure is on the base.** Offers are shared; a bought card is **replaced immediately** so 3 offers are always shown. Assumption to confirm: the on-base requirement from 6.8 still holds. | `shopTiming: "any-time-on-base"`, `shopRefill: "immediate"` | decided 2026-10-02 (on-base assumption: proposed) |
 | 12 | Table 3, 6.7 | Heal targets in co-op (Mend, Rest, Renewal, Purify). | **Self only** for v1. | `healTargets: "self"` | proposed |
 | 13 | 10.5 | Which grunt becomes the elite? | The grunt **nearest the base** (ties: lowest spawn node id). | `eliteReplacement: "nearest-base"` | proposed |
@@ -34,6 +34,8 @@ until then).
 | 19 | 18.1 | Which cards make the 8-card and 10-card starter decks? | 8 cards: 3 Move, 3 Gather, 1 Build, 1 Rest. 10 cards: 4 Move, 4 Gather, 1 Build, 1 Rest. | `deck.presets` | proposed (phase 4) |
 | 20 | 6.7, Table 8 | "Gather +2" (Haul): node amount plus 2, or 2 total? | **Node amount plus the bonus** (a 2-material node gives 4 with Haul). | `PrepareEffect gather.bonus` | proposed (phase 4) |
 | 21 | Table 1, 9.2 | The elite spawn node "holds 1 elite": does it refill (9.2) like a spawn node? | **Yes**: an elite spawn node gets a new elite only when its elite is defeated, the same as 9.2. | (engine, phase 7) | proposed (phase 4) |
+| 22 | 7.8 step 5, Tables 2, 8 | Where does a card's "+N damage" go? | Added once to the **first damage Skill that fires** this exchange (to each of its targets). Lost if no damage Skill fires. | (engine, `confirmAssignment`) | proposed (phase 5) |
+| 23 | 7.8 step 5 | Order of card bottom halves and their reroll effects. | The player plays cards one at a time in any order; a numbered reroll ("Reroll 2 dice") rerolls that many **different** dice, picked one at a time; the player may stop early. "Reroll all" rerolls every die, kept or not. Card rerolls do **not** count toward the 3-roll maximum (7.8 step 4). A Combat draw with fewer than 3 cards left draws them all, as 6.5. | (engine) | proposed (phase 5) |
 
 ## Spec amendments owed
 

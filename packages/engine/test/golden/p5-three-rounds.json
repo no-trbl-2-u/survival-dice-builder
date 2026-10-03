@@ -1,0 +1,254 @@
+{
+  "description": "Phase 5: 3 rounds, solo, default config, scripted policy (seed 2026).",
+  "seed": 2026,
+  "config": {
+    "players": {
+      "min": 1,
+      "max": 4
+    },
+    "player": {
+      "maxHealth": 15,
+      "startingDice": 1,
+      "starterSkills": ["strike", "shot", "mend", "guard"],
+      "draftSlots": 6
+    },
+    "deck": {
+      "preset": "deck-6-hand-3",
+      "presets": [
+        {
+          "id": "deck-6-hand-3",
+          "handSize": 3,
+          "cards": [
+            {
+              "card": "starter-move",
+              "quantity": 2
+            },
+            {
+              "card": "starter-gather",
+              "quantity": 2
+            },
+            {
+              "card": "starter-build",
+              "quantity": 1
+            },
+            {
+              "card": "starter-rest",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "deck-8-hand-4",
+          "handSize": 4,
+          "cards": [
+            {
+              "card": "starter-move",
+              "quantity": 3
+            },
+            {
+              "card": "starter-gather",
+              "quantity": 3
+            },
+            {
+              "card": "starter-build",
+              "quantity": 1
+            },
+            {
+              "card": "starter-rest",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "deck-10-hand-5",
+          "handSize": 5,
+          "cards": [
+            {
+              "card": "starter-move",
+              "quantity": 4
+            },
+            {
+              "card": "starter-gather",
+              "quantity": 4
+            },
+            {
+              "card": "starter-build",
+              "quantity": 1
+            },
+            {
+              "card": "starter-rest",
+              "quantity": 1
+            }
+          ]
+        }
+      ]
+    },
+    "base": {
+      "startingHealth": 20,
+      "healthPerUpgrade": 5
+    },
+    "combat": {
+      "maxRolls": 3,
+      "exchangeRange": 2,
+      "enemyMoveHexes": 2,
+      "moveCostNextToEnemy": 2
+    },
+    "experience": {
+      "firstStep": 5,
+      "stepIncrease": 5
+    },
+    "gatherAmount": 2,
+    "miniatureLimit": 20,
+    "waveTrackStart": 0,
+    "shop": {
+      "offers": 3
+    },
+    "draft": {
+      "reveal": 2,
+      "keep": 1,
+      "everyNRounds": 2
+    },
+    "supplies": {
+      "copiesPerCard": 1,
+      "copiesPerSkill": 1
+    },
+    "tiles": {
+      "countryside": 3,
+      "core": 5,
+      "setupCountryside": 1,
+      "revealPerPlayer": 1
+    },
+    "milestones": {
+      "surviveRounds": [5, 10, 15],
+      "upgradesBought": 3,
+      "tilesRevealed": 10,
+      "level": 5,
+      "skillFired": "arcane-rain"
+    },
+    "options": {
+      "exploration": "forced",
+      "boughtCards": "add",
+      "maxLevel": null,
+      "skillUses": "once-per-exchange"
+    },
+    "rulings": {
+      "enemiesPerHex": 1,
+      "figuresPerHex": 1,
+      "baseHexFigureLimitExempt": true,
+      "blockedPathRule": "next-target",
+      "tileRotation": false,
+      "coopPrepareOrder": "alternate-hands",
+      "structureDamage": "v1",
+      "skirmishFail": "stay-lose-move",
+      "fullBoardDraft": "swap",
+      "mandatoryPlays": false,
+      "shopTiming": "any-time-on-base",
+      "shopRefill": "immediate",
+      "healTargets": "self",
+      "eliteReplacement": "nearest-base",
+      "buildOnNode": true,
+      "targetTieBreak": ["player", "tower", "barricade", "base"]
+    }
+  },
+  "actions": [
+    {
+      "type": "playCard",
+      "card": "c4"
+    },
+    {
+      "type": "playCard",
+      "card": "c1"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
+      "type": "playCard",
+      "card": "c6"
+    },
+    {
+      "type": "playCard",
+      "card": "c2"
+    },
+    {
+      "type": "playCard",
+      "card": "c3"
+    },
+    {
+      "type": "stopRolling"
+    },
+    {
+      "type": "playCard",
+      "card": "c6"
+    },
+    {
+      "type": "playCard",
+      "card": "c4"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
+      "type": "assignDie",
+      "die": 0,
+      "skill": "strike",
+      "use": 0,
+      "slot": 0,
+      "asFace": "Sword"
+    },
+    {
+      "type": "confirmAssignment"
+    },
+    {
+      "type": "playCard",
+      "card": "c1"
+    },
+    {
+      "type": "playCard",
+      "card": "c2"
+    },
+    {
+      "type": "playCard",
+      "card": "c3"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
+      "type": "playCard",
+      "card": "c4"
+    },
+    {
+      "type": "playCard",
+      "card": "c6"
+    },
+    {
+      "type": "playCard",
+      "card": "c4"
+    },
+    {
+      "type": "playCard",
+      "card": "c1"
+    },
+    {
+      "type": "playCard",
+      "card": "c2"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
+      "type": "playCard",
+      "card": "c3"
+    },
+    {
+      "type": "playCard",
+      "card": "c6"
+    }
+  ],
+  "expectedHash": "5d1a6c0e9ac9881447f55d196b56252cac7b3b20b2ad7debc438f21764eca269"
+}

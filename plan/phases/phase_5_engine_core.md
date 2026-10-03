@@ -78,7 +78,10 @@ functions), `<name>.test.ts` (rule-tagged unit tests), and
 ## Code conventions (copied by every later phase)
 
 - Every exported function and type has TSDoc: what it does,
-  inputs, outputs, and `@rule <id>` (several allowed).
+  inputs, outputs, and `@rule <id>` (several allowed) when it
+  implements a rule. Infrastructure (state lookups, `withLog`,
+  serialization, action plumbing, plain data types) needs TSDoc
+  but no `@rule` tag (decided during phase 5 review).
 - Functions take state and return new state; never mutate
   inputs. Use readonly types on public state.
 - Randomness only through `rng/`; the rng state is a field of
