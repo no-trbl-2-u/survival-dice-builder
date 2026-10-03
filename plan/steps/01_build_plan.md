@@ -50,7 +50,7 @@ Tick in this file in the same commit that ships the phase.
 
 **Review readiness (phases 17–18) — promoted via oversight 2026-10-03:**
 - [x] Phase 17 — Accessibility and navigation pass: the pending critique rows on /play, /tiles, /debug, and the shell — c5a664b
-- [ ] Phase 18 — Designer decision digest: one page for every open reading and pending check
+- [x] Phase 18 — Designer decision digest: one page for every open reading and pending check — 869dc88
 
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
@@ -295,3 +295,4 @@ default changes; the designer still decides. Detailed brief:
 - phase 15 — 20e9a4e — die-face and resource icons, /credits from ASSETS.md, CSS motion (tiles, movers, Tower shots, hits, level-up, draft reveal), synthesized sound with mute, optional 3D dice (three.js, lands on the engine's face); Milestone 4 (presentable)
 - phase 16 — a7a0e7f — docs/playtests (PROTOCOL, SURVEY, REPORT template, runs/), pnpm sim -- playtests (minutes per round against the 8-9 estimate); sessions filed as a needs-user-call
 - phase 17 — c5a664b — choices and map name places, map hex text lists enemies, /debug focus and lede, per-route titles and aria-current, distinct dark terrain colours (check-design delta E); clears the 7 pending critique rows
+- phase 18 — 869dc88 — /decisions page and generated docs/DECISIONS.md: 45 open rule readings with their config values (linked to /config fields) and every needs-user-call check; pnpm sim -- decisions; freshness test
