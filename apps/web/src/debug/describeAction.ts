@@ -12,10 +12,10 @@ function skillName(state: GameState, id: string): string {
   return state.content.skills.find((s) => s.id === id)?.name ?? id
 }
 
-/** An enemy by kind and id ("Grunt e1"). */
+/** An enemy by kind and id ("grunt e1"; game terms stay lowercase, as in the rules). */
 function enemyName(state: GameState, id: string): string {
   const kind = state.enemies.find((e) => e.id === id)?.kind
-  return kind ? `${kind.charAt(0).toUpperCase()}${kind.slice(1)} ${id}` : id
+  return kind ? `${kind} ${id}` : id
 }
 
 /** Where the current player stands. */

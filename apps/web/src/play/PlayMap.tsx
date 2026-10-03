@@ -232,7 +232,7 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
           const max = state.content.enemies.enemies.find((x) => x.id === e.kind)?.health ?? e.health
           const target = enemyTargets.get(e.id)
           const r = SIZE * 0.55
-          const name = `${e.kind.charAt(0).toUpperCase()}${e.kind.slice(1)} ${e.id}, ${e.health} of ${max} health`
+          const name = `${e.kind} ${e.id}, ${e.health} of ${max} health`
           return (
             <g
               key={e.id}

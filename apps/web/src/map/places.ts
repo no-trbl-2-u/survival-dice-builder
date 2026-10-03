@@ -51,18 +51,16 @@ export function baseHex(state: GameState): Axial {
 }
 
 /**
- * How far and which way a hex is from another, in words: "2 north-east", "1 west", or `here`.
+ * How far and which way a hex is from another, in words: "2 hexes north-east", "1 hex west", or
+ * `here`.
  *
  * @param from - the hex the player is looking from.
  * @param to - the hex being named.
  */
 export function stepsAway(from: Axial, to: Axial): string {
   const n = hexDistance(from, to)
-  return n === 0 ? 'here' : `${n} ${bearing(from, to)}`
+  return n === 0 ? 'here' : `${n} ${n === 1 ? 'hex' : 'hexes'} ${bearing(from, to)}`
 }
-
-/** An enemy kind as a name ("grunt" -> "Grunt"). */
-const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 /**
  * Everything standing on a hex, in words: enemies with health, defenses, and figures.
@@ -78,7 +76,7 @@ export function hexContents(state: GameState, hex: Axial): string[] {
   return [
     ...enemies.map((e) => {
       const max = state.content.enemies.enemies.find((x) => x.id === e.kind)?.health ?? e.health
-      return `${capital(e.kind)} ${e.id} (${e.health} of ${max} health)`
+      return `${e.kind} ${e.id} (${e.health} of ${max} health)`
     }),
     ...defenses.map((d) => {
       const name = state.content.defenses.find((x) => x.id === d.kind)?.name ?? d.kind

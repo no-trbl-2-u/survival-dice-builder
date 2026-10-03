@@ -1,4 +1,5 @@
-import type { GameEvent, GameState } from '@survival/engine'
+import { hexKey, type GameEvent, type GameState } from '@survival/engine'
+import { hexLabel } from '../tiles/TileView.tsx'
 
 /** What the log needs to name ids: the content, plus the pieces in play (usually the state). */
 type Names = Readonly<{
@@ -8,9 +9,18 @@ type Names = Readonly<{
   defenses?: GameState['defenses']
   /** The log: a defeated enemy's kind is still in its spawn event. */
   log?: GameState['log']
+  /** The map, to name a hex by its terrain and site. */
+  map?: GameState['map']
 }>
 
 const hex = (h: { q: number; r: number }) => `(${h.q},${h.r})`
+/** "Plains, Spawn node (2,0)": a hex by name, with its coordinate; bare coordinates off the map. */
+function place(n: Names, h: { q: number; r: number }): string {
+  const found = n.map?.hexes[hexKey(h)]
+  return found ? `${hexLabel(found)} ${hex(h)}` : hex(h)
+}
+/** "a grunt", "an elite". */
+const article = (word: string) => `${/^[aeiou]/i.test(word) ? 'an' : 'a'} ${word}`
 const skillName = (n: Names, id: string) => n.content.skills.find((s) => s.id === id)?.name ?? id
 const cardName = (n: Names, id: string) => n.content.cards.find((c) => c.id === id)?.name ?? id
 const tileName = (n: Names, id: string) => n.content.tiles.find((t) => t.id === id)?.name ?? id
@@ -129,11 +139,11 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'tilePlaced':
       return `${tileName(names, event.tile)} placed at ${hex(event.center)}.`
     case 'enemySpawned':
-      return `A ${event.kind} appears at ${hex(event.hex)}${event.spilled ? ' (node taken: nearest empty hex)' : ''}.`
+      return `${upper(article(event.kind))} appears on ${place(names, event.hex)}${event.spilled ? ' (node taken: nearest empty hex)' : ''}.`
     case 'moved':
-      return `${who(event.player)} moved to ${hex(event.to)} (cost ${event.cost}, ${event.hexesLeft} left).`
+      return `${who(event.player)} moved to ${place(names, event.to)} (cost ${event.cost}, ${event.hexesLeft} left).`
     case 'skirmishStarted':
-      return `Skirmish with ${enemyLabel(names, event.enemy)} at ${hex(event.hex)}.`
+      return `Skirmish with ${enemyLabel(names, event.enemy)} on ${place(names, event.hex)}.`
     case 'skirmishEnded':
       return event.won
         ? 'Skirmish won: you move into the hex.'
@@ -143,7 +153,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
         ? `${who(event.player)} gathered nothing: gather on a Gathering node with no enemy on it.`
         : `${who(event.player)} gathered ${event.amount} materials (now ${event.materials}).`
     case 'defenseBuilt':
-      return `${event.kind[0]?.toUpperCase()}${event.kind.slice(1)} built at ${hex(event.hex)} for ${event.cost} materials.`
+      return `${event.kind[0]?.toUpperCase()}${event.kind.slice(1)} built on ${place(names, event.hex)} for ${event.cost} materials.`
     case 'defenseDamaged':
       return `${defenseLabel(names, event.defense)} takes ${event.amount} damage (health ${event.health}).`
     case 'defenseRemoved':
@@ -151,7 +161,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'roundAdvanced':
       return `Round ${event.round}.`
     case 'enemyMoved':
-      return `${upper(enemyLabel(names, event.enemy))} moves to ${hex(event.to)}${event.target ? ` toward ${target(event.target)}` : ''}.`
+      return `${upper(enemyLabel(names, event.enemy))} moves to ${place(names, event.to)}${event.target ? ` toward ${target(event.target)}` : ''}.`
     case 'towerAttacked':
       return `${defenseLabel(names, event.tower)} hits ${enemyLabel(names, event.enemy)} for ${event.damage}.`
     case 'structureAttacked':

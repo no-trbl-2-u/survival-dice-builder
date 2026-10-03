@@ -98,3 +98,21 @@ describe('describeEvent', () => {
     expect(describeEvent(healed as never, coop)).toBe('Player 2 healed 1 (health 5).')
   })
 })
+
+describe('describeEvent voice', () => {
+  it('uses "an elite", names the hex, and keeps game terms lowercase mid-sentence', () => {
+    const { run } = botRun(2)
+    const state = run.state
+    const spawned = {
+      type: 'enemySpawned',
+      rule: '10.2',
+      enemy: 'e9',
+      kind: 'elite',
+      hex: { q: 0, r: 0 },
+      spilled: false,
+    }
+    const line = describeEvent(spawned as never, state)
+    expect(line).toMatch(/^An elite appears on .+ \(0,0\)\.$/)
+    expect(line).not.toMatch(/on \(0,0\)/)
+  })
+})

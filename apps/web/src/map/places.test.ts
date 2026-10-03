@@ -19,7 +19,7 @@ describe('places', () => {
   })
 
   it('counts steps with the direction', () => {
-    expect(stepsAway({ q: 0, r: 0 }, { q: 0, r: -2 })).toBe('2 north')
+    expect(stepsAway({ q: 0, r: 0 }, { q: 0, r: -2 })).toBe('2 hexes north')
     expect(stepsAway({ q: 1, r: 1 }, { q: 1, r: 1 })).toBe('here')
   })
 
@@ -38,7 +38,7 @@ describe('places', () => {
       enemies: [{ id: 'e1', kind: 'grunt', hex, health: 1 }],
     }
     const max = start.content.enemies.enemies.find((e) => e.id === 'grunt')!.health
-    expect(hexContents(state, hex)[0]).toBe(`Grunt e1 (1 of ${max} health)`)
-    expect(hexTitle(state, hex)).toMatch(/, Base: Grunt e1/)
+    expect(hexContents(state, hex)[0]).toBe(`grunt e1 (1 of ${max} health)`)
+    expect(hexTitle(state, hex)).toMatch(/, Base: grunt e1/)
   })
 })

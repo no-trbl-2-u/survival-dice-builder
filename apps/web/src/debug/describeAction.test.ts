@@ -10,7 +10,7 @@ describe('describeAction', () => {
     expect(labels).toHaveLength(6)
     expect(
       labels.every((l) =>
-        /^Place [A-Z][\w ]+ \d (north|south|east|west)(-east|-west)? of the base$/.test(l),
+        /^Place [A-Z][\w ]+ \d hexes (north|south|east|west)(-east|-west)? of the base$/.test(l),
       ),
     ).toBe(true)
     expect(new Set(labels).size).toBe(6)
@@ -58,7 +58,7 @@ describe('describeAction', () => {
   it('names moves and builds by place and direction, and keeps the coordinate apart', () => {
     const base = createGame(defaultContent.config, 1)
     const move = { type: 'moveTo' as const, q: 0, r: -1 }
-    expect(describeAction(move, base)).toMatch(/^Move to (open ground|[A-Z][a-z]+.*), 1 north$/)
+    expect(describeAction(move, base)).toMatch(/^Move to (open ground|[A-Z][a-z]+.*), 1 hex north$/)
     expect(actionHex(move)).toEqual({ q: 0, r: -1 })
     expect(actionHex({ type: 'stopMoving' })).toBeNull()
   })

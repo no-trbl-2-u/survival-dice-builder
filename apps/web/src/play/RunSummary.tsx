@@ -43,7 +43,7 @@ export function RunSummary({ run, baseCurve, onNewRun }: Props) {
       </h2>
       <p className={styles.muted}>
         Seed {run.seed} · {run.actions.length} actions · level {s.level} · {s.upgrades.length}{' '}
-        upgrades
+        {s.upgrades.length === 1 ? 'upgrade' : 'upgrades'}
       </p>
       <h3 className={styles.subTitle}>Milestones</h3>
       <ul className={styles.milestones}>
