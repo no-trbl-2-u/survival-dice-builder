@@ -207,7 +207,7 @@ hot-seat, including the engine's co-op turn order (16.1–16.8,
 moved from phase 7: alternate hands in Prepare, exchanges in
 turn, per-player enemy attacks, reveals per player), `/config` panel over every config value with reset,
 save/load file, `localStorage` autosave, developer undo via
-replay.
+replay. Detailed brief: `phase_13_coop_config_save.md`.
 
 ### Phase 14 — Playtest tooling (remainder)
 
