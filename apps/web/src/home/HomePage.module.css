@@ -1,0 +1,45 @@
+.home {
+  display: grid;
+  gap: 12px;
+  max-width: 40rem;
+}
+
+.pitch {
+  margin: 0;
+  font-size: var(--text-lg, 1.125rem);
+}
+
+.start {
+  justify-self: start;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  background: var(--color-accent);
+  color: var(--on-phase);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.start:focus-visible {
+  outline: 3px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+.heading {
+  margin: 8px 0 0;
+  font-size: var(--text-lg, 1.125rem);
+}
+
+.steps {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.more {
+  color: var(--color-text-muted);
+}
+
+.art {
+  max-width: 14rem;
+}

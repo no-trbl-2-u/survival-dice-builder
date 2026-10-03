@@ -1,7 +1,7 @@
 import { ConfigPage } from './config/ConfigPage.tsx'
 import { CreditsPage } from './credits/CreditsPage.tsx'
 import { DebugPage } from './debug/DebugPage.tsx'
-import { HexTile } from './map/HexTile.tsx'
+import { HomePage } from './home/HomePage.tsx'
 import { PlayPage } from './play/PlayPage.tsx'
 import { matchRoute, type Route } from './router.tsx'
 import { TileSheet } from './tiles/TileSheet.tsx'
@@ -10,7 +10,7 @@ const routes: readonly Route[] = [
   {
     path: '/',
     title: 'Survival Dice-Builder',
-    render: () => <HexTile center={{ q: 0, r: 0 }} />,
+    render: () => <HomePage />,
   },
   { path: '/play', title: 'Play', render: () => <PlayPage /> },
   { path: '/config', title: 'Config', render: () => <ConfigPage /> },
