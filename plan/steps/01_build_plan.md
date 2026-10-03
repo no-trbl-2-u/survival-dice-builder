@@ -46,7 +46,7 @@ Tick in this file in the same commit that ships the phase.
 
 **Presentable (phases 15–16) — Milestone 4 at phase 15:**
 - [x] Phase 15 — Visual polish: icons, art, 3D dice spike + optional toggle, animation, sound (spec 8) — 20e9a4e
-- [ ] Phase 16 — Playtest protocol, survey, and analysis kit (spec C, non-code)
+- [x] Phase 16 — Playtest protocol, survey, and analysis kit (spec C, non-code) — a7a0e7f
 
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
@@ -264,3 +264,4 @@ sessions themselves are filed as a `[needs-user-call]`. Detailed brief: `phase_1
 - phase 13 — 3007181 — co-op turn order (16.1-16.8) in the engine, 1-4 player hot-seat, /config panel, save/load by replay, autosave, developer undo
 - phase 14 — 9e9afba — real timing in run exports (phase, decision, round; sums to session), sim compare and timing reports, 200-run regression identical to phase 9; Milestone 3 (playtest build)
 - phase 15 — 20e9a4e — die-face and resource icons, /credits from ASSETS.md, CSS motion (tiles, movers, Tower shots, hits, level-up, draft reveal), synthesized sound with mute, optional 3D dice (three.js, lands on the engine's face); Milestone 4 (presentable)
+- phase 16 — a7a0e7f — docs/playtests (PROTOCOL, SURVEY, REPORT template, runs/), pnpm sim -- playtests (minutes per round against the 8-9 estimate); sessions filed as a needs-user-call
