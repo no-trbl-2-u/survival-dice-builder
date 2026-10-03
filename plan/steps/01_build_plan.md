@@ -24,7 +24,7 @@ Tick in this file in the same commit that ships the phase.
 
 **Substrate (phases 1–4):**
 - [x] Phase 1 — nexus overlay (agents.md, plan/, skills/, .claude/, scripts/, gates specified) — shipped in the `chore: adopt nexus methodology` commit
-- [ ] Phase 2 — Foundation + deploy pipeline (spec 0)
+- [x] Phase 2 — Foundation + deploy pipeline (spec 0) — 83a4991
 - [ ] Phase 3 — Asset and library research (spec A, non-code)
 - [ ] Phase 4 — Content and data model + tile proposals (spec 1)
 
@@ -242,3 +242,4 @@ sessions themselves are filed as a `[needs-user-call]`.
 ## Phase log (commit hashes)
 
 - phase 1 — (adoption commit) — nexus overlay
+- phase 2 — 83a4991 — pnpm monorepo, 7-hex SVG tile, verify gate green, Cloudflare Pages deploy workflow
