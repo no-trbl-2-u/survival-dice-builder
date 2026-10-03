@@ -63,6 +63,10 @@ until then).
 | 48 | 17 | Does a Tower's elite defeat count for "Defeat an elite"? | **Yes**: any defeat of an elite counts. | (engine, `progress.elitesDefeated`) | proposed (phase 8) |
 | 49 | 11.4, Table 8 | May Architect ("Build 2 times") buy tier I and tier II of a track with one card? | **Yes**: each Build is a separate purchase in sequence (11.4). | (engine, `legalUpgrades`) | proposed (phase 8) |
 | 50 | 11.8 | Every open Skill supply is empty at a draft. | **No draft** that round (`draftSkipped` event). | (engine, `startDraft`) | proposed (phase 8) |
+| 51 | 10.3, 16.6 | With 2-4 players, how often does an empty tile deck raise the wave track, and in what order are reveals done? | **+1 once per Explore phase**, at the first reveal that finds the deck empty (so if the deck runs out partway through, the wave rises that same round). Reveals go round the seats (p1, p2, ..., then again when `revealPerPlayer` > 1). | (engine, `exploreStep`) | proposed (phase 13) |
+| 52 | 6.8, 16 | In co-op, who may buy cards? | **The player whose decision it is**, while their figure is on the base. Other players buy on their own turn. | `shopTiming` | proposed (phase 13) |
+| 53 | 8.2, 12.3, 16 | In co-op, does a Tower defeat give currency to anyone? | **No** (as row 40): experience goes to the shared track; currency needs a player who defeated the enemy. | (engine, `gainForDefeat`) | proposed (phase 13) |
+| 54 | 16, 6.7, 12.1 | Are materials per player or shared? | **Per player**: each player gathers and spends their own materials (16.1 "each player has a player board"). Experience and level are shared (16.2). | (engine, `Player.materials`) | proposed (phase 13) |
 
 ## Spec amendments owed
 

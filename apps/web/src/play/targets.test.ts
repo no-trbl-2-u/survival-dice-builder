@@ -1,20 +1,20 @@
 import { defaultContent } from '@survival/content'
 import { applyAction, createGame, legalActions, type Action } from '@survival/engine'
 import { describe, expect, it } from 'vitest'
-import { newRun, runReducer } from './run.ts'
+import { newRun, reduceRun } from './run.ts'
 import { COVERED, firstOf, hexTargets, placementsFor } from './targets.ts'
 
 const config = defaultContent.config
 
-describe('runReducer', () => {
+describe('reduceRun', () => {
   it('keeps the action list and the engine state in step', () => {
-    const reduce = runReducer(config)
+    const reduce = reduceRun
     const start = newRun(config, 5)
     const action = legalActions(start.state)[0]!
     const next = reduce(start, { kind: 'act', action })
     expect(next.actions).toEqual([action])
     expect(next.state).toEqual(applyAction(start.state, action).state)
-    expect(reduce(next, { kind: 'new', seed: 9 }).actions).toEqual([])
+    expect(reduce(next, { kind: 'new', config, seed: 9, players: 1 }).actions).toEqual([])
   })
 })
 

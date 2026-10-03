@@ -75,12 +75,15 @@ export function legalPlacements(
  *
  * @rule 7.8 step 7
  */
-export function firedUses(skills: readonly SkillDef[], assignments: readonly Assignment[]): FiredUse[] {
+export function firedUses(
+  skills: readonly SkillDef[],
+  assignments: readonly Assignment[],
+): FiredUse[] {
   const out: FiredUse[] = []
   for (const skill of skills) {
-    const uses = [...new Set(assignments.filter((a) => a.skill === skill.id).map((a) => a.use))].sort(
-      (a, b) => a - b,
-    )
+    const uses = [
+      ...new Set(assignments.filter((a) => a.skill === skill.id).map((a) => a.use)),
+    ].sort((a, b) => a - b)
     for (const use of uses) if (isFull(skill, assignments, use)) out.push({ skill: skill.id, use })
   }
   return out

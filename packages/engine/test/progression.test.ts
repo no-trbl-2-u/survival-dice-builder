@@ -201,7 +201,7 @@ describe('Skill draft (10.8, 11.6-11.9)', () => {
     expect(draftDue(due())).toBe(true)
     expect(draftDue(due({ round: 3 }))).toBe(false)
     expect(draftDue(due({ upgrades: [] }))).toBe(false)
-    expect(draftDue(due({ lastDraftRound: 2 }))).toBe(false)
+    expect(draftDue(due({ draftedPlayers: ['p1'] }))).toBe(false)
   })
 
   it('11.6-11.7 reveal the top 2 Skills, keep 1 for free, the other goes to the bottom', () => {
@@ -242,7 +242,10 @@ describe('Skill draft (10.8, 11.6-11.9)', () => {
 
   it('11.9 with 0 draft slots there is no draft (nothing to replace)', () => {
     const cfg = { ...config, player: { ...config.player, draftSlots: 0 } }
-    expect(draftDue({ ...due(), config: cfg })).toBe(false)
+    const [s, events] = startDraft({ ...due(), config: cfg })
+    expect(s.draft).toBeNull()
+    expect(s.draftedPlayers).toEqual(['p1'])
+    expect(events).toEqual([])
   })
 
   it('11.8 row 50 with every open Skill supply empty the draft is skipped', () => {
@@ -262,7 +265,9 @@ describe('Skill draft (10.8, 11.6-11.9)', () => {
         skills: ['strike', 'shot', 'mend', 'guard', ...drafted],
       },
     )
-    expect(draftDue(s)).toBe(false)
+    const [after] = startDraft(s)
+    expect(after.draft).toBeNull()
+    expect(after.draftedPlayers).toEqual(['p1'])
   })
 })
 

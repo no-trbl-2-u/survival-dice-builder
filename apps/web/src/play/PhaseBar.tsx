@@ -24,6 +24,11 @@ export function PhaseBar({ state }: Props) {
   return (
     <header className={styles.phaseBar} data-testid="phase-bar">
       <strong className={styles.round}>Round {state.round}</strong>
+      {state.players.length > 1 && state.phase !== 'ended' ? (
+        <strong className={styles.turn} data-testid="turn">
+          Player {state.current + 1}&apos;s turn
+        </strong>
+      ) : null}
       <ol className={styles.phases} aria-label="Phases">
         {PHASES.map((p) => {
           const current = state.phase === p.id

@@ -43,6 +43,7 @@ src/
   explore/    tile reveal and the wave track (10.1-10.3, 18.1)
 test/
   api.test.ts         rule-tagged scenario tests
+  coop.test.ts        2-4 players: setup, turn order, reveals, drafts, a 3-player run
   world.test.ts       map, Move, skirmish, Gather, Build, Combat range (phase 6)
   enemies.test.ts     enemy targets and movement, spawns, waves, Towers, structures, Explore (phase 7)
   progression.test.ts XP, Shop, upgrades, draft, milestones, end of run (phase 8)
@@ -70,8 +71,12 @@ the tile deck is empty.
 Progression (phase 8): defeats pay shared experience and the killer's currency; levels add
 dice; a Build on the base buys upgrades; the Shop sells at any decision while on the base;
 even-round drafts while Training is open; milestones are recorded at 10.10 and at the end.
-The engine is feature-complete for Spec v1 solo (Milestone 1). It is solo-only until the
-co-op turn order lands in phase 13.
+The engine is feature-complete for Spec v1 (Milestone 1).
+
+Co-op (phase 13): `createGame(config, seed, content, { players: 1-4 })`. `state.current` is
+the seat whose decision it is; `turnFresh` marks a new Prepare turn or Combat exchange.
+Prepare alternates hands (16.8, `coopPrepareOrder`), Combat exchanges go in seat order
+(16.4), Explore reveals 1 tile per player (16.6), and each player drafts (11.6).
 
 ## Golden replays
 

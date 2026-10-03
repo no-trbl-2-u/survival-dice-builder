@@ -190,13 +190,24 @@ export function PlayMap({ state, legal, act }: Props) {
           )
         })}
 
-        {state.players.map((p) => {
+        {state.players.map((p, seat) => {
           const c = hexToPixel(p.hex, SIZE)
+          const label = state.players.length === 1 ? 'You' : `P${seat + 1}`
+          const offset =
+            state.players.length === 1 ? 0 : (seat - (state.players.length - 1) / 2) * SIZE * 0.45
           return (
-            <g key={p.id} aria-label={`Your figure at ${p.hex.q},${p.hex.r}`}>
-              <circle className={styles.figure} cx={c.x} cy={c.y + SIZE * 0.25} r={SIZE * 0.35} />
-              <text className={styles.figureText} x={c.x} y={c.y + SIZE * 0.25}>
-                You
+            <g
+              key={p.id}
+              aria-label={`${label === 'You' ? 'Your' : `${label}'s`} figure at ${p.hex.q},${p.hex.r}`}
+            >
+              <circle
+                className={`${styles.figure} ${seat === state.current ? styles.figureCurrent : ''}`}
+                cx={c.x + offset}
+                cy={c.y + SIZE * 0.25}
+                r={SIZE * 0.3}
+              />
+              <text className={styles.figureText} x={c.x + offset} y={c.y + SIZE * 0.25}>
+                {label}
               </text>
             </g>
           )

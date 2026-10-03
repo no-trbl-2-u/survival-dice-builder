@@ -213,8 +213,12 @@ export type GameState = Readonly<{
   pendingReturn: string | null
   /** The Skill draft in progress (10.8, 11.6-11.9). */
   draft: Draft | null
-  /** The round whose draft is done, so a round drafts once. */
-  lastDraftRound: number
+  /** Players who drafted (or skipped the draft) this round, in seat order. @rule 10.8, 11.6 */
+  draftedPlayers: readonly string[]
+  /** The current player has not drawn yet in this Prepare turn or Combat exchange. @rule 16.4, 16.8 */
+  turnFresh: boolean
+  /** Tile reveals still to do in this Explore phase (players x revealPerPlayer). @rule 10.1, 16.6 */
+  revealsLeft: number
   /** Counters the milestones read. @rule 17 */
   progress: Progress
   /** Milestones reached, in order. @rule 10.10, 14.3, 17 */

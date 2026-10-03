@@ -9,7 +9,7 @@ import { draftDue, startDraft } from '../progression/draft.ts'
 import { checkMilestones } from '../progression/milestones.ts'
 import { hexDistance } from '../hex.ts'
 import { currentPlayer, handSize, updateCurrentPlayer, type Step } from '../state/helpers.ts'
-import type { GameState } from '../state/types.ts'
+import type { GameState, Player } from '../state/types.ts'
 
 /** A guard against an engine bug looping forever. */
 const MAX_AUTOMATIC_STEPS = 10_000
@@ -43,7 +43,7 @@ function stepOnce(state: GameState): readonly [GameState, readonly GameEvent[], 
     case 'setup':
       if (state.revealed.length > 0) return [state, [], true]
       return [
-        { ...state, phase: 'prepare' },
+        { ...state, phase: 'prepare', current: 0, turnFresh: true },
         [{ type: 'phaseStarted', rule: '5.1', phase: 'prepare', round: state.round }],
         false,
       ]
@@ -77,11 +77,51 @@ function draw(state: GameState, rule: string): Step {
 }
 
 /**
- * Prepare: draw 3, play each card, draw again when the hand is empty; stop when deck and hand
- * are both empty, then start Combat. A Move or Build in progress (and a skirmish) is decided
- * step by step before the next card.
+ * The next seat after the current one (cyclic, the current seat last) whose player matches.
+ * -1 when no player matches.
  *
- * @rule 6.1, 6.4, 6.5, 6.6, 6.7-6.15
+ * @rule 16.4, 16.8
+ */
+export function nextSeat(state: GameState, matches: (p: Player) => boolean): number {
+  const n = state.players.length
+  for (let k = 1; k <= n; k++) {
+    const seat = (state.current + k) % n
+    const player = state.players[seat]
+    if (player && matches(player)) return seat
+  }
+  return -1
+}
+
+/** Turns every player's deck (7.1-7.2 shuffle and bottom up; 10.6 top up, no shuffle). */
+function turnAllDecks(state: GameState, side: 'top' | 'bottom'): Step {
+  let rng = state.rng
+  const events: GameEvent[] = []
+  const players = state.players.map((before) => {
+    const [player, next] = rotateDeck(before, side, rng, side === 'bottom')
+    rng = next
+    if (side === 'bottom') {
+      events.push({
+        type: 'deckShuffled',
+        rule: '7.1',
+        player: player.id,
+        cards: player.deck.length,
+      })
+      events.push({ type: 'deckTurned', rule: '7.2', player: player.id, orientation: 'bottom' })
+    } else {
+      events.push({ type: 'deckTurned', rule: '10.6', player: player.id, orientation: 'top' })
+    }
+    return player
+  })
+  return [{ ...state, players, rng }, events]
+}
+
+/**
+ * Prepare: draw 3, play each card, draw again when the hand is empty; stop when every deck and
+ * hand is empty, then start Combat. With 2-4 players each plays 1 hand in seat order, then the
+ * next player with cards (16.8, `coopPrepareOrder`). A Move or Build in progress (and a
+ * skirmish) is decided step by step before the next card.
+ *
+ * @rule 6.1, 6.4, 6.5, 6.6, 6.7-6.15, 16.8
  */
 function prepareStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   if (state.exchange) return exchangeStep(state)
@@ -92,23 +132,28 @@ function prepareStep(state: GameState): readonly [GameState, readonly GameEvent[
   }
   const player = currentPlayer(state)
   if (player.hand.length > 0) return [state, [], true]
-  if (player.deck.length > 0) {
+  // 16.8: a fresh turn draws; after a hand, "full-turn" keeps drawing, "alternate-hands" passes.
+  const keepGoing = state.config.rulings.coopPrepareOrder === 'full-turn'
+  if ((state.turnFresh || keepGoing) && player.deck.length > 0) {
     const [next, events] = draw(state, player.deck.length < handSize(state) ? '6.5' : '6.1')
-    return [next, events, false]
+    return [{ ...next, turnFresh: false }, events, false]
   }
+  const seat = nextSeat(state, (p) => p.deck.length > 0)
+  if (seat >= 0) return [{ ...state, current: seat, turnFresh: true }, [], false]
   return [...startCombat(state), false]
 }
 
 /**
- * Combat setup: shuffle the discard pile and turn it bottom-up, refill spawn nodes, do the wave
- * step, move the enemies, and let the Towers attack.
+ * Combat setup: every player shuffles the discard pile and turns it bottom-up, then refill
+ * spawn nodes, do the wave step, move the enemies, and let the Towers attack.
  *
  * @rule 7.1, 7.2, 7.3, 7.4, 7.5, 7.6
  */
 function startCombat(state: GameState): Step {
-  const before = currentPlayer(state)
-  const [player, rng] = rotateDeck(before, 'bottom', state.rng, true)
-  const turned: GameState = { ...updateCurrentPlayer(state, () => player), rng, phase: 'combat' }
+  const [turned, turnEvents] = turnAllDecks(
+    { ...state, phase: 'combat', current: 0, turnFresh: true },
+    'bottom',
+  )
   const [next, events] = chain(turned, [
     refillNodes,
     (s) => (s.waveTrack > 0 ? waveStep(s) : [s, []]),
@@ -119,37 +164,37 @@ function startCombat(state: GameState): Step {
     next,
     [
       { type: 'phaseStarted', rule: '5.1', phase: 'combat', round: state.round },
-      { type: 'deckShuffled', rule: '7.1', player: player.id, cards: player.deck.length },
-      { type: 'deckTurned', rule: '7.2', player: player.id, orientation: 'bottom' },
+      ...turnEvents,
       ...events,
     ],
   ]
 }
 
 /**
- * Combat: run exchanges until the deck and hand are empty, then the structure attack step,
- * then Explore. An exchange with no enemy in range is skipped (7.9).
+ * Combat: run exchanges until every deck and hand is empty, then the structure attack step,
+ * then Explore. With 2-4 players the exchanges go in seat order (16.4). An exchange with no
+ * enemy in range is skipped (7.9).
  *
- * @rule 7.7, 7.8, 7.9, 7.10-7.13
+ * @rule 7.7, 7.8, 7.9, 7.10-7.13, 16.4, 16.5
  */
 function combatStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   const player = currentPlayer(state)
   if (!state.exchange) {
-    if (player.hand.length === 0 && player.deck.length === 0) {
+    // 16.4: exchanges in turn, seat order, skipping players with no cards left.
+    if (!state.turnFresh || player.deck.length === 0) {
+      const seat = nextSeat(state, (p) => p.deck.length > 0)
+      if (seat >= 0) return [{ ...state, current: seat, turnFresh: true }, [], false]
       const [attacked, events] = structureAttacks(state)
       if (attacked.phase === 'ended') return [attacked, events, false]
-      const [exploring, more] = startExplore({ ...attacked, phase: 'explore' })
+      const reveals = state.players.length * state.config.tiles.revealPerPlayer
       return [
-        exploring,
-        [
-          ...events,
-          { type: 'phaseStarted', rule: '5.1', phase: 'explore', round: state.round },
-          ...more,
-        ],
+        { ...attacked, phase: 'explore', current: 0, revealsLeft: reveals },
+        [...events, { type: 'phaseStarted', rule: '5.1', phase: 'explore', round: state.round }],
         false,
       ]
     }
-    const [drawn, drawEvents] = draw(state, '7.8')
+    const [drawnState, drawEvents] = draw(state, '7.8')
+    const drawn: GameState = { ...drawnState, turnFresh: false }
     const range = state.config.combat.exchangeRange
     if (!drawn.enemies.some((e) => hexDistance(e.hex, player.hex) <= range)) {
       const skipped = updateCurrentPlayer(drawn, (p) => clearTable(p))
@@ -233,26 +278,32 @@ export function rollAgain(state: GameState): Step {
 }
 
 /**
- * Explore, after the reveal (`startExplore`, 10.1-10.5): turn the discard pile without a
- * shuffle (10.6-10.7), do the Skill draft when it is due (10.8), add 1 to the round counter
- * (10.9), and record new milestones (10.10).
+ * Explore: reveal 1 tile per player (`startExplore`, 10.1-10.5, 16.6), turn every discard pile
+ * without a shuffle (10.6-10.7), do each player's Skill draft when it is due (10.8), add 1 to
+ * the round counter (10.9), and record new milestones (10.10).
  *
- * @rule 10.1-10.5, 10.6, 10.7, 10.8, 10.9, 10.10
+ * @rule 10.1-10.5, 10.6, 10.7, 10.8, 10.9, 10.10, 16.6
  */
 function exploreStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   if (state.revealed.length > 0 || state.revealOffer || state.draft) return [state, [], true]
-  const before = currentPlayer(state)
-  if (before.orientation === 'bottom') {
-    const [player, rng] = rotateDeck(before, 'top', state.rng, false)
-    return [
-      { ...updateCurrentPlayer(state, () => player), rng },
-      [{ type: 'deckTurned', rule: '10.6', player: player.id, orientation: 'top' }],
-      false,
-    ]
+  if (state.revealsLeft > 0) {
+    // 16.6: 1 reveal per player (x revealPerPlayer), placed in seat order.
+    const done = state.players.length * state.config.tiles.revealPerPlayer - state.revealsLeft
+    const seat = done % state.players.length
+    const emptyDeck = state.tileDeck.length === 0
+    const [next, events] = startExplore({ ...state, current: seat })
+    // 10.3: an empty tile deck adds 1 to the wave track once per Explore phase (row 51).
+    return [{ ...next, revealsLeft: emptyDeck ? 0 : state.revealsLeft - 1 }, events, false]
+  }
+  if (state.players.some((p) => p.orientation === 'bottom')) {
+    return [...turnAllDecks(state, 'top'), false]
   }
   if (draftDue(state)) return [...startDraft(state), false]
   const round = state.round + 1
-  const [next, milestones] = checkMilestones({ ...state, round, phase: 'prepare' }, '10.10')
+  const [next, milestones] = checkMilestones(
+    { ...state, round, phase: 'prepare', current: 0, turnFresh: true, draftedPlayers: [] },
+    '10.10',
+  )
   return [
     next,
     [

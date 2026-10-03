@@ -58,3 +58,9 @@ A rule implemented without a row here is a failed review (`rules-lawyer`).
 | 14.2 | `combat/resolve.ts` `finishExchange`, `finishSkirmish` | `test/api.test.ts` "14.2 the run ends..." |
 | 18.1 (Skill uses) | `skills/assign.ts` `openUses` | `skills/assign.test.ts` "18.1 unlimited Skill uses..." |
 | 2.1 (max health) | `combat/cardEffects.ts` `healCurrent` | `test/properties.test.ts` "2.1 health never exceeds maximum" |
+| 16.1, 4.6 (co-op setup) | `api/createGame.ts` `createGame` (`setup.players`) | `test/coop.test.ts` "16.1 each player has an own shuffled deck...", "rejects a player count...", "a solo run is the same as before co-op" |
+| 16.8, row 6 | `phases/advance.ts` `prepareStep`, `nextSeat` | `test/coop.test.ts` "16.8 row 6 Prepare: players alternate hands...", "16.8 full-turn ..." |
+| 16.4, 16.5 | `phases/advance.ts` `combatStep`, `nextSeat`; `combat/resolve.ts` `finishExchange` | `test/coop.test.ts` "16.4 Combat: exchanges go in seat order", "16.5 in an exchange only enemies next to that player attack..." |
+| 16.6, 10.3 (co-op) | `phases/advance.ts` `exploreStep` (`revealsLeft`) | `test/coop.test.ts` "16.6 each player reveals and places 1 tile, in seat order" |
+| 10.8, 11.6 (co-op) | `progression/draft.ts` `draftDue`, `startDraft` (`draftedPlayers`) | `test/coop.test.ts` "10.8, 11.6 each player drafts in seat order" |
+| 16.2, 16.7 | `progression/experience.ts` `gainForDefeat`; `combat/resolve.ts` `checkPlayerDown` | `test/progression.test.ts` "8.3-8.5 ..."; `test/coop.test.ts` "a 3-player run plays to the end" |

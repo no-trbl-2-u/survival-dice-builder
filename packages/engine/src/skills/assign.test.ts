@@ -23,9 +23,9 @@ describe('Skill assignment', () => {
 
   it('7.8 step 6 each die is used 1 time only', () => {
     const placed: Assignment[] = [{ die: 0, skill: 'strike', use: 0, slot: 0, asFace: 'Sword' }]
-    expect(legalPlacements(dice('Sword'), [skill('strike'), skill('cleave')], placed, false)).toEqual(
-      [],
-    )
+    expect(
+      legalPlacements(dice('Sword'), [skill('strike'), skill('cleave')], placed, false),
+    ).toEqual([])
   })
 
   it('7.8 step 6 each Skill is used 1 time only (default)', () => {

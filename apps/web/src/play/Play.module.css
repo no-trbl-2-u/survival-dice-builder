@@ -53,6 +53,10 @@
 }
 
 .footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
   color: var(--color-text-muted);
   font-size: var(--text-sm);
 }
@@ -612,4 +616,48 @@
   display: block;
   background: var(--health);
   min-block-size: 2px;
+}
+
+/* Phase 13: start panel, co-op players */
+.startForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+
+.startForm input {
+  width: 7rem;
+}
+
+.fileLabel {
+  display: grid;
+  gap: 4px;
+  font-size: var(--text-sm);
+}
+
+.turn {
+  font-family: var(--font-display);
+  padding: 2px 10px;
+  border: 2px solid var(--color-text);
+  border-radius: 999px;
+}
+
+.playerList {
+  display: grid;
+  gap: 8px;
+}
+
+.playerCard {
+  padding: 6px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.currentPlayer {
+  border: 3px solid var(--color-text);
+}
+
+.figureCurrent {
+  stroke-width: 4;
 }

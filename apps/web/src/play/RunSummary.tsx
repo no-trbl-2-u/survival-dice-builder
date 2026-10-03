@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { exportFileName, exportRun } from './exportRun.ts'
+import { downloadRun } from './exportRun.ts'
 import styles from './Play.module.css'
 import type { Run } from './run.ts'
 
@@ -28,17 +28,7 @@ export function RunSummary({ run, baseCurve, onNewRun }: Props) {
     'reveal-tiles',
     'reach-level',
   ]
-  const download = () => {
-    const data = exportRun(run)
-    const url = URL.createObjectURL(
-      new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }),
-    )
-    const a = document.createElement('a')
-    a.href = url
-    a.download = exportFileName(data)
-    a.click()
-    URL.revokeObjectURL(url)
-  }
+  const download = () => downloadRun(run)
   const max = Math.max(1, ...baseCurve)
   return (
     <section

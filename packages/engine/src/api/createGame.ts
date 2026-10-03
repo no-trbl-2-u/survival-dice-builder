@@ -7,6 +7,9 @@ import { seedRng, shuffle } from '../rng/rng.ts'
 import { withLog } from '../state/helpers.ts'
 import type { CardInstance, GameState, Player } from '../state/types.ts'
 
+/** Run options chosen at setup. @rule 16 */
+export type GameSetup = Readonly<{ players: number }>
+
 /**
  * Creates a new run. Same config + seed (+ content) = same run.
  *
@@ -18,14 +21,20 @@ import type { CardInstance, GameState, Player } from '../state/types.ts'
  * @param config - the game configuration (rule numbers and options).
  * @param seed - any integer; it seeds the engine RNG.
  * @param content - cards, Skills, enemies, defenses, and tiles; defaults to the default content.
+ * @param setup - the player count (`config.players.min`-`max`, default 1); seats p1, p2, ...
  * @returns the state at the first decision (`setup`: choose the setup tile's slot).
- * @rule 4.1-4.13
+ * @rule 4.1-4.13, 16.1
  */
 export function createGame(
   config: GameConfig,
   seed: number,
   content: Content = defaultContent,
+  setup: GameSetup = { players: 1 },
 ): GameState {
+  const count = setup.players
+  if (!Number.isInteger(count) || count < config.players.min || count > config.players.max) {
+    throw new Error(`Player count ${count} is outside ${config.players.min}-${config.players.max}`)
+  }
   let rng = seedRng(seed)
   const preset = config.deck.presets.find((p) => p.id === config.deck.preset)
   if (!preset) throw new Error(`Unknown deck preset "${config.deck.preset}"`)
@@ -57,14 +66,24 @@ export function createGame(
   const [supplies, afterSupplies] = buildSupplies(content, config, rng)
   rng = afterSupplies
 
-  const player: Player = {
-    id: 'p1',
+  // 16.1: each other player gets an own shuffled starter deck (after the shared shuffles, so a
+  // solo run's randomness is the same as before co-op existed). Instance ids stay unique.
+  const decks: (readonly CardInstance[])[] = [deck]
+  for (let i = 1; i < count; i++) {
+    const own = cards.map((c, k) => ({ id: `c${i * cards.length + k + 1}`, def: c.def }))
+    const [shuffled, next] = shuffle(rng, own)
+    decks.push(shuffled)
+    rng = next
+  }
+
+  const makePlayer = (i: number): Player => ({
+    id: `p${i + 1}`,
     hex: BASE_HEX,
     health: config.player.maxHealth,
     maxHealth: config.player.maxHealth,
     dice: config.player.startingDice,
     skills: [...config.player.starterSkills],
-    deck,
+    deck: decks[i] ?? [],
     hand: [],
     discard: [],
     inPlay: [],
@@ -72,7 +91,8 @@ export function createGame(
     guard: 0,
     materials: 0,
     currency: 0,
-  }
+  })
+  const players = Array.from({ length: count }, (_, i) => makePlayer(i))
 
   const state: GameState = {
     version: 1,
@@ -89,7 +109,7 @@ export function createGame(
     rng,
     round: 1,
     phase: setupTiles.length > 0 ? 'setup' : 'prepare',
-    players: [player],
+    players,
     current: 0,
     map: placeTile(EMPTY_MAP, baseTile, BASE_HEX),
     tileDeck,
@@ -109,10 +129,12 @@ export function createGame(
     upgrades: [],
     supplies,
     shopOffers: [],
-    nextCardId: cards.length + 1,
+    nextCardId: cards.length * count + 1,
     pendingReturn: null,
     draft: null,
-    lastDraftRound: 0,
+    draftedPlayers: [],
+    turnFresh: true,
+    revealsLeft: 0,
     progress: { elitesDefeated: 0, firedSkills: [], tilesRevealed: 0, cardsBought: 0 },
     milestones: [],
     log: [],
@@ -122,7 +144,12 @@ export function createGame(
   const setupEvents: GameEvent[] = [
     { type: 'gameCreated', rule: '4', seed },
     { type: 'tilePlaced', rule: '4.1', tile: baseTile.id, center: BASE_HEX },
-    { type: 'deckShuffled', rule: '4.8', player: player.id, cards: deck.length },
+    ...players.map((p): GameEvent => ({
+      type: 'deckShuffled',
+      rule: '4.8',
+      player: p.id,
+      cards: p.deck.length,
+    })),
   ]
   const [ready, events] = advance(state)
   return withLog(ready, [...setupEvents, ...events])

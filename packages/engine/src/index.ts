@@ -5,7 +5,7 @@
 export type { Action, ActionType } from './api/actions.ts'
 export { sameAction } from './api/actions.ts'
 export { applyAction } from './api/applyAction.ts'
-export { createGame } from './api/createGame.ts'
+export { createGame, type GameSetup } from './api/createGame.ts'
 export { legalActions } from './api/legalActions.ts'
 export { deserialize, serialize } from './api/serialize.ts'
 export type { GameEvent, GameEventType } from './events/events.ts'

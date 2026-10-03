@@ -1,44 +1,88 @@
-import { defaultContent } from '@survival/content'
 import { legalActions, type Action } from '@survival/engine'
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { useEffect, useReducer, useRef, useState } from 'react'
+import { AUTOSAVE_KEY, browserStorage, loadConfig } from '../config/configStore.ts'
 import { TileView } from '../tiles/TileView.tsx'
 import { BasePanel } from './BasePanel.tsx'
-import { DecisionDialog } from './DecisionDialog.tsx'
-import { PlayLog } from './PlayLog.tsx'
-import { RunSummary } from './RunSummary.tsx'
 import { Choices } from './Choices.tsx'
+import { DecisionDialog } from './DecisionDialog.tsx'
 import { DiceTray } from './DiceTray.tsx'
+import { downloadRun, exportRun } from './exportRun.ts'
 import { Hand } from './Hand.tsx'
 import { PhaseBar } from './PhaseBar.tsx'
 import styles from './Play.module.css'
 import { PlayerPanel } from './PlayerPanel.tsx'
+import { PlayLog } from './PlayLog.tsx'
 import { PlayMap } from './PlayMap.tsx'
-import { newRun, runReducer } from './run.ts'
+import { newRun, reduceRun, undo, type Run, type RunMsg } from './run.ts'
+import { RunSummary } from './RunSummary.tsx'
 import { SkillBoard } from './SkillBoard.tsx'
+import { StartPanel } from './StartPanel.tsx'
 
-const config = defaultContent.config
+type Msg = RunMsg | Readonly<{ kind: 'reset' }>
 
-/** `?seed=N` in the URL fixes the seed (replays, tests); otherwise a time-based seed. */
-function initialSeed(): number {
-  const fromUrl = Number.parseInt(new URLSearchParams(window.location.search).get('seed') ?? '', 10)
-  return Number.isFinite(fromUrl) ? fromUrl : Date.now() % 100000
+/** The page holds no run until one starts (start panel) or `?seed=` starts one at once. */
+function reducer(run: Run | null, msg: Msg): Run | null {
+  if (msg.kind === 'reset') return null
+  if (msg.kind === 'act' && !run) return null
+  return reduceRun(run as Run, msg)
 }
 
 /**
- * `/play`: a solo run. Every control is built from `legalActions`; the page only passes the
- * chosen action back to the engine.
+ * `/play`: a run for 1-4 players on one screen. `?seed=N` (and `?players=N`) start a run at
+ * once (replays, tests); otherwise the start panel asks. Every control is built from
+ * `legalActions`; the page only passes the chosen action back to the engine.
  */
 export function PlayPage() {
-  const reducer = useMemo(() => runReducer(config), [])
-  const [run, dispatch] = useReducer(reducer, undefined, () => newRun(config, initialSeed()))
+  const store = browserStorage()
+  const [{ config, custom }] = useState(() => loadConfig(store))
+  const [run, dispatch] = useReducer(reducer, null, () => {
+    const params = new URLSearchParams(window.location.search)
+    const seed = Number.parseInt(params.get('seed') ?? '', 10)
+    const players = Number.parseInt(params.get('players') ?? '1', 10) || 1
+    return Number.isFinite(seed) ? newRun(config, seed, players) : null
+  })
+  const [undoOn, setUndoOn] = useState(false)
+
+  // Autosave after every action (this browser only).
+  useEffect(() => {
+    if (!run || run.actions.length === 0) return
+    try {
+      store?.setItem(AUTOSAVE_KEY, JSON.stringify(exportRun(run)))
+    } catch {
+      // Storage full or blocked: the run continues; only the autosave is lost.
+    }
+  }, [run, store])
+
+  if (!run) {
+    return (
+      <StartPanel
+        custom={custom}
+        store={store}
+        onStart={(players, seed) => dispatch({ kind: 'new', config, seed, players })}
+        onLoad={(loaded) => dispatch({ kind: 'replace', run: loaded })}
+      />
+    )
+  }
+  return <Game run={run} dispatch={dispatch} undoOn={undoOn} setUndoOn={setUndoOn} />
+}
+
+type GameProps = Readonly<{
+  run: Run
+  dispatch: (msg: Msg) => void
+  undoOn: boolean
+  setUndoOn: (on: boolean) => void
+}>
+
+/** The board, panels, and controls of a run in progress (or its summary). */
+function Game({ run, dispatch, undoOn, setUndoOn }: GameProps) {
   const [selected, setSelected] = useState<number | null>(null)
   const main = useRef<HTMLDivElement>(null)
-  const legal = legalActions(run.state)
+  const { state } = run
+  const legal = legalActions(state)
   const act = (action: Action) => {
     setSelected(null)
     dispatch({ kind: 'act', action })
   }
-  const { state } = run
   const revealed = state.content.tiles.find((t) => t.id === state.revealed[0])
 
   // Keyboard: when the focused control disappears after an action, move to the next decision.
@@ -49,18 +93,24 @@ export function PlayPage() {
       ?.querySelector<HTMLElement>('[data-decisions] button, [data-decisions] [role="button"]')
       ?.focus()
   }, [run.actions.length])
-  const startNext = () => dispatch({ kind: 'new', seed: (run.seed * 7919 + 1) % 100000 })
+
+  const who = state.players.length > 1 ? `Player ${state.current + 1}, ` : ''
   const step = state.exchange
     ? `${state.exchange.skirmish ? 'Skirmish' : 'Exchange'}: ${state.exchange.step}`
     : `${state.phase}${state.active ? `: ${state.active.kind}` : ''}`
   return (
     <div className={styles.page} ref={main}>
       <p className="visually-hidden" aria-live="polite">
-        Round {state.round}, {step}
+        Round {state.round}, {who}
+        {step}
       </p>
       <PhaseBar state={state} />
       {state.phase === 'ended' ? (
-        <RunSummary run={run} baseCurve={run.baseCurve} onNewRun={startNext} />
+        <RunSummary
+          run={run}
+          baseCurve={run.baseCurve}
+          onNewRun={() => dispatch({ kind: 'reset' })}
+        />
       ) : null}
       <DecisionDialog state={state} legal={legal} act={act} />
       <div className={styles.layout}>
@@ -103,12 +153,31 @@ export function PlayPage() {
         <BasePanel state={state} legal={legal} act={act} />
         <PlayLog state={state} />
       </div>
-      <p className={styles.footer}>
-        Seed {run.seed} · {run.actions.length} actions ·{' '}
-        <button type="button" onClick={startNext}>
+      <div className={styles.footer}>
+        <span>
+          Seed {run.seed} · {run.players} {run.players === 1 ? 'player' : 'players'} ·{' '}
+          {run.actions.length} actions
+        </span>
+        <button type="button" onClick={() => downloadRun(run)}>
+          Save run (file)
+        </button>
+        <button type="button" onClick={() => dispatch({ kind: 'reset' })}>
           New run
         </button>
-      </p>
+        <label>
+          <input type="checkbox" checked={undoOn} onChange={(e) => setUndoOn(e.target.checked)} />{' '}
+          Developer: allow undo
+        </label>
+        {undoOn ? (
+          <button
+            type="button"
+            disabled={run.actions.length === 0}
+            onClick={() => dispatch({ kind: 'replace', run: undo(run) })}
+          >
+            Undo last decision
+          </button>
+        ) : null}
+      </div>
     </div>
   )
 }
