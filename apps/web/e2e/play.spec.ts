@@ -55,3 +55,14 @@ test('/play at 375px has no horizontal scroll', async ({ page }) => {
   )
   expect(overflow).toBeLessThanOrEqual(1)
 })
+
+test('/play at 375px puts the controls for the current step above the map', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto('/play?seed=3')
+  await page.getByTestId('choices').getByRole('button').first().click()
+  const play = page.getByRole('button', { name: /^Play / }).first()
+  await expect(play).toBeVisible()
+  const control = await play.boundingBox()
+  const map = await page.getByTestId('play-map').boundingBox()
+  expect(control && map && control.y < map.y, 'a Play button sits above the map').toBe(true)
+})

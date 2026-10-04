@@ -13,6 +13,43 @@
   .layout {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  /*
+   * On a phone the controls for the current step come first, then the map: the board row
+   * dissolves into the page grid so its 2 halves can be ordered. The DOM order is unchanged,
+   * and the page moves focus to the next decision after each action.
+   */
+  .boardRow {
+    display: contents;
+  }
+
+  .exchangeRow {
+    order: 1;
+  }
+
+  .handRow {
+    order: 2;
+  }
+
+  .side {
+    order: 3;
+  }
+
+  .mapPanel {
+    order: 4;
+  }
+
+  .lateRow,
+  .footer {
+    order: 5;
+  }
+}
+
+.boardRow,
+.exchangeRow,
+.handRow,
+.lateRow {
+  min-width: 0;
 }
 
 .side {
@@ -241,7 +278,7 @@
 .hpText {
   fill: var(--color-text);
   font-family: var(--font-number);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   text-anchor: middle;
   paint-order: stroke;

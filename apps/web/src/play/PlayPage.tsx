@@ -142,7 +142,7 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
         />
       ) : null}
       <DecisionDialog state={state} legal={legal} act={act} />
-      <div className={styles.layout}>
+      <div className={`${styles.layout} ${styles.boardRow}`}>
         <PlayMap state={state} legal={legal} act={act} events={run.lastEvents} />
         <div className={styles.side} data-decisions>
           {revealed ? (
@@ -158,7 +158,7 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
         </div>
       </div>
       {state.exchange ? (
-        <div className={styles.layout} data-decisions>
+        <div className={`${styles.layout} ${styles.exchangeRow}`} data-decisions>
           <DiceTray
             state={state}
             legal={legal}
@@ -176,10 +176,10 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
           />
         </div>
       ) : null}
-      <div data-decisions>
+      <div className={styles.handRow} data-decisions>
         <Hand state={state} legal={legal} act={act} />
       </div>
-      <div className={styles.layout}>
+      <div className={`${styles.layout} ${styles.lateRow}`}>
         <BasePanel state={state} legal={legal} act={act} />
         <PlayLog state={state} />
       </div>
