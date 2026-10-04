@@ -54,7 +54,7 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 19 — /config fit for the designer: plain labels, help, rules sections, and a safe save flow — 8326abe
 
 **Spec v2 (phases 20–22) — the designer decision review and the core-loop walkthrough, 2026-10-04:**
-- [ ] Phase 20 — Core loop v2 I: map, exploration, and Prepare (base-only start, reveal by stepping off the edge, no Explore phase, single-use gathering nodes, 10-card starter deck, 2 card copies, Haul 2 total, skirmish step 1)
+- [x] Phase 20 — Core loop v2 I: map, exploration, and Prepare (base-only start, reveal by stepping off the edge, no Explore phase, single-use gathering nodes, 10-card starter deck, 2 card copies, Haul 2 total, skirmish step 1) — d690982
 - [ ] Phase 21 — Core loop v2 II: enemies and Combat (no wave track, move then spawn at every node each Combat, structure-first targeting, cap and promotion, Tower ties and Tower currency, non-attack halves without enemies, knockout instead of run end)
 - [ ] Phase 22 — Experiments: experience curves, Skill caps, and spawn pressure, as a bot comparison report
 
@@ -309,7 +309,7 @@ drops below 10. Supplies hold 2 copies of each card. A skirmish step
 costs 1. The Base tile and the tile deck change in content
 (`tiles.json`); rule values stay in content/config. Golden replays, the
 bot, and the bot batch are re-recorded; the export version goes to 2.
-Brief to be drafted by `/plan-a-phase`.
+Detailed brief: `phase_20_core_loop_v2_prepare.md`.
 
 ### Phase 21 — Core loop v2 II: enemies and Combat
 
@@ -362,3 +362,5 @@ recommendation and the weak-bot caveat. No default changes.
 - phase 16 — a7a0e7f — docs/playtests (PROTOCOL, SURVEY, REPORT template, runs/), pnpm sim -- playtests (minutes per round against the 8-9 estimate); sessions filed as a needs-user-call
 - phase 17 — c5a664b — choices and map name places, map hex text lists enemies, /debug focus and lede, per-route titles and aria-current, distinct dark terrain colours (check-design delta E); clears the 7 pending critique rows
 - phase 18 — 869dc88 — /decisions page and generated docs/DECISIONS.md: 45 open rule readings with their config values (linked to /config fields) and every needs-user-call check; pnpm sim -- decisions; freshness test
+- phase 19 — 8326abe — config.meta.json labels, help, and rules sections for every config field; /config plain errors, sticky Save, unsaved-changes warning, confirmed Reset
+- phase 20 — d690982 — Base tile alone at setup with player-chosen start hexes, the whole Base tile is the base, no Explore phase, reveal by stepping off the map edge, single-use gathering nodes, 10-card deck with a hand of 3, 2 card copies, skirmish step 1, export version 2; bot batch median end round 5 (was 14)
