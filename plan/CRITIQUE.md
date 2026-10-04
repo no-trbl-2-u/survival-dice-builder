@@ -27,7 +27,9 @@
 - suggested fix: Put each error next to its field in plain words, with aria-invalid and aria-describedby. Make the Save bar sticky, add a beforeunload warning for unsaved edits, and confirm Reset.
 - source: browser
 
-### [MED] /play — at 375px the controls for the current step sit far below the map
+## Done
+
+### [x] [MED] /play — at 375px the controls for the current step sit far below the map
 - pass: 3 (commit d6176b7)
 - viewport: mobile
 - category: mobile
@@ -35,8 +37,8 @@
 - evidence: At 375x800 in round 1 Prepare, the first "Play Build" button is at y=1153. In Combat, the Dice and Skills panels start at about y=880. The map renders 343x257px, and the enemy health text is font-size 9px. There is no horizontal overflow.
 - suggested fix: At narrow widths, order the active panel (Choices, Hand, or Dice and Skills) directly under the round header, or pin it as a bottom sheet. Raise the map label size to at least 12px rendered.
 - source: browser
-
-## Done
+- issue: #26
+- fixed: a46ca82 (at 720px and narrower the current step's controls come before the map; map health text 12 units)
 
 ### [x] [LOW] /debug — the event log prints [object Object]; the State text starts with stray letters
 - pass: 3 (commit d6176b7)

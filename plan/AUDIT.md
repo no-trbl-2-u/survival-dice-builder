@@ -31,11 +31,13 @@
 - issue: #25
 - fixed: 6546545
 
-### [ ] [3.0] /play: at 375px the controls for the current step sit far below the map (critique MED)
+### [x] [3.0] /play: at 375px the controls for the current step sit far below the map (critique MED)
 - category: external-critique (mobile)
 - impact: 6
 - ease: 5
 - next: order the active panel under the round header at narrow widths; larger map labels
+- issue: #26
+- fixed: a46ca82
 
 ### [ ] [2.5] /config: raw schema errors, unsaved edits lost, Reset unconfirmed (critique MED)
 - category: external-critique (a11y)
