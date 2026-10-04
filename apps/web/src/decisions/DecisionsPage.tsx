@@ -1,4 +1,5 @@
 import {
+  defaultConfigMeta,
   defaultContent,
   flagSettings,
   openQuestions,
@@ -26,10 +27,11 @@ function Settings({ row }: Readonly<{ row: QuestionRow }>) {
           {i > 0 ? '; ' : null}
           {s.path ? (
             <>
+              {defaultConfigMeta[s.path]?.label ?? null} (
               <a href={`/config#${fieldId(s.path)}`}>
                 <code>{s.path}</code>
-              </a>{' '}
-              = {(s.current ?? '').length > 40 ? 'a list or table' : <code>{s.current}</code>}
+              </a>
+              ) = {(s.current ?? '').length > 40 ? 'a list or table' : <code>{s.current}</code>}
               {s.differs ? (
                 <strong className={styles.differs}> (the row says {s.named}: differs)</strong>
               ) : null}

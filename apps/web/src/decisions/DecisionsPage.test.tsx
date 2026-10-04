@@ -16,6 +16,8 @@ describe('DecisionsPage', () => {
     expect(readings[0]?.getAttribute('data-question')).toBe('7')
     const link = container.querySelector('a[href="/config#cfg-rulings-structureDamage"]')
     expect(link?.textContent).toBe('rulings.structureDamage')
+    // The config label stands before the path.
+    expect(link?.parentElement?.textContent).toContain('Structure damage (rulings.structureDamage)')
     expect(container.querySelectorAll('[data-testid="checks"] > li').length).toBeGreaterThan(3)
     expect(container.textContent).not.toMatch(/undefined|\*\*/)
   })

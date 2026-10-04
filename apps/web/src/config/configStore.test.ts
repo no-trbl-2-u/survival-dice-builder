@@ -1,8 +1,17 @@
 import { defaultContent } from '@survival/content'
 import { describe, expect, it } from 'vitest'
 import { newRun } from '../play/run.ts'
-import { setAt } from './ConfigPage.tsx'
-import { CONFIG_KEY, loadConfig, resetConfig, saveConfig, type KeyValue } from './configStore.ts'
+import { numberMin, setAt } from './ConfigPage.tsx'
+import {
+  CONFIG_KEY,
+  isDirty,
+  loadConfig,
+  plainMessage,
+  resetConfig,
+  saveConfig,
+  type KeyValue,
+} from './configStore.ts'
+import { GameConfigSchema } from '@survival/content'
 
 /** An in-memory storage. */
 function memory(): KeyValue & { data: Map<string, string> } {
@@ -28,8 +37,35 @@ describe('config store (spec 6)', () => {
   it('an invalid value is not saved and names the field', () => {
     const store = memory()
     const bad = setAt(defaultContent.config, ['combat', 'maxRolls'], 0)
-    expect(saveConfig(store, bad)[0]).toMatch(/^combat\.maxRolls/)
+    expect(saveConfig(store, bad)).toEqual([
+      { path: 'combat.maxRolls', message: 'Enter a number more than 0.' },
+    ])
     expect(store.data.has(CONFIG_KEY)).toBe(false)
+  })
+
+  it('problems are in plain words and filed under their field, naming the list item', () => {
+    let bad = setAt(defaultContent.config, ['player', 'maxHealth'], '')
+    bad = setAt(bad, ['deck', 'presets', 1, 'cards', 0, 'quantity'], 1.5)
+    bad = setAt(bad, ['rulings', 'targetTieBreak'], ['player'])
+    bad = setAt(bad, ['rulings', 'shopRefill'], 'later')
+    expect(saveConfig(memory(), bad)).toEqual([
+      { path: 'player.maxHealth', message: 'Enter a number.' },
+      { path: 'deck.presets', message: 'Item 2, cards, item 1, quantity: Enter a whole number.' },
+      { path: 'rulings.shopRefill', message: 'Use one of: immediate, end-of-turn.' },
+      { path: 'rulings.targetTieBreak', message: 'List exactly 4 items.' },
+    ])
+  })
+
+  it('an unknown issue keeps its own text, capitalised', () => {
+    expect(plainMessage({ code: 'custom', message: 'must be odd', path: [] })).toBe('Must be odd')
+  })
+
+  it('the dirty check and the number minimum read the draft and the schema', () => {
+    const changed = setAt(defaultContent.config, ['shop', 'offers'], 4)
+    expect(isDirty(defaultContent.config, defaultContent.config)).toBe(false)
+    expect(isDirty(changed, defaultContent.config)).toBe(true)
+    expect(numberMin(GameConfigSchema.shape.shop.shape.offers)).toBe(1)
+    expect(numberMin(GameConfigSchema.shape.waveTrackStart)).toBe(0)
   })
 
   it('reset and corrupt storage fall back to the defaults', () => {

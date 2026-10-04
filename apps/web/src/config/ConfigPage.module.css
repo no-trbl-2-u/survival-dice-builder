@@ -55,8 +55,46 @@
   font-size: var(--text-sm);
 }
 
+.help {
+  grid-column: 2;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.rule {
+  white-space: nowrap;
+}
+
+.error {
+  grid-column: 2;
+  margin: 0;
+  color: var(--health);
+  font-weight: 700;
+}
+
+.bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+  padding: 8px 0;
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+}
+
+.bar .status {
+  margin: 0;
+}
+
 @media (max-width: 480px) {
   .field {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .help,
+  .error {
+    grid-column: 1;
   }
 }

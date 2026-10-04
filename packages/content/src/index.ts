@@ -50,3 +50,11 @@ export {
   type QuestionRow,
   type UserCall,
 } from './decisions.ts'
+export {
+  configMetaPaths,
+  configMetaProblems,
+  defaultConfigMeta,
+  metaFor,
+  type ConfigMetaPath,
+} from './configMeta.ts'
+export { ConfigMetaSchema, type ConfigMeta, type ConfigMetaEntry } from './schemas/configMeta.ts'

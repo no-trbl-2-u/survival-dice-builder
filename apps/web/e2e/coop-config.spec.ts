@@ -22,7 +22,7 @@ test('/play: a 3-player run starts and passes the turn in seat order', async ({ 
 
 test('/config: a changed value is used by the next run', async ({ page }) => {
   await page.goto('/config')
-  const maxHealth = page.getByLabel('max health', { exact: true })
+  const maxHealth = page.getByLabel('Maximum health', { exact: true })
   await maxHealth.fill('21')
   await page.getByRole('button', { name: 'Save config' }).click()
   await expect(page.getByRole('status')).toContainText('Saved')
@@ -33,6 +33,7 @@ test('/config: a changed value is used by the next run', async ({ page }) => {
   // Reset for other tests in this browser context.
   await page.goto('/config')
   await page.getByRole('button', { name: 'Reset to defaults' }).click()
+  await page.getByRole('button', { name: 'Yes, reset every value' }).click()
 })
 
 test('/play: the autosave offers to resume the run', async ({ page }) => {

@@ -1,0 +1,334 @@
+{
+  "players": { "label": "Players" },
+  "players.min": {
+    "label": "Fewest players",
+    "help": "The smallest player count a new run allows.",
+    "rule": "1.5"
+  },
+  "players.max": {
+    "label": "Most players",
+    "help": "The largest player count a new run allows.",
+    "rule": "1.5"
+  },
+  "player": { "label": "Each player" },
+  "player.maxHealth": {
+    "label": "Maximum health",
+    "help": "Each player starts with this health and cannot heal above it.",
+    "rule": "2.1, 4.9"
+  },
+  "player.startingDice": {
+    "label": "Starting dice",
+    "help": "Action dice each player has at level 1.",
+    "rule": "2.1, 4.7"
+  },
+  "player.starterSkills": {
+    "label": "Starter Skills",
+    "help": "Skill ids on each player board at the start, separated by commas.",
+    "rule": "4.10, Table 3"
+  },
+  "player.draftSlots": {
+    "label": "Draft Skill slots",
+    "help": "The most drafted Skills a player can hold, on top of the starter Skills.",
+    "rule": "2.1, 11.9"
+  },
+  "deck": { "label": "Starter deck and hand" },
+  "deck.preset": {
+    "label": "Deck and hand preset",
+    "help": "The id of the preset below that new runs use.",
+    "rule": "18.1"
+  },
+  "deck.presets": {
+    "label": "Deck and hand presets",
+    "help": "Each preset has an id, a hand size, and a list of starter cards with a quantity each. Edit as JSON; it is checked on save.",
+    "rule": "18.1, Table 2 (open question 19)"
+  },
+  "base": { "label": "Base" },
+  "base.startingHealth": {
+    "label": "Starting base health",
+    "help": "The base health at the start of a run. The run stops when it reaches 0.",
+    "rule": "4.5, 11.1"
+  },
+  "base.healthPerUpgrade": {
+    "label": "Health per upgrade",
+    "help": "Each base upgrade adds this much to the maximum base health and to the base health.",
+    "rule": "11.3"
+  },
+  "combat": { "label": "Combat" },
+  "combat.maxRolls": {
+    "label": "Rolls per exchange",
+    "help": "The most times a player rolls dice in one combat exchange.",
+    "rule": "7.8 step 4"
+  },
+  "combat.exchangeRange": {
+    "label": "Exchange range",
+    "help": "If no enemy is within this many hexes, the exchange has no effect and the hand is discarded.",
+    "rule": "7.9"
+  },
+  "combat.enemyMoveHexes": {
+    "label": "Enemy move",
+    "help": "Hexes each enemy moves toward its target at the start of Combat.",
+    "rule": "7.5"
+  },
+  "combat.moveCostNextToEnemy": {
+    "label": "Move cost next to an enemy",
+    "help": "Hexes a Move pays to enter a hex next to an enemy.",
+    "rule": "6.9"
+  },
+  "experience": { "label": "Experience" },
+  "experience.firstStep": {
+    "label": "Experience for level 2",
+    "help": "Experience needed to reach level 2.",
+    "rule": "8.5"
+  },
+  "experience.stepIncrease": {
+    "label": "Step increase",
+    "help": "Each next level needs this much more experience than the step before it.",
+    "rule": "8.5 (open question 17)"
+  },
+  "gatherAmount": {
+    "label": "Gather amount",
+    "help": "Materials a gathering node gives for one Gather.",
+    "rule": "6.7, Table 1"
+  },
+  "miniatureLimit": {
+    "label": "Enemy miniature limit",
+    "help": "The most enemies on the map. A grunt over the limit turns a grunt into an elite.",
+    "rule": "2.2, 10.5 (open question 32)"
+  },
+  "waveTrackStart": {
+    "label": "Wave track start",
+    "help": "The wave track value at the start of a run.",
+    "rule": "4.5, 15.1"
+  },
+  "shop": { "label": "Shop" },
+  "shop.offers": {
+    "label": "Shop offers",
+    "help": "Cards the open Shop shows at a time.",
+    "rule": "Table 6, 11.5"
+  },
+  "draft": { "label": "Skill draft" },
+  "draft.reveal": {
+    "label": "Skills revealed",
+    "help": "Skills each player looks at in a draft.",
+    "rule": "11.6"
+  },
+  "draft.keep": {
+    "label": "Skills kept",
+    "help": "Skills each player keeps from a draft.",
+    "rule": "11.7"
+  },
+  "draft.everyNRounds": {
+    "label": "Draft every N rounds",
+    "help": "With the Training Ground open, a draft happens in each round that this number divides.",
+    "rule": "10.8"
+  },
+  "supplies": { "label": "Supplies" },
+  "supplies.copiesPerCard": {
+    "label": "Copies of each card",
+    "help": "Copies of each card in the card supplies.",
+    "rule": "2.2, Table 8 (open question 18)"
+  },
+  "supplies.copiesPerSkill": {
+    "label": "Copies of each Skill",
+    "help": "Copies of each Skill in the Skill supplies.",
+    "rule": "2.2, Table 9 (open question 18)"
+  },
+  "tiles": { "label": "Map tiles" },
+  "tiles.countryside": {
+    "label": "Countryside tiles",
+    "help": "Countryside tiles in the game.",
+    "rule": "2.2"
+  },
+  "tiles.core": {
+    "label": "Core tiles",
+    "help": "Core tiles in the game.",
+    "rule": "2.2"
+  },
+  "tiles.setupCountryside": {
+    "label": "Countryside tiles at setup",
+    "help": "Countryside tiles put next to the Base tile at setup. The rest go on top of the tile deck.",
+    "rule": "4.2, 4.3 (open question 3)"
+  },
+  "tiles.revealPerPlayer": {
+    "label": "Tiles revealed per player",
+    "help": "Tiles each player reveals in each Explore phase.",
+    "rule": "10.1, 16.6"
+  },
+  "milestones": { "label": "Milestones" },
+  "milestones.surviveRounds": {
+    "label": "Survive to rounds",
+    "help": "Round numbers that each give a milestone, separated by commas.",
+    "rule": "17 (open question 45)"
+  },
+  "milestones.upgradesBought": {
+    "label": "Base upgrades bought",
+    "help": "Base upgrades the players must buy for this milestone.",
+    "rule": "17"
+  },
+  "milestones.tilesRevealed": {
+    "label": "Tiles revealed",
+    "help": "Tiles the players must reveal for this milestone.",
+    "rule": "17 (open question 4)"
+  },
+  "milestones.level": {
+    "label": "Level reached",
+    "help": "The level the players must reach for this milestone.",
+    "rule": "17"
+  },
+  "milestones.skillFired": {
+    "label": "Skill fired",
+    "help": "The id of the Skill a player must fire for this milestone.",
+    "rule": "17"
+  },
+  "options": { "label": "Playtest options" },
+  "options.exploration": {
+    "label": "Exploration",
+    "help": "Whether the Explore phase must reveal a tile, may skip it, or reveals it without a choice.",
+    "rule": "18.1, 10.1 (open question 37)",
+    "options": {
+      "forced": "Forced: reveal a tile each round",
+      "optional": "Optional: the player may skip the reveal",
+      "automatic": "Automatic: the tile is revealed for the player"
+    }
+  },
+  "options.boughtCards": {
+    "label": "Bought cards",
+    "help": "What a card bought in the Shop does to the deck.",
+    "rule": "18.1, 13.1 (open question 44)",
+    "options": {
+      "add": "Add to the deck",
+      "replace-starter": "Replace a starter card"
+    }
+  },
+  "options.maxLevel": {
+    "label": "Maximum level",
+    "help": "The highest level the players can reach. Leave empty for no maximum.",
+    "rule": "18.1, 8.4"
+  },
+  "options.skillUses": {
+    "label": "Skill uses",
+    "help": "How often each Skill fires in one combat exchange.",
+    "rule": "18.1, 7.8 step 6",
+    "options": {
+      "once-per-exchange": "Once per exchange",
+      "unlimited": "Unlimited"
+    }
+  },
+  "rulings": { "label": "Designer rulings" },
+  "rulings.enemiesPerHex": {
+    "label": "Enemies per hex",
+    "help": "The most enemies one hex can hold.",
+    "rule": "3.7 (open question 1)"
+  },
+  "rulings.figuresPerHex": {
+    "label": "Figures per hex",
+    "help": "The most player figures one hex can hold.",
+    "rule": "3.8"
+  },
+  "rulings.baseHexFigureLimitExempt": {
+    "label": "Base hex holds any number of figures",
+    "help": "When ticked, the figure limit per hex does not apply on the base hex.",
+    "rule": "3.8, 4.6 (open question 16)"
+  },
+  "rulings.blockedPathRule": {
+    "label": "Blocked enemy",
+    "help": "What an enemy does when every path to its nearest target is blocked.",
+    "rule": "9.7 (open questions 2, 39)",
+    "options": {
+      "next-target": "Move toward the next nearest target",
+      "wait": "Wait where it is"
+    }
+  },
+  "rulings.tileRotation": {
+    "label": "Tile rotation",
+    "help": "When ticked, the player may rotate a revealed tile.",
+    "rule": "10.1 (open question 5)"
+  },
+  "rulings.coopPrepareOrder": {
+    "label": "Co-op Prepare order",
+    "help": "How 2 to 4 players take turns in the Prepare phase.",
+    "rule": "16.8 (open question 6)",
+    "options": {
+      "alternate-hands": "Players alternate hands of cards",
+      "full-turn": "Each player plays a whole deck in turn"
+    }
+  },
+  "rulings.structureDamage": {
+    "label": "Structure damage",
+    "help": "How enemies damage Barricades, Towers, and the base in the structure attack step.",
+    "rule": "7.11, 9.5 (open question 7)",
+    "options": {
+      "v1": "As an attack on a player (grunt 2, elite 6 dice)",
+      "grunt-die": "Each grunt rolls 1 die"
+    }
+  },
+  "rulings.skirmishFail": {
+    "label": "Lost skirmish",
+    "help": "What happens to the Move when a skirmish does not clear the hex.",
+    "rule": "6.14 (open question 8)",
+    "options": {
+      "stay-lose-move": "Stay; the rest of the Move is lost",
+      "stay-keep-move": "Stay; keep the rest of the Move"
+    }
+  },
+  "rulings.fullBoardDraft": {
+    "label": "Draft with full slots",
+    "help": "What a draft does when every draft Skill slot is full.",
+    "rule": "11.9 (open question 46)",
+    "options": {
+      "swap": "The kept Skill replaces a drafted Skill",
+      "skip": "No draft for that player"
+    }
+  },
+  "rulings.mandatoryPlays": {
+    "label": "Every card must be played",
+    "help": "When ticked, a card cannot be discarded without its effect.",
+    "rule": "6.2, 7.8 step 5 (open question 10)"
+  },
+  "rulings.shopTiming": {
+    "label": "Shop timing",
+    "help": "When a player on the base may buy cards.",
+    "rule": "6.8 (open questions 11, 43)",
+    "options": {
+      "any-time-on-base": "At any time on the base",
+      "prepare-only": "Only in the Prepare phase"
+    }
+  },
+  "rulings.shopRefill": {
+    "label": "Shop refill",
+    "help": "When a bought Shop offer is replaced.",
+    "rule": "11.5 (open question 11)",
+    "options": {
+      "immediate": "At once",
+      "end-of-turn": "At the end of the turn"
+    }
+  },
+  "rulings.healTargets": {
+    "label": "Heal targets",
+    "help": "Who a heal effect can heal in co-op.",
+    "rule": "Table 3, 6.7 (open question 12)",
+    "options": {
+      "self": "The player only",
+      "any-adjacent": "The player or an adjacent ally"
+    }
+  },
+  "rulings.eliteReplacement": {
+    "label": "Grunt that becomes an elite",
+    "help": "Which grunt the miniature limit turns into an elite.",
+    "rule": "10.5 (open question 13)",
+    "options": {
+      "nearest-base": "The grunt nearest the base",
+      "player-choice": "The players choose"
+    }
+  },
+  "rulings.buildOnNode": {
+    "label": "Defenses on gathering nodes",
+    "help": "When ticked, a defense may stand on a gathering node hex, and the node still works.",
+    "rule": "12.2 (open question 14)"
+  },
+  "rulings.targetTieBreak": {
+    "label": "Enemy target order",
+    "help": "Which equally near target an enemy picks first: player, tower, barricade, base, in order, separated by commas.",
+    "rule": "9.3 (open question 15)"
+  }
+}

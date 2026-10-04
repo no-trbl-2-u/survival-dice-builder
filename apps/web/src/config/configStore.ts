@@ -1,4 +1,4 @@
-import { defaultContent, GameConfigSchema, type GameConfig } from '@survival/content'
+import { defaultContent, GameConfigSchema, metaFor, type GameConfig } from '@survival/content'
 
 /** Browser storage keys (this browser only). */
 export const CONFIG_KEY = 'survival.config.v1'
@@ -45,20 +45,81 @@ export function loadConfig(store: KeyValue | undefined): Readonly<{
   }
 }
 
-/**
- * Validates and stores a config. Returns the problems (path and message) when it is not valid.
- */
-export function saveConfig(store: KeyValue | undefined, value: unknown): string[] {
-  const parsed = GameConfigSchema.safeParse(value)
-  if (!parsed.success) {
-    return parsed.error.issues.map((i) => `${i.path.join('.') || 'config'}: ${i.message}`)
+/** One save problem: the config field it belongs to (dotted path) and a plain message. */
+export type ConfigProblem = Readonly<{ path: string; message: string }>
+
+/** The parts of a Zod issue the plain message reads. */
+type Issue = Readonly<{
+  code: string
+  message: string
+  path: readonly PropertyKey[]
+  origin?: string
+  expected?: string
+  minimum?: number | bigint
+  maximum?: number | bigint
+  inclusive?: boolean
+  exact?: boolean
+  values?: readonly unknown[]
+}>
+
+/** A Zod issue in plain words ("Enter a number of 1 or more."). The Zod text is the fallback. */
+export function plainMessage(issue: Issue): string {
+  const n = Number(issue.minimum ?? issue.maximum)
+  if (issue.code === 'invalid_type') {
+    if (issue.expected === 'int') return 'Enter a whole number.'
+    if (issue.expected === 'number') return 'Enter a number.'
+    if (issue.expected === 'array') return 'Enter a list.'
+    return 'This value has the wrong type.'
   }
+  if (issue.code === 'too_small' && issue.origin === 'number')
+    return `Enter a number ${issue.inclusive ? `of ${n} or more` : `more than ${n}`}.`
+  if (issue.code === 'too_big' && issue.origin === 'number')
+    return `Enter a number ${issue.inclusive ? `of ${n} or less` : `less than ${n}`}.`
+  if ((issue.code === 'too_small' || issue.code === 'too_big') && issue.origin === 'array') {
+    if (issue.exact) return `List exactly ${n} items.`
+    return issue.code === 'too_small' ? `List at least ${n} items.` : `List at most ${n} items.`
+  }
+  if (issue.code === 'invalid_value' && issue.values)
+    return `Use one of: ${issue.values.map(String).join(', ')}.`
+  return issue.message.charAt(0).toUpperCase() + issue.message.slice(1)
+}
+
+/**
+ * The problem for one Zod issue, filed under the config field that holds it. An issue inside a
+ * list names the item ("Item 2, quantity: ...").
+ */
+function toProblem(issue: Issue): ConfigProblem {
+  const path = issue.path.map(String)
+  const field = metaFor(path)?.path ?? (path.join('.') || 'config')
+  const rest = issue.path
+    .slice(field.split('.').length)
+    .map((k) => (typeof k === 'number' ? `item ${k + 1}` : String(k)))
+  const where = rest.length > 0 ? `${rest.join(', ')}: ` : ''
+  const message = plainMessage(issue)
+  return {
+    path: field,
+    message: where ? where.charAt(0).toUpperCase() + where.slice(1) + message : message,
+  }
+}
+
+/**
+ * Validates and stores a config. Returns the problems (field path and plain message) when it is
+ * not valid.
+ */
+export function saveConfig(store: KeyValue | undefined, value: unknown): ConfigProblem[] {
+  const parsed = GameConfigSchema.safeParse(value)
+  if (!parsed.success) return parsed.error.issues.map((i) => toProblem(i as Issue))
   try {
     store?.setItem(CONFIG_KEY, JSON.stringify(parsed.data))
     return []
   } catch {
-    return ['This browser does not allow saving.']
+    return [{ path: 'config', message: 'This browser does not allow saving.' }]
   }
+}
+
+/** True when the draft differs from the config last saved (or loaded). */
+export function isDirty(draft: unknown, saved: unknown): boolean {
+  return JSON.stringify(draft) !== JSON.stringify(saved)
 }
 
 /** Removes the stored config, so new runs use the defaults again. */
