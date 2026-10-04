@@ -53,9 +53,10 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 18 — Designer decision digest: one page for every open reading and pending check — 869dc88
 - [x] Phase 19 — /config fit for the designer: plain labels, help, rules sections, and a safe save flow — 8326abe
 
-**Spec v2 (phases 20–21) — from the designer decision review, oversight 2026-10-04:**
-- [blocked: designer walkthrough in progress, round structure changing 2026-10-04] Phase 20 — Spec v2 rules I: the designer decisions of 2026-10-04 in the engine (whole-tile base, 2 card copies, Haul 2 total, skirmish step 1, Tower target choice and Tower currency, node refill when empty, player-placed exploration, blocked elites promote, reveal 7)
-- [ ] Phase 21 — Experiments: experience curves and Skill caps, as a bot comparison report
+**Spec v2 (phases 20–22) — the designer decision review and the core-loop walkthrough, 2026-10-04:**
+- [ ] Phase 20 — Core loop v2 I: map, exploration, and Prepare (base-only start, reveal by stepping off the edge, no Explore phase, single-use gathering nodes, 10-card starter deck, 2 card copies, Haul 2 total, skirmish step 1)
+- [ ] Phase 21 — Core loop v2 II: enemies and Combat (no wave track, move then spawn at every node each Combat, structure-first targeting, cap and promotion, Tower ties and Tower currency, non-attack halves without enemies, knockout instead of run end)
+- [ ] Phase 22 — Experiments: experience curves, Skill caps, and spawn pressure, as a bot comparison report
 
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
@@ -290,39 +291,51 @@ paths. Clears the 2 pending /config critique rows. No rule value
 or default changes. Brief to be drafted by `/plan-a-phase`.
 
 
-### Phase 20 — Spec v2 rules I (designer decisions 2026-10-04)
+### Phase 20 — Core loop v2 I: map, exploration, and Prepare
 
-Source: `OPEN-QUESTIONS.md` rows marked "decided 2026-10-04 (engine:
-phase 20)" and its "Spec v2 changes decided 2026-10-04" section. The
-engine adopts each change behind content/config where it is a value
-(reveal 7, 2 copies), and as engine rules where it is behaviour: the
-base is the whole 7-hex Base tile (buying, upgrades, enemy attacks;
-1 figure per hex there too, start hexes placed by the players); Haul
-gathers 2 in total; the step into an enemy's hex costs 1; a blocked
-elite promotes the grunt nearest the base; Tower ties are a player
-choice (a new decision); a spawn node refills whenever its hex is
-empty; automatic exploration lets the player choose the slot (a new
-decision); a Tower's defeat pays currency to its builder (Towers carry
-their builder). Each change keeps its rule id in TSDoc and gets a unit
-test; the golden replays and the bot batch are re-recorded, with the
-before/after numbers in the phase report. Saved runs from earlier
-builds stop replaying: the export version goes to 2 and an old file
-gives a plain error. Rule changes are spec-sanctioned here: the
-designer decided them (bearings: "rule changes are Spec v2 work").
+Source: `docs/design/core-loop-v2.md` (designer walkthrough
+2026-10-04) and the `OPEN-QUESTIONS.md` rows decided on 2026-10-04.
+Setup is the Base tile alone (base centre plus 6 plain hexes, no
+gathering nodes; the whole tile is the base for buying, upgrades, and
+enemy attacks; 1 figure per hex, start hexes chosen by the players).
+The round is Prepare then Combat: the Explore phase goes, and its
+round-end steps (turn the discard pile, the draft, the round counter,
+milestones) move to the end of Combat. A Move step off the map edge
+reveals the top tile (countryside first, then core) under the hex
+entered, for 1 movement; its enemies wait for the next Combat. Gather
+takes the card's amount (starter Gather 2, Haul 2) and spends the node
+for good. The starter deck is the 10-card preset, and a deck never
+drops below 10. Supplies hold 2 copies of each card. A skirmish step
+costs 1. The Base tile and the tile deck change in content
+(`tiles.json`); rule values stay in content/config. Golden replays, the
+bot, and the bot batch are re-recorded; the export version goes to 2.
 Brief to be drafted by `/plan-a-phase`.
 
-### Phase 21 — Experiments: experience curves and Skill caps
+### Phase 21 — Core loop v2 II: enemies and Combat
 
-Source: `OPEN-QUESTIONS.md` rows 17 and 9 (designer 2026-10-04). Add
-config options (not new defaults) for: experience steps of 3; steps
-of 5 with extra experience for elites; 1 level for each elite that
-spawns; and the draft-slot cap (4, 6, 8). Run bot batches with
-`pnpm sim -- compare` against the default and write
-`docs/reports/phase-21-experiments.md`: the level reached by round,
-the end round, and the causes for each model, with a recommendation
-for the designer and the caveat that the bot is a weak player. The
-designer picks; no default changes in this phase. Brief to be drafted
-by `/plan-a-phase`.
+Source: `docs/design/core-loop-v2.md`. The wave track goes. At each
+Combat start enemies move, then every spawn node and elite spawn node
+spawns 1 enemy (spill-over when occupied; past 20 miniatures the grunt
+nearest the base becomes an elite, also for a blocked elite). Enemies
+target the nearest structure and turn to a player only when the player
+is `rulings.playerPullDistance` (2) hexes nearer; each enemy attacks
+only its target. Tower ties are a player choice, and a Tower's defeat
+pays currency to its builder. Non-attack card halves work without an
+enemy within 2 hexes. A player at 0 health is knocked out and returns
+at the next round start (row 55, proposed values) instead of ending
+the run; the run ends when the base falls. Bot policy updated for the
+new rules. Brief to be drafted by `/plan-a-phase`.
+
+### Phase 22 — Experiments: experience curves, Skill caps, spawn pressure
+
+Source: `OPEN-QUESTIONS.md` rows 9 and 17 (designer 2026-10-04). Add
+config options (not new defaults) for experience steps of 3; steps of
+5 with extra experience for elites; 1 level for each elite that
+spawns; and the draft-slot cap (4, 6, 8). Run bot batches with `pnpm
+sim -- compare` under the core loop v2 rules and write
+`docs/reports/phase-22-experiments.md`: level by round, end round,
+causes, and how fast the 20-miniature cap is reached, with a
+recommendation and the weak-bot caveat. No default changes.
 ---
 
 ## Carry-overs / known gaps (update as phases ship)
