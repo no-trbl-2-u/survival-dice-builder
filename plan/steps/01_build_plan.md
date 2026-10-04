@@ -51,6 +51,7 @@ Tick in this file in the same commit that ships the phase.
 **Review readiness (phases 17–18) — promoted via oversight 2026-10-03:**
 - [x] Phase 17 — Accessibility and navigation pass: the pending critique rows on /play, /tiles, /debug, and the shell — c5a664b
 - [x] Phase 18 — Designer decision digest: one page for every open reading and pending check — 869dc88
+- [ ] Phase 19 — /config fit for the designer: plain labels, help, rules sections, and a safe save flow (promoted via oversight 2026-10-03)
 
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
@@ -269,6 +270,20 @@ the current config value, a link to `/config`, and its evidence
 (bot batch, playtest numbers when present). No rule or config
 default changes; the designer still decides. Detailed brief:
 `phase_18_decision_digest.md`.
+
+### Phase 19 — /config fit for the designer
+
+Promoted from `plan/PHASE_CANDIDATES.md` (expand pass 2, score
+6.0) via oversight 2026-10-03. A `config.meta.json` in content
+gives every config leaf a plain label, a one-line help, its rules
+section, and plain phrases for select options (Zod-validated; a
+unit test fails when a config key has no metadata). /config
+renders label and help (`aria-describedby`), shows each save
+error next to its field in plain words (`aria-invalid`), keeps
+Save in a sticky bar, warns before leaving with unsaved edits,
+and confirms Reset. `/decisions` shows the labels beside config
+paths. Clears the 2 pending /config critique rows. No rule value
+or default changes. Brief to be drafted by `/plan-a-phase`.
 
 ---
 

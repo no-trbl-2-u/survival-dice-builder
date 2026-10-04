@@ -9,26 +9,7 @@
 
 ## Pending
 
-### [ ] [score 6.0] /config fit for the designer: plain labels, help, rules sections, and a safe save flow
-- proposed: 2026-10-03, expand pass 2
-- source signals:
-  - `plan/CRITIQUE.md` pass 3, 2 of the 6 pending rows are on /config:
-    - [MED] settings are code keys with no help text (54 controls, no aria-describedby, slug options such as "v1/grunt-die").
-    - [MED] save errors are raw schema text, unsaved edits vanish, and Reset needs no confirmation.
-  - Phase 18 (869dc88): `/decisions` now links 45 open readings straight to their /config fields, so /config is the designer's main editing surface.
-  - `OPEN-QUESTIONS.md` row 4 named a config key that did not exist (fixed in 869dc88). Config naming has already drifted from the readings once.
-- rationale:
-  - The designer settles readings by changing values on /config, so a page they cannot read blocks the readings review.
-  - Each field needs a label, a help line, and a rules section held in content beside the config schema. That is 54 fields of authored metadata plus a form rework, so it is too big for one `/iterate` fix.
-  - The 2 critique rows share every touched file (`ConfigPage.tsx`, `configStore.ts`, the config schema).
-- proposed scope: 1 phase.
-  - A `config.meta.json` in content (label, one-line help, rules section, plain option phrases), validated by Zod to cover every config leaf. A unit test fails when a new config key has no metadata.
-  - /config renders labels and help via `aria-describedby`.
-  - Per-field errors in plain words, with `aria-invalid`.
-  - A sticky Save bar, a leave-page guard for unsaved edits, and a Reset confirm step.
-  - `/decisions` reuses the labels next to each config path.
-- estimated phases: 1
-- conflicts: none. It changes no rule value or default; the bearings errors rule ("inline red text with the rule id or validation path") is met by the per-field errors.
+(none)
 
 ## Considered (below threshold)
 
@@ -88,6 +69,28 @@
 - estimated phases: 1
 - conflicts: must not change any rule or config default (bearings: rule changes are Spec v2 work)
 - promoted: 2026-10-03 via oversight, as phase 18
+
+### [x] [score 6.0] /config fit for the designer: plain labels, help, rules sections, and a safe save flow
+- proposed: 2026-10-03, expand pass 2
+- source signals:
+  - `plan/CRITIQUE.md` pass 3, 2 of the 6 pending rows are on /config:
+    - [MED] settings are code keys with no help text (54 controls, no aria-describedby, slug options such as "v1/grunt-die").
+    - [MED] save errors are raw schema text, unsaved edits vanish, and Reset needs no confirmation.
+  - Phase 18 (869dc88): `/decisions` now links 45 open readings straight to their /config fields, so /config is the designer's main editing surface.
+  - `OPEN-QUESTIONS.md` row 4 named a config key that did not exist (fixed in 869dc88). Config naming has already drifted from the readings once.
+- rationale:
+  - The designer settles readings by changing values on /config, so a page they cannot read blocks the readings review.
+  - Each field needs a label, a help line, and a rules section held in content beside the config schema. That is 54 fields of authored metadata plus a form rework, so it is too big for one `/iterate` fix.
+  - The 2 critique rows share every touched file (`ConfigPage.tsx`, `configStore.ts`, the config schema).
+- proposed scope: 1 phase.
+  - A `config.meta.json` in content (label, one-line help, rules section, plain option phrases), validated by Zod to cover every config leaf. A unit test fails when a new config key has no metadata.
+  - /config renders labels and help via `aria-describedby`.
+  - Per-field errors in plain words, with `aria-invalid`.
+  - A sticky Save bar, a leave-page guard for unsaved edits, and a Reset confirm step.
+  - `/decisions` reuses the labels next to each config path.
+- estimated phases: 1
+- conflicts: none. It changes no rule value or default; the bearings errors rule ("inline red text with the rule id or validation path") is met by the per-field errors.
+- promoted: 2026-10-03 via oversight, as phase 19
 
 ## Rejected
 
