@@ -55,7 +55,7 @@ Tick in this file in the same commit that ships the phase.
 
 **Spec v2 (phases 20–22) — the designer decision review and the core-loop walkthrough, 2026-10-04:**
 - [x] Phase 20 — Core loop v2 I: map, exploration, and Prepare (base-only start, reveal by stepping off the edge, no Explore phase, single-use gathering nodes, 10-card starter deck, 2 card copies, Haul 2 total, skirmish step 1) — d690982
-- [ ] Phase 21 — Core loop v2 II: enemies and Combat (no wave track, move then spawn at every node each Combat, structure-first targeting, cap and promotion, Tower ties and Tower currency, non-attack halves without enemies, knockout instead of run end)
+- [x] Phase 21 — Core loop v2 II: enemies and Combat (no wave track, move then spawn at every node each Combat, structure-first targeting, cap and promotion, Tower ties and Tower currency, non-attack halves without enemies, knockout instead of run end) — 79bc77e
 - [ ] Phase 22 — Experiments: experience curves, Skill caps, and spawn pressure, as a bot comparison report
 
 > **After phase 16:** the loop transitions to `/iterate`.
@@ -324,7 +324,7 @@ pays currency to its builder. Non-attack card halves work without an
 enemy within 2 hexes. A player at 0 health is knocked out and returns
 at the next round start (row 55, proposed values) instead of ending
 the run; the run ends when the base falls. Bot policy updated for the
-new rules. Brief to be drafted by `/plan-a-phase`.
+new rules. Detailed brief: `phase_21_core_loop_v2_combat.md`.
 
 ### Phase 22 — Experiments: experience curves, Skill caps, spawn pressure
 
@@ -364,3 +364,4 @@ recommendation and the weak-bot caveat. No default changes.
 - phase 18 — 869dc88 — /decisions page and generated docs/DECISIONS.md: 45 open rule readings with their config values (linked to /config fields) and every needs-user-call check; pnpm sim -- decisions; freshness test
 - phase 19 — 8326abe — config.meta.json labels, help, and rules sections for every config field; /config plain errors, sticky Save, unsaved-changes warning, confirmed Reset
 - phase 20 — d690982 — Base tile alone at setup with player-chosen start hexes, the whole Base tile is the base, no Explore phase, reveal by stepping off the map edge, single-use gathering nodes, 10-card deck with a hand of 3, 2 card copies, skirmish step 1, export version 2; bot batch median end round 5 (was 14)
+- phase 21 — 79bc77e — no wave track: enemies move, then every spawn node spawns each Combat; structure-first targeting with a 2-hex player pull; enemies attack only their target; Tower ties are the builder's choice and pay the builder; exchanges without enemies; knockout and return at half health; state and export version 3; bot batch median end round 6, all 200 end by the base
