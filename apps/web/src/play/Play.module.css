@@ -138,9 +138,6 @@
 .combat {
   border-color: var(--phase-combat);
 }
-.explore {
-  border-color: var(--phase-explore);
-}
 
 .current.prepare {
   background: var(--phase-prepare);
@@ -148,10 +145,6 @@
 }
 .current.combat {
   background: var(--phase-combat);
-  color: var(--on-phase);
-}
-.current.explore {
-  background: var(--phase-explore);
   color: var(--on-phase);
 }
 
@@ -585,13 +578,8 @@
   padding: 16px;
 }
 
-.preview {
-  stroke: var(--legal-move);
-  opacity: 0.85;
-}
-
-.tilePreview {
-  max-width: 12rem;
+.spent {
+  opacity: 0.4;
 }
 
 .log {

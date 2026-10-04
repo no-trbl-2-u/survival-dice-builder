@@ -10,7 +10,7 @@
     "draftSlots": 6
   },
   "deck": {
-    "preset": "deck-6-hand-3",
+    "preset": "deck-10-hand-3",
     "presets": [
       {
         "id": "deck-6-hand-3",
@@ -77,8 +77,31 @@
             "quantity": 1
           }
         ]
+      },
+      {
+        "id": "deck-10-hand-3",
+        "handSize": 3,
+        "cards": [
+          {
+            "card": "starter-move",
+            "quantity": 4
+          },
+          {
+            "card": "starter-gather",
+            "quantity": 4
+          },
+          {
+            "card": "starter-build",
+            "quantity": 1
+          },
+          {
+            "card": "starter-rest",
+            "quantity": 1
+          }
+        ]
       }
-    ]
+    ],
+    "minimumSize": 10
   },
   "base": {
     "startingHealth": 20,
@@ -94,7 +117,6 @@
     "firstStep": 5,
     "stepIncrease": 5
   },
-  "gatherAmount": 2,
   "miniatureLimit": 20,
   "waveTrackStart": 0,
   "shop": {
@@ -106,14 +128,13 @@
     "everyNRounds": 2
   },
   "supplies": {
-    "copiesPerCard": 1,
+    "copiesPerCard": 2,
     "copiesPerSkill": 1
   },
   "tiles": {
     "countryside": 3,
     "core": 5,
-    "setupCountryside": 1,
-    "revealPerPlayer": 1
+    "revealMoveCost": 1
   },
   "milestones": {
     "surviveRounds": [5, 10, 15],
@@ -123,7 +144,6 @@
     "skillFired": "arcane-rain"
   },
   "options": {
-    "exploration": "forced",
     "boughtCards": "add",
     "maxLevel": null,
     "skillUses": "once-per-exchange"
@@ -131,7 +151,6 @@
   "rulings": {
     "enemiesPerHex": 1,
     "figuresPerHex": 1,
-    "baseHexFigureLimitExempt": true,
     "blockedPathRule": "next-target",
     "tileRotation": false,
     "coopPrepareOrder": "alternate-hands",
@@ -144,6 +163,7 @@
     "healTargets": "self",
     "eliteReplacement": "nearest-base",
     "buildOnNode": true,
+    "gatherNeedsNode": true,
     "targetTieBreak": ["player", "tower", "barricade", "base"]
   }
 }

@@ -5,7 +5,6 @@ import { moveEnemies } from '../src/enemies/movement.ts'
 import { refillNodes, spawnNodes, waveStep } from '../src/enemies/spawning.ts'
 import { structureAttacks, towerAttacks } from '../src/enemies/structures.ts'
 import { rankTargets } from '../src/enemies/targets.ts'
-import { startExplore } from '../src/explore/explore.ts'
 import { hexKey, type Axial } from '../src/hex.ts'
 import { applyAction, createGame, legalActions, type GameState } from '../src/index.ts'
 import { miniatureCount, spawnEnemy } from '../src/map/spawn.ts'
@@ -17,12 +16,18 @@ const tile = (id: string) => defaultContent.tiles.find((t) => t.id === id)!
 
 /**
  * A straight row of plains hexes from q = `from` to q = `to` on r = 0, with the base at (0,0).
- * No tiles are listed, so nothing refills or arrives in a wave unless a test adds tiles.
+ * The base hex is a 1-hex tile of its own, so the base is that hex alone. No tiles are listed,
+ * so nothing refills or arrives in a wave unless a test adds tiles.
  */
 function corridor(from: number, to: number): GameMap {
   const hexes: Record<string, GameMap['hexes'][string]> = {}
   for (let q = from; q <= to; q++) {
-    hexes[`${q},0`] = { terrain: 'plains', site: q === 0 ? 'base' : null, tile: 'test' }
+    const base = q === 0
+    hexes[`${q},0`] = {
+      terrain: 'plains',
+      site: base ? 'base' : null,
+      tile: base ? 'base' : 'test',
+    }
   }
   return { tiles: [], hexes }
 }
@@ -34,7 +39,6 @@ function board(map: GameMap, player: Axial, enemies: Enemy[], patch: Partial<Gam
   const state: GameState = {
     ...s,
     phase: 'prepare',
-    revealed: [],
     map,
     enemies,
     nextEnemyId: 100,
@@ -255,50 +259,46 @@ describe('Towers and structures (7.6, 7.11-7.12, 12.3, 14.1)', () => {
   })
 })
 
-describe('Explore (10.1-10.3, 18.1)', () => {
-  const exploring = (exploration: 'forced' | 'optional' | 'automatic', tileDeck?: string[]) => {
-    const cfg = { ...config, options: { ...config.options, exploration } }
-    const s = board(twoTiles(), { q: 0, r: 0 }, [], { config: cfg, phase: 'explore' })
-    return tileDeck ? { ...s, tileDeck } : s
+describe('the Base tile is the base (row 16)', () => {
+  it('row 16 an enemy next to an outer Base tile hex attacks the base', () => {
+    // (2,0) touches the outer base hex (1,0), not the base centre.
+    const s = board(twoTiles(), { q: -1, r: 0 }, [grunt('e1', 2, 0)])
+    const [after, events] = structureAttacks(s)
+    expect(events[0]).toMatchObject({ type: 'structureAttacked', structure: 'base' })
+    expect(after.base.health).toBe(s.base.health - 2)
+  })
+
+  it('row 16 enemies rank the base by its nearest Base tile hex', () => {
+    const s = board(twoTiles(), { q: -1, r: 0 }, [grunt('e1', 3, 0)])
+    const base = rankTargets(s, { q: 3, r: 0 }).find((t) => t.kind === 'base')!
+    expect(base.hex).toEqual({ q: 1, r: 0 })
+  })
+})
+
+describe('end of round (10.3, 10.6-10.9, core loop v2)', () => {
+  /** A solo run at its first Combat with no enemies: the exchanges are all skipped. */
+  const toRoundEnd = (tileDeck: string[]) => {
+    const s0 = createGame(config, 1)
+    let s: GameState = { ...applyAction(s0, legalActions(s0)[0]!).state, tileDeck }
+    for (let i = 0; i < 200 && s.round === 1 && s.phase !== 'ended'; i++) {
+      s = applyAction(s, legalActions(s)[0]!).state
+    }
+    return s
   }
 
-  it('10.1 forced: the top tile is revealed and the player chooses its slot', () => {
-    const [s] = startExplore(exploring('forced', ['meadowlands', 'old-woods']))
-    expect(s.revealed).toEqual(['meadowlands'])
-    expect(s.tileDeck).toEqual(['old-woods'])
-    expect(legalActions(s).every((a) => a.type === 'placeTile')).toBe(true)
-    const { state, events } = applyAction(s, legalActions(s)[0]!)
-    expect(state.map.tiles).toHaveLength(3)
-    expect(events[0]).toMatchObject({ type: 'tilePlaced', rule: '10.1' })
-    expect(state.phase).toBe('prepare')
-    expect(state.round).toBe(2)
+  it('core loop v2 there is no Explore phase: Combat is followed by the next Prepare', () => {
+    const s = toRoundEnd(['meadowlands'])
+    const phases = s.log.flatMap((e) => (e.type === 'phaseStarted' ? [e.phase] : []))
+    expect(phases).toEqual(['prepare', 'combat', 'prepare'])
+    expect(s.round).toBe(2)
+    expect(s.waveTrack).toBe(0)
   })
 
-  it('10.2 the new tile gets 1 enemy on each spawn node', () => {
-    const [s] = startExplore(exploring('forced', ['meadowlands']))
-    const { events } = applyAction(s, legalActions(s)[0]!)
-    expect(events.filter((e) => e.type === 'enemySpawned')).toHaveLength(1)
-  })
-
-  it('18.1 automatic: the tile is placed in the empty slot nearest the base', () => {
-    const [s] = startExplore(exploring('automatic', ['meadowlands']))
-    expect(s.map.tiles).toHaveLength(3)
-    expect(s.revealed).toEqual([])
-  })
-
-  it('18.1 optional: the player may skip the reveal', () => {
-    const [s] = startExplore(exploring('optional', ['meadowlands']))
-    expect(legalActions(s)).toEqual([{ type: 'skipReveal' }, { type: 'revealTile' }])
-    const skipped = applyAction(s, { type: 'skipReveal' }).state
-    expect(skipped.tileDeck).toEqual(['meadowlands'])
-    const revealed = applyAction(s, { type: 'revealTile' }).state
-    expect(revealed.revealed).toEqual(['meadowlands'])
-  })
-
-  it('10.3, 15.2 with an empty tile deck the wave track goes up by 1 and no tile is revealed', () => {
-    const [s, events] = startExplore(exploring('forced', []))
+  it('10.3, row 62 with an empty tile deck the wave track goes up by 1 at the end of the round', () => {
+    const s = toRoundEnd([])
     expect(s.waveTrack).toBe(1)
-    expect(s.revealed).toEqual([])
-    expect(events[0]).toMatchObject({ type: 'waveTrackAdvanced', rule: '10.3' })
+    expect(s.log).toContainEqual(
+      expect.objectContaining({ type: 'waveTrackAdvanced', rule: '10.3' }),
+    )
   })
 })

@@ -8,7 +8,7 @@ async function clickFirst(page: Page, name: RegExp): Promise<boolean> {
   return true
 }
 
-test('/play: setup tile, the Prepare hands, and 1 Combat exchange, with no errors', async ({
+test('/play: start hex, a reveal off the map edge, the Prepare hands, and 1 Combat exchange, with no errors', async ({
   page,
 }) => {
   const errors: string[] = []
@@ -21,15 +21,21 @@ test('/play: setup tile, the Prepare hands, and 1 Combat exchange, with no error
   const bar = page.getByTestId('phase-bar')
   await expect(bar).toContainText('Setup')
 
-  // Setup: the map ghost tile and the Choices button are both buttons; use the Choices one.
-  await page.getByRole('button', { name: /^Place Stony Fields .* \(2,1\)$/ }).click()
+  // Setup: the map hex and the Choices button are both buttons; use the Choices one.
+  await page
+    .getByRole('button', { name: /^Place your figure on .*the base centre \(0,0\)$/ })
+    .click()
   await expect(bar).toContainText('Round 1')
 
-  // Prepare: play every card (stop any Move or Build at once) until Combat starts.
-  for (let i = 0; i < 30 && !(await bar.textContent())?.includes('Exchange'); i++) {
+  // Prepare: walk off the map edge to reveal tiles (their enemies come at Combat), stop any
+  // Build at once, and play every card until a Combat exchange starts.
+  for (let i = 0; i < 60 && !(await bar.textContent())?.includes('Exchange'); i++) {
+    if (await clickFirst(page, /^Step off the map edge/)) continue
+    if (await clickFirst(page, /^Move to [^:]+$/)) continue
     if (await clickFirst(page, /^Stop (moving|building)$/)) continue
     await clickFirst(page, /^Play /)
   }
+  await expect(page.getByTestId('play-log')).toContainText('Tile revealed')
   await expect(bar).toContainText('Exchange: roll')
   await expect(page.getByLabel('Hand')).toContainText('bottom halves up (Combat)')
 

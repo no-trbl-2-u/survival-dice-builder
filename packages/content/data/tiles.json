@@ -11,10 +11,6 @@
         },
         {
           "terrain": "plains",
-          "site": "gathering-node"
-        },
-        {
-          "terrain": "forest",
           "site": null
         },
         {
@@ -22,11 +18,15 @@
           "site": null
         },
         {
-          "terrain": "hills",
-          "site": "gathering-node"
+          "terrain": "plains",
+          "site": null
         },
         {
-          "terrain": "forest",
+          "terrain": "plains",
+          "site": null
+        },
+        {
+          "terrain": "plains",
           "site": null
         },
         {

@@ -26,7 +26,7 @@ describe('exportRun', () => {
   it('replays to the same state, and names the file by seed and round', () => {
     const { run } = botRun(4)
     const data = exportRun(run)
-    expect(data.version).toBe(1)
+    expect(data.version).toBe(2)
     expect(serialize(replayExport(JSON.parse(JSON.stringify(data))))).toBe(serialize(run.state))
     expect(exportFileName(data)).toBe(`survival-run-4-round-${run.state.round}.json`)
   })
@@ -49,7 +49,10 @@ describe('save and load (spec 6)', () => {
 
   it('a broken or foreign file gives a plain error', () => {
     expect(importRun('not json')).toHaveProperty('error')
-    expect(importRun('{"version":2}')).toEqual({ error: 'This is not a version 1 run file.' })
+    expect(importRun('{"version":3}')).toEqual({ error: 'This is not a version 2 run file.' })
+    expect(importRun('{"version":1}')).toEqual({
+      error: 'This run file is from an earlier version and cannot be replayed.',
+    })
   })
 
   it('undo replays every action but the last', () => {
@@ -91,7 +94,11 @@ describe('describeEvent', () => {
     const state = botRun(2).run.state
     const gathered = { type: 'gathered', rule: '6.7', player: 'p1', amount: 0, materials: 0 }
     expect(describeEvent(gathered as never, state)).toBe(
-      'You gathered nothing: gather on a Gathering node with no enemy on it.',
+      'You gathered nothing: gather on an unspent gathering node with no enemy on it.',
+    )
+    const spent = { ...gathered, amount: 2, materials: 2, spent: true }
+    expect(describeEvent(spent as never, state)).toBe(
+      'You gathered 2 materials (now 2); the node is spent.',
     )
     const coop = { ...state, players: [state.players[0]!, { ...state.players[0]!, id: 'p2' }] }
     const healed = { type: 'healed', rule: '6.4', player: 'p2', amount: 1, health: 5 }

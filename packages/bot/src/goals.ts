@@ -1,4 +1,11 @@
-import { hexDistance, hexKey, type Axial, type GameState, type Player } from '@survival/engine'
+import {
+  hexDistance,
+  hexKey,
+  hexNeighbors,
+  type Axial,
+  type GameState,
+  type Player,
+} from '@survival/engine'
 
 /** The base hex: the center of the Base tile. */
 export const BASE: Axial = { q: 0, r: 0 }
@@ -35,7 +42,17 @@ export function cheapestUpgrade(state: GameState): number {
   return costs.length > 0 ? Math.min(...costs) : Number.POSITIVE_INFINITY
 }
 
-/** The gathering node nearest the base with no enemy on it (ties: hex key). */
+/** True when the figure stands on the Base tile (any of its 7 hexes). */
+export function onBaseTile(state: GameState, hex: Axial): boolean {
+  return hexDistance(hex, BASE) <= 1
+}
+
+/** True when a gathering node has been used (each node gives materials once). */
+export function spent(state: GameState, hex: Axial): boolean {
+  return state.spentNodes.some((n) => n.q === hex.q && n.r === hex.r)
+}
+
+/** The unspent gathering node nearest the base with no enemy on it (ties: hex key). */
 export function homeNode(state: GameState): Axial | null {
   const nodes = Object.entries(state.map.hexes)
     .filter(([, h]) => h.site === 'gathering-node')
@@ -43,7 +60,7 @@ export function homeNode(state: GameState): Axial | null {
       const [q = 0, r = 0] = key.split(',').map(Number)
       return { q, r }
     })
-    .filter((h) => !enemyOn(state, h))
+    .filter((h) => !enemyOn(state, h) && !spent(state, h))
     .sort(
       (a, b) => hexDistance(a, BASE) - hexDistance(b, BASE) || hexKey(a).localeCompare(hexKey(b)),
     )
@@ -51,12 +68,34 @@ export function homeNode(state: GameState): Axial | null {
 }
 
 /**
- * Where the figure wants to be: a gathering node while it cannot pay for the next upgrade, else
- * the base (to buy upgrades and Shop cards, and to defend it).
+ * The hex just off the map edge nearest the figure (ties: hex key), while the tile deck has
+ * tiles: stepping onto it reveals the next tile. Null when the deck is empty.
+ */
+export function edgeHex(state: GameState): Axial | null {
+  if (state.tileDeck.length === 0) return null
+  const from = me(state).hex
+  const off = new Map<string, Axial>()
+  for (const key of Object.keys(state.map.hexes)) {
+    const [q = 0, r = 0] = key.split(',').map(Number)
+    for (const n of hexNeighbors({ q, r })) {
+      if (!state.map.hexes[hexKey(n)]) off.set(hexKey(n), n)
+    }
+  }
+  return (
+    [...off.values()].sort(
+      (a, b) => hexDistance(a, from) - hexDistance(b, from) || hexKey(a).localeCompare(hexKey(b)),
+    )[0] ?? null
+  )
+}
+
+/**
+ * Where the figure wants to be: an unspent gathering node while it cannot pay for the next
+ * upgrade (or the map edge, to reveal a tile, when no node is left), else the base (to buy
+ * upgrades and Shop cards, and to defend it).
  */
 export function goal(state: GameState): Axial {
   const player = me(state)
-  if (player.materials < cheapestUpgrade(state)) return homeNode(state) ?? BASE
+  if (player.materials < cheapestUpgrade(state)) return homeNode(state) ?? edgeHex(state) ?? BASE
   return BASE
 }
 

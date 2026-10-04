@@ -5,7 +5,7 @@ import { closeTiming, resumeTiming, sessionMs, type Timing } from './timing.ts'
 
 /** A saved run: enough to replay it exactly. Also the run summary's export. */
 export type RunExport = Readonly<{
-  version: 1
+  version: 2
   seed: number
   players: number
   config: Run['config']
@@ -22,7 +22,7 @@ export type RunExport = Readonly<{
 export function exportRun(run: Run, at = run.timing.lastAt): RunExport {
   const timing = closeTiming(run.timing, at, run.state.phase, run.state.round)
   return {
-    version: 1,
+    version: 2,
     seed: run.seed,
     players: run.players,
     config: run.config,
@@ -42,7 +42,10 @@ export function exportRun(run: Run, at = run.timing.lastAt): RunExport {
 export function importRun(text: string, at = 0): Readonly<{ run: Run } | { error: string }> {
   try {
     const data = JSON.parse(text) as Partial<RunExport>
-    if (data.version !== 1) return { error: 'This is not a version 1 run file.' }
+    if (typeof data.version === 'number' && data.version < 2) {
+      return { error: 'This run file is from an earlier version and cannot be replayed.' }
+    }
+    if (data.version !== 2) return { error: 'This is not a version 2 run file.' }
     const config = GameConfigSchema.safeParse(data.config)
     if (!config.success) return { error: 'The run file has an invalid config.' }
     if (typeof data.seed !== 'number' || !Array.isArray(data.actions)) {

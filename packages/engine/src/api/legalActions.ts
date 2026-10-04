@@ -1,7 +1,7 @@
 import { legalBuilds } from '../build/defenses.ts'
 import { pendingTargets } from '../combat/resolve.ts'
-import { emptySlots } from '../map/tiles.ts'
-import { legalMoves } from '../movement/move.ts'
+import { baseHexes } from '../map/base.ts'
+import { blockedByFigure, legalMoves } from '../movement/move.ts'
 import { draftedSkills } from '../progression/draft.ts'
 import { legalBuys, onBase, returnableStarters } from '../progression/shop.ts'
 import { legalUpgrades } from '../progression/upgrades.ts'
@@ -18,7 +18,7 @@ import type { Action } from './actions.ts'
  * Buying a card (6.8) is offered at every decision while the figure is on the base; it never
  * comes first. A pending starter return (18.1) or Skill draft (10.8) must be resolved first.
  *
- * @rule 4.2, 6.2, 6.7-6.15, 6.8, 7.8, 10.1, 10.8, 11.2, 11.6-11.9, 18.1
+ * @rule 4.6, 6.2, 6.7-6.15, 6.8, 7.8, 10.1, 10.8, 11.2, 11.6-11.9, 18.1
  */
 export function legalActions(state: GameState): Action[] {
   if (state.phase === 'ended') return []
@@ -49,11 +49,11 @@ function coreActions(state: GameState): Action[] {
     ...(mayDiscard ? player.hand.map((c): Action => ({ type: 'discardCard', card: c.id })) : []),
   ]
 
-  if (state.revealed.length > 0 && (state.phase === 'setup' || state.phase === 'explore')) {
-    return emptySlots(state.map).map((h): Action => ({ type: 'placeTile', q: h.q, r: h.r }))
-  }
-  if (state.phase === 'explore' && state.revealOffer) {
-    return [{ type: 'skipReveal' }, { type: 'revealTile' }]
+  if (state.phase === 'setup') {
+    // 4.6, 3.8, row 16: the figure goes on a free hex of the Base tile.
+    return baseHexes(state)
+      .filter((h) => !blockedByFigure(state, h, player.id))
+      .map((h): Action => ({ type: 'placeFigure', q: h.q, r: h.r }))
   }
 
   const exchange = state.exchange

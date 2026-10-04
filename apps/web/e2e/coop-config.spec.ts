@@ -7,8 +7,17 @@ test('/play: a 3-player run starts and passes the turn in seat order', async ({ 
   await page.getByLabel('Players').selectOption('3')
   await page.getByLabel('Seed').fill('5')
   await page.getByRole('button', { name: 'Start run' }).click()
-  await page.getByRole('button', { name: /^Place .* \(2,1\)$/ }).click()
   const turn = page.getByTestId('turn')
+  // Setup: each player in seat order puts their figure on a free base hex.
+  for (let seat = 1; seat <= 3; seat++) {
+    await expect(page.getByTestId('phase-bar')).toContainText(`Player ${seat}, place your figure`)
+    await page
+      .getByRole('button', {
+        name: new RegExp(`^Place Player ${seat}'s figure .* \\(-?\\d+,-?\\d+\\)$`),
+      })
+      .first()
+      .click()
+  }
   await expect(turn).toHaveText("Player 1's turn")
   for (let i = 0; i < 3; i++)
     await page
@@ -38,7 +47,7 @@ test('/config: a changed value is used by the next run', async ({ page }) => {
 
 test('/play: the autosave offers to resume the run', async ({ page }) => {
   await page.goto('/play?seed=8')
-  await page.getByRole('button', { name: /^Place .* \(2,1\)$/ }).click()
+  await page.getByRole('button', { name: /^Place your figure .* \(0,0\)$/ }).click()
   await page.goto('/play')
   await expect(page.getByRole('button', { name: /^Resume saved run/ })).toBeVisible()
   await expect(page.getByText('Saved in this browser only.')).toBeVisible()

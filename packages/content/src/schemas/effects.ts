@@ -5,7 +5,8 @@ import { NonNegativeInt, PositiveInt } from './primitives.ts'
  * Top-half (Prepare) card effects. Content describes them; the engine interprets them.
  *
  * - `move`: move up to `hexes`. `ignoreEnemyCost` skips the 6.9 surcharge (Blink).
- * - `gather`: take the node's materials plus `bonus` (Haul "Gather +2" = bonus 2).
+ * - `gather`: take `amount` materials from the gathering node, which is then spent (core loop
+ *   v2; Haul "Gather +2" = amount 2, OPEN-QUESTIONS row 20).
  * - `build`: 1 upgrade on the base or 1 defense elsewhere; `costReduction` lowers the material
  *   cost, `times` builds more than once (Architect).
  * - `rest`: heal `amount`.
@@ -18,7 +19,7 @@ export const PrepareEffectSchema = z.discriminatedUnion('kind', [
     hexes: PositiveInt,
     ignoreEnemyCost: z.boolean().default(false),
   }),
-  z.object({ kind: z.literal('gather'), bonus: NonNegativeInt.default(0) }),
+  z.object({ kind: z.literal('gather'), amount: PositiveInt }),
   z.object({
     kind: z.literal('build'),
     costReduction: NonNegativeInt.default(0),

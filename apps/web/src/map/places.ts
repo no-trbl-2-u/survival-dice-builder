@@ -30,14 +30,17 @@ export function bearing(from: Axial, to: Axial): string {
 }
 
 /**
- * The name of a map hex: terrain and site ("Plains, Spawn node"), or `open ground` off the map.
+ * The name of a map hex: terrain and site ("Plains, Spawn node"), with "(spent)" on a used
+ * gathering node, or `open ground` off the map.
  *
  * @param state - the game state whose map is read.
  * @param hex - the hex to name.
  */
 export function hexName(state: GameState, hex: Axial): string {
   const found = state.map.hexes[hexKey(hex)]
-  return found ? hexLabel(found) : 'open ground'
+  if (!found) return 'open ground'
+  const spent = state.spentNodes.some((n) => n.q === hex.q && n.r === hex.r)
+  return spent ? `${hexLabel(found)} (spent)` : hexLabel(found)
 }
 
 /** Where the base is, or the map origin before a base exists. */
@@ -72,7 +75,9 @@ export function hexContents(state: GameState, hex: Axial): string[] {
   const on = (h: Axial) => h.q === hex.q && h.r === hex.r
   const enemies = state.enemies.filter((e) => on(e.hex))
   const defenses = state.defenses.filter((d) => on(d.hex))
-  const figures = state.players.flatMap((p, seat) => (on(p.hex) ? [seat] : []))
+  const figures = state.players.flatMap((p, seat) =>
+    on(p.hex) && !state.unplaced.includes(p.id) ? [seat] : [],
+  )
   return [
     ...enemies.map((e) => {
       const max = state.content.enemies.enemies.find((x) => x.id === e.kind)?.health ?? e.health

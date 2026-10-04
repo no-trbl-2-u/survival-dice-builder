@@ -62,8 +62,10 @@ export function StateView({ state }: Props) {
         </dd>
         <dt>Tiles</dt>
         <dd>
-          {state.map.tiles.length} placed, {state.tileDeck.length} in the tile deck
-          {state.revealed.length > 0 ? `, waiting to place: ${state.revealed.join(', ')}` : ''}
+          {state.map.tiles.length} placed, {state.tileDeck.length} in the tile deck,{' '}
+          {state.spentNodes.length} gathering {state.spentNodes.length === 1 ? 'node' : 'nodes'}{' '}
+          spent
+          {state.unplaced.length > 0 ? `; waiting to place: ${state.unplaced.join(', ')}` : ''}
         </dd>
         {active ? (
           <>

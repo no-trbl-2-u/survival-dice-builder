@@ -1,5 +1,7 @@
 {
-  "players": { "label": "Players" },
+  "players": {
+    "label": "Players"
+  },
   "players.min": {
     "label": "Fewest players",
     "help": "The smallest player count a new run allows.",
@@ -10,7 +12,9 @@
     "help": "The largest player count a new run allows.",
     "rule": "1.5"
   },
-  "player": { "label": "Each player" },
+  "player": {
+    "label": "Each player"
+  },
   "player.maxHealth": {
     "label": "Maximum health",
     "help": "Each player starts with this health and cannot heal above it.",
@@ -31,7 +35,9 @@
     "help": "The most drafted Skills a player can hold, on top of the starter Skills.",
     "rule": "2.1, 11.9"
   },
-  "deck": { "label": "Starter deck and hand" },
+  "deck": {
+    "label": "Starter deck and hand"
+  },
   "deck.preset": {
     "label": "Deck and hand preset",
     "help": "The id of the preset below that new runs use.",
@@ -42,7 +48,14 @@
     "help": "Each preset has an id, a hand size, and a list of starter cards with a quantity each. Edit as JSON; it is checked on save.",
     "rule": "18.1, Table 2 (open question 19)"
   },
-  "base": { "label": "Base" },
+  "deck.minimumSize": {
+    "label": "Smallest deck",
+    "help": "A player never has fewer cards than this. A starter card is returned only while the player has more.",
+    "rule": "18.1 (core loop v2)"
+  },
+  "base": {
+    "label": "Base"
+  },
   "base.startingHealth": {
     "label": "Starting base health",
     "help": "The base health at the start of a run. The run stops when it reaches 0.",
@@ -53,7 +66,9 @@
     "help": "Each base upgrade adds this much to the maximum base health and to the base health.",
     "rule": "11.3"
   },
-  "combat": { "label": "Combat" },
+  "combat": {
+    "label": "Combat"
+  },
   "combat.maxRolls": {
     "label": "Rolls per exchange",
     "help": "The most times a player rolls dice in one combat exchange.",
@@ -74,7 +89,9 @@
     "help": "Hexes a Move pays to enter a hex next to an enemy.",
     "rule": "6.9"
   },
-  "experience": { "label": "Experience" },
+  "experience": {
+    "label": "Experience"
+  },
   "experience.firstStep": {
     "label": "Experience for level 2",
     "help": "Experience needed to reach level 2.",
@@ -84,11 +101,6 @@
     "label": "Step increase",
     "help": "Each next level needs this much more experience than the step before it.",
     "rule": "8.5 (open question 17)"
-  },
-  "gatherAmount": {
-    "label": "Gather amount",
-    "help": "Materials a gathering node gives for one Gather.",
-    "rule": "6.7, Table 1"
   },
   "miniatureLimit": {
     "label": "Enemy miniature limit",
@@ -100,13 +112,17 @@
     "help": "The wave track value at the start of a run.",
     "rule": "4.5, 15.1"
   },
-  "shop": { "label": "Shop" },
+  "shop": {
+    "label": "Shop"
+  },
   "shop.offers": {
     "label": "Shop offers",
     "help": "Cards the open Shop shows at a time.",
     "rule": "Table 6, 11.5"
   },
-  "draft": { "label": "Skill draft" },
+  "draft": {
+    "label": "Skill draft"
+  },
   "draft.reveal": {
     "label": "Skills revealed",
     "help": "Skills each player looks at in a draft.",
@@ -122,7 +138,9 @@
     "help": "With the Training Ground open, a draft happens in each round that this number divides.",
     "rule": "10.8"
   },
-  "supplies": { "label": "Supplies" },
+  "supplies": {
+    "label": "Supplies"
+  },
   "supplies.copiesPerCard": {
     "label": "Copies of each card",
     "help": "Copies of each card in the card supplies.",
@@ -133,7 +151,9 @@
     "help": "Copies of each Skill in the Skill supplies.",
     "rule": "2.2, Table 9 (open question 18)"
   },
-  "tiles": { "label": "Map tiles" },
+  "tiles": {
+    "label": "Map tiles"
+  },
   "tiles.countryside": {
     "label": "Countryside tiles",
     "help": "Countryside tiles in the game.",
@@ -144,17 +164,14 @@
     "help": "Core tiles in the game.",
     "rule": "2.2"
   },
-  "tiles.setupCountryside": {
-    "label": "Countryside tiles at setup",
-    "help": "Countryside tiles put next to the Base tile at setup. The rest go on top of the tile deck.",
-    "rule": "4.2, 4.3 (open question 3)"
+  "tiles.revealMoveCost": {
+    "label": "Movement to reveal a tile",
+    "help": "Movement a step off the map edge costs. The step reveals the top tile of the tile deck under the hex entered.",
+    "rule": "10.1 (core loop v2)"
   },
-  "tiles.revealPerPlayer": {
-    "label": "Tiles revealed per player",
-    "help": "Tiles each player reveals in each Explore phase.",
-    "rule": "10.1, 16.6"
+  "milestones": {
+    "label": "Milestones"
   },
-  "milestones": { "label": "Milestones" },
   "milestones.surviveRounds": {
     "label": "Survive to rounds",
     "help": "Round numbers that each give a milestone, separated by commas.",
@@ -180,16 +197,8 @@
     "help": "The id of the Skill a player must fire for this milestone.",
     "rule": "17"
   },
-  "options": { "label": "Playtest options" },
-  "options.exploration": {
-    "label": "Exploration",
-    "help": "Whether the Explore phase must reveal a tile, may skip it, or reveals it without a choice.",
-    "rule": "18.1, 10.1 (open question 37)",
-    "options": {
-      "forced": "Forced: reveal a tile each round",
-      "optional": "Optional: the player may skip the reveal",
-      "automatic": "Automatic: the tile is revealed for the player"
-    }
+  "options": {
+    "label": "Playtest options"
   },
   "options.boughtCards": {
     "label": "Bought cards",
@@ -214,7 +223,9 @@
       "unlimited": "Unlimited"
     }
   },
-  "rulings": { "label": "Designer rulings" },
+  "rulings": {
+    "label": "Designer rulings"
+  },
   "rulings.enemiesPerHex": {
     "label": "Enemies per hex",
     "help": "The most enemies one hex can hold.",
@@ -224,11 +235,6 @@
     "label": "Figures per hex",
     "help": "The most player figures one hex can hold.",
     "rule": "3.8"
-  },
-  "rulings.baseHexFigureLimitExempt": {
-    "label": "Base hex holds any number of figures",
-    "help": "When ticked, the figure limit per hex does not apply on the base hex.",
-    "rule": "3.8, 4.6 (open question 16)"
   },
   "rulings.blockedPathRule": {
     "label": "Blocked enemy",
@@ -325,6 +331,11 @@
     "label": "Defenses on gathering nodes",
     "help": "When ticked, a defense may stand on a gathering node hex, and the node still works.",
     "rule": "12.2 (open question 14)"
+  },
+  "rulings.gatherNeedsNode": {
+    "label": "Gather needs a node",
+    "help": "When ticked, Gather gives materials only on an unspent gathering node, and spends it. When not ticked, Gather also works off a node.",
+    "rule": "6.7, Table 8 (open question 59)"
   },
   "rulings.targetTieBreak": {
     "label": "Enemy target order",

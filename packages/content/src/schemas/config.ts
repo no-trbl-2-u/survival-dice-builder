@@ -24,6 +24,8 @@ export const GameConfigSchema = z.object({
         z.object({ id: IdSchema, handSize: PositiveInt, cards: z.array(DeckEntrySchema).min(1) }),
       )
       .min(1),
+    /** A deck never has fewer cards than this (core loop v2). */
+    minimumSize: PositiveInt,
   }),
   base: z.object({ startingHealth: PositiveInt, healthPerUpgrade: PositiveInt }),
   combat: z.object({
@@ -33,7 +35,6 @@ export const GameConfigSchema = z.object({
     moveCostNextToEnemy: PositiveInt,
   }),
   experience: z.object({ firstStep: PositiveInt, stepIncrease: NonNegativeInt }),
-  gatherAmount: PositiveInt,
   miniatureLimit: PositiveInt,
   waveTrackStart: NonNegativeInt,
   shop: z.object({ offers: PositiveInt }),
@@ -42,8 +43,8 @@ export const GameConfigSchema = z.object({
   tiles: z.object({
     countryside: PositiveInt,
     core: PositiveInt,
-    setupCountryside: NonNegativeInt,
-    revealPerPlayer: PositiveInt,
+    /** Movement a step off the map edge costs (core loop v2: 1). */
+    revealMoveCost: PositiveInt,
   }),
   milestones: z.object({
     surviveRounds: z.array(PositiveInt),
@@ -54,7 +55,6 @@ export const GameConfigSchema = z.object({
   }),
   /** Section 18.1 configuration options. */
   options: z.object({
-    exploration: z.enum(['forced', 'optional', 'automatic']),
     boughtCards: z.enum(['add', 'replace-starter']),
     maxLevel: PositiveInt.nullable(),
     skillUses: z.enum(['once-per-exchange', 'unlimited']),
@@ -63,7 +63,6 @@ export const GameConfigSchema = z.object({
   rulings: z.object({
     enemiesPerHex: PositiveInt,
     figuresPerHex: PositiveInt,
-    baseHexFigureLimitExempt: z.boolean(),
     blockedPathRule: z.enum(['next-target', 'wait']),
     tileRotation: z.boolean(),
     coopPrepareOrder: z.enum(['alternate-hands', 'full-turn']),
@@ -76,6 +75,7 @@ export const GameConfigSchema = z.object({
     healTargets: z.enum(['self', 'any-adjacent']),
     eliteReplacement: z.enum(['nearest-base', 'player-choice']),
     buildOnNode: z.boolean(),
+    gatherNeedsNode: z.boolean(),
     targetTieBreak: z.array(z.enum(['player', 'tower', 'barricade', 'base'])).length(4),
   }),
 })

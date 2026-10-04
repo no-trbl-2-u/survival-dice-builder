@@ -1,4 +1,5 @@
 import { applyAction, legalActions, type Action, type GameState } from '../../src/index.ts'
+import { hexDistance } from '../../src/hex.ts'
 import { nextInt } from '../../src/rng/rng.ts'
 
 /**
@@ -27,10 +28,10 @@ export function explorerChoice(state: GameState): Action | undefined {
 }
 
 /**
- * A policy that grows: walks to a gathering node next to the base for materials and back to the
- * base to spend them, buys base upgrades and Shop cards whenever it can, keeps the first
- * drafted Skill, and otherwise plays like `scriptedChoice`. Used by the full-run golden to cover
- * progression.
+ * A policy that grows: walks to an unspent gathering node for materials (stepping off the map
+ * edge to reveal tiles when none is next to it) and back to the base to spend them, buys base
+ * upgrades and Shop cards whenever it can, keeps the first drafted Skill, and otherwise plays
+ * like `scriptedChoice`. Used by the full-run golden to cover progression and exploring.
  */
 export function builderChoice(state: GameState): Action | undefined {
   const actions = legalActions(state)
@@ -39,11 +40,21 @@ export function builderChoice(state: GameState): Action | undefined {
     if (found) return found
   }
   const player = state.players[state.current]
+  const spent = (a: Extract<Action, { type: 'moveTo' }>) =>
+    state.spentNodes.some((n) => n.q === a.q && n.r === a.r)
   const site = (a: Action) =>
-    a.type === 'moveTo' ? state.map.hexes[`${a.q},${a.r}`]?.site : undefined
+    a.type === 'moveTo' && !spent(a) ? state.map.hexes[`${a.q},${a.r}`]?.site : undefined
   const wanted = (player?.materials ?? 0) < 3 ? 'gathering-node' : 'base'
   const move = actions.find((a) => site(a) === wanted)
   if (move) return move
+  if (wanted === 'gathering-node') {
+    // No node in reach: head away from the base, off the edge when possible.
+    const origin = { q: 0, r: 0 }
+    const out = (a: Action) => (a.type === 'moveTo' ? hexDistance(a, origin) : -1)
+    const here = player ? hexDistance(player.hex, origin) : 0
+    const step = [...actions].sort((a, b) => out(b) - out(a))[0]
+    if (step && out(step) > here) return step
+  }
   return actions[0]
 }
 

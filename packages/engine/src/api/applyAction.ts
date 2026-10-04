@@ -4,8 +4,8 @@ import { chooseTarget, confirmAssignment } from '../combat/resolve.ts'
 import { discardFromHand, playToTable } from '../deck/deck.ts'
 import { rerollOne, toggleKeep } from '../dice/dice.ts'
 import type { GameEvent } from '../events/events.ts'
-import { revealTop } from '../explore/explore.ts'
-import { placeTileAndSpawn } from '../map/spawn.ts'
+import { revealUnder } from '../explore/explore.ts'
+import { isPassable } from '../map/tiles.ts'
 import { legalMoves } from '../movement/move.ts'
 import { startSkirmish } from '../movement/skirmish.ts'
 import { advance, rollAgain } from '../phases/advance.ts'
@@ -136,16 +136,13 @@ function act(state: GameState, action: Action): Step {
       return confirmAssignment(state)
     case 'chooseTarget':
       return chooseTarget(state, action.enemy)
-    case 'placeTile': {
-      const [tile, ...rest] = state.revealed
-      if (!tile) throw illegalAction(action, 'no tile waiting')
-      const setup = state.phase === 'setup'
-      return placeTileAndSpawn(
-        { ...state, revealed: rest },
-        tile,
-        { q: action.q, r: action.r },
-        setup,
-      )
+    case 'placeFigure': {
+      const hex = { q: action.q, r: action.r }
+      const placed = updateCurrentPlayer(state, (p) => ({ ...p, hex }))
+      return [
+        { ...placed, unplaced: state.unplaced.filter((id) => id !== player.id) },
+        [{ type: 'figurePlaced', rule: '4.6', player: player.id, hex }],
+      ]
     }
     case 'moveTo':
       return moveTo(state, action)
@@ -167,10 +164,6 @@ function act(state: GameState, action: Action): Step {
       return keepSkill(state, action.skill)
     case 'replaceSkill':
       return replaceSkill(state, action.skill)
-    case 'revealTile':
-      return revealTop(state)
-    case 'skipReveal':
-      return [{ ...state, revealOffer: false }, [{ type: 'revealSkipped', rule: '18.1' }]]
     case 'stopMoving':
     case 'stopBuilding':
       return [{ ...state, active: null }, []]
@@ -190,9 +183,11 @@ function act(state: GameState, action: Action): Step {
 
 /**
  * One step of a Move: pay the hex's cost (2 next to an enemy, 6.9). Entering an enemy's hex
- * starts a skirmish instead of moving (6.10).
+ * starts a skirmish instead of moving (6.10). A step off the map edge reveals the next tile
+ * under the hex entered, then the figure enters it; a lake or mountain there leaves the figure
+ * where it was, with the cost paid (row 61).
  *
- * @rule 6.7, 6.9, 6.10, 6.15
+ * @rule 6.7, 6.9, 6.10, 6.15, 10.1, core loop v2 (exploring), OPEN-QUESTIONS row 61
  */
 function moveTo(state: GameState, action: Extract<Action, { type: 'moveTo' }>): Step {
   const active = state.active
@@ -206,9 +201,20 @@ function moveTo(state: GameState, action: Extract<Action, { type: 'moveTo' }>): 
   const paid: GameState = { ...state, active: { ...active, hexesLeft } }
   if (option.skirmish) return startSkirmish(paid, to)
   const player = currentPlayer(state)
+  const [revealed, revealEvents] = option.reveal ? revealUnder(paid, to) : [paid, []]
+  if (!isPassable(revealed.map, to)) {
+    return [
+      revealed,
+      [
+        ...revealEvents,
+        { type: 'revealStepBlocked', rule: '3.4', player: player.id, hex: to, hexesLeft },
+      ],
+    ]
+  }
   return [
-    updateCurrentPlayer(paid, (p) => ({ ...p, hex: to })),
+    updateCurrentPlayer(revealed, (p) => ({ ...p, hex: to })),
     [
+      ...revealEvents,
       {
         type: 'moved',
         rule: '6.7',

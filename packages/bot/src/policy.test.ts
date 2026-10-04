@@ -1,12 +1,19 @@
 import { defaultContent } from '@survival/content'
-import { applyAction, createGame, legalActions, sameAction, type GameState } from '@survival/engine'
+import {
+  applyAction,
+  createGame,
+  hexDistance,
+  legalActions,
+  sameAction,
+  type GameState,
+} from '@survival/engine'
 import { describe, expect, it } from 'vitest'
 import { goal } from './goals.ts'
 import { botChoice } from './policy.ts'
 
 const config = defaultContent.config
 
-/** A round 1 Prepare state after the setup tile, with `patch` on top. */
+/** A round 1 Prepare state with the figure on the base centre, with `patch` on top. */
 function started(patch: Partial<GameState> = {}): GameState {
   const s = createGame(config, 1)
   return { ...applyAction(s, legalActions(s)[0]!).state, ...patch }
@@ -36,19 +43,36 @@ describe('botChoice', () => {
     expect(botChoice(started({ phase: 'ended' }))).toBeUndefined()
   })
 
-  it('places a tile in the slot farthest from the base', () => {
-    const s = createGame(config, 1)
-    const choice = botChoice(s)
-    expect(choice?.type).toBe('placeTile')
-    const far = (a: { q: number; r: number }) =>
-      (Math.abs(a.q) + Math.abs(a.r) + Math.abs(a.q + a.r)) / 2
-    const best = Math.max(...legalActions(s).map((a) => far(a as { q: number; r: number })))
-    expect(far(choice as { q: number; r: number })).toBe(best)
+  it('puts its figure on the first offered Base tile hex', () => {
+    expect(botChoice(createGame(config, 1))).toEqual({ type: 'placeFigure', q: 0, r: 0 })
   })
 
-  it('heads for a gathering node while it cannot pay for an upgrade, then for the base', () => {
+  it('with no gathering node on the map it heads for the map edge to reveal a tile', () => {
     const poor = started()
-    expect(poor.map.hexes[`${goal(poor).q},${goal(poor).r}`]?.site).toBe('gathering-node')
+    const target = goal(poor)
+    expect(poor.map.hexes[`${target.q},${target.r}`]).toBeUndefined()
+    expect(hexDistance(target, { q: 0, r: 0 })).toBe(2)
+    // From an outer base hex, the bot steps off the edge.
+    const edge = withPlayer(
+      started({ active: { kind: 'move', hexesLeft: 2, ignoreEnemyCost: false } }),
+      { hex: { q: 1, r: 0 } },
+    )
+    const step = botChoice(edge) as { type: string; q: number; r: number }
+    expect(step.type).toBe('moveTo')
+    expect(edge.map.hexes[`${step.q},${step.r}`]).toBeUndefined()
+  })
+
+  it('heads for an unspent gathering node while it cannot pay for an upgrade, then for the base', () => {
+    let s = withPlayer(
+      started({ active: { kind: 'move', hexesLeft: 1, ignoreEnemyCost: false } }),
+      { hex: { q: 1, r: 0 } },
+    )
+    // Reveal a tile east of the base, then look for its nodes.
+    s = applyAction(s, botChoice(s)!).state
+    const node = goal(s)
+    expect(s.map.hexes[`${node.q},${node.r}`]?.site).toBe('gathering-node')
+    const used = { ...s, spentNodes: [node] }
+    expect(goal(used)).not.toEqual(node)
     const rich = withPlayer(started(), { materials: 3 })
     expect(goal(rich)).toEqual({ q: 0, r: 0 })
   })

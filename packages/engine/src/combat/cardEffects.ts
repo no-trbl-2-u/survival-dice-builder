@@ -32,7 +32,7 @@ export function applyTopEffect(state: GameState, effect: PrepareEffect): Step {
     case 'rest':
       return healCurrent(state, effect.amount, '6.7')
     case 'gather':
-      return gather(state, effect.bonus)
+      return gather(state, effect.amount)
     case 'move':
       return [
         {

@@ -1,5 +1,5 @@
 import { IMPASSABLE, type TileDef } from '@survival/content'
-import { hexDistance, hexKey, tileHexes, type Axial } from '../hex.ts'
+import { hexDistance, hexKey, hexNeighbors, tileHexes, type Axial } from '../hex.ts'
 import type { GameMap, MapHex } from '../state/types.ts'
 
 /**
@@ -59,6 +59,42 @@ export function emptySlots(map: GameMap): Axial[] {
     }
   }
   return out
+}
+
+/** The lattice index of a hex: tile centres are exactly the hexes where it is 0 (mod 7). */
+function latticeIndex(hex: Axial): number {
+  const raw = 3 * (hex.q - BASE_HEX.q) + (hex.r - BASE_HEX.r)
+  return ((raw % 7) + 7) % 7
+}
+
+/**
+ * The centre of the tile slot that covers a hex. 7-hex tiles tessellate on 1 lattice (the
+ * `TILE_SLOT_OFFSETS` from the Base tile), so every hex belongs to exactly 1 slot: the hex
+ * itself or 1 of its neighbours is that slot's centre. A step off the map edge reveals the next
+ * tile in this slot (fixed rotation, row 5).
+ *
+ * @rule 3.1, 10.1, core loop v2 (exploring)
+ */
+export function slotCovering(hex: Axial): Axial {
+  const center = tileHexes(hex).find((h) => latticeIndex(h) === 0)
+  if (!center) throw new Error(`slotCovering: no slot centre next to ${hexKey(hex)}`)
+  return center
+}
+
+/**
+ * The hexes just off the map: not on any tile, next to a hex that is. Sorted by hex key.
+ *
+ * @rule 10.1, core loop v2 (exploring)
+ */
+export function edgeHexes(map: GameMap): Axial[] {
+  const out = new Map<string, Axial>()
+  for (const key of Object.keys(map.hexes)) {
+    const [q = 0, r = 0] = key.split(',').map(Number)
+    for (const n of hexNeighbors({ q, r })) {
+      if (!map.hexes[hexKey(n)]) out.set(hexKey(n), n)
+    }
+  }
+  return [...out.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([, h]) => h)
 }
 
 /** The map hex at a position, or undefined when no tile covers it. */

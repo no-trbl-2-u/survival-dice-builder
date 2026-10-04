@@ -150,8 +150,8 @@ export function describeEvent(event: GameEvent, names: Names): string {
         : 'Skirmish lost: you stay; the Move ends.'
     case 'gathered':
       return event.amount === 0
-        ? `${who(event.player)} gathered nothing: gather on a Gathering node with no enemy on it.`
-        : `${who(event.player)} gathered ${event.amount} materials (now ${event.materials}).`
+        ? `${who(event.player)} gathered nothing: gather on an unspent gathering node with no enemy on it.`
+        : `${who(event.player)} gathered ${event.amount} materials (now ${event.materials})${event.spent ? '; the node is spent' : ''}.`
     case 'defenseBuilt':
       return `${event.kind[0]?.toUpperCase()}${event.kind.slice(1)} built on ${place(names, event.hex)} for ${event.cost} materials.`
     case 'defenseDamaged':
@@ -174,8 +174,10 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `Miniature limit: grunt ${event.grunt} becomes elite ${event.elite}.`
     case 'tileRevealed':
       return `Tile revealed: ${tileName(names, event.tile)}.`
-    case 'revealSkipped':
-      return 'No tile revealed this round.'
+    case 'figurePlaced':
+      return `${who(event.player)} ${solo(names) ? 'start' : 'starts'} on ${place(names, event.hex)}.`
+    case 'revealStepBlocked':
+      return `${who(event.player)} cannot enter ${place(names, event.hex)}: it is lake or mountain (${event.hexesLeft} left).`
     case 'experienceGained':
       return `+${event.amount} experience (${event.experience}).`
     case 'levelReached':

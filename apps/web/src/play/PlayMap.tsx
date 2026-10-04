@@ -1,4 +1,4 @@
-import { hexKey, tileHexes, type Action, type GameEvent, type GameState } from '@survival/engine'
+import type { Action, GameEvent, GameState } from '@survival/engine'
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { gameIcons, ICON_VIEWBOX } from '../icons/gameIcons.ts'
 import { describeAction } from '../debug/describeAction.ts'
@@ -52,13 +52,12 @@ const onKey = (run: () => void) => (e: KeyboardEvent) => {
 }
 
 /**
- * The board: tiles, sites, the figure, enemies (shape + icon + health), defenses, and every
- * legal map target as a focusable SVG button. Drag to pan; wheel or buttons to zoom.
+ * The board: tiles, sites (a spent gathering node dimmed), the figures, enemies (shape + icon +
+ * health), defenses, and every legal map target as a focusable SVG button. A step off the map
+ * edge is a dashed ghost hex. Drag to pan; wheel or buttons to zoom.
  */
 export function PlayMap({ state, legal, act, events = [] }: Props) {
   const [view, setView] = useState({ x: 0, y: 0, zoom: 1 })
-  const [preview, setPreview] = useState<string | null>(null)
-  const revealed = state.content.tiles.find((t) => t.id === state.revealed[0])
   const drag = useRef<{ x: number; y: number } | null>(null)
   const svg = useRef<SVGSVGElement>(null)
   const targets = hexTargets(legal)
@@ -82,11 +81,10 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
     const [q = 0, r = 0] = key.split(',').map(Number)
     return { key, hex, title: hexTitle(state, { q, r }), center: hexToPixel({ q, r }, SIZE) }
   })
-  const ghostCenters = [...targets.values()].filter((t) => t.place)
-  const all = [
-    ...hexes.map((h) => h.center),
-    ...ghostCenters.flatMap((t) => tileHexes(t).map((h) => hexToPixel(h, SIZE))),
-  ]
+  const offMap = (t: { key: string }) => !state.map.hexes[t.key]
+  const ghosts = [...targets.values()].filter((t) => t.move && offMap(t))
+  const spent = new Set(state.spentNodes.map((n) => `${n.q},${n.r}`))
+  const all = [...hexes.map((h) => h.center), ...ghosts.map((t) => hexToPixel(t, SIZE))]
   const pad = SIZE * 2
   const minX = Math.min(...all.map((p) => p.x)) - pad
   const minY = Math.min(...all.map((p) => p.y)) - pad
@@ -151,40 +149,29 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
               <title>{title}</title>
             </polygon>
             {hex.site ? (
-              <Icon
-                name={SITE_ICON[hex.site] ?? ''}
-                x={center.x}
-                y={center.y - SIZE * 0.35}
-                size={SIZE * 0.6}
-              />
+              <g className={spent.has(key) ? styles.spent : undefined}>
+                <Icon
+                  name={SITE_ICON[hex.site] ?? ''}
+                  x={center.x}
+                  y={center.y - SIZE * 0.35}
+                  size={SIZE * 0.6}
+                />
+              </g>
             ) : null}
           </g>
         ))}
 
-        {ghostCenters.map((t) => (
+        {ghosts.map((t) => (
           <g
             key={`ghost-${t.key}`}
             role="button"
             tabIndex={0}
-            aria-label={t.place ? describeAction(t.place, state) : 'Place the tile here'}
+            aria-label={t.move ? describeAction(t.move, state) : 'Step off the map edge'}
             className={styles.ghost}
-            onClick={() => t.place && act(t.place)}
-            onKeyDown={onKey(() => t.place && act(t.place))}
-            onMouseEnter={() => setPreview(t.key)}
-            onMouseLeave={() => setPreview(null)}
-            onFocus={() => setPreview(t.key)}
-            onBlur={() => setPreview(null)}
+            onClick={() => t.move && act(t.move)}
+            onKeyDown={onKey(() => t.move && act(t.move))}
           >
-            {tileHexes(t).map((hx, i) => {
-              const terrain = preview === t.key ? revealed?.hexes[i]?.terrain : undefined
-              return (
-                <polygon
-                  key={hexKey(hx)}
-                  className={terrain ? `${styles.preview} ${styles[terrain] ?? ''}` : undefined}
-                  points={hexPolygonPoints(hexToPixel(hx, SIZE), SIZE)}
-                />
-              )
-            })}
+            <polygon points={hexPolygonPoints(hexToPixel(t, SIZE), SIZE)} />
           </g>
         ))}
 
@@ -203,6 +190,7 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
         })}
 
         {state.players.map((p, seat) => {
+          if (state.unplaced.includes(p.id)) return null
           const c = hexToPixel(p.hex, SIZE)
           const label = state.players.length === 1 ? 'You' : `P${seat + 1}`
           const offset =
@@ -281,14 +269,15 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
         })}
 
         {[...targets.values()]
-          .filter((t) => t.move || t.builds.length > 0)
+          .filter((t) => t.start || (t.move && !offMap(t)) || t.builds.length > 0)
           .map((t) => {
             const c = hexToPixel(t, SIZE)
-            const action = t.move ?? t.builds[0]
+            const action = t.start ?? t.move ?? t.builds[0]
             if (!action) return null
-            const label = t.move
-              ? describeAction(t.move, state)
-              : t.builds.map((b) => describeAction(b, state)).join(', or ')
+            const label =
+              t.start || t.move
+                ? describeAction(action, state)
+                : t.builds.map((b) => describeAction(b, state)).join(', or ')
             return (
               <g
                 key={`t-${t.key}`}

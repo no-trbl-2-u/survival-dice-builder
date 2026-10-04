@@ -7,7 +7,7 @@ export function topText(e: PrepareEffect): string {
     case 'move':
       return `Move ${e.hexes}${e.ignoreEnemyCost ? ', no extra cost next to enemies' : ''}`
     case 'gather':
-      return e.bonus > 0 ? `Gather +${e.bonus}` : 'Gather'
+      return `Gather ${e.amount}`
     case 'build':
       return `Build${e.costReduction > 0 ? `, cost -${e.costReduction}` : ''}${e.times > 1 ? ` ${e.times} times` : ''}`
     case 'rest':

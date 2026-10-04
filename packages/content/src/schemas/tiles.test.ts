@@ -53,9 +53,9 @@ describe('tile constraints (Table 1, spec 1)', () => {
     expect(issues(core)).toContain('a core tile has its elite-spawn-node on the center hex')
   })
 
-  it('3.6 the base tile has the base on its center hex and 2 gathering nodes', () => {
+  it('3.6, core loop v2: the base tile is the base centre and 6 plain hexes, no nodes', () => {
     const base = defaultContent.tiles.find((t) => t.kind === 'base')!
     expect(base.hexes[0]!.site).toBe('base')
-    expect(base.hexes.filter((h) => h.site === 'gathering-node')).toHaveLength(2)
+    expect(base.hexes.slice(1).every((h) => h.site === null && h.terrain === 'plains')).toBe(true)
   })
 })

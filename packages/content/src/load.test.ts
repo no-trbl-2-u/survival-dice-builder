@@ -17,11 +17,27 @@ describe('default content', () => {
     expect(errorsOf(rawCopy())).toEqual([])
   })
 
-  it('Table 2: the default starter deck has 6 cards and a hand of 3', () => {
+  it('core loop v2, row 19: the default starter deck has 10 cards and a hand of 3', () => {
     const { deck } = defaultContent.config
     const preset = deck.presets.find((p) => p.id === deck.preset)
     expect(preset?.handSize).toBe(3)
-    expect(preset?.cards.reduce((n, e) => n + e.quantity, 0)).toBe(6)
+    expect(preset?.cards.reduce((n, e) => n + e.quantity, 0)).toBe(10)
+    expect(Object.fromEntries(preset?.cards.map((e) => [e.card, e.quantity]) ?? [])).toEqual({
+      'starter-move': 4,
+      'starter-gather': 4,
+      'starter-build': 1,
+      'starter-rest': 1,
+    })
+    expect(deck.minimumSize).toBe(10)
+  })
+
+  it('core loop v2, row 20: each Gather card sets its amount (starter 2, Haul 2)', () => {
+    const amount = (id: string) => {
+      const top = defaultContent.cards.find((c) => c.id === id)?.top
+      return top?.kind === 'gather' ? top.amount : undefined
+    }
+    expect(amount('starter-gather')).toBe(2)
+    expect(amount('haul')).toBe(2)
   })
 
   it('Tables 3 and 9: 4 starter Skills and 14 draft Skills', () => {

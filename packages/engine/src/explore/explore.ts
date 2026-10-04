@@ -1,49 +1,38 @@
 import type { GameEvent } from '../events/events.ts'
-import { hexDistance } from '../hex.ts'
-import { placeTileAndSpawn } from '../map/spawn.ts'
-import { BASE_HEX, emptySlots } from '../map/tiles.ts'
+import { tileHexes, type Axial } from '../hex.ts'
+import { nodeKind } from '../map/spawn.ts'
+import { placeTile, slotCovering } from '../map/tiles.ts'
 import type { Step } from '../state/helpers.ts'
 import type { GameState } from '../state/types.ts'
 
 /**
- * The start of Explore. An empty tile deck adds 1 to the wave track instead (10.3). Otherwise,
- * by `options.exploration` (18.1): forced (default) reveals the top tile for the player to
- * place; automatic places it in the empty slot nearest the base; optional offers the choice.
+ * Exploring (core loop v2): a Move step off the map edge reveals the top tile of the tile deck
+ * and places it so that it covers the hex stepped into (fixed rotation, row 5). The tile counts
+ * for the milestones (17). Its spawn nodes wait in `vacantNodes`, so its enemies appear at the
+ * next Combat start (7.3), not now. An empty tile deck reveals nothing.
  *
- * @rule 10.1, 10.2, 10.3, 15.2, 17, 18.1
+ * @param state - the state during a Move.
+ * @param hex - the off-map hex the figure steps into.
+ * @rule 10.1, 10.2, 17, core loop v2 (exploring)
  */
-export function startExplore(state: GameState): Step {
+export function revealUnder(state: GameState, hex: Axial): Step {
   const [top, ...rest] = state.tileDeck
-  if (!top) {
-    const waveTrack = state.waveTrack + 1
-    return [{ ...state, waveTrack }, [{ type: 'waveTrackAdvanced', rule: '10.3', waveTrack }]]
-  }
-  switch (state.config.options.exploration) {
-    case 'optional':
-      return [{ ...state, revealOffer: true }, []]
-    case 'forced':
-      return revealTop(state)
-    case 'automatic': {
-      const slot = [...emptySlots(state.map)].sort(
-        (a, b) => hexDistance(a, BASE_HEX) - hexDistance(b, BASE_HEX),
-      )[0]
-      if (!slot) return [state, []]
-      const progress = { ...state.progress, tilesRevealed: state.progress.tilesRevealed + 1 }
-      const [placed, events] = placeTileAndSpawn({ ...state, tileDeck: rest, progress }, top, slot)
-      return [placed, [{ type: 'tileRevealed', rule: '10.1', tile: top }, ...events]]
-    }
-  }
-}
-
-/**
- * Reveals the top tile of the tile deck; the player then chooses its slot (`placeTile`).
- *
- * @rule 10.1, 17
- */
-export function revealTop(state: GameState): Step {
-  const [top, ...rest] = state.tileDeck
-  if (!top) return [{ ...state, revealOffer: false }, []]
-  const events: GameEvent[] = [{ type: 'tileRevealed', rule: '10.1', tile: top }]
-  const progress = { ...state.progress, tilesRevealed: state.progress.tilesRevealed + 1 }
-  return [{ ...state, tileDeck: rest, revealed: [top], revealOffer: false, progress }, events]
+  const tile = state.content.tiles.find((t) => t.id === top)
+  if (!top || !tile) return [state, []]
+  const center = slotCovering(hex)
+  const nodes = tileHexes(center).filter((_, i) => nodeKind(tile.hexes[i]?.site ?? null))
+  const events: GameEvent[] = [
+    { type: 'tileRevealed', rule: '10.1', tile: top },
+    { type: 'tilePlaced', rule: '10.1', tile: top, center },
+  ]
+  return [
+    {
+      ...state,
+      map: placeTile(state.map, tile, center),
+      tileDeck: rest,
+      vacantNodes: [...state.vacantNodes, ...nodes],
+      progress: { ...state.progress, tilesRevealed: state.progress.tilesRevealed + 1 },
+    },
+    events,
+  ]
 }

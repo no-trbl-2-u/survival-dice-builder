@@ -43,9 +43,7 @@ test('/debug: after an action, focus returns to the action list heading', async 
 test('/play: choices name places, and the map names what stands on each hex', async ({ page }) => {
   await page.goto('/play?seed=3')
   const choice = page.getByTestId('choices').getByRole('button').first()
-  await expect(choice).toHaveText(
-    /^Place Stony Fields \d hexes [a-z-]+ of the base \(-?\d+,-?\d+\)$/,
-  )
+  await expect(choice).toHaveText(/^Place your figure on Plains, Base, the base centre \(0,0\)$/)
   await choice.click()
   await expect(
     page.getByTestId('play-map').locator('title', { hasText: 'your figure' }),

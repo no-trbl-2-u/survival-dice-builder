@@ -1,4 +1,4 @@
-import type { Action, Axial, GameState } from '@survival/engine'
+import { hexKey, type Action, type Axial, type GameState } from '@survival/engine'
 import { baseHex, hexName, stepsAway } from '../map/places.ts'
 
 /** The printed name of a card instance in the current player's hand. */
@@ -63,12 +63,15 @@ export function describeAction(action: Action, state: GameState): string {
       const max = state.content.enemies.enemies.find((x) => x.id === enemy?.kind)?.health
       return `Target ${enemyName(state, action.enemy)}${enemy ? `, ${enemy.health} of ${max ?? enemy.health} health` : ''}`
     }
-    case 'placeTile': {
-      const tile = state.content.tiles.find((t) => t.id === state.revealed[0])
+    case 'placeFigure': {
       const away = stepsAway(baseHex(state), action)
-      return `Place ${tile?.name ?? 'the tile'} ${away === 'here' ? 'at the base' : `${away} of the base`}`
+      const whose = state.players.length === 1 ? 'your' : `Player ${state.current + 1}'s`
+      return `Place ${whose} figure on ${hexName(state, action)}, ${away === 'here' ? 'the base centre' : `${away} of the base centre`}`
     }
     case 'moveTo': {
+      if (!state.map.hexes[hexKey(action)]) {
+        return `Step off the map edge, ${stepsAway(here(state), action)}: reveal a tile`
+      }
       const enemy = state.enemies.find((e) => e.hex.q === action.q && e.hex.r === action.r)
       const where = `${hexName(state, action)}, ${stepsAway(here(state), action)}`
       return `Move to ${where}${enemy ? `: skirmish ${enemyName(state, enemy.id)}` : ''}`
@@ -81,10 +84,6 @@ export function describeAction(action: Action, state: GameState): string {
     }
     case 'stopBuilding':
       return 'Stop building'
-    case 'revealTile':
-      return `Reveal ${state.tileDeck[0] ?? 'a tile'}`
-    case 'skipReveal':
-      return 'Skip the reveal'
     case 'buyCard': {
       const def = state.content.cards.find((c) => c.id === action.card)
       return `Buy ${def?.name ?? action.card} (${def?.cost ?? '?'} currency)`
@@ -116,7 +115,7 @@ export function describeAction(action: Action, state: GameState): string {
  */
 export function actionHex(action: Action): Axial | null {
   switch (action.type) {
-    case 'placeTile':
+    case 'placeFigure':
     case 'moveTo':
     case 'build':
       return { q: action.q, r: action.r }

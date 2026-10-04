@@ -4,7 +4,8 @@ import { expect, test, type Page } from '@playwright/test'
 const PREFERENCES: readonly RegExp[] = [
   /^Draft /,
   /^Place /,
-  /^Skip the reveal$/,
+  /^Step off the map edge/,
+  /^Move to [^:]+$/,
   /^Stop moving$/,
   /^Stop building$/,
   /^Roll unkept dice$/,

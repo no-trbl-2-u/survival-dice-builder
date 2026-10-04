@@ -72,11 +72,11 @@ describe('experience and levels (8.1-8.5)', () => {
 })
 
 describe('supplies (4.12)', () => {
-  it('4.12 each level has its own shuffled card and Skill supply', () => {
+  it('4.12, row 18 each level has its own shuffled supply: 2 copies of each card, 1 of each Skill', () => {
     const s = createGame(config, 1)
     const sizes = (r: Readonly<Record<string, readonly string[]>>) =>
       ['1', '2', '3'].map((l) => r[l]!.length)
-    expect(sizes(s.supplies.cards)).toEqual([6, 4, 4])
+    expect(sizes(s.supplies.cards)).toEqual([12, 8, 8])
     expect(sizes(s.supplies.skills)).toEqual([7, 4, 3])
     expect(s.shopOffers).toEqual([])
   })
@@ -146,7 +146,11 @@ describe('Shop (6.8, 11.5, 13.1, 18.1)', () => {
 
   it('6.8 not off the base, and not without enough currency', () => {
     expect(types(shopping(2)).has('buyCard')).toBe(false)
-    expect(types(withPlayer(shopping(3), { hex: { q: 0, r: 1 } })).has('buyCard')).toBe(false)
+    expect(types(withPlayer(shopping(3), { hex: { q: 2, r: 0 } })).has('buyCard')).toBe(false)
+  })
+
+  it('6.8 row 16 buying works from any hex of the Base tile', () => {
+    expect(types(withPlayer(shopping(3), { hex: { q: 0, r: 1 } })).has('buyCard')).toBe(true)
   })
 
   it('13.1, 11.5 a bought card goes to the discard pile and its offer is replaced at once', () => {
@@ -155,7 +159,7 @@ describe('Shop (6.8, 11.5, 13.1, 18.1)', () => {
     const { state } = applyAction(s, { type: 'buyCard', card })
     const p = state.players[0]!
     expect(p.currency).toBe(0)
-    expect(p.discard.at(-1)).toEqual({ id: 'c7', def: card })
+    expect(p.discard.at(-1)).toEqual({ id: 'c11', def: card })
     expect(state.shopOffers).toHaveLength(3)
     expect(state.shopOffers).not.toContain(card)
   })
@@ -188,14 +192,29 @@ describe('Shop (6.8, 11.5, 13.1, 18.1)', () => {
     expect(returns.every((a) => a.type === 'returnStarter')).toBe(true)
     const after = applyAction(state, returns[0]!).state
     const p = after.players[0]!
-    expect([...p.deck, ...p.discard, ...p.hand]).toHaveLength(7)
+    // 10 starter cards and 1 card in hand, +1 bought, -1 returned.
+    expect([...p.deck, ...p.discard, ...p.hand]).toHaveLength(11)
     expect(after.pendingReturn).toBeNull()
+  })
+
+  it('core loop v2 replace-starter never takes a deck below deck.minimumSize', () => {
+    const cfg = {
+      ...config,
+      options: { ...config.options, boughtCards: 'replace-starter' as const },
+    }
+    const base = { ...shopping(3), config: cfg }
+    const p = base.players[0]!
+    // 8 in the discard pile + 1 in hand + the bought card = 10: nothing is returned.
+    const small = withPlayer(base, { discard: p.discard.slice(0, 8) })
+    const { state } = applyAction(small, { type: 'buyCard', card: small.shopOffers[0]! })
+    expect(state.pendingReturn).toBeNull()
+    expect(state.players[0]!.discard).toHaveLength(9)
   })
 })
 
 describe('Skill draft (10.8, 11.6-11.9)', () => {
   const due = (patch: Partial<GameState> = {}) =>
-    home({ phase: 'explore', round: 2, upgrades: ['training-1'], ...patch })
+    home({ phase: 'combat', roundEnding: true, round: 2, upgrades: ['training-1'], ...patch })
 
   it('10.8 the draft happens on even rounds while the Training Ground is open', () => {
     expect(draftDue(due())).toBe(true)
@@ -306,7 +325,7 @@ describe('milestones and the end of the run (14, 17)', () => {
   })
 
   it('10.10 milestones are examined when the round advances', () => {
-    const s = home({ phase: 'explore', round: 4 })
+    const s = home({ phase: 'combat', roundEnding: true, round: 4 })
     const p = s.players[0]!
     const [after, events] = advance(
       withPlayer(s, { orientation: 'top', deck: p.discard, discard: [] }),

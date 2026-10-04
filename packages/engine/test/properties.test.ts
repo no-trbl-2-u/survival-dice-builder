@@ -34,7 +34,7 @@ describe('engine properties', () => {
         randomWalk(seed, policy, 150).every((s) =>
           s.players.every((p) => {
             const owned = ownedCards(p)
-            const expected = 6 + s.progress.cardsBought
+            const expected = 10 + s.progress.cardsBought
             return owned.length === expected && new Set(owned.map((c) => c.id)).size === expected
           }),
         ),

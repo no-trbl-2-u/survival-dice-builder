@@ -4,20 +4,19 @@ import styles from './Play.module.css'
 const PHASES = [
   { id: 'prepare', label: 'Prepare' },
   { id: 'combat', label: 'Combat' },
-  { id: 'explore', label: 'Explore' },
 ] as const
 
 type Props = Readonly<{ state: GameState }>
 
 /**
- * Round, the 3 phases (the current one filled and marked), and the board counters: wave
+ * Round, the 2 phases (the current one filled and marked), and the board counters: wave
  * track, tiles left, enemy miniatures on the map.
  */
 export function PhaseBar({ state }: Props) {
   const step = state.exchange
     ? `${state.exchange.skirmish ? 'Skirmish' : 'Exchange'}: ${state.exchange.step}`
     : state.phase === 'setup'
-      ? 'Setup: place the first countryside tile'
+      ? `Setup: ${state.players.length > 1 ? `Player ${state.current + 1}, place your` : 'place your'} figure on a base hex`
       : state.phase === 'ended'
         ? `Run ended: ${state.endedBecause === 'base' ? 'the base fell' : 'a player fell'}`
         : null

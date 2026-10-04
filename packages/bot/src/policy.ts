@@ -1,5 +1,5 @@
 import { hexDistance, legalActions, type Action, type GameState } from '@survival/engine'
-import { atGoal, BASE, cheapestUpgrade, enemyOn, goal, me, siteAt } from './goals.ts'
+import { atGoal, cheapestUpgrade, enemyOn, goal, me, onBaseTile, siteAt, spent } from './goals.ts'
 
 type Of<T extends Action['type']> = Extract<Action, { type: T }>
 
@@ -22,7 +22,6 @@ export function botChoice(state: GameState): Action | undefined {
   return (
     required(state, actions) ??
     ofType(actions, 'buyCard')[0] ??
-    explore(state, actions) ??
     building(state, actions) ??
     moving(state, actions) ??
     combat(state, actions) ??
@@ -31,8 +30,10 @@ export function botChoice(state: GameState): Action | undefined {
   )
 }
 
-/** Starter returns and drafts: decisions that block everything else. */
+/** The start hex, starter returns, and drafts: decisions that block everything else. */
 function required(state: GameState, actions: readonly Action[]): Action | undefined {
+  const start = ofType(actions, 'placeFigure')[0]
+  if (start) return start
   const returned = ofType(actions, 'returnStarter')[0]
   if (returned) return returned
   const drafts = ofType(actions, 'draftSkill')
@@ -43,15 +44,6 @@ function required(state: GameState, actions: readonly Action[]): Action | undefi
     return damage ?? drafts[0]
   }
   return ofType(actions, 'replaceSkill')[0]
-}
-
-/** Tile placement in the slot farthest from the base; reveal when exploration is optional. */
-function explore(state: GameState, actions: readonly Action[]): Action | undefined {
-  const slots = ofType(actions, 'placeTile')
-  if (slots.length > 0) {
-    return [...slots].sort((a, b) => hexDistance(b, BASE) - hexDistance(a, BASE))[0]
-  }
-  return ofType(actions, 'revealTile')[0]
 }
 
 /** An active Build: the cheapest upgrade on the base, else a Tower or Barricade near an enemy. */
@@ -71,7 +63,10 @@ function building(state: GameState, actions: readonly Action[]): Action | undefi
   return best ?? ofType(actions, 'stopBuilding')[0]
 }
 
-/** An active Move: step closer to the goal, never into a skirmish; stop when no step helps. */
+/**
+ * An active Move: step closer to the goal (off the map edge to reveal a tile when the goal is
+ * there), never into a skirmish; stop when no step helps.
+ */
 function moving(state: GameState, actions: readonly Action[]): Action | undefined {
   if (state.active?.kind !== 'move' || state.exchange) return undefined
   const target = goal(state)
@@ -123,14 +118,15 @@ function combat(state: GameState, actions: readonly Action[]): Action | undefine
 
 /**
  * A Prepare card: Build on the base when an upgrade is affordable (or off the base when every
- * upgrade is bought), Gather on a gathering node, Rest when hurt, Move when away from the goal.
+ * upgrade is bought), Gather on an unspent gathering node, Rest when hurt, Move when away from
+ * the goal.
  * A card with no use is discarded (when discarding is allowed).
  */
 function prepareCard(state: GameState, actions: readonly Action[]): Action | undefined {
   const plays = ofType(actions, 'playCard')
   if (plays.length === 0) return undefined
   const player = me(state)
-  const onBase = siteAt(state, player.hex) === 'base'
+  const onBase = onBaseTile(state, player.hex)
   const topOf = (card: string) => {
     const def = player.hand.find((c) => c.id === card)?.def
     return state.content.cards.find((c) => c.id === def)?.top
@@ -146,7 +142,7 @@ function prepareCard(state: GameState, actions: readonly Action[]): Action | und
         return upgrade === Number.POSITIVE_INFINITY && player.materials >= 2 ? 1 : -1
       }
       case 'gather':
-        return siteAt(state, player.hex) === 'gathering-node' ? 3 : -1
+        return siteAt(state, player.hex) === 'gathering-node' && !spent(state, player.hex) ? 3 : -1
       case 'rest':
         return player.health <= player.maxHealth - 3 ? 2 : -1
       case 'move':

@@ -24,17 +24,18 @@ export function serialize(state: GameState): string {
 /**
  * Restores a run from `serialize` output.
  *
- * @throws Error when the text is not a version 1 game state.
+ * @throws Error when the text is not a version 2 game state (core loop v2 changed the state, so
+ *   a version 1 save cannot load).
  */
 export function deserialize(text: string): GameState {
   const parsed: unknown = JSON.parse(text)
   if (
     !parsed ||
     typeof parsed !== 'object' ||
-    (parsed as { version?: unknown }).version !== 1 ||
+    (parsed as { version?: unknown }).version !== 2 ||
     !Array.isArray((parsed as { players?: unknown }).players)
   ) {
-    throw new Error('deserialize: not a version 1 Survival Dice-Builder game state')
+    throw new Error('deserialize: not a version 2 Survival Dice-Builder game state')
   }
   return parsed as GameState
 }

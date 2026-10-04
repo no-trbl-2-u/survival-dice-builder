@@ -16,14 +16,11 @@ export function HomePage() {
       <ol className={styles.steps}>
         <li>
           <strong>Prepare:</strong> play the top halves of your cards to move, gather materials, and
-          build Barricades and Towers.
+          build Barricades and Towers. Step off the edge of the map to reveal a new tile.
         </li>
         <li>
           <strong>Combat:</strong> roll your dice, keep the faces you want, and put them on your
           Skills to hit the grunts and elites near you.
-        </li>
-        <li>
-          <strong>Explore:</strong> reveal new tiles. The wave track rises and more enemies come.
         </li>
       </ol>
       <p>

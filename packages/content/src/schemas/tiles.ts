@@ -23,11 +23,14 @@ export type TileHex = z.infer<typeof TileHexSchema>
 export const TileKindSchema = z.enum(['base', 'countryside', 'core'])
 export type TileKind = z.infer<typeof TileKindSchema>
 
-/** Site counts each tile kind must print, from Table 1: [min, max] per site. */
+/**
+ * Site counts each tile kind must print, from Table 1: [min, max] per site. The Base tile has no
+ * gathering nodes (core loop v2: the base centre and 6 plain hexes).
+ */
 const SITE_RULES: Record<TileKind, Record<Site, readonly [number, number]>> = {
   base: {
     base: [1, 1],
-    'gathering-node': [2, 2],
+    'gathering-node': [0, 0],
     'spawn-node': [0, 0],
     'elite-spawn-node': [0, 0],
   },
@@ -57,7 +60,7 @@ const CENTER_SITE: Record<TileKind, Site | null> = {
  * (east, then counter-clockwise on screen). Validated against Table 1 and the Phase 1 spec:
  * at most 1 lake-or-mountain per tile, never on the center, and no site on lake or mountain.
  *
- * @rule 3.1, 3.3-3.6, Table 1
+ * @rule 3.1, 3.3-3.6, Table 1, core loop v2 (Base tile)
  */
 export const TileDefSchema = z
   .object({

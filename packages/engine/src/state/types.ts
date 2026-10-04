@@ -14,8 +14,13 @@ import type {
 import type { GameEvent } from '../events/events.ts'
 import type { Axial } from '../hex.ts'
 
-/** Round phases. `setup` holds the setup tile choice before round 1. @rule 4, 5.1, 14 */
-export type Phase = 'setup' | 'prepare' | 'combat' | 'explore' | 'ended'
+/**
+ * Round phases. `setup` holds the start-hex choices before round 1. There is no Explore phase
+ * (core loop v2): the round is Prepare, then Combat.
+ *
+ * @rule 4, 5.1, 14, core loop v2
+ */
+export type Phase = 'setup' | 'prepare' | 'combat' | 'ended'
 
 /** One hex on the map, copied from the tile that holds it. @rule 3.3, 3.5 */
 export type MapHex = Readonly<{ terrain: Terrain; site: Site | null; tile: string }>
@@ -169,7 +174,7 @@ export type EngineContent = Readonly<{
  * @rule 4, 5
  */
 export type GameState = Readonly<{
-  version: 1
+  version: 2
   seed: number
   config: GameConfig
   content: EngineContent
@@ -181,22 +186,25 @@ export type GameState = Readonly<{
   /** Index of the player whose decision it is. */
   current: number
   map: GameMap
-  /** Tiles not yet placed, top first. @rule 4.2, 4.3 */
+  /** Tiles not yet placed, top first: countryside on top of core. @rule 4.3, core loop v2 */
   tileDeck: readonly string[]
-  /** Tiles drawn and waiting for the player to choose their slot (4.2 setup, 10.1 Explore). */
-  revealed: readonly string[]
+  /** Players (ids, seat order) who have not put their figure on a Base tile hex yet. @rule 4.6, 3.8 */
+  unplaced: readonly string[]
+  /** Gathering nodes already used: each node gives materials once. @rule 6.7, core loop v2 */
+  spentNodes: readonly Axial[]
   enemies: readonly Enemy[]
   nextEnemyId: number
   defenses: readonly Defense[]
   nextDefenseId: number
   active: ActiveEffect | null
   base: Readonly<{ health: number; maxHealth: number }>
-  /** Spawn nodes whose enemy was defeated and that wait for a refill (7.3, 9.2). */
+  /**
+   * Spawn nodes that wait for an enemy at the next Combat start (7.3): their enemy was defeated
+   * (9.2), or their tile was revealed this round (core loop v2).
+   */
   vacantNodes: readonly Axial[]
   /** The wave track. @rule 4.5, 15 */
   waveTrack: number
-  /** Optional exploration (18.1) is waiting for the reveal-or-skip choice. @rule 10.1 */
-  revealOffer: boolean
   exchange: Exchange | null
   /** Shared experience track and level. @rule 8.1, 8.3, 16.2 */
   experience: number
@@ -215,10 +223,10 @@ export type GameState = Readonly<{
   draft: Draft | null
   /** Players who drafted (or skipped the draft) this round, in seat order. @rule 10.8, 11.6 */
   draftedPlayers: readonly string[]
+  /** Combat is over and the end-of-round steps are running (10.6-10.10). @rule 10.6-10.10 */
+  roundEnding: boolean
   /** The current player has not drawn yet in this Prepare turn or Combat exchange. @rule 16.4, 16.8 */
   turnFresh: boolean
-  /** Tile reveals still to do in this Explore phase (players x revealPerPlayer). @rule 10.1, 16.6 */
-  revealsLeft: number
   /** Counters the milestones read. @rule 17 */
   progress: Progress
   /** Milestones reached, in order. @rule 10.10, 14.3, 17 */

@@ -1,5 +1,5 @@
 import { hexDistance, type Axial } from '../hex.ts'
-import { BASE_HEX } from '../map/tiles.ts'
+import { nearestBaseHex } from '../map/base.ts'
 import type { GameState } from '../state/types.ts'
 
 /** Something enemies move toward and attack. @rule 9.3, 7.12 */
@@ -16,11 +16,12 @@ function defenseKind(state: GameState, kind: string): 'tower' | 'barricade' {
 }
 
 /**
- * Every enemy target on the map: the players, the Barricades and Towers, and the base.
+ * Every enemy target on the map: the players, the Barricades and Towers, and the base. The
+ * whole Base tile is the base (row 16), so the base's hex is the Base tile hex nearest `from`.
  *
- * @rule 9.3
+ * @rule 9.3, OPEN-QUESTIONS row 16
  */
-export function allTargets(state: GameState): Target[] {
+export function allTargets(state: GameState, from: Axial): Target[] {
   return [
     ...state.players.map((p): Target => ({
       id: p.id,
@@ -34,7 +35,7 @@ export function allTargets(state: GameState): Target[] {
       hex: d.hex,
       health: d.health,
     })),
-    { id: 'base', kind: 'base', hex: BASE_HEX, health: state.base.health },
+    { id: 'base', kind: 'base', hex: nearestBaseHex(state, from), health: state.base.health },
   ]
 }
 
@@ -46,7 +47,7 @@ export function allTargets(state: GameState): Target[] {
  */
 export function rankTargets(state: GameState, from: Axial): Target[] {
   const order = state.config.rulings.targetTieBreak
-  return allTargets(state).sort(
+  return allTargets(state, from).sort(
     (a, b) =>
       hexDistance(from, a.hex) - hexDistance(from, b.hex) ||
       order.indexOf(a.kind) - order.indexOf(b.kind) ||

@@ -4,7 +4,6 @@ import { moveEnemies } from '../enemies/movement.ts'
 import { refillNodes, waveStep } from '../enemies/spawning.ts'
 import { structureAttacks, towerAttacks } from '../enemies/structures.ts'
 import type { GameEvent } from '../events/events.ts'
-import { startExplore } from '../explore/explore.ts'
 import { draftDue, startDraft } from '../progression/draft.ts'
 import { checkMilestones } from '../progression/milestones.ts'
 import { hexDistance } from '../hex.ts'
@@ -40,19 +39,20 @@ function stepOnce(state: GameState): readonly [GameState, readonly GameEvent[], 
       const [recorded, events] = checkMilestones(state, '14.3')
       return [recorded, events, true]
     }
-    case 'setup':
-      if (state.revealed.length > 0) return [state, [], true]
+    case 'setup': {
+      // 4.6: each player in seat order puts their figure on a free Base tile hex.
+      const seat = state.players.findIndex((p) => state.unplaced.includes(p.id))
+      if (seat >= 0) return [{ ...state, current: seat }, [], true]
       return [
         { ...state, phase: 'prepare', current: 0, turnFresh: true },
         [{ type: 'phaseStarted', rule: '5.1', phase: 'prepare', round: state.round }],
         false,
       ]
+    }
     case 'prepare':
       return prepareStep(state)
     case 'combat':
       return combatStep(state)
-    case 'explore':
-      return exploreStep(state)
   }
 }
 
@@ -172,13 +172,14 @@ function startCombat(state: GameState): Step {
 
 /**
  * Combat: run exchanges until every deck and hand is empty, then the structure attack step,
- * then Explore. With 2-4 players the exchanges go in seat order (16.4). An exchange with no
- * enemy in range is skipped (7.9).
+ * then the end of the round. With 2-4 players the exchanges go in seat order (16.4). An
+ * exchange with no enemy in range is skipped (7.9).
  *
  * @rule 7.7, 7.8, 7.9, 7.10-7.13, 16.4, 16.5
  */
 function combatStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   const player = currentPlayer(state)
+  if (state.roundEnding) return roundEndStep(state)
   if (!state.exchange) {
     // 16.4: exchanges in turn, seat order, skipping players with no cards left.
     if (!state.turnFresh || player.deck.length === 0) {
@@ -186,10 +187,15 @@ function combatStep(state: GameState): readonly [GameState, readonly GameEvent[]
       if (seat >= 0) return [{ ...state, current: seat, turnFresh: true }, [], false]
       const [attacked, events] = structureAttacks(state)
       if (attacked.phase === 'ended') return [attacked, events, false]
-      const reveals = state.players.length * state.config.tiles.revealPerPlayer
+      // 10.3 until phase 21 (row 62): an empty tile deck adds 1 to the wave track each round.
+      const wave = attacked.tileDeck.length === 0
+      const waveTrack = attacked.waveTrack + (wave ? 1 : 0)
       return [
-        { ...attacked, phase: 'explore', current: 0, revealsLeft: reveals },
-        [...events, { type: 'phaseStarted', rule: '5.1', phase: 'explore', round: state.round }],
+        { ...attacked, current: 0, waveTrack, roundEnding: true },
+        [
+          ...events,
+          ...(wave ? [{ type: 'waveTrackAdvanced', rule: '10.3', waveTrack } as const] : []),
+        ],
         false,
       ]
     }
@@ -278,30 +284,29 @@ export function rollAgain(state: GameState): Step {
 }
 
 /**
- * Explore: reveal 1 tile per player (`startExplore`, 10.1-10.5, 16.6), turn every discard pile
- * without a shuffle (10.6-10.7), do each player's Skill draft when it is due (10.8), add 1 to
- * the round counter (10.9), and record new milestones (10.10).
+ * The end of the round, after the Combat structure attack (core loop v2: there is no Explore
+ * phase): turn every discard pile without a shuffle (10.6-10.7), do each player's Skill draft
+ * when it is due (10.8), add 1 to the round counter (10.9), and record new milestones (10.10).
  *
- * @rule 10.1-10.5, 10.6, 10.7, 10.8, 10.9, 10.10, 16.6
+ * @rule 10.6, 10.7, 10.8, 10.9, 10.10, core loop v2 (end of round)
  */
-function exploreStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
-  if (state.revealed.length > 0 || state.revealOffer || state.draft) return [state, [], true]
-  if (state.revealsLeft > 0) {
-    // 16.6: 1 reveal per player (x revealPerPlayer), placed in seat order.
-    const done = state.players.length * state.config.tiles.revealPerPlayer - state.revealsLeft
-    const seat = done % state.players.length
-    const emptyDeck = state.tileDeck.length === 0
-    const [next, events] = startExplore({ ...state, current: seat })
-    // 10.3: an empty tile deck adds 1 to the wave track once per Explore phase (row 51).
-    return [{ ...next, revealsLeft: emptyDeck ? 0 : state.revealsLeft - 1 }, events, false]
-  }
+function roundEndStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
+  if (state.draft) return [state, [], true]
   if (state.players.some((p) => p.orientation === 'bottom')) {
     return [...turnAllDecks(state, 'top'), false]
   }
   if (draftDue(state)) return [...startDraft(state), false]
   const round = state.round + 1
   const [next, milestones] = checkMilestones(
-    { ...state, round, phase: 'prepare', current: 0, turnFresh: true, draftedPlayers: [] },
+    {
+      ...state,
+      round,
+      phase: 'prepare',
+      current: 0,
+      turnFresh: true,
+      draftedPlayers: [],
+      roundEnding: false,
+    },
     '10.10',
   )
   return [

@@ -3,7 +3,6 @@ import { useEffect, useReducer, useRef, useState } from 'react'
 import { AUTOSAVE_KEY, browserStorage, loadConfig } from '../config/configStore.ts'
 import { cuesFor } from '../sound/cues.ts'
 import { play } from '../sound/sound.ts'
-import { TileView } from '../tiles/TileView.tsx'
 import { BasePanel } from './BasePanel.tsx'
 import { Choices } from './Choices.tsx'
 import { DecisionDialog } from './DecisionDialog.tsx'
@@ -104,7 +103,6 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
     setSelected(null)
     dispatch({ kind: 'act', action, at: Date.now() })
   }
-  const revealed = state.content.tiles.find((t) => t.id === state.revealed[0])
 
   // Sound: the cues of each new action (never on load or undo: those replace the run).
   const heard = useRef(run.actions.length)
@@ -145,14 +143,6 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
       <div className={`${styles.layout} ${styles.boardRow}`}>
         <PlayMap state={state} legal={legal} act={act} events={run.lastEvents} />
         <div className={styles.side} data-decisions>
-          {revealed ? (
-            <section className={styles.panel} aria-label="Tile to place">
-              <h2 className={styles.panelTitle}>Place {revealed.name}: choose a slot</h2>
-              <div className={styles.tilePreview}>
-                <TileView tile={revealed} />
-              </div>
-            </section>
-          ) : null}
           <Choices state={state} legal={legal} act={act} />
           <PlayerPanel state={state} />
         </div>

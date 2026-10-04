@@ -12,10 +12,11 @@ import { explorerChoice, walk } from './helpers/policy.ts'
 
 const config = defaultContent.config
 
-/** A co-op run past setup (the setup tile placed). */
+/** A co-op run past setup: each figure on the first free Base tile hex, in seat order. */
 function coop(players: number, cfg: GameConfig = config): GameState {
-  const s = createGame(cfg, 1, defaultContent, { players })
-  return applyAction(s, legalActions(s)[0]!).state
+  let s = createGame(cfg, 1, defaultContent, { players })
+  while (s.phase === 'setup') s = applyAction(s, legalActions(s)[0]!).state
+  return s
 }
 
 /** Plays the first legal action until `stop`, collecting every event. */
@@ -30,13 +31,31 @@ function playUntil(start: GameState, stop: (s: GameState) => boolean, max = 2000
   return { state: s, events }
 }
 
+/** The events before the first one that matches. */
+const before = (events: GameEvent[], stop: (e: GameEvent) => boolean) => {
+  const i = events.findIndex(stop)
+  return i < 0 ? events : events.slice(0, i)
+}
+
+const combatStarts = (e: GameEvent) => e.type === 'phaseStarted' && e.phase === 'combat'
+
 describe('co-op setup (16.1, 4.6)', () => {
-  it('16.1 each player has an own shuffled deck; all figures start on the base', () => {
+  it('16.1 each player has an own shuffled deck', () => {
     const s = createGame(config, 1, defaultContent, { players: 3 })
     expect(s.players.map((p) => p.id)).toEqual(['p1', 'p2', 'p3'])
-    expect(s.players.every((p) => p.hex.q === 0 && p.hex.r === 0)).toBe(true)
     const ids = s.players.flatMap((p) => ownedCards(p).map((c) => c.id))
-    expect(new Set(ids).size).toBe(18)
+    expect(new Set(ids).size).toBe(30)
+  })
+
+  it('4.6, 3.8 each player in seat order puts the figure on a free Base tile hex', () => {
+    let s = createGame(config, 1, defaultContent, { players: 3 })
+    const placers: string[] = []
+    while (s.phase === 'setup') {
+      placers.push(s.players[s.current]!.id)
+      s = applyAction(s, legalActions(s)[0]!).state
+    }
+    expect(placers).toEqual(['p1', 'p2', 'p3'])
+    expect(new Set(s.players.map((p) => `${p.hex.q},${p.hex.r}`)).size).toBe(3)
   })
 
   it('rejects a player count outside config.players', () => {
@@ -53,8 +72,17 @@ describe('turn order (16.4, 16.8)', () => {
     events.flatMap((e) => (e.type === 'cardsDrawn' && rules.includes(e.rule) ? [e.player] : []))
 
   it('16.8 row 6 Prepare: players alternate hands of 3 in seat order', () => {
-    const { events } = playUntil(coop(2), (s) => s.phase === 'combat')
-    expect(drawOrder(events, ['6.1', '6.5'])).toEqual(['p2', 'p1', 'p2'])
+    const { events } = playUntil(coop(2), (s) => s.round === 2)
+    // p1's first hand was drawn when setup ended; 10 cards make 4 hands each.
+    expect(drawOrder(before(events, combatStarts), ['6.1', '6.5'])).toEqual([
+      'p2',
+      'p1',
+      'p2',
+      'p1',
+      'p2',
+      'p1',
+      'p2',
+    ])
   })
 
   it('16.8 full-turn: a player plays the whole deck before the next player', () => {
@@ -62,21 +90,26 @@ describe('turn order (16.4, 16.8)', () => {
       ...config,
       rulings: { ...config.rulings, coopPrepareOrder: 'full-turn' as const },
     }
-    const { events } = playUntil(coop(2, cfg), (s) => s.phase === 'combat')
-    expect(drawOrder(events, ['6.1', '6.5'])).toEqual(['p1', 'p2', 'p2'])
+    const { events } = playUntil(coop(2, cfg), (s) => s.round === 2)
+    expect(drawOrder(before(events, combatStarts), ['6.1', '6.5'])).toEqual([
+      'p1',
+      'p1',
+      'p1',
+      'p2',
+      'p2',
+      'p2',
+      'p2',
+    ])
   })
 
   it('16.4 Combat: exchanges go in seat order', () => {
-    const { state } = playUntil(coop(2), (s) => s.phase === 'explore')
-    const combat = state.log.slice(
-      state.log.findIndex((e) => e.type === 'phaseStarted' && e.phase === 'combat'),
-    )
-    expect(drawOrder([...combat], ['7.8'])).toEqual(['p1', 'p2', 'p1', 'p2'])
+    const { events } = playUntil(coop(2), (s) => s.round === 2)
+    const combat = events.slice(events.findIndex(combatStarts))
+    expect(drawOrder(combat, ['7.8'])).toEqual(['p1', 'p2', 'p1', 'p2', 'p1', 'p2', 'p1', 'p2'])
   })
 
   it('16.5 in an exchange only enemies next to that player attack that player', () => {
-    const start = playUntil(coop(2), (s) => s.phase === 'combat').state
-    const { events } = playUntil(start, (s) => s.phase === 'explore')
+    const { events } = playUntil(coop(2), (s) => s.round === 3)
     for (const e of events) {
       if (e.type === 'enemyAttacked' || e.type === 'playerDamaged') {
         expect(['p1', 'p2']).toContain(e.player)
@@ -85,25 +118,11 @@ describe('turn order (16.4, 16.8)', () => {
   })
 })
 
-describe('Explore with 2 players (16.6, 10.8)', () => {
-  it('16.6 each player reveals and places 1 tile, in seat order', () => {
-    const start = playUntil(coop(2), (s) => s.phase === 'explore').state
-    let s = start
-    const placers: string[] = []
-    for (let i = 0; i < 200 && s.phase === 'explore'; i++) {
-      const action = legalActions(s)[0]!
-      if (action.type === 'placeTile') placers.push(s.players[s.current]!.id)
-      s = applyAction(s, action).state
-    }
-    expect(placers).toEqual(['p1', 'p2'])
-    expect(s.map.tiles).toHaveLength(4)
-  })
-
+describe('the end of the round with 2 players (10.8)', () => {
   it('10.8, 11.6 each player drafts in seat order', () => {
-    const start = playUntil(coop(2), (s) => s.phase === 'explore').state
-    let s: GameState = { ...start, round: 2, upgrades: ['training-1'] }
+    let s: GameState = { ...coop(2), round: 2, upgrades: ['training-1'] }
     const drafters: string[] = []
-    for (let i = 0; i < 200 && s.phase === 'explore'; i++) {
+    for (let i = 0; i < 500 && s.round === 2; i++) {
       const action = legalActions(s)[0]!
       if (action.type === 'draftSkill') drafters.push(s.players[s.current]!.id)
       s = applyAction(s, action).state

@@ -15,13 +15,13 @@ export function firstOf<T extends ActionType>(
   return ofType(legal, type)[0]
 }
 
-/** The map actions that point at 1 hex: a step, a tile slot, or the defenses buildable there. */
+/** The map actions that point at 1 hex: a start hex, a step, or the defenses buildable there. */
 export type HexTarget = Readonly<{
   key: string
   q: number
   r: number
+  start?: Of<'placeFigure'>
   move?: Of<'moveTo'>
-  place?: Of<'placeTile'>
   builds: readonly Of<'build'>[]
 }>
 
@@ -34,7 +34,7 @@ export function hexTargets(legal: readonly Action[]): Map<string, HexTarget> {
   }
   for (const a of legal) {
     if (a.type === 'moveTo') out.set(hexKey(a), { ...at(a.q, a.r), move: a })
-    if (a.type === 'placeTile') out.set(hexKey(a), { ...at(a.q, a.r), place: a })
+    if (a.type === 'placeFigure') out.set(hexKey(a), { ...at(a.q, a.r), start: a })
     if (a.type === 'build') {
       const t = at(a.q, a.r)
       out.set(t.key, { ...t, builds: [...t.builds, a] })

@@ -4,20 +4,32 @@ import { describe, expect, it } from 'vitest'
 import { actionHex, describeAction } from './describeAction.ts'
 
 describe('describeAction', () => {
-  it('labels the setup tile placement', () => {
+  it('labels the start hexes by place, the centre first', () => {
     const state = createGame(defaultContent.config, 1)
     const labels = legalActions(state).map((a) => describeAction(a, state))
-    expect(labels).toHaveLength(6)
+    expect(labels).toHaveLength(7)
+    expect(labels[0]).toBe('Place your figure on Plains, Base, the base centre')
     expect(
-      labels.every((l) =>
-        /^Place [A-Z][\w ]+ \d hexes (north|south|east|west)(-east|-west)? of the base$/.test(l),
-      ),
+      labels
+        .slice(1)
+        .every((l) =>
+          /^Place your figure on Plains, 1 hex (north|south|east|west)(-east|-west)? of the base centre$/.test(
+            l,
+          ),
+        ),
     ).toBe(true)
-    expect(new Set(labels).size).toBe(6)
-    // Names the tile by its printed name, never by id or bare coordinates.
-    const ids = state.content.tiles.map((t) => t.id)
-    expect(labels.some((l) => ids.some((id) => l.includes(id)) || /\(-?\d+,-?\d+\)/.test(l))).toBe(
-      false,
+    expect(new Set(labels).size).toBe(7)
+  })
+
+  it('labels a step off the map edge as a reveal', () => {
+    const start = createGame(defaultContent.config, 1)
+    const placed = applyAction(start, { type: 'placeFigure', q: 1, r: 0 }).state
+    const state = {
+      ...placed,
+      active: { kind: 'move' as const, hexesLeft: 2, ignoreEnemyCost: false },
+    }
+    expect(describeAction({ type: 'moveTo', q: 2, r: 0 }, state)).toBe(
+      'Step off the map edge, 1 hex south-east: reveal a tile',
     )
   })
 

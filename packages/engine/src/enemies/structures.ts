@@ -2,7 +2,8 @@ import { damageDefense } from '../build/defenses.ts'
 import { damageEnemy, rollEnemyDamage } from '../combat/resolve.ts'
 import type { GameEvent } from '../events/events.ts'
 import { hexDistance } from '../hex.ts'
-import { adjacent, BASE_HEX } from '../map/tiles.ts'
+import { canAttackBase } from '../map/base.ts'
+import { adjacent } from '../map/tiles.ts'
 import type { Step } from '../state/helpers.ts'
 import type { GameState } from '../state/types.ts'
 import { byAge } from './movement.ts'
@@ -73,7 +74,7 @@ function adjacentStructures(
       const kind: StructureKind = blocks ? 'barricade' : 'tower'
       return { id: d.id, kind }
     })
-  const base = adjacent(BASE_HEX, hex) ? [{ id: 'base', kind: 'base' as StructureKind }] : []
+  const base = canAttackBase(state, hex) ? [{ id: 'base', kind: 'base' as StructureKind }] : []
   return [...defenses, ...base].sort(
     (a, b) =>
       STRUCTURE_ORDER.indexOf(a.kind) - STRUCTURE_ORDER.indexOf(b.kind) || a.id.localeCompare(b.id),
@@ -82,10 +83,11 @@ function adjacentStructures(
 
 /**
  * Structure attack step: each enemy (oldest first) that is not next to a player attacks 1
- * adjacent structure — a Barricade first, then a Tower, then the base. Damage follows
+ * adjacent structure — a Barricade first, then a Tower, then the base (next to any Base tile
+ * hex, row 16). Damage follows
  * `rulings.structureDamage` (row 7). The base at 0 ends the run (14.1).
  *
- * @rule 7.10, 7.11, 7.12, 12.4, 14.1
+ * @rule 7.10, 7.11, 7.12, 12.4, 14.1, OPEN-QUESTIONS row 16
  */
 export function structureAttacks(state: GameState): Step {
   let current = state

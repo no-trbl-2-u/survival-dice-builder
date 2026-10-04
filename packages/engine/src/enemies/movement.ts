@@ -23,7 +23,8 @@ export function chooseRoute(
 ): Readonly<{ target: Target; path: readonly Axial[] }> | null {
   const ranked = rankTargets(state, enemy.hex)
   const first = ranked[0]
-  if (!first || hexDistance(first.hex, enemy.hex) === 1) return null
+  // Next to the target, or on an outer Base tile hex with the base as target (row 16): stay.
+  if (!first || hexDistance(first.hex, enemy.hex) <= 1) return null
   const candidates = state.config.rulings.blockedPathRule === 'wait' ? [first] : ranked
   for (const target of candidates) {
     const path = pathNextTo(state, enemy.hex, target.hex)

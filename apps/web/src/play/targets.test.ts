@@ -19,15 +19,15 @@ describe('reduceRun', () => {
 })
 
 describe('targets', () => {
-  it('groups tile slots, steps, and builds by hex', () => {
+  it('groups start hexes, steps, and builds by hex', () => {
     const legal: Action[] = [
-      { type: 'placeTile', q: 2, r: 1 },
+      { type: 'placeFigure', q: 2, r: 1 },
       { type: 'moveTo', q: 1, r: 0 },
       { type: 'build', defense: 'tower', q: 1, r: 0 },
       { type: 'build', defense: 'barricade', q: 1, r: 0 },
     ]
     const t = hexTargets(legal)
-    expect(t.get('2,1')?.place).toEqual(legal[0])
+    expect(t.get('2,1')?.start).toEqual(legal[0])
     expect(t.get('1,0')?.move).toEqual(legal[1])
     expect(t.get('1,0')?.builds).toHaveLength(2)
   })
@@ -45,6 +45,6 @@ describe('targets', () => {
   it('every action type of a new run has a control or a Choices button', () => {
     const s = createGame(config, 1)
     for (const a of legalActions(s))
-      expect(COVERED.has(a.type) || a.type === 'placeTile').toBe(true)
+      expect(COVERED.has(a.type) || a.type === 'placeFigure').toBe(true)
   })
 })

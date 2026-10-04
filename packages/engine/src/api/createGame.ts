@@ -13,17 +13,16 @@ export type GameSetup = Readonly<{ players: number }>
 /**
  * Creates a new run. Same config + seed (+ content) = same run.
  *
- * Setup: the Base tile goes in the center (4.1); the countryside tiles are shuffled, 1 waits
- * for the player to choose its slot next to the base (4.2 [006]; the first decision), and the
- * others go on top of the shuffled core tiles to make the tile deck (4.3 [006]). The figure
- * starts on the base (4.6).
+ * Setup (core loop v2): the Base tile alone goes in the center (4.1); the shuffled countryside
+ * tiles go on top of the shuffled core tiles to make the tile deck (4.3). Each player then puts
+ * their figure on a free Base tile hex, in seat order (4.6, 3.8; the first decisions).
  *
  * @param config - the game configuration (rule numbers and options).
  * @param seed - any integer; it seeds the engine RNG.
  * @param content - cards, Skills, enemies, defenses, and tiles; defaults to the default content.
  * @param setup - the player count (`config.players.min`-`max`, default 1); seats p1, p2, ...
- * @returns the state at the first decision (`setup`: choose the setup tile's slot).
- * @rule 4.1-4.13, 16.1
+ * @returns the state at the first decision (`setup`: player 1 chooses a start hex).
+ * @rule 4.1-4.13, 16.1, core loop v2 (setup)
  */
 export function createGame(
   config: GameConfig,
@@ -46,7 +45,7 @@ export function createGame(
   const [deck, afterDeck] = shuffle(rng, cards)
   rng = afterDeck
 
-  // 4.1-4.3 [006]: base in the center; setup countryside tile(s); tile deck.
+  // 4.1, 4.3, core loop v2: the Base tile alone; countryside on top of core in the tile deck.
   const baseTile = content.tiles.find((t) => t.kind === 'base')
   if (!baseTile) throw new Error('Content has no base tile')
   const [countryside, afterCountry] = shuffle(
@@ -58,9 +57,7 @@ export function createGame(
     content.tiles.filter((t) => t.kind === 'core').map((t) => t.id),
   )
   rng = afterCore
-  const setupCount = config.tiles.setupCountryside
-  const setupTiles = countryside.slice(0, setupCount)
-  const tileDeck = [...countryside.slice(setupCount), ...core]
+  const tileDeck = [...countryside, ...core]
 
   // 4.12: shuffle each card supply and Skill supply.
   const [supplies, afterSupplies] = buildSupplies(content, config, rng)
@@ -95,7 +92,7 @@ export function createGame(
   const players = Array.from({ length: count }, (_, i) => makePlayer(i))
 
   const state: GameState = {
-    version: 1,
+    version: 2,
     seed,
     config,
     content: {
@@ -108,12 +105,13 @@ export function createGame(
     },
     rng,
     round: 1,
-    phase: setupTiles.length > 0 ? 'setup' : 'prepare',
+    phase: 'setup',
     players,
     current: 0,
     map: placeTile(EMPTY_MAP, baseTile, BASE_HEX),
     tileDeck,
-    revealed: setupTiles,
+    unplaced: players.map((p) => p.id),
+    spentNodes: [],
     enemies: [],
     nextEnemyId: 1,
     defenses: [],
@@ -122,7 +120,6 @@ export function createGame(
     base: { health: config.base.startingHealth, maxHealth: config.base.startingHealth },
     waveTrack: config.waveTrackStart,
     vacantNodes: [],
-    revealOffer: false,
     exchange: null,
     experience: 0,
     level: 1,
@@ -134,7 +131,7 @@ export function createGame(
     draft: null,
     draftedPlayers: [],
     turnFresh: true,
-    revealsLeft: 0,
+    roundEnding: false,
     progress: { elitesDefeated: 0, firedSkills: [], tilesRevealed: 0, cardsBought: 0 },
     milestones: [],
     log: [],

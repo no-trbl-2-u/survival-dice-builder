@@ -7,7 +7,7 @@ export type Timing = Readonly<{
   startedAt: number
   /** The last action (or the start). */
   lastAt: number
-  /** Time spent deciding, by the phase the decision was in (setup, prepare, combat, explore). */
+  /** Time spent deciding, by the phase the decision was in (setup, prepare, combat). */
   byPhase: Readonly<Record<string, number>>
   /** Time spent, by the decision type that ended the wait (playCard, roll, ...). */
   byDecision: Readonly<Record<string, number>>

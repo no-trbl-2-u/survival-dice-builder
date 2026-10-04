@@ -10,7 +10,8 @@ const PREFERENCES: readonly RegExp[] = [
   /^Replace /,
   /^Return /,
   /^Place /,
-  /^Skip the reveal$/,
+  /^Step off the map edge/,
+  /^Move to [^:]+$/,
   /^Stop moving$/,
   /^Stop building$/,
   /^Stop rolling$/,
@@ -42,7 +43,7 @@ test('/play: a full seeded solo run to the summary, then a replayable export', a
   })
   page.on('pageerror', (err) => errors.push(err.message))
 
-  await page.goto('/play?seed=4')
+  await page.goto('/play?seed=5')
   const summary = page.getByTestId('run-summary')
   for (let i = 0; i < 3000 && (await summary.count()) === 0; i++) {
     const moved = await step(page)
@@ -56,7 +57,7 @@ test('/play: a full seeded solo run to the summary, then a replayable export', a
   await page.getByRole('button', { name: 'Download run (JSON)' }).click()
   const file = await (await download).path()
   const data = JSON.parse(fs.readFileSync(file, 'utf-8'))
-  expect(data.seed).toBe(4)
+  expect(data.seed).toBe(5)
   expect(data.actions.length).toBeGreaterThan(50)
   // Real timing: the phase buckets sum to the session length (within 5%).
   const phases = Object.values(data.timing.byPhase as Record<string, number>)

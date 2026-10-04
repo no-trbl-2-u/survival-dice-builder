@@ -1,12 +1,16 @@
 import type { GameEvent } from '../events/events.ts'
-import { mapHex } from '../map/tiles.ts'
+import { onBaseTile } from '../map/base.ts'
 import { cardDef, currentPlayer, updateCurrentPlayer, type Step } from '../state/helpers.ts'
 import type { GameState, Player } from '../state/types.ts'
 import { drawLevel, openLevel } from './supplies.ts'
 
-/** True when the current player's figure is on the base hex. @rule 3.6, 6.8 */
+/**
+ * True when the current player's figure is on the base: any hex of the Base tile (row 16).
+ *
+ * @rule 3.6, 6.8, OPEN-QUESTIONS row 16
+ */
 export function onBase(state: GameState): boolean {
-  return mapHex(state.map, currentPlayer(state).hex)?.site === 'base'
+  return onBaseTile(state, currentPlayer(state).hex)
 }
 
 /**
@@ -47,8 +51,16 @@ export function legalBuys(state: GameState): string[] {
   return [...new Set(state.shopOffers)].filter((id) => cardDef(state, id).cost <= currency)
 }
 
-/** The starter cards a player may return (deck or discard pile, not hand or table). @rule 18.1 */
+/**
+ * The starter cards a player may return (deck or discard pile, not hand or table). None while
+ * the player has `deck.minimumSize` cards or fewer: a deck never drops below it (core loop v2).
+ *
+ * @rule 18.1, core loop v2 (minimum deck)
+ */
 export function returnableStarters(player: Player, state: GameState): string[] {
+  const cards =
+    player.deck.length + player.hand.length + player.discard.length + player.inPlay.length
+  if (cards <= state.config.deck.minimumSize) return []
   return [...player.deck, ...player.discard]
     .filter((c) => cardDef(state, c.def).level === 0)
     .map((c) => c.id)

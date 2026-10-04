@@ -45,7 +45,9 @@ export type GameEvent = Readonly<
     | { type: 'moved'; player: string; from: Axial; to: Axial; cost: number; hexesLeft: number }
     | { type: 'skirmishStarted'; player: string; hex: Axial; enemy: string }
     | { type: 'skirmishEnded'; player: string; won: boolean }
-    | { type: 'gathered'; player: string; amount: number; materials: number }
+    | { type: 'gathered'; player: string; amount: number; materials: number; spent: boolean }
+    | { type: 'figurePlaced'; player: string; hex: Axial }
+    | { type: 'revealStepBlocked'; player: string; hex: Axial; hexesLeft: number }
     | {
         type: 'defenseBuilt'
         player: string
@@ -70,7 +72,6 @@ export type GameEvent = Readonly<
     | { type: 'waveTrackAdvanced'; waveTrack: number }
     | { type: 'eliteReplaced'; grunt: string; elite: string; hex: Axial }
     | { type: 'tileRevealed'; tile: string }
-    | { type: 'revealSkipped' }
     | { type: 'experienceGained'; amount: number; experience: number }
     | { type: 'levelReached'; level: number }
     | { type: 'diceGained'; player: string; dice: number }

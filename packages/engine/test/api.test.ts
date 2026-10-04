@@ -13,7 +13,7 @@ import { scriptedChoice, walk } from './helpers/policy.ts'
 
 const config = defaultContent.config
 
-/** A new run with the setup tile placed in the first free slot: round 1 Prepare. */
+/** A new run with the figure placed on the base centre: round 1 Prepare. */
 function started(seed: number, cfg: GameConfig = config): GameState {
   const s = createGame(cfg, seed)
   return applyAction(s, legalActions(s)[0]!).state
@@ -36,19 +36,22 @@ describe('createGame (section 4)', () => {
     expect(serialize(createGame(config, 7))).not.toBe(serialize(createGame(config, 8)))
   })
 
-  it('4.1-4.2 [006] places the Base tile and waits for the setup tile slot', () => {
+  it('4.1, core loop v2 places the Base tile alone and waits for the start hex', () => {
     const s = createGame(config, 1)
     expect(s.phase).toBe('setup')
-    expect(s.map.tiles).toHaveLength(1)
-    expect(s.players[0]!.hex).toEqual({ q: 0, r: 0 })
-    expect(legalActions(s)).toHaveLength(6)
-    expect(legalActions(s).every((a) => a.type === 'placeTile')).toBe(true)
+    expect(s.map.tiles).toEqual([{ tile: 'broken-village', center: { q: 0, r: 0 } }])
+    expect(s.unplaced).toEqual(['p1'])
+    expect(legalActions(s)).toHaveLength(7)
+    expect(legalActions(s).every((a) => a.type === 'placeFigure')).toBe(true)
   })
 
-  it('4.3 [006] the tile deck holds the other countryside tiles on top of the core tiles', () => {
+  it('4.3, core loop v2 the tile deck holds every countryside tile on top of the core tiles', () => {
     const s = createGame(config, 1)
     const kind = (id: string) => defaultContent.tiles.find((t) => t.id === id)!.kind
-    expect(s.tileDeck.map(kind)).toEqual(['countryside', 'countryside', ...Array(5).fill('core')])
+    expect(s.tileDeck.map(kind)).toEqual([
+      ...Array(3).fill('countryside'),
+      ...Array(5).fill('core'),
+    ])
   })
 
   it('4.5-4.11 sets health, dice, Skills, round, and draws the first hand', () => {
@@ -61,30 +64,30 @@ describe('createGame (section 4)', () => {
     expect(s.round).toBe(1)
     expect(s.phase).toBe('prepare')
     expect(p.hand).toHaveLength(3)
-    expect(p.deck).toHaveLength(3)
+    expect(p.deck).toHaveLength(7)
     expect(p.orientation).toBe('top')
   })
 
-  it('4.4 [006] puts 1 grunt on the spawn node of the setup countryside tile', () => {
+  it('core loop v2 the run starts with no enemies on the map', () => {
     const s = started(1)
-    expect(s.map.tiles).toHaveLength(2)
-    expect(s.enemies).toHaveLength(1)
-    expect(s.enemies[0]).toMatchObject({ id: 'e1', kind: 'grunt', health: 2 })
-    expect(s.map.hexes[`${s.enemies[0]!.hex.q},${s.enemies[0]!.hex.r}`]?.site).toBe('spawn-node')
+    expect(s.map.tiles).toHaveLength(1)
+    expect(s.enemies).toEqual([])
   })
 })
 
 describe('Prepare (section 6)', () => {
   it('6.2-6.4 playing the hand draws the next 3 cards', () => {
     let s = started(3)
-    for (let i = 0; i < 3; i++) s = applyAction(s, legalActions(s)[0]!).state
+    for (let i = 0; i < 3; i++) {
+      s = applyAction(s, { type: 'discardCard', card: s.players[0]!.hand[0]!.id }).state
+    }
     expect(s.phase).toBe('prepare')
     expect(s.players[0]!.hand).toHaveLength(3)
-    expect(s.players[0]!.deck).toHaveLength(0)
+    expect(s.players[0]!.deck).toHaveLength(4)
   })
 
   it('6.6, 7.1-7.2 an empty deck and hand end Prepare; Combat shuffles and turns the deck', () => {
-    const s = until(started(3), (x) => x.phase === 'combat')
+    const s = until(withGrunt(3), (x) => x.phase === 'combat')
     expect(s.players[0]!.orientation).toBe('bottom')
     expect(s.log.some((e) => e.type === 'deckShuffled' && e.rule === '7.1')).toBe(true)
   })
@@ -244,7 +247,7 @@ describe('Combat exchange (7.8)', () => {
 
   it('7.9 with no enemy in range, the exchange has no effect', () => {
     const s = { ...noSpawns(started(3)), enemies: [] }
-    const after = until(s, (x) => x.phase === 'explore' || x.round === 2)
+    const after = until(s, (x) => x.round === 2)
     expect(after.log.some((e) => e.type === 'exchangeSkipped')).toBe(true)
   })
 
@@ -267,7 +270,7 @@ describe('Combat exchange (7.8)', () => {
   })
 })
 
-describe('Explore and the round loop (sections 5, 10)', () => {
+describe('the round loop (sections 5, 10)', () => {
   it('5.1, 10.6-10.9 after Combat, the discard pile turns top-up and round 2 starts', () => {
     const s = until(withGrunt(3), (x) => x.round === 2 || x.phase === 'ended')
     expect(s.round).toBe(2)
@@ -295,7 +298,8 @@ describe('applyAction contract', () => {
   })
 
   it('deserialize rejects text that is not a game state', () => {
-    expect(() => deserialize('{"version":2}')).toThrow(/version 1/)
+    expect(() => deserialize('{"version":2}')).toThrow(/version 2/)
+    expect(() => deserialize('{"version":1,"players":[]}')).toThrow(/version 2/)
   })
 })
 
@@ -387,8 +391,9 @@ describe('deck flow across a round (5.3, 7.9, 10.7)', () => {
 
   it('5.3 each round passes through the deck twice: every card is drawn in Prepare and in Combat', () => {
     const log = roundOneLog()
-    expect(drawnBy(log, ['6.1', '6.5'])).toEqual(['c1', 'c2', 'c3', 'c4', 'c5', 'c6'])
-    expect(drawnBy(log, ['7.8'])).toEqual(['c1', 'c2', 'c3', 'c4', 'c5', 'c6'])
+    const all = Array.from({ length: 10 }, (_, i) => `c${i + 1}`).sort()
+    expect(drawnBy(log, ['6.1', '6.5'])).toEqual(all)
+    expect(drawnBy(log, ['7.8'])).toEqual(all)
   })
 
   it('7.9 a skipped exchange rolls no dice and changes no health', () => {
