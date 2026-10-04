@@ -65,7 +65,7 @@ test('/decisions: open readings link to their /config field, which takes focus',
   page,
 }) => {
   await page.goto('/decisions')
-  await expect(page.getByTestId('readings').locator('li').first()).toContainText('rule 7.11')
+  await expect(page.getByTestId('readings')).toContainText('rule 7.11')
   await expect(page.getByTestId('checks').locator('li')).not.toHaveCount(0)
   await page.getByRole('link', { name: 'rulings.structureDamage' }).first().click()
   await expect(page).toHaveURL(/\/config#cfg-rulings-structureDamage$/)

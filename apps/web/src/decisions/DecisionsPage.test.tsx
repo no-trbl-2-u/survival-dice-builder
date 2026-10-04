@@ -11,9 +11,10 @@ describe('DecisionsPage', () => {
     // Exactly the open rows; the count falls as the designer settles readings.
     expect(readings.length).toBe(openQuestions(parseQuestions(questionsMd)).length)
     expect(readings.length).toBeGreaterThan(0)
-    // Row 1 is decided, so it is not listed; row 7 (pending-spec) comes first.
+    // Row 1 is decided, so it is not listed; pending-spec rows come first, and row 7 is one.
     expect(container.querySelector('[data-question="1"]')).toBeNull()
-    expect(readings[0]?.getAttribute('data-question')).toBe('7')
+    expect(readings[0]?.textContent).toContain('pending-spec')
+    expect(container.querySelector('[data-question="7"]')).not.toBeNull()
     const link = container.querySelector('a[href="/config#cfg-rulings-structureDamage"]')
     expect(link?.textContent).toBe('rulings.structureDamage')
     // The config label stands before the path.
