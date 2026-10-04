@@ -53,6 +53,10 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 18 — Designer decision digest: one page for every open reading and pending check — 869dc88
 - [ ] Phase 19 — /config fit for the designer: plain labels, help, rules sections, and a safe save flow (promoted via oversight 2026-10-03)
 
+**Spec v2 (phases 20–21) — from the designer decision review, oversight 2026-10-04:**
+- [ ] Phase 20 — Spec v2 rules I: the designer decisions of 2026-10-04 in the engine (whole-tile base, 2 card copies, Haul 2 total, skirmish step 1, Tower target choice and Tower currency, node refill when empty, player-placed exploration, blocked elites promote, reveal 7)
+- [ ] Phase 21 — Experiments: experience curves and Skill caps, as a bot comparison report
+
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
 > designer runs them and drops run exports in
@@ -285,6 +289,40 @@ and confirms Reset. `/decisions` shows the labels beside config
 paths. Clears the 2 pending /config critique rows. No rule value
 or default changes. Brief to be drafted by `/plan-a-phase`.
 
+
+### Phase 20 — Spec v2 rules I (designer decisions 2026-10-04)
+
+Source: `OPEN-QUESTIONS.md` rows marked "decided 2026-10-04 (engine:
+phase 20)" and its "Spec v2 changes decided 2026-10-04" section. The
+engine adopts each change behind content/config where it is a value
+(reveal 7, 2 copies), and as engine rules where it is behaviour: the
+base is the whole 7-hex Base tile (buying, upgrades, enemy attacks;
+1 figure per hex there too, start hexes placed by the players); Haul
+gathers 2 in total; the step into an enemy's hex costs 1; a blocked
+elite promotes the grunt nearest the base; Tower ties are a player
+choice (a new decision); a spawn node refills whenever its hex is
+empty; automatic exploration lets the player choose the slot (a new
+decision); a Tower's defeat pays currency to its builder (Towers carry
+their builder). Each change keeps its rule id in TSDoc and gets a unit
+test; the golden replays and the bot batch are re-recorded, with the
+before/after numbers in the phase report. Saved runs from earlier
+builds stop replaying: the export version goes to 2 and an old file
+gives a plain error. Rule changes are spec-sanctioned here: the
+designer decided them (bearings: "rule changes are Spec v2 work").
+Brief to be drafted by `/plan-a-phase`.
+
+### Phase 21 — Experiments: experience curves and Skill caps
+
+Source: `OPEN-QUESTIONS.md` rows 17 and 9 (designer 2026-10-04). Add
+config options (not new defaults) for: experience steps of 3; steps
+of 5 with extra experience for elites; 1 level for each elite that
+spawns; and the draft-slot cap (4, 6, 8). Run bot batches with
+`pnpm sim -- compare` against the default and write
+`docs/reports/phase-21-experiments.md`: the level reached by round,
+the end round, and the causes for each model, with a recommendation
+for the designer and the caveat that the bot is a weak player. The
+designer picks; no default changes in this phase. Brief to be drafted
+by `/plan-a-phase`.
 ---
 
 ## Carry-overs / known gaps (update as phases ship)
