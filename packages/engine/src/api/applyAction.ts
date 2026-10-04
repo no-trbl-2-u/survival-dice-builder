@@ -1,6 +1,7 @@
 import { buildDefense, legalBuilds } from '../build/defenses.ts'
 import { applyBottomEffect, applyTopEffect, updateExchange } from '../combat/cardEffects.ts'
 import { chooseTarget, confirmAssignment } from '../combat/resolve.ts'
+import { towerAttacks, towerShoots } from '../enemies/structures.ts'
 import { discardFromHand, playToTable } from '../deck/deck.ts'
 import { rerollOne, toggleKeep } from '../dice/dice.ts'
 import type { GameEvent } from '../events/events.ts'
@@ -136,11 +137,19 @@ function act(state: GameState, action: Action): Step {
       return confirmAssignment(state)
     case 'chooseTarget':
       return chooseTarget(state, action.enemy)
+    case 'chooseTowerTarget': {
+      const [shot, events] = towerShoots(state, action.enemy)
+      const [rest, more] = towerAttacks(shot)
+      return [rest, [...events, ...more]]
+    }
     case 'placeFigure': {
       const hex = { q: action.q, r: action.r }
       const placed = updateCurrentPlayer(state, (p) => ({ ...p, hex }))
+      const unplaced = state.unplaced.filter((id) => id !== player.id)
+      // A returning figure placed last hands the round back to seat 1 (core loop v2, knockout).
+      const restart = state.phase === 'prepare' && unplaced.length === 0
       return [
-        { ...placed, unplaced: state.unplaced.filter((id) => id !== player.id) },
+        { ...placed, unplaced, ...(restart ? { current: 0, turnFresh: true } : {}) },
         [{ type: 'figurePlaced', rule: '4.6', player: player.id, hex }],
       ]
     }

@@ -1,8 +1,8 @@
 import { defaultContent } from '@survival/content'
 import { describe, expect, it } from 'vitest'
-import { damageEnemy } from '../src/combat/resolve.ts'
-import { moveEnemies } from '../src/enemies/movement.ts'
-import { refillNodes, spawnNodes, waveStep } from '../src/enemies/spawning.ts'
+import { exchangeAttackers } from '../src/combat/resolve.ts'
+import { currentTarget, moveEnemies } from '../src/enemies/movement.ts'
+import { spawnAtNodes, spawnNodes } from '../src/enemies/spawning.ts'
 import { structureAttacks, towerAttacks } from '../src/enemies/structures.ts'
 import { rankTargets } from '../src/enemies/targets.ts'
 import { hexKey, type Axial } from '../src/hex.ts'
@@ -17,7 +17,7 @@ const tile = (id: string) => defaultContent.tiles.find((t) => t.id === id)!
 /**
  * A straight row of plains hexes from q = `from` to q = `to` on r = 0, with the base at (0,0).
  * The base hex is a 1-hex tile of its own, so the base is that hex alone. No tiles are listed,
- * so nothing refills or arrives in a wave unless a test adds tiles.
+ * so no spawn node spawns unless a test adds tiles.
  */
 function corridor(from: number, to: number): GameMap {
   const hexes: Record<string, GameMap['hexes'][string]> = {}
@@ -39,6 +39,7 @@ function board(map: GameMap, player: Axial, enemies: Enemy[], patch: Partial<Gam
   const state: GameState = {
     ...s,
     phase: 'prepare',
+    unplaced: [],
     map,
     enemies,
     nextEnemyId: 100,
@@ -48,12 +49,26 @@ function board(map: GameMap, player: Axial, enemies: Enemy[], patch: Partial<Gam
   return state
 }
 
-const grunt = (id: string, q: number, r: number, home?: Axial): Enemy => ({
+const grunt = (id: string, q: number, r: number): Enemy => ({
   id,
   kind: 'grunt',
   health: 2,
   hex: { q, r },
-  ...(home ? { home } : {}),
+})
+
+/** A defense token built by p1. */
+const defense = (id: string, kind: string, q: number, r: number, health: number) => ({
+  id,
+  kind,
+  hex: { q, r },
+  health,
+  builder: 'p1',
+})
+
+/** The default config with another player pull distance (row 56). */
+const pull = (playerPullDistance: number) => ({
+  ...config,
+  rulings: { ...config.rulings, playerPullDistance },
 })
 
 const at = (s: GameState, id: string) => s.enemies.find((e) => e.id === id)?.hex
@@ -68,16 +83,47 @@ const twoTiles = () =>
 describe('targets (9.3)', () => {
   it('9.3 the nearest target comes first', () => {
     const s = board(corridor(-6, 6), { q: -5, r: 0 }, [], {
-      defenses: [{ id: 'd1', kind: 'barricade', hex: { q: 4, r: 0 }, health: 4 }],
+      defenses: [defense('d1', 'barricade', 4, 0, 4)],
     })
     expect(rankTargets(s, { q: 3, r: 0 }).map((t) => t.id)).toEqual(['d1', 'base', 'p1'])
   })
 
   it('9.3 row 15 at equal distance: player, then Tower, then Barricade, then base', () => {
     const s = board(corridor(-6, 6), { q: 4, r: 0 }, [], {
-      defenses: [{ id: 'd1', kind: 'tower', hex: { q: 0, r: 0 }, health: 3 }],
+      config: pull(0),
+      defenses: [defense('d1', 'tower', 0, 0, 3)],
     })
     expect(rankTargets(s, { q: 2, r: 0 }).map((t) => t.id)).toEqual(['p1', 'd1', 'base'])
+  })
+
+  it('core loop v2 row 56 enemies prefer a structure unless a player is 2 hexes nearer', () => {
+    // From (3,0): the base is 3 away. A player 2 away (1 nearer) does not pull the enemy.
+    const near = board(corridor(-6, 6), { q: 5, r: 0 }, [])
+    expect(rankTargets(near, { q: 3, r: 0 }).map((t) => t.id)).toEqual(['base', 'p1'])
+    // A player 1 away (2 nearer) does.
+    const nearer = board(corridor(-6, 6), { q: 4, r: 0 }, [])
+    expect(rankTargets(nearer, { q: 3, r: 0 }).map((t) => t.id)).toEqual(['p1', 'base'])
+  })
+
+  it('row 56 with playerPullDistance 0 players rank by distance alone (9.3)', () => {
+    const s = board(corridor(-6, 6), { q: 5, r: 0 }, [], { config: pull(0) })
+    expect(rankTargets(s, { q: 3, r: 0 }).map((t) => t.id)).toEqual(['p1', 'base'])
+  })
+
+  it('core loop v2 a knocked-out player is not a target', () => {
+    const s = board(corridor(-6, 6), { q: 4, r: 0 }, [])
+    const out = { ...s, players: [{ ...s.players[0]!, knockedOut: true }] }
+    expect(rankTargets(out, { q: 3, r: 0 }).map((t) => t.id)).toEqual(['base'])
+  })
+
+  it('core loop v2 an enemy attacks only its target in an exchange', () => {
+    // e1 on (1,0) is next to the base and to the player on (2,0): its target is the base.
+    const guarding = board(corridor(-6, 6), { q: 2, r: 0 }, [grunt('e1', 1, 0)])
+    expect(currentTarget(guarding, guarding.enemies[0]!)?.id).toBe('base')
+    expect(exchangeAttackers(guarding)).toEqual([])
+    // e1 on (3,0): the player 1 away is 2 nearer than the base 3 away, so it targets the player.
+    const pulled = board(corridor(-6, 6), { q: 2, r: 0 }, [grunt('e1', 3, 0)])
+    expect(exchangeAttackers(pulled).map((e) => e.id)).toEqual(['e1'])
   })
 })
 
@@ -101,7 +147,7 @@ describe('enemy movement (7.5, 9.4, 9.7)', () => {
 
   it('9.4 a Barricade wall forces an attack: the enemy cannot enter, so it attacks the Barricade', () => {
     const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 4, 0)], {
-      defenses: [{ id: 'd1', kind: 'barricade', hex: { q: 2, r: 0 }, health: 4 }],
+      defenses: [defense('d1', 'barricade', 2, 0, 4)],
     })
     const [moved] = moveEnemies(s)
     expect(at(moved, 'e1')).toEqual({ q: 3, r: 0 })
@@ -120,7 +166,9 @@ describe('enemy movement (7.5, 9.4, 9.7)', () => {
 
   it('9.7 [006] if enemies block every path to the nearest target, it goes for the next nearest', () => {
     // The player on (5,0) is nearest, but e2 on (4,0) closes the only way in; the base is next.
-    const s = board(corridor(-6, 6), { q: 5, r: 0 }, [grunt('e1', 3, 0), grunt('e2', 4, 0)])
+    const s = board(corridor(-6, 6), { q: 5, r: 0 }, [grunt('e1', 3, 0), grunt('e2', 4, 0)], {
+      config: pull(0),
+    })
     const [after, events] = moveEnemies(s)
     expect(events.find((e) => e.type === 'enemyMoved' && e.enemy === 'e1')).toMatchObject({
       target: 'base',
@@ -129,7 +177,10 @@ describe('enemy movement (7.5, 9.4, 9.7)', () => {
   })
 
   it('9.7 with blockedPathRule "wait" a blocked enemy waits', () => {
-    const waiting = { ...config, rulings: { ...config.rulings, blockedPathRule: 'wait' as const } }
+    const waiting = {
+      ...pull(0),
+      rulings: { ...pull(0).rulings, blockedPathRule: 'wait' as const },
+    }
     const s = board(corridor(-6, 6), { q: 5, r: 0 }, [grunt('e1', 3, 0), grunt('e2', 4, 0)], {
       config: waiting,
     })
@@ -138,7 +189,7 @@ describe('enemy movement (7.5, 9.4, 9.7)', () => {
 
   it('3.4, 9.4 an enemy never steps onto the base, a figure, a defense, or another enemy', () => {
     const s = board(corridor(-6, 6), { q: -2, r: 0 }, [grunt('e1', 3, 0), grunt('e2', -5, 0)], {
-      defenses: [{ id: 'd1', kind: 'tower', hex: { q: 5, r: 0 }, health: 3 }],
+      defenses: [defense('d1', 'tower', 5, 0, 3)],
     })
     const [after] = moveEnemies(s)
     const taken = new Set([hexKey({ q: 0, r: 0 }), hexKey({ q: -2, r: 0 }), hexKey({ q: 5, r: 0 })])
@@ -146,38 +197,23 @@ describe('enemy movement (7.5, 9.4, 9.7)', () => {
   })
 })
 
-describe('spawning (7.3, 9.2, 10.4, 10.5)', () => {
-  it('7.3, 9.2 a spawn node refills only when its enemy was defeated', () => {
-    const map = twoTiles()
-    const s = board(map, { q: 0, r: 0 }, [])
+describe('spawning (core loop v2, 9.2, 9.8, 10.5)', () => {
+  it('core loop v2 every spawn node spawns 1 grunt each time; an occupied node spills over', () => {
+    const s = board(twoTiles(), { q: -1, r: 0 }, [])
     const nodes = spawnNodes(s)
     expect(nodes).toHaveLength(1)
-    const home = nodes[0]!.hex
-    // Its enemy walked away but is alive: the node is empty but not vacant, so no refill.
-    const away = board(map, { q: 0, r: 0 }, [grunt('e1', 1, 1, home)])
-    expect(refillNodes(away)[1]).toEqual([])
-    // Defeating that enemy makes the node vacant; the next refill puts a new grunt on it.
-    const [defeated] = damageEnemy(away, 'e1', 2, 'p1')
-    expect(defeated.vacantNodes).toEqual([home])
-    const [refilled, events] = refillNodes(defeated)
-    expect(refilled.enemies).toHaveLength(1)
-    expect(refilled.vacantNodes).toEqual([])
-    expect(events[0]).toMatchObject({ type: 'enemySpawned', rule: '7.3', hex: home })
+    const [once, first] = spawnAtNodes(s)
+    expect(once.enemies.map((e) => e.hex)).toEqual([nodes[0]!.hex])
+    expect(first).toEqual([expect.objectContaining({ type: 'enemySpawned', rule: '9.2' })])
+    const [twice, second] = spawnAtNodes(once)
+    expect(twice.enemies).toHaveLength(2)
+    expect(second).toEqual([expect.objectContaining({ rule: '9.8', spilled: true })])
   })
 
-  it('7.3 row 21 an elite spawn node refills with an elite', () => {
+  it('core loop v2 an elite spawn node spawns an elite each time', () => {
     const map = placeTile(twoTiles(), tile('ash-waste'), { q: -1, r: 3 })
-    const s = board(map, { q: 0, r: 0 }, [])
-    const [after] = refillNodes({ ...s, vacantNodes: spawnNodes(s).map((n) => n.hex) })
+    const [after] = spawnAtNodes(board(map, { q: 0, r: 0 }, []))
     expect(after.enemies.map((e) => e.kind).sort()).toEqual(['elite', 'grunt', 'grunt'])
-  })
-
-  it('10.4 the wave step puts 1 grunt per spawn node per wave point, spilling over', () => {
-    const s = board(twoTiles(), { q: 0, r: 0 }, [], { waveTrack: 2 })
-    const [after, events] = waveStep(s)
-    expect(after.enemies).toHaveLength(2)
-    expect(after.enemies.every((e) => e.home === undefined)).toBe(true)
-    expect(events.map((e) => e.rule)).toEqual(['10.4', '9.8'])
   })
 
   it('2.2, 10.5 at the miniature limit a new grunt replaces the grunt nearest the base with an elite', () => {
@@ -192,33 +228,105 @@ describe('spawning (7.3, 9.2, 10.4, 10.5)', () => {
     expect(after.enemies.find((e) => e.kind === 'elite')!.hex).toEqual({ q: 1, r: 1 })
   })
 
-  it('2.2 row 32 at the miniature limit a new elite is not placed', () => {
+  it('2.2 row 32 at the miniature limit a new elite also promotes the grunt nearest the base', () => {
     const limited = { ...config, miniatureLimit: 1 }
     const s = board(twoTiles(), { q: 0, r: 0 }, [grunt('e1', 3, 0)], { config: limited })
-    expect(spawnEnemy(s, 'elite', { q: 2, r: 0 })[0].enemies).toHaveLength(1)
+    const [after, events] = spawnEnemy(s, 'elite', { q: 2, r: 0 })
+    expect(after.enemies.map((e) => e.kind)).toEqual(['elite'])
+    expect(events[0]).toMatchObject({ type: 'eliteReplaced', grunt: 'e1' })
+  })
+
+  it('core loop v2 at Combat start the enemies move first, then every node spawns', () => {
+    const s0 = createGame(config, 1)
+    let s: GameState = applyAction(s0, { type: 'placeFigure', q: -1, r: 0 }).state
+    // e1 on (3,0) walks onto the Stony Fields node (2,0), next to the Base tile; the new grunt
+    // then finds the node taken and spills over (9.8). Spawning first would have put it on (2,0).
+    s = { ...s, map: twoTiles(), enemies: [grunt('e1', 3, 0)], nextEnemyId: 2 }
+    for (let i = 0; i < 100 && s.phase === 'prepare'; i++) {
+      s = applyAction(s, legalActions(s)[0]!).state
+    }
+    const types = s.log.flatMap((e) =>
+      e.type === 'enemyMoved' || e.type === 'enemySpawned' ? [e.type] : [],
+    )
+    expect(types).toEqual(['enemyMoved', 'enemySpawned'])
+    expect(at(s, 'e1')).toEqual({ q: 2, r: 0 })
+    expect(at(s, 'e2')).toEqual({ q: 1, r: 0 })
   })
 })
 
 describe('Towers and structures (7.6, 7.11-7.12, 12.3, 14.1)', () => {
   it('12.3 a Tower gives 2 damage to the nearest enemy within 2 hexes', () => {
     const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 5, 0), grunt('e2', 4, 0)], {
-      defenses: [{ id: 'd1', kind: 'tower', hex: { q: 3, r: 0 }, health: 3 }],
+      defenses: [defense('d1', 'tower', 3, 0, 3)],
+      towerQueue: ['d1'],
     })
     const [after, events] = towerAttacks(s)
     expect(events[0]).toMatchObject({ type: 'towerAttacked', enemy: 'e2', damage: 2 })
     expect(after.enemies.map((e) => e.id)).toEqual(['e1'])
+    expect(after.towerQueue).toEqual([])
   })
 
   it('12.3 a Tower with no enemy within 2 hexes does nothing', () => {
     const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 6, 0)], {
-      defenses: [{ id: 'd1', kind: 'tower', hex: { q: 3, r: 0 }, health: 3 }],
+      defenses: [defense('d1', 'tower', 3, 0, 3)],
+      towerQueue: ['d1'],
     })
     expect(towerAttacks(s)[1]).toEqual([])
   })
 
+  it('12.3 row 35 equally near enemies: the Tower waits for its builder to choose', () => {
+    const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 2, 0), grunt('e2', 4, 0)], {
+      phase: 'combat',
+      defenses: [defense('d1', 'tower', 3, 0, 3)],
+      towerQueue: ['d1'],
+    })
+    const [waiting, events] = towerAttacks(s)
+    expect(events).toEqual([])
+    expect(waiting.towerQueue).toEqual(['d1'])
+    expect(legalActions(waiting)).toEqual([
+      { type: 'chooseTowerTarget', tower: 'd1', enemy: 'e1' },
+      { type: 'chooseTowerTarget', tower: 'd1', enemy: 'e2' },
+    ])
+  })
+
+  it('12.3 row 35 with 2 players the builder in seat 2 decides the tie, then seat 1 is current', () => {
+    const s0 = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 2, 0), grunt('e2', 4, 0)], {
+      phase: 'combat',
+      defenses: [{ ...defense('d1', 'tower', 3, 0, 3), builder: 'p2' }],
+      towerQueue: ['d1'],
+    })
+    const s: GameState = {
+      ...s0,
+      players: [s0.players[0]!, { ...s0.players[0]!, id: 'p2', hex: { q: -4, r: 0 } }],
+    }
+    const [waiting] = towerAttacks(s)
+    expect(waiting.current).toBe(1)
+    const { state } = applyAction(waiting, { type: 'chooseTowerTarget', tower: 'd1', enemy: 'e1' })
+    expect(state.towerQueue).toEqual([])
+    expect(state.current).toBe(0)
+  })
+
+  it('rows 40, 53 a Tower that defeats an enemy pays the currency to its builder', () => {
+    const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 2, 0), grunt('e2', 4, 0)], {
+      phase: 'combat',
+      defenses: [defense('d1', 'tower', 3, 0, 3)],
+      towerQueue: ['d1'],
+    })
+    const { state, events } = applyAction(s, {
+      type: 'chooseTowerTarget',
+      tower: 'd1',
+      enemy: 'e2',
+    })
+    expect(state.enemies.map((e) => e.id)).toEqual(['e1'])
+    const grunts = defaultContent.enemies.enemies.find((e) => e.id === 'grunt')!
+    expect(events).toContainEqual(
+      expect.objectContaining({ type: 'currencyGained', player: 'p1', amount: grunts.currency }),
+    )
+  })
+
   it('7.12 an enemy attacks a Barricade before the base', () => {
     const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 1, 0)], {
-      defenses: [{ id: 'd1', kind: 'barricade', hex: { q: 2, r: 0 }, health: 4 }],
+      defenses: [defense('d1', 'barricade', 2, 0, 4)],
     })
     expect(structureAttacks(s)[1][0]).toMatchObject({ structure: 'd1' })
   })
@@ -230,7 +338,7 @@ describe('Towers and structures (7.6, 7.11-7.12, 12.3, 14.1)', () => {
 
   it('12.4 a defense at 0 health is removed', () => {
     const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 3, 0)], {
-      defenses: [{ id: 'd1', kind: 'tower', hex: { q: 4, r: 0 }, health: 2 }],
+      defenses: [defense('d1', 'tower', 4, 0, 2)],
     })
     const [after, events] = structureAttacks(s)
     expect(after.defenses).toEqual([])
@@ -275,30 +383,16 @@ describe('the Base tile is the base (row 16)', () => {
   })
 })
 
-describe('end of round (10.3, 10.6-10.9, core loop v2)', () => {
-  /** A solo run at its first Combat with no enemies: the exchanges are all skipped. */
-  const toRoundEnd = (tileDeck: string[]) => {
+describe('end of round (10.6-10.9, core loop v2)', () => {
+  it('core loop v2 there is no Explore phase and no wave track: Combat is followed by the next Prepare', () => {
     const s0 = createGame(config, 1)
-    let s: GameState = { ...applyAction(s0, legalActions(s0)[0]!).state, tileDeck }
-    for (let i = 0; i < 200 && s.round === 1 && s.phase !== 'ended'; i++) {
+    let s: GameState = { ...applyAction(s0, legalActions(s0)[0]!).state, tileDeck: [] }
+    for (let i = 0; i < 300 && s.round === 1 && s.phase !== 'ended'; i++) {
       s = applyAction(s, legalActions(s)[0]!).state
     }
-    return s
-  }
-
-  it('core loop v2 there is no Explore phase: Combat is followed by the next Prepare', () => {
-    const s = toRoundEnd(['meadowlands'])
     const phases = s.log.flatMap((e) => (e.type === 'phaseStarted' ? [e.phase] : []))
     expect(phases).toEqual(['prepare', 'combat', 'prepare'])
     expect(s.round).toBe(2)
-    expect(s.waveTrack).toBe(0)
-  })
-
-  it('10.3, row 62 with an empty tile deck the wave track goes up by 1 at the end of the round', () => {
-    const s = toRoundEnd([])
-    expect(s.waveTrack).toBe(1)
-    expect(s.log).toContainEqual(
-      expect.objectContaining({ type: 'waveTrackAdvanced', rule: '10.3' }),
-    )
+    expect('waveTrack' in s).toBe(false)
   })
 })

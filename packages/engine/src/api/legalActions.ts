@@ -1,7 +1,8 @@
 import { legalBuilds } from '../build/defenses.ts'
 import { pendingTargets } from '../combat/resolve.ts'
-import { baseHexes } from '../map/base.ts'
-import { blockedByFigure, legalMoves } from '../movement/move.ts'
+import { freeBaseHexes } from '../combat/knockout.ts'
+import { towerTargets } from '../enemies/structures.ts'
+import { legalMoves } from '../movement/move.ts'
 import { draftedSkills } from '../progression/draft.ts'
 import { legalBuys, onBase, returnableStarters } from '../progression/shop.ts'
 import { legalUpgrades } from '../progression/upgrades.ts'
@@ -18,7 +19,7 @@ import type { Action } from './actions.ts'
  * Buying a card (6.8) is offered at every decision while the figure is on the base; it never
  * comes first. A pending starter return (18.1) or Skill draft (10.8) must be resolved first.
  *
- * @rule 4.6, 6.2, 6.7-6.15, 6.8, 7.8, 10.1, 10.8, 11.2, 11.6-11.9, 18.1
+ * @rule 4.6, 6.2, 6.7-6.15, 6.8, 7.6, 7.8, 10.1, 10.8, 11.2, 11.6-11.9, 12.3, 18.1
  */
 export function legalActions(state: GameState): Action[] {
   if (state.phase === 'ended') return []
@@ -49,11 +50,24 @@ function coreActions(state: GameState): Action[] {
     ...(mayDiscard ? player.hand.map((c): Action => ({ type: 'discardCard', card: c.id })) : []),
   ]
 
-  if (state.phase === 'setup') {
-    // 4.6, 3.8, row 16: the figure goes on a free hex of the Base tile.
-    return baseHexes(state)
-      .filter((h) => !blockedByFigure(state, h, player.id))
-      .map((h): Action => ({ type: 'placeFigure', q: h.q, r: h.r }))
+  if (state.unplaced.includes(player.id)) {
+    // 4.6, 3.8, row 16: the figure goes on a free hex of the Base tile (at setup, and when a
+    // knocked-out player returns at a round start).
+    return freeBaseHexes(state, player.id).map((h): Action => ({
+      type: 'placeFigure',
+      q: h.q,
+      r: h.r,
+    }))
+  }
+
+  const tower = state.towerQueue[0]
+  if (tower) {
+    // 12.3, row 35: the Tower's builder chooses between equally near enemies.
+    return towerTargets(state, tower).map((e): Action => ({
+      type: 'chooseTowerTarget',
+      tower,
+      enemy: e.id,
+    }))
   }
 
   const exchange = state.exchange

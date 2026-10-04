@@ -88,11 +88,12 @@ export function createGame(
     guard: 0,
     materials: 0,
     currency: 0,
+    knockedOut: false,
   })
   const players = Array.from({ length: count }, (_, i) => makePlayer(i))
 
   const state: GameState = {
-    version: 2,
+    version: 3,
     seed,
     config,
     content: {
@@ -118,8 +119,7 @@ export function createGame(
     nextDefenseId: 1,
     active: null,
     base: { health: config.base.startingHealth, maxHealth: config.base.startingHealth },
-    waveTrack: config.waveTrackStart,
-    vacantNodes: [],
+    towerQueue: [],
     exchange: null,
     experience: 0,
     level: 1,

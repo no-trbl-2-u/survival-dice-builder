@@ -24,8 +24,8 @@ export function HomePage() {
         </li>
       </ol>
       <p>
-        The run ends when the base or a player falls. Level up, buy cards in the Shop, and draft
-        Skills to last longer.
+        A player at 0 health is knocked out and comes back next round. The run ends when the base
+        falls. Level up, buy cards in the Shop, and draft Skills to last longer.
       </p>
       <p className={styles.more}>
         Also: <a href="/tiles">the proposed tiles</a>, <a href="/config">the rules config</a>, and{' '}

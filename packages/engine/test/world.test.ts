@@ -242,8 +242,7 @@ describe('exploring off the map edge (10.1, core loop v2)', () => {
   it('core loop v2 the new tile has no enemies until the next Combat start', () => {
     const { state } = applyAction(atEdge(['stony-fields']), { type: 'moveTo', q: 2, r: 0 })
     expect(state.enemies).toEqual([])
-    // Stony Fields' spawn node is (2,0), under the figure: it waits for 7.3 at Combat start.
-    expect(state.vacantNodes).toEqual([{ q: 2, r: 0 }])
+    // Stony Fields' spawn node is (2,0), under the figure: it spawns at the Combat start.
     let s = applyAction(state, { type: 'stopMoving' }).state
     for (let i = 0; i < 50 && s.phase === 'prepare'; i++)
       s = applyAction(s, legalActions(s)[0]!).state
@@ -339,7 +338,9 @@ describe('Build (12.1-12.4)', () => {
     const s = building(4)
     const { state, events } = applyAction(s, { type: 'build', defense: 'tower', q: 1, r: 1 })
     expect(state.players[0]!.materials).toBe(0)
-    expect(state.defenses).toEqual([{ id: 'd1', kind: 'tower', hex: { q: 1, r: 1 }, health: 3 }])
+    expect(state.defenses).toEqual([
+      { id: 'd1', kind: 'tower', hex: { q: 1, r: 1 }, health: 3, builder: 'p1' },
+    ])
     expect(events[0]).toMatchObject({ type: 'defenseBuilt', cost: 4 })
     expect(state.active).toBeNull()
   })
@@ -355,7 +356,7 @@ describe('Build (12.1-12.4)', () => {
     s = {
       ...s,
       enemies: [grunt('e1', 2, 0)],
-      defenses: [{ id: 'd9', kind: 'barricade', hex: { q: 1, r: 2 }, health: 4 }],
+      defenses: [{ id: 'd9', kind: 'barricade', hex: { q: 1, r: 2 }, health: 4, builder: 'p1' }],
     }
     const hexes = new Set(
       legalActions(s)
@@ -420,9 +421,9 @@ describe('Build (12.1-12.4)', () => {
   })
 })
 
-describe('Combat range (7.8, 7.9)', () => {
+describe('Combat range (7.8, core loop v2)', () => {
   /** A Combat exchange at Skill placement with 1 Sword die and the given enemies. */
-  function atAssign(enemies: GameState['enemies']): GameState {
+  function atAssign(enemies: GameState['enemies'], hex = { q: 0, r: 0 }): GameState {
     const start = createGame(config, 3)
     let s: GameState = { ...noSpawns(applyAction(start, legalActions(start)[0]!).state), enemies }
     for (let i = 0; i < 50 && s.exchange?.step !== 'roll'; i++) {
@@ -434,7 +435,7 @@ describe('Combat range (7.8, 7.9)', () => {
       // Enemies moved at the start of Combat (7.5): put them back where the test wants them.
       enemies,
       exchange: { ...s.exchange!, step: 'assign', dice: [{ face: 'Sword', kept: false }] },
-      players: [{ ...p, hand: [], inPlay: p.hand }],
+      players: [{ ...p, hex, hand: [], inPlay: p.hand }],
     }
   }
 
@@ -452,22 +453,26 @@ describe('Combat range (7.8, 7.9)', () => {
     expect(events.some((e) => e.type === 'enemyDamaged')).toBe(false)
   })
 
-  it('7.8 step 8 only enemies next to the player attack', () => {
-    const s = atAssign([grunt('e1', 2, 0), grunt('e2', 0, 1)])
+  it('7.8 step 8 only enemies next to the player (and targeting it) attack', () => {
+    // Off the Base tile on (3,0): e2 next to it and e1 2 away both target the player (row 56).
+    const s = atAssign([grunt('e1', 5, 0), grunt('e2', 4, 0)], { q: 3, r: 0 })
     const { events } = applyAction(s, { type: 'confirmAssignment' })
     const attackers = events.flatMap((e) => (e.type === 'enemyAttacked' ? [e.enemy] : []))
     expect(attackers).toEqual(['e2'])
   })
 
-  it('7.9 an exchange is skipped when no enemy is within exchange range', () => {
-    const start = createGame(config, 1)
-    let s: GameState = {
-      ...noSpawns(applyAction(start, legalActions(start)[0]!).state),
-      // Off the map: it can never move, so it stays out of range.
-      enemies: [grunt('e1', 10, 0)],
-    }
-    for (let i = 0; i < 50 && s.round === 1; i++) s = applyAction(s, legalActions(s)[0]!).state
-    expect(s.log.some((e) => e.type === 'exchangeSkipped')).toBe(true)
-    expect(s.log.some((e) => e.type === 'diceRolled')).toBe(false)
+  it('core loop v2 an exchange with no enemy near is played: a guard Skill still fires', () => {
+    let s = atAssign([])
+    s = { ...s, exchange: { ...s.exchange!, dice: [{ face: 'Shield', kept: false }] } }
+    s = applyAction(s, {
+      type: 'assignDie',
+      die: 0,
+      skill: 'guard',
+      use: 0,
+      slot: 0,
+      asFace: 'Shield',
+    }).state
+    const { events } = applyAction(s, { type: 'confirmAssignment' })
+    expect(events).toContainEqual(expect.objectContaining({ type: 'guardGained', amount: 2 }))
   })
 })

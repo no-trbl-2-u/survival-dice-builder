@@ -10,6 +10,7 @@ const PREFERENCES: readonly RegExp[] = [
   /^Replace /,
   /^Return /,
   /^Place /,
+  /^Tower /,
   /^Step off the map edge/,
   /^Move to [^:]+$/,
   /^Stop moving$/,
@@ -50,7 +51,7 @@ test('/play: a full seeded solo run to the summary, then a replayable export', a
     expect(moved, 'no control to press').toBe(true)
   }
   await expect(summary).toBeVisible()
-  await expect(summary).toContainText(/fell in round \d+/)
+  await expect(summary).toContainText(/The base fell in round \d+/)
   await expect(page.getByTestId('play-log')).toContainText('The run ends.')
 
   const download = page.waitForEvent('download')

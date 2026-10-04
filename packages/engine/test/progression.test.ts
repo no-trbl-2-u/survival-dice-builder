@@ -43,10 +43,14 @@ describe('experience and levels (8.1-8.5)', () => {
     ])
   })
 
-  it('8.2 row 40 a Tower defeat gives experience but no currency', () => {
-    const [s] = damageEnemy(home({ enemies: [grunt] }), 'e1', 2, 'd1')
+  it('8.2 rows 40, 53 a Tower defeat gives experience, and the currency goes to its builder', () => {
+    const tower = { id: 'd1', kind: 'tower', hex: { q: 2, r: 0 }, health: 3, builder: 'p1' }
+    const [s, events] = damageEnemy(home({ enemies: [grunt], defenses: [tower] }), 'e1', 2, 'd1')
     expect(s.experience).toBe(1)
-    expect(s.players[0]!.currency).toBe(0)
+    expect(s.players[0]!.currency).toBe(1)
+    expect(events).toContainEqual(
+      expect.objectContaining({ type: 'currencyGained', rule: '8.2, 12.3', player: 'p1' }),
+    )
   })
 
   it('8.3-8.5 at 5 experience the level goes to 2 and every player gets 1 action die', () => {

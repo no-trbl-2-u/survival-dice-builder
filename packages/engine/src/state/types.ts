@@ -34,8 +34,14 @@ export type GameMap = Readonly<{
   hexes: Readonly<Record<string, MapHex>>
 }>
 
-/** A Barricade or Tower on the map. @rule 12 */
-export type Defense = Readonly<{ id: string; kind: string; hex: Axial; health: number }>
+/** A Barricade or Tower on the map, and the player who built it (rows 35, 40). @rule 12 */
+export type Defense = Readonly<{
+  id: string
+  kind: string
+  hex: Axial
+  health: number
+  builder: string
+}>
 
 /**
  * The top-half effect being resolved one step at a time (Prepare): a Move with hexes left, or
@@ -73,14 +79,7 @@ export type Assignment = Readonly<{
 }>
 
 /** An enemy on the board. @rule 9, 3.7 */
-export type Enemy = Readonly<{
-  id: string
-  kind: string
-  health: number
-  hex: Axial
-  /** The spawn node that owns this enemy (9.2 refill). Wave grunts have none. */
-  home?: Axial
-}>
+export type Enemy = Readonly<{ id: string; kind: string; health: number; hex: Axial }>
 
 /** A player's board, deck, and tracks. @rule 2.1, 4.6-4.10 */
 export type Player = Readonly<{
@@ -100,6 +99,11 @@ export type Player = Readonly<{
   guard: number
   materials: number
   currency: number
+  /**
+   * At 0 health the player is knocked out: the figure is off the map until it returns at the
+   * next round start (core loop v2, OPEN-QUESTIONS row 55).
+   */
+  knockedOut: boolean
 }>
 
 /** A Skill effect waiting to resolve after dice are confirmed (7.8 step 7). */
@@ -174,7 +178,7 @@ export type EngineContent = Readonly<{
  * @rule 4, 5
  */
 export type GameState = Readonly<{
-  version: 2
+  version: 3
   seed: number
   config: GameConfig
   content: EngineContent
@@ -188,7 +192,10 @@ export type GameState = Readonly<{
   map: GameMap
   /** Tiles not yet placed, top first: countryside on top of core. @rule 4.3, core loop v2 */
   tileDeck: readonly string[]
-  /** Players (ids, seat order) who have not put their figure on a Base tile hex yet. @rule 4.6, 3.8 */
+  /**
+   * Players (ids, seat order) who have not put their figure on a Base tile hex yet: at setup, and
+   * at a round start for a knocked-out player who returns. @rule 4.6, 3.8, core loop v2
+   */
   unplaced: readonly string[]
   /** Gathering nodes already used: each node gives materials once. @rule 6.7, core loop v2 */
   spentNodes: readonly Axial[]
@@ -199,12 +206,10 @@ export type GameState = Readonly<{
   active: ActiveEffect | null
   base: Readonly<{ health: number; maxHealth: number }>
   /**
-   * Spawn nodes that wait for an enemy at the next Combat start (7.3): their enemy was defeated
-   * (9.2), or their tile was revealed this round (core loop v2).
+   * Towers (ids, oldest first) still to attack at this Combat start. The head waits for its
+   * builder's choice when 2 or more enemies are equally near (row 35). @rule 7.6, 12.3
    */
-  vacantNodes: readonly Axial[]
-  /** The wave track. @rule 4.5, 15 */
-  waveTrack: number
+  towerQueue: readonly string[]
   exchange: Exchange | null
   /** Shared experience track and level. @rule 8.1, 8.3, 16.2 */
   experience: number
@@ -233,7 +238,7 @@ export type GameState = Readonly<{
   milestones: readonly string[]
   /** The last events, trimmed to `LOG_LIMIT`. */
   log: readonly GameEvent[]
-  endedBecause: 'base' | 'player' | null
+  endedBecause: 'base' | null
 }>
 
 /** How many events `GameState.log` keeps. */

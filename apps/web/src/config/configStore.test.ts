@@ -65,7 +65,7 @@ describe('config store (spec 6)', () => {
     expect(isDirty(defaultContent.config, defaultContent.config)).toBe(false)
     expect(isDirty(changed, defaultContent.config)).toBe(true)
     expect(numberMin(GameConfigSchema.shape.shop.shape.offers)).toBe(1)
-    expect(numberMin(GameConfigSchema.shape.waveTrackStart)).toBe(0)
+    expect(numberMin(GameConfigSchema.shape.rulings.shape.playerPullDistance)).toBe(0)
   })
 
   it('reset and corrupt storage fall back to the defaults', () => {

@@ -9,7 +9,7 @@ describe('playRun', () => {
   it('is deterministic per seed and plays to an end', () => {
     const a = playRun(config, 3)
     expect(playRun(config, 3)).toEqual(a)
-    expect(['base', 'player']).toContain(a.cause)
+    expect(a.cause).toBe('base')
     expect(a.baseCurve).toHaveLength(a.endRound)
   })
 })
@@ -36,10 +36,10 @@ describe('summary maths', () => {
       milestones: ['survive-round-5'],
       actions: 1,
     })
-    const s = summarize([run(9, 'base'), run(12, 'player'), run(15, 'error')])
+    const s = summarize([run(9, 'base'), run(12, 'stalled'), run(15, 'error')])
     expect(s.medianEndRound).toBe(12)
     expect(s.errors).toBe(1)
-    expect(s.causes).toEqual({ base: 1, player: 1, error: 1 })
+    expect(s.causes).toEqual({ base: 1, stalled: 1, error: 1 })
     expect(s.milestones).toEqual({ 'survive-round-5': 3 })
   })
 })

@@ -27,6 +27,7 @@ function player(deck: number, discard = 0): Player {
     guard: 0,
     materials: 0,
     currency: 0,
+    knockedOut: false,
   }
 }
 

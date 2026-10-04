@@ -130,8 +130,6 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `${who(event.player)} ${s('ignore')} the hit from ${enemyLabel(names, event.enemy)}.`
     case 'playerDamaged':
       return `${who(event.player)} ${s('lose')} ${event.toGuard} guard and ${event.toHealth} health (health ${event.health}).`
-    case 'exchangeSkipped':
-      return 'No enemy within 2 hexes: the exchange has no effect.'
     case 'exchangeEnded':
       return 'The exchange ends.'
     case 'stepDeferred':
@@ -168,8 +166,6 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `${upper(enemyLabel(names, event.enemy))} attacks ${event.structure === 'base' ? 'the base' : defenseLabel(names, event.structure)} for ${event.damage}.`
     case 'baseDamaged':
       return `The base takes ${event.amount} damage (health ${event.health}).`
-    case 'waveTrackAdvanced':
-      return `No tiles left: the wave track goes to ${event.waveTrack}.`
     case 'eliteReplaced':
       return `Miniature limit: grunt ${event.grunt} becomes elite ${event.elite}.`
     case 'tileRevealed':
@@ -207,8 +203,12 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'milestoneReached':
       return `Milestone: ${event.milestone}.`
     case 'runEnded':
-      return event.because === 'base'
-        ? `The base has fallen in round ${event.round}. The run ends.`
-        : `${solo(names) ? 'You have' : 'A player has'} fallen in round ${event.round}. The run ends.`
+      return `The base has fallen in round ${event.round}. The run ends.`
+    case 'playerKnockedOut':
+      return `${who(event.player)} ${solo(names) ? 'are' : 'is'} knocked out${event.materialsLost > 0 ? ` and ${solo(names) ? 'lose' : 'loses'} ${event.materialsLost} materials` : ''}: back at the next round start.`
+    case 'playerReturned':
+      return `${who(event.player)} ${solo(names) ? 'are' : 'is'} back with ${event.health} health: choose a free base hex.`
+    case 'returnDelayed':
+      return `No free base hex: ${who(event.player)} ${solo(names) ? 'stay' : 'stays'} knocked out this round.`
   }
 }

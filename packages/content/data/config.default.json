@@ -118,7 +118,10 @@
     "stepIncrease": 5
   },
   "miniatureLimit": 20,
-  "waveTrackStart": 0,
+  "knockout": {
+    "returnHealthDivisor": 2,
+    "loseMaterials": true
+  },
   "shop": {
     "offers": 3
   },
@@ -164,6 +167,7 @@
     "eliteReplacement": "nearest-base",
     "buildOnNode": true,
     "gatherNeedsNode": true,
-    "targetTieBreak": ["player", "tower", "barricade", "base"]
+    "targetTieBreak": ["player", "tower", "barricade", "base"],
+    "playerPullDistance": 2
   }
 }

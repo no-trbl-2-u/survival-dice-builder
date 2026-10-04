@@ -36,7 +36,8 @@ export const GameConfigSchema = z.object({
   }),
   experience: z.object({ firstStep: PositiveInt, stepIncrease: NonNegativeInt }),
   miniatureLimit: PositiveInt,
-  waveTrackStart: NonNegativeInt,
+  /** A player at 0 health is knocked out and returns at the next round start (core loop v2, row 55). */
+  knockout: z.object({ returnHealthDivisor: PositiveInt, loseMaterials: z.boolean() }),
   shop: z.object({ offers: PositiveInt }),
   draft: z.object({ reveal: PositiveInt, keep: PositiveInt, everyNRounds: PositiveInt }),
   supplies: z.object({ copiesPerCard: PositiveInt, copiesPerSkill: PositiveInt }),
@@ -77,6 +78,8 @@ export const GameConfigSchema = z.object({
     buildOnNode: z.boolean(),
     gatherNeedsNode: z.boolean(),
     targetTieBreak: z.array(z.enum(['player', 'tower', 'barricade', 'base'])).length(4),
+    /** Hexes nearer a player must be than the nearest structure to draw an enemy (row 56). */
+    playerPullDistance: NonNegativeInt,
   }),
 })
 export type GameConfig = z.infer<typeof GameConfigSchema>
