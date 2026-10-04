@@ -51,7 +51,7 @@ Tick in this file in the same commit that ships the phase.
 **Review readiness (phases 17–18) — promoted via oversight 2026-10-03:**
 - [x] Phase 17 — Accessibility and navigation pass: the pending critique rows on /play, /tiles, /debug, and the shell — c5a664b
 - [x] Phase 18 — Designer decision digest: one page for every open reading and pending check — 869dc88
-- [ ] Phase 19 — /config fit for the designer: plain labels, help, rules sections, and a safe save flow (promoted via oversight 2026-10-03)
+- [x] Phase 19 — /config fit for the designer: plain labels, help, rules sections, and a safe save flow — 8326abe
 
 **Spec v2 (phases 20–21) — from the designer decision review, oversight 2026-10-04:**
 - [blocked: designer walkthrough in progress, round structure changing 2026-10-04] Phase 20 — Spec v2 rules I: the designer decisions of 2026-10-04 in the engine (whole-tile base, 2 card copies, Haul 2 total, skirmish step 1, Tower target choice and Tower currency, node refill when empty, player-placed exploration, blocked elites promote, reveal 7)

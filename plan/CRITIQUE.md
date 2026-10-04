@@ -9,7 +9,9 @@
 
 ## Pending
 
-### [MED] /config — settings are code keys with no help text
+## Done
+
+### [x] [MED] /config — settings are code keys with no help text
 - pass: 3 (commit d6176b7)
 - viewport: desktop
 - category: comprehension
@@ -17,8 +19,9 @@
 - evidence: Labels "every nrounds", "base hex figure limit exempt", "move cost next to enemy". Options "v1/grunt-die", "stay-lose-move/stay-keep-move", "next-target/wait". All 54 controls have no aria-describedby.
 - suggested fix: Keep a label, one help line, and the rules section for each field in content (next to the config schema). Render the help through aria-describedby, and show select options as plain phrases.
 - source: browser
+- fixed: 8326abe (phase 19: label, help, and rules section for every field from config.meta.json, via aria-describedby; select options as phrases; presets keep JSON with help)
 
-### [MED] /config — save errors are raw schema text, unsaved edits vanish, and Reset needs no confirmation
+### [x] [MED] /config — save errors are raw schema text, unsaved edits vanish, and Reset needs no confirmation
 - pass: 3 (commit d6176b7)
 - viewport: desktop
 - category: a11y
@@ -26,8 +29,7 @@
 - evidence: "player.maxHealth: Too small: expected number to be >0" in `ul[role=alert]`. `#cfg-player-maxHealth` has no aria-invalid and no min. Max health 20, then Play, then back shows 15. Reset gives the status "Reset to the defaults." with no confirm step.
 - suggested fix: Put each error next to its field in plain words, with aria-invalid and aria-describedby. Make the Save bar sticky, add a beforeunload warning for unsaved edits, and confirm Reset.
 - source: browser
-
-## Done
+- fixed: 8326abe (phase 19: plain errors at the field with aria-invalid and a linked summary; sticky Save bar; beforeunload on unsaved edits; Reset confirms)
 
 ### [x] [MED] /play — at 375px the controls for the current step sit far below the map
 - pass: 3 (commit d6176b7)
