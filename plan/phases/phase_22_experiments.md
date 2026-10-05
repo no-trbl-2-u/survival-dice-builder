@@ -174,11 +174,11 @@ Closes #<phase issue>
 
 ## DoD
 
-- [ ] Eight structural options and three experience options, all default off.
-- [ ] Default batch identical to phase 21; goldens differ only by version.
-- [ ] Sim seats, turtle policy, level curve, cap round.
-- [ ] Report with every section and one recommendation per row.
-- [ ] OPEN-QUESTIONS, RULES-COVERAGE, DECISIONS updated; verify and deploy gates green.
+- [x] Eight structural options and three experience options, all default off.
+- [x] Default batch identical to phase 21; goldens differ only by version.
+- [x] Sim seats, turtle policy, level curve, cap round.
+- [x] Report with every section and one recommendation per row.
+- [x] OPEN-QUESTIONS, RULES-COVERAGE, DECISIONS updated; verify and deploy gates green.
 
 ## Follow-ups (out of scope)
 

@@ -56,7 +56,7 @@ Tick in this file in the same commit that ships the phase.
 **Spec v2 (phases 20–22) — the designer decision review and the core-loop walkthrough, 2026-10-04:**
 - [x] Phase 20 — Core loop v2 I: map, exploration, and Prepare (base-only start, reveal by stepping off the edge, no Explore phase, single-use gathering nodes, 10-card starter deck, 2 card copies, Haul 2 total, skirmish step 1) — d690982
 - [x] Phase 21 — Core loop v2 II: enemies and Combat (no wave track, move then spawn at every node each Combat, structure-first targeting, cap and promotion, Tower ties and Tower currency, non-attack halves without enemies, knockout instead of run end) — 79bc77e
-- [ ] Phase 22 — Experiments: experience curves, Skill caps, and spawn pressure, as a bot comparison report
+- [x] Phase 22 — Experiments: experience curves, Skill caps, and spawn pressure, as a bot comparison report (structural rows 63-70 as default-off options; `docs/reports/phase-22-experiments.md`) — 2599a8d
 
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
