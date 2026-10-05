@@ -324,7 +324,11 @@ pays currency to its builder. Non-attack card halves work without an
 enemy within 2 hexes. A player at 0 health is knocked out and returns
 at the next round start (row 55, proposed values) instead of ending
 the run; the run ends when the base falls. Bot policy updated for the
-new rules. Brief to be drafted by `/plan-a-phase`.
+new rules. Brief to be drafted by `/plan-a-phase`, which must first
+answer the structural questions in `OPEN-QUESTIONS.md` rows 63-70
+(no clock, map-state difficulty, exchanges coupled to deck size, the
+explorer pinned by same-round spawns, the material budget, co-op
+pressure, Base tile turtling, table upkeep).
 
 ### Phase 22 — Experiments: experience curves, Skill caps, spawn pressure
 
