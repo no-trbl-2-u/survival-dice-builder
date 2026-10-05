@@ -88,9 +88,11 @@ until then).
 
 Rows 63-70 are issues in the round sequence, the economy, or the
 scoring rule that no new card, Skill, elite, or structure can fix.
-Phase 21 shipped (79bc77e) with these open. **Next step: run
-`/plan-a-phase` on phase 22 to answer rows 63-70** (or split a phase
-for them); do not ship phase 22 around them.
+Phase 21 shipped (79bc77e) with these open. The phase 22 brief
+(`plan/phases/phase_22_experiments.md`, 2026-10-05) answers each row
+with one proposed reading, built as a config option that defaults to
+off and measured in `docs/reports/phase-22-experiments.md`. The rows
+stay `proposed` until the designer decides them.
 
 ## Spec amendments owed
 
