@@ -24,3 +24,6 @@ Thumbs.db
 
 # Playwright MCP session output (critique reader)
 .playwright-mcp/
+
+# one-pager render intermediates (scripts/one-pagers.mjs)
+design/one-pagers/v2/build/
