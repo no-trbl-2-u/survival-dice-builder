@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-04 at commit 23470a2
-> Pass count: 4
+> Last pass: 2026-10-05 at commit 04b907a
+> Pass count: 5
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [HIGH] /config — three rulings do nothing, and the miniature limit help states the old rule
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: /config offers Tile rotation, Heal targets, and Grunt that becomes an elite, but the engine never reads any of them. Changing them changes nothing. The miniature limit help still gives the v1 rule. In phase 21, any spawn past the limit (grunt or elite) turns the grunt nearest the base into an elite.
+- evidence: `packages/content/data/config.meta.json`: "When ticked, the player may rotate a revealed tile."; "player-choice": "The players choose"; "any-adjacent": "The player or an adjacent ally"; miniatureLimit help "A grunt over the limit turns a grunt into an elite." `grep -rn "tileRotation|healTargets|eliteReplacement" packages/engine/src` finds nothing.
+- suggested fix: Hide the three inert rulings on /config (or mark them "not used by the engine yet"). Change the miniatureLimit help to "Past the limit, a new grunt or elite turns the grunt nearest the base into an elite instead."
+- source: web-fetch
+
+### [MED] /play — the start panel gives the v1 lose condition
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The goal line tells players to keep every player alive. In v2 a player at 0 health is knocked out and comes back next round. Only the base falling ends the run.
+- evidence: `apps/web/src/play/StartPanel.tsx:45` "Keep the base and every player alive for as many rounds as you can."
+- suggested fix: "Keep the base standing for as many rounds as you can. A player at 0 health is knocked out and comes back next round."
+- source: web-fetch
+
+### [MED] / and /play — nothing says that exploring adds enemies
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The core v2 trade-off is not explained. Every spawn node on a revealed tile spawns enemies at every Combat, and enemies go for structures first. The home steps and the reveal button only say "reveal a tile".
+- evidence: `apps/web/src/home/HomePage.tsx:19` "Step off the edge of the map to reveal a new tile."; `apps/web/src/debug/describeAction.ts:77` "Step off the map edge, ...: reveal a tile".
+- suggested fix: Add one home step: "Each revealed tile's spawn nodes add enemies at every Combat. Enemies attack the nearest structure first." Say the same in short form on the reveal button.
+- source: web-fetch
+
+### [MED] /play — the Gather card does not say it needs an unspent gathering node
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The Gather card's top half shows only "Gather N". It does not say that Gather needs an unspent gathering node with no enemy on it, or that the node is then spent. The player learns this from the log after the card is wasted.
+- evidence: `apps/web/src/play/CardView.tsx:10` `Gather ${e.amount}`; `apps/web/src/play/describeEvent.ts:151` "gathered nothing: gather on an unspent gathering node with no enemy on it."
+- suggested fix: Change the text to "Gather N on an unspent gathering node (the node is spent)".
+- source: web-fetch
+
+### [MED] /play — the Tower-tie choice names the Tower by its internal id
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The phase 21 Tower-tie decision shows the Tower's engine id. With 2 Towers, the player cannot tell which one is asking.
+- evidence: `apps/web/src/play/PhaseBar.tsx:21` `Tower ${state.towerQueue[0]}: choose between equally near enemies`; `apps/web/src/debug/describeAction.ts:68` `Tower ${action.tower} shoots ...`.
+- suggested fix: Name the Tower by its place, for example "Tower on Forest (2,1): choose its target", and mark that Tower on the map.
+- source: web-fetch
+
+### [MED] /play — run summary milestone labels are hard-coded and ignore the config
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: The labels are a fixed table. "Reveal 10 tiles" shows on every run, but only 8 tiles can be revealed. If /config changes surviveRounds, the label falls back to the raw id ("Fire survive-round-8"). The log prints raw milestone ids.
+- evidence: `apps/web/src/play/RunSummary.tsx:12` 'reveal-tiles': 'Reveal 10 tiles'; `:55-56` fallback `Fire ${... ?? id}`; `apps/web/src/play/describeEvent.ts:204` `Milestone: ${event.milestone}.`
+- suggested fix: Build the labels from `config.milestones` (for example `Reveal ${m.tilesRevealed} tiles`, `Survive to round ${n}`), and use the same labels in the log.
+- source: web-fetch
 
 ### [MED] any unknown path — a mistyped URL shows the home page with no "not found" notice
 - pass: 4 (commit 23470a2)
@@ -28,6 +82,8 @@
 - source: web-fetch
 
 > Pass 4 note: web-fetch engine (cloud, no browser). The reader could not get the client-rendered copy on /decisions or /config from the shell, so the phase 18 and 19 copy was not reviewed. A browser pass should cover it.
+
+> Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 ## Done
 
