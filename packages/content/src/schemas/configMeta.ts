@@ -8,6 +8,8 @@ export const ConfigMetaEntrySchema = z.strictObject({
   rule: z.string().min(1).optional(),
   /** A plain phrase for each value of a select field. */
   options: z.record(z.string(), z.string().min(1)).optional(),
+  /** The placeholder of an empty optional number field (default "no maximum"). */
+  empty: z.string().min(1).optional(),
 })
 export type ConfigMetaEntry = z.infer<typeof ConfigMetaEntrySchema>
 

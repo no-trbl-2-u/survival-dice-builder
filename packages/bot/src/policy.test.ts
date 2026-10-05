@@ -49,8 +49,8 @@ describe('botChoice', () => {
       defenses: [{ id: 'd1', kind: 'tower', hex: { q: 3, r: 0 }, health: 3, builder: 'p1' }],
       towerQueue: ['d1'],
       enemies: [
-        { id: 'e1', kind: 'elite', health: 14, hex: { q: 2, r: 0 } },
-        { id: 'e2', kind: 'grunt', health: 2, hex: { q: 4, r: 0 } },
+        { id: 'e1', kind: 'elite', health: 14, hex: { q: 2, r: 0 }, attackedThisCombat: false },
+        { id: 'e2', kind: 'grunt', health: 2, hex: { q: 4, r: 0 }, attackedThisCombat: false },
       ],
     })
     expect(botChoice(tie)).toEqual({ type: 'chooseTowerTarget', tower: 'd1', enemy: 'e2' })
@@ -122,7 +122,10 @@ describe('botChoice', () => {
     expect(choice?.type).toBe('moveTo')
     // An enemy on the step it just chose: that step is now a skirmish, so the bot avoids it.
     const step = choice as { q: number; r: number }
-    const blocked = { ...s, enemies: [{ id: 'e9', kind: 'grunt', health: 2, hex: step }] }
+    const blocked = {
+      ...s,
+      enemies: [{ id: 'e9', kind: 'grunt', health: 2, hex: step, attackedThisCombat: false }],
+    }
     const next = botChoice(blocked) as { type: string; q?: number; r?: number }
     expect(next.type === 'moveTo' && next.q === step.q && next.r === step.r).toBe(false)
   })

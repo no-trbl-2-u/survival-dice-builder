@@ -1,7 +1,15 @@
 import { defaultContent } from '@survival/content'
 import { AXIAL_DIRECTIONS, createGame } from '@survival/engine'
 import { describe, expect, it } from 'vitest'
-import { baseHex, bearing, hexContents, hexName, hexTitle, stepsAway } from './places.ts'
+import {
+  baseHex,
+  bearing,
+  hexContents,
+  hexName,
+  hexTitle,
+  spawnsFrom,
+  stepsAway,
+} from './places.ts'
 
 describe('places', () => {
   it('gives each neighbour its screen direction, and "here" for the same hex', () => {
@@ -35,10 +43,40 @@ describe('places', () => {
     const hex = baseHex(start)
     const state = {
       ...start,
-      enemies: [{ id: 'e1', kind: 'grunt', hex, health: 1 }],
+      enemies: [{ id: 'e1', kind: 'grunt', hex, health: 1, attackedThisCombat: false }],
     }
     const max = start.content.enemies.enemies.find((e) => e.id === 'grunt')!.health
     expect(hexContents(state, hex)[0]).toBe(`grunt e1 (1 of ${max} health)`)
     expect(hexTitle(state, hex)).toMatch(/, Base: grunt e1/)
+  })
+
+  it('row 65 names a tipped-over enemy as attacked', () => {
+    const start = createGame(defaultContent.config, 1)
+    const hex = baseHex(start)
+    const state = {
+      ...start,
+      enemies: [{ id: 'e1', kind: 'grunt', hex, health: 1, attackedThisCombat: true }],
+    }
+    expect(hexContents(state, hex)[0]).toMatch(/health, attacked\)$/)
+  })
+
+  it('row 66 names a node of a waiting tile with the round it spawns from', () => {
+    const start = createGame(defaultContent.config, 1)
+    const node = { q: 5, r: 0 }
+    const waiting = (delay: number) => ({
+      ...start,
+      config: { ...start.config, spawn: { ...start.config.spawn, newTileDelay: delay } },
+      map: {
+        tiles: [...start.map.tiles, { tile: 'test', center: node, revealedRound: 1 }],
+        hexes: {
+          ...start.map.hexes,
+          '5,0': { terrain: 'plains' as const, site: 'spawn-node' as const, tile: 'test' },
+        },
+      },
+    })
+    expect(spawnsFrom(waiting(1), node)).toBe(2)
+    expect(hexName(waiting(1), node)).toMatch(/\(spawns from round 2\)$/)
+    expect(hexName(waiting(0), node)).not.toMatch(/spawns from/)
+    expect(spawnsFrom(waiting(1), baseHex(start))).toBeNull()
   })
 })

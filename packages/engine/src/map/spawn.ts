@@ -1,5 +1,6 @@
 import { hexDistance, hexKey, type Axial } from '../hex.ts'
 import { placedPlayers } from '../movement/move.ts'
+import { levelForEliteSpawn } from '../progression/experience.ts'
 import { enemyDef, type Step } from '../state/helpers.ts'
 import type { Enemy, GameState } from '../state/types.ts'
 import { BASE_HEX, isPassable, sameHex } from './tiles.ts'
@@ -49,9 +50,11 @@ export function miniatureCount(state: GameState): number {
 
 /**
  * The miniature limit stopped a new enemy: replace the grunt nearest the base with an elite
- * (ties: the oldest grunt, row 13). The elite keeps the grunt's hex.
+ * (ties: the oldest grunt, row 13). The elite keeps the grunt's hex. The first time this happens
+ * `progress.capReachedRound` records the round (phase 22 report). With
+ * `experience.levelPerEliteSpawn` the new elite raises the level (row 17).
  *
- * @rule 10.5
+ * @rule 10.5, OPEN-QUESTIONS row 17
  */
 export function replaceGruntWithElite(state: GameState): Step {
   const grunts = state.enemies.filter((e) => e.kind === 'grunt')
@@ -68,23 +71,34 @@ export function replaceGruntWithElite(state: GameState): Step {
     kind: 'elite',
     health: enemyDef(state, 'elite').health,
     hex: grunt.hex,
+    attackedThisCombat: grunt.attackedThisCombat,
   }
-  return [
-    {
-      ...state,
-      enemies: state.enemies.map((e) => (e.id === grunt.id ? elite : e)),
-      nextEnemyId: state.nextEnemyId + 1,
+  const replaced: GameState = {
+    ...state,
+    enemies: state.enemies.map((e) => (e.id === grunt.id ? elite : e)),
+    nextEnemyId: state.nextEnemyId + 1,
+    progress: {
+      ...state.progress,
+      capReachedRound: state.progress.capReachedRound ?? state.round,
     },
-    [{ type: 'eliteReplaced', rule: '10.5', grunt: grunt.id, elite: id, hex: grunt.hex }],
+  }
+  const [levelled, events] = levelForEliteSpawn(replaced)
+  return [
+    levelled,
+    [
+      { type: 'eliteReplaced', rule: '10.5', grunt: grunt.id, elite: id, hex: grunt.hex },
+      ...events,
+    ],
   ]
 }
 
 /**
  * Puts a new enemy of `kind` on a spawn node (or spills it, 9.8). At the miniature limit (2.2)
  * the new enemy is not placed: the grunt nearest the base becomes an elite instead, for a new
- * grunt (10.5) and for a new elite (row 32).
+ * grunt (10.5) and for a new elite (row 32). A new elite raises the level with
+ * `experience.levelPerEliteSpawn` (row 17).
  *
- * @rule 2.2, 4.4, 9.2, 9.8, 10.2, 10.5, OPEN-QUESTIONS row 32
+ * @rule 2.2, 4.4, 9.2, 9.8, 10.2, 10.5, OPEN-QUESTIONS rows 17, 32
  */
 export function spawnEnemy(state: GameState, kind: string, node: Axial, rule = '10.2'): Step {
   if (miniatureCount(state) >= state.config.miniatureLimit) return replaceGruntWithElite(state)
@@ -93,10 +107,19 @@ export function spawnEnemy(state: GameState, kind: string, node: Axial, rule = '
   const def = enemyDef(state, kind)
   const id = `e${state.nextEnemyId}`
   const spilled = !sameHex(hex, node)
-  const enemy: Enemy = { id, kind, health: def.health, hex }
+  const enemy: Enemy = { id, kind, health: def.health, hex, attackedThisCombat: false }
+  const placed: GameState = {
+    ...state,
+    enemies: [...state.enemies, enemy],
+    nextEnemyId: state.nextEnemyId + 1,
+  }
+  const [levelled, events] = kind === 'elite' ? levelForEliteSpawn(placed) : [placed, []]
   return [
-    { ...state, enemies: [...state.enemies, enemy], nextEnemyId: state.nextEnemyId + 1 },
-    [{ type: 'enemySpawned', rule: spilled ? '9.8' : rule, enemy: id, kind, hex, spilled }],
+    levelled,
+    [
+      { type: 'enemySpawned', rule: spilled ? '9.8' : rule, enemy: id, kind, hex, spilled },
+      ...events,
+    ],
   ]
 }
 

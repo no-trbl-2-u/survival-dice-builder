@@ -93,7 +93,7 @@ export function createGame(
   const players = Array.from({ length: count }, (_, i) => makePlayer(i))
 
   const state: GameState = {
-    version: 3,
+    version: 4,
     seed,
     config,
     content: {
@@ -109,7 +109,7 @@ export function createGame(
     phase: 'setup',
     players,
     current: 0,
-    map: placeTile(EMPTY_MAP, baseTile, BASE_HEX),
+    map: placeTile(EMPTY_MAP, baseTile, BASE_HEX, 0),
     tileDeck,
     unplaced: players.map((p) => p.id),
     spentNodes: [],
@@ -132,7 +132,14 @@ export function createGame(
     draftedPlayers: [],
     turnFresh: true,
     roundEnding: false,
-    progress: { elitesDefeated: 0, firedSkills: [], tilesRevealed: 0, cardsBought: 0 },
+    progress: {
+      elitesDefeated: 0,
+      firedSkills: [],
+      tilesRevealed: 0,
+      cardsBought: 0,
+      lastRevealRound: 0,
+      capReachedRound: null,
+    },
     milestones: [],
     log: [],
     endedBecause: null,

@@ -30,8 +30,26 @@ export function bearing(from: Axial, to: Axial): string {
 }
 
 /**
+ * The first round a spawn node on this hex spawns, when that is after the current round: its
+ * tile waits `spawn.newTileDelay` rounds after its reveal (row 66). Null otherwise (no node, or
+ * it spawns this round already).
+ *
+ * @param state - the game state whose map is read.
+ * @param hex - the hex to check.
+ */
+export function spawnsFrom(state: GameState, hex: Axial): number | null {
+  const found = state.map.hexes[hexKey(hex)]
+  if (found?.site !== 'spawn-node' && found?.site !== 'elite-spawn-node') return null
+  const placed = state.map.tiles.find((t) => t.tile === found.tile)
+  if (!placed) return null
+  const first = placed.revealedRound + state.config.spawn.newTileDelay
+  return first > state.round ? first : null
+}
+
+/**
  * The name of a map hex: terrain and site ("Plains, Spawn node"), with "(spent)" on a used
- * gathering node, or `open ground` off the map.
+ * gathering node, "(spawns from round N)" on a node of a tile that still waits (row 66), or
+ * `open ground` off the map.
  *
  * @param state - the game state whose map is read.
  * @param hex - the hex to name.
@@ -40,7 +58,9 @@ export function hexName(state: GameState, hex: Axial): string {
   const found = state.map.hexes[hexKey(hex)]
   if (!found) return 'open ground'
   const spent = state.spentNodes.some((n) => n.q === hex.q && n.r === hex.r)
-  return spent ? `${hexLabel(found)} (spent)` : hexLabel(found)
+  if (spent) return `${hexLabel(found)} (spent)`
+  const from = state.config.spawn.newTileDelay > 0 ? spawnsFrom(state, hex) : null
+  return from === null ? hexLabel(found) : `${hexLabel(found)} (spawns from round ${from})`
 }
 
 /** Where the base is, or the map origin before a base exists. */
@@ -81,7 +101,8 @@ export function hexContents(state: GameState, hex: Axial): string[] {
   return [
     ...enemies.map((e) => {
       const max = state.content.enemies.enemies.find((x) => x.id === e.kind)?.health ?? e.health
-      return `${e.kind} ${e.id} (${e.health} of ${max} health)`
+      const tipped = e.attackedThisCombat ? ', attacked' : ''
+      return `${e.kind} ${e.id} (${e.health} of ${max} health${tipped})`
     }),
     ...defenses.map((d) => {
       const name = state.content.defenses.find((x) => x.id === d.kind)?.name ?? d.kind

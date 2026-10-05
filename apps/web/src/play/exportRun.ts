@@ -1,11 +1,11 @@
-import { GameConfigSchema } from '@survival/content'
+import { GameConfigSchema, withConfigDefaults } from '@survival/content'
 import type { Action, GameState } from '@survival/engine'
 import { replay, type Run } from './run.ts'
 import { closeTiming, resumeTiming, sessionMs, type Timing } from './timing.ts'
 
 /** A saved run: enough to replay it exactly. Also the run summary's export. */
 export type RunExport = Readonly<{
-  version: 3
+  version: 4
   seed: number
   players: number
   config: Run['config']
@@ -22,7 +22,7 @@ export type RunExport = Readonly<{
 export function exportRun(run: Run, at = run.timing.lastAt): RunExport {
   const timing = closeTiming(run.timing, at, run.state.phase, run.state.round)
   return {
-    version: 3,
+    version: 4,
     seed: run.seed,
     players: run.players,
     config: run.config,
@@ -37,16 +37,20 @@ export function exportRun(run: Run, at = run.timing.lastAt): RunExport {
 
 /**
  * Loads a save file: checks the version and the config, then replays every action through the
- * engine (an illegal action means a bad file). Returns the run or a plain error message.
+ * engine (an illegal action means a bad file). Returns the run or a plain error message. A
+ * version 3 file (phase 21) still loads: its config gets the phase 22 options at their defaults
+ * (off), which replay a phase 21 run unchanged.
  */
 export function importRun(text: string, at = 0): Readonly<{ run: Run } | { error: string }> {
   try {
-    const data = JSON.parse(text) as Partial<RunExport>
+    const data = JSON.parse(text) as Partial<Omit<RunExport, 'version'>> & { version?: unknown }
     if (typeof data.version === 'number' && data.version < 3) {
       return { error: 'This run file is from an earlier version and cannot be replayed.' }
     }
-    if (data.version !== 3) return { error: 'This is not a version 3 run file.' }
-    const config = GameConfigSchema.safeParse(data.config)
+    if (data.version !== 3 && data.version !== 4) {
+      return { error: 'This is not a version 3 or 4 run file.' }
+    }
+    const config = GameConfigSchema.safeParse(withConfigDefaults(data.config))
     if (!config.success) return { error: 'The run file has an invalid config.' }
     if (typeof data.seed !== 'number' || !Array.isArray(data.actions)) {
       return { error: 'The run file has no seed or no action list.' }

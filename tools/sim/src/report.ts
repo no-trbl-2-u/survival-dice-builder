@@ -12,6 +12,7 @@ export type TimedExport = Readonly<{
   }>
 }>
 
+/** A number with `digits` decimals, or `-` when there is none (NaN). */
 const fmt = (n: number, digits = 1) => (Number.isFinite(n) ? n.toFixed(digits) : '-')
 const percent = (part: number, whole: number) =>
   whole > 0 ? `${fmt((100 * part) / whole, 0)}%` : '-'
@@ -38,6 +39,11 @@ export function compareTable(
     row('Middle half', (s) => `${s.middleHalf[0]}-${s.middleHalf[1]}`),
     row('Range', (s) => `${s.minEndRound}-${s.maxEndRound}`),
     row('Median level', (s) => String(s.medianLevel)),
+    row('Median level at round 3 / 6 / 9', (s) =>
+      [s.levelAt['3'], s.levelAt['6'], s.levelAt['9']].map((n) => fmt(n, 0)).join(' / '),
+    ),
+    row('Runs that reach the miniature limit', (s) => `${s.capReached} of ${s.runs}`),
+    row('Median round the limit is first reached', (s) => fmt(s.medianCapRound, 0)),
     row('Causes', causes),
     '',
     'Bot runs have no wall clock, so minutes per round come only from real run exports:',

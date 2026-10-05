@@ -38,7 +38,9 @@ describe('describeAction', () => {
     const placed = applyAction(start, { type: 'placeFigure', q: 0, r: 0 }).state
     const state = {
       ...placed,
-      enemies: [{ id: 'e3', kind: 'grunt', health: 2, hex: { q: 1, r: 0 } }],
+      enemies: [
+        { id: 'e3', kind: 'grunt', health: 2, hex: { q: 1, r: 0 }, attackedThisCombat: false },
+      ],
     }
     expect(describeAction({ type: 'chooseTowerTarget', tower: 'd1', enemy: 'e3' }, state)).toMatch(
       /^Tower d1 shoots grunt e3 on .+, 2 health$/,

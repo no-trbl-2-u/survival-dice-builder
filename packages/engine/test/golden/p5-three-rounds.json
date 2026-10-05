@@ -114,13 +114,29 @@
       "maxRolls": 3,
       "exchangeRange": 2,
       "enemyMoveHexes": 2,
-      "moveCostNextToEnemy": 2
+      "moveCostNextToEnemy": 2,
+      "enemyAttacks": "every-exchange",
+      "adjacentAttack": "target-only"
     },
     "experience": {
       "firstStep": 5,
-      "stepIncrease": 5
+      "stepIncrease": 5,
+      "eliteBonus": 0,
+      "levelPerEliteSpawn": false
     },
     "miniatureLimit": 20,
+    "clock": {
+      "forcedRevealEvery": null
+    },
+    "spawn": {
+      "rampEvery": null,
+      "newTileDelay": 0,
+      "perSeat": false,
+      "nodeRange": null
+    },
+    "gather": {
+      "offNodeAmount": 0
+    },
     "knockout": {
       "returnHealthDivisor": 2,
       "loseMaterials": true
@@ -630,5 +646,6 @@
       "type": "confirmAssignment"
     }
   ],
-  "expectedHash": "9833afb711bd3a6ccb88e5a3d6df2f5973ebabeb0d2b6757efdc2c0c7259f828"
+  "expectedHash": "94d33f681ad14bccbc347f606e89e80d9cc96479579afebb7842dcd17305b745",
+  "phase21Hash": "9833afb711bd3a6ccb88e5a3d6df2f5973ebabeb0d2b6757efdc2c0c7259f828"
 }

@@ -1,5 +1,15 @@
 import { hexDistance, legalActions, type Action, type GameState } from '@survival/engine'
-import { atGoal, cheapestUpgrade, enemyOn, goal, me, onBaseTile, siteAt, spent } from './goals.ts'
+import {
+  atGoal,
+  cheapestUpgrade,
+  enemyOn,
+  goal,
+  me,
+  onBaseTile,
+  siteAt,
+  spent,
+  type BotPolicy,
+} from './goals.ts'
 
 type Of<T extends Action['type']> = Extract<Action, { type: T }>
 
@@ -9,23 +19,28 @@ const ofType = <T extends Action['type']>(actions: readonly Action[], type: T): 
 /** Skill effect order for dice placement: damage first, then guard, heal, and Dodge. */
 const EFFECT_ORDER = ['damage', 'guard', 'heal', 'ignoreHit'] as const
 
+/** Bot options: the play style (default: `default`). */
+export type BotOptions = Readonly<{ policy?: BotPolicy }>
+
 /**
  * The bot's choice for the current decision: always one of `legalActions(state)`, chosen by
  * fixed priorities (no randomness). Undefined when the run has ended.
  *
  * @param state - any engine state.
+ * @param options - `policy: "turtle"` keeps the figure on the Base tile (phase 22 sim option).
  * @returns a legal action, or undefined when there is none.
  */
-export function botChoice(state: GameState): Action | undefined {
+export function botChoice(state: GameState, options: BotOptions = {}): Action | undefined {
+  const policy = options.policy ?? 'default'
   const actions = legalActions(state)
   if (actions.length === 0) return undefined
   return (
-    required(state, actions) ??
+    required(state, actions, policy) ??
     ofType(actions, 'buyCard')[0] ??
     building(state, actions) ??
-    moving(state, actions) ??
+    moving(state, actions, policy) ??
     combat(state, actions) ??
-    prepareCard(state, actions) ??
+    prepareCard(state, actions, policy) ??
     actions[0]
   )
 }
@@ -34,8 +49,15 @@ export function botChoice(state: GameState): Action | undefined {
  * The start hex (also when returning from a knockout), Tower ties (the weakest enemy), starter
  * returns, and drafts: decisions that block everything else.
  */
-function required(state: GameState, actions: readonly Action[]): Action | undefined {
-  const start = ofType(actions, 'placeFigure')[0]
+function required(
+  state: GameState,
+  actions: readonly Action[],
+  policy: BotPolicy,
+): Action | undefined {
+  const starts = ofType(actions, 'placeFigure')
+  // The turtle starts on the base hex itself when it is free.
+  const start =
+    (policy === 'turtle' ? starts.find((a) => a.q === 0 && a.r === 0) : undefined) ?? starts[0]
   if (start) return start
   const health = (id: string) => state.enemies.find((e) => e.id === id)?.health ?? 0
   const shot = [...ofType(actions, 'chooseTowerTarget')].sort(
@@ -73,14 +95,20 @@ function building(state: GameState, actions: readonly Action[]): Action | undefi
 
 /**
  * An active Move: step closer to the goal (off the map edge to reveal a tile when the goal is
- * there), never into a skirmish; stop when no step helps.
+ * there), never into a skirmish; stop when no step helps. The turtle never steps off the Base
+ * tile.
  */
-function moving(state: GameState, actions: readonly Action[]): Action | undefined {
+function moving(
+  state: GameState,
+  actions: readonly Action[],
+  policy: BotPolicy,
+): Action | undefined {
   if (state.active?.kind !== 'move' || state.exchange) return undefined
-  const target = goal(state)
+  const target = goal(state, policy)
   const here = hexDistance(me(state).hex, target)
   const step = ofType(actions, 'moveTo')
     .filter((m) => !enemyOn(state, m))
+    .filter((m) => policy !== 'turtle' || onBaseTile(state, m))
     .filter((m) => hexDistance(m, target) < here)
     .sort((a, b) => hexDistance(a, target) - hexDistance(b, target))[0]
   return step ?? ofType(actions, 'stopMoving')[0]
@@ -126,11 +154,15 @@ function combat(state: GameState, actions: readonly Action[]): Action | undefine
 
 /**
  * A Prepare card: Build on the base when an upgrade is affordable (or off the base when every
- * upgrade is bought), Gather on an unspent gathering node, Rest when hurt, Move when away from
- * the goal.
+ * upgrade is bought), Gather on an unspent gathering node (or anywhere when `gather.offNodeAmount`
+ * gives materials, row 67), Rest when hurt, Move when away from the goal.
  * A card with no use is discarded (when discarding is allowed).
  */
-function prepareCard(state: GameState, actions: readonly Action[]): Action | undefined {
+function prepareCard(
+  state: GameState,
+  actions: readonly Action[],
+  policy: BotPolicy,
+): Action | undefined {
   const plays = ofType(actions, 'playCard')
   if (plays.length === 0) return undefined
   const player = me(state)
@@ -150,11 +182,12 @@ function prepareCard(state: GameState, actions: readonly Action[]): Action | und
         return upgrade === Number.POSITIVE_INFINITY && player.materials >= 2 ? 1 : -1
       }
       case 'gather':
-        return siteAt(state, player.hex) === 'gathering-node' && !spent(state, player.hex) ? 3 : -1
+        if (siteAt(state, player.hex) === 'gathering-node' && !spent(state, player.hex)) return 3
+        return state.config.gather.offNodeAmount > 0 ? 0 : -1
       case 'rest':
         return player.health <= player.maxHealth - 3 ? 2 : -1
       case 'move':
-        return atGoal(state) ? -1 : 2
+        return atGoal(state, policy) ? -1 : 2
     }
   }
   const best = [...plays].sort((a, b) => useful(b) - useful(a))[0]

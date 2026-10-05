@@ -25,8 +25,13 @@ export type Phase = 'setup' | 'prepare' | 'combat' | 'ended'
 /** One hex on the map, copied from the tile that holds it. @rule 3.3, 3.5 */
 export type MapHex = Readonly<{ terrain: Terrain; site: Site | null; tile: string }>
 
-/** A tile placed on the map, by its center hex. @rule 3.1, 4.1, 4.2, 10.1 */
-export type PlacedTile = Readonly<{ tile: string; center: Axial }>
+/**
+ * A tile placed on the map, by its center hex, and the round it was revealed (0 for the Base
+ * tile at setup). `spawn.newTileDelay` reads the round (row 66).
+ *
+ * @rule 3.1, 4.1, 4.2, 10.1, core loop v2 row 66
+ */
+export type PlacedTile = Readonly<{ tile: string; center: Axial; revealedRound: number }>
 
 /** The board. `hexes` is keyed by `hexKey` ("q,r"). @rule 3 */
 export type GameMap = Readonly<{
@@ -78,8 +83,20 @@ export type Assignment = Readonly<{
   asFace: SkillFace
 }>
 
-/** An enemy on the board. @rule 9, 3.7 */
-export type Enemy = Readonly<{ id: string; kind: string; health: number; hex: Axial }>
+/**
+ * An enemy on the board. `attackedThisCombat` is set only with `combat.enemyAttacks:
+ * "once-per-combat"`: the enemy has attacked (it is tipped over) and does not attack again until
+ * the next Combat start (row 65).
+ *
+ * @rule 9, 3.7, core loop v2 row 65
+ */
+export type Enemy = Readonly<{
+  id: string
+  kind: string
+  health: number
+  hex: Axial
+  attackedThisCombat: boolean
+}>
 
 /** A player's board, deck, and tracks. @rule 2.1, 4.6-4.10 */
 export type Player = Readonly<{
@@ -154,12 +171,20 @@ export type Draft = Readonly<{
   kept: string | null
 }>
 
-/** Run counters for the milestones. @rule 17 */
+/**
+ * Run counters for the milestones, the forced reveal (row 63), and the sim reports.
+ *
+ * @rule 17, core loop v2 row 63
+ */
 export type Progress = Readonly<{
   elitesDefeated: number
   firedSkills: readonly string[]
   tilesRevealed: number
   cardsBought: number
+  /** The round of the last tile reveal (0: none yet). `clock.forcedRevealEvery` reads it. */
+  lastRevealRound: number
+  /** The round the miniature limit first turned a grunt into an elite, or null. */
+  capReachedRound: number | null
 }>
 
 /** The content the engine needs, copied into the state so a run replays from the state alone. */
@@ -178,7 +203,7 @@ export type EngineContent = Readonly<{
  * @rule 4, 5
  */
 export type GameState = Readonly<{
-  version: 3
+  version: 4
   seed: number
   config: GameConfig
   content: EngineContent

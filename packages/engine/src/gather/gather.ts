@@ -8,9 +8,11 @@ import type { GameState } from '../state/types.ts'
  * node is spent for good (core loop v2: each node gives materials once; all nodes are alike).
  * No node, a spent node, or an enemy on the hex (6.9) gives nothing. With
  * `rulings.gatherNeedsNode` off (row 20 read literally, row 59), Gather also works off a node,
- * and only a node is spent.
+ * and only a node is spent. With `gather.offNodeAmount` above 0 (row 67, proposed), a Gather on
+ * a spent node or off any node gives that many materials instead of nothing; nodes stay
+ * single-use.
  *
- * @rule 6.7, 6.9, Table 1, Table 8, OPEN-QUESTIONS rows 20, 59
+ * @rule 6.7, 6.9, Table 1, Table 8, OPEN-QUESTIONS rows 20, 59, 67
  */
 export function gather(state: GameState, amount: number): Step {
   const player = currentPlayer(state)
@@ -19,7 +21,8 @@ export function gather(state: GameState, amount: number): Step {
     !state.spentNodes.some((n) => sameHex(n, player.hex))
   const blocked = !!enemyAt(state, player.hex)
   const allowed = !blocked && (onNode || !state.config.rulings.gatherNeedsNode)
-  const gained = allowed ? amount : 0
+  const offNode = blocked ? 0 : state.config.gather.offNodeAmount
+  const gained = allowed ? amount : offNode
   const materials = player.materials + gained
   const spentNodes = allowed && onNode ? [...state.spentNodes, player.hex] : state.spentNodes
   return [

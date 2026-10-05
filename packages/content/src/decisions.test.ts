@@ -48,6 +48,9 @@ describe('decisions', () => {
     expect(flagSettings('(engine, `moveCost`)', config)).toEqual([])
     const [unknown] = flagSettings('`milestones.nope: 10`', config)
     expect(unknown).toMatchObject({ path: null, current: null, differs: false })
+    // An option that is off (null) reads as "empty", and matches a row that names null.
+    const [off] = flagSettings('`clock.forcedRevealEvery: null`', config)
+    expect(off).toMatchObject({ named: 'empty', current: 'empty', differs: false })
     // "(future ...)" notes name no setting.
     expect(flagSettings('`structureDamage: "v1"` (future `"grunt-die"`)', config)).toHaveLength(1)
   })

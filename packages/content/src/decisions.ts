@@ -90,6 +90,9 @@ function at(config: unknown, path: string): unknown {
     .reduce<unknown>((o, k) => (o as Record<string, unknown> | undefined)?.[k], config)
 }
 
+/** An empty optional value (`null`, an option that is off) reads as `empty`. */
+const shown = (json: string | null): string | null => (json === 'null' ? 'empty' : json)
+
 /** A row's named value as JSON text: `"v1"`, `1`, `true` parse; anything else is quoted. */
 function namedJson(text: string): string {
   try {
@@ -123,8 +126,8 @@ export function flagSettings(flag: string, config: GameConfig): FlagSetting[] {
       {
         key: name,
         path,
-        named,
-        current,
+        named: shown(named),
+        current: shown(current),
         differs: named !== null && current !== null && named !== current,
       },
     ]

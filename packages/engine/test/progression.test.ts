@@ -27,7 +27,7 @@ const withPlayer = (s: GameState, patch: Partial<GameState['players'][number]>):
   players: [{ ...s.players[0]!, ...patch }],
 })
 
-const grunt = { id: 'e1', kind: 'grunt', health: 2, hex: { q: 1, r: 0 } }
+const grunt = { id: 'e1', kind: 'grunt', health: 2, hex: { q: 1, r: 0 }, attackedThisCombat: false }
 const types = (s: GameState) => new Set(legalActions(s).map((a) => a.type))
 
 describe('experience and levels (8.1-8.5)', () => {
@@ -305,6 +305,8 @@ describe('milestones and the end of the run (14, 17)', () => {
         firedSkills: ['arcane-rain'],
         tilesRevealed: 10,
         cardsBought: 0,
+        lastRevealRound: 9,
+        capReachedRound: null,
       },
     })
     const [after, events] = checkMilestones(s, '10.10')

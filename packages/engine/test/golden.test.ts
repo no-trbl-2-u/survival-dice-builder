@@ -18,12 +18,49 @@ type Golden = Readonly<{
   config: GameConfig
   actions: Action[]
   expectedHash: string
+  /**
+   * The phase 21 (version 3) hash of the same replay. Phase 22 adds options that default off, so
+   * the final state minus the phase 22 fields (`toPhase21`) must still hash to it.
+   */
+  phase21Hash?: string
 }>
 
 const DIR = path.join(import.meta.dirname, 'golden')
 
 function hash(state: GameState): string {
   return createHash('sha256').update(serialize(state)).digest('hex')
+}
+
+/** The phase 22 config keys: every one defaults to the phase 21 rule. */
+const PHASE_22_KEYS: Readonly<Record<string, readonly string[]>> = {
+  combat: ['enemyAttacks', 'adjacentAttack'],
+  experience: ['eliteBonus', 'levelPerEliteSpawn'],
+}
+const PHASE_22_GROUPS = ['clock', 'spawn', 'gather']
+
+/** An object without some keys. */
+const omit = (value: object, keys: readonly string[]): Record<string, unknown> =>
+  Object.fromEntries(Object.entries(value).filter(([k]) => !keys.includes(k)))
+
+/**
+ * A version 4 state as phase 21 (version 3) wrote it: without the phase 22 config keys, tile
+ * reveal rounds, tipped enemies, and run counters.
+ */
+function toPhase21(state: GameState): unknown {
+  const config = Object.fromEntries(
+    Object.entries(omit(state.config, PHASE_22_GROUPS)).map(([group, value]) => [
+      group,
+      PHASE_22_KEYS[group] ? omit(value as object, PHASE_22_KEYS[group]) : value,
+    ]),
+  )
+  return {
+    ...state,
+    version: 3,
+    config,
+    progress: omit(state.progress, ['lastRevealRound', 'capReachedRound']),
+    map: { ...state.map, tiles: state.map.tiles.map(({ tile, center }) => ({ tile, center })) },
+    enemies: state.enemies.map((e) => omit(e, ['attackedThisCombat'])),
+  }
 }
 
 function replay(g: Golden): GameState {
@@ -71,12 +108,16 @@ describe('golden replays', () => {
       it(`regenerates ${g.file}`, () => {
         const config = defaultContent.config
         const run = walk(createGame(config, g.seed), g.policy, g.stop, 50_000)
+        const before = fs.existsSync(file)
+          ? (JSON.parse(fs.readFileSync(file, 'utf-8')) as Golden)
+          : null
         const golden: Golden = {
           description: g.description,
           seed: g.seed,
           config,
           actions: run.actions,
           expectedHash: hash(run.states.at(-1)!),
+          ...(before?.phase21Hash ? { phase21Hash: before.phase21Hash } : {}),
         }
         fs.mkdirSync(DIR, { recursive: true })
         fs.writeFileSync(file, JSON.stringify(golden, null, 2) + '\n')
@@ -87,6 +128,15 @@ describe('golden replays', () => {
       const golden = JSON.parse(fs.readFileSync(file, 'utf-8')) as Golden
       const final = replay(golden)
       expect(hash(final)).toBe(golden.expectedHash)
+    })
+    it(`${g.file} with every phase 22 option off matches the phase 21 state`, () => {
+      const golden = JSON.parse(fs.readFileSync(file, 'utf-8')) as Golden
+      const final = toPhase21(replay(golden))
+      expect(
+        createHash('sha256')
+          .update(serialize(final as GameState))
+          .digest('hex'),
+      ).toBe(golden.phase21Hash)
     })
   }
 })

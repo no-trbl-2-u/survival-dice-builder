@@ -46,6 +46,7 @@ const grunt = (id: string, q: number, r: number) => ({
   kind: 'grunt',
   health: 2,
   hex: { q, r },
+  attackedThisCombat: false,
 })
 
 const moves = (s: GameState) =>
@@ -258,7 +259,11 @@ describe('exploring off the map edge (10.1, core loop v2)', () => {
       q: 2,
       r: -1,
     })
-    expect(state.map.tiles[1]).toEqual({ tile: 'meadowlands', center: { q: 3, r: -2 } })
+    expect(state.map.tiles[1]).toEqual({
+      tile: 'meadowlands',
+      center: { q: 3, r: -2 },
+      revealedRound: 1,
+    })
     expect(state.map.hexes['2,-1']?.terrain).toBe('lake')
     expect(state.players[0]!.hex).toEqual({ q: 1, r: 0 })
     expect(state.active).toMatchObject({ hexesLeft: 1 })

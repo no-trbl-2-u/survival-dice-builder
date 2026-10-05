@@ -12,6 +12,8 @@ export const CSV_COLUMNS = [
   'milestones',
   'baseCurve',
   'enemyCurve',
+  'levelCurve',
+  'capReachedRound',
   'error',
 ] as const
 
@@ -34,6 +36,8 @@ export function toCsv(results: readonly RunResult[]): string {
       r.milestones.join('|'),
       r.baseCurve.join('|'),
       r.enemyCurve.join('|'),
+      r.levelCurve.join('|'),
+      r.capReachedRound === null ? '' : String(r.capReachedRound),
       r.error ?? '',
     ]
       .map(csvField)

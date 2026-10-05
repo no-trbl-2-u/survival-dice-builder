@@ -19,6 +19,7 @@ const grunt = (id: string, q: number, r: number) => ({
   kind: 'grunt',
   health: 2,
   hex: { q, r },
+  attackedThisCombat: false,
 })
 
 describe('knockout (core loop v2, row 55)', () => {

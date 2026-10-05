@@ -3,6 +3,7 @@ import { rerollUnkept, rollDice } from '../dice/dice.ts'
 import { moveEnemies } from '../enemies/movement.ts'
 import { returnKnockedOut } from '../combat/knockout.ts'
 import { spawnAtNodes } from '../enemies/spawning.ts'
+import { forcedReveal } from '../explore/explore.ts'
 import { structureAttacks, towerAttacks } from '../enemies/structures.ts'
 import type { GameEvent } from '../events/events.ts'
 import { draftDue, startDraft } from '../progression/draft.ts'
@@ -152,15 +153,25 @@ function prepareStep(state: GameState): readonly [GameState, readonly GameEvent[
 }
 
 /**
- * Combat setup (core loop v2): every player shuffles the discard pile and turns it bottom-up,
- * the enemies move, every spawn node spawns, and each Tower attacks (a tie waits for its
- * builder's choice). There is no wave track.
+ * Combat start, row 65: every tipped-over enemy stands up again (it may attack in this Combat).
  *
- * @rule 7.1, 7.2, 7.5, 7.6, core loop v2 (Combat steps 1-4)
+ * @rule core loop v2 row 65 (proposed: each enemy attacks once per Combat)
+ */
+export function standEnemiesUp(state: GameState): GameState {
+  if (!state.enemies.some((e) => e.attackedThisCombat)) return state
+  return { ...state, enemies: state.enemies.map((e) => ({ ...e, attackedThisCombat: false })) }
+}
+
+/**
+ * Combat setup (core loop v2): every player shuffles the discard pile and turns it bottom-up,
+ * tipped enemies stand up (row 65), the enemies move, every spawn node spawns, and each Tower
+ * attacks (a tie waits for its builder's choice). There is no wave track.
+ *
+ * @rule 7.1, 7.2, 7.5, 7.6, core loop v2 (Combat steps 1-4), row 65
  */
 function startCombat(state: GameState): Step {
   const [turned, turnEvents] = turnAllDecks(
-    { ...state, phase: 'combat', current: 0, turnFresh: true },
+    standEnemiesUp({ ...state, phase: 'combat', current: 0, turnFresh: true }),
     'bottom',
   )
   const [next, events] = chain(turned, [
@@ -284,10 +295,11 @@ export function rollAgain(state: GameState): Step {
 /**
  * The end of the round, after the Combat structure attack (core loop v2: there is no Explore
  * phase): turn every discard pile without a shuffle (10.6-10.7), do each player's Skill draft
- * when it is due (10.8), add 1 to the round counter (10.9), and record new milestones (10.10).
- * Then the next round starts: knocked-out players return (they choose a start hex first).
+ * when it is due (10.8), reveal a tile when the forced reveal is due (row 63, off by default),
+ * add 1 to the round counter (10.9), and record new milestones (10.10). Then the next round
+ * starts: knocked-out players return (they choose a start hex first).
  *
- * @rule 10.6, 10.7, 10.8, 10.9, 10.10, core loop v2 (end of round, knockout)
+ * @rule 10.6, 10.7, 10.8, 10.9, 10.10, core loop v2 (end of round, knockout), row 63
  */
 function roundEndStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   if (state.draft) return [state, [], true]
@@ -295,10 +307,11 @@ function roundEndStep(state: GameState): readonly [GameState, readonly GameEvent
     return [...turnAllDecks(state, 'top'), false]
   }
   if (draftDue(state)) return [...startDraft(state), false]
+  const [clocked, revealed] = forcedReveal(state)
   const round = state.round + 1
   const [counted, milestones] = checkMilestones(
     {
-      ...state,
+      ...clocked,
       round,
       phase: 'prepare',
       current: 0,
@@ -312,6 +325,7 @@ function roundEndStep(state: GameState): readonly [GameState, readonly GameEvent
   return [
     next,
     [
+      ...revealed,
       { type: 'roundAdvanced', rule: '10.9', round },
       ...milestones,
       { type: 'phaseStarted', rule: '5.1', phase: 'prepare', round },

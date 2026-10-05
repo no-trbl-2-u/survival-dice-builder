@@ -263,25 +263,49 @@ function checkPlayerDown(state: GameState, events: GameEvent[]): GameState {
 }
 
 /**
- * The enemies that attack the current player at the end of an exchange: next to the figure and
- * with this player as their target (core loop v2: each enemy attacks only its target), oldest
- * first.
+ * The enemies that attack the current player at the end of an exchange, oldest first: next to
+ * the figure and with this player as their target (core loop v2: each enemy attacks only its
+ * target). With `combat.adjacentAttack: "any-adjacent"` (row 69) every adjacent enemy attacks,
+ * whatever its target. With `combat.enemyAttacks: "once-per-combat"` (row 65) an enemy that has
+ * attacked in this Combat (tipped over) does not attack again.
  *
- * @rule 7.8 step 8, 9.3, core loop v2 (Combat step 5.4)
+ * @rule 7.8 step 8, 9.3, core loop v2 (Combat step 5.4), rows 65, 69
  */
 export function exchangeAttackers(state: GameState): Enemy[] {
   const player = currentPlayer(state)
+  const anyAdjacent = state.config.combat.adjacentAttack === 'any-adjacent'
   return byAge(state.enemies).filter(
-    (e) => adjacent(e.hex, player.hex) && currentTarget(state, e)?.id === player.id,
+    (e) =>
+      !e.attackedThisCombat &&
+      adjacent(e.hex, player.hex) &&
+      (anyAdjacent || currentTarget(state, e)?.id === player.id),
   )
 }
 
 /**
- * Steps 8-10 of an exchange: each enemy next to the player that targets the player attacks,
- * guard is removed, and played cards go to the discard pile. A player at 0 health is knocked
- * out.
+ * Row 65 (`combat.enemyAttacks: "once-per-combat"`): tips over the enemies that attacked (a
+ * Dodged attack counts), so they do not attack again until the next Combat start. Off: the
+ * state is unchanged.
  *
- * @rule 7.8 steps 8-10, 14.2, core loop v2 (Combat step 5.4, knockout)
+ * @rule core loop v2 row 65 (proposed: each enemy attacks once per Combat)
+ */
+export function tipOver(state: GameState, attackers: readonly Enemy[]): GameState {
+  if (state.config.combat.enemyAttacks !== 'once-per-combat' || attackers.length === 0) {
+    return state
+  }
+  const ids = new Set(attackers.map((e) => e.id))
+  return {
+    ...state,
+    enemies: state.enemies.map((e) => (ids.has(e.id) ? { ...e, attackedThisCombat: true } : e)),
+  }
+}
+
+/**
+ * Steps 8-10 of an exchange: each enemy next to the player that targets the player attacks
+ * (`exchangeAttackers`), guard is removed, and played cards go to the discard pile. A player at
+ * 0 health is knocked out.
+ *
+ * @rule 7.8 steps 8-10, 14.2, core loop v2 (Combat step 5.4, knockout), rows 65, 69
  */
 export function finishExchange(state: GameState): Step {
   const player = currentPlayer(state)
@@ -289,7 +313,7 @@ export function finishExchange(state: GameState): Step {
   const [attacked, events] = enemyAttacks(state, attackers, '7.8')
   const out: GameEvent[] = [...events, { type: 'exchangeEnded', rule: '7.8', player: player.id }]
   let current: GameState = {
-    ...updateCurrentPlayer(attacked, (p) => clearTable({ ...p, guard: 0 })),
+    ...updateCurrentPlayer(tipOver(attacked, attackers), (p) => clearTable({ ...p, guard: 0 })),
     exchange: null,
   }
   current = checkPlayerDown(current, out)

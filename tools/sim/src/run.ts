@@ -1,5 +1,5 @@
 import type { GameConfig } from '@survival/content'
-import { botChoice } from '@survival/bot'
+import { botChoice, type BotPolicy } from '@survival/bot'
 import { applyAction, createGame, type GameState } from '@survival/engine'
 
 /** A run that takes more actions than this is stopped and reported as stalled. */
@@ -16,17 +16,29 @@ export type RunResult = Readonly<{
   baseCurve: readonly number[]
   /** Enemies on the map at the start of each round. */
   enemyCurve: readonly number[]
+  /** The level at the start of each round (index 0 = round 1). */
+  levelCurve: readonly number[]
+  /** The round the miniature limit first turned a grunt into an elite, or null (never). */
+  capReachedRound: number | null
   level: number
   skills: readonly string[]
   milestones: readonly string[]
   actions: number
 }>
 
-/** Plays 1 run with the bot to the end (or to `MAX_ACTIONS`). Same config + seed = same result. */
-export function playRun(config: GameConfig, seed: number): RunResult {
-  let state: GameState = createGame(config, seed)
+/** How a batch is played: seats (1-4, default 1) and the bot policy (default `default`). */
+export type RunOptions = Readonly<{ seats?: number; policy?: BotPolicy }>
+
+/**
+ * Plays 1 run with the bot to the end (or to `MAX_ACTIONS`). Same config + seed + options =
+ * same result. With 2-4 seats the bot plays every seat.
+ */
+export function playRun(config: GameConfig, seed: number, options: RunOptions = {}): RunResult {
+  const policy = options.policy ?? 'default'
+  let state: GameState = createGame(config, seed, undefined, { players: options.seats ?? 1 })
   const baseCurve: number[] = []
   const enemyCurve: number[] = []
+  const levelCurve: number[] = []
   let round = 0
   let actions = 0
   let error: string | null = null
@@ -36,8 +48,9 @@ export function playRun(config: GameConfig, seed: number): RunResult {
         round = state.round
         baseCurve.push(state.base.health)
         enemyCurve.push(state.enemies.length)
+        levelCurve.push(state.level)
       }
-      const action = botChoice(state)
+      const action = botChoice(state, { policy })
       if (!action) break
       state = applyAction(state, action).state
       actions += 1
@@ -54,6 +67,8 @@ export function playRun(config: GameConfig, seed: number): RunResult {
     baseHealth: state.base.health,
     baseCurve,
     enemyCurve,
+    levelCurve,
+    capReachedRound: state.progress.capReachedRound,
     level: state.level,
     skills: state.players[0]?.skills ?? [],
     milestones: state.milestones,
@@ -80,13 +95,32 @@ export type Summary = Readonly<{
   causes: Readonly<Record<string, number>>
   milestones: Readonly<Record<string, number>>
   medianLevel: number
+  /** Median level at the start of rounds 3, 6, and 9, over the runs that reached the round. */
+  levelAt: Readonly<Record<'3' | '6' | '9', number>>
+  /** Runs that reached the miniature limit, and the median round they first did. */
+  capReached: number
+  medianCapRound: number
   rounds: Readonly<Record<string, number>>
 }>
+
+/** The median level at the start of `round`, over the runs that reached it (NaN when none). */
+export function levelAt(results: readonly RunResult[], round: number): number {
+  const at = results
+    .flatMap((r) => {
+      const level = r.levelCurve[round - 1]
+      return level === undefined ? [] : [level]
+    })
+    .sort((a, b) => a - b)
+  return quantile(at, 0.5)
+}
 
 /** Summarizes a batch. */
 export function summarize(results: readonly RunResult[]): Summary {
   const ends = results.map((r) => r.endRound).sort((a, b) => a - b)
   const levels = results.map((r) => r.level).sort((a, b) => a - b)
+  const caps = results
+    .flatMap((r) => (r.capReachedRound === null ? [] : [r.capReachedRound]))
+    .sort((a, b) => a - b)
   const count = (keys: readonly string[]) =>
     keys.reduce<Record<string, number>>((acc, k) => ({ ...acc, [k]: (acc[k] ?? 0) + 1 }), {})
   return {
@@ -100,11 +134,19 @@ export function summarize(results: readonly RunResult[]): Summary {
     causes: count(results.map((r) => r.cause)),
     milestones: count(results.flatMap((r) => r.milestones)),
     medianLevel: quantile(levels, 0.5),
+    levelAt: { '3': levelAt(results, 3), '6': levelAt(results, 6), '9': levelAt(results, 9) },
+    capReached: caps.length,
+    medianCapRound: quantile(caps, 0.5),
     rounds: count(ends.map(String)),
   }
 }
 
 /** Runs `runs` seeds starting at `firstSeed`. */
-export function runBatch(config: GameConfig, runs: number, firstSeed = 1): RunResult[] {
-  return Array.from({ length: runs }, (_, i) => playRun(config, firstSeed + i))
+export function runBatch(
+  config: GameConfig,
+  runs: number,
+  firstSeed = 1,
+  options: RunOptions = {},
+): RunResult[] {
+  return Array.from({ length: runs }, (_, i) => playRun(config, firstSeed + i, options))
 }

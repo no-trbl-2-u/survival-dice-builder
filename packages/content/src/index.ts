@@ -15,6 +15,7 @@ export {
 } from './load.ts'
 export { CardDefSchema, type CardDef, type DeckEntry } from './schemas/cards.ts'
 export { GameConfigSchema, type GameConfig } from './schemas/config.ts'
+export { withConfigDefaults } from './configDefaults.ts'
 export type { CombatEffect, PrepareEffect, SkillEffect } from './schemas/effects.ts'
 export {
   EnemyDefSchema,

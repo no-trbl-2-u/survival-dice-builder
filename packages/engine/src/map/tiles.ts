@@ -27,16 +27,17 @@ export const EMPTY_MAP: GameMap = { tiles: [], hexes: {} }
  * Places a tile with its center on `center`. Hex `i` of the tile goes to `tileHexes(center)[i]`
  * (fixed rotation, row 5). Returns the new map; the input is not changed.
  *
- * @rule 3.1, 4.1, 4.2, 10.1
+ * @param revealedRound - the round of the reveal (0 at setup); row 66 reads it.
+ * @rule 3.1, 4.1, 4.2, 10.1, core loop v2 row 66
  */
-export function placeTile(map: GameMap, tile: TileDef, center: Axial): GameMap {
+export function placeTile(map: GameMap, tile: TileDef, center: Axial, revealedRound = 0): GameMap {
   const positions = tileHexes(center)
   const hexes: Record<string, MapHex> = { ...map.hexes }
   tile.hexes.forEach((hex, i) => {
     const pos = positions[i]
     if (pos) hexes[hexKey(pos)] = { terrain: hex.terrain, site: hex.site, tile: tile.id }
   })
-  return { tiles: [...map.tiles, { tile: tile.id, center }], hexes }
+  return { tiles: [...map.tiles, { tile: tile.id, center, revealedRound }], hexes }
 }
 
 /**

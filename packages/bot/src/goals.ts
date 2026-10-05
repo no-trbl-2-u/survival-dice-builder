@@ -89,19 +89,26 @@ export function edgeHex(state: GameState): Axial | null {
 }
 
 /**
+ * The bot's play style. `default` gathers, explores, and builds; `turtle` never leaves the Base
+ * tile (phase 22: it measures OPEN-QUESTIONS rows 63 and 69). A sim option only.
+ */
+export type BotPolicy = 'default' | 'turtle'
+
+/**
  * Where the figure wants to be: an unspent gathering node while it cannot pay for the next
  * upgrade (or the map edge, to reveal a tile, when no node is left), else the base (to buy
- * upgrades and Shop cards, and to defend it).
+ * upgrades and Shop cards, and to defend it). The turtle always wants the base.
  */
-export function goal(state: GameState): Axial {
+export function goal(state: GameState, policy: BotPolicy = 'default'): Axial {
+  if (policy === 'turtle') return BASE
   const player = me(state)
   if (player.materials < cheapestUpgrade(state)) return homeNode(state) ?? edgeHex(state) ?? BASE
   return BASE
 }
 
 /** True when the figure is on its goal hex. */
-export function atGoal(state: GameState): boolean {
-  const target = goal(state)
+export function atGoal(state: GameState, policy: BotPolicy = 'default'): boolean {
+  const target = goal(state, policy)
   const hex = me(state).hex
   return hex.q === target.q && hex.r === target.r
 }

@@ -221,7 +221,8 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
           const max = state.content.enemies.enemies.find((x) => x.id === e.kind)?.health ?? e.health
           const target = enemyTargets.get(e.id)
           const r = SIZE * 0.55
-          const name = `${e.kind} ${e.id}, ${e.health} of ${max} health`
+          // Row 65 (once per Combat): a tipped-over enemy has attacked and waits for next Combat.
+          const name = `${e.kind} ${e.id}, ${e.health} of ${max} health${e.attackedThisCombat ? ', attacked' : ''}`
           return (
             <g
               key={e.id}
@@ -246,6 +247,11 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
               <text key={e.health} className={`${styles.hpText} ${styles.hit}`} x={0} y={r + 8}>
                 {e.health}/{max}
               </text>
+              {e.attackedThisCombat ? (
+                <text className={styles.hpText} x={0} y={-r - 4}>
+                  Attacked
+                </text>
+              ) : null}
             </g>
           )
         })}

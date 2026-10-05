@@ -4,27 +4,29 @@ import {
   GameConfigSchema,
   parseQuestions,
   parseUserCalls,
+  withConfigDefaults,
 } from '@survival/content'
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, toCsv, toJson } from './format.ts'
 import { playtestReport, type PlaytestExport } from './playtests.ts'
 import { compareTable, timingReport, type TimedExport } from './report.ts'
-import { runBatch, summarize } from './run.ts'
+import { runBatch, summarize, type RunOptions } from './run.ts'
 
 /** The median end-round band the spec targets (spec phase 7 acceptance). */
 const BAND = [8, 14] as const
 
 const usage = `Usage:
-  pnpm sim -- [--runs <n>] [--seed <first seed>] [--config <file.json>] [--out <file.csv|file.json>]
-  pnpm sim -- compare --a <config.json|default> --b <config.json|default> [--runs <n>] [--out report.md]
+  pnpm sim -- [--runs <n>] [--seed <first seed>] [--config <file.json>] [--seats <1-4>] [--policy <default|turtle>] [--out <file.csv|file.json>]
+  pnpm sim -- compare --a <config.json|default> --b <config.json|default> [--runs <n>] [--seats <1-4>] [--policy <default|turtle>] [--out report.md]
   pnpm sim -- timing <export.json ...> [--out report.md]
   pnpm sim -- playtests [--dir docs/playtests/runs] [--estimate 8.5] [--out report.md]
   pnpm sim -- decisions [--out docs/DECISIONS.md]
 
-Plays <n> bot runs (default 200) and prints a summary. --config replaces the default config
-with a full config JSON (validated). --out writes every run as CSV or JSON.
-compare: a bot batch per config, as a markdown table.
+Plays <n> bot runs (default 200) and prints a summary. --config reads a config JSON: keys it
+leaves out take the default (a partial config works). --seats plays 1-4 seats (default 1);
+--policy turtle keeps every figure on the Base tile. --out writes every run as CSV or JSON.
+compare: a bot batch per config (same seeds, seats, and policy), as a markdown table.
 timing: minutes per round and time shares per phase and decision, from real run exports.
 playtests: every run export in a folder, against the 8-9 minutes-per-round estimate.
 decisions: the designer decision digest from OPEN-QUESTIONS.md and plan/AUDIT.md.`
@@ -48,11 +50,25 @@ const here = (p: string) => path.resolve(process.env.INIT_CWD ?? process.cwd(), 
 /** The repository root (this file is tools/sim/src/cli.ts). */
 const REPO = path.resolve(import.meta.dirname, '..', '..', '..')
 
-/** A config file, or the default config for `default` or nothing. */
+/**
+ * A config file, or the default config for `default` or nothing. A partial config (only the
+ * keys an experiment changes) is merged over the default.
+ */
 function readConfig(file: string | undefined) {
   return file && file !== 'default'
-    ? GameConfigSchema.parse(JSON.parse(fs.readFileSync(here(file), 'utf-8')))
+    ? GameConfigSchema.parse(withConfigDefaults(JSON.parse(fs.readFileSync(here(file), 'utf-8'))))
     : defaultContent.config
+}
+
+/** `--seats` and `--policy`, checked. */
+function runOptions(args: Map<string, string>): RunOptions {
+  const seats = Number(args.get('seats') ?? 1)
+  const policy = args.get('policy') ?? 'default'
+  if (!Number.isInteger(seats) || seats < 1 || seats > 4) throw new Error('--seats must be 1-4')
+  if (policy !== 'default' && policy !== 'turtle') {
+    throw new Error('--policy must be default or turtle')
+  }
+  return { seats, policy }
 }
 
 /** Prints markdown and writes it to `--out` when given. */
@@ -74,11 +90,12 @@ if (args.has('help')) {
 }
 const runs = Number(args.get('runs') ?? 200)
 const seed = Number(args.get('seed') ?? 1)
+const options = runOptions(args)
 
 if (command === 'compare') {
   const side = (key: 'a' | 'b') => {
     const name = args.get(key) ?? 'default'
-    const summary = summarize(runBatch(readConfig(name), runs, seed))
+    const summary = summarize(runBatch(readConfig(name), runs, seed, options))
     return { name, summary }
   }
   const a = side('a')
@@ -137,7 +154,7 @@ if (command === 'decisions') {
 
 const config = readConfig(args.get('config'))
 
-const results = runBatch(config, runs, seed)
+const results = runBatch(config, runs, seed, options)
 const summary = summarize(results)
 console.log(describe(summary, BAND))
 

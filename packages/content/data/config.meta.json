@@ -89,6 +89,24 @@
     "help": "Hexes a Move pays to enter a hex next to an enemy.",
     "rule": "6.9"
   },
+  "combat.enemyAttacks": {
+    "label": "Enemy attacks per Combat",
+    "help": "Row 65: how often an enemy attacks in one Combat. Off: the current rule (every exchange). Once per Combat: an enemy that has attacked is tipped over and does not attack again until the next Combat starts.",
+    "rule": "7.8 step 8 (open question 65)",
+    "options": {
+      "every-exchange": "Every exchange (off)",
+      "once-per-combat": "Once per Combat"
+    }
+  },
+  "combat.adjacentAttack": {
+    "label": "Which adjacent enemies attack",
+    "help": "Row 69: at the end of a player's exchange, which enemies next to the figure attack it. Off: the current rule (only enemies that target that player).",
+    "rule": "9.3, 7.8 step 8 (open question 69)",
+    "options": {
+      "target-only": "Only enemies that target the player (off)",
+      "any-adjacent": "Every adjacent enemy"
+    }
+  },
   "experience": {
     "label": "Experience"
   },
@@ -102,10 +120,62 @@
     "help": "Each next level needs this much more experience than the step before it.",
     "rule": "8.5 (open question 17)"
   },
+  "experience.eliteBonus": {
+    "label": "Extra experience for an elite",
+    "help": "Row 17: experience added when an elite is defeated, on top of its normal experience. Off: the current rule (0).",
+    "rule": "8.1 (open question 17)"
+  },
+  "experience.levelPerEliteSpawn": {
+    "label": "1 level for each elite that spawns",
+    "help": "Row 17: when ticked, the level rises by 1 each time an elite spawns (also when the miniature limit turns a grunt into an elite), and experience no longer raises the level. Off: the current rule.",
+    "rule": "8.3 (open question 17)"
+  },
   "miniatureLimit": {
     "label": "Enemy miniature limit",
     "help": "The most enemies on the map. A grunt over the limit turns a grunt into an elite.",
     "rule": "2.2, 10.5 (open question 32)"
+  },
+  "clock": {
+    "label": "Clock (experiment)"
+  },
+  "clock.forcedRevealEvery": {
+    "label": "Forced reveal every",
+    "help": "Row 63: at round end, if no tile was revealed in this many rounds, the top tile of the tile deck is revealed in the open slot nearest the base. Off: the current rule (leave empty).",
+    "rule": "10.1 (open question 63)",
+    "empty": "off"
+  },
+  "spawn": {
+    "label": "Spawn pressure (experiment)"
+  },
+  "spawn.rampEvery": {
+    "label": "Spawn ramp every",
+    "help": "Row 64: each spawn node spawns 1 more enemy every this many rounds (1 + (round - 1) / N, rounded down). Off: the current rule (leave empty).",
+    "rule": "9.2 (open question 64)",
+    "empty": "off"
+  },
+  "spawn.newTileDelay": {
+    "label": "New tile waits",
+    "help": "Row 66: rounds a newly revealed tile waits before its spawn nodes spawn. 1: new tiles wait one round. Off: the current rule (0).",
+    "rule": "9.2, 10.1 (open question 66)"
+  },
+  "spawn.perSeat": {
+    "label": "Spawns scale with seats",
+    "help": "Row 68: when ticked, each spawn node spawns 1 enemy per 2 seats, rounded up (1 for 1-2 seats, 2 for 3-4). Off: the current rule.",
+    "rule": "9.2, 16 (open question 68)"
+  },
+  "spawn.nodeRange": {
+    "label": "Spawn range",
+    "help": "Row 70: only spawn nodes within this many hexes of a player figure, a Barricade, a Tower, or the base spawn. Off: the current rule (leave empty).",
+    "rule": "9.2 (open question 70)",
+    "empty": "off"
+  },
+  "gather": {
+    "label": "Gather (experiment)"
+  },
+  "gather.offNodeAmount": {
+    "label": "Gather off a node",
+    "help": "Row 67: materials a Gather gives on a spent node or off any node. Nodes stay single-use. Off: the current rule (0).",
+    "rule": "6.7 (open question 67)"
   },
   "knockout": {
     "label": "Knockout"

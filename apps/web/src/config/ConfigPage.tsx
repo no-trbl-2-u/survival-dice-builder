@@ -132,7 +132,7 @@ function Field({ schema, value, path, problems, onChange }: FieldProps): ReactNo
         {...a11y}
         type="number"
         min={numberMin(inner as never)}
-        placeholder="no maximum"
+        placeholder={meta?.empty ?? 'no maximum'}
         value={value === null ? '' : String(value)}
         onChange={(e) => onChange(path, e.target.value === '' ? null : Number(e.target.value))}
       />,

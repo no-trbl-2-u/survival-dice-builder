@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest'
 import { compareTable, minutesPerRound, timingReport, type TimedExport } from './report.ts'
 import { summarize, type RunResult } from './run.ts'
 
-const result = (seed: number, endRound: number): RunResult => ({
+const result = (
+  seed: number,
+  endRound: number,
+  capReachedRound: number | null = null,
+): RunResult => ({
   seed,
   endRound,
   cause: 'base',
@@ -13,18 +17,23 @@ const result = (seed: number, endRound: number): RunResult => ({
   milestones: [],
   baseCurve: [],
   enemyCurve: [],
+  levelCurve: [1, 1, 2, 2, 2, 3],
+  capReachedRound,
   error: null,
 })
 
 describe('compareTable', () => {
   it('puts both summaries side by side', () => {
     const a = summarize([result(1, 10), result(2, 12)])
-    const b = summarize([result(1, 14), result(2, 16)])
+    const b = summarize([result(1, 14, 7), result(2, 16)])
     const md = compareTable({ name: 'default', summary: a }, { name: 'hard.json', summary: b })
     expect(md).toContain('| | A: default | B: hard.json |')
     expect(md).toContain('| Median end round | 10 | 14 |')
     expect(md).toContain('| Middle half | 10-12 | 14-16 |')
     expect(md).toContain('| Causes | base 2 | base 2 |')
+    expect(md).toContain('| Median level at round 3 / 6 / 9 | 2 / 3 / - | 2 / 3 / - |')
+    expect(md).toContain('| Runs that reach the miniature limit | 0 of 2 | 1 of 2 |')
+    expect(md).toContain('| Median round the limit is first reached | - | 7 |')
     expect(md).toContain('pnpm sim -- timing')
   })
 })

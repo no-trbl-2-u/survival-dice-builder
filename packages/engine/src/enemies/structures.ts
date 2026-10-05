@@ -123,9 +123,10 @@ function adjacentStructures(
  * Structure attack step: each enemy (oldest first) that is not next to a player's figure attacks 1
  * adjacent structure — a Barricade first, then a Tower, then the base (next to any Base tile
  * hex, row 16). Damage follows
- * `rulings.structureDamage` (row 7). The base at 0 ends the run (14.1).
+ * `rulings.structureDamage` (row 7). The base at 0 ends the run (14.1). An enemy tipped over
+ * by `combat.enemyAttacks: "once-per-combat"` has already attacked and does not (row 65).
  *
- * @rule 7.10, 7.11, 7.12, 12.4, 14.1, OPEN-QUESTIONS row 16
+ * @rule 7.10, 7.11, 7.12, 12.4, 14.1, OPEN-QUESTIONS rows 16, 65
  */
 export function structureAttacks(state: GameState): Step {
   let current = state
@@ -133,7 +134,8 @@ export function structureAttacks(state: GameState): Step {
   for (const { id } of byAge(state.enemies)) {
     if (current.phase === 'ended') break
     const enemy = current.enemies.find((e) => e.id === id)
-    if (!enemy || placedPlayers(current).some((p) => adjacent(p.hex, enemy.hex))) continue
+    if (!enemy || enemy.attackedThisCombat) continue
+    if (placedPlayers(current).some((p) => adjacent(p.hex, enemy.hex))) continue
     const structure = adjacentStructures(current, enemy.hex)[0]
     if (!structure) continue
     const [rolled, damage, faces] = rollEnemyDamage(current, enemy.kind, true)

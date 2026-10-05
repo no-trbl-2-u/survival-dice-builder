@@ -12,6 +12,18 @@ test('/config: each field has a label, help with its rules section, and plain op
   await expect(page.getByRole('group', { name: 'Designer rulings' })).toBeVisible()
 })
 
+test('/config: the phase 22 experiment options default off, with help that names the row', async ({
+  page,
+}) => {
+  await page.goto('/config')
+  const reveal = page.getByLabel('Forced reveal every', { exact: true })
+  await expect(reveal).toHaveValue('')
+  await expect(reveal).toHaveAttribute('placeholder', 'off')
+  await expect(reveal).toHaveAccessibleDescription(/Row 63: .* Rules 10\.1 \(open question 63\)\./)
+  const attacks = page.getByLabel('Enemy attacks per Combat', { exact: true })
+  await expect(attacks.locator('option:checked')).toHaveText('Every exchange (off)')
+})
+
 test('/config: a bad value is named at its field; Save stays in reach', async ({ page }) => {
   await page.goto('/config')
   const health = page.getByLabel('Maximum health', { exact: true })

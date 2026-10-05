@@ -6,7 +6,7 @@ import { IdSchema, NonNegativeInt, PositiveInt } from './primitives.ts'
  * Every number in the rules, every section 18 option, and every designer-ruling flag from
  * `OPEN-QUESTIONS.md`. The engine reads rule values only from here.
  *
- * @rule 2, 4, 7, 8, 9, 10, 11, 12, 15, 16, 18, OPEN-QUESTIONS rows 1-15
+ * @rule 2, 4, 7, 8, 9, 10, 11, 12, 15, 16, 18, OPEN-QUESTIONS rows 1-15, 17, 63-70
  */
 export const GameConfigSchema = z.object({
   players: z.object({ min: PositiveInt, max: PositiveInt }),
@@ -33,9 +33,35 @@ export const GameConfigSchema = z.object({
     exchangeRange: PositiveInt,
     enemyMoveHexes: PositiveInt,
     moveCostNextToEnemy: PositiveInt,
+    /** Row 65: an enemy attacks every exchange, or once per Combat (then it is tipped over). */
+    enemyAttacks: z.enum(['every-exchange', 'once-per-combat']),
+    /** Row 69: only enemies that target the player attack it, or every adjacent enemy does. */
+    adjacentAttack: z.enum(['target-only', 'any-adjacent']),
   }),
-  experience: z.object({ firstStep: PositiveInt, stepIncrease: NonNegativeInt }),
+  experience: z.object({
+    firstStep: PositiveInt,
+    stepIncrease: NonNegativeInt,
+    /** Row 17: extra experience for defeating an elite. */
+    eliteBonus: NonNegativeInt,
+    /** Row 17: the level rises by 1 for each elite that spawns, not from experience. */
+    levelPerEliteSpawn: z.boolean(),
+  }),
   miniatureLimit: PositiveInt,
+  /** Row 63: a tile is revealed at round end when none was revealed in this many rounds. */
+  clock: z.object({ forcedRevealEvery: PositiveInt.nullable() }),
+  /** Spawn pressure and upkeep (rows 64, 66, 68, 70). Null or off = the phase 21 rule. */
+  spawn: z.object({
+    /** Row 64: each node spawns 1 more enemy every this many rounds. */
+    rampEvery: PositiveInt.nullable(),
+    /** Row 66: rounds a new tile waits before its nodes spawn. */
+    newTileDelay: NonNegativeInt,
+    /** Row 68: each node spawns 1 enemy per 2 seats, rounded up. */
+    perSeat: z.boolean(),
+    /** Row 70: only nodes within this many hexes of a figure or a structure spawn. */
+    nodeRange: PositiveInt.nullable(),
+  }),
+  /** Row 67: materials a Gather gives on a spent node or off any node. */
+  gather: z.object({ offNodeAmount: NonNegativeInt }),
   /** A player at 0 health is knocked out and returns at the next round start (core loop v2, row 55). */
   knockout: z.object({ returnHealthDivisor: PositiveInt, loseMaterials: z.boolean() }),
   shop: z.object({ offers: PositiveInt }),

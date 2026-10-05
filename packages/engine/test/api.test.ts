@@ -20,7 +20,13 @@ function started(seed: number, cfg: GameConfig = config): GameState {
 }
 
 /** A grunt next to the base hex, where the player starts. */
-const nearGrunt = (id = 'e1') => ({ id, kind: 'grunt', health: 2, hex: { q: 1, r: 0 } })
+const nearGrunt = (id = 'e1') => ({
+  id,
+  kind: 'grunt',
+  health: 2,
+  hex: { q: 1, r: 0 },
+  attackedThisCombat: false,
+})
 
 /** A started run whose only enemy is a grunt next to the player. */
 const withGrunt = (seed: number) => ({ ...noSpawns(started(seed)), enemies: [nearGrunt()] })
@@ -39,7 +45,9 @@ describe('createGame (section 4)', () => {
   it('4.1, core loop v2 places the Base tile alone and waits for the start hex', () => {
     const s = createGame(config, 1)
     expect(s.phase).toBe('setup')
-    expect(s.map.tiles).toEqual([{ tile: 'broken-village', center: { q: 0, r: 0 } }])
+    expect(s.map.tiles).toEqual([
+      { tile: 'broken-village', center: { q: 0, r: 0 }, revealedRound: 0 },
+    ])
     expect(s.unplaced).toEqual(['p1'])
     expect(legalActions(s)).toHaveLength(7)
     expect(legalActions(s).every((a) => a.type === 'placeFigure')).toBe(true)
@@ -126,7 +134,13 @@ describe('Combat exchange (7.8)', () => {
     players: [{ ...s.players[0]!, hex: { q: 3, r: 0 } }],
     enemies: [{ ...enemy, hex: { q: 4, r: 0 } }],
   })
-  const elite = { id: 'e9', kind: 'elite', health: 14, hex: { q: 4, r: 0 } }
+  const elite = {
+    id: 'e9',
+    kind: 'elite',
+    health: 14,
+    hex: { q: 4, r: 0 },
+    attackedThisCombat: false,
+  }
 
   it('7.8 steps 1-2 draw 3 and roll all action dice', () => {
     const s = inCombat()
@@ -189,7 +203,9 @@ describe('Combat exchange (7.8)', () => {
     let s = inCombat()
     s = {
       ...s,
-      enemies: [{ id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 } }],
+      enemies: [
+        { id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 }, attackedThisCombat: false },
+      ],
       exchange: {
         ...s.exchange!,
         step: 'assign',
@@ -215,8 +231,8 @@ describe('Combat exchange (7.8)', () => {
     s = {
       ...s,
       enemies: [
-        { id: 'e1', kind: 'grunt', health: 2, hex: { q: 1, r: 0 } },
-        { id: 'e2', kind: 'grunt', health: 2, hex: { q: 0, r: 1 } },
+        { id: 'e1', kind: 'grunt', health: 2, hex: { q: 1, r: 0 }, attackedThisCombat: false },
+        { id: 'e2', kind: 'grunt', health: 2, hex: { q: 0, r: 1 }, attackedThisCombat: false },
       ],
       exchange: { ...s.exchange!, step: 'assign', dice: [{ face: 'Sword', kept: false }] },
       players: [{ ...s.players[0]!, hand: [], inPlay: s.players[0]!.hand }],
@@ -328,8 +344,8 @@ describe('applyAction contract', () => {
   })
 
   it('deserialize rejects text that is not a game state', () => {
-    expect(() => deserialize('{"version":3}')).toThrow(/version 3/)
-    expect(() => deserialize('{"version":2,"players":[]}')).toThrow(/version 3/)
+    expect(() => deserialize('{"version":3}')).toThrow(/version 4/)
+    expect(() => deserialize('{"version":2,"players":[]}')).toThrow(/version 4/)
   })
 })
 
@@ -345,7 +361,9 @@ describe('Combat card effects (7.8 step 5)', () => {
     const hand = defs.map((def, i) => ({ id: `x${i}`, def }))
     return {
       ...s,
-      enemies: [{ id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 } }],
+      enemies: [
+        { id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 }, attackedThisCombat: false },
+      ],
       players: [{ ...p, hand, discard: [...p.discard, ...p.hand] }],
       exchange: {
         ...s.exchange!,

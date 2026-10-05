@@ -25,7 +25,7 @@ kit (`docs/playtests/`, `pnpm sim -- playtests`).
 ### 9. Skill capacity (rule 2.1)
 
 - Status: pending-spec 2026-10-04 (Skill design)
-- Reading: The 4 starter Skills are fixed; at most 6 drafted Skills; when full, the kept Skill replaces one (current engine). **Designer 2026-10-04:** experiment with Skill caps (phase 21), and add upgraded Skill tiers (for example Fireball III) so a late draft is never wasted. The Skills themselves are placeholders still to design.
+- Reading: The 4 starter Skills are fixed; at most 6 drafted Skills; when full, the kept Skill replaces one (current engine). **Designer 2026-10-04:** experiment with Skill caps (phase 21), and add upgraded Skill tiers (for example Fireball III) so a late draft is never wasted. The Skills themselves are placeholders still to design. **Phase 22 (bot report):** caps of 4, 6, and 8 give identical batches; runs are too short for a cap to bind (keep 6, re-run with longer runs). Report: `docs/reports/phase-22-experiments.md`.
 - Setting: `player.draftSlots` = `6`; `rulings.fullBoardDraft` = `"swap"`
 
 ### 12. Heal targets in co-op (Mend, Rest, Renewal, Purify) (rule Table 3, 6.7)
@@ -37,8 +37,8 @@ kit (`docs/playtests/`, `pnpm sim -- playtests`).
 ### 17. "Each next level needs 5 more than the last step." (rule 8.5)
 
 - Status: pending-spec 2026-10-04 (experiment: phase 21)
-- Reading: Current engine: steps grow by 5 (level 2 at 5, 3 at 15, 4 at 30, 5 at 50). **Designer 2026-10-04:** compare models before deciding: steps of 3; steps of 5 with more experience from elites; 1 level for each elite that spawns (phase 21 bot report).
-- Setting: `experience.firstStep` = `5`; `experience.stepIncrease` = `5`
+- Reading: Current engine: steps grow by 5 (level 2 at 5, 3 at 15, 4 at 30, 5 at 50). **Designer 2026-10-04:** compare models before deciding: steps of 3; steps of 5 with more experience from elites; 1 level for each elite that spawns (phase 21 bot report). **Phase 22 (bot report):** steps of 3 give 1 more level by round 9 (recommend: turn on); extra elite experience (`eliteBonus: 5`) changes almost nothing; 1 level per elite spawn levels far too fast (recommend: keep off). Report: `docs/reports/phase-22-experiments.md`.
+- Setting: `experience.firstStep` = `5`; `experience.stepIncrease` = `5`; `experience.eliteBonus` = `0`; `experience.levelPerEliteSpawn` = `false`
 
 ### 30. On the base hex, Build is always a base upgrade (never a defense on an adjacent hex)? (rule 6.7, 12.1)
 
@@ -108,51 +108,51 @@ kit (`docs/playtests/`, `pnpm sim -- playtests`).
 
 ### 63. No clock: enemies spawn only on revealed tiles, and only players reveal tiles. The score is rounds survived. A run where nobody steps off the Base tile never ends (row 62). What replaces the wave track as the clock? (rule Core loop v2)
 
-- Status: proposed 2026-10-05 (structural; plan-a-phase)
-- Reading: **None yet.** Candidates: a forced reveal every N rounds, spawn nodes on the Base tile's edge after round N, or a round cap in the score. Structural: no card, Skill, elite, or structure fixes it.
-- Setting: not a config setting ((none))
+- Status: proposed 2026-10-05 (structural; option measured in phase 22)
+- Reading: **Proposed: forced reveal** (option, default off; measured in phase 22). At round end, if no tile was revealed in the last N rounds and the tile deck is not empty, the top tile is revealed in the open slot nearest the base (ties: slot order). Bot report: without it a turtle run never ends; with N = 3 the turtle ends in rounds 8-14 (median 11). Recommendation: turn on. Report: `docs/reports/phase-22-experiments.md`.
+- Setting: `clock.forcedRevealEvery` = `empty`
 
 ### 64. Difficulty is a function of map state, not time: spawns per Combat equal revealed spawn nodes (0 to 13 with 8 tiles), chosen by the players. How does pressure ramp with the round? (rule Core loop v2)
 
-- Status: proposed 2026-10-05 (structural; plan-a-phase)
-- Reading: **None yet.** Candidates: spawn count per node tied to the round, or a reveal schedule. Structural.
-- Setting: not a config setting ((none))
+- Status: proposed 2026-10-05 (structural; option measured in phase 22)
+- Reading: **Proposed: spawn ramp** (option, default off; measured in phase 22). Each node spawns `1 + floor((round - 1) / N)` enemies per Combat, with the usual spill-over and cap. Bot report (N = 4): end round unchanged (runs end before the ramp builds), cap reached in 180 of 200 runs. Recommendation: needs a playtest with the combined set. Report: `docs/reports/phase-22-experiments.md`.
+- Setting: `spawn.rampEvery` = `empty`
 
 ### 65. Exchange count is coupled to deck size: deck 10 with hand 3 gives 4 exchanges per Combat (deck 6 gave 2), and enemies attack once per exchange. One adjacent grunt deals 8 per round against 15 health, and every bought card adds an exchange. Phase 20 batch: median end round 5, 199 of 200 runs end by player death; phase 21 batch: median round 6, all by base fall. Intended? (rule 7.8 step 8, core loop v2)
 
-- Status: proposed 2026-10-05 (structural; plan-a-phase)
-- Reading: **Open.** Candidates: enemies attack once per Combat, or once per N exchanges, or a fixed exchange count. Structural.
-- Setting: `combat.exchangeRange` = `2`
+- Status: proposed 2026-10-05 (structural; option measured in phase 22)
+- Reading: **Proposed: each enemy attacks once per Combat** (option, default off; measured in phase 22). An enemy that has attacked is tipped over and does not attack again until the next Combat start. Bot report: median end round 6 to 7. Recommendation: turn on. Report: `docs/reports/phase-22-experiments.md`.
+- Setting: `combat.enemyAttacks` = `"every-exchange"`
 
 ### 66. A tile revealed in Prepare spawns at that same round's Combat, and players do not move in Combat. The explorer ends Prepare on a fresh tile and is pinned next to new spawns for every exchange. Is that the intended cost of exploring? (rule Core loop v2)
 
-- Status: proposed 2026-10-05 (structural; plan-a-phase)
-- Reading: **Open.** Candidates: new tiles spawn one round later, or players may step once at Combat start. Structural (ordering).
-- Setting: not a config setting ((none))
+- Status: proposed 2026-10-05 (structural; option measured in phase 22)
+- Reading: **Proposed: new tiles wait one round** (option, default off; measured in phase 22). A tile's nodes first spawn at the Combat of the round after its reveal; /play names the node "spawns from round N". Bot report: median end round 6 to 7. Recommendation: turn on. Report: `docs/reports/phase-22-experiments.md`.
+- Setting: `spawn.newTileDelay` = `0`
 
 ### 67. Materials are a fixed budget: 10 single-use nodes give 20 materials per run with starter Gather, and the 6 upgrades cost 33. In 4-player, 2.5 nodes each is below Shop I. Spent nodes leave 4 of 10 starter cards dead in Prepare, and the 10-card minimum forbids thinning them (rule 6.7, Table 6, core loop v2)
 
-- Status: proposed 2026-10-05 (structural; plan-a-phase)
-- Reading: **Open.** Candidates: nodes recharge every N rounds, more tiles, Gather off a node for 1, or the minimum deck excluding Gather. Tiles raise the cap; cards and Skills cannot.
-- Setting: `deck.minimumSize` = `10`; `rulings.gatherNeedsNode` = `true`; `tiles.json`: no config field
+- Status: proposed 2026-10-05 (structural; option measured in phase 22)
+- Reading: **Proposed: Gather off a node gives 1** (option, default off; measured in phase 22). Gather on a spent node or off any node gives `gather.offNodeAmount` materials; nodes stay single-use. Bot report: median end round 6 to 9, the largest single change. Recommendation: turn on. Report: `docs/reports/phase-22-experiments.md`.
+- Setting: `gather.offNodeAmount` = `0`
 
 ### 68. Co-op does not scale pressure: spawns per node are fixed per Combat regardless of seats, player damage scales with seats, and materials per player fall with seats (row 67) (rule 16, core loop v2)
 
-- Status: proposed 2026-10-05 (structural; plan-a-phase)
-- Reading: **Open.** Candidates: spawns per node equal to the seat count, or a seat-count tile deck. Structural.
-- Setting: not a config setting ((none))
+- Status: proposed 2026-10-05 (structural; option measured in phase 22)
+- Reading: **Proposed: seat scaling** (option, default off; measured in phase 22). Each node spawns 1 enemy per 2 seats, rounded up. Bot report: same as the default at 2 seats (by construction); at 4 seats median 5 to 4. Co-op is already shorter than solo for the bot. Recommendation: keep off. Report: `docs/reports/phase-22-experiments.md`.
+- Setting: `spawn.perSeat` = `false`
 
 ### 69. Structure-first targeting makes the Base tile a safe firing position: enemies next to the base target the base, not the player beside them, and a player on the Base tile can never be 2 hexes nearer than a structure (row 56). The player hits them every exchange and is never attacked. Turtling plus row 63 is the dominant line (rule 9.3, core loop v2)
 
-- Status: proposed 2026-10-05 (structural; plan-a-phase)
-- Reading: **Open; not yet measured** (the bot does not turtle). Candidates: enemies next to a player attack that player too, or the pull distance is 0 on the Base tile. Structural.
-- Setting: `rulings.playerPullDistance` = `2`
+- Status: proposed 2026-10-05 (structural; option measured in phase 22)
+- Reading: **Proposed: every adjacent enemy attacks** (option, default off; measured in phase 22). In a player's exchange every enemy next to the figure attacks it, whatever its target. Bot report: the turtle bot is now attacked, but the base falls in the same round, and the turtle still outlasts the active bot (median 11 against 6, with the row 63 clock). Recommendation: needs a playtest. Report: `docs/reports/phase-22-experiments.md`.
+- Setting: `combat.adjacentAttack` = `"target-only"`; `rulings.playerPullDistance` = `2`
 
 ### 70. Table upkeep per Combat: up to 13 placements, each with spill-over to the nearest empty hex and a nearest-grunt promotion at the 20 cap, every round (rule Core loop v2, physical edition)
 
-- Status: proposed 2026-10-05 (structural; plan-a-phase)
-- Reading: **Open.** Candidates: spawn every other round, or spawn only on nodes within N hexes of a player or structure. Structural.
-- Setting: `miniatureLimit` = `20`
+- Status: proposed 2026-10-05 (structural; option measured in phase 22)
+- Reading: **Proposed: spawn range** (option, default off; measured in phase 22). Only nodes within N hexes of a player figure, a Barricade, a Tower, or a Base tile hex spawn. Bot report (N = 4): end round unchanged; the upkeep saving is a table question. Recommendation: needs a playtest. Report: `docs/reports/phase-22-experiments.md`.
+- Setting: `spawn.nodeRange` = `empty`; `miniatureLimit` = `20`
 
 ## Checks
 
@@ -166,6 +166,6 @@ kit (`docs/playtests/`, `pnpm sim -- playtests`).
 - **Visual polish feel check (phase 15, 2026-10-03).** On a mid-range laptop, open `/play`, turn on "3D dice", and play a few exchanges. Check that the frame rate feels smooth (headless Chromium: about 17 ms per frame, the canvas's `data-frame-ms`). Check that the synthesized sounds are pleasant at their low volume. Recorded sounds (Kenney CC0 packs, still `candidate` in `ASSETS.md`) are a later swap if wanted. Not blocking.
 - **Spec v2 design work (2026-10-04).** The core loop is settled in `docs/design/core-loop-v2.md`; fold it into `spec/`. Still to design: the new tiles (row 57), knockout values (row 55), the elite structure-damage rule (row 7), per-card heal targets (row 12), the real Skills with upgraded tiers (rows 9, 46, 50), Build versus Repair levels (rows 30, 49), the milestone set (row 4), and later scenarios (row 58). The experience curve waits on the phase 22 report (row 17). Each is listed at `/decisions`.
 - **Interim balance after phase 20 (2026-10-04).** Under the phase 20 rules the 200-run bot batch ends at a median of round 5 (middle half 4-6), against round 14 before. 199 of 200 runs end when the player falls: the bot walks onto new tiles, and their enemies appear around it at the next Combat. Phase 21 replaces the run end at 0 health with knockout and changes spawning and targeting, so re-measure then. A run where nobody steps off the Base tile has no enemies and never ends until phase 21 (row 62). Not blocking.
-- **Balance after phase 21 (2026-10-04).** Under the core loop v2 rules (no wave track, every node spawns at every Combat, structure-first targeting, knockout) the 200-run bot batch ends at a median of round 6 (middle half 6-8, range 5-12), against the 8-14 band. All 200 runs end when the base falls (0 errors, 0 stalled); median level 2; 57 runs buy 3 upgrades, 35 defeat an elite, 22 survive to round 10. The bot is weak (it builds few defenses and never defends the base on purpose), so this is a floor, not a verdict. Phase 22 compares experience curves, Skill caps, and spawn pressure on top of these rules. Not blocking.
-- **Structural v2 questions (2026-10-05).** `OPEN-QUESTIONS.md` rows 63-70 record issues no card, Skill, elite, or structure can fix: no clock (63), map-state difficulty (64), exchange count coupled to deck size (65), the explorer pinned by same-round spawns (66), the fixed material budget (67), co-op pressure (68), the Base tile as a safe firing position (69), and table upkeep (70). Phase 21 shipped with these open; **run `/plan-a-phase` on phase 22 to answer them** before it ships. Not blocking the loop otherwise.
+- **Balance after phase 21 (2026-10-04).** Under the core loop v2 rules (no wave track, every node spawns at every Combat, structure-first targeting, knockout) the 200-run bot batch ends at a median of round 6 (middle half 6-8, range 5-12), against the 8-14 band. All 200 runs end when the base falls (0 errors, 0 stalled); median level 2; 57 runs buy 3 upgrades, 35 defeat an elite, 22 survive to round 10. The bot is weak (it builds few defenses and never defends the base on purpose), so this is a floor, not a verdict. Phase 22 compares experience curves, Skill caps, and spawn pressure on top of these rules. Not blocking. **Phase 22 (2026-10-05):** the comparisons are in `docs/reports/phase-22-experiments.md`; the default batch is unchanged (median 6), Gather off a node for 1 (row 67) alone gives median 9, and the combined proposed set gives median 8 (middle half 8-9).
+- **Structural v2 questions (2026-10-05).** `OPEN-QUESTIONS.md` rows 63-70 record issues no card, Skill, elite, or structure can fix: no clock (63), map-state difficulty (64), exchange count coupled to deck size (65), the explorer pinned by same-round spawns (66), the fixed material budget (67), co-op pressure (68), the Base tile as a safe firing position (69), and table upkeep (70). Phase 22 (2026-10-05) built one proposed reading per row as a config option (all default off) and measured each: `docs/reports/phase-22-experiments.md` recommends turning on rows 63, 65, 66, and 67, keeping 68 off, and playtesting 64, 69, and 70. **The designer decides each row** (set the option on /config to try it, then mark the row decided). Not blocking the loop.
 - **Run the playtests (phase 16, 2026-10-03).** The kit is ready in `docs/playtests/`: `PROTOCOL.md` (one-page script), `SURVEY.md`, and the `REPORT.md` template. Target: 5 solo runs and 3 co-op sessions. Drop each run file into `docs/playtests/runs/`, then run `pnpm sim -- playtests`. The filled report feeds Spec v2 and the scenarios decision (rules section 19). The loop cannot playtest.

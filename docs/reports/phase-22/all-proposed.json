@@ -1,0 +1,6 @@
+{
+  "clock": { "forcedRevealEvery": 3 },
+  "spawn": { "rampEvery": 4, "newTileDelay": 1, "nodeRange": 4 },
+  "combat": { "enemyAttacks": "once-per-combat", "adjacentAttack": "any-adjacent" },
+  "gather": { "offNodeAmount": 1 }
+}

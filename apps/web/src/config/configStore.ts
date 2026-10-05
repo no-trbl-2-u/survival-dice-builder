@@ -1,4 +1,10 @@
-import { defaultContent, GameConfigSchema, metaFor, type GameConfig } from '@survival/content'
+import {
+  defaultContent,
+  GameConfigSchema,
+  metaFor,
+  withConfigDefaults,
+  type GameConfig,
+} from '@survival/content'
 
 /** Browser storage keys (this browser only). */
 export const CONFIG_KEY = 'survival.config.v1'
@@ -16,7 +22,10 @@ export function browserStorage(): KeyValue | undefined {
   }
 }
 
-/** The config new runs use: the stored one when it is valid, else the defaults. */
+/**
+ * The config new runs use: the stored one when it is valid, else the defaults. Keys a stored
+ * config does not have yet (options added after it was saved) take their default values.
+ */
 export function loadConfig(store: KeyValue | undefined): Readonly<{
   config: GameConfig
   custom: boolean
@@ -26,7 +35,7 @@ export function loadConfig(store: KeyValue | undefined): Readonly<{
   try {
     const raw = store?.getItem(CONFIG_KEY)
     if (!raw) return { config: defaults, custom: false, error: null }
-    const parsed = GameConfigSchema.safeParse(JSON.parse(raw))
+    const parsed = GameConfigSchema.safeParse(withConfigDefaults(JSON.parse(raw)))
     if (!parsed.success) {
       return {
         config: defaults,

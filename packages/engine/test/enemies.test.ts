@@ -54,6 +54,7 @@ const grunt = (id: string, q: number, r: number): Enemy => ({
   kind: 'grunt',
   health: 2,
   hex: { q, r },
+  attackedThisCombat: false,
 })
 
 /** A defense token built by p1. */
