@@ -63,6 +63,10 @@ export function describeAction(action: Action, state: GameState): string {
       const max = state.content.enemies.enemies.find((x) => x.id === enemy?.kind)?.health
       return `Target ${enemyName(state, action.enemy)}${enemy ? `, ${enemy.health} of ${max ?? enemy.health} health` : ''}`
     }
+    case 'chooseTowerTarget': {
+      const enemy = state.enemies.find((e) => e.id === action.enemy)
+      return `Tower ${action.tower} shoots ${enemyName(state, action.enemy)}${enemy ? ` on ${hexName(state, enemy.hex)}, ${enemy.health} health` : ''}`
+    }
     case 'placeFigure': {
       const away = stepsAway(baseHex(state), action)
       const whose = state.players.length === 1 ? 'your' : `Player ${state.current + 1}'s`

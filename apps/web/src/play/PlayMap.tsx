@@ -190,7 +190,8 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
         })}
 
         {state.players.map((p, seat) => {
-          if (state.unplaced.includes(p.id)) return null
+          // Not placed yet, or knocked out: the figure is off the map (core loop v2).
+          if (state.unplaced.includes(p.id) || p.knockedOut) return null
           const c = hexToPixel(p.hex, SIZE)
           const label = state.players.length === 1 ? 'You' : `P${seat + 1}`
           const offset =

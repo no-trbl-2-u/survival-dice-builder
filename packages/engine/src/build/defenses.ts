@@ -47,9 +47,10 @@ export function legalBuilds(state: GameState, costReduction: number): BuildOptio
 }
 
 /**
- * Builds a defense: pays the materials and puts the token on the map at full health.
+ * Builds a defense: pays the materials and puts the token on the map at full health. The token
+ * records its builder (Tower ties and currency, rows 35, 40).
  *
- * @rule 12.1, Table 7
+ * @rule 12.1, Table 7, OPEN-QUESTIONS rows 35, 40
  */
 export function buildDefense(state: GameState, defenseId: string, hex: Axial, cost: number): Step {
   const def = state.content.defenses.find((d) => d.id === defenseId)
@@ -58,7 +59,10 @@ export function buildDefense(state: GameState, defenseId: string, hex: Axial, co
   const id = `d${state.nextDefenseId}`
   const next: GameState = {
     ...updateCurrentPlayer(state, (p) => ({ ...p, materials: p.materials - cost })),
-    defenses: [...state.defenses, { id, kind: def.id, hex, health: def.health }],
+    defenses: [
+      ...state.defenses,
+      { id, kind: def.id, hex, health: def.health, builder: player.id },
+    ],
     nextDefenseId: state.nextDefenseId + 1,
   }
   const events: GameEvent[] = [

@@ -117,6 +117,17 @@ describe('Prepare (section 6)', () => {
 describe('Combat exchange (7.8)', () => {
   const inCombat = () => until(withGrunt(3), (x) => x.exchange?.step === 'roll')
 
+  /**
+   * The exchange with the figure off the Base tile on (3,0) and `enemy` next to it on (4,0): the
+   * base is 3 away, so the enemy targets the player (row 56). On the Base tile it would not.
+   */
+  const exposed = (s: GameState, enemy: GameState['enemies'][number] = nearGrunt()): GameState => ({
+    ...s,
+    players: [{ ...s.players[0]!, hex: { q: 3, r: 0 } }],
+    enemies: [{ ...enemy, hex: { q: 4, r: 0 } }],
+  })
+  const elite = { id: 'e9', kind: 'elite', health: 14, hex: { q: 4, r: 0 } }
+
   it('7.8 steps 1-2 draw 3 and roll all action dice', () => {
     const s = inCombat()
     expect(s.players[0]!.hand.length).toBeGreaterThan(0)
@@ -141,7 +152,7 @@ describe('Combat exchange (7.8)', () => {
   })
 
   it('9.5 a grunt next to the player deals 2 damage, guard first (7.8 step 9)', () => {
-    let s = inCombat()
+    let s = exposed(inCombat())
     s = { ...s, players: [{ ...s.players[0]!, guard: 1 }] }
     s = applyAction(s, { type: 'stopRolling' }).state
     while (s.exchange?.step === 'cards')
@@ -228,12 +239,7 @@ describe('Combat exchange (7.8)', () => {
   })
 
   it('9.6 an elite rolls 6 dice and deals Table 4 damage', () => {
-    let s = inCombat()
-    s = {
-      ...s,
-      enemies: [{ id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 } }],
-      players: [{ ...s.players[0]!, health: 15 }],
-    }
+    let s = exposed(inCombat(), elite)
     s = applyAction(s, { type: 'stopRolling' }).state
     while (s.exchange?.step === 'cards')
       s = applyAction(s, { type: 'discardCard', card: s.players[0]!.hand[0]!.id }).state
@@ -245,28 +251,52 @@ describe('Combat exchange (7.8)', () => {
     expect(attack.damage).toBe(attack.faces!.reduce((n, f) => n + table[f], 0))
   })
 
-  it('7.9 with no enemy in range, the exchange has no effect', () => {
+  it('core loop v2 with no enemy near, the exchange is still played (no 7.9 skip)', () => {
     const s = { ...noSpawns(started(3)), enemies: [] }
     const after = until(s, (x) => x.round === 2)
-    expect(after.log.some((e) => e.type === 'exchangeSkipped')).toBe(true)
+    expect(after.log.some((e) => e.type === 'diceRolled')).toBe(true)
   })
 
-  it('14.2 the run ends when the player reaches 0 health', () => {
-    let s = inCombat()
-    s = {
-      ...s,
-      enemies: [{ id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 } }],
-      players: [{ ...s.players[0]!, health: 1 }],
-    }
-    // Never place dice: the elite survives and keeps attacking.
-    s = walk(
+  /** Walks with the first legal action, discarding every card (no heals), until `stop`. */
+  const firstUntil = (s: GameState, stop: (x: GameState) => boolean) =>
+    walk(
       s,
-      (x) => legalActions(x)[0],
-      (x) => x.phase === 'ended',
+      (x) => legalActions(x).find((a) => a.type === 'discardCard') ?? legalActions(x)[0],
+      stop,
     ).states.at(-1)!
-    expect(s.phase).toBe('ended')
-    expect(s.endedBecause).toBe('player')
-    expect(legalActions(s)).toEqual([])
+
+  /** An exposed player with 1 health and 3 materials, walked until the elite knocks them out. */
+  const knockedOut = () => {
+    const s = exposed(inCombat(), elite)
+    const hurt = { ...s, players: [{ ...s.players[0]!, health: 1, materials: 3 }] }
+    const ko = (x: GameState) => x.log.some((e) => e.type === 'playerKnockedOut')
+    return firstUntil(hurt, (x) => ko(x) || x.phase === 'ended')
+  }
+
+  it('14.2, core loop v2 row 55 a player at 0 health is knocked out and the run goes on', () => {
+    const s = knockedOut()
+    expect(s.phase).not.toBe('ended')
+    expect(s.endedBecause).toBeNull()
+    expect(s.log).toContainEqual(
+      expect.objectContaining({ type: 'playerKnockedOut', rule: '14.2', materialsLost: 3 }),
+    )
+    expect(s.players[0]!.materials).toBe(0)
+  })
+
+  it('core loop v2 row 55 a knocked-out player returns at the next round start with half health', () => {
+    const s = firstUntil(knockedOut(), (x) => x.unplaced.length > 0 || x.phase === 'ended')
+    expect(s.phase).toBe('prepare')
+    expect(s.unplaced).toEqual(['p1'])
+    expect(s.players[0]).toMatchObject({ knockedOut: false, health: 8 })
+    expect(s.log).toContainEqual(
+      expect.objectContaining({ type: 'playerReturned', player: 'p1', health: 8 }),
+    )
+    const actions = legalActions(s)
+    expect(actions.length).toBeGreaterThan(0)
+    expect(actions.every((a) => a.type === 'placeFigure')).toBe(true)
+    const placed = applyAction(s, actions[0]!).state
+    expect(placed.unplaced).toEqual([])
+    expect(placed.players[0]!.hand).toHaveLength(3)
   })
 })
 
@@ -298,8 +328,8 @@ describe('applyAction contract', () => {
   })
 
   it('deserialize rejects text that is not a game state', () => {
-    expect(() => deserialize('{"version":2}')).toThrow(/version 2/)
-    expect(() => deserialize('{"version":1,"players":[]}')).toThrow(/version 2/)
+    expect(() => deserialize('{"version":3}')).toThrow(/version 3/)
+    expect(() => deserialize('{"version":2,"players":[]}')).toThrow(/version 3/)
   })
 })
 
@@ -396,10 +426,10 @@ describe('deck flow across a round (5.3, 7.9, 10.7)', () => {
     expect(drawnBy(log, ['7.8'])).toEqual(all)
   })
 
-  it('7.9 a skipped exchange rolls no dice and changes no health', () => {
+  it('core loop v2 an exchange with no enemy near rolls dice and changes no health', () => {
     const s = { ...noSpawns(started(3)), enemies: [] }
     const after = until(s, (x) => x.round === 2)
-    expect(after.log.some((e) => e.type === 'diceRolled')).toBe(false)
+    expect(after.log.some((e) => e.type === 'diceRolled')).toBe(true)
     expect(after.players[0]!.health).toBe(15)
   })
 

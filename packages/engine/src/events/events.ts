@@ -37,7 +37,6 @@ export type GameEvent = Readonly<
       }
     | { type: 'hitIgnored'; enemy: string; player: string }
     | { type: 'playerDamaged'; player: string; toGuard: number; toHealth: number; health: number }
-    | { type: 'exchangeSkipped'; player: string }
     | { type: 'exchangeEnded'; player: string }
     | { type: 'stepDeferred'; step: string; reason: string }
     | { type: 'tilePlaced'; tile: string; center: Axial }
@@ -69,7 +68,6 @@ export type GameEvent = Readonly<
         faces?: readonly Face[]
       }
     | { type: 'baseDamaged'; amount: number; health: number }
-    | { type: 'waveTrackAdvanced'; waveTrack: number }
     | { type: 'eliteReplaced'; grunt: string; elite: string; hex: Axial }
     | { type: 'tileRevealed'; tile: string }
     | { type: 'experienceGained'; amount: number; experience: number }
@@ -86,7 +84,10 @@ export type GameEvent = Readonly<
     | { type: 'skillToSupply'; skill: string; level: string }
     | { type: 'skillReplaced'; player: string; skill: string }
     | { type: 'milestoneReached'; milestone: string; round: number }
-    | { type: 'runEnded'; because: 'base' | 'player'; round: number }
+    | { type: 'playerKnockedOut'; player: string; materialsLost: number }
+    | { type: 'playerReturned'; player: string; health: number }
+    | { type: 'returnDelayed'; player: string }
+    | { type: 'runEnded'; because: 'base'; round: number }
   )
 >
 

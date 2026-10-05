@@ -18,9 +18,14 @@ export function nextToEnemy(state: GameState, hex: Axial): boolean {
   return state.enemies.some((e) => adjacent(e.hex, hex))
 }
 
-/** The players whose figure is on the map (not still waiting to be placed at setup). */
+/**
+ * The players whose figure is on the map: placed (not waiting for a start hex) and not knocked
+ * out. Only these figures block hexes, draw enemies, and shield structures.
+ *
+ * @rule 3.8, 4.6, core loop v2 (knockout)
+ */
 export function placedPlayers(state: GameState): GameState['players'] {
-  return state.players.filter((p) => !state.unplaced.includes(p.id))
+  return state.players.filter((p) => !p.knockedOut && !state.unplaced.includes(p.id))
 }
 
 /**

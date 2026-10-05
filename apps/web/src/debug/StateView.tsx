@@ -23,7 +23,7 @@ export function StateView({ state }: Props) {
         </dd>
         <dt>Base</dt>
         <dd>
-          {state.base.health} / {state.base.maxHealth} health, wave track {state.waveTrack}
+          {state.base.health} / {state.base.maxHealth} health
         </dd>
         <dt>Experience / level</dt>
         <dd>
@@ -84,6 +84,7 @@ export function StateView({ state }: Props) {
               at {at(p.hex)}, {p.health}/{p.maxHealth} health, {p.guard} guard, {p.dice}{' '}
               {p.dice === 1 ? 'die' : 'dice'}, {p.materials} materials, {p.currency} currency,
               orientation {p.orientation}
+              {p.knockedOut ? ', knocked out' : ''}
             </dd>
             <dt>Hand</dt>
             <dd>{p.hand.map((c) => `${cardName(c.def)} [${c.id}]`).join(', ') || 'empty'}</dd>

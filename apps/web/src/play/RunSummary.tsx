@@ -39,7 +39,7 @@ export function RunSummary({ run, baseCurve, onNewRun }: Props) {
       data-testid="run-summary"
     >
       <h2 id="summary-title" className={styles.summaryTitle}>
-        {s.endedBecause === 'base' ? 'The base fell' : 'You fell'} in round {s.round}
+        The base fell in round {s.round}
       </h2>
       <p className={styles.muted}>
         Seed {run.seed} · {run.actions.length} actions · level {s.level} · {s.upgrades.length}{' '}

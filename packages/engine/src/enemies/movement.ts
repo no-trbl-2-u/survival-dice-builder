@@ -11,9 +11,9 @@ export function byAge(enemies: readonly Enemy[]): Enemy[] {
 }
 
 /**
- * Where 1 enemy goes: toward the nearest target it can reach. An enemy next to a target stays
- * (9.4). If every path to the nearest target is blocked it tries the next nearest (9.7,
- * `blockedPathRule: "next-target"`); with `"wait"` it waits. No reachable target: it waits.
+ * Where 1 enemy goes: toward the first-ranked target it can reach. An enemy next to that
+ * target stays (9.4; the path is empty). If every path to it is blocked it tries the next
+ * (9.7, `blockedPathRule: "next-target"`); with `"wait"` it waits. No reachable target: null.
  *
  * @rule 9.3, 9.4, 9.7
  */
@@ -23,14 +23,25 @@ export function chooseRoute(
 ): Readonly<{ target: Target; path: readonly Axial[] }> | null {
   const ranked = rankTargets(state, enemy.hex)
   const first = ranked[0]
+  if (!first) return null
   // Next to the target, or on an outer Base tile hex with the base as target (row 16): stay.
-  if (!first || hexDistance(first.hex, enemy.hex) <= 1) return null
+  if (hexDistance(first.hex, enemy.hex) <= 1) return { target: first, path: [] }
   const candidates = state.config.rulings.blockedPathRule === 'wait' ? [first] : ranked
   for (const target of candidates) {
     const path = pathNextTo(state, enemy.hex, target.hex)
     if (path) return { target, path }
   }
   return null
+}
+
+/**
+ * The target an enemy has now, read from the board (no hidden counter): the first-ranked target
+ * when it is next to it, else the target its route leads to (9.7). Null when it has none.
+ *
+ * @rule 9.3, 9.7, core loop v2 (Combat steps 2, 5.4)
+ */
+export function currentTarget(state: GameState, enemy: Enemy): Target | null {
+  return chooseRoute(state, enemy)?.target ?? null
 }
 
 /**

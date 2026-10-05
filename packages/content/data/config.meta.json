@@ -107,10 +107,18 @@
     "help": "The most enemies on the map. A grunt over the limit turns a grunt into an elite.",
     "rule": "2.2, 10.5 (open question 32)"
   },
-  "waveTrackStart": {
-    "label": "Wave track start",
-    "help": "The wave track value at the start of a run.",
-    "rule": "4.5, 15.1"
+  "knockout": {
+    "label": "Knockout"
+  },
+  "knockout.returnHealthDivisor": {
+    "label": "Return health divisor",
+    "help": "A knocked-out player returns at the next round start with maximum health divided by this, rounded up.",
+    "rule": "Core loop v2 (open question 55)"
+  },
+  "knockout.loseMaterials": {
+    "label": "Knockout loses materials",
+    "help": "When on, a knocked-out player loses the materials they carried.",
+    "rule": "Core loop v2 (open question 55)"
   },
   "shop": {
     "label": "Shop"
@@ -341,5 +349,10 @@
     "label": "Enemy target order",
     "help": "Which equally near target an enemy picks first: player, tower, barricade, base, in order, separated by commas.",
     "rule": "9.3 (open question 15)"
+  },
+  "rulings.playerPullDistance": {
+    "label": "Player pull distance",
+    "help": "Enemies head for the nearest structure; they turn to a player only when the player is at least this many hexes nearer. 0 ranks players by distance alone.",
+    "rule": "9.3, core loop v2 (open question 56)"
   }
 }

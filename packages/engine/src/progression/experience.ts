@@ -5,10 +5,12 @@ import { levelForExperience } from './levels.ts'
 
 /**
  * The rewards for a defeated enemy: its experience goes to the shared track (8.1); its
- * currency goes to the player who defeated it (8.2) — a Tower defeat gives none (row 40).
+ * currency goes to the player who defeated it (8.2), or for a Tower's defeat to the player who
+ * built the Tower (rows 40, 53).
  * Each new level gives every player 1 action die (8.4), up to `options.maxLevel` (18.1).
  *
- * @rule 8.1, 8.2, 8.3, 8.4, 16.2, Table 5
+ * @param by - the player id, or the id of the Tower that defeated the enemy.
+ * @rule 8.1, 8.2, 8.3, 8.4, 16.2, Table 5, OPEN-QUESTIONS rows 40, 53
  */
 export function gainForDefeat(state: GameState, kind: string, by: string): Step {
   const def = enemyDef(state, kind)
@@ -17,11 +19,13 @@ export function gainForDefeat(state: GameState, kind: string, by: string): Step 
     { type: 'experienceGained', rule: '8.1', amount: def.experience, experience },
   ]
   let players = state.players
-  const killer = players.find((p) => p.id === by)
+  const payee = state.defenses.find((d) => d.id === by)?.builder ?? by
+  const killer = players.find((p) => p.id === payee)
   if (killer) {
     const currency = killer.currency + def.currency
-    players = players.map((p) => (p.id === by ? { ...p, currency } : p))
-    events.push({ type: 'currencyGained', rule: '8.2', player: by, amount: def.currency, currency })
+    players = players.map((p) => (p.id === payee ? { ...p, currency } : p))
+    const rule = payee === by ? '8.2' : '8.2, 12.3'
+    events.push({ type: 'currencyGained', rule, player: payee, amount: def.currency, currency })
   }
   const level = levelForExperience(experience, state.config)
   for (let reached = state.level + 1; reached <= level; reached++) {

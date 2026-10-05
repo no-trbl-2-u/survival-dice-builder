@@ -29,7 +29,12 @@ export function PlayerPanel({ state }: Props) {
         {state.players.map((p, seat) => {
           const current = seat === state.current
           const rows: [string, string, string, string][] = [
-            ['Health', `${p.health} / ${p.maxHealth}`, styles.health ?? '', 'health'],
+            [
+              'Health',
+              p.knockedOut ? 'Knocked out' : `${p.health} / ${p.maxHealth}`,
+              styles.health ?? '',
+              'health',
+            ],
             ['Guard', String(p.guard), styles.guard ?? '', 'guard'],
             ['Action dice', String(p.dice), '', 'face-star'],
             ['Materials', String(p.materials), styles.materials ?? '', 'materials'],

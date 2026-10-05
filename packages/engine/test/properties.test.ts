@@ -6,6 +6,7 @@ import { levelForExperience } from '../src/progression/levels.ts'
 import { hexKey } from '../src/hex.ts'
 import { isPassable } from '../src/map/tiles.ts'
 import { createGame, type GameState } from '../src/index.ts'
+import { placedPlayers } from '../src/movement/move.ts'
 import { randomChoice, walk } from './helpers/policy.ts'
 
 const config = defaultContent.config
@@ -114,7 +115,8 @@ describe('engine properties', () => {
           const blocked = new Set([
             '0,0',
             ...s.defenses.map((d) => hexKey(d.hex)),
-            ...s.players.map((p) => hexKey(p.hex)),
+            // Only figures on the map count: not knocked out or waiting to return (core loop v2).
+            ...placedPlayers(s).map((p) => hexKey(p.hex)),
           ])
           return s.enemies.every((e) => !blocked.has(hexKey(e.hex)))
         }),

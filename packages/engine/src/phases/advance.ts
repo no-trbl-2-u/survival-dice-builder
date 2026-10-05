@@ -1,12 +1,12 @@
-import { clearTable, drawHand, rotateDeck } from '../deck/deck.ts'
+import { drawHand, rotateDeck } from '../deck/deck.ts'
 import { rerollUnkept, rollDice } from '../dice/dice.ts'
 import { moveEnemies } from '../enemies/movement.ts'
-import { refillNodes, waveStep } from '../enemies/spawning.ts'
+import { returnKnockedOut } from '../combat/knockout.ts'
+import { spawnAtNodes } from '../enemies/spawning.ts'
 import { structureAttacks, towerAttacks } from '../enemies/structures.ts'
 import type { GameEvent } from '../events/events.ts'
 import { draftDue, startDraft } from '../progression/draft.ts'
 import { checkMilestones } from '../progression/milestones.ts'
-import { hexDistance } from '../hex.ts'
 import { currentPlayer, handSize, updateCurrentPlayer, type Step } from '../state/helpers.ts'
 import type { GameState, Player } from '../state/types.ts'
 
@@ -115,16 +115,24 @@ function turnAllDecks(state: GameState, side: 'top' | 'bottom'): Step {
   return [{ ...state, players, rng }, events]
 }
 
+/** True when a player still takes turns this phase: on the map, with cards in the deck. */
+function hasTurns(player: Player): boolean {
+  return !player.knockedOut && player.deck.length > 0
+}
+
 /**
  * Prepare: draw 3, play each card, draw again when the hand is empty; stop when every deck and
  * hand is empty, then start Combat. With 2-4 players each plays 1 hand in seat order, then the
  * next player with cards (16.8, `coopPrepareOrder`). A Move or Build in progress (and a
- * skirmish) is decided step by step before the next card.
+ * skirmish) is decided step by step before the next card. A returning knocked-out player first
+ * puts the figure on a free Base tile hex; a knocked-out player takes no turns.
  *
- * @rule 6.1, 6.4, 6.5, 6.6, 6.7-6.15, 16.8
+ * @rule 6.1, 6.4, 6.5, 6.6, 6.7-6.15, 16.8, core loop v2 (knockout)
  */
 function prepareStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   if (state.exchange) return exchangeStep(state)
+  const returning = state.players.findIndex((p) => state.unplaced.includes(p.id))
+  if (returning >= 0) return [{ ...state, current: returning }, [], true]
   const active = state.active
   if (active) {
     const done = active.kind === 'move' ? active.hexesLeft <= 0 : active.buildsLeft <= 0
@@ -134,20 +142,21 @@ function prepareStep(state: GameState): readonly [GameState, readonly GameEvent[
   if (player.hand.length > 0) return [state, [], true]
   // 16.8: a fresh turn draws; after a hand, "full-turn" keeps drawing, "alternate-hands" passes.
   const keepGoing = state.config.rulings.coopPrepareOrder === 'full-turn'
-  if ((state.turnFresh || keepGoing) && player.deck.length > 0) {
+  if ((state.turnFresh || keepGoing) && hasTurns(player)) {
     const [next, events] = draw(state, player.deck.length < handSize(state) ? '6.5' : '6.1')
     return [{ ...next, turnFresh: false }, events, false]
   }
-  const seat = nextSeat(state, (p) => p.deck.length > 0)
+  const seat = nextSeat(state, hasTurns)
   if (seat >= 0) return [{ ...state, current: seat, turnFresh: true }, [], false]
   return [...startCombat(state), false]
 }
 
 /**
- * Combat setup: every player shuffles the discard pile and turns it bottom-up, then refill
- * spawn nodes, do the wave step, move the enemies, and let the Towers attack.
+ * Combat setup (core loop v2): every player shuffles the discard pile and turns it bottom-up,
+ * the enemies move, every spawn node spawns, and each Tower attacks (a tie waits for its
+ * builder's choice). There is no wave track.
  *
- * @rule 7.1, 7.2, 7.3, 7.4, 7.5, 7.6
+ * @rule 7.1, 7.2, 7.5, 7.6, core loop v2 (Combat steps 1-4)
  */
 function startCombat(state: GameState): Step {
   const [turned, turnEvents] = turnAllDecks(
@@ -155,10 +164,9 @@ function startCombat(state: GameState): Step {
     'bottom',
   )
   const [next, events] = chain(turned, [
-    refillNodes,
-    (s) => (s.waveTrack > 0 ? waveStep(s) : [s, []]),
     moveEnemies,
-    towerAttacks,
+    spawnAtNodes,
+    (s) => towerAttacks({ ...s, towerQueue: towerIds(s) }),
   ])
   return [
     next,
@@ -170,46 +178,36 @@ function startCombat(state: GameState): Step {
   ]
 }
 
+/** The Towers on the map, oldest first: the defenses that attack (Table 7). @rule 7.6, 12.3 */
+function towerIds(state: GameState): string[] {
+  return state.defenses
+    .filter((d) => state.content.defenses.find((x) => x.id === d.kind)?.attack)
+    .map((d) => d.id)
+}
+
 /**
  * Combat: run exchanges until every deck and hand is empty, then the structure attack step,
- * then the end of the round. With 2-4 players the exchanges go in seat order (16.4). An
- * exchange with no enemy in range is skipped (7.9).
+ * then the end of the round. With 2-4 players the exchanges go in seat order (16.4); a
+ * knocked-out player has none. An exchange is played even with no enemy near (core loop v2:
+ * heal, guard, and reroll halves work anywhere; damage needs a target in range).
  *
- * @rule 7.7, 7.8, 7.9, 7.10-7.13, 16.4, 16.5
+ * @rule 7.7, 7.8, 7.10-7.13, 16.4, 16.5, core loop v2 (Combat step 5)
  */
 function combatStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   const player = currentPlayer(state)
   if (state.roundEnding) return roundEndStep(state)
+  if (state.towerQueue.length > 0) return [state, [], true]
   if (!state.exchange) {
     // 16.4: exchanges in turn, seat order, skipping players with no cards left.
-    if (!state.turnFresh || player.deck.length === 0) {
-      const seat = nextSeat(state, (p) => p.deck.length > 0)
+    if (!state.turnFresh || !hasTurns(player)) {
+      const seat = nextSeat(state, hasTurns)
       if (seat >= 0) return [{ ...state, current: seat, turnFresh: true }, [], false]
       const [attacked, events] = structureAttacks(state)
       if (attacked.phase === 'ended') return [attacked, events, false]
-      // 10.3 until phase 21 (row 62): an empty tile deck adds 1 to the wave track each round.
-      const wave = attacked.tileDeck.length === 0
-      const waveTrack = attacked.waveTrack + (wave ? 1 : 0)
-      return [
-        { ...attacked, current: 0, waveTrack, roundEnding: true },
-        [
-          ...events,
-          ...(wave ? [{ type: 'waveTrackAdvanced', rule: '10.3', waveTrack } as const] : []),
-        ],
-        false,
-      ]
+      return [{ ...attacked, current: 0, roundEnding: true }, events, false]
     }
     const [drawnState, drawEvents] = draw(state, '7.8')
     const drawn: GameState = { ...drawnState, turnFresh: false }
-    const range = state.config.combat.exchangeRange
-    if (!drawn.enemies.some((e) => hexDistance(e.hex, player.hex) <= range)) {
-      const skipped = updateCurrentPlayer(drawn, (p) => clearTable(p))
-      return [
-        skipped,
-        [...drawEvents, { type: 'exchangeSkipped', rule: '7.9', player: player.id }],
-        false,
-      ]
-    }
     const [faces, rng] = rollDice(drawn.rng, player.dice)
     const next: GameState = {
       ...drawn,
@@ -287,8 +285,9 @@ export function rollAgain(state: GameState): Step {
  * The end of the round, after the Combat structure attack (core loop v2: there is no Explore
  * phase): turn every discard pile without a shuffle (10.6-10.7), do each player's Skill draft
  * when it is due (10.8), add 1 to the round counter (10.9), and record new milestones (10.10).
+ * Then the next round starts: knocked-out players return (they choose a start hex first).
  *
- * @rule 10.6, 10.7, 10.8, 10.9, 10.10, core loop v2 (end of round)
+ * @rule 10.6, 10.7, 10.8, 10.9, 10.10, core loop v2 (end of round, knockout)
  */
 function roundEndStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   if (state.draft) return [state, [], true]
@@ -297,7 +296,7 @@ function roundEndStep(state: GameState): readonly [GameState, readonly GameEvent
   }
   if (draftDue(state)) return [...startDraft(state), false]
   const round = state.round + 1
-  const [next, milestones] = checkMilestones(
+  const [counted, milestones] = checkMilestones(
     {
       ...state,
       round,
@@ -309,12 +308,14 @@ function roundEndStep(state: GameState): readonly [GameState, readonly GameEvent
     },
     '10.10',
   )
+  const [next, returns] = returnKnockedOut(counted)
   return [
     next,
     [
       { type: 'roundAdvanced', rule: '10.9', round },
       ...milestones,
       { type: 'phaseStarted', rule: '5.1', phase: 'prepare', round },
+      ...returns,
     ],
     false,
   ]

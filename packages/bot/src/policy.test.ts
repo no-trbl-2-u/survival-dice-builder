@@ -43,6 +43,19 @@ describe('botChoice', () => {
     expect(botChoice(started({ phase: 'ended' }))).toBeUndefined()
   })
 
+  it('on a Tower tie it shoots the weakest enemy', () => {
+    const tie = started({
+      phase: 'combat',
+      defenses: [{ id: 'd1', kind: 'tower', hex: { q: 3, r: 0 }, health: 3, builder: 'p1' }],
+      towerQueue: ['d1'],
+      enemies: [
+        { id: 'e1', kind: 'elite', health: 14, hex: { q: 2, r: 0 } },
+        { id: 'e2', kind: 'grunt', health: 2, hex: { q: 4, r: 0 } },
+      ],
+    })
+    expect(botChoice(tie)).toEqual({ type: 'chooseTowerTarget', tower: 'd1', enemy: 'e2' })
+  })
+
   it('puts its figure on the first offered Base tile hex', () => {
     expect(botChoice(createGame(config, 1))).toEqual({ type: 'placeFigure', q: 0, r: 0 })
   })

@@ -9,7 +9,7 @@ export const MAX_ACTIONS = 5000
 export type RunResult = Readonly<{
   seed: number
   endRound: number
-  cause: 'base' | 'player' | 'stalled' | 'error'
+  cause: 'base' | 'stalled' | 'error'
   error: string | null
   baseHealth: number
   /** Base health at the start of each round (index 0 = round 1). */

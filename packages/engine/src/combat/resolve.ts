@@ -4,6 +4,7 @@ import { gainForDefeat } from '../progression/experience.ts'
 import { rollDice } from '../dice/dice.ts'
 import type { GameEvent } from '../events/events.ts'
 import { hexDistance } from '../hex.ts'
+import { byAge, currentTarget } from '../enemies/movement.ts'
 import { adjacent, sameHex } from '../map/tiles.ts'
 import { firedUses } from '../skills/assign.ts'
 import {
@@ -15,12 +16,13 @@ import {
 } from '../state/helpers.ts'
 import type { Enemy, GameState, QueuedEffect } from '../state/types.ts'
 import { healCurrent, updateExchange } from './cardEffects.ts'
+import { knockOut } from './knockout.ts'
 
 /**
- * Deals damage to one enemy and removes it at 0 health. A defeated enemy's spawn node waits
- * for a refill (9.2); its experience and currency are paid (8.1-8.2).
+ * Deals damage to one enemy and removes it at 0 health; its experience and currency are paid
+ * (8.1-8.2).
  *
- * @rule 9.1, 7.8 step 7, 8.1, 8.2, 9.2
+ * @rule 9.1, 7.8 step 7, 8.1, 8.2
  */
 export function damageEnemy(
   state: GameState,
@@ -40,12 +42,7 @@ export function damageEnemy(
     ]
   }
   events.push({ type: 'enemyDefeated', rule: '9.1', enemy: enemy.id, kind: enemy.kind, by })
-  const vacantNodes = enemy.home ? [...state.vacantNodes, enemy.home] : state.vacantNodes
-  const removed: GameState = {
-    ...state,
-    enemies: state.enemies.filter((e) => e.id !== enemyId),
-    vacantNodes,
-  }
+  const removed: GameState = { ...state, enemies: state.enemies.filter((e) => e.id !== enemyId) }
   const [rewarded, more] = gainForDefeat(removed, enemy.kind, by)
   return [rewarded, [...events, ...more]]
 }
@@ -256,22 +253,39 @@ function enemyAttacks(state: GameState, attackers: readonly Enemy[], rule: strin
   return [current, events]
 }
 
-/** Ends the run when the current player is at 0 health. @rule 14.2 */
+/** Knocks out the current player at 0 health (core loop v2; the run goes on). @rule 14.2 */
 function checkPlayerDown(state: GameState, events: GameEvent[]): GameState {
-  if (currentPlayer(state).health > 0) return state
-  events.push({ type: 'runEnded', rule: '14.2', because: 'player', round: state.round })
-  return { ...state, phase: 'ended', endedBecause: 'player', active: null }
+  const player = currentPlayer(state)
+  if (player.health > 0) return state
+  const [out, more] = knockOut(state, player.id)
+  events.push(...more)
+  return out
 }
 
 /**
- * Steps 8-10 of an exchange: each enemy next to the player attacks, guard is removed, and
- * played cards go to the discard pile. A player at 0 health ends the run.
+ * The enemies that attack the current player at the end of an exchange: next to the figure and
+ * with this player as their target (core loop v2: each enemy attacks only its target), oldest
+ * first.
  *
- * @rule 7.8 steps 8-10, 14.2
+ * @rule 7.8 step 8, 9.3, core loop v2 (Combat step 5.4)
+ */
+export function exchangeAttackers(state: GameState): Enemy[] {
+  const player = currentPlayer(state)
+  return byAge(state.enemies).filter(
+    (e) => adjacent(e.hex, player.hex) && currentTarget(state, e)?.id === player.id,
+  )
+}
+
+/**
+ * Steps 8-10 of an exchange: each enemy next to the player that targets the player attacks,
+ * guard is removed, and played cards go to the discard pile. A player at 0 health is knocked
+ * out.
+ *
+ * @rule 7.8 steps 8-10, 14.2, core loop v2 (Combat step 5.4, knockout)
  */
 export function finishExchange(state: GameState): Step {
   const player = currentPlayer(state)
-  const attackers = state.enemies.filter((e) => adjacent(e.hex, player.hex))
+  const attackers = exchangeAttackers(state)
   const [attacked, events] = enemyAttacks(state, attackers, '7.8')
   const out: GameEvent[] = [...events, { type: 'exchangeEnded', rule: '7.8', player: player.id }]
   let current: GameState = {
@@ -285,9 +299,9 @@ export function finishExchange(state: GameState): Step {
 /**
  * The end of a skirmish: the enemy in the entered hex attacks 1 time (if it is still there),
  * guard is removed, and the figure moves in only if that enemy is defeated; otherwise it stays
- * and the rest of the Move is lost.
+ * and the rest of the Move is lost. A player at 0 health is knocked out.
  *
- * @rule 6.12, 6.13, 6.14, 14.2
+ * @rule 6.12, 6.13, 6.14, 14.2, core loop v2 (knockout)
  */
 export function finishSkirmish(state: GameState): Step {
   const skirmish = state.exchange?.skirmish

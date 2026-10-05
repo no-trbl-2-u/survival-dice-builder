@@ -33,6 +33,18 @@ describe('describeAction', () => {
     )
   })
 
+  it('labels a Tower tie choice by the enemy, its place, and its health', () => {
+    const start = createGame(defaultContent.config, 1)
+    const placed = applyAction(start, { type: 'placeFigure', q: 0, r: 0 }).state
+    const state = {
+      ...placed,
+      enemies: [{ id: 'e3', kind: 'grunt', health: 2, hex: { q: 1, r: 0 } }],
+    }
+    expect(describeAction({ type: 'chooseTowerTarget', tower: 'd1', enemy: 'e3' }, state)).toMatch(
+      /^Tower d1 shoots grunt e3 on .+, 2 health$/,
+    )
+  })
+
   it('labels every legal action of round 1 Prepare with the card name', () => {
     const start = createGame(defaultContent.config, 1)
     const state = applyAction(start, legalActions(start)[0]!).state

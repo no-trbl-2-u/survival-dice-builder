@@ -62,13 +62,19 @@ base (`map/base.ts`). A Move step off the map edge reveals the next tile under t
 (core loop v2, phase 20); its enemies come at the next Combat start. Move and Build are decided one
 step at a time (`moveTo` / `stopMoving`, `build` / `stopBuilding`) through `state.active`;
 entering an enemy's hex starts a skirmish, which reuses `state.exchange` with `skirmish` set.
-Combat is range-aware: an exchange is skipped with no enemy within `combat.exchangeRange`, Skills
-hit only within their range, and only adjacent enemies attack.
+Combat is range-aware: Skills hit only within their range, and only adjacent enemies that
+target the player attack. Every exchange is played, even with no enemy near (heal, guard, and
+reroll still work).
 
-Combat starts with refills, the wave step, enemy movement, and Tower attacks (7.3-7.6) and
-ends with the structure attack step (7.10-7.12); the base at 0 health ends the run (14.1).
-There is no Explore phase: the end of the round (turn the decks, draft, round counter,
-milestones) follows the structure attack, and an empty tile deck raises the wave track then.
+Combat (core loop v2, phase 21) starts with enemy movement, then every spawn node spawns
+(`enemies/spawning.ts`; past the miniature limit a grunt is promoted), then the Towers attack
+(`state.towerQueue`; a tie waits for the builder's `chooseTowerTarget`). Enemies rank the
+nearest structure first and turn to a player only when the player is
+`rulings.playerPullDistance` hexes nearer (`enemies/targets.ts`). Combat ends with the
+structure attack step (7.10-7.12). There is no wave track and no Explore phase: the end of the
+round (turn the decks, draft, round counter, milestones) follows the structure attack. A player
+at 0 health is knocked out (`combat/knockout.ts`) and returns at the next round start through
+`unplaced`; only the base at 0 health ends the run (14.1).
 
 Progression (phase 8): defeats pay shared experience and the killer's currency; levels add
 dice; a Build on the base buys upgrades; the Shop sells at any decision while on the base;

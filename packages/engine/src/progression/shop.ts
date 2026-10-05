@@ -10,7 +10,9 @@ import { drawLevel, openLevel } from './supplies.ts'
  * @rule 3.6, 6.8, OPEN-QUESTIONS row 16
  */
 export function onBase(state: GameState): boolean {
-  return onBaseTile(state, currentPlayer(state).hex)
+  const player = currentPlayer(state)
+  if (player.knockedOut || state.unplaced.includes(player.id)) return false
+  return onBaseTile(state, player.hex)
 }
 
 /**

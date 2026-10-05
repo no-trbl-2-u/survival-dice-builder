@@ -57,11 +57,10 @@ const GOLDENS = [
   {
     file: 'p8-builder-run.json',
     description:
-      'Phase 8 (phase 20 rules): a solo run to round 12 or the end, default config, builder policy: exploring, upgrades, Shop, draft (seed 8).',
+      'Phase 8 (phase 21 rules): a solo run to the end (the base falls), default config, builder policy: gathering, exploring, building (seed 8).',
     seed: 8,
     policy: builderChoice,
-    // Phase 20: until phase 21 spawns at every Combat, a careful run can outlast any cap.
-    stop: (s: GameState) => s.round > 12 || s.phase === 'ended',
+    stop: (s: GameState) => s.phase === 'ended',
   },
 ]
 

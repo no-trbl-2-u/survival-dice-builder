@@ -26,7 +26,7 @@ describe('exportRun', () => {
   it('replays to the same state, and names the file by seed and round', () => {
     const { run } = botRun(4)
     const data = exportRun(run)
-    expect(data.version).toBe(2)
+    expect(data.version).toBe(3)
     expect(serialize(replayExport(JSON.parse(JSON.stringify(data))))).toBe(serialize(run.state))
     expect(exportFileName(data)).toBe(`survival-run-4-round-${run.state.round}.json`)
   })
@@ -49,8 +49,8 @@ describe('save and load (spec 6)', () => {
 
   it('a broken or foreign file gives a plain error', () => {
     expect(importRun('not json')).toHaveProperty('error')
-    expect(importRun('{"version":3}')).toEqual({ error: 'This is not a version 2 run file.' })
-    expect(importRun('{"version":1}')).toEqual({
+    expect(importRun('{"version":4}')).toEqual({ error: 'This is not a version 3 run file.' })
+    expect(importRun('{"version":2}')).toEqual({
       error: 'This run file is from an earlier version and cannot be replayed.',
     })
   })

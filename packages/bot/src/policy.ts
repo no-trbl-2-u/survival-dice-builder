@@ -30,10 +30,18 @@ export function botChoice(state: GameState): Action | undefined {
   )
 }
 
-/** The start hex, starter returns, and drafts: decisions that block everything else. */
+/**
+ * The start hex (also when returning from a knockout), Tower ties (the weakest enemy), starter
+ * returns, and drafts: decisions that block everything else.
+ */
 function required(state: GameState, actions: readonly Action[]): Action | undefined {
   const start = ofType(actions, 'placeFigure')[0]
   if (start) return start
+  const health = (id: string) => state.enemies.find((e) => e.id === id)?.health ?? 0
+  const shot = [...ofType(actions, 'chooseTowerTarget')].sort(
+    (a, b) => health(a.enemy) - health(b.enemy),
+  )[0]
+  if (shot) return shot
   const returned = ofType(actions, 'returnStarter')[0]
   if (returned) return returned
   const drafts = ofType(actions, 'draftSkill')
