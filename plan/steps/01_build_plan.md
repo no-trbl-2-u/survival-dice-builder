@@ -328,6 +328,12 @@ new rules. Detailed brief: `phase_21_core_loop_v2_combat.md`.
 
 ### Phase 22 — Experiments: experience curves, Skill caps, spawn pressure
 
+Before the brief: `/plan-a-phase` must first answer the structural
+questions in `OPEN-QUESTIONS.md` rows 63-70 (no clock, map-state
+difficulty, exchanges coupled to deck size, the explorer pinned by
+same-round spawns, the material budget, co-op pressure, Base tile
+turtling, table upkeep), or split a phase for them.
+
 Source: `OPEN-QUESTIONS.md` rows 9 and 17 (designer 2026-10-04). Add
 config options (not new defaults) for experience steps of 3; steps of
 5 with extra experience for elites; 1 level for each elite that
