@@ -6,6 +6,8 @@
 // page for visual checks, and merges the single-page PDFs into one file.
 //
 //   node scripts/one-pagers.mjs render [page.html ...]   # all pages when no args
+//   node scripts/one-pagers.mjs lint <page.html>          # one page: words, furniture, overflow
+//   node scripts/one-pagers.mjs text                      # visible text of every page -> build/text/
 //   node scripts/one-pagers.mjs merge                     # pages/p01..p15 -> the PDF
 //   node scripts/one-pagers.mjs check                     # page count, banned words
 //
@@ -73,6 +75,58 @@ const bannedIn = (html) => {
 /** The orientation a page asks for in its @page rule; portrait by default. */
 const orientationOf = (html) => (/@page\s*{[^}]*landscape/i.test(html) ? 'landscape' : 'portrait')
 
+/** Word count of a text (whitespace-separated tokens that hold a letter or digit). */
+const wordCount = (text) => text.split(/\s+/).filter((w) => /[A-Za-z0-9]/.test(w)).length
+
+/**
+ * The furniture every sheet must carry: a page id (A1-L1 ... A3-L5), an ISO date, and a
+ * "src:" footer naming its sources. Returns the names of the missing pieces.
+ */
+const missingFurniture = (text) =>
+  [
+    ['page id', /\bA[1-3]-L[1-5]\b/],
+    ['date', /\b20\d\d-\d\d-\d\d\b/],
+    ['src footer', /\bsrc:/],
+  ]
+    .filter(([, re]) => !re.test(text))
+    .map(([name]) => name)
+
+/** Lint one page: visible words, furniture, banned words, and (when rendered) page count. */
+function lint(file) {
+  const html = fs.readFileSync(file, 'utf8')
+  const code = html.replace(/<!--[\s\S]*?-->/g, '') // comments may mention what is banned
+  const text = visibleText(html)
+  const name = path.basename(file, '.html')
+  const pdf = path.join(OUT, `${name}.pdf`)
+  const report = {
+    file: path.relative(ROOT, file),
+    orientation: orientationOf(html),
+    words: wordCount(text),
+    banned: bannedIn(html),
+    missing: missingFurniture(text),
+    external:
+      /<(link|img|script)\b/i.test(code) || /\b(src|href)=["']https?:\/\//i.test(code)
+        ? 'external resource or URL found'
+        : null,
+    pages: fs.existsSync(pdf) ? pageCount(pdf) : null,
+  }
+  const ok =
+    !report.banned.length && !report.missing.length && !report.external && report.pages === 1
+  console.log(JSON.stringify({ ...report, ok }, null, 2))
+  process.exitCode = ok ? 0 : 1
+}
+
+/** Visible text of every page, one file each, for cross-page reading. */
+function text() {
+  const dir = path.join(OUT, 'text')
+  fs.mkdirSync(dir, { recursive: true })
+  for (const file of listPages()) {
+    const name = path.basename(file, '.html')
+    fs.writeFileSync(path.join(dir, `${name}.txt`), visibleText(fs.readFileSync(file, 'utf8')))
+    console.log(`${name}.txt`)
+  }
+}
+
 const loadPlaywright = () => {
   const require = createRequire(path.join(ROOT, 'apps/web/package.json'))
   return require('@playwright/test')
@@ -100,8 +154,8 @@ async function render(files) {
         margin: { top: 0, right: 0, bottom: 0, left: 0 },
       })
       await page.close()
-      // PNG preview at 72 dpi for a visual check (pdftoppm, poppler).
-      execFileSync('pdftoppm', ['-png', '-r', '72', pdf, path.join(OUT, name)])
+      // PNG preview at 110 dpi for a visual check (pdftoppm, poppler).
+      execFileSync('pdftoppm', ['-png', '-r', '110', pdf, path.join(OUT, name)])
       const pages = pageCount(pdf)
       console.log(`${name}: ${pages} page(s), ${landscape ? 'landscape' : 'portrait'}`)
     }
@@ -163,9 +217,11 @@ function check() {
 
 async function main([cmd, ...rest]) {
   if (cmd === 'render') return render(rest.length ? rest.map((f) => path.resolve(f)) : listPages())
+  if (cmd === 'lint') return lint(path.resolve(rest[0]))
+  if (cmd === 'text') return text()
   if (cmd === 'merge') return merge()
   if (cmd === 'check') return check()
-  console.error('usage: one-pagers.mjs render [files...] | merge | check')
+  console.error('usage: one-pagers.mjs render [files...] | lint <file> | text | merge | check')
   process.exitCode = 2
 }
 
