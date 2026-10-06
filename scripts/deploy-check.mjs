@@ -15,6 +15,11 @@
 // to 'netlify'); configure that provider's auth in .env too.
 //
 // See nexus/playbooks/ci-providers.md for full details.
+//
+// Exit codes are set with `process.exitCode`, never `process.exit()`, once a
+// request has been made: exiting while fetch's keep-alive sockets are still
+// closing aborts Node on Windows (libuv "UV_HANDLE_CLOSING" assertion,
+// exit 3221226505) after the result has already printed.
 
 import { execSync } from 'node:child_process'
 import fs from 'node:fs'
@@ -56,15 +61,13 @@ if (PROVIDER === 'netlify') {
     `https://api.netlify.com/api/v1/sites?name=${encodeURIComponent(SITE_NAME)}`,
     { headers: auth },
   )
-  if (!sitesRes.ok) apiFail('Netlify sites', sitesRes)
-  const sites = await sitesRes.json()
+  const sites = sitesRes.ok ? await sitesRes.json() : []
   const site = sites.find((s) => s.name === SITE_NAME) ?? sites[0]
-  if (!site) {
+  if (!sitesRes.ok) process.exitCode = apiFail('Netlify sites', sitesRes)
+  else if (!site) {
     console.error(`No Netlify site for "${SITE_NAME}". Override with NETLIFY_SITE_NAME.`)
-    process.exit(3)
-  }
-
-  await pollLoop(async () => {
+    process.exitCode = 3
+  } else process.exitCode = await pollLoop(async () => {
     const res = await fetch(
       `https://api.netlify.com/api/v1/sites/${site.id}/deploys?per_page=10`,
       { headers: auth },
@@ -114,7 +117,7 @@ else if (PROVIDER === 'vercel') {
   const teamParam = TEAM ? `&teamId=${TEAM}` : ''
   const targetParam = TARGET ? `&target=${TARGET}` : ''
 
-  await pollLoop(async () => {
+  process.exitCode = await pollLoop(async () => {
     const url = `https://api.vercel.com/v6/deployments?projectId=${PROJECT}${teamParam}${targetParam}&limit=20`
     const res = await fetch(url, { headers: auth })
     if (!res.ok) return null
@@ -148,7 +151,7 @@ else if (PROVIDER === 'github-actions') {
     Accept: 'application/vnd.github+json',
   }
 
-  await pollLoop(async () => {
+  process.exitCode = await pollLoop(async () => {
     const url = `https://api.github.com/repos/${REPO}/actions/runs?head_sha=${sha}&per_page=20`
     const res = await fetch(url, { headers: auth })
     if (!res.ok) return null
@@ -179,7 +182,7 @@ else if (PROVIDER === 'cloudflare-pages') {
 
   const auth = { Authorization: `Bearer ${TOKEN}` }
 
-  await pollLoop(async () => {
+  process.exitCode = await pollLoop(async () => {
     const url = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT}/pages/projects/${PROJECT}/deployments`
     const res = await fetch(url, { headers: auth })
     if (!res.ok) return null
@@ -210,7 +213,7 @@ else if (PROVIDER === 'render') {
 
   const auth = { Authorization: `Bearer ${API_KEY}` }
 
-  await pollLoop(async () => {
+  process.exitCode = await pollLoop(async () => {
     const url = `https://api.render.com/v1/services/${SERVICE}/deploys?limit=20`
     const res = await fetch(url, { headers: auth })
     if (!res.ok) return null
@@ -242,7 +245,7 @@ else if (PROVIDER === 'fly') {
   // We poll `fly status --json` until the current release is stable —
   // this confirms the app is healthy, not that this exact SHA shipped
   // (see nexus/playbooks/ci-providers.md Fly.io section).
-  await pollLoop(async () => {
+  process.exitCode = await pollLoop(async () => {
     let out
     try {
       out = execSync(`fly status --app ${APP} --json`, {
@@ -283,19 +286,17 @@ else if (PROVIDER === 'health-check') {
   await sleep(BUFFER_S * 1000)
   console.log(`Probing ${URL}...`)
   const res = await fetch(URL)
+  const text = await res.text()
   if (res.status !== 200) {
     console.error(`Health check failed: HTTP ${res.status}`)
-    process.exit(1)
+    process.exitCode = 1
+  } else if (EXPECT && !text.includes(EXPECT)) {
+    console.error(`Health check failed: expected sentinel "${EXPECT}" not found in response.`)
+    process.exitCode = 1
+  } else {
+    console.log(`Deploy ready (health check passed). URL: ${URL}`)
+    process.exitCode = 0
   }
-  if (EXPECT) {
-    const text = await res.text()
-    if (!text.includes(EXPECT)) {
-      console.error(`Health check failed: expected sentinel "${EXPECT}" not found in response.`)
-      process.exit(1)
-    }
-  }
-  console.log(`Deploy ready (health check passed). URL: ${URL}`)
-  process.exit(0)
 }
 
 // =====================================================================
@@ -317,6 +318,7 @@ else {
 // HELPERS
 // =====================================================================
 
+/** Polls until the deploy settles; returns the exit code (0 ready, 1 failed, 2 timeout). */
 async function pollLoop(probe) {
   const start = Date.now()
   let lastState = null
@@ -365,7 +367,7 @@ async function pollLoop(probe) {
         }
       }
       if (result.url) console.log(`  URL: ${result.url}`)
-      process.exit(0)
+      return 0
     }
     if (result.state === 'error') {
       console.error(`DEPLOY FAILED.`)
@@ -381,12 +383,12 @@ async function pollLoop(probe) {
       console.error(``)
       console.error(`Read the log, patch the root cause, push again.`)
       console.error(`Do not push past this gate.`)
-      process.exit(1)
+      return 1
     }
     await sleep(POLL_MS)
   }
   console.error(`Deploy still pending after ${TIMEOUT_MS / 1000}s.`)
-  process.exit(2)
+  return 2
 }
 
 function configFail(varName, helpUrl) {
@@ -397,8 +399,9 @@ function configFail(varName, helpUrl) {
   process.exit(3)
 }
 
+/** Reports an API failure after a request; returns exit code 3 (see the header note). */
 function apiFail(label, res) {
   console.error(`${label} API error: ${res.status} ${res.statusText}`)
   if (res.status === 401) console.error('  Token rejected.')
-  process.exit(3)
+  return 3
 }
