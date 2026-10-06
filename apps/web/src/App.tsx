@@ -25,7 +25,8 @@ const routes: readonly Route[] = [
     title: SITE_NAME,
     render: () => <HomePage />,
   },
-  { path: '/play', title: 'Play', render: () => <PlayPage /> },
+  // The board needs the height; the nav's current tab already says "Play".
+  { path: '/play', title: 'Play', render: () => <PlayPage />, quietTitle: true },
   { path: '/config', title: 'Config', render: () => <ConfigPage /> },
   { path: '/tiles', title: 'Tile sheet', render: () => <TileSheet /> },
   { path: '/decisions', title: 'Decisions', render: () => <DecisionsPage /> },
@@ -48,7 +49,7 @@ export function App() {
           </a>
         ))}
       </nav>
-      <h1>{route.title}</h1>
+      <h1 className={route.quietTitle ? 'visually-hidden' : undefined}>{route.title}</h1>
       {route.render()}
     </main>
   )

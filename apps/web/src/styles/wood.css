@@ -73,6 +73,11 @@ legend {
   text-shadow: var(--engrave);
 }
 
+/* A page without a visible title starts just below the rail. */
+.app > h1.visually-hidden + * {
+  margin-top: 16px;
+}
+
 a {
   color: var(--color-accent);
   text-underline-offset: 3px;

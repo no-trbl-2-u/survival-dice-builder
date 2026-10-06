@@ -1,7 +1,13 @@
 import type { ReactNode } from 'react'
 
 /** A route: its path and the page it renders. */
-export type Route = Readonly<{ path: string; title: string; render: () => ReactNode }>
+export type Route = Readonly<{
+  path: string
+  title: string
+  render: () => ReactNode
+  /** Keep the page title for screen readers only (the nav already marks the page). */
+  quietTitle?: boolean
+}>
 
 /**
  * Picks the route for a pathname. Exact match; trailing slashes are ignored; unknown paths
