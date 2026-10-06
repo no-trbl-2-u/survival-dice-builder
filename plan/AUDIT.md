@@ -15,11 +15,13 @@
 - issue: #33
 - fixed: 7906caa
 
-### [ ] [4.9] /play: the start panel gives the v1 lose condition (critique MED)
+### [x] [4.9] /play: the start panel gives the v1 lose condition (critique MED)
 - category: external-critique (comprehension)
 - impact: 6
 - ease: 9
 - next: one copy line in StartPanel.tsx
+- issue: #34
+- fixed: d37e59e
 
 ### [ ] [4.5] /play: the Gather card does not say it needs an unspent gathering node (critique MED)
 - category: external-critique (comprehension)

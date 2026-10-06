@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — the start panel gives the v1 lose condition
-- pass: 5 (commit 04b907a)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: The goal line tells players to keep every player alive. In v2 a player at 0 health is knocked out and comes back next round. Only the base falling ends the run.
-- evidence: `apps/web/src/play/StartPanel.tsx:45` "Keep the base and every player alive for as many rounds as you can."
-- suggested fix: "Keep the base standing for as many rounds as you can. A player at 0 health is knocked out and comes back next round."
-- source: web-fetch
-
 ### [MED] / and /play — nothing says that exploring adds enemies
 - pass: 5 (commit 04b907a)
 - viewport: n/a (web-fetch)
@@ -77,6 +68,17 @@
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 ## Done
+
+### [x] [MED] /play — the start panel gives the v1 lose condition
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The goal line tells players to keep every player alive. In v2 a player at 0 health is knocked out and comes back next round. Only the base falling ends the run.
+- evidence: `apps/web/src/play/StartPanel.tsx:45` "Keep the base and every player alive for as many rounds as you can."
+- suggested fix: "Keep the base standing for as many rounds as you can. A player at 0 health is knocked out and comes back next round."
+- source: web-fetch
+- issue: #34
+- fixed: d37e59e (the start panel says only the base falling ends the run; a player at 0 health is knocked out and comes back next round)
 
 ### [x] [HIGH] /config — three rulings do nothing, and the miniature limit help states the old rule
 - pass: 5 (commit 04b907a)
