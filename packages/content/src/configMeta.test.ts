@@ -34,6 +34,24 @@ describe('config metadata (rule 18.1)', () => {
     expect(paths.some((p) => p.path.startsWith('deck.presets.'))).toBe(false)
   })
 
+  it('marks the fields the engine does not read yet, and no others', () => {
+    const unused = Object.entries(defaultConfigMeta)
+      .filter(([, entry]) => entry.unused)
+      .map(([path]) => path)
+    expect(unused).toEqual([
+      'combat.exchangeRange',
+      'rulings.enemiesPerHex',
+      'rulings.tileRotation',
+      'rulings.shopRefill',
+      'rulings.healTargets',
+      'rulings.eliteReplacement',
+    ])
+  })
+
+  it('the miniature limit help states the phase 21 rule', () => {
+    expect(defaultConfigMeta['miniatureLimit']?.help).toMatch(/new grunt or elite/)
+  })
+
   it('a path inside a list gets the entry of the list', () => {
     expect(metaFor(['deck', 'presets', 0, 'cards'])?.path).toBe('deck.presets')
     expect(metaFor('combat.moveCostNextToEnemy')?.entry.rule).toBe('6.9')

@@ -12,6 +12,16 @@ test('/config: each field has a label, help with its rules section, and plain op
   await expect(page.getByRole('group', { name: 'Designer rulings' })).toBeVisible()
 })
 
+test('/config: a ruling the engine does not read yet says so', async ({ page }) => {
+  await page.goto('/config')
+  await expect(page.getByLabel('Heal targets', { exact: true })).toHaveAccessibleDescription(
+    /Not used by the engine yet: changing it changes nothing\./,
+  )
+  await expect(page.getByLabel('Lost skirmish', { exact: true })).not.toHaveAccessibleDescription(
+    /Not used by the engine yet/,
+  )
+})
+
 test('/config: the phase 22 experiment options default off, with help that names the row', async ({
   page,
 }) => {

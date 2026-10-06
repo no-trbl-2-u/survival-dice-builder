@@ -66,6 +66,10 @@
   white-space: nowrap;
 }
 
+.unused {
+  color: var(--color-text);
+}
+
 .error {
   grid-column: 2;
   margin: 0;

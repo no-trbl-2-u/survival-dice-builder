@@ -77,7 +77,8 @@
   "combat.exchangeRange": {
     "label": "Exchange range",
     "help": "If no enemy is within this many hexes, the exchange has no effect and the hand is discarded.",
-    "rule": "7.9"
+    "rule": "7.9",
+    "unused": true
   },
   "combat.enemyMoveHexes": {
     "label": "Enemy move",
@@ -132,7 +133,7 @@
   },
   "miniatureLimit": {
     "label": "Enemy miniature limit",
-    "help": "The most enemies on the map. A grunt over the limit turns a grunt into an elite.",
+    "help": "The most enemies on the map. Past the limit, a new grunt or elite turns the grunt nearest the base into an elite instead.",
     "rule": "2.2, 10.5 (open question 32)"
   },
   "clock": {
@@ -307,7 +308,8 @@
   "rulings.enemiesPerHex": {
     "label": "Enemies per hex",
     "help": "The most enemies one hex can hold.",
-    "rule": "3.7 (open question 1)"
+    "rule": "3.7 (open question 1)",
+    "unused": true
   },
   "rulings.figuresPerHex": {
     "label": "Figures per hex",
@@ -326,7 +328,8 @@
   "rulings.tileRotation": {
     "label": "Tile rotation",
     "help": "When ticked, the player may rotate a revealed tile.",
-    "rule": "10.1 (open question 5)"
+    "rule": "10.1 (open question 5)",
+    "unused": true
   },
   "rulings.coopPrepareOrder": {
     "label": "Co-op Prepare order",
@@ -382,6 +385,7 @@
     "label": "Shop refill",
     "help": "When a bought Shop offer is replaced.",
     "rule": "11.5 (open question 11)",
+    "unused": true,
     "options": {
       "immediate": "At once",
       "end-of-turn": "At the end of the turn"
@@ -391,6 +395,7 @@
     "label": "Heal targets",
     "help": "Who a heal effect can heal in co-op.",
     "rule": "Table 3, 6.7 (open question 12)",
+    "unused": true,
     "options": {
       "self": "The player only",
       "any-adjacent": "The player or an adjacent ally"
@@ -400,6 +405,7 @@
     "label": "Grunt that becomes an elite",
     "help": "Which grunt the miniature limit turns into an elite.",
     "rule": "10.5 (open question 13)",
+    "unused": true,
     "options": {
       "nearest-base": "The grunt nearest the base",
       "player-choice": "The players choose"

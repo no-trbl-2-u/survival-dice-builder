@@ -104,6 +104,12 @@ function Field({ schema, value, path, problems, onChange }: FieldProps): ReactNo
       {input}
       <p id={helpId} className={styles.help}>
         {meta?.help}
+        {meta?.unused ? (
+          <strong className={styles.unused}>
+            {' '}
+            Not used by the engine yet: changing it changes nothing.
+          </strong>
+        ) : null}
         {meta?.rule ? <span className={styles.rule}> Rules {meta.rule}.</span> : null}
       </p>
       {errors.length > 0 ? (

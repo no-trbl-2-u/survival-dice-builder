@@ -10,6 +10,8 @@ export const ConfigMetaEntrySchema = z.strictObject({
   options: z.record(z.string(), z.string().min(1)).optional(),
   /** The placeholder of an empty optional number field (default "no maximum"). */
   empty: z.string().min(1).optional(),
+  /** The engine never reads this field yet: /config marks it, and changing it changes nothing. */
+  unused: z.literal(true).optional(),
 })
 export type ConfigMetaEntry = z.infer<typeof ConfigMetaEntrySchema>
 
