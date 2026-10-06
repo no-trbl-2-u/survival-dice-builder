@@ -109,5 +109,39 @@ test('/play Combat v3: Combat cards offer their options, and Engage starts an en
       .getByRole('button', { name: /^Move 2$/ })
       .first(),
   ).toBeVisible()
+
+  // Engage: the engagement runs in a modal, step by step, and ends on its result.
+  await page
+    .getByLabel('Hand')
+    .getByRole('button', { name: /^Engage$/ })
+    .first()
+    .click()
+  const modal = page.getByRole('dialog', { name: /^Engagement/ })
+  await expect(modal).toBeVisible()
+  await expect(modal.getByRole('list', { name: 'Engagement steps' })).toContainText('Roll')
+  await expect(modal.getByLabel('Dice', { exact: true })).toBeVisible()
+  await expect(modal.getByLabel('Enemy dice')).toBeVisible()
+  await expect(modal.getByLabel('Skills')).toBeVisible()
+  // Esc never closes it mid-engagement.
+  await page.keyboard.press('Escape')
+  await expect(modal).toBeVisible()
+  // Look at the board, then come back.
+  await modal.getByRole('button', { name: 'Look at the board' }).click()
+  await expect(modal).toBeHidden()
+  await page.getByTestId('engage-return').click()
+  await expect(modal).toBeVisible()
+  const summary = modal.getByTestId('engage-summary')
+  for (let i = 0; i < 20 && !(await summary.isVisible()); i++) {
+    const pick = modal
+      .getByRole('button', {
+        name: / hits |^Fire |^Put dic?e |^Stop rolling: use these dice$|^Done adding cards$|^Stop rerolling$|^End engagement/,
+      })
+      .first()
+    if ((await pick.count()) > 0) await pick.click()
+  }
+  await expect(summary).toBeVisible()
+  await expect(modal).toContainText('Engagement over')
+  await modal.getByRole('button', { name: 'Back to the board' }).click()
+  await expect(modal).toBeHidden()
   expect(errors).toEqual([])
 })

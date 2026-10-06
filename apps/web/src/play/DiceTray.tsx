@@ -1,4 +1,4 @@
-import { sameAction, type Action, type GameState } from '@survival/engine'
+import { sameAction, type Action, type EnemyDieRoll, type GameState } from '@survival/engine'
 import { lazy, Suspense } from 'react'
 import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
@@ -20,6 +20,10 @@ type Props = Readonly<{
   toggle: (die: number) => void
   /** Show the optional 3D dice above the 2D tray (presentation only). */
   dice3d?: boolean
+  /** Show the enemy dice above the player's (off when the engagement modal shows them). */
+  enemyDice?: boolean
+  /** Show the roll / stop buttons (off when the engagement modal puts them in its footer). */
+  controls?: boolean
 }>
 
 /**
@@ -27,7 +31,16 @@ type Props = Readonly<{
  * Skill placement (any number of dice; the Skill board puts them all on 1 Skill). A die on a
  * Skill leaves the tray. The roll counter shows `roll n of max`.
  */
-export function DiceTray({ state, legal, act, selected, toggle, dice3d = false }: Props) {
+export function DiceTray({
+  state,
+  legal,
+  act,
+  selected,
+  toggle,
+  dice3d = false,
+  enemyDice = true,
+  controls = true,
+}: Props) {
   const ex = state.exchange
   if (!ex) return null
   const has = (a: Action) => legal.find((x) => sameAction(x, a))
@@ -50,38 +63,11 @@ export function DiceTray({ state, legal, act, selected, toggle, dice3d = false }
           />
         </Suspense>
       ) : null}
-      {ex.engage ? (
-        <div data-testid="enemy-dice">
-          <h3 className={styles.subTitle}>
-            {ex.engage.enemyDice.length === 0
-              ? 'Enemy dice: none (no enemy next to you)'
-              : 'Enemy dice from adjacent enemies (locked: they hit you after your Skills)'}
-          </h3>
-          <ul className={styles.dice}>
-            {ex.engage.enemyDice.map((d, i) => {
-              const enemy = state.enemies.find((e) => e.id === d.enemy)
-              const elite = enemy?.kind === 'elite'
-              const who = `${enemy?.kind ?? 'enemy'} ${d.enemy}`
-              return (
-                <li key={i} className={styles.dieItem}>
-                  <span
-                    className={`${styles.die} ${styles.enemyDie} ${elite ? styles.enemyElite : ''}`}
-                    data-face={d.face}
-                    data-kind={elite ? 'elite' : 'grunt'}
-                    aria-label={`Enemy die of ${who}: ${d.face}`}
-                  >
-                    <GameIcon name={`face-enemy-${d.face}`} size="2.4rem" />
-                  </span>
-                  <span className={styles.enemyDieLabel} aria-hidden="true">
-                    <strong>{ENEMY_FACE_LABEL[d.face]}</strong>
-                    <small>{who}</small>
-                  </span>
-                </li>
-              )
-            })}
-          </ul>
+      {ex.engage && enemyDice ? (
+        <>
+          <EnemyDice state={state} />
           <h3 className={styles.subTitle}>Your dice</h3>
-        </div>
+        </>
       ) : null}
       <ul className={styles.dice}>
         {ex.dice.map((d, i) => {
@@ -123,23 +109,91 @@ export function DiceTray({ state, legal, act, selected, toggle, dice3d = false }
           )
         })}
       </ul>
-      <div className={styles.row}>
-        {stop ? (
-          <button type="button" onClick={() => act(stop)}>
-            Stop rolling
-          </button>
-        ) : null}
-        {roll ? (
-          <button type="button" onClick={() => act(roll)}>
-            Roll unkept dice
-          </button>
-        ) : null}
-        {endReroll ? (
-          <button type="button" onClick={() => act(endReroll)}>
-            Stop rerolling
-          </button>
-        ) : null}
-      </div>
+      {ex.dice.length > 0 && ex.dice.every((_, i) => placed.has(i)) ? (
+        <p className={styles.muted}>All your dice are on Skills.</p>
+      ) : null}
+      {controls ? (
+        <div className={styles.row}>
+          {stop ? (
+            <button type="button" onClick={() => act(stop)}>
+              Stop rolling
+            </button>
+          ) : null}
+          {roll ? (
+            <button type="button" onClick={() => act(roll)}>
+              Roll unkept dice
+            </button>
+          ) : null}
+          {endReroll ? (
+            <button type="button" onClick={() => act(endReroll)}>
+              Stop rerolling
+            </button>
+          ) : null}
+        </div>
+      ) : null}
     </section>
   )
+}
+
+/**
+ * The enemy dice of an engagement: black dice rolled once by the engaged enemy and every enemy
+ * next to the player. Locked: they hit after the player's Skills.
+ */
+export function EnemyDice({
+  state,
+  heading = true,
+  rolls,
+}: Readonly<{ state: GameState; heading?: boolean; rolls?: readonly EnemyDieRoll[] }>) {
+  const dice = rolls ?? state.exchange?.engage?.enemyDice
+  if (!dice) return null
+  const cfg = state.config.combat.engage
+  const damage = { hit: cfg.hitDamage, special: cfg.specialDamage, miss: 0 }
+  return (
+    <div data-testid="enemy-dice">
+      {heading ? (
+        <h3 className={styles.subTitle}>
+          {dice.length === 0
+            ? 'Enemy dice: none (no enemy next to you)'
+            : 'Enemy dice from adjacent enemies (locked: they hit you after your Skills)'}
+        </h3>
+      ) : null}
+      <ul className={styles.dice}>
+        {dice.map((d, i) => {
+          const kind = enemyKindOf(state, d.enemy)
+          const elite = kind === 'elite'
+          const who = `${kind ?? 'enemy'} ${d.enemy}`
+          return (
+            <li key={i} className={styles.dieItem}>
+              <span
+                className={`${styles.die} ${styles.enemyDie} ${elite ? styles.enemyElite : ''}`}
+                data-face={d.face}
+                data-kind={elite ? 'elite' : 'grunt'}
+                aria-label={`Enemy die of ${who}: ${d.face}`}
+              >
+                <GameIcon name={`face-enemy-${d.face}`} size="2.4rem" />
+              </span>
+              <span className={styles.enemyDieLabel} aria-hidden="true">
+                <strong>
+                  {ENEMY_FACE_LABEL[d.face]}
+                  {damage[d.face] > 0 ? `: ${damage[d.face]} dmg` : ''}
+                </strong>
+                <small>{who}</small>
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
+/** An enemy's kind: on the map now, or (defeated) from the event that put it there. */
+function enemyKindOf(state: GameState, id: string): string | undefined {
+  const live = state.enemies.find((e) => e.id === id)?.kind
+  if (live) return live
+  for (const e of state.log) {
+    if (e.type === 'enemySpawned' && e.enemy === id) return e.kind
+    if (e.type === 'eliteReplaced' && e.elite === id) return 'elite'
+  }
+  return undefined
 }

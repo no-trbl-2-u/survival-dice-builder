@@ -7,7 +7,9 @@ import { play } from '../sound/sound.ts'
 import { BasePanel } from './BasePanel.tsx'
 import { DecisionDialog } from './DecisionDialog.tsx'
 import { DiceTray } from './DiceTray.tsx'
-import { forceEngagement } from './devEngage.ts'
+import { atTarget, forceEngagement } from './devEngage.ts'
+import { EngagementModal } from './EngagementModal.tsx'
+import { lastEngagement, type EngageSummary } from './engageView.ts'
 import { downloadRun, exportRun } from './exportRun.ts'
 import { Hand } from './Hand.tsx'
 import { PhaseBar } from './PhaseBar.tsx'
@@ -136,6 +138,18 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
   const toggle = (die: number) =>
     setPicked(chosen.includes(die) ? chosen.filter((d) => d !== die) : [...chosen, die])
 
+  // Combat v3: the engagement runs in a modal; when it ends, the modal shows the result until
+  // the player closes it. (Labels only: the summary reads the engine's events.)
+  const engaged = Boolean(state.exchange?.engage)
+  const [summary, setSummary] = useState<EngageSummary | null>(null)
+  // Set during render (not in an effect) so the modal never unmounts between the last action
+  // and its result.
+  const [wasEngaged, setWasEngaged] = useState(engaged)
+  if (wasEngaged !== engaged) {
+    setWasEngaged(engaged)
+    setSummary(engaged ? null : lastEngagement(state.log))
+  }
+
   // Sound: the cues of each new action (never on load or undo: those replace the run).
   const heard = useRef(run.actions.length)
   useEffect(() => {
@@ -172,7 +186,24 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
           <PlayerPanel state={state} />
         </div>
       </div>
-      {state.exchange ? (
+      {engaged || summary ? (
+        <EngagementModal
+          state={state}
+          legal={legal}
+          act={act}
+          actAll={actAll}
+          selected={chosen}
+          toggle={toggle}
+          dice3d={prefs.dice3d}
+          summary={engaged ? null : summary}
+          onClose={() => {
+            setSummary(null)
+            // Back to the board: bring the map into view (phones stack panels above it).
+            document.querySelector('[aria-label="Map"]')?.scrollIntoView({ block: 'start' })
+          }}
+        />
+      ) : null}
+      {state.exchange && !engaged ? (
         <div className={`${styles.layout} ${styles.exchangeRow}`} data-decisions>
           <DiceTray
             state={state}
@@ -233,6 +264,18 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
             }}
           >
             Force engagement (dev)
+          </button>
+        ) : null}
+        {devTools ? (
+          <button
+            type="button"
+            data-testid="force-target"
+            onClick={() => {
+              const next = forceEngagement(run, atTarget)
+              if (next) dispatch({ kind: 'replace', run: next })
+            }}
+          >
+            Force target pick (dev)
           </button>
         ) : null}
         {undoOn ? (

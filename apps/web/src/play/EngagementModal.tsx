@@ -1,0 +1,430 @@
+import type { Action, GameState } from '@survival/engine'
+import { useEffect, useRef, useState } from 'react'
+import { GameIcon } from '../icons/GameIcon.tsx'
+import { optionText } from './CardView.tsx'
+import { describeEvent } from './describeEvent.ts'
+import { DiceTray, EnemyDice } from './DiceTray.tsx'
+import {
+  ENGAGE_STAGES,
+  engageHeadline,
+  engageInstruction,
+  engageStage,
+  type EngageSummary,
+} from './engageView.ts'
+import styles from './Play.module.css'
+import { SkillBoard } from './SkillBoard.tsx'
+import { firstOf, ofType } from './targets.ts'
+
+type Props = Readonly<{
+  state: GameState
+  legal: readonly Action[]
+  act: (a: Action) => void
+  actAll: (actions: readonly Action[]) => void
+  selected: readonly number[]
+  toggle: (die: number) => void
+  dice3d: boolean
+  /** Set once the engagement is over: the modal shows what happened until it is closed. */
+  summary: EngageSummary | null
+  onClose: () => void
+}>
+
+/**
+ * Combat v3: the whole engagement in 1 modal — the enemy dice, the player's dice, cards to add,
+ * the Skills, the targets, and the result. Every control is a legal action from the engine;
+ * the modal only arranges them. "Look at the board" hides it until the player comes back; Esc
+ * closes it only on the result, never mid-engagement.
+ */
+export function EngagementModal(props: Props) {
+  const { state, summary, onClose } = props
+  const dialog = useRef<HTMLDialogElement>(null)
+  const opener = useRef<Element | null>(null)
+  const [peek, setPeek] = useState(false)
+  const open = !peek
+
+  useEffect(() => {
+    const el = dialog.current
+    if (!el) return
+    if (open && !el.open) {
+      opener.current ??= document.activeElement
+      el.showModal()
+      firstFocus(el)?.focus()
+    }
+    if (!open && el.open) el.close()
+  }, [open])
+
+  // After each action, keep focus inside the modal: the clicked control may be gone, so move to
+  // the step's main action (or its first control).
+  useEffect(() => {
+    const el = dialog.current
+    if (!el?.open || el.contains(document.activeElement)) return
+    firstFocus(el)?.focus()
+  }, [state, summary])
+
+  // Closing for good: give focus back to where it was (or the page's next decision).
+  useEffect(
+    () => () => {
+      const back = opener.current
+      if (back instanceof HTMLElement && document.contains(back))
+        back.focus({ preventScroll: true })
+    },
+    [],
+  )
+
+  if (peek) {
+    return (
+      <div className={styles.engagePeek} role="region" aria-label="Engagement in progress">
+        <span>
+          <strong>Engagement paused.</strong> Look around the board, then go back to finish it.
+        </span>
+        <button
+          type="button"
+          className={styles.primary}
+          autoFocus
+          data-testid="engage-return"
+          onClick={() => setPeek(false)}
+        >
+          Back to the engagement
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <dialog
+      ref={dialog}
+      className={styles.engageModal}
+      aria-labelledby="engage-title"
+      data-testid="engagement-modal"
+      onCancel={(e) => {
+        // Esc: only the result can close; mid-engagement it would hide pending choices.
+        e.preventDefault()
+        if (summary) onClose()
+      }}
+    >
+      {summary ? (
+        <SummaryView state={state} summary={summary} onClose={onClose} />
+      ) : (
+        <LiveView
+          {...props}
+          onPeek={() => {
+            setPeek(true)
+            window.scrollTo({ top: 0 })
+          }}
+        />
+      )}
+    </dialog>
+  )
+}
+
+/**
+ * Where focus goes in a step: a target, else a die's Select toggle, else "Roll again", else the
+ * step's main action. Never "End engagement" or a Skill first: Enter must not skip or fire.
+ */
+function firstFocus(el: HTMLElement): HTMLElement | null {
+  return (
+    el.querySelector<HTMLElement>('[data-testid="engage-targets"] button') ??
+    el.querySelector<HTMLElement>('section[aria-label="Dice"] button[aria-pressed]') ??
+    el.querySelector<HTMLElement>('[data-roll-again]') ??
+    el.querySelector<HTMLElement>('[data-primary]') ??
+    el.querySelector<HTMLElement>('button')
+  )
+}
+
+/** The header: who is engaged, the player's health and guard, and the stage strip. */
+function Head({
+  state,
+  stage,
+  title = 'Engagement',
+  onPeek,
+}: Readonly<{ state: GameState; stage: number; title?: string; onPeek?: () => void }>) {
+  const player = state.players[state.current]
+  const ids = [...new Set(state.exchange?.engage?.enemyDice.map((d) => d.enemy) ?? [])]
+  const foes = ids.map((id) => `${state.enemies.find((e) => e.id === id)?.kind ?? 'enemy'} ${id}`)
+  return (
+    <header className={styles.engageHead}>
+      <div className={styles.engageTitleRow}>
+        <h2 id="engage-title" className={styles.engageTitle}>
+          {title}
+          {foes.length > 0 ? (
+            <span className={styles.engageFoes}> vs {foes.join(', ')}</span>
+          ) : null}
+        </h2>
+        {onPeek ? (
+          <button
+            type="button"
+            className={styles.engagePeekButton}
+            aria-label="Look at the board"
+            onClick={onPeek}
+          >
+            <span className={styles.engageWide}>Look at the board</span>
+            <span className={styles.engageNarrow}>Board</span>
+          </button>
+        ) : null}
+        {player ? (
+          <p className={styles.engageVitals} data-testid="engage-vitals">
+            <span>
+              <GameIcon name="health" /> Health {player.health}/{player.maxHealth}
+            </span>
+            <span>
+              <GameIcon name="guard" /> Guard {player.guard}
+            </span>
+          </p>
+        ) : null}
+      </div>
+      <ol className={styles.engageSteps} aria-label="Engagement steps">
+        {ENGAGE_STAGES.map((name, i) => (
+          <li
+            key={name}
+            aria-current={i === stage ? 'step' : undefined}
+            data-done={i < stage || undefined}
+            data-final={i === ENGAGE_STAGES.length - 1 || undefined}
+          >
+            <span className={styles.engageStepNum}>{i + 1}</span>{' '}
+            <span className={styles.engageStepName}>{name}</span>
+          </li>
+        ))}
+      </ol>
+    </header>
+  )
+}
+
+type LiveProps = Props & Readonly<{ onPeek: () => void }>
+
+/** The engagement while it runs. */
+function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek }: LiveProps) {
+  const ex = state.exchange
+  const picking = legal.some((a) => a.type === 'resolveSkill' || a.type === 'chooseTarget')
+  const targets = useRef<HTMLDivElement>(null)
+  // A target pick appears at the top of the body: bring it into view (phones scroll the body).
+  useEffect(() => {
+    if (picking) targets.current?.scrollIntoView({ block: 'nearest' })
+  }, [picking])
+  if (!ex) return null
+  const stage = engageStage(ex.step)
+  const roll = firstOf(legal, 'roll')
+  const stop = firstOf(legal, 'stopRolling')
+  const endReroll = firstOf(legal, 'endReroll')
+  const endCards = firstOf(legal, 'endCards')
+  const finish = firstOf(legal, 'confirmAssignment')
+  const rollsLeft = state.config.combat.maxRolls - ex.rollsUsed
+  const primary = stop ?? endReroll ?? endCards ?? finish
+  const primaryText = stop
+    ? 'Stop rolling: use these dice'
+    : endReroll
+      ? 'Stop rerolling'
+      : endCards
+        ? 'Done adding cards'
+        : 'End engagement: enemy dice hit'
+  return (
+    <>
+      <Head state={state} stage={stage} onPeek={onPeek} />
+      <p className={styles.engageNow} aria-live="polite" data-testid="engage-instruction">
+        {engageInstruction(state)}
+      </p>
+      <div className={styles.engageBody}>
+        <div className={styles.engageMain}>
+          <div ref={targets} className={styles.engageTargetSlot}>
+            <Targets state={state} legal={legal} act={act} />
+          </div>
+          <section className={styles.panel} aria-label="Enemy dice">
+            <h2 className={styles.panelTitle}>
+              {ex.engage?.enemyDice.length
+                ? 'Enemy dice · they hit you at the end'
+                : 'Enemy dice · none (no enemy next to you)'}
+            </h2>
+            <EnemyDice state={state} heading={false} />
+            {ex.engage?.enemyDice.length ? (
+              <p className={styles.muted}>
+                Locked: every die hits at the end, even if you defeat the enemy that rolled it.
+              </p>
+            ) : null}
+          </section>
+          <DiceTray
+            state={state}
+            legal={legal}
+            act={act}
+            selected={selected}
+            toggle={toggle}
+            dice3d={dice3d}
+            enemyDice={false}
+            controls={false}
+          />
+          <Cards state={state} legal={legal} act={act} />
+        </div>
+        <div className={styles.engageSide}>
+          <SkillBoard
+            state={state}
+            legal={legal}
+            act={act}
+            actAll={actAll}
+            selected={selected}
+            confirmButton={false}
+          />
+        </div>
+      </div>
+      <footer className={styles.engageFoot}>
+        <span className={styles.engageFootActions}>
+          {roll ? (
+            <button type="button" data-roll-again onClick={() => act(roll)}>
+              Roll again ({rollsLeft} left)
+            </button>
+          ) : null}
+          {primary ? (
+            <button
+              // A new element per step: focus then moves to the new step's first control.
+              key={ex.step}
+              type="button"
+              className={styles.primary}
+              data-primary
+              onClick={() => act(primary)}
+            >
+              {primaryText}
+            </button>
+          ) : null}
+        </span>
+      </footer>
+    </>
+  )
+}
+
+/** A fired attack Skill picks its enemy here (the engine's own target list). */
+function Targets({ state, legal, act }: Readonly<Pick<Props, 'state' | 'legal' | 'act'>>) {
+  const resolves = ofType(legal, 'resolveSkill')
+  const chooses = ofType(legal, 'chooseTarget')
+  if (resolves.length === 0 && chooses.length === 0) return null
+  const enemy = (id: string) => state.enemies.find((e) => e.id === id)
+  const label = (id: string) => {
+    const e = enemy(id)
+    const max = e ? state.content.enemies.enemies.find((d) => d.id === e.kind)?.health : undefined
+    return e ? `${e.kind} ${id} (health ${e.health}${max ? `/${max}` : ''})` : `enemy ${id}`
+  }
+  const skillName = (id: string) => state.content.skills.find((s) => s.id === id)?.name ?? id
+  return (
+    <section
+      className={styles.engageTargets}
+      aria-label="Choose a target"
+      data-testid="engage-targets"
+    >
+      <h3 className={styles.subTitle}>Choose a target</h3>
+      <ul className={styles.engageTargetList}>
+        {resolves.map((a) => (
+          <li key={`${a.skill}-${a.use}-${a.enemy ?? 'none'}`}>
+            <button type="button" className={styles.primary} data-primary onClick={() => act(a)}>
+              {a.enemy
+                ? `${skillName(a.skill)} hits ${label(a.enemy)}`
+                : `Fire ${skillName(a.skill)}`}
+            </button>
+          </li>
+        ))}
+        {chooses.map((a) => (
+          <li key={a.enemy}>
+            <button type="button" className={styles.primary} data-primary onClick={() => act(a)}>
+              Target {label(a.enemy)}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+/** Cards the player can add to the engagement now (rerolls, heals). */
+function Cards({ state, legal, act }: Readonly<Pick<Props, 'state' | 'legal' | 'act'>>) {
+  const plays = ofType(legal, 'playOption')
+  if (plays.length === 0) return null
+  const player = state.players[state.current]
+  return (
+    <section className={styles.engageCards} aria-label="Cards you can add">
+      <h3 className={styles.subTitle}>Cards you can add</h3>
+      <ul className={styles.engageCardList}>
+        {player?.hand.map((c) => {
+          const def = state.content.cards.find((d) => d.id === c.def)
+          const mine = plays.filter((a) => a.card === c.id)
+          if (!def || mine.length === 0) return null
+          return (
+            <li key={c.id} className={styles.engageCard}>
+              <strong>{def.name}</strong>
+              {mine.map((a) => {
+                const option = def.combat?.[a.option]
+                return (
+                  <button key={a.option} type="button" onClick={() => act(a)}>
+                    {option ? optionText(option) : 'Play'}
+                  </button>
+                )
+              })}
+            </li>
+          )
+        })}
+      </ul>
+    </section>
+  )
+}
+
+/** The result of a finished engagement, until the player closes it. */
+function SummaryView({
+  state,
+  summary,
+  onClose,
+}: Readonly<{ state: GameState; summary: EngageSummary; onClose: () => void }>) {
+  const lines: string[] = []
+  const skillName = (id: string) => state.content.skills.find((s) => s.id === id)?.name ?? id
+  lines.push(
+    summary.fired.length > 0
+      ? `Skills fired: ${summary.fired.map(skillName).join(', ')}.`
+      : 'No Skill fired.',
+  )
+  lines.push(
+    summary.dealt > 0
+      ? `You dealt ${summary.dealt} damage${summary.defeated > 0 ? ` and defeated ${summary.defeated} ${summary.defeated === 1 ? 'enemy' : 'enemies'}` : ''}.`
+      : 'You dealt no damage.',
+  )
+  if (summary.healed > 0) lines.push(`You healed ${summary.healed}.`)
+  const rewards = [
+    summary.experience > 0 ? `${summary.experience} experience` : '',
+    summary.currency > 0 ? `${summary.currency} currency` : '',
+  ].filter(Boolean)
+  if (rewards.length > 0) lines.push(`You gained ${rewards.join(' and ')}.`)
+  lines.push(
+    summary.hitsTaken === 0
+      ? `No enemy die hit you${summary.ignored > 0 ? ` (${summary.ignored} ignored)` : ''}.`
+      : `${summary.hitsTaken} enemy ${summary.hitsTaken === 1 ? 'die' : 'dice'} hit you: ${summary.toGuard} to guard, ${summary.toHealth} to health${summary.ignored > 0 ? ` (${summary.ignored} ignored)` : ''}.`,
+  )
+  return (
+    <>
+      <Head state={state} stage={ENGAGE_STAGES.length - 1} title="Engagement over" />
+      <p
+        className={`${styles.engageNow} ${summary.knockedOut ? styles.engageKo : ''}`}
+        data-testid="engage-headline"
+      >
+        {engageHeadline(summary)}
+      </p>
+      <div className={styles.engageSummary} data-testid="engage-summary">
+        {summary.enemyDice.length > 0 ? (
+          <>
+            <h3 className={styles.subTitle}>The enemy dice</h3>
+            <EnemyDice state={state} heading={false} rolls={summary.enemyDice} />
+          </>
+        ) : null}
+        <ul className={styles.engageTotals}>
+          {lines.map((l) => (
+            <li key={l}>{l}</li>
+          ))}
+        </ul>
+        <details>
+          <summary>Everything that happened</summary>
+          <ol className={styles.log}>
+            {summary.events.map((e, i) => (
+              <li key={i}>{describeEvent(e, state)}</li>
+            ))}
+          </ol>
+        </details>
+      </div>
+      <footer className={styles.engageFoot}>
+        <span />
+        <button type="button" className={styles.primary} data-primary onClick={onClose}>
+          Back to the board
+        </button>
+      </footer>
+    </>
+  )
+}

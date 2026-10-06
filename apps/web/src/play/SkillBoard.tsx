@@ -13,6 +13,8 @@ type Props = Readonly<{
   actAll: (actions: readonly Action[]) => void
   /** The dice chosen in the tray. */
   selected: readonly number[]
+  /** Show the confirm / finish button (off when the engagement modal puts it in its footer). */
+  confirmButton?: boolean
 }>
 
 /**
@@ -22,7 +24,7 @@ type Props = Readonly<{
  * fill it (engine `canFire`). An attack Skill says how many enemies are in its range now: out
  * of range it fires and hits nothing.
  */
-export function SkillBoard({ state, legal, act, actAll, selected }: Props) {
+export function SkillBoard({ state, legal, act, actAll, selected, confirmButton = true }: Props) {
   const p = state.players[state.current]
   if (!p) return null
   const ex = state.exchange
@@ -119,7 +121,7 @@ export function SkillBoard({ state, legal, act, actAll, selected }: Props) {
           )
         })}
       </ul>
-      {confirm ? (
+      {confirm && confirmButton ? (
         <button type="button" className={styles.primary} onClick={() => act(confirm)}>
           {ex?.engage ? 'Finish engagement' : 'Confirm dice and fire Skills'}
         </button>
