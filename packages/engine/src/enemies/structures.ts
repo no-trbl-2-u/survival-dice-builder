@@ -101,7 +101,7 @@ type StructureKind = 'barricade' | 'tower' | 'base'
 const STRUCTURE_ORDER: readonly StructureKind[] = ['barricade', 'tower', 'base']
 
 /** The structures next to a hex, in the order an enemy attacks them (7.12; ties: id). */
-function adjacentStructures(
+export function adjacentStructures(
   state: GameState,
   hex: GameState['enemies'][number]['hex'],
 ): { id: string; kind: StructureKind }[] {

@@ -45,6 +45,35 @@ export function DiceTray({ state, legal, act, selected, select, dice3d = false }
           />
         </Suspense>
       ) : null}
+      {ex.engage ? (
+        <div data-testid="enemy-dice">
+          <h3 className={styles.subTitle}>
+            {ex.engage.enemyDice.length === 0
+              ? 'Enemy dice: none (no enemy next to you)'
+              : 'Enemy dice from adjacent enemies (locked: they hit you after your Skills)'}
+          </h3>
+          <ul className={styles.dice}>
+            {ex.engage.enemyDice.map((d, i) => {
+              const enemy = state.enemies.find((e) => e.id === d.enemy)
+              const who = `${enemy?.kind ?? 'enemy'} ${d.enemy}`
+              return (
+                <li key={i} className={styles.dieItem}>
+                  <span
+                    className={`${styles.die} ${styles.enemyDie} ${d.face === 'miss' ? '' : styles.enemyHit}`}
+                    aria-label={`Enemy die of ${who}: ${d.face}`}
+                  >
+                    <strong>
+                      {d.face === 'hit' ? 'HIT' : d.face === 'special' ? 'SPECIAL' : 'miss'}
+                    </strong>
+                    <small>{who}</small>
+                  </span>
+                </li>
+              )
+            })}
+          </ul>
+          <h3 className={styles.subTitle}>Your dice</h3>
+        </div>
+      ) : null}
       <ul className={styles.dice}>
         {ex.dice.map((d, i) => {
           const keep = has({ type: 'toggleKeep', die: i })

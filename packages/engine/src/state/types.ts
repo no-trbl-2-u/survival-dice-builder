@@ -134,11 +134,12 @@ export type QueuedEffect = Readonly<{ skill: string; use: number; bonusDamage: n
  * - `reroll`: choose dice for a card's reroll effect (step 5).
  * - `assign`: put dice on Skills (step 6).
  * - `targets`: choose the target of a single-target damage Skill (step 7).
+ * - `resolve`: Combat v3 only: a Skill just filled fires and waits for its target.
  *
  * @rule 7.8
  */
 export type Exchange = Readonly<{
-  step: 'roll' | 'cards' | 'reroll' | 'assign' | 'targets'
+  step: 'roll' | 'cards' | 'reroll' | 'assign' | 'targets' | 'resolve'
   dice: readonly Die[]
   rollsUsed: number
   rerollsLeft: number
@@ -150,7 +151,24 @@ export type Exchange = Readonly<{
   queue: readonly QueuedEffect[]
   /** Set when this is a skirmish (6.10-6.14): the enemy hex entered and the hex left. */
   skirmish: Readonly<{ hex: Axial; from: Axial }> | null
+  /** Set when this exchange is a Combat v3 engagement. */
+  engage?: Engagement
 }>
+
+/** One enemy die face (Combat v3). @rule Combat v3 */
+export type EnemyFace = 'hit' | 'miss' | 'special'
+
+/** One enemy die rolled in an engagement, and the enemy that rolled it. @rule Combat v3 */
+export type EnemyDieRoll = Readonly<{ enemy: string; face: EnemyFace }>
+
+/**
+ * A Combat v3 engagement (`combat.model: "engage"`): the enemy dice rolled by every enemy next
+ * to the player when it started. Enemy dice are never rerolled. Each fired Skill picks its own
+ * target in its range.
+ *
+ * @rule Combat v3
+ */
+export type Engagement = Readonly<{ enemyDice: readonly EnemyDieRoll[] }>
 
 /** Card and Skill supplies by level, top first. @rule 4.12 */
 export type Supplies = Readonly<{

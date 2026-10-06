@@ -108,6 +108,48 @@
       "any-adjacent": "Every adjacent enemy"
     }
   },
+  "combat.model": {
+    "label": "Combat model",
+    "help": "Combat v3 playtest (docs/design/combat-v3.md). Exchanges: the Spec v1 rule. Engagements: each Engage card option starts an attack on 1 enemy; that enemy and every enemy next to you roll enemy dice back at you; there is no enemy attack phase, and a siege step hits structures at the end of Combat.",
+    "rule": "7.8, Combat v3",
+    "options": {
+      "exchange": "Exchanges (Spec v1)",
+      "engage": "Engagements (Combat v3)"
+    }
+  },
+  "combat.engage": {
+    "label": "Combat v3 numbers"
+  },
+  "combat.engage.enemyDie": {
+    "label": "Enemy die faces",
+    "help": "The 6 faces of an enemy die: hit, miss, or special.",
+    "rule": "Combat v3"
+  },
+  "combat.engage.hitDamage": {
+    "label": "Hit damage",
+    "help": "Damage a Hit face deals to you (guard first).",
+    "rule": "Combat v3"
+  },
+  "combat.engage.specialDamage": {
+    "label": "Special damage",
+    "help": "Damage a Special face deals, until each grunt type has its own Special.",
+    "rule": "Combat v3"
+  },
+  "combat.engage.eliteDice": {
+    "label": "Elite enemy dice",
+    "help": "Enemy dice an elite rolls when you engage it or stand next to it.",
+    "rule": "Combat v3"
+  },
+  "combat.engage.siegeDamage": {
+    "label": "Siege damage",
+    "help": "At the end of Combat, each grunt next to a structure deals this much to it.",
+    "rule": "Combat v3 (siege)"
+  },
+  "combat.engage.eliteSiegeDamage": {
+    "label": "Elite siege damage",
+    "help": "Siege damage of an elite, until elites have their own siege rule.",
+    "rule": "Combat v3 (siege)"
+  },
   "experience": {
     "label": "Experience"
   },

@@ -87,3 +87,27 @@ test('/play at 375px puts the controls for the current step above the map', asyn
   const map = await page.getByTestId('play-map').boundingBox()
   expect(control && map && control.y < map.y, 'a Play button sits above the map').toBe(true)
 })
+
+test('/play Combat v3: Combat cards offer their options, and Engage starts an engagement', async ({
+  page,
+}) => {
+  const errors: string[] = []
+  page.on('pageerror', (err) => errors.push(err.message))
+  await page.goto('/play?seed=5&combat=engage')
+  const banner = page.getByTestId('next-step')
+  await page
+    .getByRole('button', { name: 'Place your figure on Plains, Base, the base centre' })
+    .click()
+  for (let i = 0; i < 40 && !(await banner.textContent())?.startsWith('Combat'); i++) {
+    if (await clickFirst(page, /^Stop (moving|building)$/)) continue
+    await clickFirst(page, /^Discard /)
+  }
+  await expect(banner).toContainText(/^Combat:/)
+  await expect(
+    page
+      .getByLabel('Hand')
+      .getByRole('button', { name: /^Move 2$/ })
+      .first(),
+  ).toBeVisible()
+  expect(errors).toEqual([])
+})

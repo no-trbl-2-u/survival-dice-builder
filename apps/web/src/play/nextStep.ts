@@ -10,6 +10,17 @@ const EXCHANGE: Record<NonNullable<GameState['exchange']>['step'], string> = {
   reroll: 'Choose dice to reroll, or stop rerolling',
   assign: 'Put your dice on Skills: pick a die, click a Skill slot, then confirm',
   targets: 'Click a highlighted enemy on the map to target it',
+  resolve: 'Resolve your fired Skills in any order',
+}
+
+const ENGAGE: Record<NonNullable<GameState['exchange']>['step'], string> = {
+  roll: 'Keep and reroll your dice (enemy dice stay as rolled), or stop rolling',
+  cards: 'Add cards to the engagement (rerolls, heals), or choose Done adding cards',
+  reroll: 'Choose dice to reroll, or stop rerolling',
+  assign:
+    'Select a die, then a Skill slot: a full Skill fires at once. Repeat; when you are done, the enemy dice hit you',
+  resolve: 'Click a highlighted enemy on the map to hit',
+  targets: 'Click a highlighted enemy on the map to target it',
 }
 
 /**
@@ -32,6 +43,14 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
     )
   const tower = ofType(legal, 'chooseTowerTarget')[0]
   if (tower) return step('Combat', `Choose which enemy Tower ${tower.tower} shoots`)
+  const engage = state.exchange?.engage
+  if (engage) {
+    const head = state.exchange?.queue[0]
+    const skill = state.content.skills.find((s) => s.id === head?.skill)?.name
+    if (state.exchange?.step === 'resolve' && skill)
+      return step('Engagement', `${skill} fires: click a highlighted enemy on the map to hit`)
+    return step('Engagement', ENGAGE[state.exchange?.step ?? 'roll'])
+  }
   if (state.exchange) {
     const name = state.exchange.skirmish ? 'Skirmish' : 'Combat'
     const far = state.exchange.step === 'assign' && !attackInReach(state)
@@ -42,7 +61,7 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
   }
   if (state.active?.kind === 'move')
     return step(
-      'Prepare',
+      state.phase === 'combat' ? 'Combat' : 'Prepare',
       `Move: click a highlighted hex (${state.active.hexesLeft} left), or stop moving`,
     )
   if (state.active?.kind === 'build') {
@@ -54,6 +73,11 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
       `Build: click a highlighted hex (${state.active.buildsLeft} left), or stop building`,
     )
   }
+  if (state.phase === 'combat' && state.config.combat.model === 'engage')
+    return step(
+      'Combat',
+      'Play each card: Engage (roll to attack from where you stand), another option, or discard it',
+    )
   if (state.phase === 'prepare') {
     const shop = has('buyCard') || has('buyUpgrade') ? ', or buy at the base' : ''
     return step('Prepare', `Play a card from your hand${shop}`)
@@ -80,6 +104,7 @@ export function bannerActions(legal: readonly Action[]): Action[] {
       a.type === 'stopMoving' ||
       a.type === 'stopBuilding' ||
       a.type === 'chooseTowerTarget' ||
-      a.type === 'buyUpgrade',
+      a.type === 'buyUpgrade' ||
+      a.type === 'endCards',
   )
 }

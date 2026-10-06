@@ -61,7 +61,13 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
   const drag = useRef<{ x: number; y: number } | null>(null)
   const svg = useRef<SVGSVGElement>(null)
   const targets = hexTargets(legal)
-  const enemyTargets = new Map(ofType(legal, 'chooseTarget').map((a) => [a.enemy, a]))
+  // Enemies to click: a Skill's target (v1), or the target of a Combat v3 Skill that just fired.
+  const enemyTargets = new Map<string, Action>([
+    ...ofType(legal, 'chooseTarget').map((a): [string, Action] => [a.enemy, a]),
+    ...ofType(legal, 'resolveSkill').flatMap((a): [string, Action][] =>
+      a.enemy ? [[a.enemy, a]] : [],
+    ),
+  ])
 
   useEffect(() => {
     const el = svg.current

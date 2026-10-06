@@ -1,4 +1,4 @@
-import type { CardDef, PrepareEffect, CombatEffect } from '@survival/content'
+import type { CardDef, CombatEffect, CombatOption, PrepareEffect } from '@survival/content'
 import styles from './Play.module.css'
 
 /** Plain text for a top-half (Prepare) effect. */
@@ -33,13 +33,38 @@ export function bottomText(e: CombatEffect): string {
   }
 }
 
-type Props = Readonly<{ def: CardDef; up: 'top' | 'bottom' }>
+/** Plain text for a Combat v3 card option. */
+export function optionText(o: CombatOption): string {
+  switch (o.kind) {
+    case 'engage':
+      return 'Engage'
+    case 'move':
+      return `Move ${o.hexes}`
+    case 'reroll':
+      return o.dice === 'all'
+        ? 'Reroll all dice'
+        : `Reroll ${o.dice} ${o.dice === 1 ? 'die' : 'dice'}`
+    case 'heal':
+      return `Heal ${o.amount}`
+    case 'repair':
+      return `Repair ${o.amount}`
+  }
+}
+
+/** The Combat side as printed: Combat v3 options ("Move 2 / Engage") or the v1 effects. */
+export function combatSideText(def: CardDef, engage: boolean): string {
+  return engage && def.combat
+    ? def.combat.map(optionText).join(' / ')
+    : def.bottom.map(bottomText).join(', ')
+}
+
+type Props = Readonly<{ def: CardDef; up: 'top' | 'bottom'; engage?: boolean }>
 
 /**
  * One card with both halves. The bottom half is printed upside down, as on the physical card;
  * the hand turns the whole card in Combat. The active half is also named in text.
  */
-export function CardView({ def, up }: Props) {
+export function CardView({ def, up, engage = false }: Props) {
   return (
     <div className={styles.card} data-up={up}>
       <div className={`${styles.half} ${styles.topHalf}`}>
@@ -53,13 +78,11 @@ export function CardView({ def, up }: Props) {
       </div>
       <div className={`${styles.half} ${styles.bottomHalf}`}>
         <span className={styles.band}>Bottom · Combat</span>
-        <span>{def.bottom.map(bottomText).join(', ')}</span>
+        <span>{combatSideText(def, engage)}</span>
       </div>
       <span className="visually-hidden">
         Active half:{' '}
-        {up === 'top'
-          ? `Prepare, ${topText(def.top)}`
-          : `Combat, ${def.bottom.map(bottomText).join(', ')}`}
+        {up === 'top' ? `Prepare, ${topText(def.top)}` : `Combat, ${combatSideText(def, engage)}`}
       </span>
     </div>
   )

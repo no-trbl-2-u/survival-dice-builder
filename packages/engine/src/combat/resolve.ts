@@ -6,7 +6,7 @@ import type { GameEvent } from '../events/events.ts'
 import { hexDistance } from '../hex.ts'
 import { byAge, currentTarget } from '../enemies/movement.ts'
 import { adjacent, sameHex } from '../map/tiles.ts'
-import { firedUses } from '../skills/assign.ts'
+import { firedUses, isFull } from '../skills/assign.ts'
 import {
   currentPlayer,
   enemyDef,
@@ -16,6 +16,7 @@ import {
 } from '../state/helpers.ts'
 import type { Enemy, GameState, QueuedEffect } from '../state/types.ts'
 import { healCurrent, updateExchange } from './cardEffects.ts'
+import { finishEngagement } from './engage.ts'
 import { knockOut } from './knockout.ts'
 
 /**
@@ -71,6 +72,8 @@ export function enemiesInRange(state: GameState, range: number): Enemy[] {
 export function confirmAssignment(state: GameState): Step {
   const exchange = state.exchange
   if (!exchange) throw new Error('No exchange in progress')
+  // Combat v3: every full Skill already fired; done using dice, so the enemy dice hit now.
+  if (exchange.engage) return finishEngagement(state)
   const player = currentPlayer(state)
   const skills = player.skills.map((id) => skillDef(state, id))
   const fired = firedUses(skills, exchange.assignments)
@@ -108,7 +111,11 @@ export function processQueue(state: GameState): Step {
     if (!exchange) return [current, events]
     const [head, ...rest] = exchange.queue
     if (!head) {
-      const [done, more] = exchange.skirmish ? finishSkirmish(current) : finishExchange(current)
+      const [done, more] = exchange.skirmish
+        ? finishSkirmish(current)
+        : exchange.engage
+          ? finishEngagement(current)
+          : finishExchange(current)
       return [done, [...events, ...more]]
     }
     const effect = skillDef(current, head.skill).effect
@@ -125,6 +132,74 @@ export function processQueue(state: GameState): Step {
     current = after
     events.push(...more)
   }
+}
+
+/**
+ * Combat v3: the fired Skills still to resolve, each with every target it can hit now (a
+ * single-target attack: 1 choice per enemy in its range, or none in range: no effect).
+ *
+ * @rule Combat v3 (the player resolves dice and Skills in any order)
+ */
+export function resolveChoices(state: GameState): { skill: string; use: number; enemy?: string }[] {
+  return (state.exchange?.queue ?? []).flatMap(({ skill, use }) => {
+    const effect = skillDef(state, skill).effect
+    if (effect.kind !== 'damage' || effect.target !== 'one') return [{ skill, use }]
+    const targets = enemiesInRange(state, effect.range)
+    return targets.length === 0
+      ? [{ skill, use }]
+      : targets.map((e) => ({ skill, use, enemy: e.id }))
+  })
+}
+
+/**
+ * Combat v3: when the dice now fill a Skill use, it fires at once. An attack on 1 enemy with an
+ * enemy in its range waits for the player to pick the target (`resolve`); anything else
+ * (heal, guard, an attack on each enemy, an attack with no enemy in range) resolves now.
+ *
+ * @rule Combat v3 (select a die, a Skill, a target; repeat)
+ */
+export function fireIfFull(state: GameState, skill: string, use: number): Step {
+  const def = skillDef(state, skill)
+  const exchange = state.exchange
+  if (!exchange || !isFull(def, exchange.assignments, use)) return [state, []]
+  const player = currentPlayer(state)
+  const firedSkills = [...new Set([...state.progress.firedSkills, skill])]
+  const fired = updateExchange({ ...state, progress: { ...state.progress, firedSkills } }, (e) => ({
+    ...e,
+    step: 'resolve',
+    queue: [{ skill, use, bonusDamage: 0 }],
+  }))
+  const events: GameEvent[] = [{ type: 'skillFired', rule: 'Combat v3', player: player.id, skill }]
+  const choices = resolveChoices(fired)
+  const only = choices.length === 1 ? choices[0] : undefined
+  if (only && !only.enemy) {
+    const [after, more] = resolveQueued(fired, skill, use, null)
+    return [after, [...events, ...more]]
+  }
+  return [fired, events]
+}
+
+/**
+ * Combat v3: resolves 1 fired Skill now, on the chosen enemy (single-target attacks).
+ *
+ * @rule Combat v3 (the player resolves dice and Skills in any order)
+ */
+export function resolveQueued(
+  state: GameState,
+  skill: string,
+  use: number,
+  enemy: string | null,
+): Step {
+  const queue = state.exchange?.queue ?? []
+  const index = queue.findIndex((q) => q.skill === skill && q.use === use)
+  const queued = queue[index]
+  if (!queued) throw new Error(`Skill "${skill}" is not waiting to resolve`)
+  const popped = updateExchange(state, (e) => ({
+    ...e,
+    step: 'assign',
+    queue: e.queue.filter((_, i) => i !== index),
+  }))
+  return resolveEffect(popped, queued, enemy)
 }
 
 /**

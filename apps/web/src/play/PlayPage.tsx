@@ -1,3 +1,4 @@
+import type { GameConfig } from '@survival/content'
 import { legalActions, type Action } from '@survival/engine'
 import { useEffect, useReducer, useRef, useState } from 'react'
 import { AUTOSAVE_KEY, browserStorage, loadConfig } from '../config/configStore.ts'
@@ -23,6 +24,11 @@ import { StartPanel } from './StartPanel.tsx'
 
 type Msg = RunMsg | Readonly<{ kind: 'reset' }>
 
+/** The config with the chosen Combat model (Combat v3 playtest, docs/design/combat-v3.md). */
+function withCombat(config: GameConfig, model: GameConfig['combat']['model']): GameConfig {
+  return { ...config, combat: { ...config.combat, model } }
+}
+
 /** The page holds no run until one starts (start panel) or `?seed=` starts one at once. */
 function reducer(run: Run | null, msg: Msg): Run | null {
   if (msg.kind === 'reset') return null
@@ -42,7 +48,10 @@ export function PlayPage() {
     const params = new URLSearchParams(window.location.search)
     const seed = Number.parseInt(params.get('seed') ?? '', 10)
     const players = Number.parseInt(params.get('players') ?? '1', 10) || 1
-    return Number.isFinite(seed) ? newRun(config, seed, players, Date.now()) : null
+    const combat = params.get('combat') === 'engage' ? 'engage' : config.combat.model
+    return Number.isFinite(seed)
+      ? newRun(withCombat(config, combat), seed, players, Date.now())
+      : null
   })
   const [undoOn, setUndoOn] = useState(false)
   const [prefs, setPrefsState] = useState(() => loadPrefs(store))
@@ -66,8 +75,14 @@ export function PlayPage() {
       <StartPanel
         custom={custom}
         store={store}
-        onStart={(players, seed) =>
-          dispatch({ kind: 'new', config, seed, players, at: Date.now() })
+        onStart={(players, seed, combat) =>
+          dispatch({
+            kind: 'new',
+            config: withCombat(config, combat),
+            seed,
+            players,
+            at: Date.now(),
+          })
         }
         onLoad={(loaded) => dispatch({ kind: 'replace', run: loaded })}
       />

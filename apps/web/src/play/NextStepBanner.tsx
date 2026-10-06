@@ -3,7 +3,11 @@ import { ActionLabel } from '../debug/ActionLabel.tsx'
 import { bannerActions, nextStep } from './nextStep.ts'
 import styles from './Play.module.css'
 
-type Props = Readonly<{ state: GameState; legal: readonly Action[]; act: (a: Action) => void }>
+type Props = Readonly<{
+  state: GameState
+  legal: readonly Action[]
+  act: (a: Action) => void
+}>
 
 /**
  * The big line at the top of /play: `{PHASE}: {STEP}`, what to do right now. It also holds the

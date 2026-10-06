@@ -50,6 +50,28 @@ export const CombatEffectSchema = z.discriminatedUnion('kind', [
 export type CombatEffect = z.infer<typeof CombatEffectSchema>
 
 /**
+ * Combat v3 card options (`combat.model: "engage"`, docs/design/combat-v3.md). A card's Combat
+ * side offers 1 or more; playing the card uses exactly 1.
+ *
+ * - `engage`: start an engagement with 1 enemy (the attack).
+ * - `move`: move up to `hexes`, as in Prepare.
+ * - `reroll`: reroll `dice` of your dice in the current engagement.
+ * - `heal`: heal `amount`.
+ * - `repair`: give `amount` health back to a structure you stand next to (or the base, on the
+ *   Base tile).
+ *
+ * @rule Combat v3 (designer playtest 2026-10-06)
+ */
+export const CombatOptionSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('engage') }),
+  z.object({ kind: z.literal('move'), hexes: PositiveInt }),
+  z.object({ kind: z.literal('reroll'), dice: z.union([PositiveInt, z.literal('all')]) }),
+  z.object({ kind: z.literal('heal'), amount: PositiveInt }),
+  z.object({ kind: z.literal('repair'), amount: PositiveInt }),
+])
+export type CombatOption = z.infer<typeof CombatOptionSchema>
+
+/**
  * Skill effects.
  *
  * - `damage`: `amount` damage at `range`, to one enemy or to each enemy in range.

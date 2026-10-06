@@ -27,8 +27,27 @@ type Golden = Readonly<{
 
 const DIR = path.join(import.meta.dirname, 'golden')
 
+/**
+ * The state without the Combat v3 additions (the card `combat` options and the
+ * `combat.model`/`combat.engage` config). Combat v3 is off by default, so with them removed
+ * every replay must hash as before.
+ */
+function withoutCombatV3(state: GameState): GameState {
+  const combat = omit(state.config.combat, ['model', 'engage']) as GameState['config']['combat']
+  return {
+    ...state,
+    config: { ...state.config, combat },
+    content: {
+      ...state.content,
+      cards: state.content.cards.map((c) => omit(c, ['combat']) as typeof c),
+    },
+  }
+}
+
 function hash(state: GameState): string {
-  return createHash('sha256').update(serialize(state)).digest('hex')
+  return createHash('sha256')
+    .update(serialize(withoutCombatV3(state)))
+    .digest('hex')
 }
 
 /** The phase 22 config keys: every one defaults to the phase 21 rule. */
@@ -131,7 +150,7 @@ describe('golden replays', () => {
     })
     it(`${g.file} with every phase 22 option off matches the phase 21 state`, () => {
       const golden = JSON.parse(fs.readFileSync(file, 'utf-8')) as Golden
-      const final = toPhase21(replay(golden))
+      const final = toPhase21(withoutCombatV3(replay(golden)))
       expect(
         createHash('sha256')
           .update(serialize(final as GameState))

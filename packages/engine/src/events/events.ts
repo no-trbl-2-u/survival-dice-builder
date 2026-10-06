@@ -1,6 +1,6 @@
 import type { Face, SkillFace } from '@survival/content'
 import type { Axial } from '../hex.ts'
-import type { Phase } from '../state/types.ts'
+import type { EnemyDieRoll, Phase } from '../state/types.ts'
 
 /**
  * Everything the engine resolves appears as an event. Each event names the rule that produced
@@ -36,6 +36,13 @@ export type GameEvent = Readonly<
         faces?: readonly Face[]
       }
     | { type: 'hitIgnored'; enemy: string; player: string }
+    | {
+        type: 'engaged'
+        player: string
+        card: string
+        enemyDice: readonly EnemyDieRoll[]
+      }
+    | { type: 'repaired'; player: string; structure: string; amount: number; health: number }
     | { type: 'playerDamaged'; player: string; toGuard: number; toHealth: number; health: number }
     | { type: 'exchangeEnded'; player: string }
     | { type: 'stepDeferred'; step: string; reason: string }

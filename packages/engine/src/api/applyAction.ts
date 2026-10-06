@@ -1,6 +1,7 @@
 import { buildDefense, legalBuilds } from '../build/defenses.ts'
 import { applyBottomEffect, applyTopEffect, updateExchange } from '../combat/cardEffects.ts'
-import { chooseTarget, confirmAssignment } from '../combat/resolve.ts'
+import { combatOptions, endCards, playOption, startEngagement } from '../combat/engage.ts'
+import { chooseTarget, confirmAssignment, fireIfFull, resolveQueued } from '../combat/resolve.ts'
 import { towerAttacks, towerShoots } from '../enemies/structures.ts'
 import { discardFromHand, playToTable } from '../deck/deck.ts'
 import { rerollOne, toggleKeep } from '../dice/dice.ts'
@@ -99,7 +100,8 @@ function act(state: GameState, action: Action): Step {
     case 'roll':
       return rollAgain(state)
     case 'stopRolling':
-      return [updateExchange(state, (e) => ({ ...e, step: 'cards' })), []]
+      // Combat v3: straight on to using the dice (cards can be added while using them).
+      return [updateExchange(state, (e) => ({ ...e, step: e.engage ? 'assign' : 'cards' })), []]
     case 'rerollDie': {
       const exchange = state.exchange
       if (!exchange) throw illegalAction(action, 'no exchange')
@@ -124,7 +126,13 @@ function act(state: GameState, action: Action): Step {
         ...e,
         assignments: [...e.assignments, { die, skill, use, slot, asFace }],
       }))
-      return [next, [{ type: 'dieAssigned', rule: '7.8', player: player.id, die, skill, asFace }]]
+      const events: GameEvent[] = [
+        { type: 'dieAssigned', rule: '7.8', player: player.id, die, skill, asFace },
+      ]
+      if (!state.exchange?.engage) return [next, events]
+      // Combat v3: a Skill whose slots are now full fires at once.
+      const [fired, more] = fireIfFull(next, skill, use)
+      return [fired, [...events, ...more]]
     }
     case 'unassignDie': {
       const next = updateExchange(state, (e) => ({
@@ -173,6 +181,17 @@ function act(state: GameState, action: Action): Step {
       return keepSkill(state, action.skill)
     case 'replaceSkill':
       return replaceSkill(state, action.skill)
+    case 'playOption': {
+      const option = combatOptions(state, findCard(state, action.card))[action.option]
+      if (!option) throw illegalAction(action, 'no such option')
+      return playOption(state, action.card, option)
+    }
+    case 'engage':
+      return startEngagement(state, action.card)
+    case 'endCards':
+      return endCards(state)
+    case 'resolveSkill':
+      return resolveQueued(state, action.skill, action.use, action.enemy ?? null)
     case 'stopMoving':
     case 'stopBuilding':
       return [{ ...state, active: null }, []]

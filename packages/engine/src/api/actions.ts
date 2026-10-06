@@ -29,6 +29,10 @@ export type Action = Readonly<
   | { type: 'buyUpgrade'; upgrade: string }
   | { type: 'draftSkill'; skill: string }
   | { type: 'replaceSkill'; skill: string }
+  | { type: 'playOption'; card: string; option: number }
+  | { type: 'engage'; card: string; option: number }
+  | { type: 'endCards' }
+  | { type: 'resolveSkill'; skill: string; use: number; enemy?: string }
 >
 
 /** Action type names. */

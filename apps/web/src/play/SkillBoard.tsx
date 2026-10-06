@@ -98,7 +98,7 @@ export function SkillBoard({ state, legal, act, selected, select }: Props) {
       </ul>
       {confirm ? (
         <button type="button" className={styles.primary} onClick={() => act(confirm)}>
-          Confirm dice and fire Skills
+          {ex?.engage ? 'Done with dice: the enemy dice hit you' : 'Confirm dice and fire Skills'}
         </button>
       ) : null}
     </section>

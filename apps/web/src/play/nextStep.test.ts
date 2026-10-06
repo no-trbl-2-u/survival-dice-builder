@@ -47,6 +47,19 @@ describe('nextStep', () => {
     expect(nextStep(s, legalActions(s)).step).toMatch(/^Player 1: /)
   })
 
+  it('Combat v3: every legal action of a played-out engage run has a control', () => {
+    const engage = { ...config, combat: { ...config.combat, model: 'engage' as const } }
+    let s = createGame(engage, 5)
+    for (let i = 0; i < 600 && s.phase !== 'ended'; i++) {
+      const legal = legalActions(s)
+      const banner = new Set(bannerActions(legal))
+      for (const a of legal)
+        expect(COVERED.has(a.type) || MAP.has(a.type) || banner.has(a)).toBe(true)
+      expect(nextStep(s, legal).step).not.toBe('Waiting')
+      s = applyAction(s, legal[i % legal.length] as Action).state
+    }
+  })
+
   it('every legal action of a played-out run has a control, a map target, or a banner button', () => {
     let s = createGame(config, 7)
     for (let i = 0; i < 400 && s.phase !== 'ended'; i++) {

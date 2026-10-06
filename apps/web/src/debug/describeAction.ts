@@ -1,5 +1,6 @@
 import { hexKey, type Action, type Axial, type GameState } from '@survival/engine'
 import { baseHex, hexName, stepsAway } from '../map/places.ts'
+import { optionText } from '../play/CardView.tsx'
 
 /** The printed name of a card instance in the current player's hand. */
 function cardName(state: GameState, cardId: string): string {
@@ -21,6 +22,12 @@ function enemyName(state: GameState, id: string): string {
 /** Where the current player stands. */
 function here(state: GameState): Axial {
   return state.players[state.current]?.hex ?? { q: 0, r: 0 }
+}
+
+/** A Combat v3 option of a card in the current player's hand. */
+function cardOption(state: GameState, cardId: string, option: number) {
+  const def = state.players[state.current]?.hand.find((c) => c.id === cardId)?.def
+  return state.content.cards.find((c) => c.id === def)?.combat?.[option]
 }
 
 /** The face of an exchange die, for labels. */
@@ -108,6 +115,24 @@ export function describeAction(action: Action, state: GameState): string {
       return `Draft ${skillName(state, action.skill)}`
     case 'replaceSkill':
       return `Replace ${skillName(state, action.skill)}`
+    case 'playOption': {
+      const option = cardOption(state, action.card, action.option)
+      return `${cardName(state, action.card)}: ${option ? optionText(option) : `option ${action.option + 1}`}`
+    }
+    case 'engage':
+      return `${cardName(state, action.card)}: Engage`
+    case 'endCards':
+      return 'Done adding cards'
+    case 'resolveSkill': {
+      const effect = state.content.skills.find((s) => s.id === action.skill)?.effect
+      const enemy = action.enemy ? state.enemies.find((e) => e.id === action.enemy) : undefined
+      const name = skillName(state, action.skill)
+      if (action.enemy) {
+        return `Resolve ${name} on ${enemyName(state, action.enemy)}${enemy ? ` (${hexName(state, enemy.hex)}, ${enemy.health} health)` : ''}`
+      }
+      const miss = effect?.kind === 'damage' && effect.target === 'one'
+      return `Resolve ${name}${miss ? ' (no enemy in range: no effect)' : ''}`
+    }
   }
 }
 

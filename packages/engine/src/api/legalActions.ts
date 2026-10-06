@@ -1,12 +1,13 @@
 import { legalBuilds } from '../build/defenses.ts'
-import { pendingTargets } from '../combat/resolve.ts'
+import { combatOptions, engageMode } from '../combat/engage.ts'
+import { pendingTargets, resolveChoices } from '../combat/resolve.ts'
 import { freeBaseHexes } from '../combat/knockout.ts'
 import { towerTargets } from '../enemies/structures.ts'
 import { legalMoves } from '../movement/move.ts'
 import { draftedSkills } from '../progression/draft.ts'
 import { legalBuys, onBase, returnableStarters } from '../progression/shop.ts'
 import { legalUpgrades } from '../progression/upgrades.ts'
-import { legalPlacements } from '../skills/assign.ts'
+import { isFull, legalPlacements } from '../skills/assign.ts'
 import { currentPlayer, skillDef } from '../state/helpers.ts'
 import type { GameState } from '../state/types.ts'
 import type { Action } from './actions.ts'
@@ -72,6 +73,19 @@ function coreActions(state: GameState): Action[] {
 
   const exchange = state.exchange
   const active = state.active
+  const engage = engageMode(state)
+  if (engage && state.phase === 'combat' && !exchange) {
+    // Combat v3: a Move option in Combat (never into an enemy: that is an engagement).
+    if (active?.kind === 'move') {
+      return [
+        { type: 'stopMoving' },
+        ...legalMoves(state, active.hexesLeft, active.ignoreEnemyCost)
+          .filter((m) => !m.skirmish)
+          .map((m): Action => ({ type: 'moveTo', q: m.to.q, r: m.to.r })),
+      ]
+    }
+    return engageCardChoices(state)
+  }
   if (state.phase === 'prepare' && !exchange) {
     if (active?.kind === 'move') {
       return [
@@ -114,17 +128,34 @@ function coreActions(state: GameState): Action[] {
         ...exchange.dice.map((_, die): Action => ({ type: 'toggleKeep', die })),
       ]
     case 'cards':
-      return cardChoices()
+      return exchange.engage ? engagementCardChoices(state) : cardChoices()
     case 'reroll':
       return [
         { type: 'endReroll' },
         ...exchange.dice.flatMap((_, die): Action[] =>
-          exchange.rerolled.includes(die) ? [] : [{ type: 'rerollDie', die }],
+          exchange.rerolled.includes(die) || exchange.assignments.some((a) => a.die === die)
+            ? []
+            : [{ type: 'rerollDie', die }],
         ),
       ]
     case 'assign': {
       const skills = player.skills.map((id) => skillDef(state, id))
       const unlimited = state.config.options.skillUses === 'unlimited'
+      if (exchange.engage) {
+        // Combat v3: use the dice 1 at a time (a full Skill fires at once), add cards, or stop.
+        const fired = (a: { skill: string; use: number }) =>
+          isFull(skillDef(state, a.skill), exchange.assignments, a.use)
+        return [
+          { type: 'confirmAssignment' },
+          ...legalPlacements(exchange.dice, skills, exchange.assignments, unlimited).map(
+            (a): Action => ({ type: 'assignDie', ...a }),
+          ),
+          ...engagementCardChoices(state).filter((a) => a.type === 'playOption'),
+          ...exchange.assignments
+            .filter((a) => !fired(a))
+            .map((a): Action => ({ type: 'unassignDie', die: a.die })),
+        ]
+      }
       return [
         { type: 'confirmAssignment' },
         ...legalPlacements(exchange.dice, skills, exchange.assignments, unlimited).map(
@@ -135,5 +166,39 @@ function coreActions(state: GameState): Action[] {
     }
     case 'targets':
       return pendingTargets(state).map((e): Action => ({ type: 'chooseTarget', enemy: e.id }))
+    case 'resolve':
+      return resolveChoices(state).map((c): Action => ({ type: 'resolveSkill', ...c }))
   }
+}
+
+/**
+ * Combat v3, between engagements: each card's Combat options (Engage anywhere, even with no
+ * enemy near; Move, Heal, Repair at once; a reroll only inside an engagement), or discard it.
+ *
+ * @rule Combat v3
+ */
+function engageCardChoices(state: GameState): Action[] {
+  const player = currentPlayer(state)
+  const plays = player.hand.flatMap((c) =>
+    combatOptions(state, c.def).flatMap((o, option): Action[] => {
+      if (o.kind === 'engage') return [{ type: 'engage', card: c.id, option }]
+      return o.kind === 'reroll' ? [] : [{ type: 'playOption', card: c.id, option }]
+    }),
+  )
+  return [...plays, ...player.hand.map((c): Action => ({ type: 'discardCard', card: c.id }))]
+}
+
+/**
+ * Combat v3, inside an engagement: add cards (their reroll and heal options), or stop adding.
+ *
+ * @rule Combat v3 (engagement step 5)
+ */
+function engagementCardChoices(state: GameState): Action[] {
+  const player = currentPlayer(state)
+  const adds = player.hand.flatMap((c) =>
+    combatOptions(state, c.def).flatMap((o, option): Action[] =>
+      o.kind === 'reroll' || o.kind === 'heal' ? [{ type: 'playOption', card: c.id, option }] : [],
+    ),
+  )
+  return [{ type: 'endCards' }, ...adds]
 }

@@ -126,6 +126,10 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `${upper(enemyLabel(names, event.enemy, event.kind))} is defeated.`
     case 'enemyAttacked':
       return `${upper(enemyLabel(names, event.enemy))} attacks ${whom(event.player)} for ${event.damage}${event.faces ? ` (${event.faces.join(', ')})` : ''}.`
+    case 'engaged':
+      return `${who(event.player)} ${s('engage')}. ${event.enemyDice.length === 0 ? 'No enemy is next to you: no enemy dice.' : `Enemy dice: ${event.enemyDice.map((d) => `${enemyLabel(names, d.enemy)} ${d.face}`).join(', ')}.`}`
+    case 'repaired':
+      return `${who(event.player)} ${s('repair')} ${event.structure === 'base' ? 'the base' : event.structure} for ${event.amount} (health ${event.health}).`
     case 'hitIgnored':
       return `${who(event.player)} ${s('ignore')} the hit from ${enemyLabel(names, event.enemy)}.`
     case 'playerDamaged':

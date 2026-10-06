@@ -816,3 +816,13 @@
   font-size: var(--text-sm);
   font-weight: 600;
 }
+
+/* Combat v3 enemy dice */
+.enemyDie {
+  border-style: dashed;
+}
+
+.enemyHit {
+  border-color: var(--phase-combat);
+  color: var(--phase-combat);
+}

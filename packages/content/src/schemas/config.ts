@@ -37,6 +37,36 @@ export const GameConfigSchema = z.object({
     enemyAttacks: z.enum(['every-exchange', 'once-per-combat']),
     /** Row 69: only enemies that target the player attack it, or every adjacent enemy does. */
     adjacentAttack: z.enum(['target-only', 'any-adjacent']),
+    /**
+     * Combat v3 (docs/design/combat-v3.md): "exchange" is Spec v1 7.8; "engage" plays Combat as
+     * engagements, each opened by an Engage card option, with enemy dice rolled back at you and
+     * a siege step instead of enemy attacks.
+     */
+    model: z.enum(['exchange', 'engage']).default('exchange'),
+    /** Combat v3 numbers (used only when `model` is "engage"). */
+    engage: z
+      .object({
+        /** The 6 faces of an enemy die. */
+        enemyDie: z.array(z.enum(['hit', 'miss', 'special'])).length(6),
+        /** Damage of a Hit face. */
+        hitDamage: NonNegativeInt,
+        /** Damage of a Special face (placeholder until each grunt type has its own). */
+        specialDamage: NonNegativeInt,
+        /** Enemy dice an elite rolls when it is engaged or adjacent. */
+        eliteDice: PositiveInt,
+        /** Siege: damage each enemy next to a structure deals at the end of Combat. */
+        siegeDamage: NonNegativeInt,
+        /** Siege damage of an elite (placeholder for its special siege rule). */
+        eliteSiegeDamage: NonNegativeInt,
+      })
+      .default({
+        enemyDie: ['hit', 'hit', 'miss', 'miss', 'miss', 'special'],
+        hitDamage: 1,
+        specialDamage: 2,
+        eliteDice: 2,
+        siegeDamage: 1,
+        eliteSiegeDamage: 3,
+      }),
   }),
   experience: z.object({
     firstStep: PositiveInt,

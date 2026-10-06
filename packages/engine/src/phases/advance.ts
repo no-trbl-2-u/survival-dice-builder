@@ -2,6 +2,7 @@ import { drawHand, rotateDeck } from '../deck/deck.ts'
 import { rerollUnkept, rollDice } from '../dice/dice.ts'
 import { moveEnemies } from '../enemies/movement.ts'
 import { returnKnockedOut } from '../combat/knockout.ts'
+import { engageMode, engagementMoves, finishEngagement, siege } from '../combat/engage.ts'
 import { spawnAtNodes } from '../enemies/spawning.ts'
 import { forcedReveal } from '../explore/explore.ts'
 import { structureAttacks, towerAttacks } from '../enemies/structures.ts'
@@ -208,6 +209,7 @@ function combatStep(state: GameState): readonly [GameState, readonly GameEvent[]
   const player = currentPlayer(state)
   if (state.roundEnding) return roundEndStep(state)
   if (state.towerQueue.length > 0) return [state, [], true]
+  if (engageMode(state)) return engageCombatStep(state)
   if (!state.exchange) {
     // 16.4: exchanges in turn, seat order, skipping players with no cards left.
     if (!state.turnFresh || !hasTurns(player)) {
@@ -245,6 +247,34 @@ function combatStep(state: GameState): readonly [GameState, readonly GameEvent[]
   return exchangeStep(state)
 }
 
+/**
+ * Combat v3: each player plays the whole deck a hand at a time (seat order, 1 hand each turn).
+ * A card is played for 1 of its Combat options or discarded; an Engage option runs an
+ * engagement (the exchange machinery). When every deck and hand is empty, the siege step runs
+ * instead of the enemy attack step, then the end of the round.
+ *
+ * @rule Combat v3, 16.4
+ */
+function engageCombatStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
+  if (state.exchange) return exchangeStep(state)
+  const active = state.active
+  if (active) {
+    const done = active.kind === 'move' ? active.hexesLeft <= 0 : active.buildsLeft <= 0
+    return done ? [{ ...state, active: null }, [], false] : [state, [], true]
+  }
+  const player = currentPlayer(state)
+  if (!player.knockedOut && player.hand.length > 0) return [state, [], true]
+  if (state.turnFresh && hasTurns(player)) {
+    const [next, events] = draw(state, 'Combat v3')
+    return [{ ...next, turnFresh: false }, events, false]
+  }
+  const seat = nextSeat(state, hasTurns)
+  if (seat >= 0) return [{ ...state, current: seat, turnFresh: true }, [], false]
+  const [besieged, events] = siege(state)
+  if (besieged.phase === 'ended') return [besieged, events, false]
+  return [{ ...besieged, current: 0, roundEnding: true }, events, false]
+}
+
 /** The automatic steps inside an exchange (or skirmish); the rest are decisions. @rule 7.8 */
 function exchangeStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   const exchange = state.exchange
@@ -253,7 +283,8 @@ function exchangeStep(state: GameState): readonly [GameState, readonly GameEvent
   switch (exchange.step) {
     case 'roll':
       if (exchange.rollsUsed >= state.config.combat.maxRolls) {
-        return [{ ...state, exchange: { ...exchange, step: 'cards' } }, [], false]
+        const step = exchange.engage ? 'assign' : 'cards'
+        return [{ ...state, exchange: { ...exchange, step } }, [], false]
       }
       return [state, [], true]
     case 'cards':
@@ -263,10 +294,16 @@ function exchangeStep(state: GameState): readonly [GameState, readonly GameEvent
       return [state, [], true]
     case 'reroll':
       if (exchange.rerollsLeft <= 0) {
-        return [{ ...state, exchange: { ...exchange, step: 'cards', rerollsLeft: 0 } }, [], false]
+        const step = exchange.engage ? 'assign' : 'cards'
+        return [{ ...state, exchange: { ...exchange, step, rerollsLeft: 0 } }, [], false]
       }
       return [state, [], true]
+    case 'resolve':
+      return [state, [], true]
     case 'assign':
+      // Combat v3: no die can go on a Skill and no card can reroll one: the enemy dice hit now.
+      if (exchange.engage && !engagementMoves(state)) return [...finishEngagement(state), false]
+      return [state, [], true]
     case 'targets':
       return [state, [], true]
   }

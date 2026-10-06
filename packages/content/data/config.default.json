@@ -113,7 +113,16 @@
     "enemyMoveHexes": 2,
     "moveCostNextToEnemy": 2,
     "enemyAttacks": "every-exchange",
-    "adjacentAttack": "target-only"
+    "adjacentAttack": "target-only",
+    "model": "exchange",
+    "engage": {
+      "enemyDie": ["hit", "hit", "miss", "miss", "miss", "special"],
+      "hitDamage": 1,
+      "specialDamage": 2,
+      "eliteDice": 2,
+      "siegeDamage": 1,
+      "eliteSiegeDamage": 3
+    }
   },
   "experience": {
     "firstStep": 5,

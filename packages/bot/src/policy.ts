@@ -143,6 +143,8 @@ function combat(state: GameState, actions: readonly Action[]): Action | undefine
       const place = [...ofType(actions, 'assignDie')].sort((a, b) => rank(a) - rank(b))[0]
       return place ?? ofType(actions, 'confirmAssignment')[0]
     }
+    case 'resolve':
+      return ofType(actions, 'resolveSkill')[0]
     case 'targets': {
       const health = (id: string) => state.enemies.find((e) => e.id === id)?.health ?? 0
       return [...ofType(actions, 'chooseTarget')].sort(

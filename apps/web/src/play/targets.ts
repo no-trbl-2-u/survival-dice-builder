@@ -68,4 +68,7 @@ export const COVERED: ReadonlySet<ActionType> = new Set<ActionType>([
   'draftSkill',
   'replaceSkill',
   'returnStarter',
+  'playOption',
+  'engage',
+  'resolveSkill',
 ])

@@ -14,6 +14,15 @@
           "kind": "reroll",
           "dice": 1
         }
+      ],
+      "combat": [
+        {
+          "kind": "move",
+          "hexes": 2
+        },
+        {
+          "kind": "engage"
+        }
       ]
     },
     {
@@ -30,6 +39,15 @@
           "kind": "damage",
           "amount": 1
         }
+      ],
+      "combat": [
+        {
+          "kind": "engage"
+        },
+        {
+          "kind": "reroll",
+          "dice": 1
+        }
       ]
     },
     {
@@ -45,6 +63,12 @@
           "kind": "guard",
           "amount": 2
         }
+      ],
+      "combat": [
+        {
+          "kind": "repair",
+          "amount": 2
+        }
       ]
     },
     {
@@ -57,6 +81,16 @@
         "amount": 2
       },
       "bottom": [
+        {
+          "kind": "reroll",
+          "dice": "all"
+        }
+      ],
+      "combat": [
+        {
+          "kind": "heal",
+          "amount": 2
+        },
         {
           "kind": "reroll",
           "dice": "all"
@@ -77,6 +111,15 @@
           "kind": "reroll",
           "dice": 2
         }
+      ],
+      "combat": [
+        {
+          "kind": "move",
+          "hexes": 3
+        },
+        {
+          "kind": "engage"
+        }
       ]
     },
     {
@@ -93,6 +136,15 @@
           "kind": "damage",
           "amount": 2
         }
+      ],
+      "combat": [
+        {
+          "kind": "engage"
+        },
+        {
+          "kind": "reroll",
+          "dice": 2
+        }
       ]
     },
     {
@@ -107,6 +159,12 @@
       "bottom": [
         {
           "kind": "guard",
+          "amount": 3
+        }
+      ],
+      "combat": [
+        {
+          "kind": "repair",
           "amount": 3
         }
       ]
@@ -125,6 +183,15 @@
           "kind": "extraDie",
           "dice": 1
         }
+      ],
+      "combat": [
+        {
+          "kind": "move",
+          "hexes": 2
+        },
+        {
+          "kind": "engage"
+        }
       ]
     },
     {
@@ -141,6 +208,16 @@
           "kind": "heal",
           "amount": 2
         }
+      ],
+      "combat": [
+        {
+          "kind": "heal",
+          "amount": 2
+        },
+        {
+          "kind": "reroll",
+          "dice": 1
+        }
       ]
     },
     {
@@ -153,6 +230,15 @@
         "amount": 1
       },
       "bottom": [
+        {
+          "kind": "heal",
+          "amount": 1
+        }
+      ],
+      "combat": [
+        {
+          "kind": "engage"
+        },
         {
           "kind": "heal",
           "amount": 1
@@ -173,6 +259,15 @@
           "kind": "reroll",
           "dice": 3
         }
+      ],
+      "combat": [
+        {
+          "kind": "move",
+          "hexes": 4
+        },
+        {
+          "kind": "engage"
+        }
       ]
     },
     {
@@ -188,6 +283,15 @@
         {
           "kind": "damage",
           "amount": 3
+        }
+      ],
+      "combat": [
+        {
+          "kind": "engage"
+        },
+        {
+          "kind": "reroll",
+          "dice": 3
         }
       ]
     },
@@ -205,6 +309,12 @@
           "kind": "guard",
           "amount": 5
         }
+      ],
+      "combat": [
+        {
+          "kind": "repair",
+          "amount": 5
+        }
       ]
     },
     {
@@ -220,6 +330,16 @@
         {
           "kind": "heal",
           "amount": 3
+        }
+      ],
+      "combat": [
+        {
+          "kind": "heal",
+          "amount": 3
+        },
+        {
+          "kind": "reroll",
+          "dice": "all"
         }
       ]
     },
@@ -242,6 +362,15 @@
           "kind": "extraDie",
           "dice": 1
         }
+      ],
+      "combat": [
+        {
+          "kind": "move",
+          "hexes": 5
+        },
+        {
+          "kind": "engage"
+        }
       ]
     },
     {
@@ -257,6 +386,15 @@
         {
           "kind": "damage",
           "amount": 5
+        }
+      ],
+      "combat": [
+        {
+          "kind": "engage"
+        },
+        {
+          "kind": "reroll",
+          "dice": "all"
         }
       ]
     },
@@ -274,6 +412,12 @@
           "kind": "guard",
           "amount": 8
         }
+      ],
+      "combat": [
+        {
+          "kind": "repair",
+          "amount": 8
+        }
       ]
     },
     {
@@ -289,6 +433,16 @@
         {
           "kind": "heal",
           "amount": 5
+        }
+      ],
+      "combat": [
+        {
+          "kind": "heal",
+          "amount": 5
+        },
+        {
+          "kind": "reroll",
+          "dice": "all"
         }
       ]
     }

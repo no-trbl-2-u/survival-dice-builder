@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { CombatEffectSchema, PrepareEffectSchema } from './effects.ts'
+import { CombatEffectSchema, CombatOptionSchema, PrepareEffectSchema } from './effects.ts'
 import { IdSchema, LevelSchema, NonNegativeInt, PositiveInt } from './primitives.ts'
 
 /**
@@ -16,6 +16,8 @@ export const CardDefSchema = z
     cost: NonNegativeInt,
     top: PrepareEffectSchema,
     bottom: z.array(CombatEffectSchema).min(1, 'must have at least 1 Combat effect'),
+    /** Combat v3: the options of the Combat side (play 1). Used when `combat.model` is "engage". */
+    combat: z.array(CombatOptionSchema).min(1).optional(),
   })
   .refine((c) => (c.level === 0) === (c.cost === 0), {
     message: 'starter cards (level 0) cost 0; supply cards cost currency',
