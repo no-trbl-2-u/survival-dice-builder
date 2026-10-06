@@ -122,7 +122,7 @@ function hasTurns(player: Player): boolean {
 }
 
 /**
- * Prepare: draw 3, play each card, draw again when the hand is empty; stop when every deck and
+ * Prepare: draw a hand, play each card, draw again when the hand is empty; stop when every deck and
  * hand is empty, then start Combat. With 2-4 players each plays 1 hand in seat order, then the
  * next player with cards (16.8, `coopPrepareOrder`). A Move or Build in progress (and a
  * skirmish) is decided step by step before the next card. A returning knocked-out player first

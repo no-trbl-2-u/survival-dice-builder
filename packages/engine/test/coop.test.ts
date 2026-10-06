@@ -71,18 +71,10 @@ describe('turn order (16.4, 16.8)', () => {
   const drawOrder = (events: GameEvent[], rules: string[]) =>
     events.flatMap((e) => (e.type === 'cardsDrawn' && rules.includes(e.rule) ? [e.player] : []))
 
-  it('16.8 row 6 Prepare: players alternate hands of 3 in seat order', () => {
+  it('16.8 row 6 Prepare: players alternate hands in seat order', () => {
     const { events } = playUntil(coop(2), (s) => s.round === 2)
-    // p1's first hand was drawn when setup ended; 10 cards make 4 hands each.
-    expect(drawOrder(before(events, combatStarts), ['6.1', '6.5'])).toEqual([
-      'p2',
-      'p1',
-      'p2',
-      'p1',
-      'p2',
-      'p1',
-      'p2',
-    ])
+    // p1's first hand was drawn when setup ended; 10 cards make 2 hands of 5 each.
+    expect(drawOrder(before(events, combatStarts), ['6.1', '6.5'])).toEqual(['p2', 'p1', 'p2'])
   })
 
   it('16.8 full-turn: a player plays the whole deck before the next player', () => {
@@ -91,21 +83,13 @@ describe('turn order (16.4, 16.8)', () => {
       rulings: { ...config.rulings, coopPrepareOrder: 'full-turn' as const },
     }
     const { events } = playUntil(coop(2, cfg), (s) => s.round === 2)
-    expect(drawOrder(before(events, combatStarts), ['6.1', '6.5'])).toEqual([
-      'p1',
-      'p1',
-      'p1',
-      'p2',
-      'p2',
-      'p2',
-      'p2',
-    ])
+    expect(drawOrder(before(events, combatStarts), ['6.1', '6.5'])).toEqual(['p1', 'p2', 'p2'])
   })
 
   it('16.4 Combat: exchanges go in seat order', () => {
     const { events } = playUntil(coop(2), (s) => s.round === 2)
     const combat = events.slice(events.findIndex(combatStarts))
-    expect(drawOrder(combat, ['7.8'])).toEqual(['p1', 'p2', 'p1', 'p2', 'p1', 'p2', 'p1', 'p2'])
+    expect(drawOrder(combat, ['7.8'])).toEqual(['p1', 'p2', 'p1', 'p2'])
   })
 
   it('16.5 in an exchange only enemies next to that player attack that player', () => {

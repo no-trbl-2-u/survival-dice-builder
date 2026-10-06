@@ -1,4 +1,4 @@
-import { canFire, type Action, type GameState } from '@survival/engine'
+import { canFire, enemiesInRange, type Action, type GameState } from '@survival/engine'
 import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { skillText } from './effectText.ts'
@@ -16,7 +16,8 @@ type Props = Readonly<{
 /**
  * The Skill board. During placement, the slots the selected die fits are buttons; a filled
  * slot takes its die back. "Fires" = every slot is filled; "can fire" = the free dice could
- * fill it (engine `canFire`).
+ * fill it (engine `canFire`). An attack Skill says how many enemies are in its range now: out
+ * of range it fires and hits nothing.
  */
 export function SkillBoard({ state, legal, act, selected, select }: Props) {
   const p = state.players[state.current]
@@ -48,6 +49,9 @@ export function SkillBoard({ state, legal, act, selected, select }: Props) {
                 {fires ? ' — fires' : could && placing ? ' — can fire' : ''}
               </span>
               <span className={styles.muted}>{skillText(skill.effect)}</span>
+              {skill.effect.kind === 'damage' ? (
+                <InReach count={enemiesInRange(state, skill.effect.range).length} />
+              ) : null}
               <span className={styles.slots}>
                 {skill.faces.map((face, slot) => {
                   const here = mine.find((a) => a.slot === slot)
@@ -98,5 +102,16 @@ export function SkillBoard({ state, legal, act, selected, select }: Props) {
         </button>
       ) : null}
     </section>
+  )
+}
+
+/** How many enemies an attack Skill can reach from the figure now. */
+function InReach({ count }: Readonly<{ count: number }>) {
+  return count === 0 ? (
+    <span className={styles.outOfRange}>No enemy in range: it would hit nothing</span>
+  ) : (
+    <span className={styles.inRange}>
+      {count} {count === 1 ? 'enemy' : 'enemies'} in range
+    </span>
   )
 }

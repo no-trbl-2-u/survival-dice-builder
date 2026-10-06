@@ -105,11 +105,11 @@ Table 3 — Starter Skills
 
 ## 6 Prepare phase
 
-6.1 Draw 3 cards from your deck.
+6.1 Draw 5 cards from your deck.
 6.2 Play the top half of a card. Do the effect. Or discard the card. Do not do the effect. **[006]**
 6.3 Put each played card in your discard pile.
-6.4 When your hand is empty, draw 3 cards again.
-6.5 If your deck has fewer than 3 cards, draw all the cards.
+6.4 When your hand is empty, draw 5 cards again.
+6.5 If your deck has fewer than 5 cards, draw all the cards.
 6.6 When your deck is empty and your hand is empty, the Prepare phase stops.
 
 6.7 Top-half effects:
@@ -143,7 +143,7 @@ You can buy in each phase, at each moment that your figure is on the base. **[00
 7.7 Do combat exchanges until your deck is empty.
 
 7.8 For each combat exchange, do these steps in sequence:
-1. Draw 3 cards.
+1. Draw 5 cards.
 2. Roll all your action dice.
 3. Keep the dice that you want. Roll the other dice again.
 4. Do step 3 one more time if necessary. The maximum is 3 rolls.
@@ -306,7 +306,7 @@ Table 9 — Skill supplies (draft)
 16.1 Each player has a deck, dice, and a player board.
 16.2 All players share the experience track. All players get dice at the same time.
 16.3 All hands are open. Players can discuss all cards.
-16.8 Prepare: The players play 1 hand of 3 cards in turn. Start with the first player. Continue clockwise. Continue until each deck is empty. **[006]**
+16.8 Prepare: The players play 1 hand of 5 cards in turn. Start with the first player. Continue clockwise. Continue until each deck is empty. **[006]**
 16.4 Combat: The players do their exchanges in turn. Start with the first player. Continue clockwise.
 16.5 In each exchange of a player, each enemy next to that player attacks that player.
 16.6 Reveal 1 map tile for each player in the Explore phase. **[006: open. With a 7-tile deck, 4 players empty the deck in round 2. Designer to confirm.]**
@@ -330,7 +330,7 @@ Table 9 — Skill supplies (draft)
 - Bought cards: add to the deck (default) or replace a starter card.
 - Max level: no maximum (default) or a number.
 - Skill uses: 1 time for each exchange (default) or unlimited.
-- Starter deck and hand: 6 and 3 (default), 8 and 4, or 10 and 5.
+- Starter deck and hand: 10 and 5 (default), 6 and 3, 8 and 4, or 10 and 3.
 
 ## 19 Future: scenarios
 

@@ -10,7 +10,7 @@
     "draftSlots": 6
   },
   "deck": {
-    "preset": "deck-10-hand-3",
+    "preset": "deck-10-hand-5",
     "presets": [
       {
         "id": "deck-6-hand-3",

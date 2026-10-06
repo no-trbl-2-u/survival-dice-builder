@@ -17,10 +17,10 @@ describe('default content', () => {
     expect(errorsOf(rawCopy())).toEqual([])
   })
 
-  it('core loop v2, row 19: the default starter deck has 10 cards and a hand of 3', () => {
+  it('core loop v2, row 19: the default starter deck has 10 cards and a hand of 5 (row 71)', () => {
     const { deck } = defaultContent.config
     const preset = deck.presets.find((p) => p.id === deck.preset)
-    expect(preset?.handSize).toBe(3)
+    expect(preset?.handSize).toBe(5)
     expect(preset?.cards.reduce((n, e) => n + e.quantity, 0)).toBe(10)
     expect(Object.fromEntries(preset?.cards.map((e) => [e.card, e.quantity]) ?? [])).toEqual({
       'starter-move': 4,

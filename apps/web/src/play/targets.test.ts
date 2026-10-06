@@ -42,7 +42,7 @@ describe('targets', () => {
     expect(firstOf(legal, 'confirmAssignment')).toEqual(legal[0])
   })
 
-  it('every action type of a new run has a control or a Choices button', () => {
+  it('every action type of a new run has a dedicated control or a map target', () => {
     const s = createGame(config, 1)
     for (const a of legalActions(s))
       expect(COVERED.has(a.type) || a.type === 'placeFigure').toBe(true)

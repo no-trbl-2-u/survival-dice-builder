@@ -37,7 +37,7 @@ Terms that appear in the sources and the tabletop term the sheets use instead. B
 | refill (Shop offers) | Spec v1 11.5, OQ 11, 41 | "the bought card is replaced at once" |
 | turn the deck 180 degrees | Spec v1 7.2, 10.6 | turn the deck so the bottom halves are up (or the top halves) |
 | top half, bottom half, upside down | Spec v1 2.6, 2.7, v2 | card halves: top half up in Prepare, bottom half up in Combat |
-| deck preset, deck-10-hand-3, hand size | config, OQ 19, Spec v1 18.1 | the 10-card starter deck; a hand of 3 |
+| deck preset, deck-10-hand-5, hand size | config, OQ 19, Spec v1 18.1 | the 10-card starter deck; a hand of 5 |
 | player board, Skill slot, draft slot | Spec v1 2.1, 11.9 | player board, Skill slot (physical, stay) |
 | wave track, wave step, wave | Spec v1 7.4, 10.3, 10.4, 15, OQ 38, 51, 62 | omitted: removed by v2 (no wave track) |
 | Explore phase, reveal step, automatic exploration, forced reveal | Spec v1 5.1, 10, 18.1, OQ 37, 51 | omitted: removed by v2; a tile is revealed by stepping off the map edge in Prepare |
@@ -89,11 +89,11 @@ Terms that appear in the sources and the tabletop term the sheets use instead. B
 
 - F-025 [Spec v1 2.6, 2.7]: Each card has 2 halves. The top half is the Prepare effect. The bottom half is printed upside down and is the Combat effect.
 - F-026 [v2 Setup; OQ 19 decided]: Starter deck: 10 cards per player: 4 Move 2, 4 Gather 2, 1 Build, 1 Rest (overrides Spec v1 2.1 and Table 2: 6 starter cards). A deck never has fewer than 10 cards.
-- F-027 [Spec v1 Table 2 (effects); prototype value cards.json starter-move; copies: v2 Setup, prototype value config.default.json deck.presets deck-10-hand-3]: Starter card "Move": top Move 2; bottom Reroll 1 die. 4 copies per player.
-- F-028 [Spec v1 Table 2 (effects); prototype value cards.json starter-gather; copies: v2 Setup, prototype value config.default.json deck.presets deck-10-hand-3]: Starter card "Gather": top Gather 2 (amount from v2 Setup "Gather 2"); bottom +1 damage. 4 copies per player.
+- F-027 [Spec v1 Table 2 (effects); prototype value cards.json starter-move; copies: v2 Setup, prototype value config.default.json deck.presets deck-10-hand-5]: Starter card "Move": top Move 2; bottom Reroll 1 die. 4 copies per player.
+- F-028 [Spec v1 Table 2 (effects); prototype value cards.json starter-gather; copies: v2 Setup, prototype value config.default.json deck.presets deck-10-hand-5]: Starter card "Gather": top Gather 2 (amount from v2 Setup "Gather 2"); bottom +1 damage. 4 copies per player.
 - F-029 [Spec v1 Table 2; prototype value cards.json starter-build]: Starter card "Build": top Build; bottom +2 guard. 1 copy per player.
 - F-030 [Spec v1 Table 2; prototype value cards.json starter-rest]: Starter card "Rest": top Rest: heal 2; bottom Reroll all dice. 1 copy per player.
-- F-031 [prototype value config.default.json deck.preset, handSize]: Hand size 3 (the "deck-10-hand-3" preset). Matches v2 Prepare "Draw 3 cards".
+- F-031 [prototype value config.default.json deck.preset, handSize]: Hand size 5 (the "deck-10-hand-5" preset). Matches v2 Prepare "Draw 5 cards" (OQ 71).
 - F-032 [v2 Setup; OQ 18 decided]: Supplies: 2 copies of each supply card (overrides Spec v1 Table 8, which lists each once).
 - F-033 [Spec v1 Table 8; OQ 60 proposed]: Level 1 supply cards, cost 3 currency each: Sprint (Move 3 / Reroll 2 dice); Haul (Gather 2 in total / +2 damage); Mason (Build, cost -1 / +3 guard); Scout (Move 2 / +1 die for this exchange); Bandage (Rest: heal 3 / Heal 2); Forage (Gather 1 in total / Heal 1). 6 cards x 2 copies = 12.
 - F-034 [Spec v1 Table 8; OQ 60 proposed]: Level 2 supply cards, cost 5 currency each: Dash (Move 4 / Reroll 3 dice); Excavate (Gather 3 in total / +3 damage); Engineer (Build, cost -2 / +5 guard); Field Medic (Rest: heal 4 / Heal 3). 4 cards x 2 copies = 8.

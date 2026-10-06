@@ -48,7 +48,10 @@ export function placementsFor(legal: readonly Action[], die: number): Of<'assign
   return ofType(legal, 'assignDie').filter((a) => a.die === die)
 }
 
-/** The action types that have a dedicated control on /play; everything else goes to Choices. */
+/**
+ * The action types that have a dedicated control on /play; map targets and the next-step
+ * banner (`bannerActions`) cover the rest.
+ */
 export const COVERED: ReadonlySet<ActionType> = new Set<ActionType>([
   'playCard',
   'discardCard',

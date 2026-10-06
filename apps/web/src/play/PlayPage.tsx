@@ -4,7 +4,6 @@ import { AUTOSAVE_KEY, browserStorage, loadConfig } from '../config/configStore.
 import { cuesFor } from '../sound/cues.ts'
 import { play } from '../sound/sound.ts'
 import { BasePanel } from './BasePanel.tsx'
-import { Choices } from './Choices.tsx'
 import { DecisionDialog } from './DecisionDialog.tsx'
 import { DiceTray } from './DiceTray.tsx'
 import { downloadRun, exportRun } from './exportRun.ts'
@@ -13,9 +12,11 @@ import { PhaseBar } from './PhaseBar.tsx'
 import styles from './Play.module.css'
 import { PlayerPanel } from './PlayerPanel.tsx'
 import { PlayLog } from './PlayLog.tsx'
+import { NextStepBanner } from './NextStepBanner.tsx'
 import { PlayMap } from './PlayMap.tsx'
 import { loadPrefs, savePrefs, type Prefs } from './prefs.ts'
 import { newRun, reduceRun, undo, type Run, type RunMsg } from './run.ts'
+import { placementsFor } from './targets.ts'
 import { RunSummary } from './RunSummary.tsx'
 import { SkillBoard } from './SkillBoard.tsx'
 import { StartPanel } from './StartPanel.tsx'
@@ -103,6 +104,11 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
     setSelected(null)
     dispatch({ kind: 'act', action, at: Date.now() })
   }
+  // Skill placement: the chosen die, else the first die that fits a Skill, so the slots it
+  // fits show as buttons without a separate "Select" click.
+  const fits = (die: number | null) => die !== null && placementsFor(legal, die).length > 0
+  const firstFit = state.exchange?.dice.findIndex((_, i) => fits(i)) ?? -1
+  const die = fits(selected) ? selected : firstFit >= 0 ? firstFit : null
 
   // Sound: the cues of each new action (never on load or undo: those replace the run).
   const heard = useRef(run.actions.length)
@@ -112,25 +118,19 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
     if (fresh && prefs.sound) play(cuesFor(run.lastEvents))
   }, [run, prefs.sound])
 
-  // Keyboard: when the focused control disappears after an action, move to the next decision.
+  // Keyboard: when the focused control disappears after an action, move to the next decision
+  // without scrolling the page to it.
   useEffect(() => {
     const active = document.activeElement
     if (active && active !== document.body && document.contains(active)) return
     main.current
       ?.querySelector<HTMLElement>('[data-decisions] button, [data-decisions] [role="button"]')
-      ?.focus()
+      ?.focus({ preventScroll: true })
   }, [run.actions.length])
 
-  const who = state.players.length > 1 ? `Player ${state.current + 1}, ` : ''
-  const step = state.exchange
-    ? `${state.exchange.skirmish ? 'Skirmish' : 'Exchange'}: ${state.exchange.step}`
-    : `${state.phase}${state.active ? `: ${state.active.kind}` : ''}`
   return (
     <div className={styles.page} ref={main}>
-      <p className="visually-hidden" aria-live="polite">
-        Round {state.round}, {who}
-        {step}
-      </p>
+      <NextStepBanner state={state} legal={legal} act={act} />
       <PhaseBar state={state} />
       {state.phase === 'ended' ? (
         <RunSummary
@@ -143,7 +143,6 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
       <div className={`${styles.layout} ${styles.boardRow}`}>
         <PlayMap state={state} legal={legal} act={act} events={run.lastEvents} />
         <div className={styles.side} data-decisions>
-          <Choices state={state} legal={legal} act={act} />
           <PlayerPanel state={state} />
         </div>
       </div>
@@ -153,17 +152,11 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
             state={state}
             legal={legal}
             act={act}
-            selected={selected}
+            selected={die}
             select={setSelected}
             dice3d={prefs.dice3d}
           />
-          <SkillBoard
-            state={state}
-            legal={legal}
-            act={act}
-            selected={selected}
-            select={setSelected}
-          />
+          <SkillBoard state={state} legal={legal} act={act} selected={die} select={setSelected} />
         </div>
       ) : null}
       <div className={styles.handRow} data-decisions>

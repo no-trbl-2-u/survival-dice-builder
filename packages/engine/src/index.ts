@@ -13,6 +13,7 @@ export type { Axial } from './hex.ts'
 export { AXIAL_DIRECTIONS, hexDistance, hexKey, hexNeighbors, tileHexes } from './hex.ts'
 export { experienceForLevel, levelForExperience } from './progression/levels.ts'
 export { canFire } from './skills/canFire.ts'
+export { enemiesInRange } from './combat/resolve.ts'
 export type {
   Assignment,
   CardInstance,

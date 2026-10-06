@@ -11,7 +11,7 @@ A rule implemented without a row here is a failed review (`rules-lawyer`).
 | 3.3-3.6, Table 1 | `schemas/tiles.ts` `TileDefSchema` | `schemas/tiles.test.ts` (8 tests) |
 | 8.3, 8.5, 18.1 (max level) | `packages/engine/src/progression/levels.ts` `experienceForLevel`, `levelForExperience` | `progression/levels.test.ts` "8.5 ...", "8.3 ...", "18.1 ...", "spec 1: changing a number..." |
 | 11.4, Table 6 | `schemas/structures.ts` `UpgradesFileSchema`, `data/upgrades.json` | `load.test.ts` "a missing upgrade tier is rejected" |
-| Table 2, 18.1, rows 19-20 | `data/cards.json` (starter, `gather.amount`), `config.default.json` `deck.presets` (`deck-10-hand-3` default), `deck.minimumSize` | `load.test.ts` "core loop v2, row 19: the default starter deck has 10 cards...", "core loop v2, row 20: each Gather card sets its amount..." |
+| Table 2, 18.1, rows 19-20, 71 | `data/cards.json` (starter, `gather.amount`), `config.default.json` `deck.presets` (`deck-10-hand-5` default), `deck.minimumSize` | `load.test.ts` "core loop v2, row 19: the default starter deck has 10 cards and a hand of 5...", "core loop v2, row 20: each Gather card sets its amount..." |
 | Tables 3, 9 | `data/skills.json` | `load.test.ts` "Tables 3 and 9..." |
 | Table 4 | `data/enemies.json` `enemyDieDamage` | `load.test.ts` "Table 4..." |
 | Table 8 | `data/cards.json` (supply) | `load.test.ts` "Table 8..." |

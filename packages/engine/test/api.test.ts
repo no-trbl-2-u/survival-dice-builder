@@ -71,8 +71,8 @@ describe('createGame (section 4)', () => {
     expect(s.base.health).toBe(20)
     expect(s.round).toBe(1)
     expect(s.phase).toBe('prepare')
-    expect(p.hand).toHaveLength(3)
-    expect(p.deck).toHaveLength(7)
+    expect(p.hand).toHaveLength(5)
+    expect(p.deck).toHaveLength(5)
     expect(p.orientation).toBe('top')
   })
 
@@ -84,14 +84,14 @@ describe('createGame (section 4)', () => {
 })
 
 describe('Prepare (section 6)', () => {
-  it('6.2-6.4 playing the hand draws the next 3 cards', () => {
+  it('6.2-6.4 playing the hand draws the next 5 cards', () => {
     let s = started(3)
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i++) {
       s = applyAction(s, { type: 'discardCard', card: s.players[0]!.hand[0]!.id }).state
     }
     expect(s.phase).toBe('prepare')
-    expect(s.players[0]!.hand).toHaveLength(3)
-    expect(s.players[0]!.deck).toHaveLength(4)
+    expect(s.players[0]!.hand).toHaveLength(5)
+    expect(s.players[0]!.deck).toHaveLength(0)
   })
 
   it('6.6, 7.1-7.2 an empty deck and hand end Prepare; Combat shuffles and turns the deck', () => {
@@ -142,7 +142,7 @@ describe('Combat exchange (7.8)', () => {
     attackedThisCombat: false,
   }
 
-  it('7.8 steps 1-2 draw 3 and roll all action dice', () => {
+  it('7.8 steps 1-2 draw a hand and roll all action dice', () => {
     const s = inCombat()
     expect(s.players[0]!.hand.length).toBeGreaterThan(0)
     expect(s.exchange!.dice).toHaveLength(1)
@@ -312,7 +312,7 @@ describe('Combat exchange (7.8)', () => {
     expect(actions.every((a) => a.type === 'placeFigure')).toBe(true)
     const placed = applyAction(s, actions[0]!).state
     expect(placed.unplaced).toEqual([])
-    expect(placed.players[0]!.hand).toHaveLength(3)
+    expect(placed.players[0]!.hand).toHaveLength(5)
   })
 })
 

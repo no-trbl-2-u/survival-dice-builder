@@ -54,7 +54,7 @@ const onKey = (run: () => void) => (e: KeyboardEvent) => {
 /**
  * The board: tiles, sites (a spent gathering node dimmed), the figures, enemies (shape + icon +
  * health), defenses, and every legal map target as a focusable SVG button. A step off the map
- * edge is a dashed ghost hex. Drag to pan; wheel or buttons to zoom.
+ * edge is a dashed ghost hex. Drag to pan; wheel to zoom.
  */
 export function PlayMap({ state, legal, act, events = [] }: Props) {
   const [view, setView] = useState({ x: 0, y: 0, zoom: 1 })
@@ -113,23 +113,6 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
 
   return (
     <section className={styles.mapPanel} aria-label="Map">
-      <div className={styles.mapTools}>
-        <button
-          type="button"
-          onClick={() => setView((v) => ({ ...v, zoom: Math.min(3, v.zoom * 1.25) }))}
-        >
-          Zoom in
-        </button>
-        <button
-          type="button"
-          onClick={() => setView((v) => ({ ...v, zoom: Math.max(0.4, v.zoom / 1.25) }))}
-        >
-          Zoom out
-        </button>
-        <button type="button" onClick={() => setView({ x: 0, y: 0, zoom: 1 })}>
-          Reset view
-        </button>
-      </div>
       <svg
         ref={svg}
         className={styles.map}

@@ -19,36 +19,49 @@ test('/play: start hex, a reveal off the map edge, the Prepare hands, and 1 Comb
 
   await page.goto('/play?seed=3')
   const bar = page.getByTestId('phase-bar')
-  await expect(bar).toContainText('Setup')
+  const banner = page.getByTestId('next-step')
+  await expect(banner).toContainText('Setup: Click a highlighted base hex')
 
-  // Setup: the map hex and the Choices button are both buttons; use the Choices one.
+  // Setup: the base-centre hex on the map is a button.
   await page
-    .getByRole('button', { name: /^Place your figure on .*the base centre \(0,0\)$/ })
+    .getByRole('button', { name: 'Place your figure on Plains, Base, the base centre' })
     .click()
   await expect(bar).toContainText('Round 1')
 
   // Prepare: walk off the map edge to reveal tiles (their enemies come at Combat), stop any
   // Build at once, and play every card until a Combat exchange starts.
-  for (let i = 0; i < 60 && !(await bar.textContent())?.includes('Exchange'); i++) {
+  for (let i = 0; i < 60 && !(await banner.textContent())?.includes('roll again'); i++) {
     if (await clickFirst(page, /^Step off the map edge/)) continue
     if (await clickFirst(page, /^Move to [^:]+$/)) continue
     if (await clickFirst(page, /^Stop (moving|building)$/)) continue
     await clickFirst(page, /^Play /)
   }
   await expect(page.getByTestId('play-log')).toContainText('Tile revealed')
-  await expect(bar).toContainText('Exchange: roll')
+  await expect(banner).toContainText('roll again or stop rolling')
   await expect(page.getByLabel('Hand')).toContainText('bottom halves up (Combat)')
 
   // Combat exchange: stop rolling, play the bottom halves, put a die on a Skill if one fits.
   await page.getByRole('button', { name: 'Stop rolling' }).click()
-  for (let i = 0; i < 10 && /cards|reroll/.test((await bar.textContent()) ?? ''); i++) {
+  // In Combat each Play button names the bottom-half effect, not the card's Prepare name.
+  await expect(
+    page
+      .getByLabel('Hand')
+      .getByRole('button', { name: /^Play / })
+      .first(),
+  ).toHaveText(/^Play (Reroll|\+\d|Heal)/)
+  for (
+    let i = 0;
+    i < 10 && /Play or discard|reroll/.test((await banner.textContent()) ?? '');
+    i++
+  ) {
     if (await clickFirst(page, /^Stop rerolling$/)) continue
     await clickFirst(page, /^Play /)
   }
-  if (await clickFirst(page, /^Select die 1$/)) await clickFirst(page, /^Put die 1 on /)
+  // The first die that fits is already chosen: its Skill slots are buttons at once.
+  await clickFirst(page, /^Put die \d on /)
   await page.getByRole('button', { name: 'Confirm dice and fire Skills' }).click()
   // The first exchange is over: either a new exchange began or Combat moved on.
-  await expect(bar).not.toContainText('Exchange: assign')
+  await expect(banner).not.toContainText('Put your dice on Skills')
   expect(errors).toEqual([])
 })
 
@@ -65,7 +78,9 @@ test('/play at 375px has no horizontal scroll', async ({ page }) => {
 test('/play at 375px puts the controls for the current step above the map', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 })
   await page.goto('/play?seed=3')
-  await page.getByTestId('choices').getByRole('button').first().click()
+  await page
+    .getByRole('button', { name: 'Place your figure on Plains, Base, the base centre' })
+    .click()
   const play = page.getByRole('button', { name: /^Play / }).first()
   await expect(play).toBeVisible()
   const control = await play.boundingBox()

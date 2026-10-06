@@ -33,8 +33,8 @@ played twice: top halves in Prepare, bottom halves in Combat.
 
 ### Prepare
 
-1. Draw 3 cards. Play a top half, or discard the card without its
-   effect. Draw 3 again when the hand is empty; Prepare ends when the
+1. Draw 5 cards. Play a top half, or discard the card without its
+   effect. Draw 5 again when the hand is empty; Prepare ends when the
    deck and the hand are empty.
 2. **Move N**: each step costs 1. A step onto a hex next to an enemy
    costs 2. A step into an enemy's hex (a skirmish) costs 1.
@@ -68,7 +68,7 @@ played twice: top halves in Prepare, bottom halves in Combat.
    instead turns the grunt nearest the base into an elite.
 4. Each Tower attacks.
 5. **Exchanges** until the deck is empty:
-   1. Draw 3. Roll all your dice; keep and reroll, up to 3 rolls.
+   1. Draw 5. Roll all your dice; keep and reroll, up to 3 rolls.
    2. Play bottom halves (or discard them). Non-attack halves (heal,
       guard, reroll) work even when no enemy is near; damage needs a
       target in range.

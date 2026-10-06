@@ -26,21 +26,21 @@ describe('playRun', () => {
   })
 })
 
-describe('the default batch (phase 22: no default changes)', () => {
-  it('matches the phase 21 summary on seeds 1-200', () => {
+describe('the default batch (hand of 5, OPEN-QUESTIONS row 71)', () => {
+  it('matches the hand-5 summary on seeds 1-200', () => {
     const s = summarize(runBatch(config, 200, 1))
     expect([s.medianEndRound, s.middleHalf, s.minEndRound, s.maxEndRound]).toEqual([
       6,
-      [6, 8],
+      [5, 7],
       5,
-      12,
+      14,
     ])
     expect(s.causes).toEqual({ base: 200 })
     expect(s.milestones).toEqual({
       'survive-round-5': 200,
-      'defeat-elite': 35,
-      'buy-upgrades': 57,
-      'survive-round-10': 22,
+      'buy-upgrades': 80,
+      'survive-round-10': 18,
+      'defeat-elite': 10,
     })
   })
 })
