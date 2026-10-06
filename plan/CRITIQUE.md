@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-05 at commit 04b907a
-> Pass count: 5
+> Last pass: 2026-10-06 at commit e9a9406
+> Pass count: 6
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [HIGH] /play — in Exchanges Combat the next-step banner describes controls that no longer exist
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The assign step says "pick a die, click a Skill slot", but empty Skill slots are not buttons now; you select dice and then click the whole Skill row. The roll step says "Click dice to keep them", but the dice are not clickable; only the "Keep die N" buttons keep. A player who follows the banner clicks things that do nothing.
+- evidence: `apps/web/src/play/nextStep.ts:8` "Click dice to keep them, then roll again or stop rolling"; `nextStep.ts:11` "Put your dice on Skills: pick a die, click a Skill slot, then confirm"; `SkillBoard.tsx:73-81` empty slot is a `<span role="img">`; `DiceTray.tsx:88-98` die is a `<span>`, keep is a separate button.
+- suggested fix: Reword EXCHANGE.assign to "Select dice, then click a Skill they fit. Confirm when done." and EXCHANGE.roll to "Keep dice, then roll again or stop rolling."
+- source: web-fetch
+
+### [MED] /play — when the selected dice fit no Skill, the board goes quiet with no reason
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: If the selected dice do not fit any one Skill together, no Skill row becomes a button and the "can fire" outline is hidden (it shows only with nothing selected). Nothing tells the player to unselect a die.
+- evidence: `apps/web/src/play/SkillBoard.tsx:47` `could` class requires `selected.length === 0`; `SkillBoard.tsx:50` `planPlacement(...)` returns null when the dice do not fit (`targets.ts:62`, `:81`) and the row renders as a plain `<div>`.
+- suggested fix: When the selected dice fit no Skill, show "These dice fit no Skill together. Unselect a die." above the Skill list.
+- source: web-fetch
+
+### [MED] /play — enemy dice show "SPECIAL" with no damage or meaning
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: In an engagement, enemy dice can read HIT, SPECIAL, or miss. Nothing on /play says what a special does or that it deals more damage than a hit.
+- evidence: `apps/web/src/play/DiceTray.tsx:68` `d.face === 'special' ? 'SPECIAL'`; no other "special" copy in `apps/web/src`; `packages/content/data/config.default.json` `"specialDamage": 2`.
+- suggested fix: Show the damage from config on each enemy die, e.g. "HIT 1" and "SPECIAL 2".
+- source: web-fetch
+
+### [MED] /play — the start panel's Combat choice ignores the saved config and uses internal labels
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The Combat select always starts on "Engagements", whatever /config says (default config is "exchange"); only `?seed=` runs read `config.combat.model`. The options are named "Combat v3 playtest" and "Spec v1", with no line saying how the two differ, and the /config help for the same setting points to a repo file (`docs/design/combat-v3.md`) a visitor cannot open.
+- evidence: `apps/web/src/play/StartPanel.tsx:33` `useState<CombatModel>('engage')`; `StartPanel.tsx:82-83` "Engagements (Combat v3 playtest)" / "Exchanges (Spec v1)"; `PlayPage.tsx:51` vs `:81`; `packages/content/data/config.meta.json:127`.
+- suggested fix: Start the select from the saved `combat.model`, add a one-line hint for each choice, and drop the docs/ path from the /config help.
+- source: web-fetch
+
+### [LOW] /config — optional-limit toggles are always named "...: on"
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: The checkbox for an optional limit has the accessible name "<label>: on" even when unchecked, and the visible "Off" / "no maximum" text is aria-hidden. A screen reader hears "X: on, checkbox, not checked".
+- evidence: `apps/web/src/config/ConfigPage.tsx:261` ``aria-label={`${label}: on`}``; `ConfigPage.tsx:264` `<span aria-hidden="true">`.
+- suggested fix: Name the checkbox "<label>: use a limit" and let the checked state carry on/off.
+- source: web-fetch
+
+### [LOW] /config — pick lists show internal ids next to names; presets show only ids
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: The Skill and card pick lists show each option as "Name (id)". Deck presets are listed by bare id, e.g. "preset-2".
+- evidence: `apps/web/src/config/ConfigPage.tsx:101` ```${name} (${id})` ``; `ConfigPage.tsx:81` `presets.map((p) => [p.id, p.id])`.
+- suggested fix: Show only the name in options; label presets "Preset 1", "Preset 2".
+- source: web-fetch
 
 ### [MED] / and /play — nothing says that exploring adds enemies
 - pass: 5 (commit 04b907a)
