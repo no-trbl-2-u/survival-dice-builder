@@ -53,7 +53,9 @@ test('/play: choices name places, and the map names what stands on each hex', as
 test('/play: the start panel says what a run is and what the seed does', async ({ page }) => {
   await page.goto('/play')
   const panel = page.getByTestId('start-panel')
-  await expect(panel).toContainText('Keep the base and every player alive')
+  await expect(panel).toContainText(
+    'Keep the base standing for as many rounds as you can. A player at 0 health is knocked out',
+  )
   await expect(panel.getByRole('textbox', { name: /Seed/ })).toHaveAccessibleDescription(
     'The same seed and the same choices give the same game.',
   )

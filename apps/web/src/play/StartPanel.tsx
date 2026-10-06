@@ -42,7 +42,10 @@ export function StartPanel({ custom, store, onStart, onLoad }: Props) {
       <h2 id="start-title" className={styles.panelTitle}>
         New run
       </h2>
-      <p>Keep the base and every player alive for as many rounds as you can.</p>
+      <p>
+        Keep the base standing for as many rounds as you can. A player at 0 health is knocked out
+        and comes back next round.
+      </p>
       <form
         className={styles.startForm}
         onSubmit={(e) => {
