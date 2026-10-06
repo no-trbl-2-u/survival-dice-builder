@@ -1,0 +1,2632 @@
+<!doctype html>
+<!--
+  docs/retrospective-2026-10-06.html
+
+  WHAT THIS FILE IS
+  The visual edition of docs/retrospective-2026-10-06.md: an executive summary
+  plus animated diagrams of what Miserere Mei, Deus (the mobile game) and
+  Axiomancer: Table Edition (the board game) taught us before Survival
+  Dice-Builder. The markdown file is the source of record; this page is a view
+  of it and adds no new claims.
+
+  HOW IT IS BUILT (lowest abstraction first)
+  1. CSS design tokens (:root custom properties), redefined for dark mode.
+  2. CSS components: .card, .stamp, .bar, .meter, .lane, .loop, .track.
+  3. JS data: frozen arrays, one per section (DATA.*). Every claim carries a
+     source path and a 0-100 confidence score.
+  4. JS pure renderers: one function per component, data in, HTML string out.
+     No renderer touches the DOM.
+  5. JS effects: mount() writes renderer output into the page; animate()
+     wires scroll-triggered animations; theme and checklist handlers.
+  6. boot(): the single entry point that runs the effects in order.
+
+  NEOBRUTALISM, AS USED HERE
+  Thick solid ink borders, hard offset shadows with no blur, flat saturated
+  fills, heavy display type, slight rotations on stamps, and motion that
+  "snaps" (steps or overshoot) instead of easing softly.
+
+  Self-contained: no build step, no dependencies. Google Fonts is optional; the
+  system font stack is the fallback. Respects prefers-reduced-motion.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Two Games, One Lesson</title>
+    <meta
+      name="description"
+      content="Retrospective of Miserere Mei, Deus and Axiomancer: Table Edition, and the plan for Survival Dice-Builder."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* =====================================================================
+         1. DESIGN TOKENS
+         Every colour, border, shadow and font used on the page. Components
+         read only these variables, so the dark theme is a token swap.
+         ===================================================================== */
+      :root {
+        /* Surfaces */
+        --bg: #fff4e0; /* page: warm paper */
+        --surface: #ffffff; /* cards */
+        --ink: #111111; /* text, borders, shadows */
+        --muted: #4a4a4a; /* secondary text */
+        --grid: rgba(17, 17, 17, 0.07); /* background graph-paper lines */
+
+        /* Flat accents. Text on an accent is always --on-accent. */
+        --yellow: #ffd23f;
+        --pink: #ff6b9d;
+        --cyan: #3dd6f5;
+        --lime: #a3e635;
+        --orange: #ff8a3d;
+        --violet: #b79cff;
+        --red: #ff4d4d;
+        --on-accent: #111111;
+
+        /* Neobrutalist geometry */
+        --border: 3px solid var(--ink);
+        --shadow: 6px 6px 0 0 var(--ink);
+        --shadow-sm: 3px 3px 0 0 var(--ink);
+        --shadow-lg: 10px 10px 0 0 var(--ink);
+        --radius: 6px;
+
+        /* Type */
+        --font-display: 'Archivo Black', 'Arial Black', 'Helvetica Neue', Impact, sans-serif;
+        --font-body: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+        color-scheme: light;
+      }
+
+      /* Dark theme, automatic: follows the OS unless the reader forced light. */
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --bg: #15130f;
+          --surface: #221f1a;
+          --ink: #f5efe3;
+          --muted: #c9c1b2;
+          --grid: rgba(245, 239, 227, 0.06);
+          color-scheme: dark;
+        }
+      }
+
+      /* Dark theme, forced by the toggle. Same values as the block above. */
+      :root[data-theme='dark'] {
+        --bg: #15130f;
+        --surface: #221f1a;
+        --ink: #f5efe3;
+        --muted: #c9c1b2;
+        --grid: rgba(245, 239, 227, 0.06);
+        color-scheme: dark;
+      }
+
+      /* =====================================================================
+         2. BASE
+         ===================================================================== */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background-color: var(--bg);
+        /* Graph paper: two 1px line gradients on a 28px grid. */
+        background-image:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+        background-size: 28px 28px;
+        color: var(--ink);
+        font-family: var(--font-body);
+        font-size: 17px;
+        line-height: 1.55;
+        overflow-x: hidden; /* no horizontal page scroll at phone width */
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: var(--font-display);
+        font-weight: 400; /* Archivo Black is already black */
+        line-height: 1.05;
+        letter-spacing: -0.01em;
+        margin: 0 0 0.5em;
+      }
+
+      h2 {
+        font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+      }
+
+      h3 {
+        font-size: 1.2rem;
+      }
+
+      p {
+        margin: 0 0 0.8em;
+      }
+
+      a {
+        color: inherit;
+        text-decoration-thickness: 3px;
+        text-underline-offset: 3px;
+      }
+
+      code,
+      .mono {
+        font-family: var(--font-mono);
+        font-size: 0.85em;
+      }
+
+      /* Visible, chunky focus ring on every interactive element. */
+      :focus-visible {
+        outline: 4px solid var(--pink);
+        outline-offset: 3px;
+      }
+
+      .wrap {
+        width: 100%;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 16px; /* 16px side gutter at phone width */
+      }
+
+      section {
+        padding: 56px 0;
+      }
+
+      /* =====================================================================
+         3. COMPONENTS
+         ===================================================================== */
+
+      /* --- Card: the basic neobrutalist box. -------------------------------- */
+      .card {
+        background: var(--surface);
+        border: var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 20px;
+        position: relative;
+      }
+
+      /* A card filled with an accent always uses dark ink for legibility. */
+      .card.fill {
+        color: var(--on-accent);
+      }
+
+      /* Lift on hover: the shadow grows as the card moves up-left. */
+      .card.lift {
+        transition:
+          transform 0.12s steps(3),
+          box-shadow 0.12s steps(3);
+      }
+      /* A card that both reveals and lifts needs all three transitions. */
+      .card.lift.reveal {
+        transition:
+          opacity 0.35s steps(4),
+          transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.12s steps(3);
+      }
+      .card.lift:hover {
+        transform: translate(-3px, -3px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      /* --- Section label: the chip above each heading. ---------------------- */
+      .kicker {
+        display: inline-block;
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        background: var(--ink);
+        color: var(--bg);
+        padding: 4px 10px;
+        margin-bottom: 14px;
+        border-radius: var(--radius);
+      }
+
+      /* --- Stamp: a rotated label (RIGHT / WRONG / ZERO). ------------------- */
+      .stamp {
+        display: inline-block;
+        font-family: var(--font-display);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        padding: 3px 10px;
+        border: 3px solid #111;
+        border-radius: var(--radius);
+        color: #111;
+        transform: rotate(-4deg);
+        box-shadow: var(--shadow-sm);
+      }
+
+      /* --- Confidence chip: "conf 85". -------------------------------------- */
+      .conf {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        border: 2px solid currentColor;
+        border-radius: 999px;
+        padding: 1px 8px;
+        white-space: nowrap;
+      }
+
+      /* --- Meter: confidence bar that fills when scrolled into view. -------- */
+      .meter {
+        height: 16px;
+        border: var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        overflow: hidden;
+      }
+      .meter > i {
+        display: block;
+        height: 100%;
+        width: 0; /* animate() sets the target width */
+        background: repeating-linear-gradient(-45deg, var(--lime) 0 8px, #8bcf1f 8px 16px);
+        border-right: 3px solid #111;
+        transition: width 1.1s cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot */
+      }
+
+      /* --- Reveal: elements pop in when they enter the viewport. ------------ */
+      .reveal {
+        opacity: 0;
+        transform: translate(-10px, 16px) rotate(-1deg);
+        transition:
+          opacity 0.35s steps(4),
+          transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* =====================================================================
+         4. SECTIONS
+         ===================================================================== */
+
+      /* --- Top bar + ticker --------------------------------------------------*/
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: var(--yellow);
+        color: #111;
+        border-bottom: var(--border);
+        border-color: #111;
+      }
+      .topbar .wrap {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+      .brand {
+        font-family: var(--font-display);
+        font-size: 1rem;
+        white-space: nowrap;
+      }
+      .nav {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .btn {
+        font: 700 0.8rem var(--font-mono);
+        text-transform: uppercase;
+        background: #fff;
+        color: #111;
+        border: 3px solid #111;
+        border-radius: var(--radius);
+        box-shadow: 3px 3px 0 0 #111;
+        padding: 4px 10px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform 0.08s steps(2);
+      }
+      .btn:active {
+        transform: translate(3px, 3px);
+        box-shadow: none;
+      }
+      @media (max-width: 720px) {
+        .nav a {
+          display: none; /* phone: keep only the theme toggle */
+        }
+      }
+
+      .ticker {
+        background: #111;
+        color: var(--yellow);
+        border-bottom: 3px solid #111;
+        overflow: hidden;
+        white-space: nowrap;
+        font: 700 0.9rem var(--font-mono);
+        text-transform: uppercase;
+      }
+      .ticker-track {
+        display: inline-block;
+        padding: 8px 0;
+        animation: ticker 38s linear infinite;
+      }
+      @keyframes ticker {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%); /* the content is rendered twice */
+        }
+      }
+
+      /* --- Hero --------------------------------------------------------------*/
+      .hero {
+        padding: 56px 0 24px;
+      }
+      .hero h1 {
+        font-size: clamp(2.4rem, 8vw, 5.4rem);
+        margin-bottom: 0.3em;
+      }
+      .hero h1 mark {
+        background: var(--pink);
+        color: #111;
+        padding: 0 0.12em;
+        border: 4px solid #111;
+        box-shadow: 6px 6px 0 #111;
+        display: inline-block;
+        transform: rotate(-1.5deg);
+      }
+      .hero .lede {
+        font-size: 1.2rem;
+        max-width: 760px;
+      }
+      .meta {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      /* --- Executive summary ------------------------------------------------ */
+      .verdict {
+        background: var(--cyan);
+        font-family: var(--font-display);
+        font-size: clamp(1.3rem, 3.2vw, 2rem);
+        line-height: 1.2;
+        margin-bottom: 28px;
+      }
+      .exec-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 22px;
+      }
+      .exec-card .num {
+        position: absolute;
+        top: -18px;
+        left: -14px;
+        width: 46px;
+        height: 46px;
+        display: grid;
+        place-items: center;
+        font-family: var(--font-display);
+        font-size: 1.3rem;
+        background: #111;
+        color: var(--yellow);
+        border-radius: 50%;
+        border: 3px solid var(--ink);
+      }
+      .exec-card h3 {
+        margin-top: 10px;
+      }
+      .exec-card .evidence {
+        font-size: 0.92rem;
+      }
+      .exec-card footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+        font-size: 0.75rem;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+      .now-box {
+        margin-top: 28px;
+        background: var(--lime);
+      }
+      .now-box ol {
+        margin: 0;
+        padding-left: 1.3em;
+        font-weight: 500;
+      }
+
+      /* --- Scoreboard ------------------------------------------------------- */
+      .score-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 18px;
+      }
+      .score {
+        text-align: left;
+      }
+      .score .big {
+        font-family: var(--font-display);
+        font-size: clamp(2.4rem, 6vw, 3.4rem);
+        line-height: 1;
+        display: block;
+      }
+      .score .lbl {
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: block;
+        margin-top: 6px;
+      }
+      .score .src {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        opacity: 0.8;
+        display: block;
+        margin-top: 6px;
+      }
+
+      /* --- Built vs logged chart -------------------------------------------- */
+      .vs {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 22px;
+      }
+      @media (max-width: 820px) {
+        .vs {
+          grid-template-columns: 1fr;
+        }
+      }
+      .bar-row {
+        display: grid;
+        grid-template-columns: 170px 1fr 56px;
+        gap: 10px;
+        align-items: center;
+        margin: 10px 0;
+        font-size: 0.88rem;
+      }
+      @media (max-width: 520px) {
+        .bar-row {
+          grid-template-columns: 1fr 48px;
+        }
+        .bar-row .bar-label {
+          grid-column: 1 / -1;
+        }
+      }
+      .bar-track {
+        height: 28px;
+        border: var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        overflow: hidden;
+      }
+      .bar-fill {
+        height: 100%;
+        width: 0;
+        border-right: 3px solid #111;
+        transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .bar-val {
+        font-family: var(--font-display);
+        text-align: right;
+      }
+      .group-name {
+        font-family: var(--font-display);
+        font-size: 1rem;
+        margin: 18px 0 2px;
+      }
+      .zeros {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .zero {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 10px;
+      }
+      .zero .z {
+        font-family: var(--font-display);
+        font-size: 3.2rem;
+        line-height: 1;
+      }
+      .zero small {
+        display: block;
+        font-size: 0.78rem;
+      }
+
+      /* --- Timeline --------------------------------------------------------- */
+      .timeline-scroll {
+        overflow-x: auto; /* the diagram scrolls inside its box, never the page */
+        border: var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        background: var(--surface);
+        -webkit-overflow-scrolling: touch;
+      }
+      .timeline {
+        min-width: 1100px;
+        padding: 18px 48px 10px 150px;
+        position: relative;
+      }
+      .axis {
+        display: flex;
+        justify-content: space-between;
+        font: 700 0.72rem var(--font-mono);
+        margin: 0 0 8px;
+        text-transform: uppercase;
+      }
+      .lane {
+        position: relative;
+        height: 108px;
+        margin: 6px 0;
+      }
+      .lane-name {
+        position: absolute;
+        left: -138px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 128px;
+        font-family: var(--font-display);
+        font-size: 0.82rem;
+        line-height: 1.1;
+      }
+      .lane-line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: 6px;
+        margin-top: -3px;
+        background: var(--ink);
+        transform-origin: left center;
+        transform: scaleX(0);
+        transition: transform 1.4s steps(14);
+      }
+      .timeline.in .lane-line {
+        transform: scaleX(1);
+      }
+      .pin {
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        margin: -13px 0 0 -13px;
+        border: 3px solid #111;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 3px 3px 0 #111;
+        transform: scale(0) rotate(45deg);
+        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        padding: 0;
+      }
+      .timeline.in .pin {
+        transform: scale(1) rotate(45deg);
+      }
+      .pin.human {
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        margin: -16px 0 0 -16px;
+      }
+      .pin[aria-pressed='true'] {
+        outline: 4px solid var(--ink);
+        outline-offset: 3px;
+      }
+      .legend {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        font-size: 0.82rem;
+        margin: 14px 0 0;
+      }
+      .legend span::before {
+        content: '';
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 2px solid var(--ink);
+        margin-right: 6px;
+        vertical-align: -2px;
+      }
+      .legend .l-ev::before {
+        transform: rotate(45deg);
+        background: var(--yellow);
+      }
+      .legend .l-hu::before {
+        border-radius: 50%;
+        background: var(--pink);
+      }
+      .event-panel {
+        margin-top: 18px;
+        min-height: 110px;
+      }
+      .event-panel .date {
+        font: 700 0.8rem var(--font-mono);
+      }
+
+      /* --- Loop diagrams ---------------------------------------------------- */
+      .loops {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+      }
+      @media (max-width: 820px) {
+        .loops {
+          grid-template-columns: 1fr;
+        }
+      }
+      .loop svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .loop svg text {
+        font-family: var(--font-body);
+        font-weight: 700;
+      }
+      .loop .center {
+        font-family: var(--font-display);
+      }
+      /* SVG strokes and fills follow the theme ink. */
+      .loop .ink-stroke {
+        stroke: var(--ink);
+      }
+      .loop .ink-fill {
+        fill: var(--ink);
+      }
+
+      /* --- Sim vs humans ---------------------------------------------------- */
+      .finds {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+      }
+      @media (max-width: 900px) {
+        .finds {
+          grid-template-columns: 1fr;
+        }
+      }
+      .finds ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .finds li {
+        border: 3px solid #111;
+        border-radius: var(--radius);
+        padding: 8px 10px;
+        background: #fff;
+        color: #111;
+        font-size: 0.9rem;
+        box-shadow: 3px 3px 0 #111;
+      }
+      .finds li small {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        opacity: 0.75;
+        margin-top: 2px;
+      }
+
+      /* --- Questions (details/summary accordion) ---------------------------- */
+      .qs {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      details.q {
+        padding: 0;
+      }
+      details.q > summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 16px 56px 16px 18px;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 12px;
+        align-items: center;
+        position: relative;
+      }
+      details.q > summary::-webkit-details-marker {
+        display: none;
+      }
+      details.q > summary::after {
+        content: '+';
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        font-family: var(--font-display);
+        border: 3px solid var(--ink);
+        border-radius: var(--radius);
+        background: var(--yellow);
+        color: #111;
+        transition: transform 0.15s steps(3);
+      }
+      details.q[open] > summary::after {
+        content: '–';
+        transform: translateY(-50%) rotate(180deg);
+      }
+      .qid {
+        font-family: var(--font-display);
+        background: var(--violet);
+        color: #111;
+        border: 3px solid #111;
+        border-radius: var(--radius);
+        padding: 2px 8px;
+      }
+      .qtext {
+        font-weight: 700;
+      }
+      .qbody {
+        border-top: var(--border);
+        padding: 16px 18px 18px;
+      }
+      .qanswer {
+        font-family: var(--font-display);
+        font-size: 1.15rem;
+        margin-bottom: 10px;
+      }
+      .qbody ul {
+        margin: 0 0 12px;
+        padding-left: 1.2em;
+      }
+      .qbody li {
+        margin: 4px 0;
+      }
+      .conf-row {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 10px;
+        align-items: center;
+        font: 700 0.78rem var(--font-mono);
+      }
+
+      /* --- Rules grid ------------------------------------------------------- */
+      .rules {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        counter-reset: rule;
+      }
+      .rule h3 {
+        font-size: 1.02rem;
+      }
+      .rule .why {
+        font-size: 0.85rem;
+        border-top: 3px dashed #111;
+        padding-top: 8px;
+        margin-top: 8px;
+      }
+      .rule .rn {
+        font-family: var(--font-display);
+        font-size: 2.2rem;
+        line-height: 1;
+        float: right;
+        margin: -4px 0 0 8px;
+        opacity: 0.9;
+      }
+
+      /* --- Owner answers table ---------------------------------------------- */
+      .answers {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .ans {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 16px;
+        align-items: start;
+      }
+      @media (max-width: 760px) {
+        .ans {
+          grid-template-columns: 1fr;
+        }
+      }
+      .ans .label {
+        font: 700 0.7rem var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        display: block;
+        margin-bottom: 4px;
+        color: var(--muted);
+      }
+      .ans .stamp {
+        animation: none;
+      }
+      .ans.in .stamp {
+        animation: thunk 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      @keyframes thunk {
+        0% {
+          transform: scale(2.6) rotate(-14deg);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1) rotate(-4deg);
+          opacity: 1;
+        }
+      }
+      .tally {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 18px;
+        font-weight: 700;
+      }
+
+      /* --- Plan tracks ------------------------------------------------------ */
+      .tracks {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+      }
+      @media (max-width: 900px) {
+        .tracks {
+          grid-template-columns: 1fr;
+        }
+      }
+      .track {
+        overflow: hidden; /* clip the header fill to the rounded corners */
+      }
+      .track header {
+        margin: -20px -20px 16px;
+        padding: 14px 20px;
+        border-bottom: 3px solid #111;
+        color: #111;
+      }
+      .track header h3 {
+        margin: 0;
+      }
+      .track header small {
+        font: 700 0.75rem var(--font-mono);
+        text-transform: uppercase;
+      }
+      .track ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .track label {
+        display: grid;
+        grid-template-columns: 24px 1fr;
+        gap: 10px;
+        align-items: start;
+        cursor: pointer;
+        font-size: 0.92rem;
+      }
+      .track input[type='checkbox'] {
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        margin: 1px 0 0;
+        border: 3px solid var(--ink);
+        border-radius: 4px;
+        background: var(--surface);
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+      }
+      .track input[type='checkbox']:checked {
+        background: var(--lime);
+      }
+      .track input[type='checkbox']:checked::after {
+        content: '✓';
+        font-weight: 700;
+        color: #111;
+        font-size: 15px;
+        line-height: 1;
+      }
+      .track input:checked + span {
+        text-decoration: line-through;
+        text-decoration-thickness: 3px;
+        opacity: 0.7;
+      }
+      .progress {
+        margin-top: 14px;
+        font: 700 0.75rem var(--font-mono);
+      }
+
+      /* --- Don't list ------------------------------------------------------- */
+      .donts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .dont {
+        border: 3px solid #111;
+        border-radius: var(--radius);
+        background: var(--red);
+        color: #111;
+        font-weight: 700;
+        padding: 8px 14px;
+        box-shadow: 4px 4px 0 #111;
+        font-size: 0.92rem;
+      }
+      .dont::before {
+        content: '✕ ';
+        font-family: var(--font-display);
+      }
+
+      /* --- Sources ---------------------------------------------------------- */
+      .sources {
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        columns: 2 320px;
+        column-gap: 28px;
+      }
+      .sources li {
+        break-inside: avoid;
+        margin-bottom: 4px;
+      }
+      footer.page {
+        border-top: var(--border);
+        padding: 24px 0 40px;
+        font-size: 0.85rem;
+      }
+
+      /* =====================================================================
+         5. REDUCED MOTION
+         Everything renders in its final state; nothing moves.
+         ===================================================================== */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+        .lane-line {
+          transform: scaleX(1);
+        }
+        .pin {
+          transform: scale(1) rotate(45deg);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Sticky top bar: title, section links, theme toggle. -->
+    <div class="topbar">
+      <div class="wrap">
+        <span class="brand">RETRO / 2026-10-06</span>
+        <nav class="nav" aria-label="Sections">
+          <a class="btn" href="#summary">Summary</a>
+          <a class="btn" href="#numbers">Numbers</a>
+          <a class="btn" href="#timeline">Timeline</a>
+          <a class="btn" href="#questions">Questions</a>
+          <a class="btn" href="#plan">Plan</a>
+          <button class="btn" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+            Theme
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Scrolling ticker. Filled by renderTicker(). Hidden from screen readers
+         because it repeats facts stated in the page. -->
+    <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+
+    <main>
+      <!-- HERO ============================================================= -->
+      <header class="hero">
+        <div class="wrap">
+          <span class="kicker">Retrospective</span>
+          <h1>Two games built.<br /><mark>Zero</mark> sessions logged.</h1>
+          <p class="lede">
+            What Miserere Mei, Deus (mobile) and Axiomancer: Table Edition (board) taught us, and
+            how Survival Dice-Builder gets built differently.
+          </p>
+          <p class="meta">
+            Source of record: <code>docs/retrospective-2026-10-06.md</code>. Every claim carries a
+            confidence score from 0 (a guess) to 100 (written exactly as stated).
+          </p>
+        </div>
+      </header>
+
+      <!-- EXECUTIVE SUMMARY ================================================ -->
+      <section id="summary" aria-labelledby="h-summary">
+        <div class="wrap">
+          <span class="kicker">00 / Executive summary</span>
+          <h2 id="h-summary">What we learned</h2>
+          <div class="card fill verdict reveal" id="verdict"></div>
+          <div class="exec-grid" id="exec"></div>
+          <div class="card fill now-box reveal">
+            <h3>What changes now</h3>
+            <ol id="now"></ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCOREBOARD ======================================================= -->
+      <section id="numbers" aria-labelledby="h-numbers">
+        <div class="wrap">
+          <span class="kicker">01 / The scoreboard</span>
+          <h2 id="h-numbers">By the numbers</h2>
+          <div class="score-grid" id="scores"></div>
+        </div>
+      </section>
+
+      <!-- BUILT VS LOGGED ================================================== -->
+      <section aria-labelledby="h-vs">
+        <div class="wrap">
+          <span class="kicker">02 / Built vs played</span>
+          <h2 id="h-vs">We measured output, not evidence</h2>
+          <div class="vs">
+            <div class="card reveal">
+              <h3>Built</h3>
+              <div id="built"></div>
+            </div>
+            <div class="card fill reveal" style="background: var(--pink)">
+              <h3>Logged at a table</h3>
+              <div class="zeros" id="logged"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TIMELINE ========================================================= -->
+      <section id="timeline" aria-labelledby="h-timeline">
+        <div class="wrap">
+          <span class="kicker">03 / Timeline</span>
+          <h2 id="h-timeline">76 days, three repos</h2>
+          <p>
+            Select a marker to read the event. Round markers are where human play changed the game.
+          </p>
+          <div class="timeline-scroll reveal">
+            <div class="timeline" id="tl"></div>
+          </div>
+          <div class="legend">
+            <span class="l-ev">Repo event</span>
+            <span class="l-hu">Human play changed the direction</span>
+          </div>
+          <div class="card event-panel" id="tl-panel" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- LOOPS ============================================================ -->
+      <section aria-labelledby="h-loops">
+        <div class="wrap">
+          <span class="kicker">04 / The loop</span>
+          <h2 id="h-loops">How rules got made, and how they should</h2>
+          <div class="loops" id="loops"></div>
+        </div>
+      </section>
+
+      <!-- SIM VS HUMANS ==================================================== -->
+      <section aria-labelledby="h-finds">
+        <div class="wrap">
+          <span class="kicker">05 / Who found what</span>
+          <h2 id="h-finds">The sim finds bugs. Humans find the game.</h2>
+          <div class="finds" id="finds"></div>
+        </div>
+      </section>
+
+      <!-- QUESTIONS ======================================================== -->
+      <section id="questions" aria-labelledby="h-questions">
+        <div class="wrap">
+          <span class="kicker">06 / Eight questions</span>
+          <h2 id="h-questions">The questions a retrospective should ask</h2>
+          <div class="qs" id="qs"></div>
+        </div>
+      </section>
+
+      <!-- RULES ============================================================ -->
+      <section aria-labelledby="h-rules">
+        <div class="wrap">
+          <span class="kicker">07 / Ten rules</span>
+          <h2 id="h-rules">Lessons, stated as rules</h2>
+          <p>Each rule names the failure that justifies it. Proposed, not yet ratified.</p>
+          <div class="rules" id="rules"></div>
+        </div>
+      </section>
+
+      <!-- OWNER ANSWERS ==================================================== -->
+      <section aria-labelledby="h-answers">
+        <div class="wrap">
+          <span class="kicker">08 / Owner answers</span>
+          <h2 id="h-answers">Seven questions for the owner</h2>
+          <div class="tally" id="tally"></div>
+          <div class="answers" id="answers"></div>
+        </div>
+      </section>
+
+      <!-- PLAN ============================================================= -->
+      <section id="plan" aria-labelledby="h-plan">
+        <div class="wrap">
+          <span class="kicker">09 / Next steps</span>
+          <h2 id="h-plan">Build Survival Dice-Builder right</h2>
+          <p>
+            Scaled to the owner's answers: the web app is a design tool, table time is 1 to 2 solo
+            hours a week, and the loop stays on for docs and bot work only. Ticks are saved in this
+            browser only.
+          </p>
+          <div class="tracks" id="tracks"></div>
+          <h3 style="margin-top: 36px">Not until Track B has data</h3>
+          <div class="donts" id="donts"></div>
+        </div>
+      </section>
+
+      <!-- SOURCES ========================================================== -->
+      <section aria-labelledby="h-sources">
+        <div class="wrap">
+          <span class="kicker">10 / Sources</span>
+          <h2 id="h-sources">Where every number came from</h2>
+          <ul class="sources" id="sources"></ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page">
+      <div class="wrap">
+        Shallow clones: Axiomancer git history visible 2026-10-01 to 10-03, board-brainstorm
+        2026-08-15 to 09-18, survival-dice-builder 2026-10-03 to 10-06. Earlier dates come from
+        dated plan files, decision ballots and the results archive.
+      </div>
+    </footer>
+
+    <script>
+      'use strict'
+
+      /* =======================================================================
+         LAYER 1: DATA
+         Plain frozen objects. Nothing here computes or touches the page.
+         `deepFreeze` makes every nested array and object immutable so a
+         renderer cannot mutate shared data by accident.
+         ======================================================================= */
+
+      /**
+       * Recursively freeze an object graph.
+       * @template T
+       * @param {T} value - any value; objects and arrays are frozen in place.
+       * @returns {T} the same value, now immutable all the way down.
+       */
+      const deepFreeze = (value) => {
+        if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+          Object.values(value).forEach(deepFreeze)
+          Object.freeze(value)
+        }
+        return value
+      }
+
+      const DATA = deepFreeze({
+        /** One-sentence verdict shown at the top of the summary. */
+        verdict:
+          'Both games found their real problems only when a person played them, and neither repo wrote that down. Survival Dice-Builder is four days into the same path.',
+
+        /** Ticker phrases. Rendered twice so the CSS loop is seamless. */
+        ticker: [
+          '191 phases shipped',
+          '636 cards designed',
+          '123 sim experiments',
+          '0 table sessions logged',
+          '132 of 134 cards purged',
+          '70 rule rows in 4 days',
+          '3 of 7 priors wrong',
+          'play beats proof',
+        ],
+
+        /**
+         * Executive summary cards.
+         * @type {{title:string, body:string, evidence:string, conf:number, color:string}[]}
+         */
+        exec: [
+          {
+            title: 'Play beats proof',
+            body: 'Every direction-changing problem was found by a person at a table: the broken exploration deck, missing components, infinite COVENANT combos, and the Miserere reset itself.',
+            evidence: '123 sim runs with four pilot brains found none of them.',
+            conf: 90,
+            color: 'var(--yellow)',
+          },
+          {
+            title: 'Content outran the core',
+            body: 'Miserere built 134 cards on a stat system later called "decorative", then purged 132. Table Edition reached 636 cards with zero logged sessions.',
+            evidence: 'Axiomancer D36, trim-the-fat spec; board-brainstorm cards.json.',
+            conf: 95,
+            color: 'var(--pink)',
+          },
+          {
+            title: 'The loop is a builder, not a designer',
+            body: 'The autonomous loop was excellent at gates, deterministic engines and small verified phases. It was bad at choosing what to build, and it shipped past its own hold.',
+            evidence: 'Axiomancer D37, D58, D64; lessons.md "a hold nothing obeys".',
+            conf: 90,
+            color: 'var(--cyan)',
+          },
+          {
+            title: 'A number needs a known pilot',
+            body: 'A wiring bug was read as a balance result (D31). Co-op pilots won 100% of the time. The Survival bot cannot defend. Measurements drove rulings anyway.',
+            evidence: 'big-numbers D31; README open problems 4, 7, 9; phase-22 report.',
+            conf: 85,
+            color: 'var(--violet)',
+          },
+          {
+            title: 'Tools transferred, lessons did not',
+            body: 'Survival Dice-Builder inherited the whole loop harness but none of the design lessons. Its lessons file is seven notes about setup friction.',
+            evidence: 'NEXUS_LESSONS.md; grep for prior repo names returns nothing.',
+            conf: 90,
+            color: 'var(--orange)',
+          },
+        ],
+
+        /** "What changes now": the three behaviour changes, in priority order. */
+        now: [
+          'One solo cardboard run per week, logged in docs/playtests/runs/. Sessions logged is the measure of progress, not phases shipped.',
+          'The loop ships docs, bot policy, rule-text sync and the playtest kit only. No mechanics, routes or content without the owner.',
+          'A rule earns a config flag only after it has been played on index cards.',
+        ],
+
+        /**
+         * Scoreboard tiles. `value` counts up; `suffix` is appended after.
+         * @type {{value:number, suffix?:string, label:string, src:string, color:string}[]}
+         */
+        scores: [
+          {
+            value: 191,
+            label: 'Miserere phases shipped',
+            src: 'Axiomancer build plan',
+            color: 'var(--yellow)',
+          },
+          {
+            value: 636,
+            label: 'Table Edition unique cards',
+            src: 'board-brainstorm cards.json',
+            color: 'var(--cyan)',
+          },
+          {
+            value: 123,
+            label: 'Simulated experiments, approx.',
+            src: 'sim results archive',
+            color: 'var(--violet)',
+          },
+          {
+            value: 0,
+            label: 'Table sessions logged, any repo',
+            src: 'playtests folders',
+            color: 'var(--pink)',
+          },
+          {
+            value: 70,
+            label: 'SDB rule rows in 4 days',
+            src: 'OPEN-QUESTIONS.md',
+            color: 'var(--orange)',
+          },
+          {
+            value: 3,
+            suffix: '/7',
+            label: 'My priors the owner proved wrong',
+            src: 'retrospective section 4',
+            color: 'var(--lime)',
+          },
+        ],
+
+        /**
+         * "Built" bars, grouped by project. Scaled to the largest value.
+         * @type {{project:string, rows:{label:string, value:number, color:string}[]}[]}
+         */
+        built: [
+          {
+            project: 'Miserere Mei, Deus (mobile)',
+            rows: [
+              { label: 'phases shipped', value: 191, color: 'var(--yellow)' },
+              { label: 'cards purged', value: 132, color: 'var(--red)' },
+              { label: 'enemies cut', value: 76, color: 'var(--red)' },
+            ],
+          },
+          {
+            project: 'Table Edition (board)',
+            rows: [
+              { label: 'unique cards', value: 636, color: 'var(--cyan)' },
+              { label: 'exploration cards', value: 301, color: 'var(--cyan)' },
+              { label: 'sim experiments', value: 123, color: 'var(--violet)' },
+            ],
+          },
+          {
+            project: 'Survival Dice-Builder',
+            rows: [
+              { label: 'phases shipped', value: 22, color: 'var(--yellow)' },
+              { label: 'rule rows', value: 70, color: 'var(--orange)' },
+            ],
+          },
+        ],
+
+        /**
+         * "Logged at a table" column. `played` is what happened in reality per
+         * the owner; `logged` is what the repo holds.
+         */
+        logged: [
+          { project: 'Miserere', logged: 0, note: 'played by the owner; no log found' },
+          { project: 'Table Edition', logged: 0, note: '2 sessions with others; unlogged' },
+          { project: 'Survival', logged: 0, note: 'never played; runs/ holds a README' },
+        ],
+
+        /** Timeline bounds (ISO dates). */
+        tlStart: '2026-07-22',
+        tlEnd: '2026-10-06',
+
+        /** Timeline lanes, top to bottom. */
+        lanes: [
+          { id: 'board', name: 'Table Edition', color: 'var(--cyan)' },
+          { id: 'mobile', name: 'Miserere Mei, Deus', color: 'var(--yellow)' },
+          { id: 'sdb', name: 'Survival Dice-Builder', color: 'var(--lime)' },
+        ],
+
+        /**
+         * Timeline events. `human: true` marks an event caused by human play.
+         * @type {{lane:string, date:string, title:string, body:string, src:string, human?:boolean}[]}
+         */
+        events: [
+          {
+            lane: 'board',
+            date: '2026-07-22',
+            title: 'Repo split; sim archive starts',
+            body: 'The simulator, kit v3 and the append-only results archive begin.',
+            src: 'board-brainstorm README.md',
+          },
+          {
+            lane: 'board',
+            date: '2026-07-27',
+            title: 'Three Windows-only breaks',
+            body: '--pdf, --cards and --sheets had never once succeeded on Windows despite green remote sessions. The both-environments rule is born.',
+            src: 'board-brainstorm CLAUDE.md',
+          },
+          {
+            lane: 'board',
+            date: '2026-07-30',
+            title: 'Three-phase battle adopted',
+            body: 'A battle becomes three combats. This is the shipped default that still blocks the rulebook.',
+            src: 'docs/rulings.md',
+          },
+          {
+            lane: 'board',
+            date: '2026-08-12',
+            title: '"No more phases" for encounters',
+            body: 'The Acts model is proposed. Phases vs Acts is still unresolved on 2026-10-06, and the rulebook cannot ship until one wins.',
+            src: 'docs/rulings.md:1538, 2321',
+          },
+          {
+            lane: 'board',
+            date: '2026-08-15',
+            title: 'Exploration deck reaches 301 cards',
+            body: '+201 exploration cards and five bosses in one sprint. At the table, the exploration deck did not work.',
+            src: 'braindump 2026-08-15; owner answer',
+          },
+          {
+            lane: 'board',
+            date: '2026-09-12',
+            title: 'Roadmap to the first blind playtest',
+            body: 'Seven phases planned before the first blind human playtest of a full run.',
+            src: 'ROADMAP.md',
+          },
+          {
+            lane: 'board',
+            date: '2026-09-17',
+            title: 'Four-seat TTS table',
+            body: 'The owner drives the virtual table: camera across from the seat, deal in front of the wrong player. Only a human could see either.',
+            src: 'NEEDS_HUMAN_ATTENTION.md:230-258',
+            human: true,
+          },
+          {
+            lane: 'board',
+            date: '2026-09-18',
+            title: 'TOLL bug found',
+            body: 'Co-op never implemented the 2026-08-05 ruling. Six weeks of co-op numbers were measured against a broken engine.',
+            src: 'docs/rulings.md:2307',
+          },
+          {
+            lane: 'mobile',
+            date: '2026-08-08',
+            title: 'Locked mechanics',
+            body: 'Conviction, the Surge meter and the dice are locked.',
+            src: 'plan/bearings.md',
+          },
+          {
+            lane: 'mobile',
+            date: '2026-08-13',
+            title: 'Hold ignored',
+            body: 'The loop ships past the AUDIT-DRAIN hold. Lesson: a hold nothing obeys is worse than no hold.',
+            src: 'plan/steps/01_build_plan.md:22-35',
+          },
+          {
+            lane: 'mobile',
+            date: '2026-08-22',
+            title: 'The longer leash',
+            body: 'The loop gets bold authority over cards, keywords, art, map and mechanics. The game is renamed Miserere Mei, Deus.',
+            src: 'plan/north-star-mork-borg.md',
+          },
+          {
+            lane: 'mobile',
+            date: '2026-09-02',
+            title: 'Big Numbers rewrite',
+            body: '112 cards across 6 themes. A dice retune (D31) is withdrawn the next day: the flat measurement was a wiring bug.',
+            src: 'big-numbers decisions D3, D31',
+          },
+          {
+            lane: 'mobile',
+            date: '2026-09-25',
+            title: 'Trim the fat',
+            body: 'About 3,600 dead engine lines and 8 commands with zero uses in six weeks are removed.',
+            src: 'trim-the-fat spec; D10',
+          },
+          {
+            lane: 'mobile',
+            date: '2026-09-26',
+            title: 'Card purge and card hold',
+            body: '132 of 134 cards purged (D36). No card or keyword is created outside a session with the owner (D37).',
+            src: 'refactor-strategy decisions D36, D37',
+          },
+          {
+            lane: 'mobile',
+            date: '2026-09-28',
+            title: 'THE REVAMP',
+            body: 'Reset to three cards, four dice, three foes. The trigger, per the owner: "after playing it, I realized I needed to be more hands on in the card creation process."',
+            src: 'D46-D64; owner answer 2026-10-06',
+            human: true,
+          },
+          {
+            lane: 'mobile',
+            date: '2026-10-02',
+            title: 'v0.1.0 checkpoint',
+            body: '31 revamp phases in five days end in a tagged release and an APK.',
+            src: 'D76',
+          },
+          {
+            lane: 'sdb',
+            date: '2026-10-02',
+            title: 'Loop adopted',
+            body: 'The nexus loop is adopted. Nine rule readings decided the same day.',
+            src: 'NEXUS_LESSONS.md; OPEN-QUESTIONS.md',
+          },
+          {
+            lane: 'sdb',
+            date: '2026-10-03',
+            title: '32 commits in a day',
+            body: 'Phases ship fast. The designer spec runs out of phases; the loop promotes its own (17-19).',
+            src: 'git log; build plan',
+          },
+          {
+            lane: 'sdb',
+            date: '2026-10-04',
+            title: 'Core loop v2',
+            body: 'The designer walkthrough rewrites the round. Nine rule rows superseded within 48 hours.',
+            src: 'docs/design/core-loop-v2.md',
+            human: true,
+          },
+          {
+            lane: 'sdb',
+            date: '2026-10-05',
+            title: 'Bot experiments',
+            body: 'Phase 22: "the bot is weak, every number here is a floor". Verdicts recommend turning on four structural flags anyway.',
+            src: 'docs/reports/phase-22-experiments.md',
+          },
+          {
+            lane: 'sdb',
+            date: '2026-10-06',
+            title: 'This retrospective',
+            body: 'Zero human runs logged. 22 of 22 phases done.',
+            src: 'docs/retrospective-2026-10-06.md',
+          },
+        ],
+
+        /**
+         * Loop diagrams. Each node label may split into two lines with "|".
+         * @type {{id:string, title:string, sub:string, color:string, center:string[], nodes:string[]}[]}
+         */
+        loops: [
+          {
+            id: 'old',
+            title: 'Then: design in code',
+            sub: 'A hole found by the bot becomes a new rule and a default-off flag. The config surface grows; the design does not settle.',
+            color: '#ff4d4d',
+            center: ['70 rows', 'in 4 days'],
+            nodes: ['Write|a rule', 'Engine|it', 'Bot finds|a hole', 'Add a|flag'],
+          },
+          {
+            id: 'new',
+            title: 'Now: design on cardboard',
+            sub: 'A rule reaches code only after it has been played and logged. The engine is tested against the printed text.',
+            color: '#a3e635',
+            center: ['1 run', 'a week'],
+            nodes: ['Index|cards', 'Play|solo', 'Log|it', 'Rule|it', 'Code +|parity'],
+          },
+        ],
+
+        /**
+         * Who found what. Three columns.
+         * @type {{title:string, color:string, items:{text:string, src:string}[]}[]}
+         */
+        finds: [
+          {
+            title: 'Only the sim found',
+            color: 'var(--violet)',
+            items: [
+              {
+                text: 'Two cards being played that are not in the box',
+                src: 'archive: unprinted-cards',
+              },
+              {
+                text: 'Infinite loop: Warm Welcome + The Chronicler',
+                src: 'archive: coop-mixed-party',
+              },
+              { text: 'Co-op ignored the TOLL ruling for six weeks', src: 'rulings.md:2307' },
+              {
+                text: 'A heal signature "blank" because the pilot never cast it',
+                src: 'archive: sig-heuristic-coverage',
+              },
+            ],
+          },
+          {
+            title: 'Only humans found',
+            color: 'var(--pink)',
+            items: [
+              {
+                text: 'The exploration deck does not work at the table',
+                src: 'owner, 2 unlogged sessions',
+              },
+              {
+                text: 'Cards and components missing from the kit',
+                src: 'owner, 2 unlogged sessions',
+              },
+              { text: 'Infinite COVENANT combos', src: 'owner, 2 unlogged sessions' },
+              {
+                text: 'Miserere card design needed the owner hands-on',
+                src: 'owner answer 2026-10-06',
+              },
+              {
+                text: 'TTS camera across from the seat; deal at the wrong seat',
+                src: 'NEEDS_HUMAN_ATTENTION.md',
+              },
+              { text: 'The owner already thinks in Acts, not phases', src: 'rulings.md:2321' },
+            ],
+          },
+          {
+            title: 'Nobody can measure yet',
+            color: 'var(--yellow)',
+            items: [
+              { text: 'Discard decisions: "the pilot cannot discard"', src: 'rulings.md:980-990' },
+              { text: 'Social failure: "Dave ruined it"', src: 'README open problem 8' },
+              {
+                text: 'Skilled play: pilots already win 100%',
+                src: 'README open problems 4, 7, 9',
+              },
+              { text: 'SDB defence: the bot does not defend', src: 'phase-22-experiments.md' },
+            ],
+          },
+        ],
+
+        /**
+         * The eight retrospective questions.
+         * @type {{q:string, a:string, points:string[], conf:number}[]}
+         */
+        questions: [
+          {
+            q: 'Did either project validate its core loop with humans before building outward?',
+            a: 'No, in both cases.',
+            points: [
+              'Miserere built cards, enemies, a hazard minigame, a labyrinth and a card editor on a stat system later called "decorative". Reset came about seven weeks in.',
+              'Table Edition reached 636 cards, 61 keywords, five bosses and a TTS table. Two table sessions happened; neither was logged.',
+              'Survival Dice-Builder: 22 phases and six web routes; the playtest kit still teaches rules the engine dropped.',
+            ],
+            conf: 95,
+          },
+          {
+            q: 'What did building ahead of validation cost?',
+            a: 'Weeks of work deleted, and measurement that measured nothing.',
+            points: [
+              'Trim removed ~3,600 dead engine lines, ~1,600 mobile orphans, ~90 stale docs and 95 MB of binaries.',
+              'The balance baseline was retired: after the purge "every cell was the grey deck".',
+              'Six weeks of Table Edition co-op numbers were taken on a broken engine.',
+            ],
+            conf: 90,
+          },
+          {
+            q: 'What did the sim find that humans could not, and the reverse?',
+            a: 'The sim finds engine bugs. Only humans find the game.',
+            points: [
+              'Sim: unprinted cards, an infinite loop, the TOLL bug, pilot artefacts.',
+              'Humans: a broken exploration deck, missing components, COVENANT infinites, rules-model drift.',
+              'The sim admits it cannot see discards, social failure or skilled play.',
+            ],
+            conf: 85,
+          },
+          {
+            q: 'Where did the autonomous loop help, and where did it hurt?',
+            a: 'It helped on engineering discipline. It hurt whenever it chose what to build.',
+            points: [
+              'Helped: deterministic engines, hook-enforced gates, decisions as ballots, small verified phases.',
+              'Hurt: content before core, tooling nobody used, holds ignored, self-promoted phases.',
+              'The owner imposed D37, D38, D58 and D64 after the fact. Impose them up front.',
+            ],
+            conf: 90,
+          },
+          {
+            q: 'Did measurement replace judgement, or inform it?',
+            a: 'It replaced it more than once, and the numbers were wrong each time.',
+            points: [
+              'D31 retuned a dice axis on a wiring bug; withdrawn the next day.',
+              'A double count pushed the baseline to 100% win rates.',
+              'Table Edition got it right late: the carry ruling is "a coherence and teachability decision, and the numbers cannot make it".',
+            ],
+            conf: 85,
+          },
+          {
+            q: 'How much rules churn is normal, and how much is a symptom?',
+            a: 'Same-day reversals are a symptom of designing in code instead of on the table.',
+            points: [
+              'Table Edition: MEDIC built and cut in a day; four of six rulings on 09-13 amended earlier ones.',
+              'Survival: 70 rule rows in four days, nine superseded within 48 hours.',
+              'Rows 63-70 (no clock, turtle dominance, materials 20 vs cost 33) each got a flag instead of a stop.',
+            ],
+            conf: 75,
+          },
+          {
+            q: 'What was the cost of multiple surfaces?',
+            a: 'Parity debt, and the physical target got the least attention.',
+            points: [
+              'The Table Edition mobile port is out of parity; the render chain past --pdf is owed on Windows.',
+              'Survival targets a physical game and has a web app, a bot, a sim CLI and no print-and-play kit.',
+            ],
+            conf: 85,
+          },
+          {
+            q: 'What transferred between projects, and what did not?',
+            a: 'Infrastructure transferred. The lessons did not.',
+            points: [
+              'NEXUS_LESSONS.md holds seven notes, all about loop setup friction.',
+              'The card hold, rec/exp discipline, both-environments rule and pilot-ceiling lesson were not carried.',
+            ],
+            conf: 90,
+          },
+        ],
+
+        /**
+         * Ten rules, each with the failure that justifies it.
+         * @type {{rule:string, why:string, color:string}[]}
+         */
+        rules: [
+          {
+            rule: 'A core loop is validated by people at a table, not by a bot batch.',
+            why: 'Neither prior project reached that bar in about 60 days.',
+            color: 'var(--yellow)',
+          },
+          {
+            rule: 'The loop never chooses content, mechanics or new surfaces.',
+            why: 'D37, D58, D64 were imposed after the fact. Owner ruling: docs and bot only.',
+            color: 'var(--pink)',
+          },
+          {
+            rule: 'A rule gets a config flag only after it is played on cardboard.',
+            why: 'Flags accumulated faster than decisions (rows 63-70).',
+            color: 'var(--cyan)',
+          },
+          {
+            rule: 'One source of rule text. The printed text is the spec.',
+            why: 'The Survival playtest kit teaches rules the engine dropped.',
+            color: 'var(--lime)',
+          },
+          {
+            rule: 'Default sim = shipped game. Proposals behind --rec, experiments behind --exp.',
+            why: 'The only discipline that kept measurement honest.',
+            color: 'var(--violet)',
+          },
+          {
+            rule: 'A measurement needs a pilot with a known ceiling and floor.',
+            why: 'D31, 100% co-op pilots, a bot that cannot defend.',
+            color: 'var(--orange)',
+          },
+          {
+            rule: 'Every physical artefact runs on the owner’s machine before it is done.',
+            why: 'Three Windows-only breaks shipped green on 2026-07-27.',
+            color: 'var(--cyan)',
+          },
+          {
+            rule: 'Measure progress in sessions logged, not phases shipped.',
+            why: '191 and 22 phases; zero logged sessions.',
+            color: 'var(--pink)',
+          },
+          {
+            rule: 'The sim is for bug detection and range finding, not tuning.',
+            why: 'Miserere’s own post-reset rule: "simulations keep bug detectors only".',
+            color: 'var(--yellow)',
+          },
+          {
+            rule: 'A hold must be mechanical: a hook that blocks, not a line in a plan.',
+            why: 'The AUDIT-DRAIN hold was ignored.',
+            color: 'var(--lime)',
+          },
+        ],
+
+        /**
+         * Owner questions. `right` compares my prior to the answer.
+         * @type {{q:string, prior:string, conf:number, answer:string, right:boolean}[]}
+         */
+        answers: [
+          {
+            q: 'Has anyone else played either game at a table?',
+            prior: 'No',
+            conf: 70,
+            answer:
+              'Table Edition twice with others, unlogged: exploration cards broken, components missing, COVENANT infinites.',
+            right: false,
+          },
+          {
+            q: 'What triggered the Miserere reset?',
+            prior: 'Reading the code',
+            conf: 40,
+            answer:
+              'Playing it: "I realized I needed to be more hands on in the card creation process."',
+            right: false,
+          },
+          {
+            q: 'What is the Survival web app for?',
+            prior: 'A design tool',
+            conf: 60,
+            answer: 'A design tool for the physical game.',
+            right: true,
+          },
+          {
+            q: 'How much table time a week, with whom?',
+            prior: 'No assumption possible',
+            conf: 0,
+            answer: '1 to 2 hours, solo only.',
+            right: null,
+          },
+          {
+            q: 'Keep the hourly loop running with zero sessions?',
+            prior: 'Pause it',
+            conf: 65,
+            answer: 'Keep running, docs and bot only.',
+            right: false,
+          },
+          {
+            q: 'Which of rows 63, 67, 69 are resolved in your head?',
+            prior: 'None yet',
+            conf: 50,
+            answer: 'None yet.',
+            right: true,
+          },
+          {
+            q: 'Log the two Table Edition sessions from memory?',
+            prior: 'Yes',
+            conf: 80,
+            answer: 'Yes, next session, via /playtest-log, marked recalled.',
+            right: true,
+          },
+        ],
+
+        /**
+         * Plan tracks. Item ids are stable keys for the per-browser checklist.
+         * @type {{id:string, title:string, when:string, color:string, items:{id:string, text:string}[]}[]}
+         */
+        tracks: [
+          {
+            id: 'a',
+            title: 'A / Discussion',
+            when: 'This week',
+            color: 'var(--cyan)',
+            items: [
+              { id: 'a1', text: 'File the seven owner answers in docs/DECISIONS.md as ballots.' },
+              { id: 'a2', text: 'Decide rows 63, 67 and 69 on paper, not by bot.' },
+              { id: 'a3', text: 'Ratify or strike the ten rules into agents.md.' },
+              { id: 'a4', text: 'Add plan/LOOP-SCOPE.md that ship skills read and enforce.' },
+              {
+                id: 'a5',
+                text: 'Run /playtest-log in board-brainstorm for the two unlogged sessions.',
+              },
+            ],
+          },
+          {
+            id: 'b',
+            title: 'B / Physical, solo',
+            when: 'Next 4 weeks, 1-2 h/week',
+            color: 'var(--yellow)',
+            items: [
+              {
+                id: 'b1',
+                text: 'Index-card kit for core loop v2 only: base, 8 tiles, 10-card deck, 1 d6, tokens.',
+              },
+              { id: 'b2', text: 'Week 1 solo run, logged.' },
+              { id: 'b3', text: 'Week 2 solo run, logged. Try forced reveal.' },
+              { id: 'b4', text: 'Week 3 solo run, logged. Try once-per-Combat attacks.' },
+              { id: 'b5', text: 'Week 4 solo run, logged. Try Gather off node gives 1.' },
+              { id: 'b6', text: 'Answer: is a round a decision, or bookkeeping?' },
+            ],
+          },
+          {
+            id: 'c',
+            title: 'C / Code, in loop scope',
+            when: 'Now, in parallel',
+            color: 'var(--lime)',
+            items: [
+              { id: 'c1', text: 'Move PROTOCOL, SURVEY and REPORT to v2 rules.' },
+              { id: 'c2', text: 'Parity test: every printed number appears in packages/content.' },
+              { id: 'c3', text: 'Port the --rec / --exp split into tools/sim.' },
+              { id: 'c4', text: 'A defending bot before any more tuning verdicts.' },
+              { id: 'c5', text: 'Print renderer only after 4 logged runs; verify on Windows.' },
+            ],
+          },
+        ],
+
+        /** Things not to do until Track B has data. */
+        donts: [
+          'New web routes',
+          'New Skills',
+          'Scenarios',
+          '3D dice work',
+          'Art direction',
+          'Tuning verdicts from the current bot',
+          'Porting Table Edition cards or systems',
+          'Co-op or seat-scaling rulings',
+        ],
+
+        /** Sources, by repo. */
+        sources: [
+          'Axiomancer/plan/bearings.md',
+          'Axiomancer/plan/lessons.md',
+          'Axiomancer/plan/reflexes.md',
+          'Axiomancer/plan/steps/01_build_plan.md',
+          'Axiomancer/plan/2026-09-02-big-numbers-overhaul.decisions.md',
+          'Axiomancer/plan/2026-09-25-refactor-strategy.decisions.md',
+          'Axiomancer/plan/2026-09-25-trim-the-fat.spec.md',
+          'Axiomancer/plan/revamp/*',
+          'Axiomancer/docs/truth-sources.md',
+          'board-brainstorm/README.md',
+          'board-brainstorm/CLAUDE.md',
+          'board-brainstorm/docs/rulings.md',
+          'board-brainstorm/NEEDS_HUMAN_ATTENTION.md',
+          'board-brainstorm/needs-brainstorming.md',
+          'board-brainstorm/braindump/* (35 files)',
+          'board-brainstorm/table-edition-sim-results-2026-07-22.md',
+          'board-brainstorm/cards.json',
+          'survival-dice-builder/agents.md',
+          'survival-dice-builder/plan/steps/01_build_plan.md',
+          'survival-dice-builder/OPEN-QUESTIONS.md',
+          'survival-dice-builder/docs/design/core-loop-v2.md',
+          'survival-dice-builder/docs/playtests/*',
+          'survival-dice-builder/docs/reports/phase-22-experiments.md',
+          'survival-dice-builder/NEXUS_LESSONS.md',
+          'Owner answers, 2026-10-06',
+        ],
+      })
+
+      /* =======================================================================
+         LAYER 2: PURE HELPERS
+         Small functions with no side effects. Each returns a value computed
+         only from its arguments.
+         ======================================================================= */
+
+      /**
+       * Escape text for safe insertion into HTML. All data above is authored
+       * here, but escaping keeps the renderers correct if a string ever holds
+       * "<" or "&".
+       * @param {unknown} s - any value; coerced to string.
+       * @returns {string} HTML-safe text.
+       */
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"']/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
+        )
+
+      /**
+       * Join an array of HTML strings produced by mapping a renderer.
+       * @template T
+       * @param {readonly T[]} items - data items.
+       * @param {(item: T, index: number) => string} render - pure renderer.
+       * @returns {string} concatenated HTML.
+       */
+      const each = (items, render) => items.map(render).join('')
+
+      /**
+       * Whole days between two ISO dates (UTC, so time zones cannot shift it).
+       * @param {string} from - ISO date, e.g. "2026-07-22".
+       * @param {string} to - ISO date.
+       * @returns {number} days from `from` to `to`.
+       */
+      const daysBetween = (from, to) => Math.round((Date.parse(to) - Date.parse(from)) / 86400000)
+
+      /**
+       * Position of a date on the timeline as a percentage of its width.
+       * @param {string} date - ISO date inside [tlStart, tlEnd].
+       * @returns {number} 0..100.
+       */
+      const tlPercent = (date) =>
+        (daysBetween(DATA.tlStart, date) / daysBetween(DATA.tlStart, DATA.tlEnd)) * 100
+
+      /**
+       * Short "Aug 13" label for an ISO date.
+       * @param {string} date - ISO date.
+       * @returns {string} month abbreviation and day.
+       */
+      const shortDate = (date) =>
+        new Date(date + 'T00:00:00Z').toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          timeZone: 'UTC',
+        })
+
+      /**
+       * Point on a circle, for placing loop-diagram nodes.
+       * Angle 0 is 12 o'clock; positive angles go clockwise.
+       * @param {number} cx - centre x.
+       * @param {number} cy - centre y.
+       * @param {number} r - radius.
+       * @param {number} turn - fraction of a full turn, 0..1.
+       * @returns {{x:number, y:number}} the point.
+       */
+      const onCircle = (cx, cy, r, turn) => ({
+        x: cx + r * Math.sin(turn * 2 * Math.PI),
+        y: cy - r * Math.cos(turn * 2 * Math.PI),
+      })
+
+      /**
+       * Largest numeric value across all "built" bar rows; the chart scale.
+       * @param {typeof DATA.built} groups - bar groups.
+       * @returns {number} the maximum value.
+       */
+      const builtMax = (groups) => Math.max(...groups.flatMap((g) => g.rows.map((r) => r.value)))
+
+      /** Vertical offsets (px) for timeline rows: centre, above, below. */
+      const ROW_OFFSETS = Object.freeze([0, -32, 32])
+
+      /**
+       * Assign each timeline pin in a lane to a row so pins less than four
+       * days apart do not overlap. A pin far from its predecessor goes on
+       * the centre row; a close one takes the next row in a 3-row cycle.
+       * @param {readonly string[]} dates - ISO dates, sorted ascending.
+       * @returns {number[]} row index (0..2) per date.
+       */
+      const staggerRows = (dates) =>
+        dates.reduce((rows, date, i) => {
+          const close = i > 0 && daysBetween(dates[i - 1], date) < 4
+          return [...rows, close ? (rows[i - 1] + 1) % ROW_OFFSETS.length : 0]
+        }, [])
+
+      /* =======================================================================
+         LAYER 3: PURE RENDERERS (components)
+         Each takes data and returns an HTML (or SVG) string. None reads or
+         writes the DOM. Animation targets are expressed as data-* attributes
+         so the effects layer can find and animate them later.
+         ======================================================================= */
+
+      /**
+       * Confidence chip, e.g. "conf 85".
+       * @param {number} n - confidence 0..100.
+       * @returns {string} HTML.
+       */
+      const Conf = (n) => `<span class="conf" title="Confidence ${n} of 100">conf ${n}</span>`
+
+      /**
+       * Animated confidence meter. `data-to` is the fill width the effects
+       * layer animates to when the meter scrolls into view.
+       * @param {number} n - confidence 0..100.
+       * @returns {string} HTML.
+       */
+      const Meter = (n) =>
+        `<div class="meter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${n}" aria-label="Confidence ${n} of 100"><i data-to="${n}%"></i></div>`
+
+      /**
+       * Ticker content. Phrases are joined with stars and rendered twice so a
+       * translateX(-50%) loop has no visible seam.
+       * @param {readonly string[]} phrases - ticker phrases.
+       * @returns {string} HTML.
+       */
+      const Ticker = (phrases) => {
+        const once = phrases.map((p) => `&nbsp;★&nbsp;${esc(p)}`).join('')
+        return once + once
+      }
+
+      /**
+       * One executive-summary card.
+       * @param {(typeof DATA.exec)[number]} item - card data.
+       * @param {number} i - index, shown as the badge number.
+       * @returns {string} HTML.
+       */
+      const ExecCard = (item, i) => `
+        <article class="card fill lift exec-card reveal" style="background:${item.color}; transition-delay:${i * 70}ms">
+          <span class="num" aria-hidden="true">${i + 1}</span>
+          <h3>${esc(item.title)}</h3>
+          <p>${esc(item.body)}</p>
+          <footer><span class="evidence">${esc(item.evidence)}</span>${Conf(item.conf)}</footer>
+        </article>`
+
+      /**
+       * One scoreboard tile. The number starts at 0 and counts up to
+       * `data-count` when visible.
+       * @param {(typeof DATA.scores)[number]} s - tile data.
+       * @param {number} i - index, used to stagger the reveal.
+       * @returns {string} HTML.
+       */
+      const ScoreTile = (s, i) => `
+        <div class="card fill lift score reveal" style="background:${s.color}; transition-delay:${i * 60}ms">
+          <span class="big"><span data-count="${s.value}">${s.value}</span>${esc(s.suffix || '')}</span>
+          <span class="lbl">${esc(s.label)}</span>
+          <span class="src">${esc(s.src)}</span>
+        </div>`
+
+      /**
+       * One horizontal bar. Width animates from 0 to `data-to`.
+       * @param {{label:string, value:number, color:string}} row - bar data.
+       * @param {number} max - value that maps to 100% width.
+       * @returns {string} HTML.
+       */
+      const Bar = (row, max) => `
+        <div class="bar-row">
+          <span class="bar-label">${esc(row.label)}</span>
+          <div class="bar-track" aria-hidden="true"><div class="bar-fill" style="background:${row.color}" data-to="${((row.value / max) * 100).toFixed(1)}%"></div></div>
+          <span class="bar-val" aria-label="${esc(row.label)}: ${row.value}">${row.value}</span>
+        </div>`
+
+      /**
+       * All "built" bars, grouped by project.
+       * @param {typeof DATA.built} groups - bar groups.
+       * @returns {string} HTML.
+       */
+      const BuiltChart = (groups) => {
+        const max = builtMax(groups)
+        return each(
+          groups,
+          (g) =>
+            `<div class="group-name">${esc(g.project)}</div>${each(g.rows, (r) => Bar(r, max))}`,
+        )
+      }
+
+      /**
+       * The "logged at a table" column: one large zero per project.
+       * @param {typeof DATA.logged} rows - per-project counts.
+       * @returns {string} HTML.
+       */
+      const LoggedColumn = (rows) =>
+        each(
+          rows,
+          (r) => `
+          <div class="zero">
+            <div><strong>${esc(r.project)}</strong><small>${esc(r.note)}</small></div>
+            <span class="z" data-count="${r.logged}">${r.logged}</span>
+          </div>`,
+        )
+
+      /**
+       * Timeline axis labels: one per calendar month start inside the range,
+       * plus the end date.
+       * @param {string} start - ISO start.
+       * @param {string} end - ISO end.
+       * @returns {string} HTML.
+       */
+      const TimelineAxis = (start, end) =>
+        `<div class="axis" aria-hidden="true">${each(
+          [start, '2026-08-15', '2026-09-01', '2026-09-15', end],
+          (d) => `<span>${shortDate(d)}</span>`,
+        )}</div>`
+
+      /**
+       * One timeline marker. A <button> so it is keyboard reachable; its
+       * index into DATA.events is stored in data-ev.
+       * @param {(typeof DATA.events)[number]} ev - event.
+       * @param {number} idx - index into DATA.events.
+       * @param {string} color - lane colour.
+       * @param {number} dy - vertical offset in px from the lane centre.
+       * @returns {string} HTML.
+       */
+      const Pin = (ev, idx, color, dy) => `
+        <button type="button" class="pin${ev.human ? ' human' : ''}" data-ev="${idx}" aria-pressed="false"
+          style="left:${tlPercent(ev.date).toFixed(2)}%; top:calc(50% + ${dy}px); background:${ev.human ? 'var(--pink)' : color}; transition-delay:${Math.round(tlPercent(ev.date) * 14)}ms"
+          aria-label="${esc(shortDate(ev.date))}: ${esc(ev.title)}"></button>`
+
+      /**
+       * One swim lane with its line and markers.
+       * @param {(typeof DATA.lanes)[number]} lane - lane definition.
+       * @param {typeof DATA.events} events - all events (filtered here).
+       * @returns {string} HTML.
+       */
+      const Lane = (lane, events) => {
+        // Keep each event's global index (the panel looks events up by it),
+        // keep only this lane, and sort by date so staggering is stable.
+        const mine = events
+          .map((ev, idx) => ({ ev, idx }))
+          .filter(({ ev }) => ev.lane === lane.id)
+          .sort((a, b) => Date.parse(a.ev.date) - Date.parse(b.ev.date))
+        const rows = staggerRows(mine.map(({ ev }) => ev.date))
+        return `
+        <div class="lane">
+          <span class="lane-name">${esc(lane.name)}</span>
+          <div class="lane-line"></div>
+          ${mine.map(({ ev, idx }, i) => Pin(ev, idx, lane.color, ROW_OFFSETS[rows[i]])).join('')}
+        </div>`
+      }
+
+      /**
+       * The whole timeline diagram.
+       * @param {typeof DATA} d - page data.
+       * @returns {string} HTML.
+       */
+      const Timeline = (d) =>
+        TimelineAxis(d.tlStart, d.tlEnd) + each(d.lanes, (l) => Lane(l, d.events))
+
+      /**
+       * Detail panel for one timeline event.
+       * @param {(typeof DATA.events)[number]} ev - event.
+       * @returns {string} HTML.
+       */
+      const EventPanel = (ev) => `
+        <span class="date">${esc(shortDate(ev.date))} 2026 / ${esc(DATA.lanes.find((l) => l.id === ev.lane).name)}</span>
+        <h3>${ev.human ? '★ ' : ''}${esc(ev.title)}</h3>
+        <p>${esc(ev.body)}</p>
+        <span class="mono">${esc(ev.src)}</span>`
+
+      /**
+       * A loop diagram as inline SVG. Nodes sit evenly on a circle; a marker
+       * travels the circle with <animateMotion>; arrows point clockwise.
+       * @param {(typeof DATA.loops)[number]} loop - loop data.
+       * @returns {string} HTML containing an SVG.
+       */
+      const LoopDiagram = (loop) => {
+        const C = 210 // centre
+        const R = 140 // ring radius
+        const W = 124 // node box width
+        const H = 56 // node box height
+        const n = loop.nodes.length
+
+        // Circle path starting at 12 o'clock, drawn clockwise as two arcs.
+        const ring = `M ${C} ${C - R} A ${R} ${R} 0 1 1 ${C} ${C + R} A ${R} ${R} 0 1 1 ${C} ${C - R}`
+
+        // Arrow heads half-way between consecutive nodes, rotated to the tangent.
+        const arrows = loop.nodes
+          .map((_, i) => {
+            const t = (i + 0.5) / n
+            const p = onCircle(C, C, R, t)
+            const deg = t * 360 + 90 // tangent direction for clockwise travel
+            return `<path d="M -9 -8 L 9 0 L -9 8 Z" class="ink-fill" transform="translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${deg.toFixed(1)})"/>`
+          })
+          .join('')
+
+        // Node boxes with up to two lines of text each.
+        const nodes = loop.nodes
+          .map((label, i) => {
+            const p = onCircle(C, C, R, i / n)
+            const lines = label.split('|')
+            const text = lines
+              .map(
+                (line, j) =>
+                  `<text x="${p.x.toFixed(1)}" y="${(p.y + (j - (lines.length - 1) / 2) * 17 + 5).toFixed(1)}" text-anchor="middle" font-size="15" fill="#111">${esc(line)}</text>`,
+              )
+              .join('')
+            return `
+              <g>
+                <rect x="${(p.x - W / 2 + 5).toFixed(1)}" y="${(p.y - H / 2 + 5).toFixed(1)}" width="${W}" height="${H}" rx="6" class="ink-fill"/>
+                <rect x="${(p.x - W / 2).toFixed(1)}" y="${(p.y - H / 2).toFixed(1)}" width="${W}" height="${H}" rx="6" fill="${loop.color}" stroke="#111" stroke-width="3"/>
+                ${text}
+              </g>`
+          })
+          .join('')
+
+        return `
+          <figure class="card loop reveal" style="margin:0">
+            <h3>${esc(loop.title)}</h3>
+            <svg viewBox="0 0 420 420" role="img" aria-label="${esc(loop.title)}: ${esc(loop.nodes.map((s) => s.replace('|', ' ')).join(', then '))}, then repeat.">
+              <path d="${ring}" fill="none" class="ink-stroke" stroke-width="6" stroke-dasharray="14 10"/>
+              ${arrows}
+              <circle r="11" fill="${loop.color}" stroke="#111" stroke-width="3">
+                <animateMotion dur="${n * 1.6}s" repeatCount="indefinite" path="${ring}"/>
+              </circle>
+              ${nodes}
+              <text x="${C}" y="${C - 6}" text-anchor="middle" font-size="28" class="center ink-fill">${esc(loop.center[0])}</text>
+              <text x="${C}" y="${C + 24}" text-anchor="middle" font-size="18" class="ink-fill">${esc(loop.center[1])}</text>
+            </svg>
+            <figcaption>${esc(loop.sub)}</figcaption>
+          </figure>`
+      }
+
+      /**
+       * One "who found what" column.
+       * @param {(typeof DATA.finds)[number]} col - column data.
+       * @param {number} i - index, used to stagger the reveal.
+       * @returns {string} HTML.
+       */
+      const FindColumn = (col, i) => `
+        <div class="card fill reveal" style="background:${col.color}; transition-delay:${i * 90}ms">
+          <h3>${esc(col.title)} <span class="stamp" style="background:#fff">${col.items.length}</span></h3>
+          <ul>${each(col.items, (it) => `<li>${esc(it.text)}<small>${esc(it.src)}</small></li>`)}</ul>
+        </div>`
+
+      /**
+       * One retrospective question as a native <details> accordion. The
+       * first question starts open.
+       * @param {(typeof DATA.questions)[number]} q - question data.
+       * @param {number} i - index.
+       * @returns {string} HTML.
+       */
+      const Question = (q, i) => `
+        <details class="card q reveal"${i === 0 ? ' open' : ''}>
+          <summary><span class="qid">Q${i + 1}</span><span class="qtext">${esc(q.q)}</span></summary>
+          <div class="qbody">
+            <div class="qanswer">${esc(q.a)}</div>
+            <ul>${each(q.points, (p) => `<li>${esc(p)}</li>`)}</ul>
+            <div class="conf-row"><span>Confidence</span>${Meter(q.conf)}<span>${q.conf}</span></div>
+          </div>
+        </details>`
+
+      /**
+       * One rule card.
+       * @param {(typeof DATA.rules)[number]} r - rule data.
+       * @param {number} i - index, shown as the rule number.
+       * @returns {string} HTML.
+       */
+      const RuleCard = (r, i) => `
+        <article class="card fill lift rule reveal" style="background:${r.color}; transition-delay:${(i % 4) * 60}ms">
+          <span class="rn" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
+          <h3>${esc(r.rule)}</h3>
+          <div class="why"><strong>Because:</strong> ${esc(r.why)}</div>
+        </article>`
+
+      /**
+       * Stamp for a prior assumption: RIGHT, WRONG, or N/A when no prior
+       * could be made.
+       * @param {boolean|null} right - comparison result.
+       * @returns {string} HTML.
+       */
+      const Verdict = (right) =>
+        right === null
+          ? '<span class="stamp" style="background:#ddd">N/A</span>'
+          : right
+            ? '<span class="stamp" style="background:var(--lime)">Right</span>'
+            : '<span class="stamp" style="background:var(--red)">Wrong</span>'
+
+      /**
+       * One owner-answer row.
+       * @param {(typeof DATA.answers)[number]} a - answer data.
+       * @param {number} i - index.
+       * @returns {string} HTML.
+       */
+      const AnswerRow = (a, i) => `
+        <div class="card ans reveal">
+          <div>
+            <span class="label">Q${i + 1}</span>
+            <strong>${esc(a.q)}</strong>
+            <div style="margin-top:10px"><span class="label">My prior, conf ${a.conf}</span>${esc(a.prior)}</div>
+            <div style="margin-top:8px">${Meter(a.conf)}</div>
+          </div>
+          <div><span class="label">Owner answer</span>${esc(a.answer)}</div>
+          <div>${Verdict(a.right)}</div>
+        </div>`
+
+      /**
+       * Tally of RIGHT / WRONG / N/A stamps above the answers list.
+       * @param {typeof DATA.answers} rows - all answers.
+       * @returns {string} HTML.
+       */
+      const Tally = (rows) => {
+        const count = (pred) => rows.filter(pred).length
+        return `
+          <span class="stamp" style="background:var(--red)">${count((a) => a.right === false)} wrong</span>
+          <span class="stamp" style="background:var(--lime)">${count((a) => a.right === true)} right</span>
+          <span class="stamp" style="background:#ddd">${count((a) => a.right === null)} no prior</span>
+          <span>Both big misses point the same way: the owner's own play was the signal, and no repo recorded it.</span>`
+      }
+
+      /**
+       * One plan track with a checklist. `checked` is a Set of item ids
+       * already ticked in this browser.
+       * @param {(typeof DATA.tracks)[number]} t - track data.
+       * @param {ReadonlySet<string>} checked - ticked ids.
+       * @returns {string} HTML.
+       */
+      const Track = (t, checked) => `
+        <div class="card track reveal" data-track="${t.id}">
+          <header style="background:${t.color}">
+            <small>${esc(t.when)}</small>
+            <h3>${esc(t.title)}</h3>
+          </header>
+          <ul>${each(
+            t.items,
+            (it) => `
+            <li><label><input type="checkbox" data-item="${it.id}"${checked.has(it.id) ? ' checked' : ''} /><span>${esc(it.text)}</span></label></li>`,
+          )}</ul>
+          <div class="progress" data-progress="${t.id}">${Progress(t, checked)}</div>
+        </div>`
+
+      /**
+       * "3 / 5 done" line for a track.
+       * @param {(typeof DATA.tracks)[number]} t - track data.
+       * @param {ReadonlySet<string>} checked - ticked ids.
+       * @returns {string} text.
+       */
+      const Progress = (t, checked) =>
+        `${t.items.filter((it) => checked.has(it.id)).length} / ${t.items.length} done`
+
+      /* =======================================================================
+         LAYER 4: EFFECTS
+         The only functions that touch the DOM, storage or timers. Each is
+         small and named for the one thing it does.
+         ======================================================================= */
+
+      /** True when the reader asked the OS for reduced motion. */
+      const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+      /** localStorage key for the plan checklist. */
+      const CHECK_KEY = 'sdb-retro-2026-10-06-checked'
+
+      /** localStorage key for the forced theme. */
+      const THEME_KEY = 'sdb-retro-theme'
+
+      /**
+       * Read a JSON value from localStorage. Storage can be missing or throw
+       * (private windows, blocked site data), so every failure returns the
+       * fallback and the page still works.
+       * @template T
+       * @param {string} key - storage key.
+       * @param {T} fallback - value when absent or unreadable.
+       * @returns {T} the stored value or the fallback.
+       */
+      const loadJSON = (key, fallback) => {
+        try {
+          const raw = localStorage.getItem(key)
+          return raw == null ? fallback : JSON.parse(raw)
+        } catch {
+          return fallback
+        }
+      }
+
+      /**
+       * Write a JSON value to localStorage. Failures are ignored on purpose:
+       * persistence is a convenience, not a requirement.
+       * @param {string} key - storage key.
+       * @param {unknown} value - JSON-serialisable value.
+       * @returns {void}
+       */
+      const saveJSON = (key, value) => {
+        try {
+          localStorage.setItem(key, JSON.stringify(value))
+        } catch {
+          /* storage unavailable: keep working without it */
+        }
+      }
+
+      /**
+       * Put renderer output into the element with the given id.
+       * @param {string} id - element id.
+       * @param {string} html - markup from a pure renderer.
+       * @returns {HTMLElement} the element, for chaining.
+       */
+      const mount = (id, html) => {
+        const el = document.getElementById(id)
+        el.innerHTML = html
+        return el
+      }
+
+      /**
+       * Count a number up from 0 to its data-count value, with a stepped
+       * ease so it "ticks" like a mechanical counter.
+       * @param {HTMLElement} el - element with data-count.
+       * @returns {void}
+       */
+      const countUp = (el) => {
+        const target = Number(el.dataset.count)
+        if (REDUCED || target === 0) {
+          el.textContent = String(target)
+          return
+        }
+        const duration = 1100
+        const start = performance.now()
+        const tick = (now) => {
+          const t = Math.min(1, (now - start) / duration)
+          const eased = 1 - Math.pow(1 - t, 3) // ease-out cubic
+          el.textContent = String(Math.round(target * eased))
+          if (t < 1) requestAnimationFrame(tick)
+        }
+        el.textContent = '0'
+        requestAnimationFrame(tick)
+      }
+
+      /**
+       * Start every animation inside a container that just became visible:
+       * reveal class, bar and meter widths, count-ups, and the timeline draw.
+       * @param {Element} el - the element that entered the viewport.
+       * @returns {void}
+       */
+      const activate = (el) => {
+        el.classList.add('in')
+        el.querySelectorAll('[data-to]').forEach((bar) => {
+          bar.style.width = bar.dataset.to
+        })
+        el.querySelectorAll('[data-count]').forEach(countUp)
+        // The stagger delay is for the entrance only; clear it so hover
+        // effects respond immediately afterwards.
+        setTimeout(() => {
+          el.style.transitionDelay = '0ms'
+        }, 1200)
+      }
+
+      /**
+       * Observe every .reveal element (and the timeline) and activate each
+       * once, the first time a fifth of it is on screen. Without
+       * IntersectionObserver, or with reduced motion, everything activates
+       * immediately.
+       * @returns {void}
+       */
+      const animateOnScroll = () => {
+        const targets = [...document.querySelectorAll('.reveal, #tl')]
+        if (REDUCED || !('IntersectionObserver' in window)) {
+          targets.forEach(activate)
+          return
+        }
+        const io = new IntersectionObserver(
+          (entries) =>
+            entries
+              .filter((e) => e.isIntersecting)
+              .forEach((e) => {
+                activate(e.target)
+                io.unobserve(e.target)
+              }),
+          { threshold: 0.2 },
+        )
+        targets.forEach((t) => io.observe(t))
+      }
+
+      /**
+       * Show one timeline event in the detail panel and mark its pin pressed.
+       * @param {number} idx - index into DATA.events.
+       * @returns {void}
+       */
+      const selectEvent = (idx) => {
+        mount('tl-panel', EventPanel(DATA.events[idx]))
+        document
+          .querySelectorAll('.pin')
+          .forEach((p) => p.setAttribute('aria-pressed', String(Number(p.dataset.ev) === idx)))
+      }
+
+      /**
+       * Wire timeline pins with one delegated click handler, and preselect
+       * the event caused by human play in the mobile lane (the revamp).
+       * @returns {void}
+       */
+      const wireTimeline = () => {
+        document.getElementById('tl').addEventListener('click', (e) => {
+          const pin = e.target.closest('.pin')
+          if (pin) selectEvent(Number(pin.dataset.ev))
+        })
+        selectEvent(DATA.events.findIndex((ev) => ev.title === 'THE REVAMP'))
+      }
+
+      /**
+       * Wire the plan checklist: each tick updates the stored set and the
+       * track's progress line. State is per browser only.
+       * @returns {void}
+       */
+      const wireChecklist = () => {
+        document.getElementById('tracks').addEventListener('change', (e) => {
+          const box = e.target.closest('input[data-item]')
+          if (!box) return
+          const current = new Set(loadJSON(CHECK_KEY, []))
+          const next = box.checked
+            ? new Set([...current, box.dataset.item])
+            : new Set([...current].filter((id) => id !== box.dataset.item))
+          saveJSON(CHECK_KEY, [...next])
+          const track = DATA.tracks.find((t) => t.items.some((it) => it.id === box.dataset.item))
+          document.querySelector(`[data-progress="${track.id}"]`).textContent = Progress(
+            track,
+            next,
+          )
+        })
+      }
+
+      /**
+       * The theme the page is showing right now: a forced value if set,
+       * otherwise the OS preference.
+       * @returns {'light'|'dark'} effective theme.
+       */
+      const effectiveTheme = () =>
+        document.documentElement.dataset.theme ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+
+      /**
+       * Apply a stored forced theme, and flip it when the toggle is pressed.
+       * @returns {void}
+       */
+      const wireTheme = () => {
+        const stored = loadJSON(THEME_KEY, null)
+        if (stored === 'light' || stored === 'dark') document.documentElement.dataset.theme = stored
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+          const next = effectiveTheme() === 'dark' ? 'light' : 'dark'
+          document.documentElement.dataset.theme = next
+          saveJSON(THEME_KEY, next)
+        })
+      }
+
+      /**
+       * Stop SVG <animateMotion> for readers who asked for reduced motion.
+       * CSS cannot pause SMIL, so this calls the SVG API directly.
+       * @returns {void}
+       */
+      const pauseSvgMotion = () => {
+        if (REDUCED) document.querySelectorAll('.loop svg').forEach((svg) => svg.pauseAnimations())
+      }
+
+      /* =======================================================================
+         LAYER 5: BOOT
+         The single entry point. Renders every section from DATA, then wires
+         interactions and animations. Order matters: mount before observing.
+         ======================================================================= */
+
+      /**
+       * Render the page and start its behaviour.
+       * @returns {void}
+       */
+      const boot = () => {
+        const checked = new Set(loadJSON(CHECK_KEY, []))
+
+        wireTheme()
+
+        mount('ticker', Ticker(DATA.ticker))
+        mount('verdict', esc(DATA.verdict))
+        mount('exec', each(DATA.exec, ExecCard))
+        mount(
+          'now',
+          each(DATA.now, (n) => `<li>${esc(n)}</li>`),
+        )
+        mount('scores', each(DATA.scores, ScoreTile))
+        mount('built', BuiltChart(DATA.built))
+        mount('logged', LoggedColumn(DATA.logged))
+        mount('tl', Timeline(DATA))
+        mount('loops', each(DATA.loops, LoopDiagram))
+        mount('finds', each(DATA.finds, FindColumn))
+        mount('qs', each(DATA.questions, Question))
+        mount('rules', each(DATA.rules, RuleCard))
+        mount('tally', Tally(DATA.answers))
+        mount('answers', each(DATA.answers, AnswerRow))
+        mount(
+          'tracks',
+          each(DATA.tracks, (t) => Track(t, checked)),
+        )
+        mount(
+          'donts',
+          each(DATA.donts, (d) => `<span class="dont">${esc(d)}</span>`),
+        )
+        mount(
+          'sources',
+          each(DATA.sources, (s) => `<li>${esc(s)}</li>`),
+        )
+
+        wireTimeline()
+        wireChecklist()
+        pauseSvgMotion()
+        animateOnScroll()
+      }
+
+      boot()
+    </script>
+  </body>
+</html>
