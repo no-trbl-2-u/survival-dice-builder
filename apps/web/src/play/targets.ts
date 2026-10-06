@@ -1,4 +1,11 @@
-import { hexKey, type Action, type ActionType } from '@survival/engine'
+import {
+  applyAction,
+  hexKey,
+  legalActions,
+  type Action,
+  type ActionType,
+  type GameState,
+} from '@survival/engine'
 
 type Of<T extends ActionType> = Extract<Action, { type: T }>
 
@@ -46,6 +53,35 @@ export function hexTargets(legal: readonly Action[]): Map<string, HexTarget> {
 /** The legal placements of 1 die (for highlighting the Skill slots it fits). */
 export function placementsFor(legal: readonly Action[], die: number): Of<'assignDie'>[] {
   return ofType(legal, 'assignDie').filter((a) => a.die === die)
+}
+
+/**
+ * The placements that put every chosen die on 1 Skill, in order: each step is a legal
+ * `assignDie` of the state the steps before it leave, so the engine still decides every
+ * placement (a Skill that fills fires at once in Combat v3, so later dice cannot follow it).
+ * Null when the dice do not all fit that Skill together.
+ *
+ * @param state - the state with the exchange in its assign step.
+ * @param skill - the Skill id.
+ * @param dice - the chosen dice (indexes), placed in this order.
+ */
+export function planPlacement(
+  state: GameState,
+  skill: string,
+  dice: readonly number[],
+): Of<'assignDie'>[] | null {
+  if (dice.length === 0) return null
+  const place = (s: GameState, left: readonly number[]): Of<'assignDie'>[] | null => {
+    const [die, ...rest] = left
+    if (die === undefined) return []
+    for (const a of ofType(legalActions(s), 'assignDie')) {
+      if (a.die !== die || a.skill !== skill) continue
+      const after = place(applyAction(s, a).state, rest)
+      if (after) return [a, ...after]
+    }
+    return null
+  }
+  return place(state, dice)
 }
 
 /**

@@ -1,8 +1,15 @@
+import { botChoice } from '@survival/bot'
 import { defaultContent } from '@survival/content'
-import { applyAction, createGame, legalActions, type Action } from '@survival/engine'
+import {
+  applyAction,
+  createGame,
+  legalActions,
+  type Action,
+  type GameState,
+} from '@survival/engine'
 import { describe, expect, it } from 'vitest'
 import { newRun, reduceRun } from './run.ts'
-import { COVERED, firstOf, hexTargets, placementsFor } from './targets.ts'
+import { COVERED, firstOf, hexTargets, placementsFor, planPlacement } from './targets.ts'
 
 const config = defaultContent.config
 
@@ -46,5 +53,51 @@ describe('targets', () => {
     const s = createGame(config, 1)
     for (const a of legalActions(s))
       expect(COVERED.has(a.type) || a.type === 'placeFigure').toBe(true)
+  })
+})
+
+/** A Combat v3 engagement in its assign step, with Cleave (Sword + Sword) and 3 dice set. */
+function engagementWith(faces: readonly string[]): GameState {
+  const cfg = {
+    ...config,
+    player: { ...config.player, startingDice: 3, starterSkills: ['cleave', 'strike'] },
+    combat: { ...config.combat, model: 'engage' as const },
+  }
+  let s = createGame(cfg, 4)
+  for (let i = 0; i < 2000 && s.exchange?.step !== 'assign'; i++) {
+    const engage = legalActions(s).find((a) => a.type === 'engage')
+    const stop = legalActions(s).find((a) => a.type === 'stopRolling')
+    s = applyAction(s, stop ?? engage ?? botChoice(s)!).state
+  }
+  const ex = s.exchange!
+  return {
+    ...s,
+    exchange: { ...ex, dice: ex.dice.map((d, i) => ({ ...d, face: faces[i] ?? d.face })) },
+  } as GameState
+}
+
+describe('planPlacement (several dice on 1 Skill)', () => {
+  it('puts 2 Swords on Cleave in 2 legal steps; the Skill then fires', () => {
+    const s = engagementWith(['Sword', 'Wand', 'Sword'])
+    const plan = planPlacement(s, 'cleave', [0, 2])
+    expect(plan?.map((a) => [a.die, a.slot])).toEqual([
+      [0, 0],
+      [2, 1],
+    ])
+    const first = applyAction(s, plan![0]!).state
+    const { events } = applyAction(first, plan![1]!)
+    expect(events).toContainEqual(expect.objectContaining({ type: 'skillFired', skill: 'cleave' }))
+  })
+
+  it('is null when the chosen dice do not all fit that Skill', () => {
+    const s = engagementWith(['Sword', 'Wand', 'Sword'])
+    expect(planPlacement(s, 'cleave', [0, 1])).toBeNull()
+    expect(planPlacement(s, 'strike', [0, 2])).toBeNull()
+    expect(planPlacement(s, 'cleave', [])).toBeNull()
+  })
+
+  it('1 die fits a 1-face Skill', () => {
+    const s = engagementWith(['Sword', 'Wand', 'Sword'])
+    expect(planPlacement(s, 'strike', [2])?.map((a) => a.die)).toEqual([2])
   })
 })

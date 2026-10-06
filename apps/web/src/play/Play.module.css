@@ -622,6 +622,24 @@
   flex-basis: 100%;
 }
 
+/* A Skill the chosen dice fit together: the whole head is the button that places them. */
+.skillPick {
+  justify-content: flex-start;
+  inline-size: 100%;
+  margin: -4px -6px;
+  padding: 4px 6px;
+  text-align: start;
+  font-weight: inherit;
+  border: 2px dashed var(--legal-move);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--legal-move) 10%, transparent);
+  box-shadow: none;
+}
+
+.skillPick:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--legal-move) 20%, transparent);
+}
+
 .skillState {
   font-family: var(--font-display);
   font-size: var(--text-xs);

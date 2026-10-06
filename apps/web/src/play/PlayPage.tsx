@@ -111,19 +111,26 @@ type GameProps = Readonly<{
 
 /** The board, panels, and controls of a run in progress (or its summary). */
 function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) {
-  const [selected, setSelected] = useState<number | null>(null)
+  // Dice chosen for a Skill. Null until the player picks: then the first die that fits a Skill
+  // is chosen, so the Skills it fits are buttons without a separate "Select" click.
+  const [picked, setPicked] = useState<readonly number[] | null>(null)
   const main = useRef<HTMLDivElement>(null)
   const { state } = run
   const legal = legalActions(state)
   const act = (action: Action) => {
-    setSelected(null)
+    setPicked(null)
     dispatch({ kind: 'act', action, at: Date.now() })
   }
-  // Skill placement: the chosen die, else the first die that fits a Skill, so the slots it
-  // fits show as buttons without a separate "Select" click.
-  const fits = (die: number | null) => die !== null && placementsFor(legal, die).length > 0
+  /** Several engine actions in a row (dice placed on a Skill one by one). */
+  const actAll = (actions: readonly Action[]) => {
+    setPicked(null)
+    for (const action of actions) dispatch({ kind: 'act', action, at: Date.now() })
+  }
+  const fits = (die: number) => placementsFor(legal, die).length > 0
   const firstFit = state.exchange?.dice.findIndex((_, i) => fits(i)) ?? -1
-  const die = fits(selected) ? selected : firstFit >= 0 ? firstFit : null
+  const chosen = (picked ?? (firstFit >= 0 ? [firstFit] : [])).filter(fits)
+  const toggle = (die: number) =>
+    setPicked(chosen.includes(die) ? chosen.filter((d) => d !== die) : [...chosen, die])
 
   // Sound: the cues of each new action (never on load or undo: those replace the run).
   const heard = useRef(run.actions.length)
@@ -167,11 +174,11 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
             state={state}
             legal={legal}
             act={act}
-            selected={die}
-            select={setSelected}
+            selected={chosen}
+            toggle={toggle}
             dice3d={prefs.dice3d}
           />
-          <SkillBoard state={state} legal={legal} act={act} selected={die} select={setSelected} />
+          <SkillBoard state={state} legal={legal} act={act} actAll={actAll} selected={chosen} />
         </div>
       ) : null}
       <div className={styles.handRow} data-decisions>

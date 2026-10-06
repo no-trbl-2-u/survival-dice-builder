@@ -3,7 +3,7 @@ import { lazy, Suspense } from 'react'
 import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import styles from './Play.module.css'
-import { firstOf } from './targets.ts'
+import { firstOf, placementsFor } from './targets.ts'
 
 /** Loaded only when 3D dice are on: three.js stays out of the main bundle. */
 const Dice3D = lazy(() => import('../dice3d/Dice3D.tsx'))
@@ -12,17 +12,19 @@ type Props = Readonly<{
   state: GameState
   legal: readonly Action[]
   act: (a: Action) => void
-  selected: number | null
-  select: (die: number | null) => void
+  /** The dice chosen for a Skill (any number of them). */
+  selected: readonly number[]
+  toggle: (die: number) => void
   /** Show the optional 3D dice above the 2D tray (presentation only). */
   dice3d?: boolean
 }>
 
 /**
- * The exchange dice: keep toggles while rolling, rerolls from cards, and die selection for
- * Skill placement. The roll counter shows `roll n of max`.
+ * The exchange dice: keep toggles while rolling, rerolls from cards, and Select/Unselect for
+ * Skill placement (any number of dice; the Skill board puts them all on 1 Skill). A die on a
+ * Skill leaves the tray. The roll counter shows `roll n of max`.
  */
-export function DiceTray({ state, legal, act, selected, select, dice3d = false }: Props) {
+export function DiceTray({ state, legal, act, selected, toggle, dice3d = false }: Props) {
   const ex = state.exchange
   if (!ex) return null
   const has = (a: Action) => legal.find((x) => sameAction(x, a))
@@ -76,14 +78,16 @@ export function DiceTray({ state, legal, act, selected, select, dice3d = false }
       ) : null}
       <ul className={styles.dice}>
         {ex.dice.map((d, i) => {
+          if (placed.has(i)) return null
           const keep = has({ type: 'toggleKeep', die: i })
           const reroll = has({ type: 'rerollDie', die: i })
-          const canPlace = ex.step === 'assign' && !placed.has(i) && d.face !== 'Blank'
+          const canPlace = ex.step === 'assign' && placementsFor(legal, i).length > 0
+          const isSelected = selected.includes(i)
           return (
             <li key={i} className={styles.dieItem}>
               <span
-                className={`${styles.die} ${d.kept ? styles.kept : ''} ${selected === i ? styles.selected : ''}`}
-                aria-label={`Die ${i + 1}: ${d.face}${d.kept ? ', kept' : ''}${placed.has(i) ? ', on a Skill' : ''}`}
+                className={`${styles.die} ${d.kept ? styles.kept : ''} ${isSelected ? styles.selected : ''}`}
+                aria-label={`Die ${i + 1}: ${d.face}${d.kept ? ', kept' : ''}`}
               >
                 <GameIcon name={faceIcon(d.face)} size="1.6rem" />
                 <small>{d.face}</small>
@@ -101,10 +105,11 @@ export function DiceTray({ state, legal, act, selected, select, dice3d = false }
               {canPlace ? (
                 <button
                   type="button"
-                  aria-pressed={selected === i}
-                  onClick={() => select(selected === i ? null : i)}
+                  aria-pressed={isSelected}
+                  aria-label={`${isSelected ? 'Unselect' : 'Select'} die ${i + 1}`}
+                  onClick={() => toggle(i)}
                 >
-                  {selected === i ? 'Selected' : 'Select'} die {i + 1}
+                  {isSelected ? 'Unselect' : 'Select'}
                 </button>
               ) : null}
             </li>

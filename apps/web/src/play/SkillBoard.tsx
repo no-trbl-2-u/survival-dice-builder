@@ -3,28 +3,30 @@ import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { skillText } from './effectText.ts'
 import styles from './Play.module.css'
-import { firstOf, ofType, placementsFor } from './targets.ts'
+import { firstOf, ofType, planPlacement } from './targets.ts'
 
 type Props = Readonly<{
   state: GameState
   legal: readonly Action[]
   act: (a: Action) => void
-  selected: number | null
-  select: (die: number | null) => void
+  /** Several engine actions in a row: the chosen dice placed on 1 Skill. */
+  actAll: (actions: readonly Action[]) => void
+  /** The dice chosen in the tray. */
+  selected: readonly number[]
 }>
 
 /**
- * The Skill board. During placement, the slots the selected die fits are buttons; a filled
- * slot takes its die back. "Fires" = every slot is filled; "can fire" = the free dice could
+ * The Skill board, each Skill as "Name: glyph glyph". During placement, every Skill all the
+ * chosen dice fit together is a button that puts them on it (`planPlacement`: the engine's
+ * own placements, 1 die at a time); a filled slot takes its die back. "Fires" = every slot is filled; "can fire" = the free dice could
  * fill it (engine `canFire`). An attack Skill says how many enemies are in its range now: out
  * of range it fires and hits nothing.
  */
-export function SkillBoard({ state, legal, act, selected, select }: Props) {
+export function SkillBoard({ state, legal, act, actAll, selected }: Props) {
   const p = state.players[state.current]
   if (!p) return null
   const ex = state.exchange
   const placing = ex?.step === 'assign'
-  const fits = selected === null ? [] : placementsFor(legal, selected)
   const unassign = ofType(legal, 'unassignDie')
   const confirm = firstOf(legal, 'confirmAssignment')
   const placed = new Set(ex?.assignments.map((a) => a.die) ?? [])
@@ -42,68 +44,73 @@ export function SkillBoard({ state, legal, act, selected, select }: Props) {
           return (
             <li
               key={`${id}-${si}`}
-              className={`${styles.skill} ${fires ? styles.fires : ''} ${could && placing ? styles.could : ''}`}
+              className={`${styles.skill} ${fires ? styles.fires : ''} ${could && placing && selected.length === 0 ? styles.could : ''}`}
             >
-              <div className={styles.skillHead}>
-                <span className={styles.skillName}>{skill.name}:</span>
-                <span className={styles.slots}>
-                  {skill.faces.map((face, slot) => {
-                    const here = mine.find((a) => a.slot === slot)
-                    const fit = fits.find((a) => a.skill === id && a.slot === slot && a.use === 0)
-                    const back = here && unassign.find((u) => u.die === here.die)
-                    if (back) {
-                      const name = `Die ${here.die + 1} (${here.asFace}) — take back`
-                      return (
-                        <button
-                          key={slot}
-                          type="button"
-                          className={styles.slotFilled}
-                          aria-label={name}
-                          title={name}
-                          onClick={() => act(back)}
-                        >
-                          <GameIcon name={faceIcon(here.asFace)} />
-                        </button>
-                      )
-                    }
-                    if (fit) {
-                      const name = `Put die ${fit.die + 1} on ${face}`
-                      return (
-                        <button
-                          key={slot}
-                          type="button"
-                          className={styles.slotFit}
-                          aria-label={name}
-                          title={name}
-                          onClick={() => {
-                            act(fit)
-                            select(null)
-                          }}
-                        >
-                          <GameIcon name={faceIcon(face)} />
-                        </button>
-                      )
-                    }
-                    const name = here ? `Die ${here.die + 1} (${here.asFace})` : face
+              {(() => {
+                const plan = placing ? planPlacement(state, id, selected) : null
+                const filling = new Map(plan?.map((a) => [a.slot, a]) ?? [])
+                const slots = skill.faces.map((face, slot) => {
+                  const here = mine.find((a) => a.slot === slot)
+                  const incoming = filling.get(slot)
+                  const back = !plan && here && unassign.find((u) => u.die === here.die)
+                  if (back) {
+                    const name = `Die ${here.die + 1} (${here.asFace}) — take back`
                     return (
-                      <span
+                      <button
                         key={slot}
-                        role="img"
+                        type="button"
+                        className={styles.slotFilled}
                         aria-label={name}
                         title={name}
-                        className={here ? styles.slotFilled : styles.slot}
+                        onClick={() => act(back)}
                       >
-                        <GameIcon name={faceIcon(here ? here.asFace : face)} />
-                      </span>
+                        <GameIcon name={faceIcon(here.asFace)} />
+                      </button>
                     )
-                  })}
-                </span>
-                {fires ? (
+                  }
+                  const name = here ? `Die ${here.die + 1} (${here.asFace})` : face
+                  return (
+                    <span
+                      key={slot}
+                      role="img"
+                      aria-label={name}
+                      title={name}
+                      className={here ? styles.slotFilled : incoming ? styles.slotFit : styles.slot}
+                    >
+                      <GameIcon name={faceIcon(here ? here.asFace : face)} />
+                    </span>
+                  )
+                })
+                const status = fires ? (
                   <span className={styles.skillState}>fires</span>
                 ) : could && placing ? (
                   <span className={styles.skillState}>can fire</span>
-                ) : null}
-              </div>
+                ) : null
+                if (plan) {
+                  const dice = plan.map((a) => a.die + 1)
+                  const name = `Put ${dice.length === 1 ? 'die' : 'dice'} ${dice.join(', ')} on ${skill.name}`
+                  return (
+                    <button
+                      type="button"
+                      className={`${styles.skillHead} ${styles.skillPick}`}
+                      aria-label={name}
+                      title={name}
+                      onClick={() => actAll(plan)}
+                    >
+                      <span className={styles.skillName}>{skill.name}:</span>
+                      <span className={styles.slots}>{slots}</span>
+                      {status}
+                    </button>
+                  )
+                }
+                return (
+                  <div className={styles.skillHead}>
+                    <span className={styles.skillName}>{skill.name}:</span>
+                    <span className={styles.slots}>{slots}</span>
+                    {status}
+                  </div>
+                )
+              })()}
               <span className={styles.muted}>{skillText(skill.effect)}</span>
               {skill.effect.kind === 'damage' ? (
                 <InReach count={enemiesInRange(state, skill.effect.range).length} />
@@ -114,7 +121,7 @@ export function SkillBoard({ state, legal, act, selected, select }: Props) {
       </ul>
       {confirm ? (
         <button type="button" className={styles.primary} onClick={() => act(confirm)}>
-          {ex?.engage ? 'Done with dice: the enemy dice hit you' : 'Confirm dice and fire Skills'}
+          {ex?.engage ? 'Finish engagement' : 'Confirm dice and fire Skills'}
         </button>
       ) : null}
     </section>
