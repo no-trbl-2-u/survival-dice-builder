@@ -7,6 +7,7 @@ import { play } from '../sound/sound.ts'
 import { BasePanel } from './BasePanel.tsx'
 import { DecisionDialog } from './DecisionDialog.tsx'
 import { DiceTray } from './DiceTray.tsx'
+import { forceEngagement } from './devEngage.ts'
 import { downloadRun, exportRun } from './exportRun.ts'
 import { Hand } from './Hand.tsx'
 import { PhaseBar } from './PhaseBar.tsx'
@@ -21,6 +22,9 @@ import { placementsFor } from './targets.ts'
 import { RunSummary } from './RunSummary.tsx'
 import { SkillBoard } from './SkillBoard.tsx'
 import { StartPanel } from './StartPanel.tsx'
+
+/** DEV ONLY (TODO: remove with forceEngagement): the dev server, never a production build. */
+const devTools = import.meta.env.DEV
 
 type Msg = RunMsg | Readonly<{ kind: 'reset' }>
 
@@ -219,6 +223,18 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
           <input type="checkbox" checked={undoOn} onChange={(e) => setUndoOn(e.target.checked)} />{' '}
           Developer: allow undo
         </label>
+        {devTools ? (
+          <button
+            type="button"
+            data-testid="force-engagement"
+            onClick={() => {
+              const next = forceEngagement(run)
+              if (next) dispatch({ kind: 'replace', run: next })
+            }}
+          >
+            Force engagement (dev)
+          </button>
+        ) : null}
         {undoOn ? (
           <button
             type="button"

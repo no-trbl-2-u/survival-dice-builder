@@ -69,6 +69,11 @@
   --face-star: #ecc24f;
   --face-bow: #67b77a;
   --face-blank: #a89c8a;
+  /* Enemy dice: black in both themes; grunt glyphs white, elite glyphs gold. */
+  --enemy-die-body: #2a2420;
+  --enemy-die-shade: #0b0908;
+  --enemy-glyph-grunt: #f6f1e7;
+  --enemy-glyph-elite: #e8b93f;
 }
 
 @media (prefers-color-scheme: dark) {

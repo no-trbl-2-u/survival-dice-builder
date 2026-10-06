@@ -5,6 +5,9 @@ import { GameIcon } from '../icons/GameIcon.tsx'
 import styles from './Play.module.css'
 import { firstOf, placementsFor } from './targets.ts'
 
+/** The word under an enemy die (the glyph carries the face; the word confirms it). */
+const ENEMY_FACE_LABEL = { hit: 'Hit', miss: 'Miss', special: 'Special' } as const
+
 /** Loaded only when 3D dice are on: three.js stays out of the main bundle. */
 const Dice3D = lazy(() => import('../dice3d/Dice3D.tsx'))
 
@@ -57,16 +60,20 @@ export function DiceTray({ state, legal, act, selected, toggle, dice3d = false }
           <ul className={styles.dice}>
             {ex.engage.enemyDice.map((d, i) => {
               const enemy = state.enemies.find((e) => e.id === d.enemy)
+              const elite = enemy?.kind === 'elite'
               const who = `${enemy?.kind ?? 'enemy'} ${d.enemy}`
               return (
                 <li key={i} className={styles.dieItem}>
                   <span
-                    className={`${styles.die} ${styles.enemyDie} ${d.face === 'miss' ? '' : styles.enemyHit}`}
+                    className={`${styles.die} ${styles.enemyDie} ${elite ? styles.enemyElite : ''}`}
+                    data-face={d.face}
+                    data-kind={elite ? 'elite' : 'grunt'}
                     aria-label={`Enemy die of ${who}: ${d.face}`}
                   >
-                    <strong>
-                      {d.face === 'hit' ? 'HIT' : d.face === 'special' ? 'SPECIAL' : 'miss'}
-                    </strong>
+                    <GameIcon name={`face-enemy-${d.face}`} size="2.4rem" />
+                  </span>
+                  <span className={styles.enemyDieLabel} aria-hidden="true">
+                    <strong>{ENEMY_FACE_LABEL[d.face]}</strong>
                     <small>{who}</small>
                   </span>
                 </li>

@@ -289,3 +289,9 @@ svg[data-icon='face-bow'] {
 svg[data-icon='face-blank'] {
   color: var(--face-blank);
 }
+
+/* Enemy die glyphs: no warm outline on black, a black one so the glyph's edge stays crisp. */
+svg[data-icon^='face-enemy-'] {
+  stroke: #000;
+  stroke-width: 12px;
+}

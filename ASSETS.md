@@ -21,6 +21,9 @@ not downloaded yet; the named phase downloads it), `rejected`.
 | Shield die face | `assets/icons/dice/shield.svg` | https://game-icons.net/1x1/sbed/shield.html | CC BY 3.0 | https://creativecommons.org/licenses/by/3.0/ | Shield icon by Sbed, game-icons.net, CC BY 3.0 | in use | 2026-10-03 |
 | Star die face | `assets/icons/dice/star.svg` | https://game-icons.net/1x1/delapouite/round-star.html | CC BY 3.0 | https://creativecommons.org/licenses/by/3.0/ | Round star icon by Delapouite, game-icons.net, CC BY 3.0 | in use | 2026-10-03 |
 | Blank die face (empty: a blank face shows nothing) | `assets/icons/dice/blank.svg` | drawn in-repo | Project-owned | - | none required | in use | 2026-10-06 |
+| Enemy die face: hit (claw marks) | `assets/icons/dice/enemy-hit.svg` | drawn in-repo | Project-owned | - | none required | in use | 2026-10-06 |
+| Enemy die face: miss (empty: a miss shows nothing) | `assets/icons/dice/enemy-miss.svg` | drawn in-repo | Project-owned | - | none required | in use | 2026-10-06 |
+| Enemy die face: special (skull) | `assets/icons/dice/enemy-special.svg` | drawn in-repo | Project-owned | - | none required | in use | 2026-10-06 |
 | Materials | `assets/icons/game/materials.svg` | https://game-icons.net/1x1/delapouite/wood-pile.html | CC BY 3.0 | https://creativecommons.org/licenses/by/3.0/ | Wood pile icon by Delapouite, game-icons.net, CC BY 3.0 | in use | 2026-10-03 |
 | Currency | `assets/icons/game/currency.svg` | https://game-icons.net/1x1/delapouite/two-coins.html | CC BY 3.0 | https://creativecommons.org/licenses/by/3.0/ | Two coins icon by Delapouite, game-icons.net, CC BY 3.0 | in use | 2026-10-03 |
 | Health | `assets/icons/game/health.svg` | https://game-icons.net/1x1/skoll/hearts.html | CC BY 3.0 | https://creativecommons.org/licenses/by/3.0/ | Hearts icon by Skoll, game-icons.net, CC BY 3.0 | in use | 2026-10-03 |
