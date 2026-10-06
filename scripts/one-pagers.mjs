@@ -1,0 +1,301 @@
+#!/usr/bin/env node
+// scripts/one-pagers.mjs
+//
+// Renders the v2 one-page design sheets (design/one-pagers/v2/pages/*.html)
+// to PDF with the project's Playwright Chromium, writes a PNG preview of each
+// page for visual checks, and merges the single-page PDFs into one file.
+//
+//   node scripts/one-pagers.mjs render [page.html ...]   # all pages when no args
+//   node scripts/one-pagers.mjs lint <page.html>          # one page: words, furniture, overflow
+//   node scripts/one-pagers.mjs text                      # visible text of every page -> build/text/
+//   node scripts/one-pagers.mjs merge                     # pages/p01..p15 -> the PDF
+//   node scripts/one-pagers.mjs check                     # page count, banned words
+//
+// Pure functions over plain data where possible; the I/O sits in `main`.
+import fs from 'node:fs'
+import path from 'node:path'
+import { execFileSync } from 'node:child_process'
+import { createRequire } from 'node:module'
+
+const ROOT = process.cwd()
+const DIR = path.join(ROOT, 'design/one-pagers/v2')
+const PAGES = path.join(DIR, 'pages')
+const OUT = path.join(DIR, 'build')
+const PDF = path.join(DIR, 'survival-dice-builder-v2-one-pagers.pdf')
+const CHROMIUM = '/opt/pw-browsers/chromium'
+
+// Words that betray the digital prototype. The sheets describe a board game.
+const BANNED = [
+  'screen',
+  'button',
+  'click',
+  'tap ',
+  'HUD',
+  ' UI ',
+  'app ',
+  'website',
+  'save file',
+  'export',
+  'bot ',
+  'engine',
+  'config',
+  'flag',
+  'version 2',
+  'phase bar',
+  'debug',
+  'Vite',
+  'React',
+  'SVG',
+]
+
+/** Every page file in display order (p01 ... p15). */
+const listPages = () =>
+  fs
+    .readdirSync(PAGES)
+    .filter((f) => /^p\d\d-.*\.html$/.test(f))
+    .sort()
+    .map((f) => path.join(PAGES, f))
+
+/** Visible text of an HTML page: tags, styles and SVG stripped. */
+const visibleText = (html) =>
+  html
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<svg[\s\S]*?<\/svg>/gi, ' ')
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&[a-z]+;/g, ' ')
+    .replace(/\s+/g, ' ')
+
+/** Banned words found in a page's visible text (case-insensitive, padded). */
+const bannedIn = (html) => {
+  const text = ` ${visibleText(html)} `.toLowerCase()
+  return BANNED.filter((w) => text.includes(w.toLowerCase()))
+}
+
+/** The orientation a page asks for in its @page rule; portrait by default. */
+const orientationOf = (html) => (/@page\s*{[^}]*landscape/i.test(html) ? 'landscape' : 'portrait')
+
+/** Word count of a text (whitespace-separated tokens that hold a letter or digit). */
+const wordCount = (text) => text.split(/\s+/).filter((w) => /[A-Za-z0-9]/.test(w)).length
+
+/**
+ * The furniture every sheet must carry: a page id (A1-L1 ... A3-L5), an ISO date, and a
+ * "src:" footer naming its sources. Returns the names of the missing pieces.
+ */
+const missingFurniture = (text) =>
+  [
+    ['page id', /\bA[1-3]-L[1-5]\b/],
+    ['date', /\b20\d\d-\d\d-\d\d\b/],
+    ['src footer', /\bsrc:/],
+  ]
+    .filter(([, re]) => !re.test(text))
+    .map(([name]) => name)
+
+/**
+ * Labelled vector diagrams inside the sheet: inline <svg> blocks (not the defs block) that
+ * draw at least 6 shapes and carry at least one text label. Every sheet needs one or more.
+ */
+const diagramCount = (html) => {
+  const sheet = html.slice(html.indexOf('class="sheet'))
+  return [...sheet.matchAll(/<svg\b[\s\S]*?<\/svg>/gi)].filter(([svg]) => {
+    const shapes = (svg.match(/<(polygon|rect|circle|path|use|line|ellipse|polyline)\b/gi) || [])
+      .length
+    return shapes >= 6 && /<text\b/i.test(svg)
+  }).length
+}
+
+/** Lint one page: visible words, furniture, banned words, and (when rendered) page count. */
+function lint(file) {
+  const html = fs.readFileSync(file, 'utf8')
+  const code = html.replace(/<!--[\s\S]*?-->/g, '') // comments may mention what is banned
+  const text = visibleText(html)
+  const name = path.basename(file, '.html')
+  const pdf = path.join(OUT, `${name}.pdf`)
+  const fitFile = path.join(OUT, `${name}.json`)
+  const fit = fs.existsSync(fitFile) ? JSON.parse(fs.readFileSync(fitFile, 'utf8')) : null
+  const report = {
+    file: path.relative(ROOT, file),
+    orientation: orientationOf(html),
+    words: wordCount(text),
+    banned: bannedIn(html),
+    missing: missingFurniture(text),
+    fit: fit ? describeFit(fit) : 'not rendered yet',
+    clippedSample: fit && fit.clippedSample && fit.clippedSample.length ? fit.clippedSample : undefined,
+    diagrams: diagramCount(code),
+    external:
+      /<(link|img|script)\b/i.test(code) || /\b(src|href)=["']https?:\/\//i.test(code)
+        ? 'external resource or URL found'
+        : null,
+    pages: fs.existsSync(pdf) ? pageCount(pdf) : null,
+  }
+  const reasons = [
+    report.banned.length && `banned words: ${report.banned.join(', ')}`,
+    report.missing.length && `missing furniture: ${report.missing.join(', ')}`,
+    report.external,
+    report.pages !== 1 && `rendered PDF has ${report.pages} page(s), must be 1 (render first)`,
+    report.fit !== 'fits' && report.fit,
+    report.diagrams === 0 &&
+      'no vector diagram: the sheet needs at least one inline svg with 6+ shapes and a text label',
+  ].filter(Boolean)
+  console.log(JSON.stringify({ ...report, ok: reasons.length === 0, reasons }, null, 2))
+  process.exitCode = reasons.length ? 1 : 0
+}
+
+/** Visible text of every page, one file each, for cross-page reading. */
+function text() {
+  const dir = path.join(OUT, 'text')
+  fs.mkdirSync(dir, { recursive: true })
+  for (const file of listPages()) {
+    const name = path.basename(file, '.html')
+    fs.writeFileSync(path.join(dir, `${name}.txt`), visibleText(fs.readFileSync(file, 'utf8')))
+    console.log(`${name}.txt`)
+  }
+}
+
+const loadPlaywright = () => {
+  const require = createRequire(path.join(ROOT, 'apps/web/package.json'))
+  return require('@playwright/test')
+}
+
+async function render(files) {
+  fs.mkdirSync(OUT, { recursive: true })
+  const { chromium } = loadPlaywright()
+  const browser = await chromium.launch({ executablePath: CHROMIUM })
+  try {
+    for (const file of files) {
+      const html = fs.readFileSync(file, 'utf8')
+      const landscape = orientationOf(html) === 'landscape'
+      const name = path.basename(file, '.html')
+      const pdf = path.join(OUT, `${name}.pdf`)
+      const page = await browser.newPage()
+      await page.goto(`file://${file}`, { waitUntil: 'load' })
+      await page.emulateMedia({ media: 'print' })
+      // The sheet clips what does not fit, so measure the overflow before printing:
+      // content below the sheet's bottom edge, and text that reaches into the footer
+      // or past the right edge.
+      const fit = await page.evaluate(measureFit)
+      fs.writeFileSync(path.join(OUT, `${name}.json`), JSON.stringify(fit))
+      await page.pdf({
+        path: pdf,
+        format: 'Letter',
+        landscape,
+        printBackground: true,
+        preferCSSPageSize: true,
+        margin: { top: 0, right: 0, bottom: 0, left: 0 },
+      })
+      await page.close()
+      // PNG preview at 110 dpi for a visual check (pdftoppm, poppler).
+      execFileSync('pdftoppm', ['-png', '-r', '110', pdf, path.join(OUT, name)])
+      const pages = pageCount(pdf)
+      console.log(
+        `${name}: ${pages} page(s), ${landscape ? 'landscape' : 'portrait'}, ${describeFit(fit)}`,
+      )
+    }
+  } finally {
+    await browser.close()
+  }
+}
+
+/**
+ * Runs inside the page. Measures how far the content overflows the fixed sheet and how
+ * many text-bearing elements reach into the footer or past the right edge.
+ */
+function measureFit() {
+  const sheet = document.querySelector('.sheet')
+  if (!sheet) return { sheet: false, overflowPx: 0, clipped: 0 }
+  const box = sheet.getBoundingClientRect()
+  const foot = sheet.querySelector('.sheet-foot')
+  const footTop = foot ? foot.getBoundingClientRect().top : box.bottom
+  const hasText = (el) =>
+    [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim().length > 0)
+  const clipped = [...sheet.querySelectorAll('*')].filter((el) => {
+    if (foot && (el === foot || foot.contains(el))) return false
+    if (!hasText(el)) return false
+    const r = el.getBoundingClientRect()
+    return r.width > 0 && r.height > 0 && (r.bottom > footTop + 1 || r.right > box.right + 1)
+  })
+  return {
+    sheet: true,
+    overflowPx: Math.max(0, Math.round(sheet.scrollHeight - sheet.clientHeight)),
+    clipped: clipped.length,
+    clippedSample: clipped.slice(0, 3).map((el) => el.textContent.trim().slice(0, 60)),
+  }
+}
+
+/** One line on a fit measurement, for the render log. */
+const describeFit = (fit) =>
+  !fit.sheet
+    ? 'no .sheet element'
+    : fit.overflowPx === 0 && fit.clipped === 0
+      ? 'fits'
+      : `OVERFLOW: ${fit.overflowPx}px past the sheet, ${fit.clipped} text element(s) in the footer or off the edge`
+
+/** Page count of a PDF through pypdf. */
+const pageCount = (pdf) =>
+  Number(
+    execFileSync('python3', [
+      '-c',
+      'import sys; from pypdf import PdfReader; print(len(PdfReader(sys.argv[1]).pages))',
+      pdf,
+    ])
+      .toString()
+      .trim(),
+  )
+
+function merge() {
+  const parts = listPages().map((f) => path.join(OUT, `${path.basename(f, '.html')}.pdf`))
+  const missing = parts.filter((p) => !fs.existsSync(p))
+  if (missing.length) throw new Error(`render first; missing: ${missing.join(', ')}`)
+  execFileSync('python3', [
+    '-c',
+    [
+      'import sys',
+      'from pypdf import PdfWriter, PdfReader',
+      'w = PdfWriter()',
+      'for f in sys.argv[2:]:',
+      '    [w.add_page(p) for p in PdfReader(f).pages]',
+      'w.add_metadata({"/Title": "Survival Dice-Builder v2 one-page designs"})',
+      'w.write(sys.argv[1])',
+    ].join('\n'),
+    PDF,
+    ...parts,
+  ])
+  console.log(`${path.relative(ROOT, PDF)}: ${pageCount(PDF)} pages`)
+}
+
+function check() {
+  const files = listPages()
+  const problems = []
+  if (files.length !== 15) problems.push(`expected 15 page files, found ${files.length}`)
+  for (const file of files) {
+    const html = fs.readFileSync(file, 'utf8')
+    const bad = bannedIn(html)
+    if (bad.length) problems.push(`${path.basename(file)}: banned words ${bad.join(', ')}`)
+    const name = path.basename(file, '.html')
+    const pdf = path.join(OUT, `${name}.pdf`)
+    if (fs.existsSync(pdf) && pageCount(pdf) !== 1) problems.push(`${name}: overflows one page`)
+    if (diagramCount(html.replace(/<!--[\s\S]*?-->/g, '')) === 0)
+      problems.push(`${name}: no labelled vector diagram`)
+  }
+  if (fs.existsSync(PDF)) {
+    if (pageCount(PDF) !== 15) problems.push(`${PDF}: not 15 pages`)
+    // Every drawing must be vector: the merged PDF may hold no raster image at all.
+    const images = execFileSync('pdfimages', ['-list', PDF]).toString().trim().split('\n').length - 2
+    if (images > 0) problems.push(`${PDF}: ${images} raster image(s); diagrams must be vector`)
+  }
+  for (const p of problems) console.error(`check: ${p}`)
+  console.log(problems.length ? `check: ${problems.length} problem(s)` : 'check: ok')
+  process.exitCode = problems.length ? 1 : 0
+}
+
+async function main([cmd, ...rest]) {
+  if (cmd === 'render') return render(rest.length ? rest.map((f) => path.resolve(f)) : listPages())
+  if (cmd === 'lint') return lint(path.resolve(rest[0]))
+  if (cmd === 'text') return text()
+  if (cmd === 'merge') return merge()
+  if (cmd === 'check') return check()
+  console.error('usage: one-pagers.mjs render [files...] | lint <file> | text | merge | check')
+  process.exitCode = 2
+}
+
+main(process.argv.slice(2))
