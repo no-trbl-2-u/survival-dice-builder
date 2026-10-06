@@ -7,8 +7,12 @@ exactly as stated). Shallow clones: Axiomancer git history visible
 survival-dice-builder 2026-10-03 to 10-06. Earlier dates come from
 dated plan files, decision ballots and the results archive, not git.
 
-Owner questions in section 4 are unanswered. Section 5 is a proposal,
-not a ruling.
+Owner questions in section 4 were answered on 2026-10-06. Section 5
+is a proposal, not a ruling.
+
+Visual edition with an executive summary and animated diagrams:
+`docs/retrospective-2026-10-06.html` (open it in a browser; no build
+step). This markdown file stays the source of record.
 
 ## 1. The three projects in numbers
 
