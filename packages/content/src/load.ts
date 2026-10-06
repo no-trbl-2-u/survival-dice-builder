@@ -1,4 +1,5 @@
 import type { z } from 'zod'
+import { configReferenceProblems } from './configRefs.ts'
 import { CardsFileSchema, type CardDef } from './schemas/cards.ts'
 import { GameConfigSchema, type GameConfig } from './schemas/config.ts'
 import { EnemiesFileSchema, type EnemiesFile } from './schemas/enemies.ts'
@@ -113,56 +114,13 @@ export function loadContent(raw: RawContent): LoadResult {
   if (skills) checkUniqueIds('skills.json', 'skills', skills, errors)
   if (tiles) checkUniqueIds('tiles.json', 'tiles', tiles, errors)
 
-  if (config && cards) {
-    const cardIds = new Set(cards.map((c) => c.id))
-    config.deck.presets.forEach((preset, p) =>
-      preset.cards.forEach((entry, i) => {
-        if (!cardIds.has(entry.card))
-          errors.push({
-            file: 'config.default.json',
-            path: `deck.presets[${p}].cards[${i}].card`,
-            message: `unknown card "${entry.card}" (not in cards.json)`,
-          })
-      }),
-    )
-    if (!config.deck.presets.some((p) => p.id === config.deck.preset))
-      errors.push({
-        file: 'config.default.json',
-        path: 'deck.preset',
-        message: `no preset with id "${config.deck.preset}"`,
-      })
-  }
-
-  if (config && skills) {
-    const skillIds = new Set(skills.map((s) => s.id))
-    const refs = [
-      ...config.player.starterSkills.map((id, i) => [`player.starterSkills[${i}]`, id] as const),
-      ['milestones.skillFired', config.milestones.skillFired] as const,
-    ]
-    for (const [path, id] of refs)
-      if (!skillIds.has(id))
-        errors.push({
-          file: 'config.default.json',
-          path,
-          message: `unknown Skill "${id}" (not in skills.json)`,
-        })
-  }
-
-  if (config && tiles) {
-    const count = (kind: TileDef['kind']) => tiles.filter((t) => t.kind === kind).length
-    const checks = [
-      ['base', 1, 'exactly 1 base tile'],
-      ['countryside', config.tiles.countryside, `${config.tiles.countryside} countryside tiles`],
-      ['core', config.tiles.core, `${config.tiles.core} core tiles`],
-    ] as const
-    for (const [kind, want, label] of checks)
-      if (count(kind) !== want)
-        errors.push({
-          file: 'tiles.json',
-          path: 'tiles',
-          message: `config needs ${label}; found ${count(kind)}`,
-        })
-  }
+  if (config && cards && skills && tiles)
+    for (const p of configReferenceProblems(config, { cards, skills, tiles }))
+      errors.push(
+        p.file
+          ? { file: p.file, path: 'tiles', message: p.message }
+          : { file: 'config.default.json', path: formatPath(p.path), message: p.message },
+      )
 
   if (errors.length || !config || !cards || !skills || !enemies || !defenses || !upgrades || !tiles)
     return { ok: false, errors }

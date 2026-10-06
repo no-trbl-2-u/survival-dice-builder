@@ -17,7 +17,7 @@ import {
 
 /** Minimal view of a Zod 4 schema node, enough to pick an input. */
 type SchemaNode = Readonly<{
-  def: Readonly<{ type: string; element?: SchemaNode }>
+  def: Readonly<{ type: string; element?: SchemaNode; innerType?: SchemaNode }>
   shape?: Readonly<Record<string, SchemaNode>>
   options?: readonly string[]
   unwrap?: () => SchemaNode
@@ -63,16 +63,109 @@ type FieldProps = Readonly<{
   schema: SchemaNode
   value: unknown
   path: Path
+  /** The whole draft config, for choices that come from it (the deck presets). */
+  draft: unknown
   problems: ReadonlyMap<string, readonly string[]>
   onChange: (path: Path, next: unknown) => void
 }>
 
-/** One config field, chosen from its schema: number, checkbox, select, list, or JSON. */
-function Field({ schema, value, path, problems, onChange }: FieldProps): ReactNode {
+/** The choices an id field offers, from the content list (or the draft's presets) it names. */
+function choicesFor(
+  source: string | undefined,
+  draft: unknown,
+): readonly (readonly [string, string])[] {
+  if (source === 'skills') return defaultContent.skills.map((s) => [s.id, s.name] as const)
+  if (source === 'cards') return defaultContent.cards.map((c) => [c.id, c.name] as const)
+  if (source === 'presets') {
+    const presets = (getAt(draft, ['deck', 'presets']) ?? []) as readonly { id: string }[]
+    return presets.map((p) => [p.id, p.id] as const)
+  }
+  return []
+}
+
+/** A select of choices; a value no longer among them (a renamed preset) is kept and flagged. */
+function ChoiceSelect(
+  props: Readonly<{
+    choices: readonly (readonly [string, string])[]
+    value: string
+    onChange: (next: string) => void
+    a11y: Record<string, unknown>
+  }>,
+) {
+  const known = props.choices.some(([id]) => id === props.value)
+  return (
+    <select {...props.a11y} value={props.value} onChange={(e) => props.onChange(e.target.value)}>
+      {known ? null : <option value={props.value}>{props.value} (missing)</option>}
+      {props.choices.map(([id, name]) => (
+        <option key={id} value={id}>
+          {name === id ? id : `${name} (${id})`}
+        </option>
+      ))}
+    </select>
+  )
+}
+
+/** A slider and a number box for one number; the box takes any value, the slider its range. */
+function NumberControl(
+  props: Readonly<{
+    a11y: Record<string, unknown>
+    label: string
+    value: unknown
+    min: number
+    range: readonly [number, number]
+    off?: string
+    onChange: (next: unknown) => void
+  }>,
+) {
+  const n = typeof props.value === 'number' ? props.value : null
+  const [low, high] = [Math.min(props.range[0], n ?? Infinity), Math.max(props.range[1], n ?? 0)]
+  return (
+    <div className={styles.numberRow}>
+      <input
+        type="range"
+        className={styles.slider}
+        aria-label={`${props.label} slider`}
+        min={Math.max(low, props.min)}
+        max={high}
+        step={1}
+        disabled={n === null}
+        value={n ?? Math.max(low, props.min)}
+        onChange={(e) => props.onChange(Number(e.target.value))}
+      />
+      <input
+        {...props.a11y}
+        type="number"
+        min={props.min}
+        placeholder={props.off}
+        value={props.value === null ? '' : String(props.value)}
+        onChange={(e) => {
+          const raw = e.target.value
+          if (raw.trim() === '') props.onChange(props.off === undefined ? raw : null)
+          else props.onChange(Number(raw))
+        }}
+      />
+    </div>
+  )
+}
+
+/** One config field, chosen from its schema and metadata. */
+function Field({ schema, value, path, draft, problems, onChange }: FieldProps): ReactNode {
   const id = fieldId(path)
   const meta = path.length > 0 ? defaultConfigMeta[path.join('.')] : undefined
   const label = meta?.label ?? human(path.at(-1) ?? 'config')
   const type = schema.def.type
+  if (type === 'default' && schema.def.innerType) {
+    return (
+      <Field
+        schema={schema.def.innerType}
+        value={value}
+        path={path}
+        draft={draft}
+        problems={problems}
+        onChange={onChange}
+      />
+    )
+  }
   if (type === 'object' && schema.shape) {
     return (
       <fieldset className={styles.group}>
@@ -83,6 +176,7 @@ function Field({ schema, value, path, problems, onChange }: FieldProps): ReactNo
             schema={child}
             value={getAt(value, [key])}
             path={[...path, key]}
+            draft={draft}
             problems={problems}
             onChange={onChange}
           />
@@ -93,14 +187,31 @@ function Field({ schema, value, path, problems, onChange }: FieldProps): ReactNo
   const errors = problems.get(path.join('.')) ?? []
   const helpId = `${id}-help`
   const errorId = `${id}-error`
+  const labelId = `${id}-label`
   const a11y = {
     id,
     'aria-describedby': errors.length > 0 ? `${helpId} ${errorId}` : helpId,
     'aria-invalid': errors.length > 0 ? true : undefined,
   }
-  const row = (input: ReactNode) => (
+  /** A control group (several inputs) is named by the row label instead of `for`. */
+  const groupA11y = {
+    id,
+    role: 'group',
+    tabIndex: -1,
+    'aria-labelledby': labelId,
+    'aria-describedby': a11y['aria-describedby'],
+  }
+  const row = (input: ReactNode, grouped = false) => (
     <div className={styles.field}>
-      <label htmlFor={id}>{label}</label>
+      {grouped ? (
+        <span id={labelId} className={styles.label}>
+          {label}
+        </span>
+      ) : (
+        <label id={labelId} htmlFor={id} className={styles.label}>
+          {label}
+        </label>
+      )}
       {input}
       <p id={helpId} className={styles.help}>
         {meta?.help}
@@ -119,44 +230,67 @@ function Field({ schema, value, path, problems, onChange }: FieldProps): ReactNo
       ) : null}
     </div>
   )
-  const asNumber = (raw: string) => (raw.trim() === '' ? raw : Number(raw))
-  if (type === 'number') {
-    return row(
-      <input
-        {...a11y}
-        type="number"
-        min={numberMin(schema as never)}
-        value={String(value)}
-        onChange={(e) => onChange(path, asNumber(e.target.value))}
-      />,
-    )
-  }
+  const set = (next: unknown) => onChange(path, next)
+
+  // Numbers: a slider over the metadata range, and a number box for exact values.
   const inner = type === 'nullable' ? schema.unwrap?.() : undefined
-  if (inner?.def.type === 'number') {
+  if (type === 'number' || inner?.def.type === 'number') {
+    const node = (inner ?? schema) as never
+    const min = numberMin(node)
+    const range = meta?.range ?? [min, Math.max(10, Number(value) * 2 || 10)]
+    if (!inner) {
+      return row(
+        <NumberControl
+          a11y={a11y}
+          label={label}
+          value={value}
+          min={min}
+          range={range}
+          onChange={set}
+        />,
+      )
+    }
+    // An optional limit: a toggle turns it on (at the low end of its range) or off.
+    const on = value !== null
     return row(
-      <input
-        {...a11y}
-        type="number"
-        min={numberMin(inner as never)}
-        placeholder={meta?.empty ?? 'no maximum'}
-        value={value === null ? '' : String(value)}
-        onChange={(e) => onChange(path, e.target.value === '' ? null : Number(e.target.value))}
-      />,
+      <div className={styles.numberRow}>
+        <label className={styles.toggle}>
+          <input
+            type="checkbox"
+            checked={on}
+            aria-label={`${label}: on`}
+            onChange={(e) => set(e.target.checked ? Math.max(range[0], min) : null)}
+          />
+          <span aria-hidden="true">{on ? 'On' : (meta?.empty ?? 'Off')}</span>
+        </label>
+        <NumberControl
+          a11y={a11y}
+          label={label}
+          value={value}
+          min={min}
+          range={range}
+          off={meta?.empty ?? 'no maximum'}
+          onChange={set}
+        />
+      </div>,
     )
   }
   if (type === 'boolean') {
     return row(
-      <input
-        {...a11y}
-        type="checkbox"
-        checked={value === true}
-        onChange={(e) => onChange(path, e.target.checked)}
-      />,
+      <span className={styles.toggle}>
+        <input
+          {...a11y}
+          type="checkbox"
+          checked={value === true}
+          onChange={(e) => set(e.target.checked)}
+        />
+        <span aria-hidden="true">{value === true ? 'On' : 'Off'}</span>
+      </span>,
     )
   }
   if (type === 'enum' && schema.options) {
     return row(
-      <select {...a11y} value={String(value)} onChange={(e) => onChange(path, e.target.value)}>
+      <select {...a11y} value={String(value)} onChange={(e) => set(e.target.value)}>
         {schema.options.map((o) => (
           <option key={o} value={o}>
             {meta?.options?.[o] ?? o}
@@ -165,35 +299,142 @@ function Field({ schema, value, path, problems, onChange }: FieldProps): ReactNo
       </select>,
     )
   }
+  // Ids: a select of what exists, so a typo cannot reach a run.
+  if (type === 'string' && meta?.source) {
+    return row(
+      <ChoiceSelect
+        a11y={a11y}
+        choices={choicesFor(meta.source, draft)}
+        value={String(value)}
+        onChange={set}
+      />,
+    )
+  }
   if (type === 'string') {
     return row(
-      <input
-        {...a11y}
-        type="text"
-        value={String(value)}
-        onChange={(e) => onChange(path, e.target.value)}
-      />,
+      <input {...a11y} type="text" value={String(value)} onChange={(e) => set(e.target.value)} />,
     )
   }
-  const element = schema.def.element?.def.type
-  if (type === 'array' && (element === 'number' || element === 'string' || element === 'enum')) {
-    const list = Array.isArray(value) ? value.join(', ') : ''
+  const element = schema.def.element
+  const list = Array.isArray(value) ? (value as unknown[]) : []
+  // A set of ids (the starter Skills): a toggle for each one that exists, in content order.
+  if (type === 'array' && element?.def.type === 'string' && meta?.source) {
+    const chosen = new Set(list.map(String))
+    const choices = choicesFor(meta.source, draft)
+    return row(
+      <div {...groupA11y} className={styles.chips}>
+        {choices.map(([choice, name]) => (
+          <label key={choice} className={styles.chip}>
+            <input
+              type="checkbox"
+              checked={chosen.has(choice)}
+              onChange={(e) =>
+                set(
+                  e.target.checked
+                    ? choices.map(([c]) => c).filter((c) => c === choice || chosen.has(c))
+                    : list.filter((c) => c !== choice),
+                )
+              }
+            />
+            {name}
+          </label>
+        ))}
+      </div>,
+      true,
+    )
+  }
+  // A fixed list of enum values: an order (every value once) gets up/down buttons; anything
+  // else (the faces of a die) gets a select per item.
+  if (type === 'array' && element?.def.type === 'enum' && element.options) {
+    const options = element.options
+    const phrase = (o: string) => {
+      const text = meta?.options?.[o] ?? human(o)
+      return text.charAt(0).toUpperCase() + text.slice(1)
+    }
+    const isOrder = list.length === options.length && new Set(list).size === options.length
+    if (isOrder) {
+      const move = (i: number, by: number) => {
+        const next = [...list]
+        ;[next[i], next[i + by]] = [next[i + by], next[i]]
+        set(next)
+      }
+      return row(
+        <ol {...groupA11y} className={styles.order}>
+          {list.map((item, i) => (
+            <li key={String(item)}>
+              <span className={styles.orderName}>
+                {i + 1}. {phrase(String(item))}
+              </span>
+              <button
+                type="button"
+                aria-label={`Move ${phrase(String(item))} up`}
+                disabled={i === 0}
+                onClick={() => move(i, -1)}
+              >
+                ▲
+              </button>
+              <button
+                type="button"
+                aria-label={`Move ${phrase(String(item))} down`}
+                disabled={i === list.length - 1}
+                onClick={() => move(i, 1)}
+              >
+                ▼
+              </button>
+            </li>
+          ))}
+        </ol>,
+        true,
+      )
+    }
+    return row(
+      <div {...groupA11y} className={styles.faces}>
+        {list.map((item, i) => (
+          <select
+            key={i}
+            aria-label={`${label}, ${i + 1}`}
+            value={String(item)}
+            onChange={(e) => set(list.map((v, j) => (j === i ? e.target.value : v)))}
+          >
+            {options.map((o) => (
+              <option key={o} value={o}>
+                {phrase(o)}
+              </option>
+            ))}
+          </select>
+        ))}
+      </div>,
+      true,
+    )
+  }
+  // A list of numbers (milestone rounds): typed, comma-separated, checked on save.
+  if (type === 'array' && element?.def.type === 'number') {
     return row(
       <input
         {...a11y}
         type="text"
-        defaultValue={list}
-        onBlur={(e) => {
-          const items = e.target.value
-            .split(',')
-            .map((x) => x.trim())
-            .filter((x) => x !== '')
-          onChange(path, element === 'number' ? items.map(Number) : items)
-        }}
+        inputMode="numeric"
+        defaultValue={list.join(', ')}
+        onBlur={(e) =>
+          set(
+            e.target.value
+              .split(',')
+              .map((x) => x.trim())
+              .filter((x) => x !== '')
+              .map(Number),
+          )
+        }
       />,
     )
   }
-  // Anything else (the deck presets): edit as JSON, checked on save.
+  // The deck presets: an editor whose cards come from the card list.
+  if (path.join('.') === 'deck.presets') {
+    return row(
+      <PresetsEditor groupA11y={groupA11y} value={list as Preset[]} onChange={set} />,
+      true,
+    )
+  }
+  // Anything else: edit as JSON, checked on save.
   return row(
     <textarea
       {...a11y}
@@ -201,12 +442,126 @@ function Field({ schema, value, path, problems, onChange }: FieldProps): ReactNo
       defaultValue={JSON.stringify(value, null, 2)}
       onBlur={(e) => {
         try {
-          onChange(path, JSON.parse(e.target.value))
+          set(JSON.parse(e.target.value))
         } catch {
-          onChange(path, e.target.value)
+          set(e.target.value)
         }
       }}
     />,
+  )
+}
+
+type Preset = { id: string; handSize: number; cards: { card: string; quantity: number }[] }
+
+/** Deck presets: each one's id, hand size, and cards (picked from the card list) with quantities. */
+function PresetsEditor(
+  props: Readonly<{
+    groupA11y: Record<string, unknown>
+    value: readonly Preset[]
+    onChange: (next: Preset[]) => void
+  }>,
+) {
+  const cards = choicesFor('cards', null)
+  const update = (p: number, next: Partial<Preset>) =>
+    props.onChange(props.value.map((preset, i) => (i === p ? { ...preset, ...next } : preset)))
+  const asCount = (raw: string) => (raw.trim() === '' ? (raw as unknown as number) : Number(raw))
+  return (
+    <div {...props.groupA11y} className={styles.presets}>
+      {props.value.map((preset, p) => {
+        const size = preset.cards.reduce((n, c) => n + (Number(c.quantity) || 0), 0)
+        return (
+          <section key={p} className={styles.preset} aria-label={`Preset ${preset.id}`}>
+            <div className={styles.presetHead}>
+              <label>
+                Id
+                <input
+                  type="text"
+                  value={preset.id}
+                  onChange={(e) => update(p, { id: e.target.value })}
+                />
+              </label>
+              <label>
+                Hand size
+                <input
+                  type="number"
+                  min={1}
+                  value={String(preset.handSize)}
+                  onChange={(e) => update(p, { handSize: asCount(e.target.value) })}
+                />
+              </label>
+              <span className={styles.presetSize}>{size} cards</span>
+              <button
+                type="button"
+                disabled={props.value.length === 1}
+                onClick={() => props.onChange(props.value.filter((_, i) => i !== p))}
+              >
+                Remove preset
+              </button>
+            </div>
+            <ul className={styles.presetCards}>
+              {preset.cards.map((entry, i) => (
+                <li key={i}>
+                  <ChoiceSelect
+                    a11y={{ 'aria-label': `${preset.id}: card ${i + 1}` }}
+                    choices={cards}
+                    value={entry.card}
+                    onChange={(card) =>
+                      update(p, {
+                        cards: preset.cards.map((c, j) => (j === i ? { ...c, card } : c)),
+                      })
+                    }
+                  />
+                  <input
+                    type="number"
+                    min={1}
+                    aria-label={`${preset.id}: card ${i + 1} quantity`}
+                    value={String(entry.quantity)}
+                    onChange={(e) =>
+                      update(p, {
+                        cards: preset.cards.map((c, j) =>
+                          j === i ? { ...c, quantity: asCount(e.target.value) } : c,
+                        ),
+                      })
+                    }
+                  />
+                  <button
+                    type="button"
+                    aria-label={`Remove ${preset.id} card ${i + 1}`}
+                    disabled={preset.cards.length === 1}
+                    onClick={() => update(p, { cards: preset.cards.filter((_, j) => j !== i) })}
+                  >
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              onClick={() =>
+                update(p, { cards: [...preset.cards, { card: cards[0]?.[0] ?? '', quantity: 1 }] })
+              }
+            >
+              Add card
+            </button>
+          </section>
+        )
+      })}
+      <button
+        type="button"
+        onClick={() => {
+          const last = props.value.at(-1)
+          const ids = new Set(props.value.map((x) => x.id))
+          let n = props.value.length + 1
+          while (ids.has(`preset-${n}`)) n++
+          props.onChange([
+            ...props.value,
+            { id: `preset-${n}`, handSize: last?.handSize ?? 5, cards: last?.cards ?? [] },
+          ])
+        }}
+      >
+        Add preset
+      </button>
+    </div>
   )
 }
 
@@ -294,6 +649,7 @@ export function ConfigPage() {
           schema={GameConfigSchema as unknown as SchemaNode}
           value={draft as GameConfig}
           path={[]}
+          draft={draft}
           problems={fields}
           onChange={onChange}
         />

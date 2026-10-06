@@ -22,13 +22,35 @@ export function configMetaPaths(config: GameConfig): ConfigMetaPath[] {
   return walk(config, [])
 }
 
-/** The select values of each enum field in the config schema, keyed by dotted path. */
-function enumValues(): Map<string, readonly string[]> {
-  type Node = { def: { type: string }; shape?: Record<string, Node>; options?: string[] }
-  const found = new Map<string, readonly string[]>()
+/** The schema type of each field in the config schema, keyed by dotted path. */
+type FieldKind = Readonly<
+  { kind: 'enum'; options: readonly string[] } | { kind: 'number' | 'id' | 'other' }
+>
+
+function fieldKinds(): Map<string, FieldKind> {
+  type Node = {
+    def: { type: string; element?: Node; innerType?: Node }
+    shape?: Record<string, Node>
+    options?: string[]
+  }
+  const found = new Map<string, FieldKind>()
+  const kindOf = (node: Node): FieldKind => {
+    const t = node.def.type
+    if ((t === 'nullable' || t === 'default') && node.def.innerType)
+      return kindOf(node.def.innerType)
+    if (t === 'enum' && node.options) return { kind: 'enum', options: node.options }
+    if (t === 'number') return { kind: 'number' }
+    if (t === 'string') return { kind: 'id' }
+    if (t === 'array' && node.def.element?.def.type === 'string') return { kind: 'id' }
+    return { kind: 'other' }
+  }
   const walk = (node: Node, prefix: string[]) => {
-    if (node.def.type === 'enum' && node.options) found.set(prefix.join('.'), node.options)
-    for (const [key, child] of Object.entries(node.shape ?? {})) walk(child, [...prefix, key])
+    const inner = node.def.type === 'default' && node.def.innerType ? node.def.innerType : node
+    if (inner.shape) {
+      for (const [key, child] of Object.entries(inner.shape)) walk(child, [...prefix, key])
+      return
+    }
+    found.set(prefix.join('.'), kindOf(node))
   }
   walk(GameConfigSchema as unknown as Node, [])
   return found
@@ -53,9 +75,16 @@ export function configMetaProblems(metadata: ConfigMeta, config: GameConfig): st
   for (const path of Object.keys(metadata)) {
     if (!known.has(path)) problems.push(`${path}: not a config path`)
   }
-  for (const [path, values] of enumValues()) {
-    const options = metadata[path]?.options ?? {}
-    for (const v of values) if (!options[v]) problems.push(`${path}: no phrase for "${v}"`)
+  for (const [path, field] of fieldKinds()) {
+    const entry = metadata[path]
+    if (field.kind === 'enum') {
+      const options = entry?.options ?? {}
+      for (const v of field.options) if (!options[v]) problems.push(`${path}: no phrase for "${v}"`)
+    }
+    if (field.kind === 'number' && !entry?.range) problems.push(`${path}: no slider range`)
+    if (field.kind === 'number' && entry?.range && entry.range[0] >= entry.range[1])
+      problems.push(`${path}: slider range is empty`)
+    if (field.kind === 'id' && !entry?.source) problems.push(`${path}: no source for its choices`)
   }
   return problems
 }

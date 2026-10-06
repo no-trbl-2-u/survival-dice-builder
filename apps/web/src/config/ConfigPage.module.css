@@ -135,10 +135,6 @@ form > .group > .field {
   border-bottom: none;
 }
 
-.field > label {
-  font-weight: 700;
-}
-
 .field input[type='number'],
 .field input[type='text'],
 .field select,
@@ -150,7 +146,7 @@ form > .group > .field {
 /* Numbers: an engraved brass counter, wide enough to read at a glance. */
 .field input[type='number'] {
   justify-self: start;
-  inline-size: 8rem;
+  inline-size: 6rem;
   font-family: var(--font-number);
   font-weight: 800;
   font-size: var(--text-lg);
@@ -230,4 +226,239 @@ form > .group > .field {
   .error {
     grid-column: 1;
   }
+}
+
+.label {
+  font-weight: 700;
+}
+
+/* A number: slider in a carved track, then the brass counter for exact values. */
+.numberRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  min-width: 0;
+}
+
+.numberRow .numberRow {
+  flex: 1 1 20rem;
+}
+
+/* A row of several controls: the label sits at the top. */
+.field:has([role='group']) {
+  align-items: start;
+}
+
+.numberRow input[type='number'] {
+  inline-size: 6rem;
+}
+
+.slider {
+  appearance: none;
+  flex: 1 1 12rem;
+  max-inline-size: 26rem;
+  block-size: 1.75rem;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.slider:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.slider::-webkit-slider-runnable-track {
+  block-size: 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background:
+    linear-gradient(var(--scrim-raised), var(--scrim-raised)),
+    var(--tex-oak) center / 192px,
+    var(--color-surface-raised);
+  box-shadow: var(--groove);
+}
+
+.slider::-moz-range-track {
+  block-size: 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+  box-shadow: var(--groove);
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  inline-size: 1.4rem;
+  block-size: 1.4rem;
+  margin-block-start: calc(-0.7rem + 4px);
+  border-radius: 50%;
+  border: 1px solid #6b4e17;
+  background:
+    radial-gradient(circle at 35% 30%, rgb(255 250 220 / 0.85), transparent 55%),
+    var(--tex-brass) center / 64px,
+    var(--brass);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.45);
+}
+
+.slider::-moz-range-thumb {
+  inline-size: 1.4rem;
+  block-size: 1.4rem;
+  border-radius: 50%;
+  border: 1px solid #6b4e17;
+  background: var(--brass);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.45);
+}
+
+.slider:focus-visible {
+  outline: 3px solid var(--legal-move);
+  outline-offset: 2px;
+}
+
+/* A toggle with its state written beside it. */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: start;
+  font-weight: 700;
+  min-inline-size: 5.5rem;
+}
+
+/* Starter Skills: a toggle chip per Skill. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 4px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-surface-raised) 70%, transparent);
+  box-shadow: var(--bevel);
+  cursor: pointer;
+}
+
+.chip:has(input:checked) {
+  border-color: var(--brass);
+  font-weight: 700;
+}
+
+/* An order (target tie-break): numbered rows with up and down buttons. */
+.order {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  justify-self: start;
+}
+
+.order li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.orderName {
+  min-inline-size: 7rem;
+  font-weight: 700;
+}
+
+.order button {
+  min-height: 1.9rem;
+  padding: 0 10px;
+  font-size: var(--text-xs);
+}
+
+/* Die faces: a select per face. */
+.faces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.faces select {
+  min-inline-size: 0;
+}
+
+/* Deck presets: a card per preset. */
+.presets {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.preset {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  inline-size: 100%;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-surface-raised) 55%, transparent);
+  box-shadow: var(--groove);
+}
+
+.presetHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 8px 14px;
+}
+
+.presetHead label {
+  display: grid;
+  gap: 2px;
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.presetHead input[type='text'] {
+  inline-size: 11rem;
+}
+
+.presetHead input[type='number'],
+.presetCards input[type='number'] {
+  inline-size: 5rem;
+  font-size: var(--text-md);
+}
+
+.presetSize {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  padding-block-end: 8px;
+}
+
+.presetCards {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.presetCards li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.presetCards select {
+  flex: 1 1 9rem;
+  min-inline-size: 0;
+  max-inline-size: 16rem;
+}
+
+.presetCards button {
+  min-height: 2rem;
+  padding: 0 10px;
 }

@@ -5,12 +5,14 @@
   "players.min": {
     "label": "Fewest players",
     "help": "The smallest player count a new run allows.",
-    "rule": "1.5"
+    "rule": "1.5",
+    "range": [1, 6]
   },
   "players.max": {
     "label": "Most players",
     "help": "The largest player count a new run allows.",
-    "rule": "1.5"
+    "rule": "1.5",
+    "range": [1, 6]
   },
   "player": {
     "label": "Each player"
@@ -18,40 +20,46 @@
   "player.maxHealth": {
     "label": "Maximum health",
     "help": "Each player starts with this health and cannot heal above it.",
-    "rule": "2.1, 4.9"
+    "rule": "2.1, 4.9",
+    "range": [1, 40]
   },
   "player.startingDice": {
     "label": "Starting dice",
     "help": "Action dice each player has at level 1.",
-    "rule": "2.1, 4.7"
+    "rule": "2.1, 4.7",
+    "range": [1, 6]
   },
   "player.starterSkills": {
     "label": "Starter Skills",
-    "help": "Skill ids on each player board at the start, separated by commas.",
-    "rule": "4.10, Table 3"
+    "help": "The Skills on each player board at the start. Tick at least 1.",
+    "rule": "4.10, Table 3",
+    "source": "skills"
   },
   "player.draftSlots": {
     "label": "Draft Skill slots",
     "help": "The most drafted Skills a player can hold, on top of the starter Skills.",
-    "rule": "2.1, 11.9"
+    "rule": "2.1, 11.9",
+    "range": [0, 12]
   },
   "deck": {
     "label": "Starter deck and hand"
   },
   "deck.preset": {
     "label": "Deck and hand preset",
-    "help": "The id of the preset below that new runs use.",
-    "rule": "18.1"
+    "help": "The preset below that new runs use.",
+    "rule": "18.1",
+    "source": "presets"
   },
   "deck.presets": {
     "label": "Deck and hand presets",
-    "help": "Each preset has an id, a hand size, and a list of starter cards with a quantity each. Edit as JSON; it is checked on save.",
+    "help": "Each preset has an id, a hand size, and its starter cards with a quantity each. Cards are picked from the card list, so a preset can only name cards that exist.",
     "rule": "18.1, Table 2 (open question 19)"
   },
   "deck.minimumSize": {
     "label": "Smallest deck",
     "help": "A player never has fewer cards than this. A starter card is returned only while the player has more.",
-    "rule": "18.1 (core loop v2)"
+    "rule": "18.1 (core loop v2)",
+    "range": [1, 30]
   },
   "base": {
     "label": "Base"
@@ -59,12 +67,14 @@
   "base.startingHealth": {
     "label": "Starting base health",
     "help": "The base health at the start of a run. The run stops when it reaches 0.",
-    "rule": "4.5, 11.1"
+    "rule": "4.5, 11.1",
+    "range": [1, 60]
   },
   "base.healthPerUpgrade": {
     "label": "Health per upgrade",
     "help": "Each base upgrade adds this much to the maximum base health and to the base health.",
-    "rule": "11.3"
+    "rule": "11.3",
+    "range": [1, 20]
   },
   "combat": {
     "label": "Combat"
@@ -72,23 +82,27 @@
   "combat.maxRolls": {
     "label": "Rolls per exchange",
     "help": "The most times a player rolls dice in one combat exchange.",
-    "rule": "7.8 step 4"
+    "rule": "7.8 step 4",
+    "range": [1, 6]
   },
   "combat.exchangeRange": {
     "label": "Exchange range",
     "help": "If no enemy is within this many hexes, the exchange has no effect and the hand is discarded.",
     "rule": "7.9",
-    "unused": true
+    "unused": true,
+    "range": [1, 6]
   },
   "combat.enemyMoveHexes": {
     "label": "Enemy move",
     "help": "Hexes each enemy moves toward its target at the start of Combat.",
-    "rule": "7.5"
+    "rule": "7.5",
+    "range": [1, 6]
   },
   "combat.moveCostNextToEnemy": {
     "label": "Move cost next to an enemy",
     "help": "Hexes a Move pays to enter a hex next to an enemy.",
-    "rule": "6.9"
+    "rule": "6.9",
+    "range": [1, 6]
   },
   "combat.enemyAttacks": {
     "label": "Enemy attacks per Combat",
@@ -128,27 +142,32 @@
   "combat.engage.hitDamage": {
     "label": "Hit damage",
     "help": "Damage a Hit face deals to you (guard first).",
-    "rule": "Combat v3"
+    "rule": "Combat v3",
+    "range": [0, 6]
   },
   "combat.engage.specialDamage": {
     "label": "Special damage",
     "help": "Damage a Special face deals, until each grunt type has its own Special.",
-    "rule": "Combat v3"
+    "rule": "Combat v3",
+    "range": [0, 6]
   },
   "combat.engage.eliteDice": {
     "label": "Elite enemy dice",
     "help": "Enemy dice an elite rolls when you engage it or stand next to it.",
-    "rule": "Combat v3"
+    "rule": "Combat v3",
+    "range": [1, 4]
   },
   "combat.engage.siegeDamage": {
     "label": "Siege damage",
     "help": "At the end of Combat, each grunt next to a structure deals this much to it.",
-    "rule": "Combat v3 (siege)"
+    "rule": "Combat v3 (siege)",
+    "range": [0, 6]
   },
   "combat.engage.eliteSiegeDamage": {
     "label": "Elite siege damage",
     "help": "Siege damage of an elite, until elites have their own siege rule.",
-    "rule": "Combat v3 (siege)"
+    "rule": "Combat v3 (siege)",
+    "range": [0, 10]
   },
   "experience": {
     "label": "Experience"
@@ -156,17 +175,20 @@
   "experience.firstStep": {
     "label": "Experience for level 2",
     "help": "Experience needed to reach level 2.",
-    "rule": "8.5"
+    "rule": "8.5",
+    "range": [1, 20]
   },
   "experience.stepIncrease": {
     "label": "Step increase",
     "help": "Each next level needs this much more experience than the step before it.",
-    "rule": "8.5 (open question 17)"
+    "rule": "8.5 (open question 17)",
+    "range": [0, 20]
   },
   "experience.eliteBonus": {
     "label": "Extra experience for an elite",
     "help": "Row 17: experience added when an elite is defeated, on top of its normal experience. Off: the current rule (0).",
-    "rule": "8.1 (open question 17)"
+    "rule": "8.1 (open question 17)",
+    "range": [0, 10]
   },
   "experience.levelPerEliteSpawn": {
     "label": "1 level for each elite that spawns",
@@ -176,30 +198,34 @@
   "miniatureLimit": {
     "label": "Enemy miniature limit",
     "help": "The most enemies on the map. Past the limit, a new grunt or elite turns the grunt nearest the base into an elite instead.",
-    "rule": "2.2, 10.5 (open question 32)"
+    "rule": "2.2, 10.5 (open question 32)",
+    "range": [1, 60]
   },
   "clock": {
     "label": "Clock (experiment)"
   },
   "clock.forcedRevealEvery": {
     "label": "Forced reveal every",
-    "help": "Row 63: at round end, if no tile was revealed in this many rounds, the top tile of the tile deck is revealed in the open slot nearest the base. Off: the current rule (leave empty).",
+    "help": "Row 63: at round end, if no tile was revealed in this many rounds, the top tile of the tile deck is revealed in the open slot nearest the base. Off: the current rule.",
     "rule": "10.1 (open question 63)",
-    "empty": "off"
+    "empty": "off",
+    "range": [1, 10]
   },
   "spawn": {
     "label": "Spawn pressure (experiment)"
   },
   "spawn.rampEvery": {
     "label": "Spawn ramp every",
-    "help": "Row 64: each spawn node spawns 1 more enemy every this many rounds (1 + (round - 1) / N, rounded down). Off: the current rule (leave empty).",
+    "help": "Row 64: each spawn node spawns 1 more enemy every this many rounds (1 + (round - 1) / N, rounded down). Off: the current rule.",
     "rule": "9.2 (open question 64)",
-    "empty": "off"
+    "empty": "off",
+    "range": [1, 10]
   },
   "spawn.newTileDelay": {
     "label": "New tile waits",
     "help": "Row 66: rounds a newly revealed tile waits before its spawn nodes spawn. 1: new tiles wait one round. Off: the current rule (0).",
-    "rule": "9.2, 10.1 (open question 66)"
+    "rule": "9.2, 10.1 (open question 66)",
+    "range": [0, 6]
   },
   "spawn.perSeat": {
     "label": "Spawns scale with seats",
@@ -208,9 +234,10 @@
   },
   "spawn.nodeRange": {
     "label": "Spawn range",
-    "help": "Row 70: only spawn nodes within this many hexes of a player figure, a Barricade, a Tower, or the base spawn. Off: the current rule (leave empty).",
+    "help": "Row 70: only spawn nodes within this many hexes of a player figure, a Barricade, a Tower, or the base spawn. Off: the current rule.",
     "rule": "9.2 (open question 70)",
-    "empty": "off"
+    "empty": "off",
+    "range": [1, 10]
   },
   "gather": {
     "label": "Gather (experiment)"
@@ -218,7 +245,8 @@
   "gather.offNodeAmount": {
     "label": "Gather off a node",
     "help": "Row 67: materials a Gather gives on a spent node or off any node. Nodes stay single-use. Off: the current rule (0).",
-    "rule": "6.7 (open question 67)"
+    "rule": "6.7 (open question 67)",
+    "range": [0, 5]
   },
   "knockout": {
     "label": "Knockout"
@@ -226,7 +254,8 @@
   "knockout.returnHealthDivisor": {
     "label": "Return health divisor",
     "help": "A knocked-out player returns at the next round start with maximum health divided by this, rounded up.",
-    "rule": "Core loop v2 (open question 55)"
+    "rule": "Core loop v2 (open question 55)",
+    "range": [1, 4]
   },
   "knockout.loseMaterials": {
     "label": "Knockout loses materials",
@@ -239,7 +268,8 @@
   "shop.offers": {
     "label": "Shop offers",
     "help": "Cards the open Shop shows at a time.",
-    "rule": "Table 6, 11.5"
+    "rule": "Table 6, 11.5",
+    "range": [1, 8]
   },
   "draft": {
     "label": "Skill draft"
@@ -247,17 +277,20 @@
   "draft.reveal": {
     "label": "Skills revealed",
     "help": "Skills each player looks at in a draft.",
-    "rule": "11.6"
+    "rule": "11.6",
+    "range": [1, 6]
   },
   "draft.keep": {
     "label": "Skills kept",
     "help": "Skills each player keeps from a draft.",
-    "rule": "11.7"
+    "rule": "11.7",
+    "range": [1, 6]
   },
   "draft.everyNRounds": {
     "label": "Draft every N rounds",
     "help": "With the Training Ground open, a draft happens in each round that this number divides.",
-    "rule": "10.8"
+    "rule": "10.8",
+    "range": [1, 6]
   },
   "supplies": {
     "label": "Supplies"
@@ -265,12 +298,14 @@
   "supplies.copiesPerCard": {
     "label": "Copies of each card",
     "help": "Copies of each card in the card supplies.",
-    "rule": "2.2, Table 8 (open question 18)"
+    "rule": "2.2, Table 8 (open question 18)",
+    "range": [1, 6]
   },
   "supplies.copiesPerSkill": {
     "label": "Copies of each Skill",
     "help": "Copies of each Skill in the Skill supplies.",
-    "rule": "2.2, Table 9 (open question 18)"
+    "rule": "2.2, Table 9 (open question 18)",
+    "range": [1, 4]
   },
   "tiles": {
     "label": "Map tiles"
@@ -278,17 +313,20 @@
   "tiles.countryside": {
     "label": "Countryside tiles",
     "help": "Countryside tiles in the game.",
-    "rule": "2.2"
+    "rule": "2.2",
+    "range": [1, 10]
   },
   "tiles.core": {
     "label": "Core tiles",
     "help": "Core tiles in the game.",
-    "rule": "2.2"
+    "rule": "2.2",
+    "range": [1, 10]
   },
   "tiles.revealMoveCost": {
     "label": "Movement to reveal a tile",
     "help": "Movement a step off the map edge costs. The step reveals the top tile of the tile deck under the hex entered.",
-    "rule": "10.1 (core loop v2)"
+    "rule": "10.1 (core loop v2)",
+    "range": [1, 4]
   },
   "milestones": {
     "label": "Milestones"
@@ -301,22 +339,26 @@
   "milestones.upgradesBought": {
     "label": "Base upgrades bought",
     "help": "Base upgrades the players must buy for this milestone.",
-    "rule": "17"
+    "rule": "17",
+    "range": [1, 10]
   },
   "milestones.tilesRevealed": {
     "label": "Tiles revealed",
     "help": "Tiles the players must reveal for this milestone.",
-    "rule": "17 (open question 4)"
+    "rule": "17 (open question 4)",
+    "range": [1, 20]
   },
   "milestones.level": {
     "label": "Level reached",
     "help": "The level the players must reach for this milestone.",
-    "rule": "17"
+    "rule": "17",
+    "range": [1, 20]
   },
   "milestones.skillFired": {
     "label": "Skill fired",
-    "help": "The id of the Skill a player must fire for this milestone.",
-    "rule": "17"
+    "help": "The Skill a player must fire for this milestone.",
+    "rule": "17",
+    "source": "skills"
   },
   "options": {
     "label": "Playtest options"
@@ -332,8 +374,9 @@
   },
   "options.maxLevel": {
     "label": "Maximum level",
-    "help": "The highest level the players can reach. Leave empty for no maximum.",
-    "rule": "18.1, 8.4"
+    "help": "The highest level the players can reach. Off: no maximum.",
+    "rule": "18.1, 8.4",
+    "range": [1, 20]
   },
   "options.skillUses": {
     "label": "Skill uses",
@@ -351,12 +394,14 @@
     "label": "Enemies per hex",
     "help": "The most enemies one hex can hold.",
     "rule": "3.7 (open question 1)",
-    "unused": true
+    "unused": true,
+    "range": [1, 4]
   },
   "rulings.figuresPerHex": {
     "label": "Figures per hex",
     "help": "The most player figures one hex can hold.",
-    "rule": "3.8"
+    "rule": "3.8",
+    "range": [1, 4]
   },
   "rulings.blockedPathRule": {
     "label": "Blocked enemy",
@@ -465,12 +510,13 @@
   },
   "rulings.targetTieBreak": {
     "label": "Enemy target order",
-    "help": "Which equally near target an enemy picks first: player, tower, barricade, base, in order, separated by commas.",
+    "help": "Which equally near target an enemy picks first, top to bottom.",
     "rule": "9.3 (open question 15)"
   },
   "rulings.playerPullDistance": {
     "label": "Player pull distance",
     "help": "Enemies head for the nearest structure; they turn to a player only when the player is at least this many hexes nearer. 0 ranks players by distance alone.",
-    "rule": "9.3, core loop v2 (open question 56)"
+    "rule": "9.3, core loop v2 (open question 56)",
+    "range": [0, 6]
   }
 }

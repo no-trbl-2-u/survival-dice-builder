@@ -76,3 +76,36 @@ test('/decisions: a setting shows its config label beside the path', async ({ pa
     'Structure damage (rulings.structureDamage)',
   )
 })
+
+test('/config: sliders, toggles, and pick lists; a name can only come from the content', async ({
+  page,
+}) => {
+  await page.goto('/config')
+  // No free-text JSON: every list has its own control.
+  await expect(page.locator('textarea')).toHaveCount(0)
+  // A slider and its number box move together.
+  const slider = page.getByLabel('Maximum health slider', { exact: true })
+  await slider.focus()
+  await page.keyboard.press('ArrowRight')
+  await expect(page.getByLabel('Maximum health', { exact: true })).toHaveValue('16')
+  // An optional limit turns on at the low end of its range.
+  await page.getByLabel('Forced reveal every: on', { exact: true }).check()
+  await expect(page.getByLabel('Forced reveal every', { exact: true })).toHaveValue('1')
+  // Starter Skills are toggles; a starter deck card is a pick from the card list.
+  const skills = page.locator('#cfg-player-starterSkills')
+  await skills.getByLabel('Cleave', { exact: true }).check()
+  await page.getByLabel('deck-10-hand-5: card 1', { exact: true }).selectOption('sprint')
+  // Renaming the preset in use is caught on save, at the field that names it.
+  await page.getByRole('region', { name: 'Preset deck-10-hand-5' }).getByLabel('Id').fill('mine')
+  await page.getByRole('button', { name: 'Save config' }).click()
+  await expect(
+    page.getByRole('alert').getByRole('link', { name: 'Deck and hand preset' }),
+  ).toBeVisible()
+  await page.getByLabel('Deck and hand preset', { exact: true }).selectOption('mine')
+  await page.getByRole('button', { name: 'Save config' }).click()
+  await expect(page.getByRole('status')).toContainText('Saved')
+  // The saved config starts a run.
+  await page.goto('/play')
+  await page.getByRole('button', { name: 'Start run' }).click()
+  await expect(page.getByTestId('player-panel')).toContainText('16 / 16')
+})

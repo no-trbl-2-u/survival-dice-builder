@@ -56,6 +56,31 @@ describe('config store (spec 6)', () => {
     ])
   })
 
+  it('a name that does not exist is not saved: it would crash the next run', () => {
+    const store = memory()
+    let bad = setAt(defaultContent.config, ['player', 'starterSkills'], ['strike', 'fireball'])
+    bad = setAt(bad, ['deck', 'preset'], 'deck-10-hand-6')
+    expect(saveConfig(store, bad)).toEqual([
+      { path: 'deck.preset', message: 'No preset with id "deck-10-hand-6"' },
+      {
+        path: 'player.starterSkills',
+        message: 'Item 2: Unknown Skill "fireball" (not in skills.json)',
+      },
+    ])
+    expect(store.data.has(CONFIG_KEY)).toBe(false)
+  })
+
+  it('a stored config that names a missing card falls back to the defaults', () => {
+    const store = memory()
+    const bad = setAt(defaultContent.config, ['deck', 'presets', 0, 'cards', 0, 'card'], 'gone')
+    store.setItem(CONFIG_KEY, JSON.stringify(bad))
+    expect(loadConfig(store)).toMatchObject({
+      config: defaultContent.config,
+      custom: false,
+      error: expect.any(String),
+    })
+  })
+
   it('an unknown issue keeps its own text, capitalised', () => {
     expect(plainMessage({ code: 'custom', message: 'must be odd', path: [] })).toBe('Must be odd')
   })

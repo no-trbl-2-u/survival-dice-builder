@@ -1,4 +1,5 @@
 import {
+  configReferenceProblems,
   defaultContent,
   GameConfigSchema,
   metaFor,
@@ -36,7 +37,7 @@ export function loadConfig(store: KeyValue | undefined): Readonly<{
     const raw = store?.getItem(CONFIG_KEY)
     if (!raw) return { config: defaults, custom: false, error: null }
     const parsed = GameConfigSchema.safeParse(withConfigDefaults(JSON.parse(raw)))
-    if (!parsed.success) {
+    if (!parsed.success || configReferenceProblems(parsed.data, defaultContent).length > 0) {
       return {
         config: defaults,
         custom: false,
@@ -85,8 +86,9 @@ export function plainMessage(issue: Issue): string {
   if (issue.code === 'too_big' && issue.origin === 'number')
     return `Enter a number ${issue.inclusive ? `of ${n} or less` : `less than ${n}`}.`
   if ((issue.code === 'too_small' || issue.code === 'too_big') && issue.origin === 'array') {
-    if (issue.exact) return `List exactly ${n} items.`
-    return issue.code === 'too_small' ? `List at least ${n} items.` : `List at most ${n} items.`
+    const items = `${n} ${n === 1 ? 'item' : 'items'}`
+    if (issue.exact) return `List exactly ${items}.`
+    return issue.code === 'too_small' ? `List at least ${items}.` : `List at most ${items}.`
   }
   if (issue.code === 'invalid_value' && issue.values)
     return `Use one of: ${issue.values.map(String).join(', ')}.`
@@ -112,12 +114,16 @@ function toProblem(issue: Issue): ConfigProblem {
 }
 
 /**
- * Validates and stores a config. Returns the problems (field path and plain message) when it is
- * not valid.
+ * Validates and stores a config: its shape first, then its references (cards, Skills, and deck
+ * presets that exist; tile counts the tile set can fill), so a saved config always starts a
+ * run. Returns the problems (field path and plain message) when it is not valid.
  */
 export function saveConfig(store: KeyValue | undefined, value: unknown): ConfigProblem[] {
   const parsed = GameConfigSchema.safeParse(value)
   if (!parsed.success) return parsed.error.issues.map((i) => toProblem(i as Issue))
+  const refs = configReferenceProblems(parsed.data, defaultContent)
+  if (refs.length > 0)
+    return refs.map((r) => toProblem({ code: 'custom', message: r.message, path: r.path }))
   try {
     store?.setItem(CONFIG_KEY, JSON.stringify(parsed.data))
     return []

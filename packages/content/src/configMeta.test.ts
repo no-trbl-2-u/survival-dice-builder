@@ -10,19 +10,26 @@ describe('config metadata (rule 18.1)', () => {
   it('reports a missing entry, an unknown path, a field without help, and a missing phrase', () => {
     const refill = defaultConfigMeta['rulings.shopRefill']
     const rolls = defaultConfigMeta['combat.maxRolls']
+    const offers = defaultConfigMeta['shop.offers']
+    const fired = defaultConfigMeta['milestones.skillFired']
     const rest = Object.fromEntries(
       Object.entries(defaultConfigMeta).filter(([path]) => path !== 'player.maxHealth'),
     )
     const broken = {
       ...rest,
-      'combat.maxRolls': { label: rolls!.label },
+      'combat.maxRolls': { label: rolls!.label, range: rolls!.range },
       'rulings.shopRefill': { ...refill!, options: { immediate: 'At once' } },
+      'shop.offers': { ...offers!, range: [4, 4] as [number, number] },
+      'milestones.skillFired': { ...fired!, source: undefined },
       'player.speed': { label: 'Speed', help: 'Not a field.', rule: '1' },
     }
     expect(configMetaProblems(broken, defaultContent.config)).toEqual([
       'player.maxHealth: no entry',
       'combat.maxRolls: no help or rule',
       'player.speed: not a config path',
+      'player.maxHealth: no slider range',
+      'shop.offers: slider range is empty',
+      'milestones.skillFired: no source for its choices',
       'rulings.shopRefill: no phrase for "end-of-turn"',
     ])
   })

@@ -12,6 +12,13 @@ export const ConfigMetaEntrySchema = z.strictObject({
   empty: z.string().min(1).optional(),
   /** The engine never reads this field yet: /config marks it, and changing it changes nothing. */
   unused: z.literal(true).optional(),
+  /**
+   * A number field's slider bounds on /config, [low, high]. A UI hint only: the schema still
+   * decides what is valid, and the number box beside the slider takes any valid value.
+   */
+  range: z.tuple([z.number().int().nonnegative(), z.number().int().positive()]).optional(),
+  /** An id field's choices on /config: the content list (or the deck presets) it names. */
+  source: z.enum(['skills', 'cards', 'presets']).optional(),
 })
 export type ConfigMetaEntry = z.infer<typeof ConfigMetaEntrySchema>
 
