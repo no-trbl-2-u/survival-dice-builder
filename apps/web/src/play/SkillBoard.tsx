@@ -44,54 +44,70 @@ export function SkillBoard({ state, legal, act, selected, select }: Props) {
               key={`${id}-${si}`}
               className={`${styles.skill} ${fires ? styles.fires : ''} ${could && placing ? styles.could : ''}`}
             >
-              <span className={styles.skillName}>
-                {skill.name}
-                {fires ? ' — fires' : could && placing ? ' — can fire' : ''}
-              </span>
+              <div className={styles.skillHead}>
+                <span className={styles.skillName}>{skill.name}:</span>
+                <span className={styles.slots}>
+                  {skill.faces.map((face, slot) => {
+                    const here = mine.find((a) => a.slot === slot)
+                    const fit = fits.find((a) => a.skill === id && a.slot === slot && a.use === 0)
+                    const back = here && unassign.find((u) => u.die === here.die)
+                    if (back) {
+                      const name = `Die ${here.die + 1} (${here.asFace}) — take back`
+                      return (
+                        <button
+                          key={slot}
+                          type="button"
+                          className={styles.slotFilled}
+                          aria-label={name}
+                          title={name}
+                          onClick={() => act(back)}
+                        >
+                          <GameIcon name={faceIcon(here.asFace)} />
+                        </button>
+                      )
+                    }
+                    if (fit) {
+                      const name = `Put die ${fit.die + 1} on ${face}`
+                      return (
+                        <button
+                          key={slot}
+                          type="button"
+                          className={styles.slotFit}
+                          aria-label={name}
+                          title={name}
+                          onClick={() => {
+                            act(fit)
+                            select(null)
+                          }}
+                        >
+                          <GameIcon name={faceIcon(face)} />
+                        </button>
+                      )
+                    }
+                    const name = here ? `Die ${here.die + 1} (${here.asFace})` : face
+                    return (
+                      <span
+                        key={slot}
+                        role="img"
+                        aria-label={name}
+                        title={name}
+                        className={here ? styles.slotFilled : styles.slot}
+                      >
+                        <GameIcon name={faceIcon(here ? here.asFace : face)} />
+                      </span>
+                    )
+                  })}
+                </span>
+                {fires ? (
+                  <span className={styles.skillState}>fires</span>
+                ) : could && placing ? (
+                  <span className={styles.skillState}>can fire</span>
+                ) : null}
+              </div>
               <span className={styles.muted}>{skillText(skill.effect)}</span>
               {skill.effect.kind === 'damage' ? (
                 <InReach count={enemiesInRange(state, skill.effect.range).length} />
               ) : null}
-              <span className={styles.slots}>
-                {skill.faces.map((face, slot) => {
-                  const here = mine.find((a) => a.slot === slot)
-                  const fit = fits.find((a) => a.skill === id && a.slot === slot && a.use === 0)
-                  const back = here && unassign.find((u) => u.die === here.die)
-                  if (back) {
-                    return (
-                      <button
-                        key={slot}
-                        type="button"
-                        className={styles.slotFilled}
-                        onClick={() => act(back)}
-                      >
-                        Die {here.die + 1} ({here.asFace}) — take back
-                      </button>
-                    )
-                  }
-                  if (fit) {
-                    return (
-                      <button
-                        key={slot}
-                        type="button"
-                        className={styles.slotFit}
-                        onClick={() => {
-                          act(fit)
-                          select(null)
-                        }}
-                      >
-                        Put die {fit.die + 1} on {face}
-                      </button>
-                    )
-                  }
-                  return (
-                    <span key={slot} className={styles.slot}>
-                      <GameIcon name={faceIcon(here ? here.asFace : face)} />{' '}
-                      {here ? `Die ${here.die + 1}` : face}
-                    </span>
-                  )
-                })}
-              </span>
             </li>
           )
         })}
