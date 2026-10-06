@@ -40,10 +40,6 @@ describe('credits', () => {
   })
 
   it('lists the fonts', () => {
-    expect(fontCredits(register).map((f) => f.font)).toEqual([
-      'Oswald',
-      'Atkinson Hyperlegible Next',
-      'JetBrains Mono',
-    ])
+    expect(fontCredits(register).map((f) => f.font)).toEqual(['Alfa Slab One', 'Bitter'])
   })
 })

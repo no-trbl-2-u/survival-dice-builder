@@ -50,6 +50,12 @@ importers:
 
   apps/web:
     dependencies:
+      '@fontsource-variable/bitter':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/alfa-slab-one':
+        specifier: 5.3.0
+        version: 5.3.0
       '@survival/bot':
         specifier: workspace:*
         version: link:../../packages/bot
@@ -504,6 +510,12 @@ packages:
     peerDependenciesMeta:
       '@noble/hashes':
         optional: true
+
+  '@fontsource-variable/bitter@5.3.0':
+    resolution: {integrity: sha512-TNGusdX+fjWE2b8pTG7kH1A615DbjjSj8/PwVm+iyiFiLFtioHXt6eH5jIFE2kmiA3Ogp03jEyZDsukotzC+4Q==}
+
+  '@fontsource/alfa-slab-one@5.3.0':
+    resolution: {integrity: sha512-J/ANFZ7S9CbZClr/QhMjmBtpFmmKipVkEXHj20aurR5uqJPCBChVPJn1/kx6vtrwnfnDY0kQaYSTYasSt4GruA==}
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -2114,6 +2126,10 @@ snapshots:
       levn: 0.4.1
 
   '@exodus/bytes@1.16.0': {}
+
+  '@fontsource-variable/bitter@5.3.0': {}
+
+  '@fontsource/alfa-slab-one@5.3.0': {}
 
   '@humanfs/core@0.19.2':
     dependencies:

@@ -14,7 +14,11 @@
   padding: 0.75rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  background: var(--color-surface);
+  background:
+    linear-gradient(var(--scrim-surface), var(--scrim-surface)),
+    var(--tex-paper) center / 256px,
+    var(--color-surface);
+  box-shadow: var(--bevel), var(--lift);
   overflow-wrap: anywhere;
 }
 

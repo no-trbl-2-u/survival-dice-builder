@@ -311,7 +311,7 @@ export function ConfigPage() {
           </div>
         ) : (
           <div className={styles.actions}>
-            <button type="button" onClick={save}>
+            <button type="button" className="brass" onClick={save}>
               Save config
             </button>
             <button type="button" onClick={() => setConfirming(true)}>

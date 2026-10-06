@@ -2,26 +2,26 @@
    scripts/check-design.mjs keeps the two in sync and checks contrast. */
 :root {
   color-scheme: light dark;
-  --color-bg: #f7f5f0;
-  --color-surface: #ffffff;
-  --color-surface-raised: #ece7dc;
-  --color-border: #857c69;
-  --color-text: #1d1b18;
-  --color-text-muted: #5a5448;
-  --color-accent: #2a59b3;
-  --phase-prepare: #2a59b3;
-  --phase-combat: #b02d26;
-  --phase-explore: #2a7344;
+  --color-bg: #dcc49c;
+  --color-surface: #f6ecd6;
+  --color-surface-raised: #ead7b2;
+  --color-border: #7a5230;
+  --color-text: #2a1a0d;
+  --color-text-muted: #5b3d22;
+  --color-accent: #2f5d34;
+  --phase-prepare: #2c4f86;
+  --phase-combat: #9e2a1c;
+  --phase-explore: #2f6a3a;
   --on-phase: #ffffff;
-  --health: #b02d26;
-  --guard: #2a59b3;
-  --materials: #7a5414;
-  --currency: #7a5f00;
-  --enemy-grunt: #7a4312;
-  --enemy-elite: #6b1f7a;
+  --health: #a32a1c;
+  --guard: #2c4f86;
+  --materials: #6e4512;
+  --currency: #6b5200;
+  --enemy-grunt: #7a3f10;
+  --enemy-elite: #5e1f72;
   --legal-move: #8a3d00;
-  --color-hex-stroke: #4a4639;
-  --tile-icon: #1d1b18;
+  --color-hex-stroke: #3d2a18;
+  --tile-icon: #2a1a0d;
   --terrain-plains: #d8e6b0;
   --terrain-forest: #8fb67a;
   --terrain-hills: #e1c281;
@@ -29,11 +29,10 @@
   --terrain-lake: #8fbfe3;
   --terrain-mountain: #8b909c;
   --color-hex-fill: #d9e4c8;
-  --color-hex-center: #c9b48a;
-  --font-display: Oswald, 'Arial Narrow', system-ui, sans-serif;
-  --font-body:
-    'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-number: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  --color-hex-center: #c9a26e;
+  --font-display: 'Alfa Slab One', 'Rockwell', Georgia, serif;
+  --font-body: 'Bitter Variable', Georgia, 'Times New Roman', serif;
+  --font-number: 'Bitter Variable', Georgia, serif;
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-md: 1rem;
@@ -44,31 +43,44 @@
   --icon-md: 24px;
   --icon-lg: 40px;
   --gutter: 16px;
-  --radius: 6px;
+  --radius: 10px;
+  /* Wood material (design/ART-GUIDE.md, "Real-wood"). Not palette tokens: shadows and grain. */
+  --wood-table: #5a3a20;
+  --wood-rail: #4a2d17;
+  --wood-rail-text: #f6e2b8;
+  --brass: #b8913f;
+  --brass-hi: #ecd28a;
+  --felt: #2f5a37;
+  --felt-deep: #1d3d24;
+  --grain-mix: 82%;
+  --bevel: inset 0 1px 0 rgb(255 245 220 / 0.55), inset 0 -2px 0 rgb(60 30 10 / 0.25);
+  --lift: 0 1px 0 rgb(60 30 10 / 0.35), 0 4px 10px rgb(30 15 5 / 0.28);
+  --groove: inset 0 2px 5px rgb(40 20 5 / 0.45), inset 0 -1px 0 rgb(255 240 210 / 0.35);
+  --engrave: 0 1px 0 rgb(255 240 210 / 0.55);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #15140f;
-    --color-surface: #1f1d17;
-    --color-surface-raised: #2b2920;
-    --color-border: #8f8775;
-    --color-text: #ece8de;
-    --color-text-muted: #b3ac9c;
-    --color-accent: #8fb0f0;
-    --phase-prepare: #8fb0f0;
-    --phase-combat: #f08a80;
-    --phase-explore: #7fcf98;
-    --on-phase: #15140f;
-    --health: #f08a80;
-    --guard: #8fb0f0;
-    --materials: #e0b46a;
-    --currency: #e8cf6a;
-    --enemy-grunt: #e0a46a;
-    --enemy-elite: #d29be0;
+    --color-bg: #26180e;
+    --color-surface: #362417;
+    --color-surface-raised: #4a3221;
+    --color-border: #a88358;
+    --color-text: #f3e4c6;
+    --color-text-muted: #cbb48f;
+    --color-accent: #9fd18a;
+    --phase-prepare: #93b4f2;
+    --phase-combat: #f0907f;
+    --phase-explore: #86d39e;
+    --on-phase: #1a1008;
+    --health: #f0907f;
+    --guard: #93b4f2;
+    --materials: #e6b86e;
+    --currency: #ecd26e;
+    --enemy-grunt: #e6a66c;
+    --enemy-elite: #d7a0e6;
     --legal-move: #ffb347;
-    --color-hex-stroke: #c9c3b2;
-    --tile-icon: #f3efe4;
+    --color-hex-stroke: #d8c6a6;
+    --tile-icon: #f6ecd6;
     --terrain-plains: #606e3d;
     --terrain-forest: #2b4f39;
     --terrain-hills: #80612e;
@@ -77,6 +89,16 @@
     --terrain-mountain: #3c4252;
     --color-hex-fill: #3b4a2f;
     --color-hex-center: #6b5a36;
+    --wood-table: #1a0f08;
+    --wood-rail: #2a190c;
+    --brass: #a7843a;
+    --felt: #1f4227;
+    --felt-deep: #12291a;
+    --grain-mix: 86%;
+    --bevel: inset 0 1px 0 rgb(255 225 170 / 0.12), inset 0 -2px 0 rgb(0 0 0 / 0.35);
+    --lift: 0 1px 0 rgb(0 0 0 / 0.5), 0 6px 14px rgb(0 0 0 / 0.45);
+    --groove: inset 0 2px 6px rgb(0 0 0 / 0.6), inset 0 -1px 0 rgb(255 225 170 / 0.1);
+    --engrave: 0 -1px 0 rgb(0 0 0 / 0.6);
   }
 }
 
@@ -84,13 +106,6 @@
 *::before,
 *::after {
   box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-body);
 }
 
 .visually-hidden {
@@ -102,38 +117,11 @@ body {
   white-space: nowrap;
 }
 
-button {
-  font: inherit;
-  min-height: 2rem;
-}
-
-.nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-}
-
-.nav a {
-  color: inherit;
-}
-
-.nav a[aria-current='page'] {
-  font-weight: 700;
-  text-decoration-thickness: 3px;
-  text-underline-offset: 4px;
-}
-
 /* A map coordinate after a place name: kept for replays and reports, but quiet. */
 .coords {
   color: var(--color-text-muted);
   font-family: var(--font-number);
   font-size: 0.875em;
-}
-
-.app {
-  padding: var(--gutter);
-  max-width: 64rem;
-  margin: 0 auto;
 }
 
 @media (prefers-reduced-motion: reduce) {

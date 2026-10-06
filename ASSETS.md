@@ -34,6 +34,18 @@ not downloaded yet; the named phase downloads it), `rejected`.
 | Gathering node | `assets/icons/game/gathering-node.svg` | https://game-icons.net/1x1/faithtoken/ore.html | CC BY 3.0 | https://creativecommons.org/licenses/by/3.0/ | Ore icon by Faithtoken, game-icons.net, CC BY 3.0 | in use | 2026-10-03 |
 | Spawn node | `assets/icons/game/spawn-node.svg` | https://game-icons.net/1x1/delapouite/cave-entrance.html | CC BY 3.0 | https://creativecommons.org/licenses/by/3.0/ | Cave entrance icon by Delapouite, game-icons.net, CC BY 3.0 | in use | 2026-10-03 |
 
+## Textures
+
+Downscaled to 256-512 px WebP from the 1K JPG colour map (permitted under CC0).
+
+| Asset | Local path | Source | License | License URL | Attribution | Status | Checked |
+|---|---|---|---|---|---|---|---|
+| Oak grain (panels, board) | `assets/textures/ambientcg-wood049.webp` | https://ambientcg.com/view?id=Wood049 | CC0 | https://docs.ambientcg.com/license/ | Wood049 material by ambientCG, ambientcg.com, CC0 | in use | 2026-10-06 |
+| Weathered planks (table, nav rail) | `assets/textures/ambientcg-planks012.webp` | https://ambientcg.com/view?id=Planks012 | CC0 | https://docs.ambientcg.com/license/ | Planks012 material by ambientCG, ambientcg.com, CC0 | in use | 2026-10-06 |
+| Felt (dice tray lining) | `assets/textures/ambientcg-fabric034.webp` | https://ambientcg.com/view?id=Fabric034 | CC0 | https://docs.ambientcg.com/license/ | Fabric034 material by ambientCG, ambientcg.com, CC0 | in use | 2026-10-06 |
+| Paper (card faces) | `assets/textures/ambientcg-paper006.webp` | https://ambientcg.com/view?id=Paper006 | CC0 | https://docs.ambientcg.com/license/ | Paper006 material by ambientCG, ambientcg.com, CC0 | in use | 2026-10-06 |
+| Brass (hardware, primary buttons) | `assets/textures/ambientcg-metal048c.webp` | https://ambientcg.com/view?id=Metal048C | CC0 | https://docs.ambientcg.com/license/ | Metal048C material by ambientCG, ambientcg.com, CC0 | in use | 2026-10-06 |
+
 ## Candidates (license verified, not downloaded)
 
 The named phase downloads the file and flips the row to `in use`.
@@ -50,13 +62,12 @@ The named phase downloads the file and flips the row to `in use`.
 | Poly Haven textures / HDRIs (phase 15) | `assets/models/polyhaven/` | https://polyhaven.com/ | CC0 | https://polyhaven.com/license | none required | candidate | 2026-10-03 |
 | ambientCG materials (phase 15) | `assets/models/ambientcg/` | https://ambientcg.com/ | CC0 | https://docs.ambientcg.com/license/ | none required | candidate | 2026-10-03 |
 
-## Fonts (loaded from Google Fonts CSS, no files committed)
+## Fonts (self-hosted from npm @fontsource packages, no files committed)
 
 | Font | Role | License | License URL |
 |---|---|---|---|
-| Oswald | display | SIL OFL 1.1 | https://github.com/google/fonts/blob/main/ofl/oswald/OFL.txt |
-| Atkinson Hyperlegible Next | body | SIL OFL 1.1 | https://github.com/google/fonts/blob/main/ofl/atkinsonhyperlegiblenext/OFL.txt |
-| JetBrains Mono | numbers | SIL OFL 1.1 | https://github.com/google/fonts/blob/main/ofl/jetbrainsmono/OFL.txt |
+| Alfa Slab One | display | SIL OFL 1.1 | https://github.com/google/fonts/blob/main/ofl/alfaslabone/OFL.txt |
+| Bitter | body and numbers | SIL OFL 1.1 | https://github.com/google/fonts/blob/main/ofl/bitter/OFL.txt |
 
 ## Libraries (npm dependencies; licenses checked, adopted by the phase that uses them)
 

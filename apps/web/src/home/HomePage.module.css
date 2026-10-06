@@ -1,7 +1,38 @@
+/* `/`: a parchment notice pinned to the board beside a felt mat holding the starting tile. */
 .home {
   display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(12rem, 2fr);
+  grid-template-areas: 'text art';
+  gap: 20px 28px;
+  align-items: start;
+}
+
+.text {
+  grid-area: text;
+  display: grid;
   gap: 12px;
-  max-width: 40rem;
+  padding: 22px 26px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(ellipse at center, transparent 60%, rgb(120 80 30 / 0.14)),
+    linear-gradient(var(--scrim-surface), var(--scrim-surface)),
+    var(--tex-paper) center / 256px,
+    var(--color-surface);
+  box-shadow: var(--bevel), var(--lift);
+  transform: rotate(-0.4deg);
+}
+
+@media (max-width: 720px) {
+  .home {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'text' 'art';
+  }
+
+  .text {
+    transform: none;
+    padding: 18px;
+  }
 }
 
 .pitch {
@@ -9,14 +40,33 @@
   font-size: var(--text-lg, 1.125rem);
 }
 
+/* Brass: the way in. */
 .start {
   justify-self: start;
-  padding: 10px 16px;
-  border-radius: var(--radius);
-  background: var(--color-accent);
-  color: var(--on-phase);
-  font-weight: 700;
+  padding: 10px 22px;
+  border: 1px solid #6b4e17;
+  border-radius: 9px;
+  color: #20140a;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  letter-spacing: 0.04em;
   text-decoration: none;
+  text-shadow: 0 1px 0 rgb(255 245 210 / 0.6);
+  background:
+    linear-gradient(rgb(255 240 190 / 0.45), rgb(120 85 25 / 0.35)),
+    var(--tex-brass) center / 128px,
+    #c9a24c;
+  box-shadow: var(--bevel), var(--lift);
+  transition: transform 90ms ease;
+}
+
+.start:hover {
+  filter: brightness(1.05);
+}
+
+.start:active {
+  transform: translateY(2px);
+  box-shadow: var(--groove);
 }
 
 .start:focus-visible {
@@ -36,10 +86,30 @@
   padding-left: 1.25rem;
 }
 
+.text > p {
+  margin: 0;
+}
+
 .more {
   color: var(--color-text-muted);
 }
 
+/* The starting tile on a felt mat in a walnut frame. */
 .art {
-  max-width: 14rem;
+  grid-area: art;
+  padding: 22px;
+  border: 8px solid var(--wood-rail);
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse at center, transparent 50%, rgb(0 0 0 / 0.35)),
+    linear-gradient(rgb(47 90 55 / 0.85), rgb(29 61 36 / 0.9)),
+    var(--tex-felt) center / 128px,
+    var(--felt);
+  box-shadow:
+    inset 0 4px 12px rgb(0 0 0 / 0.55),
+    var(--lift);
+}
+
+.art svg {
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.5));
 }

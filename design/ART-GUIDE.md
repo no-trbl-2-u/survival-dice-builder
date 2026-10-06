@@ -1,6 +1,6 @@
 # Art guide
 
-The look of the Survival Dice-Builder prototype. Theme-neutral (the setting is still open),
+The look of the Survival Dice-Builder prototype: **real-wood skeuomorphism** (2026-10-06),
 readable at a glance, and built only from the assets in `ASSETS.md`. The UI phases (11-12)
 use these tokens; the designer's own exports in `design/decisions.*` win on conflict.
 
@@ -8,7 +8,37 @@ use these tokens; the designer's own exports in `design/decisions.*` win on conf
   the same values; `scripts/check-design.mjs` (part of `pnpm lint`) fails when they drift or
   when a contrast pair drops below its minimum.
 - **Templates:** [`templates/`](templates/) — card, die net, tile, base board.
-- **Mock-ups:** [`mockups/`](mockups/) — main screen, run summary.
+- **Mock-ups:** [`mockups/`](mockups/) — main screen, run summary; `wood-before/` and
+  `wood-after/` are the screenshots either side of the real-wood pass.
+
+## Direction: real-wood skeuomorphism
+
+Source brief: [daisyUI trend, real-wood skeuomorphism](https://trends.daisyui.com/trend/real-wood-skeuomorphism/).
+The game is a survival board game on a table, so the UI is the table.
+
+| Layer | Material | Where | Recipe (`apps/web/src/styles/wood.css`) |
+| --- | --- | --- | --- |
+| Room | dark weathered planks | page background | `--tex-planks` under a dark wash, `--wood-table` |
+| Board | oak slab, walnut frame | `.app` | `--tex-oak` under `--color-bg` at `--grain-mix` |
+| Rail | carved dark plank | nav, Config save bar | planks + `--wood-rail`; labels in `--wood-rail-text` |
+| Parchment | paper pinned with brass tacks | panels, cards, dialogs, Config sections | `--tex-paper` under `--color-surface` at 90% |
+| Inlay | routed oak strip | phase bar, Skills, offers | `--tex-oak` under `--color-surface-raised`, `--groove` or `--bevel` |
+| Felt | green baize in a walnut frame | map, dice tray, home tile mat | `--tex-felt` under `--felt` |
+| Brass | aged brass plate | current nav item, primary buttons, Save config, turn badge | `--tex-brass`, class `.brass` / `.primary` |
+| Dice | bone-white cube; enemy dice scorched walnut | dice tray | gradients + inset bevel |
+
+- **Text never sits on raw grain.** Every texture is mixed under a solid scrim of its palette
+  colour, so the contrast pairs in `tokens.json` still hold. Text on felt or the rail uses the
+  fixed light colours (`#f3ead2`, `--wood-rail-text`).
+- **Light vs dark:** light is oak by daylight; dark is walnut by lamplight. Only the palette
+  and the shadow strengths change; the materials are the same.
+- **Depth:** `--bevel` (raised edge), `--lift` (sits on the board), `--groove` (routed in).
+  Buttons are wooden blocks that press in (`translateY(2px)` + `--groove`); checkboxes are
+  wooden toggles in a carved track with a brass knob when on.
+- **Motion:** physical and small: cards lift on hover, buttons press, the selected die rises.
+  All of it is off under `prefers-reduced-motion`.
+- **Textures:** CC0 from ambientCG (`assets/textures/`, ASSETS.md), 256-512 px WebP, about 50 kB
+  in all.
 
 ## Palette
 
@@ -16,23 +46,23 @@ Light and dark themes follow `prefers-color-scheme`. Every pair below is checked
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `color-bg` | `#f7f5f0` | `#15140f` | page |
-| `color-surface` | `#ffffff` | `#1f1d17` | panels, card faces |
-| `color-surface-raised` | `#ece7dc` | `#2b2920` | dice, Skill slots, empty slots |
-| `color-border` | `#857c69` | `#8f8775` | control and panel borders (3:1) |
-| `color-text` | `#1d1b18` | `#ece8de` | text |
-| `color-text-muted` | `#5a5448` | `#b3ac9c` | secondary text (4.5:1) |
-| `color-accent` | `#2a59b3` | `#8fb0f0` | links, primary buttons |
-| `phase-prepare` | `#2a59b3` | `#8fb0f0` | Prepare: phase bar, card top band |
-| `phase-combat` | `#b02d26` | `#f08a80` | Combat: phase bar, card bottom band |
-| `phase-explore` | `#2a7344` | `#7fcf98` | Explore: phase bar |
-| `on-phase` | `#ffffff` | `#15140f` | text on a phase colour (4.5:1) |
-| `health` | `#b02d26` | `#f08a80` | health pips and bars |
-| `guard` | `#2a59b3` | `#8fb0f0` | guard pips |
-| `materials` | `#7a5414` | `#e0b46a` | materials count |
-| `currency` | `#7a5f00` | `#e8cf6a` | currency count and card cost |
-| `enemy-grunt` | `#7a4312` | `#e0a46a` | grunt outline |
-| `enemy-elite` | `#6b1f7a` | `#d29be0` | elite outline |
+| `color-bg` | `#dcc49c` | `#26180e` | page |
+| `color-surface` | `#f6ecd6` | `#362417` | panels, card faces |
+| `color-surface-raised` | `#ead7b2` | `#4a3221` | dice, Skill slots, empty slots |
+| `color-border` | `#7a5230` | `#a88358` | control and panel borders (3:1) |
+| `color-text` | `#2a1a0d` | `#f3e4c6` | text |
+| `color-text-muted` | `#5b3d22` | `#cbb48f` | secondary text (4.5:1) |
+| `color-accent` | `#2f5d34` | `#9fd18a` | links, primary buttons |
+| `phase-prepare` | `#2c4f86` | `#93b4f2` | Prepare: phase bar, card top band |
+| `phase-combat` | `#9e2a1c` | `#f0907f` | Combat: phase bar, card bottom band |
+| `phase-explore` | `#2f6a3a` | `#86d39e` | Explore: phase bar |
+| `on-phase` | `#ffffff` | `#1a1008` | text on a phase colour (4.5:1) |
+| `health` | `#a32a1c` | `#f0907f` | health pips and bars |
+| `guard` | `#2c4f86` | `#93b4f2` | guard pips |
+| `materials` | `#6e4512` | `#e6b86e` | materials count |
+| `currency` | `#6b5200` | `#ecd26e` | currency count and card cost |
+| `enemy-grunt` | `#7a3f10` | `#e6a66c` | grunt outline |
+| `enemy-elite` | `#5e1f72` | `#d7a0e6` | elite outline |
 | `legal-move` | `#8a3d00` | `#ffb347` | legal-move hex outline (3:1 on every passable terrain) |
 | `terrain-*` | see tokens | see tokens | the 6 terrains (phase 4); every pair at least 20 apart (delta E) in each theme |
 
@@ -40,9 +70,11 @@ Light and dark themes follow `prefers-color-scheme`. Every pair below is checked
 
 | Role | Family (OFL, ASSETS.md) | Fallback | Use |
 | --- | --- | --- | --- |
-| Display | Oswald | Arial Narrow, system sans | titles, phase names, card names, band labels |
-| Body | Atkinson Hyperlegible Next | system UI sans | everything else |
-| Numbers | JetBrains Mono | ui-monospace | health, costs, counts (tabular) |
+| Display | Alfa Slab One (stamped, branded slab) | Rockwell, Georgia | titles, panel titles, phase names, band labels, Config plaques |
+| Body | Bitter (variable slab serif) | Georgia | everything else |
+| Numbers | Bitter, tabular figures | Georgia | health, costs, counts |
+
+Self-hosted from the `@fontsource` npm packages (no request to Google at run time).
 
 Scale (`--text-*`): xs 0.75rem, sm 0.875rem, md 1rem (body), lg 1.25rem, xl 1.5rem, 2xl 2rem.
 Body text never below `sm`; numbers on the board never below `md`.

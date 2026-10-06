@@ -1,0 +1,259 @@
+/* Real-wood material layer (design/ART-GUIDE.md, "Real-wood skeuomorphism").
+   The room is a dark plank table; the app is an oak board set on it; panels are parchment
+   pinned to the board; controls are carved wooden blocks and brass. Text never sits on raw
+   grain: every texture is mixed under a solid scrim of its palette colour. Textures are CC0
+   (ambientCG, ASSETS.md). */
+
+:root {
+  --tex-oak: url('../../../../assets/textures/ambientcg-wood049.webp');
+  --tex-planks: url('../../../../assets/textures/ambientcg-planks012.webp');
+  --tex-felt: url('../../../../assets/textures/ambientcg-fabric034.webp');
+  --tex-paper: url('../../../../assets/textures/ambientcg-paper006.webp');
+  --tex-brass: url('../../../../assets/textures/ambientcg-metal048c.webp');
+  /* Solid scrims: the palette colour at --grain-mix over the texture. */
+  --scrim-bg: color-mix(in srgb, var(--color-bg) var(--grain-mix), transparent);
+  --scrim-surface: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  --scrim-raised: color-mix(in srgb, var(--color-surface-raised) 86%, transparent);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.45;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgb(255 220 160 / 0.18), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgb(0 0 0 / 0.45), transparent 70%),
+    linear-gradient(rgb(40 20 8 / 0.35), rgb(40 20 8 / 0.35)),
+    var(--tex-planks) center / 384px repeat,
+    var(--wood-table);
+}
+
+/* The board: the app sits on an oak slab with a walnut frame. */
+.app {
+  max-width: 72rem;
+  margin: 16px auto;
+  padding: 0 var(--gutter) var(--gutter);
+  border-radius: 18px;
+  background:
+    linear-gradient(var(--scrim-bg), var(--scrim-bg)),
+    var(--tex-oak) center / 512px repeat,
+    var(--color-bg);
+  border: 6px solid var(--wood-rail);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 230 180 / 0.25),
+    inset 0 6px 18px rgb(40 20 5 / 0.35),
+    0 18px 40px rgb(0 0 0 / 0.55);
+}
+
+@media (max-width: 600px) {
+  .app {
+    margin: 0;
+    border-radius: 0;
+    border-width: 0 0 6px;
+  }
+}
+
+h1,
+h2,
+h3,
+legend {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* The page title: branded into the board. */
+.app > h1 {
+  margin: 20px 0 16px;
+  font-size: var(--text-2xl);
+  color: var(--color-text);
+  text-shadow: var(--engrave);
+}
+
+a {
+  color: var(--color-accent);
+  text-underline-offset: 3px;
+}
+
+/* Header rail: a dark carved plank across the top of the board, labels routed into it. */
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0 calc(var(--gutter) * -1);
+  padding: 10px var(--gutter);
+  border-radius: 12px 12px 0 0;
+  background:
+    linear-gradient(rgb(30 15 5 / 0.55), rgb(30 15 5 / 0.7)),
+    var(--tex-planks) 0 0 / 384px repeat,
+    var(--wood-rail);
+  box-shadow:
+    inset 0 -3px 0 rgb(0 0 0 / 0.35),
+    inset 0 1px 0 rgb(255 220 160 / 0.2),
+    0 3px 6px rgb(0 0 0 / 0.35);
+}
+
+.nav a {
+  color: var(--wood-rail-text);
+  font-family: var(--font-display);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-shadow: 0 -1px 0 rgb(0 0 0 / 0.7);
+  transition:
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.nav a:hover {
+  background: rgb(255 220 160 / 0.1);
+}
+
+/* The current page: a brass plate set into the rail. */
+.nav a[aria-current='page'] {
+  color: #2a1a0d;
+  text-shadow: 0 1px 0 rgb(255 245 210 / 0.6);
+  background:
+    linear-gradient(rgb(236 210 138 / 0.55), rgb(160 120 50 / 0.55)),
+    var(--tex-brass) center / 128px,
+    var(--brass);
+  box-shadow:
+    inset 0 1px 0 rgb(255 250 220 / 0.7),
+    inset 0 -2px 0 rgb(90 60 15 / 0.5),
+    0 1px 2px rgb(0 0 0 / 0.6);
+}
+
+:focus-visible {
+  outline: 3px solid var(--legal-move);
+  outline-offset: 2px;
+}
+
+.nav a:focus-visible {
+  outline-color: var(--brass-hi);
+}
+
+/* Buttons: carved wooden blocks that press into the board. */
+button,
+.button {
+  font: inherit;
+  font-weight: 600;
+  min-height: 2.25rem;
+  padding: 6px 14px;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  cursor: pointer;
+  background:
+    linear-gradient(rgb(255 245 220 / 0.25), rgb(80 40 10 / 0.08)),
+    linear-gradient(var(--scrim-raised), var(--scrim-raised)),
+    var(--tex-oak) center / 256px,
+    var(--color-surface-raised);
+  box-shadow: var(--bevel), var(--lift);
+  transition:
+    transform 90ms ease,
+    box-shadow 90ms ease,
+    filter 120ms ease;
+}
+
+button:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: var(--groove);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+/* Inputs: wells routed into the wood. */
+input:not([type='checkbox'], [type='radio'], [type='file']),
+select,
+textarea {
+  font: inherit;
+  color: var(--color-text);
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background:
+    linear-gradient(var(--scrim-surface), var(--scrim-surface)),
+    var(--tex-paper) center / 256px,
+    var(--color-surface);
+  box-shadow: var(--groove);
+}
+
+/* Checkboxes: a wooden toggle in a carved track; the knob slides when checked. */
+input[type='checkbox'] {
+  appearance: none;
+  position: relative;
+  inline-size: 3.25rem;
+  block-size: 1.75rem;
+  margin: 0;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+  box-shadow: var(--groove);
+  cursor: pointer;
+  transition: background-color 160ms ease;
+}
+
+input[type='checkbox']::after {
+  content: '';
+  position: absolute;
+  inset-block: 2px;
+  inset-inline-start: 2px;
+  inline-size: 1.4rem;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgb(255 245 220 / 0.6), transparent 55%),
+    var(--tex-oak) center / 96px,
+    #8a5a2e;
+  box-shadow:
+    0 1px 0 rgb(0 0 0 / 0.4),
+    0 2px 4px rgb(0 0 0 / 0.35);
+  transition: transform 160ms ease;
+}
+
+input[type='checkbox']:checked {
+  background: var(--felt);
+}
+
+input[type='checkbox']:checked::after {
+  transform: translateX(1.45rem);
+  background:
+    radial-gradient(circle at 35% 30%, rgb(255 250 220 / 0.8), transparent 55%),
+    var(--tex-brass) center / 64px,
+    var(--brass);
+}
+
+/* Parchment: the shared surface for any panel that holds text. */
+.parchment {
+  background:
+    linear-gradient(var(--scrim-surface), var(--scrim-surface)),
+    var(--tex-paper) center / 256px,
+    var(--color-surface);
+}
+
+/* Brass: primary call to action. */
+.brass {
+  color: #20140a;
+  border-color: #6b4e17;
+  text-shadow: 0 1px 0 rgb(255 245 210 / 0.6);
+  background:
+    linear-gradient(rgb(255 240 190 / 0.45), rgb(120 85 25 / 0.35)),
+    var(--tex-brass) center / 128px,
+    #c9a24c;
+}
+
+pre,
+code {
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+}

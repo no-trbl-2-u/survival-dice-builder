@@ -1,12 +1,20 @@
+/* /config: the workshop ledger. Each rules section is a parchment page in a wooden drawer,
+   its name branded on a plaque; the save bar is the drawer front with brass pulls. */
 .page {
   display: grid;
-  gap: 12px;
+  gap: 14px;
+}
+
+.page > p:first-child {
+  margin: 0;
+  max-width: 48rem;
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
 }
 
 .status {
@@ -17,41 +25,151 @@
 .problems {
   color: var(--health);
   font-weight: 700;
+  padding: 10px 16px;
+  border: 2px solid var(--health);
+  border-radius: var(--radius);
+  background: var(--scrim-surface);
 }
 
 .group {
+  position: relative;
+  margin: 0 0 18px;
+  padding: 28px 16px 12px;
+  display: grid;
+  gap: 4px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  padding: 8px 12px;
-  margin: 0 0 12px;
-  display: grid;
-  gap: 6px;
+  background:
+    linear-gradient(var(--scrim-surface), var(--scrim-surface)),
+    var(--tex-paper) center / 256px,
+    var(--color-surface);
+  box-shadow:
+    0 0 0 6px var(--wood-rail),
+    0 0 0 7px rgb(255 230 180 / 0.2),
+    var(--lift);
 }
 
+/* The outermost group is the cabinet itself: no frame, sections stack inside it. */
+form > .group {
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  gap: 26px;
+}
+
+form > .group > legend {
+  /* "Config" repeats the page title. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+form > .group > .group {
+  margin: 8px 6px 0;
+}
+
+/* A setting outside any section: its own parchment slip. */
+form > .group > .field {
+  margin: 0 6px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(var(--scrim-surface), var(--scrim-surface)),
+    var(--tex-paper) center / 256px,
+    var(--color-surface);
+  box-shadow: var(--bevel), var(--lift);
+}
+
+/* A nested group inside a section: a ruled sub-page. */
+.group .group .group {
+  margin: 10px 0 4px;
+  padding: 26px 12px 8px;
+  box-shadow: var(--groove);
+  background: color-mix(in srgb, var(--color-surface-raised) 55%, transparent);
+}
+
+/* The section name on a carved oak plaque nailed across the top edge. */
 .group legend {
+  float: left;
+  position: absolute;
+  top: -16px;
+  left: 14px;
+  padding: 4px 16px;
   font-family: var(--font-display);
-  text-transform: capitalize;
-  padding: 0 4px;
+  font-size: var(--text-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wood-rail-text);
+  text-shadow: 0 -1px 0 rgb(0 0 0 / 0.7);
+  border-radius: 6px;
+  background:
+    linear-gradient(rgb(30 15 5 / 0.35), rgb(30 15 5 / 0.55)),
+    var(--tex-planks) center / 256px,
+    var(--wood-rail);
+  box-shadow:
+    inset 0 1px 0 rgb(255 220 160 / 0.25),
+    0 2px 4px rgb(0 0 0 / 0.45);
 }
 
+.group .group .group legend {
+  top: -12px;
+  font-size: var(--text-xs);
+}
+
+/* One ledger line: label, control, help underneath. Rows are ruled like a ledger. */
 .field {
   display: grid;
-  grid-template-columns: minmax(8rem, 14rem) minmax(0, 1fr);
+  grid-template-columns: minmax(8rem, 15rem) minmax(0, 1fr);
   align-items: center;
-  gap: 8px;
+  gap: 4px 14px;
+  padding: 10px 0;
+  border-bottom: 1px dashed color-mix(in srgb, var(--color-border) 55%, transparent);
+}
+
+.field:last-child {
+  border-bottom: none;
+}
+
+.field > label {
+  font-weight: 700;
 }
 
 .field input[type='number'],
 .field input[type='text'],
 .field select,
 .field textarea {
-  font: inherit;
   max-width: 100%;
   min-width: 0;
 }
 
-.field textarea {
+/* Numbers: an engraved brass counter, wide enough to read at a glance. */
+.field input[type='number'] {
+  justify-self: start;
+  inline-size: 8rem;
   font-family: var(--font-number);
+  font-weight: 800;
+  font-size: var(--text-lg);
+  text-align: center;
+  border: 2px solid #8a6a28;
+}
+
+.field select {
+  justify-self: start;
+  min-inline-size: 14rem;
+  cursor: pointer;
+}
+
+.field input[type='checkbox'] {
+  justify-self: start;
+}
+
+.field textarea {
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
   font-size: var(--text-sm);
 }
 
@@ -64,6 +182,7 @@
 
 .rule {
   white-space: nowrap;
+  font-style: italic;
 }
 
 .unused {
@@ -77,19 +196,29 @@
   font-weight: 700;
 }
 
+/* The drawer front: a walnut bar pinned to the bottom of the screen. */
 .bar {
   position: sticky;
   bottom: 0;
   z-index: 1;
   display: grid;
   gap: 4px;
-  padding: 8px 0;
-  background: var(--color-bg);
-  border-top: 1px solid var(--color-border);
+  margin: 0 calc(var(--gutter) * -1);
+  padding: 12px var(--gutter);
+  color: var(--wood-rail-text);
+  border-radius: 12px 12px 0 0;
+  background:
+    linear-gradient(rgb(30 15 5 / 0.55), rgb(30 15 5 / 0.7)),
+    var(--tex-planks) center / 384px,
+    var(--wood-rail);
+  box-shadow:
+    inset 0 2px 0 rgb(255 220 160 / 0.2),
+    0 -6px 14px rgb(0 0 0 / 0.35);
 }
 
 .bar .status {
   margin: 0;
+  color: var(--wood-rail-text);
 }
 
 @media (max-width: 480px) {
