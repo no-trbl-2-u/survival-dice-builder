@@ -18,15 +18,6 @@
 - suggested fix: Add one home step: "Each revealed tile's spawn nodes add enemies at every Combat. Enemies attack the nearest structure first." Say the same in short form on the reveal button.
 - source: web-fetch
 
-### [MED] /play — the Gather card does not say it needs an unspent gathering node
-- pass: 5 (commit 04b907a)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: The Gather card's top half shows only "Gather N". It does not say that Gather needs an unspent gathering node with no enemy on it, or that the node is then spent. The player learns this from the log after the card is wasted.
-- evidence: `apps/web/src/play/CardView.tsx:10` `Gather ${e.amount}`; `apps/web/src/play/describeEvent.ts:151` "gathered nothing: gather on an unspent gathering node with no enemy on it."
-- suggested fix: Change the text to "Gather N on an unspent gathering node (the node is spent)".
-- source: web-fetch
-
 ### [MED] /play — the Tower-tie choice names the Tower by its internal id
 - pass: 5 (commit 04b907a)
 - viewport: n/a (web-fetch)
@@ -68,6 +59,17 @@
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 ## Done
+
+### [x] [MED] /play — the Gather card does not say it needs an unspent gathering node
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The Gather card's top half shows only "Gather N". It does not say that Gather needs an unspent gathering node with no enemy on it, or that the node is then spent. The player learns this from the log after the card is wasted.
+- evidence: `apps/web/src/play/CardView.tsx:10` `Gather ${e.amount}`; `apps/web/src/play/describeEvent.ts:151` "gathered nothing: gather on an unspent gathering node with no enemy on it."
+- suggested fix: Change the text to "Gather N on an unspent gathering node (the node is spent)".
+- source: web-fetch
+- issue: #35
+- fixed: e1cf396 (the Gather top half reads "Gather N on an unspent gathering node (the node is spent)")
 
 ### [x] [MED] /play — the start panel gives the v1 lose condition
 - pass: 5 (commit 04b907a)

@@ -23,11 +23,13 @@
 - issue: #34
 - fixed: d37e59e
 
-### [ ] [4.5] /play: the Gather card does not say it needs an unspent gathering node (critique MED)
+### [x] [4.5] /play: the Gather card does not say it needs an unspent gathering node (critique MED)
 - category: external-critique (comprehension)
 - impact: 6
 - ease: 8
 - next: Gather effect text in CardView
+- issue: #35
+- fixed: e1cf396
 
 ### [ ] [4.2] / and /play: nothing says that exploring adds enemies (critique MED)
 - category: external-critique (comprehension)
