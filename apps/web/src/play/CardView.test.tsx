@@ -16,6 +16,9 @@ describe('CardView', () => {
   it('writes effects in plain text', () => {
     expect(topText(card('blink').top)).toBe('Move 5, no extra cost next to enemies')
     expect(topText(card('architect').top)).toBe('Build 2 times')
+    expect(topText({ kind: 'gather', amount: 2 })).toBe(
+      'Gather 2 on an unspent gathering node (the node is spent)',
+    )
     expect(bottomText({ kind: 'reroll', dice: 'all' })).toBe('Reroll all dice')
     expect(bottomText({ kind: 'reroll', dice: 1 })).toBe('Reroll 1 die')
   })

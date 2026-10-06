@@ -23,7 +23,7 @@ export function skillText(e: SkillEffect): string {
 }
 
 /**
- * Both halves of a card in one line: "Prepare: Gather 2. Combat: +1 guard."
+ * Both halves of a card in one line: "Prepare: Move 3. Combat: +1 guard."
  *
  * @param def - the card from content.
  * @rule 2.6, 2.7, Table 2, Table 8
