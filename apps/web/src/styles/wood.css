@@ -257,3 +257,30 @@ pre,
 code {
   font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
 }
+
+/* Die-face glyphs: each face in its pastel, outlined so it holds on off-white and on wood. */
+svg[data-icon^='face-'] {
+  paint-order: stroke;
+  stroke: var(--die-outline);
+  stroke-width: 22px;
+  stroke-linejoin: round;
+}
+
+svg[data-icon='face-sword'] {
+  color: var(--face-sword);
+}
+svg[data-icon='face-shield'] {
+  color: var(--face-shield);
+}
+svg[data-icon='face-wand'] {
+  color: var(--face-wand);
+}
+svg[data-icon='face-star'] {
+  color: var(--face-star);
+}
+svg[data-icon='face-bow'] {
+  color: var(--face-bow);
+}
+svg[data-icon='face-blank'] {
+  color: var(--face-blank);
+}

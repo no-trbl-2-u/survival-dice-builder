@@ -57,6 +57,18 @@
   --lift: 0 1px 0 rgb(60 30 10 / 0.35), 0 4px 10px rgb(30 15 5 / 0.28);
   --groove: inset 0 2px 5px rgb(40 20 5 / 0.45), inset 0 -1px 0 rgb(255 240 210 / 0.35);
   --engrave: 0 1px 0 rgb(255 240 210 / 0.55);
+  /* Dice: off-white in both themes, each face glyph in its own pastel with a dark outline
+     (the glyph shape carries the meaning; the colour is a second cue). Read by the 3D dice. */
+  --die-paper: #f8f3e8;
+  --die-shade: #e4d9c6;
+  --die-edge: #8a6a45;
+  --die-outline: #3d2a18;
+  --face-sword: #e2706a;
+  --face-shield: #6f9ad8;
+  --face-wand: #b08ad0;
+  --face-star: #ecc24f;
+  --face-bow: #67b77a;
+  --face-blank: #a89c8a;
 }
 
 @media (prefers-color-scheme: dark) {

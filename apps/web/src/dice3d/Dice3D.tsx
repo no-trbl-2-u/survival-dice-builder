@@ -22,8 +22,11 @@ const DURATION = 900
 const TEXTURE = 128
 const GAP = 1.5
 
-/** A die-face texture: the icon's paths drawn on a canvas (no image loading). */
-function faceTexture(face: Face, ink: string, paper: string): CanvasTexture {
+/**
+ * A die-face texture: the icon's paths drawn on a canvas (no image loading), in the face's
+ * colour with a dark outline, on the off-white die.
+ */
+function faceTexture(face: Face, ink: string, outline: string, paper: string): CanvasTexture {
   const canvas = document.createElement('canvas')
   canvas.width = TEXTURE
   canvas.height = TEXTURE
@@ -32,11 +35,18 @@ function faceTexture(face: Face, ink: string, paper: string): CanvasTexture {
     g.fillStyle = paper
     g.fillRect(0, 0, TEXTURE, TEXTURE)
     g.fillStyle = ink
+    g.strokeStyle = outline
+    g.lineWidth = 26
+    g.lineJoin = 'round'
     const pad = TEXTURE * 0.14
     g.translate(pad, pad)
     g.scale((TEXTURE - pad * 2) / ICON_VIEWBOX, (TEXTURE - pad * 2) / ICON_VIEWBOX)
     const markup = gameIcons[faceIcon(face)] ?? ''
-    for (const m of markup.matchAll(/\sd="([^"]+)"/g)) g.fill(new Path2D(m[1]))
+    for (const m of markup.matchAll(/\sd="([^"]+)"/g)) {
+      const path = new Path2D(m[1])
+      g.stroke(path)
+      g.fill(path)
+    }
   }
   const tex = new CanvasTexture(canvas)
   tex.colorSpace = SRGBColorSpace
@@ -100,12 +110,13 @@ export default function Dice3D({ faces, kept, roll }: Props) {
     sun.position.set(2, 8, 4)
     scene.add(sun)
 
-    const ink = token('--color-text', '#1b1b1b')
-    const paper = token('--color-surface-raised', '#f4efe6')
+    const paper = token('--die-paper', '#f8f3e8')
+    const outline = token('--die-outline', '#3d2a18')
+    const ink = (f: Face) => token(`--face-${f.toLowerCase()}`, outline)
     const geometry = new BoxGeometry(1, 1, 1)
     const textures = new Map<Face, CanvasTexture>()
     const tex = (f: Face) => {
-      const t = textures.get(f) ?? faceTexture(f, ink, paper)
+      const t = textures.get(f) ?? faceTexture(f, ink(f), outline, paper)
       textures.set(f, t)
       return t
     }
