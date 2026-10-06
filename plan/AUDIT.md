@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-06 (pass 3, from critique pass 5)
+
+## Top 5 findings (scored)
+
+### [x] [6.3] /config: inert rulings look live; miniature limit help is the v1 rule (critique HIGH)
+- category: external-critique (comprehension)
+- impact: 9
+- ease: 7
+- next: an `unused` mark in config.meta.json for every field the engine never reads, shown in the field help; an engine test checks the marks against the engine source
+- issue: #33
+- fixed: 7906caa
+
+### [ ] [4.9] /play: the start panel gives the v1 lose condition (critique MED)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: one copy line in StartPanel.tsx
+
+### [ ] [4.5] /play: the Gather card does not say it needs an unspent gathering node (critique MED)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: Gather effect text in CardView
+
+### [ ] [4.2] / and /play: nothing says that exploring adds enemies (critique MED)
+- category: external-critique (comprehension)
+- impact: 7
+- ease: 6
+- next: one home step and the reveal button text
+
+### [ ] [3.6] /play: run summary milestone labels are hard-coded (critique MED)
+- category: external-critique (voice)
+- impact: 6
+- ease: 6
+- next: build the labels from config.milestones; reuse them in the log
+
 # Site audit — 2026-10-03 (pass 2, from critique pass 3)
 
 ## Top 5 findings (scored)

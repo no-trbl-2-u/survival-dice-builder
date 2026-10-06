@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [HIGH] /config — three rulings do nothing, and the miniature limit help states the old rule
-- pass: 5 (commit 04b907a)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: /config offers Tile rotation, Heal targets, and Grunt that becomes an elite, but the engine never reads any of them. Changing them changes nothing. The miniature limit help still gives the v1 rule. In phase 21, any spawn past the limit (grunt or elite) turns the grunt nearest the base into an elite.
-- evidence: `packages/content/data/config.meta.json`: "When ticked, the player may rotate a revealed tile."; "player-choice": "The players choose"; "any-adjacent": "The player or an adjacent ally"; miniatureLimit help "A grunt over the limit turns a grunt into an elite." `grep -rn "tileRotation|healTargets|eliteReplacement" packages/engine/src` finds nothing.
-- suggested fix: Hide the three inert rulings on /config (or mark them "not used by the engine yet"). Change the miniatureLimit help to "Past the limit, a new grunt or elite turns the grunt nearest the base into an elite instead."
-- source: web-fetch
-
 ### [MED] /play — the start panel gives the v1 lose condition
 - pass: 5 (commit 04b907a)
 - viewport: n/a (web-fetch)
@@ -86,6 +77,17 @@
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 ## Done
+
+### [x] [HIGH] /config — three rulings do nothing, and the miniature limit help states the old rule
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: /config offers Tile rotation, Heal targets, and Grunt that becomes an elite, but the engine never reads any of them. Changing them changes nothing. The miniature limit help still gives the v1 rule. In phase 21, any spawn past the limit (grunt or elite) turns the grunt nearest the base into an elite.
+- evidence: `packages/content/data/config.meta.json`: "When ticked, the player may rotate a revealed tile."; "player-choice": "The players choose"; "any-adjacent": "The player or an adjacent ally"; miniatureLimit help "A grunt over the limit turns a grunt into an elite." `grep -rn "tileRotation|healTargets|eliteReplacement" packages/engine/src` finds nothing.
+- suggested fix: Hide the three inert rulings on /config (or mark them "not used by the engine yet"). Change the miniatureLimit help to "Past the limit, a new grunt or elite turns the grunt nearest the base into an elite instead."
+- source: web-fetch
+- issue: #33
+- fixed: 7906caa (/config marks every field the engine does not read yet: these three plus Exchange range, Enemies per hex, and Shop refill; an engine test keeps the marks honest; miniature limit help states the phase 21 rule)
 
 ### [x] [MED] /config — settings are code keys with no help text
 - pass: 3 (commit d6176b7)
