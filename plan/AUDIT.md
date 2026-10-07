@@ -15,11 +15,13 @@
 - issue: #42
 - fixed: (this commit)
 
-### [ ] [4.2] /play: the Tower-tie choice names the Tower by its internal id (critique MED)
+### [x] [4.2] /play: the Tower-tie choice names the Tower by its internal id (critique MED)
 - category: external-critique (comprehension)
 - impact: 6
 - ease: 7
-- next: name the Tower by its hex and terrain in PhaseBar.tsx and describeAction.ts
+- next: name the Tower by its hex and terrain in nextStep.ts and describeAction.ts
+- issue: #43
+- fixed: (this commit)
 
 ### [ ] [3.6] /play: run summary milestone labels are hard-coded (critique MED)
 - category: external-critique (voice)

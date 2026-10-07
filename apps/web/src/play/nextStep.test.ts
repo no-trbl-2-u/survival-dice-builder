@@ -19,6 +19,22 @@ const MAP: ReadonlySet<ActionType> = new Set<ActionType>([
 ])
 
 describe('nextStep', () => {
+  it('names a tied Tower by its place, never by its id', () => {
+    const start = createGame(config, 1)
+    const placed = applyAction(start, { type: 'placeFigure', q: 0, r: 0 }).state
+    const state = {
+      ...placed,
+      defenses: [{ id: 'd1', kind: 'tower', hex: { q: 0, r: -1 }, health: 3, builder: 'p1' }],
+    }
+    const legal: Action[] = [{ type: 'chooseTowerTarget', tower: 'd1', enemy: 'e1' }]
+    const { phase, step } = nextStep(state, legal)
+    expect(phase).toBe('Combat')
+    expect(step).toMatch(
+      /^Choose which enemy the Tower on .+, 1 hex north of the base centre shoots$/,
+    )
+    expect(step).not.toContain('d1')
+  })
+
   it('names the setup step, then Prepare once the figure is placed', () => {
     const s = createGame(config, 3)
     expect(nextStep(s, legalActions(s))).toEqual({

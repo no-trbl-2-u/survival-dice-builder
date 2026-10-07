@@ -1,5 +1,5 @@
 import { hexKey, type Action, type Axial, type GameState } from '@survival/engine'
-import { baseHex, hexName, stepsAway } from '../map/places.ts'
+import { baseHex, defenseName, hexName, stepsAway } from '../map/places.ts'
 import { optionText } from '../play/CardView.tsx'
 
 /** The printed name of a card instance in the current player's hand. */
@@ -72,7 +72,7 @@ export function describeAction(action: Action, state: GameState): string {
     }
     case 'chooseTowerTarget': {
       const enemy = state.enemies.find((e) => e.id === action.enemy)
-      return `Tower ${action.tower} shoots ${enemyName(state, action.enemy)}${enemy ? ` on ${hexName(state, enemy.hex)}, ${enemy.health} health` : ''}`
+      return `${defenseName(state, action.tower)} shoots ${enemyName(state, action.enemy)}${enemy ? ` on ${hexName(state, enemy.hex)}, ${enemy.health} health` : ''}`
     }
     case 'placeFigure': {
       const away = stepsAway(baseHex(state), action)

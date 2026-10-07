@@ -27,15 +27,6 @@
 - suggested fix: Show only the name in options; label presets "Preset 1", "Preset 2".
 - source: web-fetch
 
-### [MED] /play — the Tower-tie choice names the Tower by its internal id
-- pass: 5 (commit 04b907a)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: The phase 21 Tower-tie decision shows the Tower's engine id. With 2 Towers, the player cannot tell which one is asking.
-- evidence: `apps/web/src/play/PhaseBar.tsx:21` `Tower ${state.towerQueue[0]}: choose between equally near enemies`; `apps/web/src/debug/describeAction.ts:68` `Tower ${action.tower} shoots ...`.
-- suggested fix: Name the Tower by its place, for example "Tower on Forest (2,1): choose its target", and mark that Tower on the map.
-- source: web-fetch
-
 ### [MED] /play — run summary milestone labels are hard-coded and ignore the config
 - pass: 5 (commit 04b907a)
 - viewport: n/a (web-fetch)
@@ -59,6 +50,17 @@
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 ## Done
+
+### [x] [MED] /play — the Tower-tie choice names the Tower by its internal id
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The phase 21 Tower-tie decision shows the Tower's engine id. With 2 Towers, the player cannot tell which one is asking.
+- evidence: `apps/web/src/play/PhaseBar.tsx:21` `Tower ${state.towerQueue[0]}: choose between equally near enemies`; `apps/web/src/debug/describeAction.ts:68` `Tower ${action.tower} shoots ...`.
+- suggested fix: Name the Tower by its place, for example "Tower on Forest (2,1): choose its target", and mark that Tower on the map.
+- source: web-fetch
+- issue: #43
+- fixed: (this commit) — the next-step banner and the action label name the Tower by kind, terrain, and distance from the base centre; marking it on the map is left for a later tick
 
 ### [x] [MED] any unknown path — a mistyped URL shows the home page with no "not found" notice
 - pass: 4 (commit 23470a2)

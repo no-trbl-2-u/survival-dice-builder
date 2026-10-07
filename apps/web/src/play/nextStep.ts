@@ -1,4 +1,5 @@
 import { enemiesInRange, type Action, type GameState } from '@survival/engine'
+import { defenseName } from '../map/places.ts'
 import { ofType } from './targets.ts'
 
 /** What the player does next: the phase it belongs to, and the step in plain words. */
@@ -42,7 +43,8 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
       'Click a highlighted base hex to place your figure',
     )
   const tower = ofType(legal, 'chooseTowerTarget')[0]
-  if (tower) return step('Combat', `Choose which enemy Tower ${tower.tower} shoots`)
+  if (tower)
+    return step('Combat', `Choose which enemy the ${defenseName(state, tower.tower)} shoots`)
   const engage = state.exchange?.engage
   if (engage) {
     const head = state.exchange?.queue[0]
