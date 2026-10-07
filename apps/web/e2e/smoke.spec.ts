@@ -27,3 +27,13 @@ test('375px viewport has no horizontal scroll', async ({ page }) => {
   )
   expect(overflow).toBeLessThanOrEqual(1)
 })
+
+test('an unknown path says the page was not found and links home', async ({ page }) => {
+  await page.goto('/decision')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found')
+  await expect(page).toHaveTitle('Page not found - Survival Dice-Builder')
+  await expect(page.locator('main')).toContainText('There is no page at /decision.')
+  await expect(page.locator('nav a[aria-current="page"]')).toHaveCount(0)
+  await page.getByRole('link', { name: 'the home page' }).click()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Survival Dice-Builder')
+})

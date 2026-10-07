@@ -4,6 +4,7 @@ import { CreditsPage } from './credits/CreditsPage.tsx'
 import { DebugPage } from './debug/DebugPage.tsx'
 import { DecisionsPage } from './decisions/DecisionsPage.tsx'
 import { HomePage } from './home/HomePage.tsx'
+import { NotFoundPage } from './notfound/NotFoundPage.tsx'
 import { PlayPage } from './play/PlayPage.tsx'
 import { documentTitle, matchRoute, SITE_NAME, type Route } from './router.tsx'
 import { TileSheet } from './tiles/TileSheet.tsx'
@@ -34,9 +35,16 @@ const routes: readonly Route[] = [
   { path: '/credits', title: 'Credits', render: () => <CreditsPage /> },
 ]
 
+/** Any path no route matches; its empty path marks no nav link as current. */
+const notFound: Route = {
+  path: '',
+  title: 'Page not found',
+  render: () => <NotFoundPage path={window.location.pathname} />,
+}
+
 /** App shell: navigation (the current page marked), the page title, and the page itself. */
 export function App() {
-  const route = matchRoute(routes, window.location.pathname)
+  const route = matchRoute(routes, window.location.pathname, notFound)
   useEffect(() => {
     document.title = documentTitle(route)
   }, [route])

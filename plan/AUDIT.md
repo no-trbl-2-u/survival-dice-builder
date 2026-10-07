@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-07 (pass 5, cloud tick)
+
+## Top 5 findings (scored)
+
+### [x] [4.8] any unknown path: a mistyped URL shows the home page with no notice (critique MED)
+- category: external-critique (navigation)
+- impact: 6
+- ease: 8
+- next: a not-found route in matchRoute naming the path, links to Home and Play; public/robots.txt
+- issue: #42
+- fixed: (this commit)
+
+### [ ] [4.2] /play: the Tower-tie choice names the Tower by its internal id (critique MED)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7
+- next: name the Tower by its hex and terrain in PhaseBar.tsx and describeAction.ts
+
+### [ ] [3.6] /play: run summary milestone labels are hard-coded (critique MED)
+- category: external-critique (voice)
+- impact: 6
+- ease: 6
+- next: build the labels from config.milestones; reuse them in the log
+
+### [ ] [3.0] all pages: with JavaScript off the page is blank (critique LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 10
+- next: one noscript line in apps/web/index.html
+
+### [ ] [2.7] /config: optional-limit toggles are always named "...: on" (critique LOW)
+- category: external-critique (a11y)
+- impact: 3
+- ease: 9
+- next: name the checkbox "<label>: use a limit" in ConfigPage.tsx
+
 # Site audit — 2026-10-07 (pass 4, from critique pass 6)
 
 ## Top 5 findings (scored)

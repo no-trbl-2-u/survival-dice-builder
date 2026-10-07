@@ -10,19 +10,17 @@ export type Route = Readonly<{
 }>
 
 /**
- * Picks the route for a pathname. Exact match; trailing slashes are ignored; unknown paths
- * fall back to the first route. Cloudflare's `_redirects` serves index.html for every path.
+ * Picks the route for a pathname. Exact match; trailing slashes are ignored, and an empty path
+ * is the home page. Unknown paths get the not-found route: Cloudflare's `_redirects` serves
+ * index.html for every path, so the app itself must say that a link was wrong.
  *
- * @param routes - the app's routes; the first one is the fallback.
+ * @param routes - the app's routes.
  * @param pathname - `window.location.pathname`.
+ * @param notFound - the route for a path no route matches.
  */
-export function matchRoute(routes: readonly Route[], pathname: string): Route {
+export function matchRoute(routes: readonly Route[], pathname: string, notFound: Route): Route {
   const path = pathname.replace(/\/+$/, '') || '/'
-  const found = routes.find((r) => r.path === path)
-  if (found) return found
-  const fallback = routes[0]
-  if (!fallback) throw new Error('matchRoute needs at least 1 route')
-  return fallback
+  return routes.find((r) => r.path === path) ?? notFound
 }
 
 /** The site name, used alone on the home page and after every other page's title. */

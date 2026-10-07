@@ -45,15 +45,6 @@
 - suggested fix: Build the labels from `config.milestones` (for example `Reveal ${m.tilesRevealed} tiles`, `Survive to round ${n}`), and use the same labels in the log.
 - source: web-fetch
 
-### [MED] any unknown path — a mistyped URL shows the home page with no "not found" notice
-- pass: 4 (commit 23470a2)
-- viewport: n/a (web-fetch)
-- category: navigation
-- observation: The `_redirects` catch-all serves the app shell with HTTP 200 for every path, and `matchRoute` falls back to the first route. A link to `/decision` or `/setup` opens Home with the heading "Survival Dice-Builder", so the visitor does not know the link was wrong. `/robots.txt` also returns the app HTML.
-- evidence: `curl -w "%{http_code} %{content_type}"`: `/nonexistent-xyz` gives "200 text/html", `/robots.txt` gives "200 text/html". `apps/web/src/router.tsx`: "unknown paths fall back to the first route".
-- suggested fix: Let `matchRoute` return a not-found route (title "Page not found", one line naming the path, links to Home and Play) for unknown paths. Add `apps/web/public/robots.txt` so crawlers get a text file.
-- source: web-fetch
-
 ### [LOW] all pages — with JavaScript off the page is blank
 - pass: 4 (commit 23470a2)
 - viewport: n/a (web-fetch)
@@ -68,6 +59,17 @@
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 ## Done
+
+### [x] [MED] any unknown path — a mistyped URL shows the home page with no "not found" notice
+- pass: 4 (commit 23470a2)
+- viewport: n/a (web-fetch)
+- category: navigation
+- observation: The `_redirects` catch-all serves the app shell with HTTP 200 for every path, and `matchRoute` falls back to the first route. A link to `/decision` or `/setup` opens Home with the heading "Survival Dice-Builder", so the visitor does not know the link was wrong. `/robots.txt` also returns the app HTML.
+- evidence: `curl -w "%{http_code} %{content_type}"`: `/nonexistent-xyz` gives "200 text/html", `/robots.txt` gives "200 text/html". `apps/web/src/router.tsx`: "unknown paths fall back to the first route".
+- suggested fix: Let `matchRoute` return a not-found route (title "Page not found", one line naming the path, links to Home and Play) for unknown paths. Add `apps/web/public/robots.txt` so crawlers get a text file.
+- source: web-fetch
+- issue: #42
+- fixed: (this commit) — unknown paths get a "Page not found" page naming the path, with links to Home and Play; robots.txt ships as a text file
 
 ### [x] [MED] /play — the start panel's Combat choice ignores the saved config and uses internal labels
 - pass: 6 (commit e9a9406)
