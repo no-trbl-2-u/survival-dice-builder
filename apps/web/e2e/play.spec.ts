@@ -61,7 +61,7 @@ test('/play: start hex, a reveal off the map edge, the Prepare hands, and 1 Comb
   await clickFirst(page, /^Put die \d on /)
   await page.getByRole('button', { name: 'Confirm dice and fire Skills' }).click()
   // The first exchange is over: either a new exchange began or Combat moved on.
-  await expect(banner).not.toContainText('Put your dice on Skills')
+  await expect(banner).not.toContainText('click a Skill they fit')
   expect(errors).toEqual([])
 })
 

@@ -71,4 +71,22 @@ describe('nextStep', () => {
       s = applyAction(s, legal[0] as Action).state
     }
   })
+
+  it('Exchanges: the roll and assign banners name the Keep buttons and the Skill rows', () => {
+    let s = createGame(config, 7)
+    const seen = new Set<string>()
+    for (let i = 0; i < 400 && s.phase !== 'ended'; i++) {
+      const legal = legalActions(s)
+      const step = s.exchange && !s.exchange.engage ? s.exchange.step : null
+      if (step === 'roll' || step === 'assign') {
+        const text = nextStep(s, legal).step
+        expect(text).not.toMatch(/Click dice|Skill slot/)
+        if (step === 'roll') expect(text).toMatch(/^Keep dice, then roll again or stop rolling/)
+        else expect(text).toMatch(/^Select dice, then click a Skill they fit\. Confirm when done/)
+        seen.add(step)
+      }
+      s = applyAction(s, legal[0] as Action).state
+    }
+    expect([...seen].sort()).toEqual(['assign', 'roll'])
+  })
 })

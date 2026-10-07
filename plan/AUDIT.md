@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-07 (pass 4, from critique pass 6)
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /play: the Exchanges next-step banner describes controls that no longer exist (critique HIGH)
+- category: external-critique (comprehension)
+- impact: 9
+- ease: 9
+- next: reword EXCHANGE.roll and EXCHANGE.assign in nextStep.ts; a unit test pins both lines
+- issue: #37
+- fixed: (this commit)
+
+### [ ] [4.8] /play: when the selected dice fit no Skill, the board goes quiet with no reason (critique MED)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: a "fit no Skill" line above the Skill list in SkillBoard.tsx
+
+### [ ] [4.8] /play: enemy dice show "SPECIAL" with no damage (critique MED)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: "HIT 1" / "SPECIAL 2" from config in DiceTray.tsx
+
+### [ ] [4.2] /play: the start panel's Combat choice ignores the saved config (critique MED)
+- category: external-critique (comprehension)
+- impact: 7
+- ease: 6
+- next: seed the select from config.combat.model, add hints, drop the docs/ path
+
+### [ ] [4.2] / and /play: nothing says that exploring adds enemies (critique MED)
+- category: external-critique (comprehension)
+- impact: 7
+- ease: 6
+- next: one home step and the reveal button text
+
 # Site audit — 2026-10-06 (pass 3, from critique pass 5)
 
 ## Top 5 findings (scored)

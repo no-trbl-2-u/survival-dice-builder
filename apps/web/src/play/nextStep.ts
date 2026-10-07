@@ -5,10 +5,10 @@ import { ofType } from './targets.ts'
 export type NextStep = Readonly<{ phase: string; step: string }>
 
 const EXCHANGE: Record<NonNullable<GameState['exchange']>['step'], string> = {
-  roll: 'Click dice to keep them, then roll again or stop rolling',
+  roll: 'Keep dice, then roll again or stop rolling',
   cards: 'Play or discard each card in your hand',
   reroll: 'Choose dice to reroll, or stop rerolling',
-  assign: 'Put your dice on Skills: pick a die, click a Skill slot, then confirm',
+  assign: 'Select dice, then click a Skill they fit. Confirm when done',
   targets: 'Click a highlighted enemy on the map to target it',
   resolve: 'Resolve your fired Skills in any order',
 }
