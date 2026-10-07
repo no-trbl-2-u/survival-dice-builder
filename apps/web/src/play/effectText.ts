@@ -1,4 +1,4 @@
-import type { CardDef, SkillEffect } from '@survival/content'
+import type { CardDef, GameConfig, SkillEffect } from '@survival/content'
 import { bottomText, topText } from './CardView.tsx'
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
@@ -30,4 +30,22 @@ export function skillText(e: SkillEffect): string {
  */
 export function cardText(def: CardDef): string {
   return `Prepare: ${topText(def.top)}. Combat: ${def.bottom.map(bottomText).join(', ')}.`
+}
+
+/**
+ * What an enemy die face does to you, from config: the label on the die ("HIT 1",
+ * "SPECIAL 2", "miss") and its damage.
+ *
+ * @param face - the rolled enemy face.
+ * @param engage - `config.combat.engage`.
+ * @rule Combat v3 (engagement step 6)
+ */
+export function enemyFaceText(
+  face: 'hit' | 'miss' | 'special',
+  engage: GameConfig['combat']['engage'],
+): Readonly<{ label: string; damage: number }> {
+  if (face === 'hit') return { label: `HIT ${engage.hitDamage}`, damage: engage.hitDamage }
+  if (face === 'special')
+    return { label: `SPECIAL ${engage.specialDamage}`, damage: engage.specialDamage }
+  return { label: 'miss', damage: 0 }
 }

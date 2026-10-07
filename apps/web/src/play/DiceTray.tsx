@@ -2,6 +2,7 @@ import { sameAction, type Action, type GameState } from '@survival/engine'
 import { lazy, Suspense } from 'react'
 import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
+import { enemyFaceText } from './effectText.ts'
 import styles from './Play.module.css'
 import { firstOf, placementsFor } from './targets.ts'
 
@@ -52,21 +53,20 @@ export function DiceTray({ state, legal, act, selected, toggle, dice3d = false }
           <h3 className={styles.subTitle}>
             {ex.engage.enemyDice.length === 0
               ? 'Enemy dice: none (no enemy next to you)'
-              : 'Enemy dice from adjacent enemies (locked: they hit you after your Skills)'}
+              : `Enemy dice from adjacent enemies (locked: they hit you after your Skills; a Hit deals ${state.config.combat.engage.hitDamage} damage, a Special ${state.config.combat.engage.specialDamage})`}
           </h3>
           <ul className={styles.dice}>
             {ex.engage.enemyDice.map((d, i) => {
               const enemy = state.enemies.find((e) => e.id === d.enemy)
               const who = `${enemy?.kind ?? 'enemy'} ${d.enemy}`
+              const face = enemyFaceText(d.face, state.config.combat.engage)
               return (
                 <li key={i} className={styles.dieItem}>
                   <span
                     className={`${styles.die} ${styles.enemyDie} ${d.face === 'miss' ? '' : styles.enemyHit}`}
-                    aria-label={`Enemy die of ${who}: ${d.face}`}
+                    aria-label={`Enemy die of ${who}: ${d.face}, ${face.damage} damage`}
                   >
-                    <strong>
-                      {d.face === 'hit' ? 'HIT' : d.face === 'special' ? 'SPECIAL' : 'miss'}
-                    </strong>
+                    <strong>{face.label}</strong>
                     <small>{who}</small>
                   </span>
                 </li>

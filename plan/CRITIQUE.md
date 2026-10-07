@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — enemy dice show "SPECIAL" with no damage or meaning
-- pass: 6 (commit e9a9406)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: In an engagement, enemy dice can read HIT, SPECIAL, or miss. Nothing on /play says what a special does or that it deals more damage than a hit.
-- evidence: `apps/web/src/play/DiceTray.tsx:68` `d.face === 'special' ? 'SPECIAL'`; no other "special" copy in `apps/web/src`; `packages/content/data/config.default.json` `"specialDamage": 2`.
-- suggested fix: Show the damage from config on each enemy die, e.g. "HIT 1" and "SPECIAL 2".
-- source: web-fetch
-
 ### [MED] /play — the start panel's Combat choice ignores the saved config and uses internal labels
 - pass: 6 (commit e9a9406)
 - viewport: n/a (web-fetch)
@@ -96,6 +87,17 @@
 
 ## Done
 
+### [x] [MED] /play — enemy dice show "SPECIAL" with no damage or meaning
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: In an engagement, enemy dice can read HIT, SPECIAL, or miss. Nothing on /play says what a special does or that it deals more damage than a hit.
+- evidence: `apps/web/src/play/DiceTray.tsx:68` `d.face === 'special' ? 'SPECIAL'`; no other "special" copy in `apps/web/src`; `packages/content/data/config.default.json` `"specialDamage": 2`.
+- suggested fix: Show the damage from config on each enemy die, e.g. "HIT 1" and "SPECIAL 2".
+- source: web-fetch
+- issue: #39
+- fixed: (this commit)
+
 ### [x] [MED] /play — when the selected dice fit no Skill, the board goes quiet with no reason
 - pass: 6 (commit e9a9406)
 - viewport: n/a (web-fetch)
@@ -105,7 +107,7 @@
 - suggested fix: When the selected dice fit no Skill, show "These dice fit no Skill together. Unselect a die." above the Skill list.
 - source: web-fetch
 - issue: #38
-- fixed: (this commit)
+- fixed: e55ad36
 
 ### [x] [HIGH] /play — in Exchanges Combat the next-step banner describes controls that no longer exist
 - pass: 6 (commit e9a9406)

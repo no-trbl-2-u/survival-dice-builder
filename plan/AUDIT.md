@@ -21,13 +21,15 @@
 - ease: 8
 - next: a "fit no Skill" line above the Skill list in SkillBoard.tsx
 - issue: #38
-- fixed: (this commit)
+- fixed: e55ad36
 
-### [ ] [4.8] /play: enemy dice show "SPECIAL" with no damage (critique MED)
+### [x] [4.8] /play: enemy dice show "SPECIAL" with no damage (critique MED)
 - category: external-critique (comprehension)
 - impact: 6
 - ease: 8
 - next: "HIT 1" / "SPECIAL 2" from config in DiceTray.tsx
+- issue: #39
+- fixed: (this commit)
 
 ### [ ] [4.2] /play: the start panel's Combat choice ignores the saved config (critique MED)
 - category: external-critique (comprehension)
