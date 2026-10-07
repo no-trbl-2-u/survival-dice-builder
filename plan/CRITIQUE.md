@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — the Combat model setting uses internal labels and repeats itself
-- pass: 7 (commit b91436a)
-- viewport: n/a (web-fetch)
-- category: voice
-- observation: /config names the options "Exchanges (Spec v1)" and "Engagements (Combat v3)", while the /play start panel now says "Exchanges (written rules)" and "Engagements (playtest)". The /config help is long and says "Engagements are..." then "Engagements: ..." again.
-- evidence: `packages/content/data/config.meta.json:127` help text; `:130-131` option labels; `apps/web/src/play/StartPanel.tsx:12-17` (COMBAT_HINT) and `:94-95`.
-- suggested fix: Reuse the start panel's option labels and its two hint lines as the /config options and help.
-- source: web-fetch
-
 ### [LOW] /play — enemy choice buttons name enemies by engine id ("grunt e3")
 - pass: 7 (commit b91436a)
 - viewport: n/a (web-fetch)
@@ -95,6 +86,17 @@
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 ## Done
+
+### [x] [MED] /config — the Combat model setting uses internal labels and repeats itself
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: /config names the options "Exchanges (Spec v1)" and "Engagements (Combat v3)", while the /play start panel now says "Exchanges (written rules)" and "Engagements (playtest)". The /config help is long and says "Engagements are..." then "Engagements: ..." again.
+- evidence: `packages/content/data/config.meta.json:127` help text; `:130-131` option labels; `apps/web/src/play/StartPanel.tsx:12-17` (COMBAT_HINT) and `:94-95`.
+- suggested fix: Reuse the start panel's option labels and its two hint lines as the /config options and help.
+- source: web-fetch
+- issue: #45
+- fixed: (this commit) — /config uses the start panel names and one hint line per model; the start panel reads its names from config.meta.json
 
 ### [x] [MED] /play — the "Return 1 starter card" buttons show card ids and no card text
 - pass: 7 (commit b91436a)

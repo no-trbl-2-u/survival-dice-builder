@@ -59,6 +59,16 @@ describe('config metadata (rule 18.1)', () => {
     expect(defaultConfigMeta['miniatureLimit']?.help).toMatch(/new grunt or elite/)
   })
 
+  it('the Combat model names its choices plainly and describes each once', () => {
+    const model = defaultConfigMeta['combat.model']
+    expect(model?.options).toEqual({
+      exchange: 'Exchanges (written rules)',
+      engage: 'Engagements (playtest)',
+    })
+    expect(model?.help).not.toMatch(/Spec v1|Combat v3/)
+    expect(model?.help?.match(/Engagements/g)).toHaveLength(1)
+  })
+
   it('a path inside a list gets the entry of the list', () => {
     expect(metaFor(['deck', 'presets', 0, 'cards'])?.path).toBe('deck.presets')
     expect(metaFor('combat.moveCostNextToEnemy')?.entry.rule).toBe('6.9')

@@ -15,11 +15,13 @@
 - issue: #44
 - fixed: (this commit)
 
-### [ ] [4.0] /config: the Combat model setting uses internal labels and repeats itself (critique MED)
+### [x] [4.0] /config: the Combat model setting uses internal labels and repeats itself (critique MED)
 - category: external-critique (voice)
 - impact: 5
 - ease: 8
 - next: reuse the start panel labels and hint lines in config.meta.json
+- issue: #45
+- fixed: (this commit)
 
 ### [ ] [3.6] /play: run summary milestone labels are hard-coded (critique MED)
 - category: external-critique (voice)

@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent } from 'react'
+import { defaultConfigMeta } from '@survival/content'
 import type { KeyValue } from '../config/configStore.ts'
 import { AUTOSAVE_KEY } from '../config/configStore.ts'
 import { importRun } from './exportRun.ts'
@@ -7,6 +8,9 @@ import type { Run } from './run.ts'
 
 /** Which Combat a new run plays: Spec v1 exchanges, or the Combat v3 playtest. */
 export type CombatModel = 'exchange' | 'engage'
+
+/** The Combat choice names, shared with /config. */
+const COMBAT_LABEL = defaultConfigMeta['combat.model']?.options ?? {}
 
 /** One line per Combat choice: how a Combat plays under it. */
 const COMBAT_HINT: Record<CombatModel, string> = {
@@ -91,8 +95,8 @@ export function StartPanel({ custom, store, onStart, onLoad }: Props) {
             onChange={(e) => setCombat(e.target.value as CombatModel)}
             aria-describedby="combat-hint"
           >
-            <option value="engage">Engagements (playtest)</option>
-            <option value="exchange">Exchanges (written rules)</option>
+            <option value="engage">{COMBAT_LABEL.engage ?? 'engage'}</option>
+            <option value="exchange">{COMBAT_LABEL.exchange ?? 'exchange'}</option>
           </select>
         </label>
         <button type="submit" className={styles.primary}>
