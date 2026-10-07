@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-06 at commit e9a9406
-> Pass count: 6
+> Last pass: 2026-10-07 at commit b91436a
+> Pass count: 7
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /play — the "Return 1 starter card" buttons show card ids and no card text
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: Each return button reads "Return Move [c3]": the engine card id sits in square brackets, and the button does not say what the card does. The draft and replace buttons in the same dialog do show effect text. Nothing says why a starter card goes back.
+- evidence: `apps/web/src/play/DecisionDialog.tsx:73` `Return {card(a.card)} [{a.card}]`; title only "Return 1 starter card"; draft/replace buttons at `DecisionDialog.tsx:58,66` use `effectOf()`.
+- suggested fix: Drop the `[id]`, show the card text on each button, and add one line saying why a starter card goes back.
+- source: web-fetch
+
+### [MED] /config — the Combat model setting uses internal labels and repeats itself
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: /config names the options "Exchanges (Spec v1)" and "Engagements (Combat v3)", while the /play start panel now says "Exchanges (written rules)" and "Engagements (playtest)". The /config help is long and says "Engagements are..." then "Engagements: ..." again.
+- evidence: `packages/content/data/config.meta.json:127` help text; `:130-131` option labels; `apps/web/src/play/StartPanel.tsx:12-17` (COMBAT_HINT) and `:94-95`.
+- suggested fix: Reuse the start panel's option labels and its two hint lines as the /config options and help.
+- source: web-fetch
+
+### [LOW] /play — enemy choice buttons name enemies by engine id ("grunt e3")
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: Target, Tower-target, skirmish and resolve buttons name each enemy as "<kind> <id>", e.g. "Tower on Plains, 2 hexes north of the base centre shoots grunt e3 on Forest, 2 health". The Tower button repeats the Tower's full place, which the banner already gives. Two enemies on the same terrain differ only by the id.
+- evidence: `apps/web/src/debug/describeAction.ts:17-19` `enemyName` returns `${kind} ${id}`; used at `:71`, `:75`, `:88`, `:131`; banner at `apps/web/src/play/nextStep.ts:47`.
+- suggested fix: Name enemies by kind plus place (terrain and direction from the player or Tower, as `stepsAway` does), and leave the Tower out of Tower-target buttons.
+- source: web-fetch
+
+### [LOW] /play — enemy dice faces use three different cases, and the heading is long
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: Dice show "HIT 1", "SPECIAL 2" and "miss"; the heading says "a Hit deals 1 damage, a Special 2"; the screen-reader label uses the raw lowercase face ("hit"). The heading is a long bracketed sentence that repeats the damage each die now shows.
+- evidence: `apps/web/src/play/effectText.ts:47-50`; `apps/web/src/play/DiceTray.tsx:56` heading; `DiceTray.tsx:67` aria-label `${d.face}`.
+- suggested fix: Use one case for all faces (Hit 1 / Special 2 / Miss) and shorten the heading to "Enemy dice: they hit you after your Skills".
+- source: web-fetch
+
+### [LOW] / — the home page "How a run goes" describes only Engagements Combat
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The Combat step says "play Engage to roll your dice, plus 1 enemy die for each enemy next to you", but the start panel offers both models and the config default is Exchanges. A player who picks Exchanges gets a different Combat from the one the home page describes.
+- evidence: `apps/web/src/home/HomePage.tsx:25-27`; `apps/web/src/play/StartPanel.tsx:94-95`; `packages/content/data/config.default.json:117` `"model": "exchange"`.
+- suggested fix: Add one sentence: "Or choose Exchanges (the written rules) on the start panel." (Related user call in AUDIT.md: the start panel Combat default.)
+- source: web-fetch
+
+### [LOW] any unknown path — "Page not found" is served with HTTP 200 and no noindex
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: seo
+- observation: The new not-found view is client-side only. Every path returns 200 with the same shell, so crawlers can index mistyped URLs as copies of the home page.
+- evidence: `apps/web/public/_redirects:1` `/* /index.html 200`; `apps/web/src/App.tsx:39-43` notFound route only sets document.title; WebFetch of `/no-such-page` returned the home shell.
+- suggested fix: Have the notFound route add `<meta name="robots" content="noindex">`, or list known routes in `_redirects` and send the rest to a 404 page with status 404.
+- source: web-fetch
 
 ### [LOW] /config — optional-limit toggles are always named "...: on"
 - pass: 6 (commit e9a9406)
