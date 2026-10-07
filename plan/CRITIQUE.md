@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — the start panel's Combat choice ignores the saved config and uses internal labels
-- pass: 6 (commit e9a9406)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: The Combat select always starts on "Engagements", whatever /config says (default config is "exchange"); only `?seed=` runs read `config.combat.model`. The options are named "Combat v3 playtest" and "Spec v1", with no line saying how the two differ, and the /config help for the same setting points to a repo file (`docs/design/combat-v3.md`) a visitor cannot open.
-- evidence: `apps/web/src/play/StartPanel.tsx:33` `useState<CombatModel>('engage')`; `StartPanel.tsx:82-83` "Engagements (Combat v3 playtest)" / "Exchanges (Spec v1)"; `PlayPage.tsx:51` vs `:81`; `packages/content/data/config.meta.json:127`.
-- suggested fix: Start the select from the saved `combat.model`, add a one-line hint for each choice, and drop the docs/ path from the /config help.
-- source: web-fetch
-
 ### [LOW] /config — optional-limit toggles are always named "...: on"
 - pass: 6 (commit e9a9406)
 - viewport: n/a (web-fetch)
@@ -78,6 +69,17 @@
 
 ## Done
 
+### [x] [MED] /play — the start panel's Combat choice ignores the saved config and uses internal labels
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The Combat select always starts on "Engagements", whatever /config says (default config is "exchange"); only `?seed=` runs read `config.combat.model`. The options are named "Combat v3 playtest" and "Spec v1", with no line saying how the two differ, and the /config help for the same setting points to a repo file (`docs/design/combat-v3.md`) a visitor cannot open.
+- evidence: `apps/web/src/play/StartPanel.tsx:33` `useState<CombatModel>('engage')`; `StartPanel.tsx:82-83` "Engagements (Combat v3 playtest)" / "Exchanges (Spec v1)"; `PlayPage.tsx:51` vs `:81`; `packages/content/data/config.meta.json:127`.
+- suggested fix: Start the select from the saved `combat.model`, add a one-line hint for each choice, and drop the docs/ path from the /config help.
+- source: web-fetch
+- issue: #41
+- fixed: (this commit) — hints, plain option names, no docs/ path in the /config help; the default choice is filed as a user call in AUDIT.md
+
 ### [x] [MED] / and /play — nothing says that exploring adds enemies
 - pass: 5 (commit 04b907a)
 - viewport: n/a (web-fetch)
@@ -87,7 +89,7 @@
 - suggested fix: Add one home step: "Each revealed tile's spawn nodes add enemies at every Combat. Enemies attack the nearest structure first." Say the same in short form on the reveal button.
 - source: web-fetch
 - issue: #40
-- fixed: (this commit)
+- fixed: 2d3def3
 
 ### [x] [MED] /play — enemy dice show "SPECIAL" with no damage or meaning
 - pass: 6 (commit e9a9406)

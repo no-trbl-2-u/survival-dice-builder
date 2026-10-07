@@ -31,11 +31,13 @@
 - issue: #39
 - fixed: d8bfcfa
 
-### [ ] [4.2] /play: the start panel's Combat choice ignores the saved config (critique MED)
+### [x] [4.2] /play: the start panel's Combat choice ignores the saved config (critique MED)
 - category: external-critique (comprehension)
 - impact: 7
 - ease: 6
 - next: seed the select from config.combat.model, add hints, drop the docs/ path
+- issue: #41
+- fixed: (this commit) — hints and plain option names shipped; the default choice is a user call (see below)
 
 ### [x] [4.2] / and /play: nothing says that exploring adds enemies (critique MED)
 - category: external-critique (comprehension)
@@ -43,7 +45,7 @@
 - ease: 6
 - next: one home step and the reveal button text
 - issue: #40
-- fixed: (this commit)
+- fixed: 2d3def3
 
 # Site audit — 2026-10-06 (pass 3, from critique pass 5)
 
@@ -132,6 +134,7 @@ outside the top 5 and is the core of that candidate.
 
 ## Needs user call (from adoption, 2026-10-02)
 
+- [needs-user-call] **/play start panel Combat default (critique pass 6, 2026-10-07).** The start panel always starts on Engagements (673198c, the designer's playtest choice), while `combat.model` defaults to "exchange" and /config's setting only reaches `?seed=` runs. Following the saved config would make Exchanges the panel default; keeping Engagements means /config's choice is ignored there. Decide which: (a) keep Engagements as the panel default, (b) follow `combat.model`, or (c) make "engage" the config default and follow it. The hints and plain option names shipped (issue #41).
 - [needs-user-call] **Set `CLAUDE_CODE_OAUTH_TOKEN`** as a GitHub Actions secret on `no-trbl-2-u/survival-dice-builder` (oversight 2026-10-02). The cloud `/march` cron in `.github/workflows/march.yml` is live (every 2h, off-peak) and every run fails until the secret exists. The loop never sets secrets itself. Oversight 2026-10-03: the user will set it; keep the workflow as is.
 - [needs-user-call] **Local `.env` keys.** Add `DEPLOY_PROVIDER=cloudflare-pages` and `CF_PAGES_PROJECT=survival-dice-builder` to `.env` (both are also defaulted in `scripts/deploy-check.mjs`, so this is optional). Optional: `NOTIFY_NTFY_TOPIC` for the pager before any unattended run.
 - [needs-user-call] **Designer reviews (async, never blocking):** tile layouts at `/tiles` (phase 4; best reviewed before phase 7), the bot batch distribution (phase 9), the "2 people identify at a glance" check (phase 10), and the playtest sessions themselves (phase 16). The loop ships around them; review via `/oversight`. Every open reading and check is listed at `/decisions` (also `docs/DECISIONS.md`).
