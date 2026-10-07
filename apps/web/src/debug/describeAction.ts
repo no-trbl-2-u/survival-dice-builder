@@ -81,7 +81,7 @@ export function describeAction(action: Action, state: GameState): string {
     }
     case 'moveTo': {
       if (!state.map.hexes[hexKey(action)]) {
-        return `Step off the map edge, ${stepsAway(here(state), action)}: reveal a tile`
+        return `Step off the map edge, ${stepsAway(here(state), action)}: reveal a tile; its spawn nodes add enemies at every Combat`
       }
       const enemy = state.enemies.find((e) => e.hex.q === action.q && e.hex.r === action.r)
       const where = `${hexName(state, action)}, ${stepsAway(here(state), action)}`

@@ -17,7 +17,9 @@ export function HomePage() {
         <ol className={styles.steps}>
           <li>
             <strong>Prepare:</strong> play the top halves of your cards to move, gather materials,
-            and build Barricades and Towers. Step off the edge of the map to reveal a new tile.
+            and build Barricades and Towers. Step off the edge of the map to reveal a new tile. Each
+            new tile's spawn nodes add enemies at every Combat, and enemies go for the nearest
+            structure first.
           </li>
           <li>
             <strong>Combat:</strong> play Engage to roll your dice, plus 1 enemy die for each enemy

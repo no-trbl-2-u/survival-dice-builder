@@ -29,7 +29,7 @@
 - ease: 8
 - next: "HIT 1" / "SPECIAL 2" from config in DiceTray.tsx
 - issue: #39
-- fixed: (this commit)
+- fixed: d8bfcfa
 
 ### [ ] [4.2] /play: the start panel's Combat choice ignores the saved config (critique MED)
 - category: external-critique (comprehension)
@@ -37,11 +37,13 @@
 - ease: 6
 - next: seed the select from config.combat.model, add hints, drop the docs/ path
 
-### [ ] [4.2] / and /play: nothing says that exploring adds enemies (critique MED)
+### [x] [4.2] / and /play: nothing says that exploring adds enemies (critique MED)
 - category: external-critique (comprehension)
 - impact: 7
 - ease: 6
 - next: one home step and the reveal button text
+- issue: #40
+- fixed: (this commit)
 
 # Site audit — 2026-10-06 (pass 3, from critique pass 5)
 

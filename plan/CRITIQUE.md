@@ -36,15 +36,6 @@
 - suggested fix: Show only the name in options; label presets "Preset 1", "Preset 2".
 - source: web-fetch
 
-### [MED] / and /play — nothing says that exploring adds enemies
-- pass: 5 (commit 04b907a)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: The core v2 trade-off is not explained. Every spawn node on a revealed tile spawns enemies at every Combat, and enemies go for structures first. The home steps and the reveal button only say "reveal a tile".
-- evidence: `apps/web/src/home/HomePage.tsx:19` "Step off the edge of the map to reveal a new tile."; `apps/web/src/debug/describeAction.ts:77` "Step off the map edge, ...: reveal a tile".
-- suggested fix: Add one home step: "Each revealed tile's spawn nodes add enemies at every Combat. Enemies attack the nearest structure first." Say the same in short form on the reveal button.
-- source: web-fetch
-
 ### [MED] /play — the Tower-tie choice names the Tower by its internal id
 - pass: 5 (commit 04b907a)
 - viewport: n/a (web-fetch)
@@ -87,6 +78,17 @@
 
 ## Done
 
+### [x] [MED] / and /play — nothing says that exploring adds enemies
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The core v2 trade-off is not explained. Every spawn node on a revealed tile spawns enemies at every Combat, and enemies go for structures first. The home steps and the reveal button only say "reveal a tile".
+- evidence: `apps/web/src/home/HomePage.tsx:19` "Step off the edge of the map to reveal a new tile."; `apps/web/src/debug/describeAction.ts:77` "Step off the map edge, ...: reveal a tile".
+- suggested fix: Add one home step: "Each revealed tile's spawn nodes add enemies at every Combat. Enemies attack the nearest structure first." Say the same in short form on the reveal button.
+- source: web-fetch
+- issue: #40
+- fixed: (this commit)
+
 ### [x] [MED] /play — enemy dice show "SPECIAL" with no damage or meaning
 - pass: 6 (commit e9a9406)
 - viewport: n/a (web-fetch)
@@ -96,7 +98,7 @@
 - suggested fix: Show the damage from config on each enemy die, e.g. "HIT 1" and "SPECIAL 2".
 - source: web-fetch
 - issue: #39
-- fixed: (this commit)
+- fixed: d8bfcfa
 
 ### [x] [MED] /play — when the selected dice fit no Skill, the board goes quiet with no reason
 - pass: 6 (commit e9a9406)

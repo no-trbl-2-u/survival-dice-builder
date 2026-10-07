@@ -29,7 +29,7 @@ describe('describeAction', () => {
       active: { kind: 'move' as const, hexesLeft: 2, ignoreEnemyCost: false },
     }
     expect(describeAction({ type: 'moveTo', q: 2, r: 0 }, state)).toBe(
-      'Step off the map edge, 1 hex south-east: reveal a tile',
+      'Step off the map edge, 1 hex south-east: reveal a tile; its spawn nodes add enemies at every Combat',
     )
   })
 
