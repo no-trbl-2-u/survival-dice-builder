@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — when the selected dice fit no Skill, the board goes quiet with no reason
-- pass: 6 (commit e9a9406)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: If the selected dice do not fit any one Skill together, no Skill row becomes a button and the "can fire" outline is hidden (it shows only with nothing selected). Nothing tells the player to unselect a die.
-- evidence: `apps/web/src/play/SkillBoard.tsx:47` `could` class requires `selected.length === 0`; `SkillBoard.tsx:50` `planPlacement(...)` returns null when the dice do not fit (`targets.ts:62`, `:81`) and the row renders as a plain `<div>`.
-- suggested fix: When the selected dice fit no Skill, show "These dice fit no Skill together. Unselect a die." above the Skill list.
-- source: web-fetch
-
 ### [MED] /play — enemy dice show "SPECIAL" with no damage or meaning
 - pass: 6 (commit e9a9406)
 - viewport: n/a (web-fetch)
@@ -105,6 +96,17 @@
 
 ## Done
 
+### [x] [MED] /play — when the selected dice fit no Skill, the board goes quiet with no reason
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: If the selected dice do not fit any one Skill together, no Skill row becomes a button and the "can fire" outline is hidden (it shows only with nothing selected). Nothing tells the player to unselect a die.
+- evidence: `apps/web/src/play/SkillBoard.tsx:47` `could` class requires `selected.length === 0`; `SkillBoard.tsx:50` `planPlacement(...)` returns null when the dice do not fit (`targets.ts:62`, `:81`) and the row renders as a plain `<div>`.
+- suggested fix: When the selected dice fit no Skill, show "These dice fit no Skill together. Unselect a die." above the Skill list.
+- source: web-fetch
+- issue: #38
+- fixed: (this commit)
+
 ### [x] [HIGH] /play — in Exchanges Combat the next-step banner describes controls that no longer exist
 - pass: 6 (commit e9a9406)
 - viewport: n/a (web-fetch)
@@ -114,7 +116,7 @@
 - suggested fix: Reword EXCHANGE.assign to "Select dice, then click a Skill they fit. Confirm when done." and EXCHANGE.roll to "Keep dice, then roll again or stop rolling."
 - source: web-fetch
 - issue: #37
-- fixed: (this commit)
+- fixed: f85de8f
 
 ### [x] [MED] /play — the Gather card does not say it needs an unspent gathering node
 - pass: 5 (commit 04b907a)

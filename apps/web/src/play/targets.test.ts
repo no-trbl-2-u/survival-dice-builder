@@ -9,7 +9,14 @@ import {
 } from '@survival/engine'
 import { describe, expect, it } from 'vitest'
 import { newRun, reduceRun } from './run.ts'
-import { COVERED, firstOf, hexTargets, placementsFor, planPlacement } from './targets.ts'
+import {
+  COVERED,
+  firstOf,
+  fitsNoSkill,
+  hexTargets,
+  placementsFor,
+  planPlacement,
+} from './targets.ts'
 
 const config = defaultContent.config
 
@@ -99,5 +106,19 @@ describe('planPlacement (several dice on 1 Skill)', () => {
   it('1 die fits a 1-face Skill', () => {
     const s = engagementWith(['Sword', 'Wand', 'Sword'])
     expect(planPlacement(s, 'strike', [2])?.map((a) => a.die)).toEqual([2])
+  })
+})
+
+describe('fitsNoSkill (the chosen dice fit no Skill together)', () => {
+  it('is true for a Sword and a Wand: Cleave wants 2 Swords, Strike takes 1 die', () => {
+    const s = engagementWith(['Sword', 'Wand', 'Sword'])
+    expect(fitsNoSkill(s, [0, 1])).toBe(true)
+  })
+
+  it('is false when some Skill takes the dice, or when no die is chosen', () => {
+    const s = engagementWith(['Sword', 'Wand', 'Sword'])
+    expect(fitsNoSkill(s, [0, 2])).toBe(false)
+    expect(fitsNoSkill(s, [2])).toBe(false)
+    expect(fitsNoSkill(s, [])).toBe(false)
   })
 })

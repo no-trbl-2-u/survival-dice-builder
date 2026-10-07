@@ -994,6 +994,14 @@
   overflow-y: auto;
 }
 
+/* The chosen dice fit no Skill */
+.noFit {
+  margin: 0 0 0.5rem;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--phase-combat);
+}
+
 /* Attack Skill reach */
 .outOfRange {
   font-size: var(--text-sm);

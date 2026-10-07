@@ -13,13 +13,15 @@
 - ease: 9
 - next: reword EXCHANGE.roll and EXCHANGE.assign in nextStep.ts; a unit test pins both lines
 - issue: #37
-- fixed: (this commit)
+- fixed: f85de8f
 
-### [ ] [4.8] /play: when the selected dice fit no Skill, the board goes quiet with no reason (critique MED)
+### [x] [4.8] /play: when the selected dice fit no Skill, the board goes quiet with no reason (critique MED)
 - category: external-critique (comprehension)
 - impact: 6
 - ease: 8
 - next: a "fit no Skill" line above the Skill list in SkillBoard.tsx
+- issue: #38
+- fixed: (this commit)
 
 ### [ ] [4.8] /play: enemy dice show "SPECIAL" with no damage (critique MED)
 - category: external-critique (comprehension)
