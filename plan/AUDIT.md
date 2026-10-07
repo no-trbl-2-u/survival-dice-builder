@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-07 (pass 6, from critique pass 7)
+
+## Top 5 findings (scored)
+
+### [x] [5.4] /play: the starter return buttons show card ids and no card text (critique MED)
+- category: external-critique (voice)
+- impact: 6
+- ease: 9
+- next: one button per starter kind with its card text, a why line, no ids (DecisionDialog.tsx, starterChoices.ts)
+- issue: #44
+- fixed: (this commit)
+
+### [ ] [4.0] /config: the Combat model setting uses internal labels and repeats itself (critique MED)
+- category: external-critique (voice)
+- impact: 5
+- ease: 8
+- next: reuse the start panel labels and hint lines in config.meta.json
+
+### [ ] [3.6] /play: run summary milestone labels are hard-coded (critique MED)
+- category: external-critique (voice)
+- impact: 6
+- ease: 6
+- next: build the labels from config.milestones; reuse them in the log
+
+### [ ] [3.2] /: "How a run goes" describes only Engagements Combat (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: one sentence in HomePage.tsx naming Exchanges
+
+### [ ] [3.0] all pages: with JavaScript off the page is blank (critique LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 10
+- next: one noscript line in apps/web/index.html
+
 # Site audit — 2026-10-07 (pass 5, cloud tick)
 
 ## Top 5 findings (scored)

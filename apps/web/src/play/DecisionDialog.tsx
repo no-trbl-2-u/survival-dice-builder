@@ -1,7 +1,8 @@
 import type { Action, GameState } from '@survival/engine'
 import { useEffect, useRef } from 'react'
-import { skillText } from './effectText.ts'
+import { cardText, skillText } from './effectText.ts'
 import styles from './Play.module.css'
+import { starterChoices } from './starterChoices.ts'
 import { ofType } from './targets.ts'
 
 type Props = Readonly<{ state: GameState; legal: readonly Action[]; act: (a: Action) => void }>
@@ -26,13 +27,6 @@ export function DecisionDialog({ state, legal, act }: Props) {
     const def = skill(id)
     return def ? `: ${skillText(def.effect)}` : ''
   }
-  const player = state.players[state.current]
-  const card = (id: string) =>
-    state.content.cards.find(
-      (c) =>
-        c.id ===
-        [...(player?.deck ?? []), ...(player?.discard ?? [])].find((x) => x.id === id)?.def,
-    )?.name ?? id
   const title = drafts.length
     ? 'Skill draft: keep 1 Skill'
     : replaces.length
@@ -50,6 +44,11 @@ export function DecisionDialog({ state, legal, act }: Props) {
         <h2 id="decision-title" className={styles.panelTitle}>
           {title}
         </h2>
+        {returns.length > 0 && (
+          <p className={styles.muted}>
+            You bought a card, so 1 starter card leaves your deck for good.
+          </p>
+        )}
         <ul className={styles.choices}>
           {drafts.map((a, i) => (
             <li key={a.skill} className={styles.reveal} style={{ animationDelay: `${i * 120}ms` }}>
@@ -67,10 +66,12 @@ export function DecisionDialog({ state, legal, act }: Props) {
               </button>
             </li>
           ))}
-          {returns.map((a) => (
-            <li key={a.card}>
-              <button type="button" onClick={() => act(a)}>
-                Return {card(a.card)} [{a.card}]
+          {starterChoices(state, returns).map(({ action, def, copies }) => (
+            <li key={def.id}>
+              <button type="button" onClick={() => act(action)}>
+                Return {def.name}
+                {copies > 1 && ` (you have ${copies})`}
+                <span className={styles.muted}>: {cardText(def)}</span>
               </button>
             </li>
           ))}

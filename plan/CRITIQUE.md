@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — the "Return 1 starter card" buttons show card ids and no card text
-- pass: 7 (commit b91436a)
-- viewport: n/a (web-fetch)
-- category: voice
-- observation: Each return button reads "Return Move [c3]": the engine card id sits in square brackets, and the button does not say what the card does. The draft and replace buttons in the same dialog do show effect text. Nothing says why a starter card goes back.
-- evidence: `apps/web/src/play/DecisionDialog.tsx:73` `Return {card(a.card)} [{a.card}]`; title only "Return 1 starter card"; draft/replace buttons at `DecisionDialog.tsx:58,66` use `effectOf()`.
-- suggested fix: Drop the `[id]`, show the card text on each button, and add one line saying why a starter card goes back.
-- source: web-fetch
-
 ### [MED] /config — the Combat model setting uses internal labels and repeats itself
 - pass: 7 (commit b91436a)
 - viewport: n/a (web-fetch)
@@ -104,6 +95,17 @@
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 ## Done
+
+### [x] [MED] /play — the "Return 1 starter card" buttons show card ids and no card text
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: Each return button reads "Return Move [c3]": the engine card id sits in square brackets, and the button does not say what the card does. The draft and replace buttons in the same dialog do show effect text. Nothing says why a starter card goes back.
+- evidence: `apps/web/src/play/DecisionDialog.tsx:73` `Return {card(a.card)} [{a.card}]`; title only "Return 1 starter card"; draft/replace buttons at `DecisionDialog.tsx:58,66` use `effectOf()`.
+- suggested fix: Drop the `[id]`, show the card text on each button, and add one line saying why a starter card goes back.
+- source: web-fetch
+- issue: #44
+- fixed: (this commit)
 
 ### [x] [MED] /play — the Tower-tie choice names the Tower by its internal id
 - pass: 5 (commit 04b907a)
