@@ -7,6 +7,8 @@ export type Route = Readonly<{
   render: () => ReactNode
   /** Keep the page title for screen readers only (the nav already marks the page). */
   quietTitle?: boolean
+  /** Ask search engines not to index the page (every path is served with status 200). */
+  noindex?: boolean
 }>
 
 /**

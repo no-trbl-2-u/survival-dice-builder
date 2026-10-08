@@ -34,8 +34,10 @@ test('an unknown path says the page was not found and links home', async ({ page
   await expect(page).toHaveTitle('Page not found - Survival Dice-Builder')
   await expect(page.locator('main')).toContainText('There is no page at /decision.')
   await expect(page.locator('nav a[aria-current="page"]')).toHaveCount(0)
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex')
   await page.getByRole('link', { name: 'the home page' }).click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Survival Dice-Builder')
+  await expect(page.locator('meta[name="robots"]')).toHaveCount(0)
 })
 
 test('with JavaScript off the shell says what the game is and that it needs JavaScript', async ({

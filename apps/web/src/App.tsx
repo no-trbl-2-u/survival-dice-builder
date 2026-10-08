@@ -39,14 +39,24 @@ const routes: readonly Route[] = [
 const notFound: Route = {
   path: '',
   title: 'Page not found',
+  noindex: true,
   render: () => <NotFoundPage path={window.location.pathname} />,
 }
 
-/** App shell: navigation (the current page marked), the page title, and the page itself. */
+/**
+ * App shell: navigation (the current page marked), the page title, and the page itself. The
+ * not-found page also gets a robots noindex tag, so a mistyped URL is not indexed as a page.
+ */
 export function App() {
   const route = matchRoute(routes, window.location.pathname, notFound)
   useEffect(() => {
     document.title = documentTitle(route)
+    if (!route.noindex) return
+    const robots = document.createElement('meta')
+    robots.name = 'robots'
+    robots.content = 'noindex'
+    document.head.append(robots)
+    return () => robots.remove()
   }, [route])
   return (
     <main className="app">

@@ -27,15 +27,6 @@
 - suggested fix: Use one case for all faces (Hit 1 / Special 2 / Miss) and shorten the heading to "Enemy dice: they hit you after your Skills".
 - source: web-fetch
 
-### [LOW] any unknown path — "Page not found" is served with HTTP 200 and no noindex
-- pass: 7 (commit b91436a)
-- viewport: n/a (web-fetch)
-- category: seo
-- observation: The new not-found view is client-side only. Every path returns 200 with the same shell, so crawlers can index mistyped URLs as copies of the home page.
-- evidence: `apps/web/public/_redirects:1` `/* /index.html 200`; `apps/web/src/App.tsx:39-43` notFound route only sets document.title; WebFetch of `/no-such-page` returned the home shell.
-- suggested fix: Have the notFound route add `<meta name="robots" content="noindex">`, or list known routes in `_redirects` and send the rest to a 404 page with status 404.
-- source: web-fetch
-
 ### [LOW] /config — pick lists show internal ids next to names; presets show only ids
 - pass: 6 (commit e9a9406)
 - viewport: n/a (web-fetch)
@@ -50,6 +41,17 @@
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 ## Done
+
+### [x] [LOW] any unknown path — "Page not found" is served with HTTP 200 and no noindex
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: seo
+- observation: The new not-found view is client-side only. Every path returns 200 with the same shell, so crawlers can index mistyped URLs as copies of the home page.
+- evidence: `apps/web/public/_redirects:1` `/* /index.html 200`; `apps/web/src/App.tsx:39-43` notFound route only sets document.title; WebFetch of `/no-such-page` returned the home shell.
+- suggested fix: Have the notFound route add `<meta name="robots" content="noindex">`, or list known routes in `_redirects` and send the rest to a 404 page with status 404.
+- source: web-fetch
+- issue: #50
+- fixed: (this commit) — the notFound route adds `<meta name="robots" content="noindex">` and removes it on the way out
 
 ### [x] [LOW] /config — optional-limit toggles are always named "...: on"
 - pass: 6 (commit e9a9406)

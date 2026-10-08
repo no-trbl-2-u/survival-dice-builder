@@ -3,6 +3,36 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-08 (pass 11, cloud tick)
+
+## Top 5 findings (scored)
+
+### [x] [3.0] any unknown path: "Page not found" served with HTTP 200, no noindex (critique LOW)
+- category: external-critique (seo)
+- impact: 3
+- ease: 10 (re-scored: one robots meta tag from the notFound route, as the pass 9 noscript line)
+- next: notFound route adds a robots noindex meta tag
+- issue: #50
+- fixed: (this commit)
+
+### [ ] [2.8] /play: enemy choice buttons name enemies by engine id (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: name enemies by kind and place in describeAction.ts (or the pending "Player names for every map piece" candidate)
+
+### [ ] [2.4] /play: enemy dice faces use three different cases (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: one case for faces in effectText.ts; shorter DiceTray heading
+
+### [ ] [2.4] /config: pick lists show internal ids next to names (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: names only in options; presets as "Preset 1", "Preset 2"
+
 # Site audit — 2026-10-08 (pass 10, cloud tick)
 
 ## Top 5 findings (scored)
