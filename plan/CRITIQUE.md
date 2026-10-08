@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-07 at commit b91436a
-> Pass count: 7
+> Last pass: 2026-10-08 at commit c9bd27d
+> Pass count: 8
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /decisions — status lines use build-process words and point at hidden rows
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: Each reading prints its raw status, e.g. "proposed 2026-10-05 (structural; option measured in phase 22)" or "proposed 2026-10-04 (engine: phase 21, shipped)". Phase numbers and "structural" mean nothing to the designer. Row 63 says "never ends (row 62)", but row 62 is superseded and the page hides it, so the reference leads nowhere. Read from source; the live page is client-rendered.
+- evidence: `apps/web/src/decisions/DecisionsPage.tsx:76` `Status: {q.status}`; `packages/content/src/decisions.ts:64` `const OPEN = /proposed|pending-spec/` filters superseded rows; `OPEN-QUESTIONS.md` rows 62-63.
+- suggested fix: Map each status to a plain label ("Proposed, waiting for your answer", "Waiting for rules text") with no phase numbers, and drop or inline references to rows the page does not show.
+- source: web-fetch
+
+### [MED] /decisions — the page tells the designer to edit repository files it does not link
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: navigation
+- observation: The lede says "To confirm a reading, change its status in OPEN-QUESTIONS.md. The same list is in docs/DECISIONS.md." Both names are code text, not links, and readings name report files such as `docs/reports/phase-22-experiments.md` the same way. A designer who uses only the site cannot open any of them. Read from source; the live page is client-rendered.
+- evidence: `apps/web/src/decisions/DecisionsPage.tsx:60-62`; report paths inside `OPEN-QUESTIONS.md` rows 63-70.
+- suggested fix: Link each file to its page on GitHub (github.com/no-trbl-2-u/survival-dice-builder/blob/main/...), and say in one sentence who confirms a reading.
+- source: web-fetch
+
+### [LOW] / — the home page does not link the Decisions page
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: navigation
+- observation: The "Also:" line links the tiles, the config, and credits, but not Decisions, the page that lists what waits on the designer.
+- evidence: `apps/web/src/home/HomePage.tsx:37-38`.
+- suggested fix: Add "the rules questions that wait on you" linked to /decisions to the "Also:" line.
+- source: web-fetch
+
+### [LOW] all pages — the main nav is inside <main> and there is no skip link
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: The nav sits inside the main landmark, so landmark navigation lands on the nav, not the content. Keyboard users tab through 7 nav links on every page before they reach the content.
+- evidence: `apps/web/src/App.tsx:62-69` `<main className="app"><nav aria-label="Main" ...>`.
+- suggested fix: Move the nav into a <header> before <main>, and add a "Skip to content" link as the first focusable element.
+- source: web-fetch
+
+### [LOW] /tiles — the tiles are one flat grid with no headings
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: The lede names Base, countryside and core tiles, and the doc comment says "grouped by kind", but the sheet is one grid with no H2 or H3. Tile names are <strong>, so screen-reader users cannot jump from tile to tile by heading.
+- evidence: `apps/web/src/tiles/TileSheet.tsx:18-19`, `:26`, `:46-51`.
+- suggested fix: Group the grid under an H2 per kind (Base, Countryside, Core) and make each tile name an H3.
+- source: web-fetch
+
+### [LOW] / — the Combat step is one long sentence chain
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: The Combat step joins three clauses with semicolons and colons, and names the "start panel" and "Exchanges" before the visitor has seen either. This is not the short, plain style set in bearings.
+- evidence: `apps/web/src/home/HomePage.tsx:25-29` "Put your dice on your Skills one at a time; the enemy dice hit last, after your guard. Or choose Exchanges, the Combat in the written rules, on the start panel: in each exchange you roll, ..."
+- suggested fix: Split into short sentences, and put Exchanges in its own sentence: "Before a run, you can choose Exchanges, the Combat in the written rules."
+- source: web-fetch
 
 ### [LOW] /play — enemy choice buttons name enemies by engine id ("grunt e3")
 - pass: 7 (commit b91436a)
@@ -30,6 +84,8 @@
 > Pass 4 note: web-fetch engine (cloud, no browser). The reader could not get the client-rendered copy on /decisions or /config from the shell, so the phase 18 and 19 copy was not reviewed. A browser pass should cover it.
 
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
+
+> Pass 8 note: web-fetch engine (cloud, no browser). Every route served only the app shell, so the reader read the shipped copy from source. 2 reader observations were not filed (cap): the /decisions lede counts "rule readings" and "checks" without saying what they are (LOW, partly covered by the status-line row); index.html has no canonical link or Open Graph tags (LOW). The pass 5 observation about raw step ids is no longer true on /play; that form now appears only on /debug.
 
 ## Done
 
