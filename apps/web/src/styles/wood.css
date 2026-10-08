@@ -33,6 +33,7 @@ body {
 
 /* The board: the app sits on an oak slab with a walnut frame. */
 .app {
+  position: relative;
   max-width: 72rem;
   margin: 16px auto;
   padding: 0 var(--gutter) var(--gutter);
@@ -66,7 +67,7 @@ legend {
 }
 
 /* The page title: branded into the board. */
-.app > h1 {
+.app main > h1 {
   margin: 20px 0 16px;
   font-size: var(--text-2xl);
   color: var(--color-text);
@@ -74,13 +75,34 @@ legend {
 }
 
 /* A page without a visible title starts just below the rail. */
-.app > h1.visually-hidden + * {
+.app main > h1.visually-hidden + * {
   margin-top: 16px;
 }
 
 a {
   color: var(--color-accent);
   text-underline-offset: 3px;
+}
+
+/* The skip link: hidden until focused, then a brass plate over the rail's corner. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+
+.skip-link:focus {
+  left: calc(var(--gutter) + 16px);
+  top: 24px;
+  z-index: 10;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #2a1a0d;
+  background: var(--brass);
+}
+
+/* Focus moved here by the skip link draws no ring around the whole page. */
+.app main:focus {
+  outline: none;
 }
 
 /* Header rail: a dark carved plank across the top of the board, labels routed into it. */

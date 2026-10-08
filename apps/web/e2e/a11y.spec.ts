@@ -31,6 +31,22 @@ for (const [path, link, title] of ROUTES) {
   })
 }
 
+test('the first Tab stop skips the nav to the content, and the nav sits outside main', async ({
+  page,
+}) => {
+  await page.goto('/')
+  await expect(page.locator('main nav')).toHaveCount(0)
+  await expect(page.locator('header').getByRole('navigation', { name: 'Main' })).toBeVisible()
+  await page.keyboard.press('Tab')
+  const skip = page.getByRole('link', { name: 'Skip to content' })
+  await expect(skip).toBeFocused()
+  await expect(skip).toBeInViewport()
+  await page.keyboard.press('Enter')
+  await expect(page.locator('main')).toBeFocused()
+  await page.keyboard.press('Tab')
+  expect(await page.evaluate(() => document.activeElement?.closest('main') !== null)).toBe(true)
+})
+
 test('/debug: after an action, focus returns to the action list heading', async ({ page }) => {
   await page.goto('/debug')
   const first = page.getByTestId('actions').getByRole('button').first()

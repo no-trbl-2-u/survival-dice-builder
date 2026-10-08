@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-08 (pass 15, cloud tick)
+
+## Top 5 findings (scored)
+
+### [x] [3.6] all pages: nav inside <main>, no skip link (critique LOW)
+- category: external-critique (a11y)
+- impact: 4 (rescored from 3: it fails WCAG 2.4.1 Bypass Blocks, level A, on every page)
+- ease: 9
+- next: nav moves into a header before main; "Skip to content" is the first Tab stop and focuses main
+- issue: #54
+- fixed: (this commit)
+
+### [ ] [2.8] /play: enemy choice buttons name enemies by engine id (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: name enemies by kind and place in describeAction.ts (or the pending "Player names for every map piece" candidate)
+
+### [ ] [2.7] /: home page does not link /decisions (critique LOW)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 9
+- next: add the Decisions link to the "Also:" line
+
+### [ ] [2.4] /tiles: one flat grid with no headings (critique LOW)
+- category: external-critique (a11y)
+- impact: 3
+- ease: 8
+- next: an H2 per tile kind, an H3 per tile name
+
+### [ ] [2.4] /: the Combat step is one long sentence chain (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: split into short sentences; Exchanges in its own sentence
+
 # Site audit — 2026-10-08 (pass 14, cloud tick)
 
 ## Top 5 findings (scored)

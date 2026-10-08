@@ -44,7 +44,8 @@ const notFound: Route = {
 }
 
 /**
- * App shell: navigation (the current page marked), the page title, and the page itself. The
+ * App shell: a skip link, the navigation in a header (the current page marked), then the page
+ * title and the page itself in the main landmark. The
  * not-found page also gets a robots noindex tag, so a mistyped URL is not indexed as a page.
  */
 export function App() {
@@ -59,16 +60,23 @@ export function App() {
     return () => robots.remove()
   }, [route])
   return (
-    <main className="app">
-      <nav aria-label="Main" className="nav">
-        {NAV.map(([path, label]) => (
-          <a key={path} href={path} aria-current={path === route.path ? 'page' : undefined}>
-            {label}
-          </a>
-        ))}
-      </nav>
-      <h1 className={route.quietTitle ? 'visually-hidden' : undefined}>{route.title}</h1>
-      {route.render()}
-    </main>
+    <div className="app">
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
+      <header>
+        <nav aria-label="Main" className="nav">
+          {NAV.map(([path, label]) => (
+            <a key={path} href={path} aria-current={path === route.path ? 'page' : undefined}>
+              {label}
+            </a>
+          ))}
+        </nav>
+      </header>
+      <main id="main" tabIndex={-1}>
+        <h1 className={route.quietTitle ? 'visually-hidden' : undefined}>{route.title}</h1>
+        {route.render()}
+      </main>
+    </div>
   )
 }

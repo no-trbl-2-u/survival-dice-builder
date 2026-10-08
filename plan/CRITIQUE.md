@@ -18,15 +18,6 @@
 - suggested fix: Add "the rules questions that wait on you" linked to /decisions to the "Also:" line.
 - source: web-fetch
 
-### [LOW] all pages — the main nav is inside <main> and there is no skip link
-- pass: 8 (commit c9bd27d)
-- viewport: n/a (web-fetch)
-- category: a11y
-- observation: The nav sits inside the main landmark, so landmark navigation lands on the nav, not the content. Keyboard users tab through 7 nav links on every page before they reach the content.
-- evidence: `apps/web/src/App.tsx:62-69` `<main className="app"><nav aria-label="Main" ...>`.
-- suggested fix: Move the nav into a <header> before <main>, and add a "Skip to content" link as the first focusable element.
-- source: web-fetch
-
 ### [LOW] /tiles — the tiles are one flat grid with no headings
 - pass: 8 (commit c9bd27d)
 - viewport: n/a (web-fetch)
@@ -70,6 +61,17 @@
 > Pass 8 note: web-fetch engine (cloud, no browser). Every route served only the app shell, so the reader read the shipped copy from source. 2 reader observations were not filed (cap): the /decisions lede counts "rule readings" and "checks" without saying what they are (LOW, partly covered by the status-line row); index.html has no canonical link or Open Graph tags (LOW). The pass 5 observation about raw step ids is no longer true on /play; that form now appears only on /debug.
 
 ## Done
+
+### [x] [LOW] all pages — the main nav is inside <main> and there is no skip link
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: The nav sits inside the main landmark, so landmark navigation lands on the nav, not the content. Keyboard users tab through 7 nav links on every page before they reach the content.
+- evidence: `apps/web/src/App.tsx:62-69` `<main className="app"><nav aria-label="Main" ...>`.
+- suggested fix: Move the nav into a <header> before <main>, and add a "Skip to content" link as the first focusable element.
+- source: web-fetch
+- issue: #54
+- fixed: (this commit) — the nav sits in a header before main; a "Skip to content" link is the first Tab stop and moves focus to main
 
 ### [x] [MED] /decisions — status lines use build-process words and point at hidden rows
 - pass: 8 (commit c9bd27d)
