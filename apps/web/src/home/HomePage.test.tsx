@@ -9,4 +9,10 @@ describe('HomePage', () => {
       screen.getByText(/new tile's spawn nodes add enemies at every Combat, and enemies go for/),
     ).toBeTruthy()
   })
+
+  it('names both Combat models the start panel offers', () => {
+    render(<HomePage />)
+    const combat = screen.getAllByText(/Or choose Exchanges, the Combat in the written rules/)[0]
+    expect(combat?.textContent).toMatch(/play Engage to roll/)
+  })
 })

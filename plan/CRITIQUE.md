@@ -27,15 +27,6 @@
 - suggested fix: Use one case for all faces (Hit 1 / Special 2 / Miss) and shorten the heading to "Enemy dice: they hit you after your Skills".
 - source: web-fetch
 
-### [LOW] / — the home page "How a run goes" describes only Engagements Combat
-- pass: 7 (commit b91436a)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: The Combat step says "play Engage to roll your dice, plus 1 enemy die for each enemy next to you", but the start panel offers both models and the config default is Exchanges. A player who picks Exchanges gets a different Combat from the one the home page describes.
-- evidence: `apps/web/src/home/HomePage.tsx:25-27`; `apps/web/src/play/StartPanel.tsx:94-95`; `packages/content/data/config.default.json:117` `"model": "exchange"`.
-- suggested fix: Add one sentence: "Or choose Exchanges (the written rules) on the start panel." (Related user call in AUDIT.md: the start panel Combat default.)
-- source: web-fetch
-
 ### [LOW] any unknown path — "Page not found" is served with HTTP 200 and no noindex
 - pass: 7 (commit b91436a)
 - viewport: n/a (web-fetch)
@@ -77,6 +68,17 @@
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 ## Done
+
+### [x] [LOW] / — the home page "How a run goes" describes only Engagements Combat
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The Combat step says "play Engage to roll your dice, plus 1 enemy die for each enemy next to you", but the start panel offers both models and the config default is Exchanges. A player who picks Exchanges gets a different Combat from the one the home page describes.
+- evidence: `apps/web/src/home/HomePage.tsx:25-27`; `apps/web/src/play/StartPanel.tsx:94-95`; `packages/content/data/config.default.json:117` `"model": "exchange"`.
+- suggested fix: Add one sentence: "Or choose Exchanges (the written rules) on the start panel." (Related user call in AUDIT.md: the start panel Combat default.)
+- source: web-fetch
+- issue: #47
+- fixed: (this commit) — the Combat step in `apps/web/src/home/HomePage.tsx` adds one sentence naming Exchanges and how it plays
 
 ### [x] [MED] /play — run summary milestone labels are hard-coded and ignore the config
 - pass: 5 (commit 04b907a)
