@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-08 (pass 16, cloud tick)
+
+## Top 5 findings (scored)
+
+### [x] [3.2] all pages: no Open Graph or Twitter card tags in the served shell (audit, seo)
+- category: seo
+- impact: 4 (every shared link, including links sent to playtesters; unfurlers read the static HTML and run no JavaScript)
+- ease: 8
+- next: og:type, og:site_name, og:title, og:description, og:url and twitter:card in index.html; the smoke e2e checks the served shell
+- issue: #55
+- fixed: (this commit)
+
+### [ ] [2.8] /play: enemy choice buttons name enemies by engine id (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: name enemies by kind and place in describeAction.ts (or the pending "Player names for every map piece" candidate)
+
+### [ ] [2.7] /: home page does not link /decisions (critique LOW)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 9
+- next: add the Decisions link to the "Also:" line
+
+### [ ] [2.4] /tiles: one flat grid with no headings (critique LOW)
+- category: external-critique (a11y)
+- impact: 3
+- ease: 8
+- next: an H2 per tile kind, an H3 per tile name
+
+### [ ] [2.4] /: the Combat step is one long sentence chain (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: split into short sentences; Exchanges in its own sentence
+
 # Site audit — 2026-10-08 (pass 15, cloud tick)
 
 ## Top 5 findings (scored)
