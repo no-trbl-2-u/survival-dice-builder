@@ -37,3 +37,16 @@ test('an unknown path says the page was not found and links home', async ({ page
   await page.getByRole('link', { name: 'the home page' }).click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Survival Dice-Builder')
 })
+
+test('with JavaScript off the shell says what the game is and that it needs JavaScript', async ({
+  request,
+}) => {
+  // Headless Chromium still parses <noscript> as raw text when scripts are
+  // disabled, so check the served shell rather than the rendered page.
+  const html = await (await request.get('/play')).text()
+  const noscript = /<noscript>([\s\S]*?)<\/noscript>/.exec(html)?.[1] ?? ''
+  expect(noscript.replace(/\s+/g, ' ')).toContain(
+    'a co-op survival dice-builder for 1 to 4 players',
+  )
+  expect(noscript).toContain('Turn JavaScript on to play.')
+})

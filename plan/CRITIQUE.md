@@ -54,7 +54,13 @@
 - suggested fix: Show only the name in options; label presets "Preset 1", "Preset 2".
 - source: web-fetch
 
-### [LOW] all pages — with JavaScript off the page is blank
+> Pass 4 note: web-fetch engine (cloud, no browser). The reader could not get the client-rendered copy on /decisions or /config from the shell, so the phase 18 and 19 copy was not reviewed. A browser pass should cover it.
+
+> Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
+
+## Done
+
+### [x] [LOW] all pages — with JavaScript off the page is blank
 - pass: 4 (commit 23470a2)
 - viewport: n/a (web-fetch)
 - category: comprehension
@@ -62,12 +68,8 @@
 - evidence: Raw `/` HTML body: `<div id="root"></div>`. No `<noscript>` element. Reader WebFetch of `/`, `/decisions`, `/config`, `/play`, `/tiles`, `/credits`: "contains only a title 'Survival Dice-Builder'".
 - suggested fix: Add a `<noscript>` paragraph to `apps/web/index.html`: one line that says what the game is and that it needs JavaScript.
 - source: web-fetch
-
-> Pass 4 note: web-fetch engine (cloud, no browser). The reader could not get the client-rendered copy on /decisions or /config from the shell, so the phase 18 and 19 copy was not reviewed. A browser pass should cover it.
-
-> Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
-
-## Done
+- issue: #48
+- fixed: (this commit) — `apps/web/index.html` adds a `<noscript>` paragraph saying what the game is and that it needs JavaScript
 
 ### [x] [LOW] / — the home page "How a run goes" describes only Engagements Combat
 - pass: 7 (commit b91436a)
