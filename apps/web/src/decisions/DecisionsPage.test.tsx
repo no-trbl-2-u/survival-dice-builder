@@ -21,7 +21,11 @@ describe('DecisionsPage', () => {
     expect(readings.length).toBeGreaterThan(0)
     // Row 1 is decided, so it is not listed; pending-spec rows come first, and row 7 is one.
     expect(container.querySelector('[data-question="1"]')).toBeNull()
-    expect(readings[0]?.textContent).toContain('pending-spec')
+    expect(readings[0]?.textContent).toContain('Waiting for the designer to write the rule')
+    // Statuses are plain words: no build terms or phase numbers.
+    expect(container.querySelector('[data-testid="readings"]')?.textContent).not.toMatch(
+      /Status: [^.]*(pending-spec|structural|phase \d)/,
+    )
     expect(container.querySelector('[data-question="7"]')).not.toBeNull()
     const link = container.querySelector('a[href="/config#cfg-rulings-structureDamage"]')
     expect(link?.textContent).toBe('rulings.structureDamage')
@@ -29,6 +33,19 @@ describe('DecisionsPage', () => {
     expect(link?.parentElement?.textContent).toContain('Structure damage (rulings.structureDamage)')
     expect(container.querySelectorAll('[data-testid="checks"] > li').length).toBeGreaterThan(3)
     expect(container.textContent).not.toMatch(/undefined|\*\*/)
+  })
+
+  it('links each row it names: to the listed reading, or to the full table for a settled row', () => {
+    const { container } = render(<DecisionsPage />)
+    const row = (n: number) => container.querySelector(`[data-question="${n}"]`)
+    // Row 30 points at row 49, which is open and listed on the page.
+    const listed = [...row(30)!.querySelectorAll('a')].find((a) => a.textContent === 'row 49')
+    expect(listed?.getAttribute('href')).toBe('#q-49')
+    expect(container.querySelector('#q-49')).toBe(row(49))
+    // Row 63 points at row 62, which is settled and not listed.
+    expect(row(62)).toBeNull()
+    const hidden = [...row(63)!.querySelectorAll('a')].find((a) => a.textContent === 'row 62')
+    expect(hidden?.getAttribute('href')).toBe(repoFileUrl('OPEN-QUESTIONS.md'))
   })
 
   it('links every repository file it names to GitHub, and each file exists', () => {

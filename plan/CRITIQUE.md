@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — status lines use build-process words and point at hidden rows
-- pass: 8 (commit c9bd27d)
-- viewport: n/a (web-fetch)
-- category: voice
-- observation: Each reading prints its raw status, e.g. "proposed 2026-10-05 (structural; option measured in phase 22)" or "proposed 2026-10-04 (engine: phase 21, shipped)". Phase numbers and "structural" mean nothing to the designer. Row 63 says "never ends (row 62)", but row 62 is superseded and the page hides it, so the reference leads nowhere. Read from source; the live page is client-rendered.
-- evidence: `apps/web/src/decisions/DecisionsPage.tsx:76` `Status: {q.status}`; `packages/content/src/decisions.ts:64` `const OPEN = /proposed|pending-spec/` filters superseded rows; `OPEN-QUESTIONS.md` rows 62-63.
-- suggested fix: Map each status to a plain label ("Proposed, waiting for your answer", "Waiting for rules text") with no phase numbers, and drop or inline references to rows the page does not show.
-- source: web-fetch
-
 ### [LOW] / — the home page does not link the Decisions page
 - pass: 8 (commit c9bd27d)
 - viewport: n/a (web-fetch)
@@ -79,6 +70,17 @@
 > Pass 8 note: web-fetch engine (cloud, no browser). Every route served only the app shell, so the reader read the shipped copy from source. 2 reader observations were not filed (cap): the /decisions lede counts "rule readings" and "checks" without saying what they are (LOW, partly covered by the status-line row); index.html has no canonical link or Open Graph tags (LOW). The pass 5 observation about raw step ids is no longer true on /play; that form now appears only on /debug.
 
 ## Done
+
+### [x] [MED] /decisions — status lines use build-process words and point at hidden rows
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: Each reading prints its raw status, e.g. "proposed 2026-10-05 (structural; option measured in phase 22)" or "proposed 2026-10-04 (engine: phase 21, shipped)". Phase numbers and "structural" mean nothing to the designer. Row 63 says "never ends (row 62)", but row 62 is superseded and the page hides it, so the reference leads nowhere. Read from source; the live page is client-rendered.
+- evidence: `apps/web/src/decisions/DecisionsPage.tsx:76` `Status: {q.status}`; `packages/content/src/decisions.ts:64` `const OPEN = /proposed|pending-spec/` filters superseded rows; `OPEN-QUESTIONS.md` rows 62-63.
+- suggested fix: Map each status to a plain label ("Proposed, waiting for your answer", "Waiting for rules text") with no phase numbers, and drop or inline references to rows the page does not show.
+- source: web-fetch
+- issue: #53
+- fixed: (this commit) — statuses read as plain labels with no dates or phase numbers; each "row N" links to the listed reading, or to `OPEN-QUESTIONS.md` for a settled row
 
 ### [x] [MED] /decisions — the page tells the designer to edit repository files it does not link
 - pass: 8 (commit c9bd27d)

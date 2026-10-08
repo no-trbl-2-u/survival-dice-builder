@@ -5,12 +5,13 @@ import {
   openQuestions,
   parseQuestions,
   parseUserCalls,
+  statusLabel,
   type QuestionRow,
 } from '@survival/content'
 import questionsMd from '../../../../OPEN-QUESTIONS.md?raw'
 import auditMd from '../../../../plan/AUDIT.md?raw'
 import styles from './DecisionsPage.module.css'
-import { Inline, RepoFile } from './Inline.tsx'
+import { Inline, RepoFile, rowId } from './Inline.tsx'
 
 /** The config field id on /config for a dotted path (`rulings.enemiesPerHex`). */
 const fieldId = (path: string) => `cfg-${path.split('.').join('-')}`
@@ -54,6 +55,7 @@ function Settings({ row }: Readonly<{ row: QuestionRow }>) {
 export function DecisionsPage() {
   const open = openQuestions(parseQuestions(questionsMd))
   const calls = parseUserCalls(auditMd)
+  const shown = new Set(open.map((q) => q.number))
   return (
     <div className={styles.page}>
       <p>
@@ -69,14 +71,14 @@ export function DecisionsPage() {
       <h2 id="readings">Rule readings</h2>
       <ol className={styles.list} data-testid="readings">
         {open.map((q) => (
-          <li key={q.number} className={styles.item} data-question={q.number}>
+          <li key={q.number} id={rowId(q.number)} className={styles.item} data-question={q.number}>
             <h3 className={styles.question}>
-              {q.number}. <Inline text={q.question} />{' '}
+              {q.number}. <Inline text={q.question} rows={shown} />{' '}
               <span className={styles.muted}>(rule {q.rule})</span>
             </h3>
-            <p className={styles.muted}>Status: {q.status}</p>
+            <p className={styles.muted}>Status: {statusLabel(q.status)}</p>
             <p>
-              <Inline text={q.reading} />
+              <Inline text={q.reading} rows={shown} />
             </p>
             <p>
               Setting: <Settings row={q} />

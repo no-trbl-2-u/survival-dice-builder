@@ -7,6 +7,7 @@ import {
   openQuestions,
   parseQuestions,
   parseUserCalls,
+  statusLabel,
 } from './decisions.ts'
 
 const root = new URL('../../../', import.meta.url)
@@ -53,6 +54,26 @@ describe('decisions', () => {
     expect(off).toMatchObject({ named: 'empty', current: 'empty', differs: false })
     // "(future ...)" notes name no setting.
     expect(flagSettings('`structureDamage: "v1"` (future `"grunt-die"`)', config)).toHaveLength(1)
+  })
+
+  it('labels each status in plain words, with no dates or phase numbers', () => {
+    expect(statusLabel('pending-spec 2026-10-04 (Skill design)')).toBe(
+      'Waiting for the designer to write the rule (Skill design).',
+    )
+    expect(statusLabel('pending-spec 2026-10-04 (experiment: phase 21)')).toBe(
+      'Waiting for the designer to write the rule.',
+    )
+    expect(statusLabel('pending-spec (2026-10-04: keep the v1 reading)')).toBe(
+      'Waiting for the designer to write the rule (keep the v1 reading).',
+    )
+    expect(statusLabel('proposed 2026-10-04 (engine: phase 21, shipped)')).toBe(
+      "Proposed, waiting for the designer's answer. The game plays this reading now.",
+    )
+    expect(statusLabel('proposed 2026-10-05 (structural; option measured in phase 22)')).toBe(
+      "Proposed, waiting for the designer's answer. It is an option, off by default.",
+    )
+    for (const q of openQuestions(parseQuestions(questionsMd)))
+      expect(statusLabel(q.status)).not.toMatch(/\d{4}-|phase|structural|engine|pending-spec/)
   })
 
   it('reads needs-user-call checks', () => {

@@ -20,13 +20,35 @@ export function RepoFile({ path }: Readonly<{ path: string }>) {
   )
 }
 
+/** The element id of an open reading on /decisions. */
+export const rowId = (n: number) => `q-${n}`
+
+/**
+ * Links each "row N" in plain text: to the reading on this page when it is listed, else to
+ * `OPEN-QUESTIONS.md` on GitHub, where every row (settled ones too) is kept.
+ */
+function rowRefs(text: string, rows: ReadonlySet<number>, key: number): ReactNode[] {
+  return text.split(/(\brow \d+\b)/).map((part, i) => {
+    const n = /^row (\d+)$/.exec(part)?.[1]
+    if (!n) return part
+    const href = rows.has(Number(n)) ? `#${rowId(Number(n))}` : repoFileUrl('OPEN-QUESTIONS.md')
+    return (
+      <a key={`${key}-${i}`} href={href}>
+        {part}
+      </a>
+    )
+  })
+}
+
 /**
  * Renders the inline markdown the plan files use: **bold** and `code`. Everything else is text.
- * A `code` span that names a repository document links to it on GitHub.
+ * A `code` span that names a repository document links to it on GitHub. With `rows`, each
+ * "row N" links to that reading (see `rowRefs`).
  *
  * @param text - one cell or line of markdown.
+ * @param rows - the row numbers listed on the page.
  */
-export function Inline({ text }: Readonly<{ text: string }>) {
+export function Inline({ text, rows }: Readonly<{ text: string; rows?: ReadonlySet<number> }>) {
   const parts: ReactNode[] = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/).map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**') && part.length > 4)
       return <strong key={i}>{part.slice(2, -2)}</strong>
@@ -34,7 +56,7 @@ export function Inline({ text }: Readonly<{ text: string }>) {
       const code = part.slice(1, -1)
       return REPO_FILE.test(code) ? <RepoFile key={i} path={code} /> : <code key={i}>{code}</code>
     }
-    return part
+    return rows ? rowRefs(part, rows, i) : part
   })
   return <>{parts}</>
 }
