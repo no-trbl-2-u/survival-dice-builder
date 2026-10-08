@@ -89,7 +89,9 @@ test('/config: sliders, toggles, and pick lists; a name can only come from the c
   await page.keyboard.press('ArrowRight')
   await expect(page.getByLabel('Maximum health', { exact: true })).toHaveValue('16')
   // An optional limit turns on at the low end of its range.
-  await page.getByLabel('Forced reveal every: on', { exact: true }).check()
+  const limit = page.getByLabel('Forced reveal every: use a limit', { exact: true })
+  await expect(limit).not.toBeChecked()
+  await limit.check()
   await expect(page.getByLabel('Forced reveal every', { exact: true })).toHaveValue('1')
   // Starter Skills are toggles; a starter deck card is a pick from the card list.
   const skills = page.locator('#cfg-player-starterSkills')

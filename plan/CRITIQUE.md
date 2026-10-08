@@ -36,15 +36,6 @@
 - suggested fix: Have the notFound route add `<meta name="robots" content="noindex">`, or list known routes in `_redirects` and send the rest to a 404 page with status 404.
 - source: web-fetch
 
-### [LOW] /config — optional-limit toggles are always named "...: on"
-- pass: 6 (commit e9a9406)
-- viewport: n/a (web-fetch)
-- category: a11y
-- observation: The checkbox for an optional limit has the accessible name "<label>: on" even when unchecked, and the visible "Off" / "no maximum" text is aria-hidden. A screen reader hears "X: on, checkbox, not checked".
-- evidence: `apps/web/src/config/ConfigPage.tsx:261` ``aria-label={`${label}: on`}``; `ConfigPage.tsx:264` `<span aria-hidden="true">`.
-- suggested fix: Name the checkbox "<label>: use a limit" and let the checked state carry on/off.
-- source: web-fetch
-
 ### [LOW] /config — pick lists show internal ids next to names; presets show only ids
 - pass: 6 (commit e9a9406)
 - viewport: n/a (web-fetch)
@@ -59,6 +50,17 @@
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 ## Done
+
+### [x] [LOW] /config — optional-limit toggles are always named "...: on"
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: The checkbox for an optional limit has the accessible name "<label>: on" even when unchecked, and the visible "Off" / "no maximum" text is aria-hidden. A screen reader hears "X: on, checkbox, not checked".
+- evidence: `apps/web/src/config/ConfigPage.tsx:261` ``aria-label={`${label}: on`}``; `ConfigPage.tsx:264` `<span aria-hidden="true">`.
+- suggested fix: Name the checkbox "<label>: use a limit" and let the checked state carry on/off.
+- source: web-fetch
+- issue: #49
+- fixed: (this commit) — the checkbox is named "<label>: use a limit"; its checked state carries on/off
 
 ### [x] [LOW] all pages — with JavaScript off the page is blank
 - pass: 4 (commit 23470a2)

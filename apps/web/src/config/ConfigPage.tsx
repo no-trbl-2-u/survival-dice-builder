@@ -258,7 +258,7 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
           <input
             type="checkbox"
             checked={on}
-            aria-label={`${label}: on`}
+            aria-label={`${label}: use a limit`}
             onChange={(e) => set(e.target.checked ? Math.max(range[0], min) : null)}
           />
           <span aria-hidden="true">{on ? 'On' : (meta?.empty ?? 'Off')}</span>
