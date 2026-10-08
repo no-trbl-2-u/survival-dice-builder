@@ -10,7 +10,7 @@ import {
 import questionsMd from '../../../../OPEN-QUESTIONS.md?raw'
 import auditMd from '../../../../plan/AUDIT.md?raw'
 import styles from './DecisionsPage.module.css'
-import { Inline } from './Inline.tsx'
+import { Inline, RepoFile } from './Inline.tsx'
 
 /** The config field id on /config for a dotted path (`rulings.enemiesPerHex`). */
 const fieldId = (path: string) => `cfg-${path.split('.').join('-')}`
@@ -58,8 +58,9 @@ export function DecisionsPage() {
     <div className={styles.page}>
       <p>
         {open.length} rule readings and {calls.length} checks wait on the designer. To change a
-        value, follow its link to the Config page. To confirm a reading, change its status in{' '}
-        <code>OPEN-QUESTIONS.md</code>. The same list is in <code>docs/DECISIONS.md</code>.
+        value, follow its link to the Config page. The designer confirms a reading by changing its
+        status in <RepoFile path="OPEN-QUESTIONS.md" />. The same list is in{' '}
+        <RepoFile path="docs/DECISIONS.md" />.
       </p>
       <nav aria-label="On this page">
         <a href="#readings">Rule readings</a> · <a href="#checks">Checks</a>

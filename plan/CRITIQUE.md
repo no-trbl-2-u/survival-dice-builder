@@ -18,15 +18,6 @@
 - suggested fix: Map each status to a plain label ("Proposed, waiting for your answer", "Waiting for rules text") with no phase numbers, and drop or inline references to rows the page does not show.
 - source: web-fetch
 
-### [MED] /decisions — the page tells the designer to edit repository files it does not link
-- pass: 8 (commit c9bd27d)
-- viewport: n/a (web-fetch)
-- category: navigation
-- observation: The lede says "To confirm a reading, change its status in OPEN-QUESTIONS.md. The same list is in docs/DECISIONS.md." Both names are code text, not links, and readings name report files such as `docs/reports/phase-22-experiments.md` the same way. A designer who uses only the site cannot open any of them. Read from source; the live page is client-rendered.
-- evidence: `apps/web/src/decisions/DecisionsPage.tsx:60-62`; report paths inside `OPEN-QUESTIONS.md` rows 63-70.
-- suggested fix: Link each file to its page on GitHub (github.com/no-trbl-2-u/survival-dice-builder/blob/main/...), and say in one sentence who confirms a reading.
-- source: web-fetch
-
 ### [LOW] / — the home page does not link the Decisions page
 - pass: 8 (commit c9bd27d)
 - viewport: n/a (web-fetch)
@@ -88,6 +79,17 @@
 > Pass 8 note: web-fetch engine (cloud, no browser). Every route served only the app shell, so the reader read the shipped copy from source. 2 reader observations were not filed (cap): the /decisions lede counts "rule readings" and "checks" without saying what they are (LOW, partly covered by the status-line row); index.html has no canonical link or Open Graph tags (LOW). The pass 5 observation about raw step ids is no longer true on /play; that form now appears only on /debug.
 
 ## Done
+
+### [x] [MED] /decisions — the page tells the designer to edit repository files it does not link
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: navigation
+- observation: The lede says "To confirm a reading, change its status in OPEN-QUESTIONS.md. The same list is in docs/DECISIONS.md." Both names are code text, not links, and readings name report files such as `docs/reports/phase-22-experiments.md` the same way. A designer who uses only the site cannot open any of them. Read from source; the live page is client-rendered.
+- evidence: `apps/web/src/decisions/DecisionsPage.tsx:60-62`; report paths inside `OPEN-QUESTIONS.md` rows 63-70.
+- suggested fix: Link each file to its page on GitHub (github.com/no-trbl-2-u/survival-dice-builder/blob/main/...), and say in one sentence who confirms a reading.
+- source: web-fetch
+- issue: #52
+- fixed: (this commit)
 
 ### [x] [LOW] /play — enemy dice faces use three different cases, and the heading is long
 - pass: 7 (commit b91436a)

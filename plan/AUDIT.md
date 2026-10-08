@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-08 (pass 13, cloud tick)
+
+## Top 5 findings (scored)
+
+### [x] [4.5] /decisions: names repository files it does not link (critique MED)
+- category: external-critique (navigation)
+- impact: 5
+- ease: 9
+- next: every full repository path in a `code` span links to its GitHub page; the lede says the designer confirms a reading
+- issue: #52
+- fixed: (this commit)
+
+### [ ] [4.2] /decisions: status lines use build-process words and point at hidden rows (critique MED)
+- category: external-critique (voice)
+- impact: 6
+- ease: 7
+- next: map each status to a plain label with no phase numbers; drop or inline references to hidden rows
+
+### [ ] [2.8] /play: enemy choice buttons name enemies by engine id (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: name enemies by kind and place in describeAction.ts (or the pending "Player names for every map piece" candidate)
+
+### [ ] [2.7] all pages: nav inside <main>, no skip link (critique LOW)
+- category: external-critique (a11y)
+- impact: 3
+- ease: 9
+- next: move nav into a header before main; add "Skip to content"
+
+### [ ] [2.7] /: home page does not link /decisions (critique LOW)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 9
+- next: add the Decisions link to the "Also:" line
+
 # Site audit — 2026-10-08 (pass 12, cloud tick)
 
 ## Top 5 findings (scored)
