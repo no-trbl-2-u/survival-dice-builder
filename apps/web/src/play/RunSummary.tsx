@@ -1,17 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { downloadRun } from './exportRun.ts'
+import { milestoneIds, milestoneLabel } from './milestoneText.ts'
 import styles from './Play.module.css'
 import type { Run } from './run.ts'
-
-const MILESTONE_LABEL: Record<string, string> = {
-  'survive-round-5': 'Survive to round 5',
-  'survive-round-10': 'Survive to round 10',
-  'survive-round-15': 'Survive to round 15',
-  'defeat-elite': 'Defeat an elite',
-  'buy-upgrades': 'Buy 3 base upgrades',
-  'reveal-tiles': 'Reveal 10 tiles',
-  'reach-level': 'Reach level 5',
-}
 
 type Props = Readonly<{ run: Run; baseCurve: readonly number[]; onNewRun: () => void }>
 
@@ -20,14 +11,7 @@ export function RunSummary({ run, baseCurve, onNewRun }: Props) {
   const ref = useRef<HTMLElement>(null)
   useEffect(() => ref.current?.focus(), [])
   const s = run.state
-  const all = [
-    ...s.config.milestones.surviveRounds.map((n) => `survive-round-${n}`),
-    'defeat-elite',
-    `fire-${s.config.milestones.skillFired}`,
-    'buy-upgrades',
-    'reveal-tiles',
-    'reach-level',
-  ]
+  const all = milestoneIds(s.config.milestones)
   const download = () => downloadRun(run, Date.now())
   const max = Math.max(1, ...baseCurve)
   return (
@@ -51,9 +35,7 @@ export function RunSummary({ run, baseCurve, onNewRun }: Props) {
           const got = s.milestones.includes(id)
           return (
             <li key={id} className={got ? styles.got : styles.muted}>
-              {got ? '✓' : '–'}{' '}
-              {MILESTONE_LABEL[id] ??
-                `Fire ${s.content.skills.find((k) => `fire-${k.id}` === id)?.name ?? id}`}
+              {got ? '✓' : '–'} {milestoneLabel(id, s.config.milestones, s.content)}
             </li>
           )
         })}

@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-08 (pass 7, cloud tick)
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play: run summary milestone labels are hard-coded (critique MED)
+- category: external-critique (voice)
+- impact: 6
+- ease: 6
+- next: build the labels from config.milestones; reuse them in the log
+- issue: #46
+- fixed: (this commit)
+
+### [ ] [3.2] /: "How a run goes" describes only Engagements Combat (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: one sentence in HomePage.tsx naming Exchanges
+
+### [ ] [3.0] all pages: with JavaScript off the page is blank (critique LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 10
+- next: one noscript line in apps/web/index.html
+
+### [ ] [2.7] /config: optional-limit toggles are always named "...: on" (critique LOW)
+- category: external-critique (a11y)
+- impact: 3
+- ease: 9
+- next: name the checkbox "<label>: use a limit" in ConfigPage.tsx
+
+### [ ] [2.7] /play: enemy choice buttons name enemies by engine id (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: name enemies by kind and place in describeAction.ts
+
 # Site audit — 2026-10-07 (pass 6, from critique pass 7)
 
 ## Top 5 findings (scored)

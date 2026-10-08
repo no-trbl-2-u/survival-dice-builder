@@ -1,5 +1,6 @@
 import { hexKey, type GameEvent, type GameState } from '@survival/engine'
 import { hexLabel } from '../tiles/TileView.tsx'
+import { milestoneLabel } from './milestoneText.ts'
 
 /** What the log needs to name ids: the content, plus the pieces in play (usually the state). */
 type Names = Readonly<{
@@ -11,6 +12,8 @@ type Names = Readonly<{
   log?: GameState['log']
   /** The map, to name a hex by its terrain and site. */
   map?: GameState['map']
+  /** The config, to give milestones their numbers. */
+  config?: GameState['config']
 }>
 
 const hex = (h: { q: number; r: number }) => `(${h.q},${h.r})`
@@ -205,7 +208,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'skillReplaced':
       return `${skillName(names, event.skill)} leaves the Skill board.`
     case 'milestoneReached':
-      return `Milestone: ${event.milestone}.`
+      return `Milestone: ${names.config ? milestoneLabel(event.milestone, names.config.milestones, names.content) : event.milestone}.`
     case 'runEnded':
       return `The base has fallen in round ${event.round}. The run ends.`
     case 'playerKnockedOut':

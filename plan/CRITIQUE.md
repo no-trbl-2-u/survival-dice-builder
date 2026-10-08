@@ -63,15 +63,6 @@
 - suggested fix: Show only the name in options; label presets "Preset 1", "Preset 2".
 - source: web-fetch
 
-### [MED] /play — run summary milestone labels are hard-coded and ignore the config
-- pass: 5 (commit 04b907a)
-- viewport: n/a (web-fetch)
-- category: voice
-- observation: The labels are a fixed table. "Reveal 10 tiles" shows on every run, but only 8 tiles can be revealed. If /config changes surviveRounds, the label falls back to the raw id ("Fire survive-round-8"). The log prints raw milestone ids.
-- evidence: `apps/web/src/play/RunSummary.tsx:12` 'reveal-tiles': 'Reveal 10 tiles'; `:55-56` fallback `Fire ${... ?? id}`; `apps/web/src/play/describeEvent.ts:204` `Milestone: ${event.milestone}.`
-- suggested fix: Build the labels from `config.milestones` (for example `Reveal ${m.tilesRevealed} tiles`, `Survive to round ${n}`), and use the same labels in the log.
-- source: web-fetch
-
 ### [LOW] all pages — with JavaScript off the page is blank
 - pass: 4 (commit 23470a2)
 - viewport: n/a (web-fetch)
@@ -86,6 +77,17 @@
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 ## Done
+
+### [x] [MED] /play — run summary milestone labels are hard-coded and ignore the config
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: The labels are a fixed table. "Reveal 10 tiles" shows on every run, but only 8 tiles can be revealed. If /config changes surviveRounds, the label falls back to the raw id ("Fire survive-round-8"). The log prints raw milestone ids.
+- evidence: `apps/web/src/play/RunSummary.tsx:12` 'reveal-tiles': 'Reveal 10 tiles'; `:55-56` fallback `Fire ${... ?? id}`; `apps/web/src/play/describeEvent.ts:204` `Milestone: ${event.milestone}.`
+- suggested fix: Build the labels from `config.milestones` (for example `Reveal ${m.tilesRevealed} tiles`, `Survive to round ${n}`), and use the same labels in the log.
+- source: web-fetch
+- issue: #46
+- fixed: (this commit) — labels and log lines come from `config.milestones` via `apps/web/src/play/milestoneText.ts`
 
 ### [x] [MED] /config — the Combat model setting uses internal labels and repeats itself
 - pass: 7 (commit b91436a)
