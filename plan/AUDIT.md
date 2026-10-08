@@ -3,6 +3,30 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-08 (pass 12, cloud tick)
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /play: enemy dice faces use three different cases (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 10 (re-scored: copy in effectText.ts and DiceTray.tsx plus one unit test, no layout change)
+- next: faces read "Hit 1", "Special 2", "Miss"; the aria label names the face; heading "Enemy dice (locked): they hit you after your Skills"
+- issue: #51
+- fixed: (this commit)
+
+### [ ] [2.8] /play: enemy choice buttons name enemies by engine id (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: name enemies by kind and place in describeAction.ts (or the pending "Player names for every map piece" candidate)
+
+### [ ] [2.4] /config: pick lists show internal ids next to names (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: names only in options; presets as "Preset 1", "Preset 2" (also in the "Player names" candidate)
+
 # Site audit — 2026-10-08 (pass 11, cloud tick)
 
 ## Top 5 findings (scored)

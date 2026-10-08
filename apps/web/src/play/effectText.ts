@@ -33,8 +33,8 @@ export function cardText(def: CardDef): string {
 }
 
 /**
- * What an enemy die face does to you, from config: the label on the die ("HIT 1",
- * "SPECIAL 2", "miss") and its damage.
+ * What an enemy die face does to you, from config: its name ("Hit"), the label on the
+ * die ("Hit 1", "Special 2", "Miss"), and its damage.
  *
  * @param face - the rolled enemy face.
  * @param engage - `config.combat.engage`.
@@ -43,9 +43,14 @@ export function cardText(def: CardDef): string {
 export function enemyFaceText(
   face: 'hit' | 'miss' | 'special',
   engage: GameConfig['combat']['engage'],
-): Readonly<{ label: string; damage: number }> {
-  if (face === 'hit') return { label: `HIT ${engage.hitDamage}`, damage: engage.hitDamage }
+): Readonly<{ name: string; label: string; damage: number }> {
+  if (face === 'hit')
+    return { name: 'Hit', label: `Hit ${engage.hitDamage}`, damage: engage.hitDamage }
   if (face === 'special')
-    return { label: `SPECIAL ${engage.specialDamage}`, damage: engage.specialDamage }
-  return { label: 'miss', damage: 0 }
+    return {
+      name: 'Special',
+      label: `Special ${engage.specialDamage}`,
+      damage: engage.specialDamage,
+    }
+  return { name: 'Miss', label: 'Miss', damage: 0 }
 }

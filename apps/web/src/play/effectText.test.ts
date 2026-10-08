@@ -24,14 +24,16 @@ describe('effect text', () => {
   it('gives each enemy die face its damage from config', () => {
     const engage = defaultContent.config.combat.engage
     expect(enemyFaceText('hit', engage)).toEqual({
-      label: `HIT ${engage.hitDamage}`,
+      name: 'Hit',
+      label: `Hit ${engage.hitDamage}`,
       damage: engage.hitDamage,
     })
     expect(enemyFaceText('special', engage)).toEqual({
-      label: `SPECIAL ${engage.specialDamage}`,
+      name: 'Special',
+      label: `Special ${engage.specialDamage}`,
       damage: engage.specialDamage,
     })
-    expect(enemyFaceText('miss', engage)).toEqual({ label: 'miss', damage: 0 })
-    expect(enemyFaceText('special', { ...engage, specialDamage: 5 }).label).toBe('SPECIAL 5')
+    expect(enemyFaceText('miss', engage)).toEqual({ name: 'Miss', label: 'Miss', damage: 0 })
+    expect(enemyFaceText('special', { ...engage, specialDamage: 5 }).label).toBe('Special 5')
   })
 })

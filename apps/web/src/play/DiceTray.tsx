@@ -53,7 +53,7 @@ export function DiceTray({ state, legal, act, selected, toggle, dice3d = false }
           <h3 className={styles.subTitle}>
             {ex.engage.enemyDice.length === 0
               ? 'Enemy dice: none (no enemy next to you)'
-              : `Enemy dice from adjacent enemies (locked: they hit you after your Skills; a Hit deals ${state.config.combat.engage.hitDamage} damage, a Special ${state.config.combat.engage.specialDamage})`}
+              : 'Enemy dice (locked): they hit you after your Skills'}
           </h3>
           <ul className={styles.dice}>
             {ex.engage.enemyDice.map((d, i) => {
@@ -64,7 +64,7 @@ export function DiceTray({ state, legal, act, selected, toggle, dice3d = false }
                 <li key={i} className={styles.dieItem}>
                   <span
                     className={`${styles.die} ${styles.enemyDie} ${d.face === 'miss' ? '' : styles.enemyHit}`}
-                    aria-label={`Enemy die of ${who}: ${d.face}, ${face.damage} damage`}
+                    aria-label={`Enemy die of ${who}: ${face.name}, ${face.damage} damage`}
                   >
                     <strong>{face.label}</strong>
                     <small>{who}</small>
