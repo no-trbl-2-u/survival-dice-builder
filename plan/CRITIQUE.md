@@ -135,6 +135,116 @@
 - suggested fix: Show only the name in options; label presets "Preset 1", "Preset 2".
 - source: web-fetch
 
+### [MED] /play — a defeated enemy's die still hits, and nothing says so
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: observation
+- observation: In an engagement, killing an enemy does not cancel the die it rolled: the result can read "You defeated 2 enemies" and still "1 enemy die hit you", and the log shows "Grunt e8 is defeated." then "Grunt e8 attacks you for 1." The "Locked" note was removed from the felt, so nothing explains it; the blind tester called it unfair. Decide the rule (keep, or cancel a defeated enemy's dice), then explain or change it.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3 (2026-10-09); `packages/engine/src/combat/engage.ts` finishEngagement hits with every rolled enemy die
+- suggested fix: [user has not specified — iterate to determine]
+- source: user
+
+### [MED] /play — the pre-selected die is often not the one the player wants
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: observation
+- observation: At Use dice the modal pre-selects the first die that fits a Skill, and after each placement it jumps to another fitting die (e.g. a second Wand when Dodge still needs a Shield). Blind testers had to Unselect almost every time.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; `apps/web/src/play/PlayPage.tsx` `firstFit` auto-pick
+- suggested fix: [user has not specified — iterate to determine]
+- source: user
+
+### [MED] /play — no in-modal note of the damage a target pick dealt
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: observation
+- observation: After picking a target the modal moves straight back to Use dice; the damage dealt (and a kill) only shows in the log or on the board. Testers checked the board to see if the hit landed.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3
+- suggested fix: [user has not specified — iterate to determine]
+- source: user
+
+### [MED] /play — card drag on a real touch phone is untested
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: mobile
+- observation: The engagement hand strip uses pointer events with touch-action: none, verified with a mouse at 375px only. Long-press, scroll-versus-drag and accidental taps on a real touch device are unknown.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; `apps/web/src/play/CardStrip.tsx`; blind testers drove it with mouse events
+- suggested fix: [user has not specified — iterate to determine]
+- source: user
+
+### [LOW] /play — Heal is offered (and spent) at full health
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: observation
+- observation: Rest's "Heal 2" (and Mend) can be played at full health and does nothing ("You healed 0"), with no warning before the card is spent.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3
+- suggested fix: [user has not specified — iterate to determine]
+- source: user
+
+### [LOW] /play — at 375px the dice and Skills are never on screen together
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: mobile
+- observation: On a phone the felt (8 dice: 2 rows) and the Skills need scrolling back and forth; the selected die is usually out of view when a Skill is tapped. The instruction line takes 3 lines and stays pinned.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; screenshots at 375x812
+- suggested fix: [user has not specified — iterate to determine]
+- source: user
+
+### [LOW] /play — nothing says hand cards can be dragged, or why they are greyed
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: comprehension
+- observation: Cards in the engagement hand strip peek from the bottom edge and look like background on desktop; during Roll they are greyed with no reason (cards cannot be added while rolling).
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3
+- suggested fix: [user has not specified — iterate to determine]
+- source: user
+
+### [LOW] /play — mini map: orange vs white rings are unexplained and tokens are unnamed
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: comprehension
+- observation: On the target map, in-range enemies have an orange ring and the hovered or focused one a white glow; testers could not tell what the two meant until hovering. Tokens carry health but no name, so grunt e5 and e6 look the same.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; `apps/web/src/play/Play.module.css` .miniMap .target
+- suggested fix: [user has not specified — iterate to determine]
+- source: user
+
+### [LOW] /play — a Star placed on a Skill shows as the slot's face
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: comprehension
+- observation: Once a Star die is on a Skill the slot shows (and names) the slot face, e.g. "Die 1 (Sword)", so the player wonders where the Star went.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; `apps/web/src/play/SkillBoard.tsx` slot label uses asFace
+- suggested fix: [user has not specified — iterate to determine]
+- source: user
+
+### [LOW] /play — elite enemy dice not yet seen by a blind tester
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: observation
+- observation: None of the 3 blind runs met an elite as a tester, so the gold elite dice vs white grunt dice and the 2-dice elite roll have not had a fresh-eyes check.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest rounds 1-3
+- suggested fix: [user has not specified — iterate to determine]
+- source: user
+
+### [LOW] /play — remove the dev-only engagement tools once the modal is signed off
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: observation
+- observation: "Force engagement (dev)", "Force target pick (dev)" and `?dice=N` (dev server only) are still in the code with TODOs. The DiceTray and CardStrip unit tests use `forceEngagement` as a fixture and need their own fixture first.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; `apps/web/src/play/devEngage.ts`, `PlayPage.tsx` devTools, `DiceTray.test.tsx`, `CardStrip.test.tsx`
+- suggested fix: [user has not specified — iterate to determine]
+- source: user
+
 > Pass 4 note: web-fetch engine (cloud, no browser). The reader could not get the client-rendered copy on /decisions or /config from the shell, so the phase 18 and 19 copy was not reviewed. A browser pass should cover it.
 
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
