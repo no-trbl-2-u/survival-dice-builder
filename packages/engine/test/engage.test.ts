@@ -262,3 +262,18 @@ describe("Combat v3 defeated enemies' dice (designer 2026-10-09)", () => {
     expect(cancelledEnemyDice(inCombat())).toEqual([])
   })
 })
+
+describe('Combat v3: the hand across engagements (designer 2026-10-09)', () => {
+  it('Combat v3 the cards left in hand stay after an engagement; only played cards are discarded', () => {
+    const s = inCombat()
+    const engage = legalActions(s).find((a) => a.type === 'engage')!
+    const opened = applyAction(s, engage).state
+    const hand = opened.players[0]!.hand.map((c) => c.id)
+    expect(hand.length).toBeGreaterThan(0)
+    const [after] = finishEngagement(opened)
+    const player = after.players[0]!
+    expect(player.hand.map((c) => c.id)).toEqual(hand)
+    expect(player.inPlay).toEqual([])
+    expect(player.discard.map((c) => c.id)).toContain(engage.type === 'engage' ? engage.card : '')
+  })
+})

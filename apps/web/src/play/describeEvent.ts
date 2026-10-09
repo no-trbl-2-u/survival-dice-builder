@@ -46,6 +46,7 @@ function enemyKind(n: Names, id: string): string | undefined {
   for (const e of n.log ?? []) {
     if (e.type === 'enemySpawned' && e.enemy === id) return e.kind
     if (e.type === 'eliteReplaced' && e.elite === id) return 'elite'
+    if (e.type === 'enemyDefeated' && e.enemy === id) return e.kind
   }
   return undefined
 }

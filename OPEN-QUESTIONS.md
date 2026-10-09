@@ -144,6 +144,13 @@ phase 21 experiments), upgraded Skill tiers and Skill caps (rows 9, 46,
   defeated enemy's dice do not hit); see
   `docs/reports/phase-23-defeated-dice.md`. Default stays `"hit"`.
 
+- Rule 6.9: a step onto a hex next to an enemy costs 1, like any step
+  (`combat.moveCostNextToEnemy` default 1); the written surcharge of 2
+  stays an option in `/config`.
+- Combat v3: the cards left in hand after an engagement stay in hand for
+  the next engagement (only the cards played into it are discarded), so
+  Combat lasts until the deck and hand are empty.
+
 ## Physical edition constraint (standing)
 
 The designer intends a physical board game. Every reading

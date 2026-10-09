@@ -48,6 +48,16 @@ export function playToTable(player: Player, cardId: string): Player {
   }
 }
 
+/**
+ * Puts the cards in play on the discard pile; the hand stays. The end of an engagement: the
+ * cards left in hand are still played or discarded before the next hand is drawn.
+ *
+ * @rule Combat v3 (Combat uses the whole deck, a hand at a time)
+ */
+export function clearPlayed(player: Player): Player {
+  return { ...player, discard: [...[...player.inPlay].reverse(), ...player.discard], inPlay: [] }
+}
+
 /** Puts every card in play and in hand on the discard pile. @rule 7.8 step 10, 7.9 */
 export function clearTable(player: Player): Player {
   return {

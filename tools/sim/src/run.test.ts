@@ -30,17 +30,19 @@ describe('the default batch (engagements, designer 2026-10-09)', () => {
   it('matches the engagement summary on seeds 1-200', () => {
     expect(config.combat.model).toBe('engage')
     const s = summarize(runBatch(config, 200, 1))
+    // The hand stays across engagements; no move surcharge next to enemies (designer 2026-10-09).
     expect([s.medianEndRound, s.middleHalf, s.minEndRound, s.maxEndRound]).toEqual([
-      7,
+      6,
       [6, 7],
       5,
-      12,
+      11,
     ])
     expect(s.causes).toEqual({ base: 200 })
     expect(s.milestones).toEqual({
       'survive-round-5': 200,
-      'buy-upgrades': 90,
-      'survive-round-10': 11,
+      'buy-upgrades': 118,
+      'defeat-elite': 21,
+      'survive-round-10': 3,
     })
   })
 })
@@ -53,15 +55,15 @@ describe('the exchange batch (hand of 5, OPEN-QUESTIONS row 71)', () => {
       6,
       [5, 7],
       5,
-      16,
+      15,
     ])
     expect(s.causes).toEqual({ base: 200 })
-    // Skills fire as often as the dice fill them (designer change 2026-10-09).
+    // Skills fire as often as the dice fill them; no move surcharge (designer 2026-10-09).
     expect(s.milestones).toEqual({
       'survive-round-5': 200,
-      'buy-upgrades': 83,
-      'survive-round-10': 14,
-      'defeat-elite': 14,
+      'buy-upgrades': 96,
+      'defeat-elite': 12,
+      'survive-round-10': 8,
       'survive-round-15': 1,
     })
   })

@@ -111,7 +111,7 @@
     "maxRolls": 3,
     "exchangeRange": 2,
     "enemyMoveHexes": 2,
-    "moveCostNextToEnemy": 2,
+    "moveCostNextToEnemy": 1,
     "enemyAttacks": "every-exchange",
     "adjacentAttack": "target-only",
     "model": "engage",

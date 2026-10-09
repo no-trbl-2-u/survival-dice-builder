@@ -1,5 +1,5 @@
 import type { CombatOption } from '@survival/content'
-import { clearTable, discardFromHand, playToTable } from '../deck/deck.ts'
+import { clearPlayed, discardFromHand, playToTable } from '../deck/deck.ts'
 import { rerollUnkept, rollDice } from '../dice/dice.ts'
 import { byAge } from '../enemies/movement.ts'
 import { adjacentStructures, damageBase } from '../enemies/structures.ts'
@@ -239,7 +239,7 @@ export function cancelledEnemyDice(state: GameState): number[] {
 /**
  * The end of an engagement, after the Skills resolved: every enemy die rolled hits the player
  * (Hit and Special faces; guard first, an "ignore 1 hit" skips a die), played cards go to the
- * discard pile, and guard is removed. A player at 0 health is knocked out. Under
+ * discard pile (the rest of the hand stays for the next engagement), and guard is removed. A player at 0 health is knocked out. Under
  * `defeatedDice: "cancelled"` a die of an enemy defeated during the engagement does not hit
  * and does not use up an "ignore 1 hit".
  *
@@ -294,7 +294,7 @@ export function finishEngagement(state: GameState): Step {
   }
   events.push({ type: 'exchangeEnded', rule: 'Combat v3', player: playerId })
   current = {
-    ...updateCurrentPlayer(current, (p) => clearTable({ ...p, guard: 0 })),
+    ...updateCurrentPlayer(current, (p) => clearPlayed({ ...p, guard: 0 })),
     exchange: null,
   }
   if (currentPlayer(current).health <= 0) {
