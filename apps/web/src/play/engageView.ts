@@ -35,7 +35,9 @@ export function engageInstruction(state: GameState): string {
     case 'reroll':
       return 'Choose dice to reroll, or stop rerolling.'
     case 'assign':
-      return 'Pick dice, then a Skill they fit (a Star fits any slot). A full Skill fires at once; when no die is left, the enemy dice hit.'
+      return `Pick dice, then a Skill they fit (a Star fits any slot). A full Skill fires at once${
+        state.config.options.skillUses === 'unlimited' ? '' : ', once per engagement'
+      }; when no die is left, the enemy dice hit.`
     case 'targets':
     case 'resolve': {
       const skill = state.content.skills.find((s) => s.id === ex.queue[0]?.skill)?.name

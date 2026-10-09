@@ -32,6 +32,8 @@ type Props = Readonly<{
   /** A card with more than 1 option was played: the felt offers its options. */
   choose: (card: string) => void
   onDrag: (drag: DragState) => void
+  /** The card whose options the felt is offering: it has left the hand until chosen. */
+  pending: string | null
 }>
 
 /** Pixels a pointer moves before a press becomes a drag (less is a tap). */
@@ -43,7 +45,7 @@ const DRAG_START = 6
  * plays it too. A card with 2 options asks which on the felt. A card the engine does not offer
  * now is dimmed and does nothing.
  */
-export function CardStrip({ state, legal, act, felt, choose, onDrag }: Props) {
+export function CardStrip({ state, legal, act, felt, choose, onDrag, pending }: Props) {
   const cards = stripCards(state, legal)
   const [held, setHeld] = useState<{ id: string; dx: number; dy: number; over: boolean } | null>(
     null,
@@ -109,7 +111,7 @@ export function CardStrip({ state, legal, act, felt, choose, onDrag }: Props) {
                 .join(' or ')}`
             : `${card.def.name}: cannot be played now`
           return (
-            <li key={card.id}>
+            <li key={card.id} hidden={card.id === pending}>
               <button
                 type="button"
                 className={styles.stripCard}

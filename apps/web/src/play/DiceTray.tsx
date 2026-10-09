@@ -212,7 +212,7 @@ export function EnemyDice({
 }
 
 /** An enemy's kind: on the map now, or (defeated) from the event that put it there. */
-function enemyKindOf(state: GameState, id: string): string | undefined {
+export function enemyKindOf(state: GameState, id: string): string | undefined {
   const live = state.enemies.find((e) => e.id === id)?.kind
   if (live) return live
   for (const e of state.log) {

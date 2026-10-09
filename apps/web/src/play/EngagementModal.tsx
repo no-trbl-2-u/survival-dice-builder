@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { CardStrip, OptionChips, stripCards, type DragState } from './CardStrip.tsx'
 import { describeEvent } from './describeEvent.ts'
-import { DiceTray, EnemyDice } from './DiceTray.tsx'
+import { DiceTray, EnemyDice, enemyKindOf } from './DiceTray.tsx'
 import {
   ENGAGE_STAGES,
   engageHeadline,
@@ -147,7 +147,7 @@ function Head({
 }: Readonly<{ state: GameState; stage: number; title?: string; onPeek?: () => void }>) {
   const player = state.players[state.current]
   const ids = [...new Set(state.exchange?.engage?.enemyDice.map((d) => d.enemy) ?? [])]
-  const foes = ids.map((id) => `${state.enemies.find((e) => e.id === id)?.kind ?? 'enemy'} ${id}`)
+  const foes = ids.map((id) => `${enemyKindOf(state, id) ?? 'enemy'} ${id}`)
   return (
     <header className={styles.engageHead}>
       <div className={styles.engageTitleRow}>
@@ -285,6 +285,7 @@ function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek 
         felt={felt}
         choose={setChoosing}
         onDrag={setDrag}
+        pending={chosen?.id ?? null}
       />
       <footer className={styles.engageFoot}>
         <span className={styles.engageFootActions}>
@@ -333,6 +334,9 @@ function RollPips({
   )
 }
 
+/** Hexes around the player the target map frames: the same zoom for every pick. */
+const MINI_MAP_RADIUS = 3
+
 /**
  * A fired attack Skill picks its enemy here: a small map framed on the player, the enemies in
  * range highlighted and clickable, and 1 button per target (the keyboard and screen-reader way;
@@ -354,8 +358,6 @@ function Targets({ state, legal, act }: Readonly<Pick<Props, 'state' | 'legal' |
     return e ? `${e.kind} ${id} (health ${e.health}${max ? `/${max}` : ''})` : `enemy ${id}`
   }
   const skillName = (id: string) => state.content.skills.find((s) => s.id === id)?.name ?? id
-  const effect = state.content.skills.find((s) => s.id === head?.skill)?.effect
-  const range = effect?.kind === 'damage' ? effect.range : 1
   const player = state.players[state.current]
   const onMap = [...resolves, ...chooses].some((a) => a.enemy !== undefined)
   const buttonProps = (id: string | undefined) =>
@@ -379,7 +381,7 @@ function Targets({ state, legal, act }: Readonly<Pick<Props, 'state' | 'legal' |
           state={state}
           legal={[...resolves, ...chooses]}
           act={act}
-          around={{ hex: player.hex, radius: Math.max(2, range + 1) }}
+          around={{ hex: player.hex, radius: MINI_MAP_RADIUS }}
           fixed
           highlight={hover}
           onHighlight={setHover}

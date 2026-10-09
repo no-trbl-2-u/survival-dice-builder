@@ -84,7 +84,9 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
                   )
                 })
                 const status = fires ? (
-                  <span className={styles.skillState}>fires</span>
+                  <span className={styles.skillState} data-state="fired">
+                    {ex?.engage ? 'fired' : 'fires'}
+                  </span>
                 ) : could && placing ? (
                   <span className={styles.skillState} data-state="could">
                     can fire

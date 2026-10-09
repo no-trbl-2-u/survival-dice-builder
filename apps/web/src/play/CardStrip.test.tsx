@@ -43,6 +43,7 @@ describe('CardStrip', () => {
         felt={{ current: null }}
         choose={choose}
         onDrag={() => {}}
+        pending={null}
       />,
     )
     const buttons = screen.getAllByRole('button')

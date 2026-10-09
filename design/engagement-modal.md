@@ -133,3 +133,19 @@ engagements at 1280x800 and 375x812.
 - Left open: the Miss face is an empty black die by design; on phones the
   Skills sit below the dice (scroll needed); a Star placed on a Skill shows
   as the slot's face; elites were not met in either blind run.
+- Round 3 (card strip and mini map), with 8 and 6 dice. Confirmed: the drop
+  target was obvious without words once a drag started (gold glow, dashed
+  slot, green when over); dragging and map-clicking targets both worked.
+  Fixed: a card with 2 options looked like it snapped back while its chips
+  showed (it now leaves the hand until chosen); "fires" in red read as
+  "ready" (engagements now say "fired", muted); "each Skill once per
+  engagement" was never said (the Use dice line says it unless skillUses is
+  unlimited); the mini map's zoom changed per Skill (fixed radius 3 now);
+  a defeated enemy turned into "enemy e8" in the title (its kind now comes
+  from the log); keeping a die thickened its border and reflowed the tray
+  (a ring now, same size).
+- Left open after round 3 (rules or bigger calls): a defeated enemy's die
+  still hits (rule); Heal is offered at full health; the auto-selected die
+  is often not the one wanted; no in-modal damage note after a target pick;
+  on phones, cards peek under the footer and the felt plus Skills need
+  scrolling; real touch (long-press vs scroll) is untested.
