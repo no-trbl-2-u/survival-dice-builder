@@ -60,6 +60,7 @@ Tick in this file in the same commit that ships the phase.
 
 **Designer playtest follow-ups (2026-10-09):**
 - [ ] Phase 23 — Engagements by default, and a switch that cancels a defeated enemy's dice (config default `combat.model: "engage"`, Start run follows the saved config, `combat.engage.defeatedDice` default `"hit"`, sim comparison)
+- [ ] Phase 24 — Engagement modal II: no pre-selected die, a damage number on the board after a target pick, phone fit, a first-time card nudge, enemy names (mini map, buttons, title), result read out, touch-drag test, a force-elite dev tool, and an elite blind round
 
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
@@ -355,6 +356,18 @@ baseline and the tests that assumed exchanges. Add
 `combat.engage.defeatedDice` (`"hit"` default: every enemy die hits at
 the end, all at once; `"cancelled"`: a defeated enemy's dice do not
 hit) and compare both with `pnpm sim -- compare`.
+### Phase 24 — Engagement modal II
+
+Source: the `plan/CRITIQUE.md` engagement rows the designer decided
+on 2026-10-09, plus the pass 10 engagement rows. Builds on phase 23
+(engagements are the default). No pre-selected die; after a target
+pick the modal steps aside while a damage number floats off the enemy
+on the board, then comes back; one short instruction line and compact
+Skill tiles on phones; a wordless first-time card nudge; enemies named
+by kind and place (mini-map hover label, target buttons, title); the
+result announced to screen readers; guard damage in the headline; the
+phone hand strip scrolls; a touch-emulated drag test; the dev tools
+stay, plus a force-elite one; an elite blind round closes the phase.
 ---
 
 ## Carry-overs / known gaps (update as phases ship)
