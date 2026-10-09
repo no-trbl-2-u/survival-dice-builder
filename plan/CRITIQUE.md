@@ -142,7 +142,7 @@
 - category: observation
 - observation: In an engagement, killing an enemy does not cancel the die it rolled: the result can read "You defeated 2 enemies" and still "1 enemy die hit you", and the log shows "Grunt e8 is defeated." then "Grunt e8 attacks you for 1." The "Locked" note was removed from the felt, so nothing explains it; the blind tester called it unfair. Decide the rule (keep, or cancel a defeated enemy's dice), then explain or change it.
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3 (2026-10-09); `packages/engine/src/combat/engage.ts` finishEngagement hits with every rolled enemy die
-- suggested fix: [user has not specified — iterate to determine]
+- suggested fix: (user, 2026-10-09) keep the rule: every enemy die hits at the end, all at once, so the player must still defend against a defeated enemy's attack. Add a config toggle (default off) that cancels a defeated enemy's dice, for the simulator to compare.
 - source: user
 
 ### [MED] /play — the pre-selected die is often not the one the player wants
@@ -152,7 +152,7 @@
 - category: observation
 - observation: At Use dice the modal pre-selects the first die that fits a Skill, and after each placement it jumps to another fitting die (e.g. a second Wand when Dodge still needs a Shield). Blind testers had to Unselect almost every time.
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; `apps/web/src/play/PlayPage.tsx` `firstFit` auto-pick
-- suggested fix: [user has not specified — iterate to determine]
+- suggested fix: (user, 2026-10-09) no pre-selection: nothing is selected until the player taps dice, then a Skill.
 - source: user
 
 ### [MED] /play — no in-modal note of the damage a target pick dealt
@@ -162,7 +162,7 @@
 - category: observation
 - observation: After picking a target the modal moves straight back to Use dice; the damage dealt (and a kill) only shows in the log or on the board. Testers checked the board to see if the hit landed.
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3
-- suggested fix: [user has not specified — iterate to determine]
+- suggested fix: (user, 2026-10-09) after a target pick, the modal steps aside, a damage number ("-2") floats off the enemy on the board, and the modal comes back after a short delay.
 - source: user
 
 ### [MED] /play — card drag on a real touch phone is untested
@@ -172,7 +172,7 @@
 - category: mobile
 - observation: The engagement hand strip uses pointer events with touch-action: none, verified with a mouse at 375px only. Long-press, scroll-versus-drag and accidental taps on a real touch device are unknown.
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; `apps/web/src/play/CardStrip.tsx`; blind testers drove it with mouse events
-- suggested fix: [user has not specified — iterate to determine]
+- suggested fix: (user, 2026-10-09) run a touch-emulated Playwright test (mobile Chrome, touch events) and fix what it finds; then the user tries the deployed site on a real phone.
 - source: user
 
 ### [LOW] /play — Heal is offered (and spent) at full health
