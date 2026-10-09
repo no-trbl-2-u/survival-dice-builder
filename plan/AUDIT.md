@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-09 (pass 25, cloud tick)
+
+No finding scores 3.0 or more: no actionable iterate work, handed to `/expand` (pass 8, bold posture). Re-checked this pass: the 4 open critique pass 9 rows are still true in source (`ConfigPage.tsx:616`, `CreditsPage.tsx:60`, `index.html:6,16`, `App.tsx:13-21`).
+
+## Top 5 findings (scored)
+
+### [ ] [2.8] /play: enemy choice buttons name enemies by engine id (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: waits on the "Player names for every map piece" candidate (re-evidenced in expand pass 8)
+
+### [ ] [2.7] /: home page does not link /decisions (critique LOW)
+- category: external-critique (navigation)
+- impact: 3 (Decisions is already in the nav on every page)
+- ease: 9
+- next: add the Decisions link to the "Also:" line
+
+### [ ] [2.7] all pages: one meta description and og:url for every route, no canonical (critique LOW, pass 9)
+- category: seo
+- impact: 3
+- ease: 9
+- next: covered by the "Static HTML for each page" candidate (re-evidenced in expand pass 8); a script-set canonical does not reach unfurlers that skip JavaScript
+
+### [ ] [2.7] /config: the save message names "/play", not the Play page (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: "Saved. New runs on the Play page use this config."
+
+### [ ] [2.4] all pages: design tools sit in the nav as equals of Play (critique LOW, pass 9)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 8
+- next: a labelled "Design tools" group in the nav; filed as Considered in expand pass 8
+
 # Site audit — 2026-10-09 (pass 24, cloud tick)
 
 ## Top 5 findings (scored)
