@@ -64,3 +64,14 @@ test('with JavaScript off the shell says what the game is and that it needs Java
   )
   expect(noscript).toContain('Turn JavaScript on to play.')
 })
+
+test('the shell links a favicon, and the favicon is served as an SVG image', async ({
+  request,
+}) => {
+  const html = await (await request.get('/tiles')).text()
+  expect(html).toContain('<link rel="icon" href="/favicon.svg" type="image/svg+xml" />')
+  const icon = await request.get('/favicon.svg')
+  expect(icon.ok()).toBe(true)
+  expect(icon.headers()['content-type']).toContain('image/svg+xml')
+  expect(await icon.text()).toContain('<polygon')
+})
