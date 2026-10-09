@@ -90,6 +90,7 @@ export type GameEvent = Readonly<
     | { type: 'skillDrafted'; player: string; skill: string }
     | { type: 'draftSkipped'; player: string }
     | { type: 'skillToSupply'; skill: string; level: string }
+    | { type: 'skillPooled'; skill: string; player: string }
     | { type: 'skillReplaced'; player: string; skill: string }
     | { type: 'milestoneReached'; milestone: string; round: number }
     | { type: 'playerKnockedOut'; player: string; materialsLost: number }

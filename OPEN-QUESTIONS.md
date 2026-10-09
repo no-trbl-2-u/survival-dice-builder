@@ -151,6 +151,14 @@ phase 21 experiments), upgraded Skill tiers and Skill caps (rows 9, 46,
   the next engagement (only the cards played into it are discarded), so
   Combat lasts until the deck and hand are empty.
 
+- Rules 11.6-11.7, draft pool: the Skills a player is offered and does not
+  keep go to that player's own draft pool (`draft.unpicked: "pool"`), not
+  to the bottom of the supply. Each later draft offers `draft.reveal` new
+  Skills from the open training level plus the whole pool; the player keeps
+  1 and the rest return to the pool. The pool grows, and a player is not
+  tied to one training level. `"supply"` (the written 11.7) stays an
+  option.
+
 ## Physical edition constraint (standing)
 
 The designer intends a physical board game. Every reading

@@ -55,6 +55,9 @@ export function DecisionDialog({ state, legal, act }: Props) {
               <button type="button" onClick={() => act(a)}>
                 Draft {skill(a.skill)?.name} ({skill(a.skill)?.faces.join(' + ')})
                 <span className={styles.muted}>{effectOf(a.skill)}</span>
+                {state.draft?.fromPool?.includes(a.skill) ? (
+                  <span className={styles.muted}> (from your pool)</span>
+                ) : null}
               </button>
             </li>
           ))}

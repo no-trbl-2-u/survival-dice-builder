@@ -227,8 +227,9 @@ describe('Skill draft (10.8, 11.6-11.9)', () => {
     expect(draftDue(due({ draftedPlayers: ['p1'] }))).toBe(false)
   })
 
-  it('11.6-11.7 reveal the top 2 Skills, keep 1 for free, the other goes to the bottom', () => {
-    const [s] = startDraft(due())
+  it('11.6-11.7 (draft.unpicked "supply") reveal the top 2 Skills, keep 1 for free, the other goes to the bottom', () => {
+    const supply = { ...config, draft: { ...config.draft, unpicked: 'supply' as const } }
+    const [s] = startDraft({ ...due(), config: supply })
     const [first, second] = s.draft!.options
     expect(s.supplies.skills['1']).toHaveLength(5)
     expect(legalActions(s)).toEqual([
@@ -239,6 +240,43 @@ describe('Skill draft (10.8, 11.6-11.9)', () => {
     expect(state.players[0]!.skills.at(-1)).toBe(first)
     expect(state.supplies.skills['1']!.at(-1)).toBe(second)
     expect(state.draft).toBeNull()
+  })
+
+  it('draft pool (designer 2026-10-09): the unkept Skill goes to the pool; the next draft offers 2 new Skills plus the pool', () => {
+    expect(config.draft.unpicked).toBe('pool')
+    const [s] = startDraft(due())
+    const [first, second] = s.draft!.options
+    expect(s.draft!.fromPool).toBeUndefined()
+    const { state, events } = applyAction(s, { type: 'draftSkill', skill: first! })
+    expect(state.players[0]!.draftPool).toEqual([second])
+    expect(state.supplies.skills['1']).toHaveLength(5)
+    expect(events).toContainEqual(
+      expect.objectContaining({ type: 'skillPooled', skill: second, player: 'p1' }),
+    )
+
+    // The next draft: 2 new Skills from the supply, then the pool.
+    const [next] = startDraft({ ...state, round: 4, draftedPlayers: [] })
+    expect(next.draft!.options).toHaveLength(3)
+    expect(next.draft!.options.at(-1)).toBe(second)
+    expect(next.draft!.fromPool).toEqual([second])
+    expect(next.players[0]!.draftPool).toEqual([])
+    expect(next.supplies.skills['1']).toHaveLength(3)
+    // Keeping the pool Skill: both new ones join the pool, so it keeps growing.
+    const [n1, n2] = next.draft!.options
+    const after = applyAction(next, { type: 'draftSkill', skill: second! }).state
+    expect(after.players[0]!.skills.at(-1)).toBe(second)
+    expect(after.players[0]!.draftPool).toEqual([n1, n2])
+  })
+
+  it('draft pool: with the supply empty, the pool alone is offered', () => {
+    const base = withPlayer(due(), { draftPool: ['cleave', 'dodge'] })
+    const s = {
+      ...base,
+      supplies: { ...base.supplies, skills: { ...base.supplies.skills, '1': [] } },
+    }
+    const [after, events] = startDraft(s)
+    expect(after.draft!.options).toEqual(['cleave', 'dodge'])
+    expect(events[0]).toMatchObject({ type: 'draftStarted' })
   })
 
   it('11.8 an empty supply falls back to the next lower level', () => {

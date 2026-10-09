@@ -301,6 +301,15 @@
     "rule": "10.8",
     "range": [1, 6]
   },
+  "draft.unpicked": {
+    "label": "Skills you do not keep",
+    "help": "Pool (default, designer 2026-10-09): they go to your own pool, and each later draft offers the new Skills plus your whole pool, so the choice grows and is not tied to one training level. Supply: they go to the bottom of their supply (the written rule).",
+    "rule": "11.7",
+    "options": {
+      "pool": "Your pool (default)",
+      "supply": "Back to the supply (written rules)"
+    }
+  },
   "supplies": {
     "label": "Supplies"
   },

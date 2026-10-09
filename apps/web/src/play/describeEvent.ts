@@ -206,6 +206,8 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `${who(event.player)} drafted ${skillName(names, event.skill)}.`
     case 'draftSkipped':
       return 'No Skills left to draft.'
+    case 'skillPooled':
+      return `${skillName(names, event.skill)} goes to ${solo(names) ? 'your' : `${seat(names, event.player)}'s`} draft pool.`
     case 'skillToSupply':
       return `${skillName(names, event.skill)} goes to the bottom of its supply.`
     case 'skillReplaced':

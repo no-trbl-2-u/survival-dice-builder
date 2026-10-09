@@ -216,6 +216,7 @@ Terms that appear in the sources and the tabletop term the sheets use instead. B
 - F-130 [prototype value config.default.json combat.exchangeRange]: Exchange range 2 (the "within 2 hexes" of Spec v1 7.9; v2 keeps only "damage needs a target in range").
 - F-223 [prototype value config.default.json combat.model]: Combat is played as engagements by default (designer 2026-10-09, OQ 72): each Engage card option starts an engagement and each adjacent enemy rolls enemy dice back; exchanges (Spec v1 7.8) stay an option.
 - F-224 [prototype value config.default.json combat.engage.defeatedDice]: Every enemy die rolled in an engagement hits at its end, all at once, even the dice of an enemy defeated during it (designer 2026-10-09, OQ 72); `"cancelled"` (a defeated enemy's dice do not hit) is a sim experiment, see docs/reports/phase-23-defeated-dice.md.
+- F-225 [prototype value config.default.json draft.unpicked]: Draft pool (designer 2026-10-09): a Skill offered in a draft and not kept goes to the player's own pool; each later draft offers 2 new Skills from the open training level plus the whole pool (overrides Spec v1 11.7 "the other goes to the bottom of the supply"; that reading stays an option).
 
 ### End of round
 

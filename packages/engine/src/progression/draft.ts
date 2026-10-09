@@ -45,12 +45,23 @@ function drafted(state: GameState, player: string): GameState {
   return { ...state, draftedPlayers: [...state.draftedPlayers, player], draft: null }
 }
 
+/** True when unkept Skills go to the player's pool (designer 2026-10-09), not the supply. */
+function pooling(state: GameState): boolean {
+  return state.config.draft.unpicked === 'pool'
+}
+
+/** The Skills in a player's draft pool. */
+export function draftPool(player: Player): readonly string[] {
+  return player.draftPool ?? []
+}
+
 /**
  * Starts the next player's draft (they become the current player): the top `draft.reveal`
  * Skills of the highest open level Skill supply, or the next lower level when it is empty
- * (11.8). A player who cannot draft (11.9) or finds no Skills is skipped.
+ * (11.8). With `draft.unpicked: "pool"` the player's whole pool is offered too (after the new
+ * Skills). A player who cannot draft (11.9) or finds no Skills is skipped.
  *
- * @rule 11.6, 11.8, 11.9
+ * @rule 11.6, 11.8, 11.9, designer 2026-10-09 (draft pool)
  */
 export function startDraft(state: GameState): Step {
   const seat = nextDrafter(state)
@@ -58,20 +69,42 @@ export function startDraft(state: GameState): Step {
   const seated: GameState = { ...state, current: seat }
   const player = currentPlayer(seated)
   if (cannotDraft(seated, player)) return [drafted(seated, player.id), []]
+  const pool = pooling(seated) ? draftPool(player) : []
   const level = drawLevel(seated.supplies.skills, openLevel(seated, 'training'))
-  if (!level) {
+  if (!level && pool.length === 0) {
     return [drafted(seated, player.id), [{ type: 'draftSkipped', rule: '11.8', player: player.id }]]
   }
-  const stack = seated.supplies.skills[level] ?? []
-  const options = stack.slice(0, seated.config.draft.reveal)
-  const skills = { ...seated.supplies.skills, [level]: stack.slice(options.length) }
+  const stack = level ? (seated.supplies.skills[level] ?? []) : []
+  const fresh = stack.slice(0, seated.config.draft.reveal)
+  const skills = level
+    ? { ...seated.supplies.skills, [level]: stack.slice(fresh.length) }
+    : seated.supplies.skills
+  const options = [...fresh, ...pool]
+  const drawnFrom = level ?? String(openLevel(seated, 'training'))
+  const emptied =
+    pool.length > 0 ? updateCurrentPlayer(seated, (p) => ({ ...p, draftPool: [] })) : seated
   return [
     {
-      ...seated,
+      ...emptied,
       supplies: { ...seated.supplies, skills },
-      draft: { player: player.id, level, options, kept: null },
+      draft: {
+        player: player.id,
+        level: drawnFrom,
+        options,
+        kept: null,
+        ...(pool.length > 0 ? { fromPool: pool } : {}),
+      },
     },
-    [{ type: 'draftStarted', rule: '11.6', player: player.id, level, options }],
+    [{ type: 'draftStarted', rule: '11.6', player: player.id, level: drawnFrom, options }],
+  ]
+}
+
+/** Puts an unkept Skill in the current player's draft pool. @rule designer 2026-10-09 */
+function toPool(state: GameState, skill: string): Step {
+  const player = currentPlayer(state)
+  return [
+    updateCurrentPlayer(state, (p) => ({ ...p, draftPool: [...draftPool(p), skill] })),
+    [{ type: 'skillPooled', rule: 'Draft pool (designer 2026-10-09)', skill, player: player.id }],
   ]
 }
 
@@ -88,7 +121,8 @@ function toBottom(state: GameState, skill: string, level: string): Step {
 }
 
 /**
- * Keeps 1 revealed Skill for free; the others go to the bottom of the supply (11.7). With free
+ * Keeps 1 revealed Skill for free; the others go to the bottom of the supply (11.7), or to the
+ * player's draft pool with `draft.unpicked: "pool"` (designer 2026-10-09). With free
  * slots the Skill goes on the board; with full slots (`swap`) the player then picks the drafted
  * Skill it replaces.
  *
@@ -100,7 +134,9 @@ export function keepSkill(state: GameState, skill: string): Step {
   let current = state
   const events: GameEvent[] = []
   for (const other of draft.options.filter((s, i) => i !== draft.options.indexOf(skill))) {
-    const [next, more] = toBottom(current, other, draft.level)
+    const [next, more] = pooling(current)
+      ? toPool(current, other)
+      : toBottom(current, other, draft.level)
     current = next
     events.push(...more)
   }

@@ -154,7 +154,8 @@
   "draft": {
     "reveal": 2,
     "keep": 1,
-    "everyNRounds": 2
+    "everyNRounds": 2,
+    "unpicked": "pool"
   },
   "supplies": {
     "copiesPerCard": 2,

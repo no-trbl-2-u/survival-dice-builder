@@ -106,6 +106,11 @@ export type Player = Readonly<{
   maxHealth: number
   dice: number
   skills: readonly string[]
+  /**
+   * Skills this player was offered in a draft and did not keep (`draft.unpicked: "pool"`,
+   * designer 2026-10-09): every later draft offers them again. Absent until the first one.
+   */
+  draftPool?: readonly string[]
   /** Index 0 is the top of each pile. */
   deck: readonly CardInstance[]
   hand: readonly CardInstance[]
@@ -187,6 +192,8 @@ export type Draft = Readonly<{
   level: string
   options: readonly string[]
   kept: string | null
+  /** The options that came from the player's draft pool (absent when none did). */
+  fromPool?: readonly string[]
 }>
 
 /**

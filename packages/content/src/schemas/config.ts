@@ -103,7 +103,17 @@ export const GameConfigSchema = z.object({
   /** A player at 0 health is knocked out and returns at the next round start (core loop v2, row 55). */
   knockout: z.object({ returnHealthDivisor: PositiveInt, loseMaterials: z.boolean() }),
   shop: z.object({ offers: PositiveInt }),
-  draft: z.object({ reveal: PositiveInt, keep: PositiveInt, everyNRounds: PositiveInt }),
+  draft: z.object({
+    reveal: PositiveInt,
+    keep: PositiveInt,
+    everyNRounds: PositiveInt,
+    /**
+     * Designer 2026-10-09: "pool" — the Skills a player does not keep go to that player's pool,
+     * and each later draft offers `reveal` new Skills plus the whole pool; "supply" — they go
+     * to the bottom of their supply (11.7).
+     */
+    unpicked: z.enum(['pool', 'supply']).default('pool'),
+  }),
   supplies: z.object({ copiesPerCard: PositiveInt, copiesPerSkill: PositiveInt }),
   tiles: z.object({
     countryside: PositiveInt,
