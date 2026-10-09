@@ -13,20 +13,24 @@ scrolled between 4 places for 1 fight.
 | (1 Roll) (2 Use dice) (3 Pick target) (4 Result)                |
 +-----------------------------------------------------------------+
 | What to do now, in one sentence                                  |
-+--------------------------------------+--------------------------+
-| Choose a target (only when needed)   | Skills                   |
-| Enemy dice (locked)                  |  (scrolls with the body) |
-| Your dice                            |                          |
-| Cards you can add (only when legal)  |                          |
-+--------------------------------------+--------------------------+
++-----------------------------------------------------------------+
+| Choose a target (only when needed)                              |
++--------------------------+--------------------------------------+
+| Enemy dice (locked)      | Your dice                            |
++--------------------------+--------------------------------------+
+| Skills: [Strike] [Shot] [Mend] [Guard] ... (wrapping row)        |
++-----------------------------------------------------------------+
+| Cards you can add (only when legal)                              |
++-----------------------------------------------------------------+
 |                         [Roll again (n left)]  [Primary action]  |
 +-----------------------------------------------------------------+
 ```
 
-- **Desktop (1280x800):** 2 columns, 7:5. The dice side holds everything that
-  changes from step to step; the Skills stay put on the right. Header, the
-  instruction line, and the footer are fixed; only the body scrolls, and at
-  1280x800 a normal hand of Skills fits.
+- **Desktop (1280x800):** the roll area on top (enemy dice beside your
+  dice, 2:3), the Skills under it as a horizontal, wrapping row of tiles,
+  then cards to add. Dice and the Skills they go on sit one above the other,
+  so the eye moves down, not across. Header, instruction line, and footer
+  are fixed; only the body scrolls.
 - **Phone (375 wide):** full screen, 1 column in play order (target, enemy
   dice, your dice, Skills, then cards). A compact header keeps every step
   name. The footer buttons share the width and stay on screen. When a target

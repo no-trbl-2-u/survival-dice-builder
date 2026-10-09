@@ -222,10 +222,10 @@ function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek 
         {engageInstruction(state)}
       </p>
       <div className={styles.engageBody}>
-        <div className={styles.engageMain}>
-          <div ref={targets} className={styles.engageTargetSlot}>
-            <Targets state={state} legal={legal} act={act} />
-          </div>
+        <div ref={targets} className={styles.engageTargetSlot}>
+          <Targets state={state} legal={legal} act={act} />
+        </div>
+        <div className={styles.engageDiceRow}>
           <section className={styles.panel} aria-label="Enemy dice">
             <h2 className={styles.panelTitle}>
               {ex.engage?.enemyDice.length
@@ -249,18 +249,16 @@ function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek 
             enemyDice={false}
             controls={false}
           />
-          <Cards state={state} legal={legal} act={act} />
         </div>
-        <div className={styles.engageSide}>
-          <SkillBoard
-            state={state}
-            legal={legal}
-            act={act}
-            actAll={actAll}
-            selected={selected}
-            confirmButton={false}
-          />
-        </div>
+        <SkillBoard
+          state={state}
+          legal={legal}
+          act={act}
+          actAll={actAll}
+          selected={selected}
+          confirmButton={false}
+        />
+        <Cards state={state} legal={legal} act={act} />
       </div>
       <footer className={styles.engageFoot}>
         <span className={styles.engageFootActions}>

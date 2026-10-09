@@ -1181,24 +1181,33 @@
 }
 
 .engageBody {
+  /* Top to bottom: a target pick, the roll area (enemy dice | your dice), the Skills in a
+     row-wrapping grid under it, then cards to add. */
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  align-content: start;
   gap: 12px;
   padding: 12px;
   min-height: 0;
   overflow: auto;
 }
 
-.engageMain,
-.engageSide {
+.engageBody > section {
+  margin: 0;
+}
+
+.engageDiceRow {
   display: grid;
-  align-content: start;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
   gap: 12px;
 }
 
-.engageMain > section,
-.engageSide > section {
+.engageDiceRow > section {
   margin: 0;
+}
+
+/* The Skills run horizontally under the roll area. */
+.engageBody .skills {
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
 .engageTargets,
@@ -1408,44 +1417,10 @@
     padding: 6px 10px;
   }
 
-  /* Phones: 1 column in play order — target, enemy dice, your dice, Skills, then cards. */
-  .engageBody {
-    display: flex;
-    flex-direction: column;
+  /* Phones: 1 column (target, enemy dice, your dice, Skills, cards). */
+  .engageDiceRow {
+    grid-template-columns: minmax(0, 1fr);
     gap: 8px;
-  }
-
-  .engageMain,
-  .engageSide {
-    display: contents;
-  }
-
-  .engageTargetSlot {
-    order: 0;
-  }
-
-  .engageBody section[aria-label='Enemy dice'] {
-    order: 1;
-  }
-
-  .engageBody section[aria-label='Dice'] {
-    order: 2;
-  }
-
-  .engageBody section[aria-label='Skills'] {
-    order: 3;
-  }
-
-  .engageBody section[aria-label='Cards you can add'] {
-    order: 4;
-  }
-
-  .engageWide {
-    display: none;
-  }
-
-  .engageNarrow {
-    display: inline;
   }
 
   .engageBody section[aria-label='Enemy dice'] .dice {
