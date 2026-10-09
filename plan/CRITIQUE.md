@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-08 at commit c9bd27d
-> Pass count: 8
+> Last pass: 2026-10-09 at commit e859de5
+> Pass count: 9
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] all pages — rules sections are cited but the rules are never linked
+- pass: 9 (commit e859de5)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: Home, /config, /debug and /decisions cite "the written rules" and rule numbers, but no page links to the rules. A visitor cannot look up a cited section.
+- evidence: `apps/web/src/home/HomePage.tsx:27` "the Combat in the written rules"; `apps/web/src/config/ConfigPage.tsx:632` "Each field names its rules section."; `apps/web/src/debug/DebugPage.tsx:81` "Numbers in [brackets] are rules sections."; no href to the rules anywhere in `apps/web/src`.
+- suggested fix: Link "the written rules" (and the /config and /debug notes) to `spec/01-spec-v1-rules.md` on GitHub, using the repository-link helper in `apps/web/src/decisions/Inline.tsx`.
+- source: web-fetch
+
+### [LOW] all pages — nav labels "Tiles" and "Debug" do not match the page headings
+- pass: 9 (commit e859de5)
+- viewport: n/a (web-fetch)
+- category: navigation
+- observation: The nav says "Tiles" and "Debug", but the pages they open are headed "Tile sheet" and "Engine console".
+- evidence: `apps/web/src/App.tsx:17,19` nav labels vs `:32,34` route titles.
+- suggested fix: Use one name per page: nav "Tile sheet" and "Engine console", or rename the headings to match the nav.
+- source: web-fetch
+
+### [LOW] all pages — design tools sit in the nav as equals of Play
+- pass: 9 (commit e859de5)
+- viewport: n/a (web-fetch)
+- category: navigation
+- observation: Tiles, Decisions and Debug are design and playtest aids, but the nav lists them beside Home and Play with nothing to tell them apart.
+- evidence: `apps/web/src/App.tsx:13-21` NAV lists seven equal links.
+- suggested fix: Split the nav into the game links and a labelled "Design tools" group, or open each tool page with one sentence that says it is a design aid.
+- source: web-fetch
+
+### [LOW] all pages — one meta description and og:url for every route, no canonical
+- pass: 9 (commit e859de5)
+- viewport: n/a (web-fetch)
+- category: seo
+- observation: Every route has the home description and an og:url fixed to the home page, and there is no rel=canonical.
+- evidence: `apps/web/index.html:6,16`; `apps/web/src/App.tsx:53-61` sets only the title and noindex per route.
+- suggested fix: In the route effect, set a canonical link and og:url from the route path, and give each route its own description.
+- source: web-fetch
+
+### [LOW] /config — the save message names a URL path, not the page
+- pass: 9 (commit e859de5)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: After a save the page says "/play" where a visitor sees the nav label "Play".
+- evidence: `apps/web/src/config/ConfigPage.tsx:615` "Saved. New runs on /play use this config."
+- suggested fix: Change to "Saved. New runs on the Play page use this config."
+- source: web-fetch
+
+### [LOW] /credits — the intro describes how the page is built
+- pass: 9 (commit e859de5)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: The second sentence is build-process language with no use to a visitor.
+- evidence: `apps/web/src/credits/CreditsPage.tsx:60` "Generated from the project's asset register."
+- suggested fix: Cut the sentence, or replace it with where to report a missing credit.
+- source: web-fetch
 
 ### [LOW] / — the home page does not link the Decisions page
 - pass: 8 (commit c9bd27d)
