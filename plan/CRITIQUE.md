@@ -18,15 +18,6 @@
 - suggested fix: (user, 2026-10-09) make 'engage' the config default Combat model and drop the `&combat=engage` override, so Start run follows the saved config; update the sim baseline and tests that assume 'exchange'.
 - source: web-fetch
 
-### [MED] /play — screen readers hear enemy dice as "hit" or "special" with no damage
-- pass: 10 (commit 10fd9d1)
-- viewport: n/a (web-fetch)
-- category: a11y
-- observation: In the engagement modal each enemy die is named by its raw face word. The visible label that gives the damage ("Hit 2", "Special 3") is hidden from assistive technology.
-- evidence: `apps/web/src/play/DiceTray.tsx:191` `aria-label={`Enemy die of ${who}: ${d.face}`}`; `DiceTray.tsx:195-196` the `enemyFaceText(...).label` span is `aria-hidden="true"`.
-- suggested fix: Build the aria-label from `enemyFaceText(d.face, state.config.combat.engage).label`.
-- source: web-fetch
-
 ### [MED] /play — the engagement result is not announced to screen readers
 - pass: 10 (commit 10fd9d1)
 - viewport: n/a (web-fetch)
@@ -252,6 +243,17 @@
 > Pass 8 note: web-fetch engine (cloud, no browser). Every route served only the app shell, so the reader read the shipped copy from source. 2 reader observations were not filed (cap): the /decisions lede counts "rule readings" and "checks" without saying what they are (LOW, partly covered by the status-line row); index.html has no canonical link or Open Graph tags (LOW). The pass 5 observation about raw step ids is no longer true on /play; that form now appears only on /debug.
 
 ## Done
+
+### [x] [MED] /play — screen readers hear enemy dice as "hit" or "special" with no damage
+- pass: 10 (commit 10fd9d1)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: In the engagement modal each enemy die is named by its raw face word. The visible label that gives the damage ("Hit 2", "Special 3") is hidden from assistive technology.
+- evidence: `apps/web/src/play/DiceTray.tsx:191` `aria-label={`Enemy die of ${who}: ${d.face}`}`; `DiceTray.tsx:195-196` the `enemyFaceText(...).label` span is `aria-hidden="true"`.
+- suggested fix: Build the aria-label from `enemyFaceText(d.face, state.config.combat.engage).label`.
+- source: web-fetch
+- issue: #62
+- fixed: (this commit) — each enemy die's aria-label carries its damage label from config ("Enemy die of grunt e3: Hit 1"), the same text the hidden visible label shows; the DiceTray test checks it
 
 ### [x] [LOW] all pages — nav labels "Tiles" and "Debug" do not match the page headings
 - pass: 9 (commit e859de5)

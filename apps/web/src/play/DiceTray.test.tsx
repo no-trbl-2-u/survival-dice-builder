@@ -34,6 +34,7 @@ function engagedState(): GameState {
 describe('DiceTray enemy dice', () => {
   it('draws each enemy die as a black die with its face glyph, grunt and elite apart', () => {
     const state = engagedState()
+    const { hitDamage, specialDamage } = state.config.combat.engage
     render(
       <DiceTray
         state={state}
@@ -43,13 +44,13 @@ describe('DiceTray enemy dice', () => {
         toggle={() => {}}
       />,
     )
-    const hit = screen.getByLabelText('Enemy die of grunt g1: hit')
+    const hit = screen.getByLabelText(`Enemy die of grunt g1: Hit ${hitDamage}`)
     expect(hit.dataset.kind).toBe('grunt')
     expect(hit.querySelector('svg')?.dataset.icon).toBe('face-enemy-hit')
     expect(
-      screen.getByLabelText('Enemy die of grunt g1: miss').querySelector('svg')?.dataset.icon,
+      screen.getByLabelText('Enemy die of grunt g1: Miss').querySelector('svg')?.dataset.icon,
     ).toBe('face-enemy-miss')
-    const special = screen.getByLabelText('Enemy die of elite x1: special')
+    const special = screen.getByLabelText(`Enemy die of elite x1: Special ${specialDamage}`)
     expect(special.dataset.kind).toBe('elite')
     expect(special.querySelector('svg')?.dataset.icon).toBe('face-enemy-special')
   })

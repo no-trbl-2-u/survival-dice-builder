@@ -182,18 +182,19 @@ export function EnemyDice({
           const kind = enemyKindOf(state, d.enemy)
           const elite = kind === 'elite'
           const who = `${kind ?? 'enemy'} ${d.enemy}`
+          const text = enemyFaceText(d.face, state.config.combat.engage)
           return (
             <li key={i} className={styles.dieItem}>
               <span
                 className={`${styles.die} ${styles.enemyDie} ${elite ? styles.enemyElite : ''}`}
                 data-face={d.face}
                 data-kind={elite ? 'elite' : 'grunt'}
-                aria-label={`Enemy die of ${who}: ${d.face}`}
+                aria-label={`Enemy die of ${who}: ${text.label}`}
               >
                 <GameIcon name={`face-enemy-${d.face}`} size="2.4rem" />
               </span>
               <span className={styles.enemyDieLabel} aria-hidden="true">
-                <strong>{enemyFaceText(d.face, state.config.combat.engage).label}</strong>
+                <strong>{text.label}</strong>
                 <small>{who}</small>
               </span>
             </li>

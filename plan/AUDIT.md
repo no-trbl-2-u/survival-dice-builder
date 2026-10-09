@@ -3,6 +3,44 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-09 (pass 26, cloud tick)
+
+Critique pass 10 and the user's jot of 2026-10-09 refilled the queue. The two MED a11y rows tie; the enemy-dice label is the one-line fix.
+
+## Top 5 findings (scored)
+
+### [x] [5.4] /play: screen readers hear enemy dice as "hit" or "special" with no damage (critique MED, pass 10)
+- category: external-critique (a11y)
+- impact: 6 (every engagement; the damage is the point of the die)
+- ease: 9
+- next: aria-label from `enemyFaceText(...).label`
+- issue: #62
+- fixed: (this commit)
+
+### [ ] [5.4] /play: the engagement result is not announced to screen readers (critique MED, pass 10)
+- category: external-critique (a11y)
+- impact: 6
+- ease: 9
+- next: `role="status"` on the result headline
+
+### [ ] [4.7] /play: no pre-selected die in the engagement modal (user jot MED, call recorded)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7
+- next: drop the `firstFit` auto-pick; nothing is selected until the player taps dice (+0.5 user)
+
+### [ ] [4.2] /config: Start run always starts an engagement run (critique MED, pass 10)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7
+- next: name it on the button, or follow the saved Combat model
+
+### [ ] [3.5] /play: a defeated enemy's die still hits, and nothing says so (user jot MED, call recorded)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 5
+- next: keep the rule and say so in the modal; add a default-off config toggle that cancels a defeated enemy's dice (+0.5 user)
+
 # Site audit — 2026-10-09 (pass 25, cloud tick)
 
 No finding scores 3.0 or more: no actionable iterate work, handed to `/expand` (pass 8, bold posture). Re-checked this pass: the 4 open critique pass 9 rows are still true in source (`ConfigPage.tsx:616`, `CreditsPage.tsx:60`, `index.html:6,16`, `App.tsx:13-21`).
