@@ -1440,8 +1440,7 @@
   border-color: #3f7d3a;
 }
 
-.engageModal .could .skillState,
-.engageModal .skillPick .skillState {
+.engageModal .skillState[data-state='could'] {
   color: #2f6b2a;
 }
 
@@ -1485,7 +1484,28 @@
     padding: 6px 10px;
   }
 
+  /* Phones: still 1 felt, the enemy dice above your dice, the seam across between them. */
   .engageFelt {
+    flex-direction: column;
+    align-items: stretch;
     padding: 36px 8px 8px;
+  }
+
+  /* Tighter dice on phones: 4 to a row instead of 3. */
+  .engageFelt .engageDiceList {
+    gap: 8px;
+  }
+
+  .engageFelt .dieItem button {
+    padding: 4px 8px;
+    font-size: var(--text-sm);
+  }
+
+  .engageFeltSplit {
+    width: auto;
+    height: 2px;
+    margin: 2px 0;
+    background: linear-gradient(90deg, transparent, rgb(0 0 0 / 0.45), transparent);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.08);
   }
 }

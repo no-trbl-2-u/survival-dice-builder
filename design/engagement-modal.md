@@ -32,7 +32,9 @@ scrolled between 4 places for 1 fight.
   ("Rolls:" and 1 pip per roll, filled once used). The Skills sit under it
   as a horizontal, wrapping row of tiles, then cards to add. Header,
   instruction line, and footer are fixed; only the body scrolls.
-- **Phone (375 wide):** full screen, 1 column in play order (target, enemy
+- **Phone (375 wide):** still 1 felt, but stacked: the enemy dice above, the
+  seam across, your dice below (4 to a row with tighter buttons, so 8 dice
+  take 2 rows). Full screen, 1 column in play order (target, enemy
   dice, your dice, Skills, then cards). A compact header keeps every step
   name. The footer buttons share the width and stay on screen. When a target
   pick appears, it scrolls into view (the body may be scrolled down to the
@@ -77,7 +79,9 @@ scrolled between 4 places for 1 fight.
 `Force engagement (dev)` and `Force target pick (dev)` in the footer, dev
 server only (`import.meta.env.DEV`), play the bot forward to an engagement
 (or to a target pick). Remove them with `apps/web/src/play/devEngage.ts`
-once the modal is signed off.
+once the modal is signed off. `?dice=N` (dev server only) starts each player
+with N dice, to see a crowded felt: 8 dice fit 1 row at 1024 and 1280 wide,
+2 rows on a 375 phone.
 
 ## Blind usability rounds
 

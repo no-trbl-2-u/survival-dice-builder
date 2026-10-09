@@ -86,7 +86,9 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
                 const status = fires ? (
                   <span className={styles.skillState}>fires</span>
                 ) : could && placing ? (
-                  <span className={styles.skillState}>can fire</span>
+                  <span className={styles.skillState} data-state="could">
+                    can fire
+                  </span>
                 ) : null
                 if (plan) {
                   const dice = plan.map((a) => a.die + 1)

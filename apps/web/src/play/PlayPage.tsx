@@ -55,9 +55,13 @@ export function PlayPage() {
     const seed = Number.parseInt(params.get('seed') ?? '', 10)
     const players = Number.parseInt(params.get('players') ?? '1', 10) || 1
     const combat = params.get('combat') === 'engage' ? 'engage' : config.combat.model
-    return Number.isFinite(seed)
-      ? newRun(withCombat(config, combat), seed, players, Date.now())
-      : null
+    // DEV ONLY (TODO: remove with forceEngagement): `?dice=N` starts each player with N dice,
+    // to see a crowded dice tray.
+    const dice = Number.parseInt(params.get('dice') ?? '', 10)
+    const base = withCombat(config, combat)
+    const start =
+      devTools && dice > 0 ? { ...base, player: { ...base.player, startingDice: dice } } : base
+    return Number.isFinite(seed) ? newRun(start, seed, players, Date.now()) : null
   })
   const [undoOn, setUndoOn] = useState(false)
   const [prefs, setPrefsState] = useState(() => loadPrefs(store))
