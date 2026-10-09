@@ -182,7 +182,7 @@
 - category: observation
 - observation: Rest's "Heal 2" (and Mend) can be played at full health and does nothing ("You healed 0"), with no warning before the card is spent.
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3
-- suggested fix: [user has not specified — iterate to determine]
+- suggested fix: (user, 2026-10-09) won't fix: wasting a heal is the player's choice; the engine keeps offering it.
 - source: user
 
 ### [LOW] /play — at 375px the dice and Skills are never on screen together
@@ -192,7 +192,7 @@
 - category: mobile
 - observation: On a phone the felt (8 dice: 2 rows) and the Skills need scrolling back and forth; the selected die is usually out of view when a Skill is tapped. The instruction line takes 3 lines and stays pinned.
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; screenshots at 375x812
-- suggested fix: [user has not specified — iterate to determine]
+- suggested fix: (user, 2026-10-09) cut the instruction to one short line on phones (the long text stays on desktop) and shrink the Skill tiles so the felt and Skills fit together at 375x812.
 - source: user
 
 ### [LOW] /play — nothing says hand cards can be dragged, or why they are greyed
@@ -202,7 +202,7 @@
 - category: comprehension
 - observation: Cards in the engagement hand strip peek from the bottom edge and look like background on desktop; during Roll they are greyed with no reason (cards cannot be added while rolling).
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3
-- suggested fix: [user has not specified — iterate to determine]
+- suggested fix: (user, 2026-10-09) a wordless nudge: the first time cards become playable in a run, the first playable card lifts slightly toward the felt and settles back. Greyed cards stay greyed, no text.
 - source: user
 
 ### [LOW] /play — mini map: orange vs white rings are unexplained and tokens are unnamed
@@ -212,7 +212,7 @@
 - category: comprehension
 - observation: On the target map, in-range enemies have an orange ring and the hovered or focused one a white glow; testers could not tell what the two meant until hovering. Tokens carry health but no name, so grunt e5 and e6 look the same.
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; `apps/web/src/play/Play.module.css` .miniMap .target
-- suggested fix: [user has not specified — iterate to determine]
+- suggested fix: (user, 2026-10-09) no legend: the hovered or focused enemy on the mini map shows its name and health beside it (its button already lights up). Orange alone means 'in range'.
 - source: user
 
 ### [LOW] /play — a Star placed on a Skill shows as the slot's face
@@ -222,7 +222,7 @@
 - category: comprehension
 - observation: Once a Star die is on a Skill the slot shows (and names) the slot face, e.g. "Die 1 (Sword)", so the player wonders where the Star went.
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; `apps/web/src/play/SkillBoard.tsx` slot label uses asFace
-- suggested fix: [user has not specified — iterate to determine]
+- suggested fix: (user, 2026-10-09) won't fix: a Star counts as the slot's face, so it shows that face.
 - source: user
 
 ### [LOW] /play — elite enemy dice not yet seen by a blind tester
@@ -232,7 +232,7 @@
 - category: observation
 - observation: None of the 3 blind runs met an elite as a tester, so the gold elite dice vs white grunt dice and the 2-dice elite roll have not had a fresh-eyes check.
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest rounds 1-3
-- suggested fix: [user has not specified — iterate to determine]
+- suggested fix: (user, 2026-10-09) run a blind round once this phase's changes land, with the dev tool able to force an elite engagement; it also covers the new die picking and the board damage number.
 - source: user
 
 ### [LOW] /play — remove the dev-only engagement tools once the modal is signed off
@@ -242,7 +242,7 @@
 - category: observation
 - observation: "Force engagement (dev)", "Force target pick (dev)" and `?dice=N` (dev server only) are still in the code with TODOs. The DiceTray and CardStrip unit tests use `forceEngagement` as a fixture and need their own fixture first.
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; `apps/web/src/play/devEngage.ts`, `PlayPage.tsx` devTools, `DiceTray.test.tsx`, `CardStrip.test.tsx`
-- suggested fix: [user has not specified — iterate to determine]
+- suggested fix: (user, 2026-10-09) keep the dev-only tools (Force engagement, Force target pick, ?dice=N) for testing; they never ship to players. Add a way to force an elite engagement for the elite blind round. Update devEngage.ts's TODO to say they stay.
 - source: user
 
 > Pass 4 note: web-fetch engine (cloud, no browser). The reader could not get the client-rendered copy on /decisions or /config from the shell, so the phase 18 and 19 copy was not reviewed. A browser pass should cover it.
