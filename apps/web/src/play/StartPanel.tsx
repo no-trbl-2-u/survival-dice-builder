@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent } from 'react'
+import { defaultConfigMeta } from '@survival/content'
 import type { KeyValue } from '../config/configStore.ts'
 import { importRun, readAutosave } from './exportRun.ts'
 import styles from './Play.module.css'
@@ -6,6 +7,17 @@ import type { Run } from './run.ts'
 
 /** Which Combat a new run plays: Spec v1 exchanges, or the Combat v3 playtest. */
 export type CombatModel = 'exchange' | 'engage'
+
+/** The Combat choice names, shared with /config. */
+const COMBAT_LABEL = defaultConfigMeta['combat.model']?.options ?? {}
+
+/** One line per Combat choice: how a Combat plays under it. */
+const COMBAT_HINT: Record<CombatModel, string> = {
+  engage:
+    "The designer's playtest Combat. Play Engage to roll from where you stand; each enemy next to you rolls a die back. Enemies hit structures at the end of Combat.",
+  exchange:
+    'The Combat in the written rules. In each exchange you roll, play cards, and fire Skills; then every enemy next to you attacks.',
+}
 
 type Props = Readonly<{
   custom: boolean
@@ -65,9 +77,13 @@ export function StartPanel({ custom, store, onStart, onLoad }: Props) {
         </label>
         <label>
           Combat{' '}
-          <select value={combat} onChange={(e) => setCombat(e.target.value as CombatModel)}>
-            <option value="engage">Engagements (Combat v3 playtest)</option>
-            <option value="exchange">Exchanges (Spec v1)</option>
+          <select
+            value={combat}
+            onChange={(e) => setCombat(e.target.value as CombatModel)}
+            aria-describedby="combat-hint"
+          >
+            <option value="engage">{COMBAT_LABEL.engage ?? 'engage'}</option>
+            <option value="exchange">{COMBAT_LABEL.exchange ?? 'exchange'}</option>
           </select>
         </label>
         <button type="submit" className={styles.primary}>
@@ -76,6 +92,9 @@ export function StartPanel({ custom, store, onStart, onLoad }: Props) {
       </form>
       <p id="seed-hint" className={styles.muted}>
         The same seed and the same choices give the same game.
+      </p>
+      <p id="combat-hint" className={styles.muted}>
+        Combat: {COMBAT_HINT[combat]}
       </p>
       <p className={styles.muted}>
         Config: {custom ? 'custom (changed on the Config page)' : 'default rules'}.{' '}

@@ -75,6 +75,27 @@ export function openQuestions(rows: readonly QuestionRow[]): QuestionRow[] {
     .sort((a, b) => rank(a) - rank(b) || a.number - b.number)
 }
 
+/**
+ * A row's status in plain words for the designer: what it waits on, with no dates, phase
+ * numbers or build terms. A note in brackets is kept only when it names a topic
+ * (`(Skill design)`); notes about the build (`(engine: phase 21, shipped)`) become a plain
+ * sentence or are dropped.
+ *
+ * @param status - the Status cell, for example `proposed 2026-10-04 (engine: phase 21, shipped)`.
+ */
+export function statusLabel(status: string): string {
+  const note = (/\((.*)\)/.exec(status)?.[1] ?? '').replace(/^\d{4}-\d{2}-\d{2}:\s*/, '')
+  const topic = note && !/phase \d|engine|structural|experiment/.test(note) ? ` (${note})` : ''
+  if (status.startsWith('pending-spec'))
+    return `Waiting for the designer to write the rule${topic}.`
+  const plays = /structural/.test(note)
+    ? ' It is an option, off by default.'
+    : /phase \d|engine/.test(note)
+      ? ' The game plays this reading now.'
+      : ''
+  return `Proposed, waiting for the designer's answer${topic}.${plays}`
+}
+
 /** Every leaf path of a config object ("rulings.enemiesPerHex"). */
 function leafPaths(value: unknown, prefix: string[] = []): string[] {
   if (value && typeof value === 'object' && !Array.isArray(value)) {

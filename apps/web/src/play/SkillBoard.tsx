@@ -3,7 +3,7 @@ import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { skillText } from './effectText.ts'
 import styles from './Play.module.css'
-import { firstOf, ofType, planPlacement } from './targets.ts'
+import { firstOf, fitsNoSkill, ofType, planPlacement } from './targets.ts'
 
 type Props = Readonly<{
   state: GameState
@@ -22,7 +22,8 @@ type Props = Readonly<{
  * chosen dice fit together is a button that puts them on it (`planPlacement`: the engine's
  * own placements, 1 die at a time); a filled slot takes its die back. "Fires" = every slot is filled; "can fire" = the free dice could
  * fill it (engine `canFire`). An attack Skill says how many enemies are in its range now: out
- * of range it fires and hits nothing.
+ * of range it fires and hits nothing. When the chosen dice fit no Skill together, a line
+ * above the list says so and asks the player to unselect a die.
  */
 export function SkillBoard({ state, legal, act, actAll, selected, confirmButton = true }: Props) {
   const p = state.players[state.current]
@@ -36,6 +37,11 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
   return (
     <section className={styles.panel} aria-label="Skills">
       <h2 className={styles.panelTitle}>Skills</h2>
+      {placing && fitsNoSkill(state, selected) ? (
+        <p className={styles.noFit} role="status">
+          These dice fit no Skill together. Unselect a die.
+        </p>
+      ) : null}
       <ul className={styles.skills}>
         {p.skills.map((id, si) => {
           const skill = state.content.skills.find((s) => s.id === id)

@@ -1,6 +1,6 @@
 import { defaultContent } from '@survival/content'
 import { describe, expect, it } from 'vitest'
-import { cardText, skillText } from './effectText.ts'
+import { cardText, enemyFaceText, skillText } from './effectText.ts'
 
 describe('effect text', () => {
   it('describes every Skill in content', () => {
@@ -19,5 +19,21 @@ describe('effect text', () => {
     for (const c of defaultContent.cards) {
       expect(cardText(c)).toMatch(/^Prepare: .+\. Combat: .+\.$/)
     }
+  })
+
+  it('gives each enemy die face its damage from config', () => {
+    const engage = defaultContent.config.combat.engage
+    expect(enemyFaceText('hit', engage)).toEqual({
+      name: 'Hit',
+      label: `Hit ${engage.hitDamage}`,
+      damage: engage.hitDamage,
+    })
+    expect(enemyFaceText('special', engage)).toEqual({
+      name: 'Special',
+      label: `Special ${engage.specialDamage}`,
+      damage: engage.specialDamage,
+    })
+    expect(enemyFaceText('miss', engage)).toEqual({ name: 'Miss', label: 'Miss', damage: 0 })
+    expect(enemyFaceText('special', { ...engage, specialDamage: 5 }).label).toBe('Special 5')
   })
 })

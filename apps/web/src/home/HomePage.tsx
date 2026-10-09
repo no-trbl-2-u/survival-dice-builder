@@ -1,3 +1,4 @@
+import { rulesUrl } from '../decisions/Inline.tsx'
 import { HexTile } from '../map/HexTile.tsx'
 import styles from './HomePage.module.css'
 
@@ -17,12 +18,16 @@ export function HomePage() {
         <ol className={styles.steps}>
           <li>
             <strong>Prepare:</strong> play the top halves of your cards to move, gather materials,
-            and build Barricades and Towers. Step off the edge of the map to reveal a new tile.
+            and build Barricades and Towers. Step off the edge of the map to reveal a new tile. Each
+            new tile's spawn nodes add enemies at every Combat, and enemies go for the nearest
+            structure first.
           </li>
           <li>
             <strong>Combat:</strong> play Engage to roll your dice, plus 1 enemy die for each enemy
             next to you. Put your dice on your Skills one at a time; the enemy dice hit last, after
-            your guard.
+            your guard. Or choose Exchanges, the Combat in the <a href={rulesUrl}>written rules</a>,
+            on the start panel: in each exchange you roll, play cards, and fire Skills, then every
+            enemy next to you attacks.
           </li>
         </ol>
         <p>

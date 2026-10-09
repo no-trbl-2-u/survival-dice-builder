@@ -19,6 +19,22 @@ const MAP: ReadonlySet<ActionType> = new Set<ActionType>([
 ])
 
 describe('nextStep', () => {
+  it('names a tied Tower by its place, never by its id', () => {
+    const start = createGame(config, 1)
+    const placed = applyAction(start, { type: 'placeFigure', q: 0, r: 0 }).state
+    const state = {
+      ...placed,
+      defenses: [{ id: 'd1', kind: 'tower', hex: { q: 0, r: -1 }, health: 3, builder: 'p1' }],
+    }
+    const legal: Action[] = [{ type: 'chooseTowerTarget', tower: 'd1', enemy: 'e1' }]
+    const { phase, step } = nextStep(state, legal)
+    expect(phase).toBe('Combat')
+    expect(step).toMatch(
+      /^Choose which enemy the Tower on .+, 1 hex north of the base centre shoots$/,
+    )
+    expect(step).not.toContain('d1')
+  })
+
   it('names the setup step, then Prepare once the figure is placed', () => {
     const s = createGame(config, 3)
     expect(nextStep(s, legalActions(s))).toEqual({
@@ -70,5 +86,23 @@ describe('nextStep', () => {
       expect(nextStep(s, legal).step).not.toBe('Waiting')
       s = applyAction(s, legal[0] as Action).state
     }
+  })
+
+  it('Exchanges: the roll and assign banners name the Keep buttons and the Skill rows', () => {
+    let s = createGame(config, 7)
+    const seen = new Set<string>()
+    for (let i = 0; i < 400 && s.phase !== 'ended'; i++) {
+      const legal = legalActions(s)
+      const step = s.exchange && !s.exchange.engage ? s.exchange.step : null
+      if (step === 'roll' || step === 'assign') {
+        const text = nextStep(s, legal).step
+        expect(text).not.toMatch(/Click dice|Skill slot/)
+        if (step === 'roll') expect(text).toMatch(/^Keep dice, then roll again or stop rolling/)
+        else expect(text).toMatch(/^Select dice, then click a Skill they fit\. Confirm when done/)
+        seen.add(step)
+      }
+      s = applyAction(s, legal[0] as Action).state
+    }
+    expect([...seen].sort()).toEqual(['assign', 'roll'])
   })
 })

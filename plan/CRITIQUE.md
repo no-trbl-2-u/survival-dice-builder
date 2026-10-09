@@ -1,7 +1,7 @@
 # Critique log
 
-> Last pass: 2026-10-06 at commit e9a9406
-> Pass count: 6
+> Last pass: 2026-10-09 at commit e859de5
+> Pass count: 9
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
@@ -9,49 +9,67 @@
 
 ## Pending
 
-### [HIGH] /play — in Exchanges Combat the next-step banner describes controls that no longer exist
-- pass: 6 (commit e9a9406)
+### [LOW] all pages — design tools sit in the nav as equals of Play
+- pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
-- category: comprehension
-- observation: The assign step says "pick a die, click a Skill slot", but empty Skill slots are not buttons now; you select dice and then click the whole Skill row. The roll step says "Click dice to keep them", but the dice are not clickable; only the "Keep die N" buttons keep. A player who follows the banner clicks things that do nothing.
-- evidence: `apps/web/src/play/nextStep.ts:8` "Click dice to keep them, then roll again or stop rolling"; `nextStep.ts:11` "Put your dice on Skills: pick a die, click a Skill slot, then confirm"; `SkillBoard.tsx:73-81` empty slot is a `<span role="img">`; `DiceTray.tsx:88-98` die is a `<span>`, keep is a separate button.
-- suggested fix: Reword EXCHANGE.assign to "Select dice, then click a Skill they fit. Confirm when done." and EXCHANGE.roll to "Keep dice, then roll again or stop rolling."
+- category: navigation
+- observation: Tiles, Decisions and Debug are design and playtest aids, but the nav lists them beside Home and Play with nothing to tell them apart.
+- evidence: `apps/web/src/App.tsx:13-21` NAV lists seven equal links.
+- suggested fix: Split the nav into the game links and a labelled "Design tools" group, or open each tool page with one sentence that says it is a design aid.
 - source: web-fetch
 
-### [MED] /play — when the selected dice fit no Skill, the board goes quiet with no reason
-- pass: 6 (commit e9a9406)
+### [LOW] all pages — one meta description and og:url for every route, no canonical
+- pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
-- category: comprehension
-- observation: If the selected dice do not fit any one Skill together, no Skill row becomes a button and the "can fire" outline is hidden (it shows only with nothing selected). Nothing tells the player to unselect a die.
-- evidence: `apps/web/src/play/SkillBoard.tsx:47` `could` class requires `selected.length === 0`; `SkillBoard.tsx:50` `planPlacement(...)` returns null when the dice do not fit (`targets.ts:62`, `:81`) and the row renders as a plain `<div>`.
-- suggested fix: When the selected dice fit no Skill, show "These dice fit no Skill together. Unselect a die." above the Skill list.
+- category: seo
+- observation: Every route has the home description and an og:url fixed to the home page, and there is no rel=canonical.
+- evidence: `apps/web/index.html:6,16`; `apps/web/src/App.tsx:53-61` sets only the title and noindex per route.
+- suggested fix: In the route effect, set a canonical link and og:url from the route path, and give each route its own description.
 - source: web-fetch
 
-### [MED] /play — enemy dice show "SPECIAL" with no damage or meaning
-- pass: 6 (commit e9a9406)
+### [LOW] /config — the save message names a URL path, not the page
+- pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
-- category: comprehension
-- observation: In an engagement, enemy dice can read HIT, SPECIAL, or miss. Nothing on /play says what a special does or that it deals more damage than a hit.
-- evidence: `apps/web/src/play/DiceTray.tsx:68` `d.face === 'special' ? 'SPECIAL'`; no other "special" copy in `apps/web/src`; `packages/content/data/config.default.json` `"specialDamage": 2`.
-- suggested fix: Show the damage from config on each enemy die, e.g. "HIT 1" and "SPECIAL 2".
+- category: voice
+- observation: After a save the page says "/play" where a visitor sees the nav label "Play".
+- evidence: `apps/web/src/config/ConfigPage.tsx:615` "Saved. New runs on /play use this config."
+- suggested fix: Change to "Saved. New runs on the Play page use this config."
 - source: web-fetch
 
-### [MED] /play — the start panel's Combat choice ignores the saved config and uses internal labels
-- pass: 6 (commit e9a9406)
+### [LOW] /credits — the intro describes how the page is built
+- pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
-- category: comprehension
-- observation: The Combat select always starts on "Engagements", whatever /config says (default config is "exchange"); only `?seed=` runs read `config.combat.model`. The options are named "Combat v3 playtest" and "Spec v1", with no line saying how the two differ, and the /config help for the same setting points to a repo file (`docs/design/combat-v3.md`) a visitor cannot open.
-- evidence: `apps/web/src/play/StartPanel.tsx:33` `useState<CombatModel>('engage')`; `StartPanel.tsx:82-83` "Engagements (Combat v3 playtest)" / "Exchanges (Spec v1)"; `PlayPage.tsx:51` vs `:81`; `packages/content/data/config.meta.json:127`.
-- suggested fix: Start the select from the saved `combat.model`, add a one-line hint for each choice, and drop the docs/ path from the /config help.
+- category: voice
+- observation: The second sentence is build-process language with no use to a visitor.
+- evidence: `apps/web/src/credits/CreditsPage.tsx:60` "Generated from the project's asset register."
+- suggested fix: Cut the sentence, or replace it with where to report a missing credit.
 - source: web-fetch
 
-### [LOW] /config — optional-limit toggles are always named "...: on"
-- pass: 6 (commit e9a9406)
+### [LOW] / — the home page does not link the Decisions page
+- pass: 8 (commit c9bd27d)
 - viewport: n/a (web-fetch)
-- category: a11y
-- observation: The checkbox for an optional limit has the accessible name "<label>: on" even when unchecked, and the visible "Off" / "no maximum" text is aria-hidden. A screen reader hears "X: on, checkbox, not checked".
-- evidence: `apps/web/src/config/ConfigPage.tsx:261` ``aria-label={`${label}: on`}``; `ConfigPage.tsx:264` `<span aria-hidden="true">`.
-- suggested fix: Name the checkbox "<label>: use a limit" and let the checked state carry on/off.
+- category: navigation
+- observation: The "Also:" line links the tiles, the config, and credits, but not Decisions, the page that lists what waits on the designer.
+- evidence: `apps/web/src/home/HomePage.tsx:37-38`.
+- suggested fix: Add "the rules questions that wait on you" linked to /decisions to the "Also:" line.
+- source: web-fetch
+
+### [LOW] / — the Combat step is one long sentence chain
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: The Combat step joins three clauses with semicolons and colons, and names the "start panel" and "Exchanges" before the visitor has seen either. This is not the short, plain style set in bearings.
+- evidence: `apps/web/src/home/HomePage.tsx:25-29` "Put your dice on your Skills one at a time; the enemy dice hit last, after your guard. Or choose Exchanges, the Combat in the written rules, on the start panel: in each exchange you roll, ..."
+- suggested fix: Split into short sentences, and put Exchanges in its own sentence: "Before a run, you can choose Exchanges, the Combat in the written rules."
+- source: web-fetch
+
+### [LOW] /play — enemy choice buttons name enemies by engine id ("grunt e3")
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: Target, Tower-target, skirmish and resolve buttons name each enemy as "<kind> <id>", e.g. "Tower on Plains, 2 hexes north of the base centre shoots grunt e3 on Forest, 2 health". The Tower button repeats the Tower's full place, which the banner already gives. Two enemies on the same terrain differ only by the id.
+- evidence: `apps/web/src/debug/describeAction.ts:17-19` `enemyName` returns `${kind} ${id}`; used at `:71`, `:75`, `:88`, `:131`; banner at `apps/web/src/play/nextStep.ts:47`.
+- suggested fix: Name enemies by kind plus place (terrain and direction from the player or Tower, as `stepsAway` does), and leave the Tower out of Tower-target buttons.
 - source: web-fetch
 
 ### [LOW] /config — pick lists show internal ids next to names; presets show only ids
@@ -63,43 +81,114 @@
 - suggested fix: Show only the name in options; label presets "Preset 1", "Preset 2".
 - source: web-fetch
 
-### [MED] / and /play — nothing says that exploring adds enemies
-- pass: 5 (commit 04b907a)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: The core v2 trade-off is not explained. Every spawn node on a revealed tile spawns enemies at every Combat, and enemies go for structures first. The home steps and the reveal button only say "reveal a tile".
-- evidence: `apps/web/src/home/HomePage.tsx:19` "Step off the edge of the map to reveal a new tile."; `apps/web/src/debug/describeAction.ts:77` "Step off the map edge, ...: reveal a tile".
-- suggested fix: Add one home step: "Each revealed tile's spawn nodes add enemies at every Combat. Enemies attack the nearest structure first." Say the same in short form on the reveal button.
-- source: web-fetch
+> Pass 4 note: web-fetch engine (cloud, no browser). The reader could not get the client-rendered copy on /decisions or /config from the shell, so the phase 18 and 19 copy was not reviewed. A browser pass should cover it.
 
-### [MED] /play — the Tower-tie choice names the Tower by its internal id
-- pass: 5 (commit 04b907a)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: The phase 21 Tower-tie decision shows the Tower's engine id. With 2 Towers, the player cannot tell which one is asking.
-- evidence: `apps/web/src/play/PhaseBar.tsx:21` `Tower ${state.towerQueue[0]}: choose between equally near enemies`; `apps/web/src/debug/describeAction.ts:68` `Tower ${action.tower} shoots ...`.
-- suggested fix: Name the Tower by its place, for example "Tower on Forest (2,1): choose its target", and mark that Tower on the map.
-- source: web-fetch
+> Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
-### [MED] /play — run summary milestone labels are hard-coded and ignore the config
-- pass: 5 (commit 04b907a)
-- viewport: n/a (web-fetch)
-- category: voice
-- observation: The labels are a fixed table. "Reveal 10 tiles" shows on every run, but only 8 tiles can be revealed. If /config changes surviveRounds, the label falls back to the raw id ("Fire survive-round-8"). The log prints raw milestone ids.
-- evidence: `apps/web/src/play/RunSummary.tsx:12` 'reveal-tiles': 'Reveal 10 tiles'; `:55-56` fallback `Fire ${... ?? id}`; `apps/web/src/play/describeEvent.ts:204` `Milestone: ${event.milestone}.`
-- suggested fix: Build the labels from `config.milestones` (for example `Reveal ${m.tilesRevealed} tiles`, `Survive to round ${n}`), and use the same labels in the log.
-- source: web-fetch
+> Pass 8 note: web-fetch engine (cloud, no browser). Every route served only the app shell, so the reader read the shipped copy from source. 2 reader observations were not filed (cap): the /decisions lede counts "rule readings" and "checks" without saying what they are (LOW, partly covered by the status-line row); index.html has no canonical link or Open Graph tags (LOW). The pass 5 observation about raw step ids is no longer true on /play; that form now appears only on /debug.
 
-### [MED] any unknown path — a mistyped URL shows the home page with no "not found" notice
-- pass: 4 (commit 23470a2)
+## Done
+
+### [x] [LOW] all pages — nav labels "Tiles" and "Debug" do not match the page headings
+- pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
 - category: navigation
-- observation: The `_redirects` catch-all serves the app shell with HTTP 200 for every path, and `matchRoute` falls back to the first route. A link to `/decision` or `/setup` opens Home with the heading "Survival Dice-Builder", so the visitor does not know the link was wrong. `/robots.txt` also returns the app HTML.
-- evidence: `curl -w "%{http_code} %{content_type}"`: `/nonexistent-xyz` gives "200 text/html", `/robots.txt` gives "200 text/html". `apps/web/src/router.tsx`: "unknown paths fall back to the first route".
-- suggested fix: Let `matchRoute` return a not-found route (title "Page not found", one line naming the path, links to Home and Play) for unknown paths. Add `apps/web/public/robots.txt` so crawlers get a text file.
+- observation: The nav says "Tiles" and "Debug", but the pages they open are headed "Tile sheet" and "Engine console".
+- evidence: `apps/web/src/App.tsx:17,19` nav labels vs `:32,34` route titles.
+- suggested fix: Use one name per page: nav "Tile sheet" and "Engine console", or rename the headings to match the nav.
 - source: web-fetch
+- issue: #61
+- fixed: (this commit) — the nav reads "Tile sheet" and "Engine console", the page headings; e2e checks every nav label is its page heading
 
-### [LOW] all pages — with JavaScript off the page is blank
+### [x] [MED] all pages — rules sections are cited but the rules are never linked
+- pass: 9 (commit e859de5)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: Home, /config, /debug and /decisions cite "the written rules" and rule numbers, but no page links to the rules. A visitor cannot look up a cited section.
+- evidence: `apps/web/src/home/HomePage.tsx:27` "the Combat in the written rules"; `apps/web/src/config/ConfigPage.tsx:632` "Each field names its rules section."; `apps/web/src/debug/DebugPage.tsx:81` "Numbers in [brackets] are rules sections."; no href to the rules anywhere in `apps/web/src`.
+- suggested fix: Link "the written rules" (and the /config and /debug notes) to `spec/01-spec-v1-rules.md` on GitHub, using the repository-link helper in `apps/web/src/decisions/Inline.tsx`.
+- source: web-fetch
+- issue: #60
+- fixed: (this commit) — "written rules" on Home, /config and /debug links to `spec/01-spec-v1-rules.md` on GitHub (`rulesUrl` in `decisions/Inline.tsx`); /decisions already links the files it names
+
+### [x] [LOW] /tiles — the tiles are one flat grid with no headings
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: The lede names Base, countryside and core tiles, and the doc comment says "grouped by kind", but the sheet is one grid with no H2 or H3. Tile names are <strong>, so screen-reader users cannot jump from tile to tile by heading.
+- evidence: `apps/web/src/tiles/TileSheet.tsx:18-19`, `:26`, `:46-51`.
+- suggested fix: Group the grid under an H2 per kind (Base, Countryside, Core) and make each tile name an H3.
+- source: web-fetch
+- issue: #56
+- fixed: (this commit) — the sheet has an H2 per kind (Base tile, Countryside tiles, Core tiles) and each tile name is an H3
+
+### [x] [LOW] all pages — the main nav is inside <main> and there is no skip link
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: The nav sits inside the main landmark, so landmark navigation lands on the nav, not the content. Keyboard users tab through 7 nav links on every page before they reach the content.
+- evidence: `apps/web/src/App.tsx:62-69` `<main className="app"><nav aria-label="Main" ...>`.
+- suggested fix: Move the nav into a <header> before <main>, and add a "Skip to content" link as the first focusable element.
+- source: web-fetch
+- issue: #54
+- fixed: (this commit) — the nav sits in a header before main; a "Skip to content" link is the first Tab stop and moves focus to main
+
+### [x] [MED] /decisions — status lines use build-process words and point at hidden rows
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: Each reading prints its raw status, e.g. "proposed 2026-10-05 (structural; option measured in phase 22)" or "proposed 2026-10-04 (engine: phase 21, shipped)". Phase numbers and "structural" mean nothing to the designer. Row 63 says "never ends (row 62)", but row 62 is superseded and the page hides it, so the reference leads nowhere. Read from source; the live page is client-rendered.
+- evidence: `apps/web/src/decisions/DecisionsPage.tsx:76` `Status: {q.status}`; `packages/content/src/decisions.ts:64` `const OPEN = /proposed|pending-spec/` filters superseded rows; `OPEN-QUESTIONS.md` rows 62-63.
+- suggested fix: Map each status to a plain label ("Proposed, waiting for your answer", "Waiting for rules text") with no phase numbers, and drop or inline references to rows the page does not show.
+- source: web-fetch
+- issue: #53
+- fixed: (this commit) — statuses read as plain labels with no dates or phase numbers; each "row N" links to the listed reading, or to `OPEN-QUESTIONS.md` for a settled row
+
+### [x] [MED] /decisions — the page tells the designer to edit repository files it does not link
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: navigation
+- observation: The lede says "To confirm a reading, change its status in OPEN-QUESTIONS.md. The same list is in docs/DECISIONS.md." Both names are code text, not links, and readings name report files such as `docs/reports/phase-22-experiments.md` the same way. A designer who uses only the site cannot open any of them. Read from source; the live page is client-rendered.
+- evidence: `apps/web/src/decisions/DecisionsPage.tsx:60-62`; report paths inside `OPEN-QUESTIONS.md` rows 63-70.
+- suggested fix: Link each file to its page on GitHub (github.com/no-trbl-2-u/survival-dice-builder/blob/main/...), and say in one sentence who confirms a reading.
+- source: web-fetch
+- issue: #52
+- fixed: (this commit)
+
+### [x] [LOW] /play — enemy dice faces use three different cases, and the heading is long
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: Dice show "HIT 1", "SPECIAL 2" and "miss"; the heading says "a Hit deals 1 damage, a Special 2"; the screen-reader label uses the raw lowercase face ("hit"). The heading is a long bracketed sentence that repeats the damage each die now shows.
+- evidence: `apps/web/src/play/effectText.ts:47-50`; `apps/web/src/play/DiceTray.tsx:56` heading; `DiceTray.tsx:67` aria-label `${d.face}`.
+- suggested fix: Use one case for all faces (Hit 1 / Special 2 / Miss) and shorten the heading to "Enemy dice: they hit you after your Skills".
+- source: web-fetch
+- issue: #51
+- fixed: (this commit)
+
+### [x] [LOW] any unknown path — "Page not found" is served with HTTP 200 and no noindex
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: seo
+- observation: The new not-found view is client-side only. Every path returns 200 with the same shell, so crawlers can index mistyped URLs as copies of the home page.
+- evidence: `apps/web/public/_redirects:1` `/* /index.html 200`; `apps/web/src/App.tsx:39-43` notFound route only sets document.title; WebFetch of `/no-such-page` returned the home shell.
+- suggested fix: Have the notFound route add `<meta name="robots" content="noindex">`, or list known routes in `_redirects` and send the rest to a 404 page with status 404.
+- source: web-fetch
+- issue: #50
+- fixed: (this commit) — the notFound route adds `<meta name="robots" content="noindex">` and removes it on the way out
+
+### [x] [LOW] /config — optional-limit toggles are always named "...: on"
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: The checkbox for an optional limit has the accessible name "<label>: on" even when unchecked, and the visible "Off" / "no maximum" text is aria-hidden. A screen reader hears "X: on, checkbox, not checked".
+- evidence: `apps/web/src/config/ConfigPage.tsx:261` ``aria-label={`${label}: on`}``; `ConfigPage.tsx:264` `<span aria-hidden="true">`.
+- suggested fix: Name the checkbox "<label>: use a limit" and let the checked state carry on/off.
+- source: web-fetch
+- issue: #49
+- fixed: (this commit) — the checkbox is named "<label>: use a limit"; its checked state carries on/off
+
+### [x] [LOW] all pages — with JavaScript off the page is blank
 - pass: 4 (commit 23470a2)
 - viewport: n/a (web-fetch)
 - category: comprehension
@@ -107,12 +196,129 @@
 - evidence: Raw `/` HTML body: `<div id="root"></div>`. No `<noscript>` element. Reader WebFetch of `/`, `/decisions`, `/config`, `/play`, `/tiles`, `/credits`: "contains only a title 'Survival Dice-Builder'".
 - suggested fix: Add a `<noscript>` paragraph to `apps/web/index.html`: one line that says what the game is and that it needs JavaScript.
 - source: web-fetch
+- issue: #48
+- fixed: (this commit) — `apps/web/index.html` adds a `<noscript>` paragraph saying what the game is and that it needs JavaScript
 
-> Pass 4 note: web-fetch engine (cloud, no browser). The reader could not get the client-rendered copy on /decisions or /config from the shell, so the phase 18 and 19 copy was not reviewed. A browser pass should cover it.
+### [x] [LOW] / — the home page "How a run goes" describes only Engagements Combat
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The Combat step says "play Engage to roll your dice, plus 1 enemy die for each enemy next to you", but the start panel offers both models and the config default is Exchanges. A player who picks Exchanges gets a different Combat from the one the home page describes.
+- evidence: `apps/web/src/home/HomePage.tsx:25-27`; `apps/web/src/play/StartPanel.tsx:94-95`; `packages/content/data/config.default.json:117` `"model": "exchange"`.
+- suggested fix: Add one sentence: "Or choose Exchanges (the written rules) on the start panel." (Related user call in AUDIT.md: the start panel Combat default.)
+- source: web-fetch
+- issue: #47
+- fixed: (this commit) — the Combat step in `apps/web/src/home/HomePage.tsx` adds one sentence naming Exchanges and how it plays
 
-> Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
+### [x] [MED] /play — run summary milestone labels are hard-coded and ignore the config
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: The labels are a fixed table. "Reveal 10 tiles" shows on every run, but only 8 tiles can be revealed. If /config changes surviveRounds, the label falls back to the raw id ("Fire survive-round-8"). The log prints raw milestone ids.
+- evidence: `apps/web/src/play/RunSummary.tsx:12` 'reveal-tiles': 'Reveal 10 tiles'; `:55-56` fallback `Fire ${... ?? id}`; `apps/web/src/play/describeEvent.ts:204` `Milestone: ${event.milestone}.`
+- suggested fix: Build the labels from `config.milestones` (for example `Reveal ${m.tilesRevealed} tiles`, `Survive to round ${n}`), and use the same labels in the log.
+- source: web-fetch
+- issue: #46
+- fixed: (this commit) — labels and log lines come from `config.milestones` via `apps/web/src/play/milestoneText.ts`
 
-## Done
+### [x] [MED] /config — the Combat model setting uses internal labels and repeats itself
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: /config names the options "Exchanges (Spec v1)" and "Engagements (Combat v3)", while the /play start panel now says "Exchanges (written rules)" and "Engagements (playtest)". The /config help is long and says "Engagements are..." then "Engagements: ..." again.
+- evidence: `packages/content/data/config.meta.json:127` help text; `:130-131` option labels; `apps/web/src/play/StartPanel.tsx:12-17` (COMBAT_HINT) and `:94-95`.
+- suggested fix: Reuse the start panel's option labels and its two hint lines as the /config options and help.
+- source: web-fetch
+- issue: #45
+- fixed: (this commit) — /config uses the start panel names and one hint line per model; the start panel reads its names from config.meta.json
+
+### [x] [MED] /play — the "Return 1 starter card" buttons show card ids and no card text
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: Each return button reads "Return Move [c3]": the engine card id sits in square brackets, and the button does not say what the card does. The draft and replace buttons in the same dialog do show effect text. Nothing says why a starter card goes back.
+- evidence: `apps/web/src/play/DecisionDialog.tsx:73` `Return {card(a.card)} [{a.card}]`; title only "Return 1 starter card"; draft/replace buttons at `DecisionDialog.tsx:58,66` use `effectOf()`.
+- suggested fix: Drop the `[id]`, show the card text on each button, and add one line saying why a starter card goes back.
+- source: web-fetch
+- issue: #44
+- fixed: (this commit)
+
+### [x] [MED] /play — the Tower-tie choice names the Tower by its internal id
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The phase 21 Tower-tie decision shows the Tower's engine id. With 2 Towers, the player cannot tell which one is asking.
+- evidence: `apps/web/src/play/PhaseBar.tsx:21` `Tower ${state.towerQueue[0]}: choose between equally near enemies`; `apps/web/src/debug/describeAction.ts:68` `Tower ${action.tower} shoots ...`.
+- suggested fix: Name the Tower by its place, for example "Tower on Forest (2,1): choose its target", and mark that Tower on the map.
+- source: web-fetch
+- issue: #43
+- fixed: (this commit) — the next-step banner and the action label name the Tower by kind, terrain, and distance from the base centre; marking it on the map is left for a later tick
+
+### [x] [MED] any unknown path — a mistyped URL shows the home page with no "not found" notice
+- pass: 4 (commit 23470a2)
+- viewport: n/a (web-fetch)
+- category: navigation
+- observation: The `_redirects` catch-all serves the app shell with HTTP 200 for every path, and `matchRoute` falls back to the first route. A link to `/decision` or `/setup` opens Home with the heading "Survival Dice-Builder", so the visitor does not know the link was wrong. `/robots.txt` also returns the app HTML.
+- evidence: `curl -w "%{http_code} %{content_type}"`: `/nonexistent-xyz` gives "200 text/html", `/robots.txt` gives "200 text/html". `apps/web/src/router.tsx`: "unknown paths fall back to the first route".
+- suggested fix: Let `matchRoute` return a not-found route (title "Page not found", one line naming the path, links to Home and Play) for unknown paths. Add `apps/web/public/robots.txt` so crawlers get a text file.
+- source: web-fetch
+- issue: #42
+- fixed: (this commit) — unknown paths get a "Page not found" page naming the path, with links to Home and Play; robots.txt ships as a text file
+
+### [x] [MED] /play — the start panel's Combat choice ignores the saved config and uses internal labels
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The Combat select always starts on "Engagements", whatever /config says (default config is "exchange"); only `?seed=` runs read `config.combat.model`. The options are named "Combat v3 playtest" and "Spec v1", with no line saying how the two differ, and the /config help for the same setting points to a repo file (`docs/design/combat-v3.md`) a visitor cannot open.
+- evidence: `apps/web/src/play/StartPanel.tsx:33` `useState<CombatModel>('engage')`; `StartPanel.tsx:82-83` "Engagements (Combat v3 playtest)" / "Exchanges (Spec v1)"; `PlayPage.tsx:51` vs `:81`; `packages/content/data/config.meta.json:127`.
+- suggested fix: Start the select from the saved `combat.model`, add a one-line hint for each choice, and drop the docs/ path from the /config help.
+- source: web-fetch
+- issue: #41
+- fixed: (this commit) — hints, plain option names, no docs/ path in the /config help; the default choice is filed as a user call in AUDIT.md
+
+### [x] [MED] / and /play — nothing says that exploring adds enemies
+- pass: 5 (commit 04b907a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The core v2 trade-off is not explained. Every spawn node on a revealed tile spawns enemies at every Combat, and enemies go for structures first. The home steps and the reveal button only say "reveal a tile".
+- evidence: `apps/web/src/home/HomePage.tsx:19` "Step off the edge of the map to reveal a new tile."; `apps/web/src/debug/describeAction.ts:77` "Step off the map edge, ...: reveal a tile".
+- suggested fix: Add one home step: "Each revealed tile's spawn nodes add enemies at every Combat. Enemies attack the nearest structure first." Say the same in short form on the reveal button.
+- source: web-fetch
+- issue: #40
+- fixed: 2d3def3
+
+### [x] [MED] /play — enemy dice show "SPECIAL" with no damage or meaning
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: In an engagement, enemy dice can read HIT, SPECIAL, or miss. Nothing on /play says what a special does or that it deals more damage than a hit.
+- evidence: `apps/web/src/play/DiceTray.tsx:68` `d.face === 'special' ? 'SPECIAL'`; no other "special" copy in `apps/web/src`; `packages/content/data/config.default.json` `"specialDamage": 2`.
+- suggested fix: Show the damage from config on each enemy die, e.g. "HIT 1" and "SPECIAL 2".
+- source: web-fetch
+- issue: #39
+- fixed: d8bfcfa
+
+### [x] [MED] /play — when the selected dice fit no Skill, the board goes quiet with no reason
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: If the selected dice do not fit any one Skill together, no Skill row becomes a button and the "can fire" outline is hidden (it shows only with nothing selected). Nothing tells the player to unselect a die.
+- evidence: `apps/web/src/play/SkillBoard.tsx:47` `could` class requires `selected.length === 0`; `SkillBoard.tsx:50` `planPlacement(...)` returns null when the dice do not fit (`targets.ts:62`, `:81`) and the row renders as a plain `<div>`.
+- suggested fix: When the selected dice fit no Skill, show "These dice fit no Skill together. Unselect a die." above the Skill list.
+- source: web-fetch
+- issue: #38
+- fixed: e55ad36
+
+### [x] [HIGH] /play — in Exchanges Combat the next-step banner describes controls that no longer exist
+- pass: 6 (commit e9a9406)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The assign step says "pick a die, click a Skill slot", but empty Skill slots are not buttons now; you select dice and then click the whole Skill row. The roll step says "Click dice to keep them", but the dice are not clickable; only the "Keep die N" buttons keep. A player who follows the banner clicks things that do nothing.
+- evidence: `apps/web/src/play/nextStep.ts:8` "Click dice to keep them, then roll again or stop rolling"; `nextStep.ts:11` "Put your dice on Skills: pick a die, click a Skill slot, then confirm"; `SkillBoard.tsx:73-81` empty slot is a `<span role="img">`; `DiceTray.tsx:88-98` die is a `<span>`, keep is a separate button.
+- suggested fix: Reword EXCHANGE.assign to "Select dice, then click a Skill they fit. Confirm when done." and EXCHANGE.roll to "Keep dice, then roll again or stop rolling."
+- source: web-fetch
+- issue: #37
+- fixed: f85de8f
 
 ### [x] [MED] /play — the Gather card does not say it needs an unspent gathering node
 - pass: 5 (commit 04b907a)

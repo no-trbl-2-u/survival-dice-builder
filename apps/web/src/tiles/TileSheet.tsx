@@ -1,10 +1,15 @@
-import { defaultContent, type Site, type Terrain } from '@survival/content'
+import { defaultContent, type Site, type Terrain, type TileDef } from '@survival/content'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { HEX_POSITION, hexLabel, SITE_ICON, SITE_LABEL, TileView } from './TileView.tsx'
 import styles from './TileSheet.module.css'
 
 const TERRAINS: readonly Terrain[] = ['plains', 'forest', 'hills', 'wasteland', 'lake', 'mountain']
 const SITES: readonly Site[] = ['base', 'gathering-node', 'spawn-node', 'elite-spawn-node']
+const KINDS: readonly (readonly [TileDef['kind'], string])[] = [
+  ['base', 'Base tile'],
+  ['countryside', 'Countryside tiles'],
+  ['core', 'Core tiles'],
+]
 
 /** Counts each site printed on a tile, for the caption. */
 function siteSummary(sites: readonly (Site | null)[]): string {
@@ -43,25 +48,32 @@ export function TileSheet() {
           </li>
         ))}
       </ul>
-      <div className={styles.grid}>
-        {tiles.map((tile) => (
-          <figure key={tile.id} className={styles.card} data-tile={tile.id}>
-            <TileView tile={tile} />
-            <figcaption>
-              <strong>{tile.name}</strong> <span className={styles.kind}>{tile.kind}</span>
-              <br />
-              {siteSummary(tile.hexes.map((h) => h.site))}
-              <ul className={styles.hexList} aria-label={`${tile.name} hexes`}>
-                {tile.hexes.map((hex, i) => (
-                  <li key={i} data-hex-row={i}>
-                    <span className={styles.position}>{HEX_POSITION[i]}:</span> {hexLabel(hex)}
-                  </li>
-                ))}
-              </ul>
-            </figcaption>
-          </figure>
-        ))}
-      </div>
+      {KINDS.map(([kind, heading]) => (
+        <section key={kind} aria-labelledby={`tiles-${kind}`} data-tile-kind={kind}>
+          <h2 id={`tiles-${kind}`}>{heading}</h2>
+          <div className={styles.grid}>
+            {tiles
+              .filter((tile) => tile.kind === kind)
+              .map((tile) => (
+                <figure key={tile.id} className={styles.card} data-tile={tile.id}>
+                  <TileView tile={tile} />
+                  <figcaption>
+                    <h3 className={styles.name}>{tile.name}</h3>
+                    {siteSummary(tile.hexes.map((h) => h.site))}
+                    <ul className={styles.hexList} aria-label={`${tile.name} hexes`}>
+                      {tile.hexes.map((hex, i) => (
+                        <li key={i} data-hex-row={i}>
+                          <span className={styles.position}>{HEX_POSITION[i]}:</span>{' '}
+                          {hexLabel(hex)}
+                        </li>
+                      ))}
+                    </ul>
+                  </figcaption>
+                </figure>
+              ))}
+          </div>
+        </section>
+      ))}
     </section>
   )
 }

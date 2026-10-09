@@ -124,11 +124,11 @@
   },
   "combat.model": {
     "label": "Combat model",
-    "help": "Combat v3 playtest (docs/design/combat-v3.md). Exchanges: the Spec v1 rule. Engagements: each Engage card option starts an attack on 1 enemy; that enemy and every enemy next to you roll enemy dice back at you; there is no enemy attack phase, and a siege step hits structures at the end of Combat.",
+    "help": "Exchanges: the Combat in the written rules. In each exchange you roll, play cards, and fire Skills; then every enemy next to you attacks. Engagements: the designer's playtest Combat. Play Engage to roll from where you stand; each enemy next to you rolls a die back. Enemies hit structures at the end of Combat.",
     "rule": "7.8, Combat v3",
     "options": {
-      "exchange": "Exchanges (Spec v1)",
-      "engage": "Engagements (Combat v3)"
+      "exchange": "Exchanges (written rules)",
+      "engage": "Engagements (playtest)"
     }
   },
   "combat.engage": {

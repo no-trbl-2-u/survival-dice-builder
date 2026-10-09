@@ -5,16 +5,18 @@ const routes: Route[] = [
   { path: '/', title: 'Home', render: () => null },
   { path: '/tiles', title: 'Tiles', render: () => null },
 ]
+const notFound: Route = { path: '', title: 'Page not found', render: () => null }
 
 describe('matchRoute', () => {
   it('matches exact paths and ignores a trailing slash', () => {
-    expect(matchRoute(routes, '/tiles').title).toBe('Tiles')
-    expect(matchRoute(routes, '/tiles/').title).toBe('Tiles')
+    expect(matchRoute(routes, '/tiles', notFound).title).toBe('Tiles')
+    expect(matchRoute(routes, '/tiles/', notFound).title).toBe('Tiles')
+    expect(matchRoute(routes, '', notFound).title).toBe('Home')
   })
 
-  it('falls back to the first route', () => {
-    expect(matchRoute(routes, '/nope').title).toBe('Home')
-    expect(matchRoute(routes, '').title).toBe('Home')
+  it('gives unknown paths the not-found route, not the home page', () => {
+    expect(matchRoute(routes, '/nope', notFound).title).toBe('Page not found')
+    expect(matchRoute(routes, '/tile', notFound).title).toBe('Page not found')
   })
 })
 

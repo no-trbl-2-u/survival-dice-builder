@@ -14,6 +14,14 @@ test('/tiles shows the 9 proposed tiles with no console errors', async ({ page }
   await expect(page.locator('[data-tile="broken-village"] [data-site="base"]')).toHaveCount(1)
   // Every hex is also listed as text (touch, keyboard, and screen-reader users).
   await expect(page.locator('[data-hex-row]')).toHaveCount(63)
+  // Screen-reader users can jump by heading: one H2 per kind, one H3 per tile.
+  await expect(page.getByRole('heading', { level: 2 })).toHaveText([
+    'Base tile',
+    'Countryside tiles',
+    'Core tiles',
+  ])
+  await expect(page.getByRole('heading', { level: 3 })).toHaveCount(9)
+  await expect(page.getByRole('heading', { level: 3, name: 'Broken Village' })).toBeVisible()
   await expect(page.getByRole('list', { name: 'Broken Village hexes' })).toContainText(
     'Center: Plains, Base',
   )
@@ -39,7 +47,7 @@ test('/tiles at 375px has no horizontal scroll', async ({ page }) => {
 test('navigation links reach both pages', async ({ page }) => {
   await page.goto('/')
   const nav = page.getByRole('navigation', { name: 'Main' })
-  await nav.getByRole('link', { name: 'Tiles' }).click()
+  await nav.getByRole('link', { name: 'Tile sheet' }).click()
   await expect(page).toHaveURL(/\/tiles$/)
   await nav.getByRole('link', { name: 'Home' }).click()
   await expect(page.locator('polygon[data-hex]')).toHaveCount(7)

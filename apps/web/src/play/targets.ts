@@ -85,6 +85,19 @@ export function planPlacement(
 }
 
 /**
+ * True when dice are chosen and they fit no Skill of the current player together (no
+ * `planPlacement` for any of them), so the board can say why no Skill takes them.
+ *
+ * @param state - the state with the exchange in its assign step.
+ * @param dice - the chosen dice (indexes).
+ */
+export function fitsNoSkill(state: GameState, dice: readonly number[]): boolean {
+  if (dice.length === 0) return false
+  const skills = state.players[state.current]?.skills ?? []
+  return skills.every((id) => planPlacement(state, id, dice) === null)
+}
+
+/**
  * The action types that have a dedicated control on /play; map targets and the next-step
  * banner (`bannerActions`) cover the rest.
  */

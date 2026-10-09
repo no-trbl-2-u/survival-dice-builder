@@ -13,9 +13,9 @@
   font-size: 0.875rem;
 }
 
-.kind {
-  text-transform: capitalize;
-  opacity: 0.8;
+.name {
+  margin: 0;
+  font-size: inherit;
 }
 
 .legend {

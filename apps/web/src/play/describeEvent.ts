@@ -1,5 +1,6 @@
 import { hexKey, type GameEvent, type GameState } from '@survival/engine'
 import { hexLabel } from '../tiles/TileView.tsx'
+import { milestoneLabel } from './milestoneText.ts'
 
 /** What the log needs to name ids: the content, plus the pieces in play (usually the state). */
 type Names = Readonly<{
@@ -11,6 +12,8 @@ type Names = Readonly<{
   log?: GameState['log']
   /** The map, to name a hex by its terrain and site. */
   map?: GameState['map']
+  /** The config, to give milestones their numbers. */
+  config?: GameState['config']
 }>
 
 const hex = (h: { q: number; r: number }) => `(${h.q},${h.r})`
@@ -129,7 +132,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'engaged':
       return `${who(event.player)} ${s('engage')}. ${event.enemyDice.length === 0 ? 'No enemy is next to you: no enemy dice.' : `Enemy dice: ${event.enemyDice.map((d) => `${enemyLabel(names, d.enemy)} ${d.face}`).join(', ')}.`}`
     case 'repaired':
-      return `${who(event.player)} ${s('repair')} ${event.structure === 'base' ? 'the base' : event.structure} for ${event.amount} (health ${event.health}).`
+      return `${who(event.player)} ${s('repair')} ${event.structure === 'base' ? 'the base' : defenseLabel(names, event.structure)} for ${event.amount} (health ${event.health}).`
     case 'hitIgnored':
       return `${who(event.player)} ${s('ignore')} the hit from ${enemyLabel(names, event.enemy)}.`
     case 'playerDamaged':
@@ -148,8 +151,8 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `Skirmish with ${enemyLabel(names, event.enemy)} on ${place(names, event.hex)}.`
     case 'skirmishEnded':
       return event.won
-        ? 'Skirmish won: you move into the hex.'
-        : 'Skirmish lost: you stay; the Move ends.'
+        ? `Skirmish won: ${whom(event.player)} ${s('move')} into the hex.`
+        : `Skirmish lost: ${whom(event.player)} ${s('stay')}; the Move ends.`
     case 'gathered':
       return event.amount === 0
         ? `${who(event.player)} gathered nothing: gather on an unspent gathering node with no enemy on it.`
@@ -205,7 +208,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'skillReplaced':
       return `${skillName(names, event.skill)} leaves the Skill board.`
     case 'milestoneReached':
-      return `Milestone: ${event.milestone}.`
+      return `Milestone: ${names.config ? milestoneLabel(event.milestone, names.config.milestones, names.content) : event.milestone}.`
     case 'runEnded':
       return `The base has fallen in round ${event.round}. The run ends.`
     case 'playerKnockedOut':

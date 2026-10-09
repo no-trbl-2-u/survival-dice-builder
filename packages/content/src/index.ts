@@ -52,6 +52,7 @@ export {
   openQuestions,
   parseQuestions,
   parseUserCalls,
+  statusLabel,
   type FlagSetting,
   type QuestionRow,
   type UserCall,

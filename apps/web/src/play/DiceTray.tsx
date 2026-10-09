@@ -2,11 +2,9 @@ import { sameAction, type Action, type EnemyDieRoll, type GameState } from '@sur
 import { lazy, Suspense } from 'react'
 import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
+import { enemyFaceText } from './effectText.ts'
 import styles from './Play.module.css'
 import { firstOf, placementsFor } from './targets.ts'
-
-/** The word under an enemy die (the glyph carries the face; the word confirms it). */
-const ENEMY_FACE_LABEL = { hit: 'Hit', miss: 'Miss', special: 'Special' } as const
 
 /** Loaded only when 3D dice are on: three.js stays out of the main bundle. */
 const Dice3D = lazy(() => import('../dice3d/Dice3D.tsx'))
@@ -167,8 +165,6 @@ export function EnemyDice({
 }>) {
   const dice = rolls ?? state.exchange?.engage?.enemyDice
   if (!dice) return null
-  const cfg = state.config.combat.engage
-  const damage = { hit: cfg.hitDamage, special: cfg.specialDamage, miss: 0 }
   return (
     <div data-testid="enemy-dice" className={bare ? styles.engageDiceGroup : undefined}>
       {heading ? (
@@ -197,10 +193,7 @@ export function EnemyDice({
                 <GameIcon name={`face-enemy-${d.face}`} size="2.4rem" />
               </span>
               <span className={styles.enemyDieLabel} aria-hidden="true">
-                <strong>
-                  {ENEMY_FACE_LABEL[d.face]}
-                  {damage[d.face] > 0 ? `: ${damage[d.face]} dmg` : ''}
-                </strong>
+                <strong>{enemyFaceText(d.face, state.config.combat.engage).label}</strong>
                 <small>{who}</small>
               </span>
             </li>
