@@ -1925,6 +1925,12 @@
   overflow-x: auto;
   justify-content: safe center;
   scroll-snap-type: none;
+  /* It still scrolls (swipe, wheel, keyboard focus); the bar itself is hidden. */
+  scrollbar-width: none;
+}
+
+.cardStripList::-webkit-scrollbar {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
