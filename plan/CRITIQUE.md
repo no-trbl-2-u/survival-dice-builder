@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-09 at commit e859de5
-> Pass count: 9
+> Last pass: 2026-10-09 at commit 10fd9d1
+> Pass count: 10
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /config — Start run always starts an engagement run, whatever Combat model is saved
+- pass: 10 (commit 10fd9d1)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The new Start run button on the Config bar always opens an engagement run. A visitor who sets the Combat model to exchanges on the same page and presses Start run still gets engagements, and the button does not say so.
+- evidence: `apps/web/src/config/ConfigPage.tsx:700` links `/play?seed=...&combat=engage`; `apps/web/src/play/PlayPage.tsx:59` uses the saved `config.combat.model` only when `combat` is not `engage`.
+- suggested fix: Keep the engagement playtest start, but name it on the button ("Start engagement run"), or follow the saved Combat model and drop `&combat=engage`.
+- source: web-fetch
+
+### [MED] /play — screen readers hear enemy dice as "hit" or "special" with no damage
+- pass: 10 (commit 10fd9d1)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: In the engagement modal each enemy die is named by its raw face word. The visible label that gives the damage ("Hit 2", "Special 3") is hidden from assistive technology.
+- evidence: `apps/web/src/play/DiceTray.tsx:191` `aria-label={`Enemy die of ${who}: ${d.face}`}`; `DiceTray.tsx:195-196` the `enemyFaceText(...).label` span is `aria-hidden="true"`.
+- suggested fix: Build the aria-label from `enemyFaceText(d.face, state.config.combat.engage).label`.
+- source: web-fetch
+
+### [MED] /play — the engagement result is not announced to screen readers
+- pass: 10 (commit 10fd9d1)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: When an engagement ends, the live instruction line is replaced by a result headline that is not a live region, and focus moves to "Back to the board". A screen-reader user hears the button but not the result, such as "You were knocked out."
+- evidence: `apps/web/src/play/EngagementModal.tsx:236` `aria-live="polite"` is on the instruction only; the headline `<p data-testid="engage-headline">` near line 461 has no live role.
+- suggested fix: Give the result headline `role="status"`, or point the dialog's `aria-describedby` at it.
+- source: web-fetch
+
+### [LOW] /play — the engagement headline says "took no damage" when enemy dice hit the guard
+- pass: 10 (commit 10fd9d1)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The result headline says "took no damage" whenever health did not drop. The line below can then say "2 enemy dice hit you: 2 to guard, 0 to health", so the two lines seem to disagree.
+- evidence: `apps/web/src/play/engageView.ts:125` `s.toHealth > 0 ? ... : 'took no damage'`; `EngagementModal.tsx:456` the hits line.
+- suggested fix: When `toGuard > 0` and `toHealth` is 0, say "your guard stopped <n> damage" in the headline.
+- source: web-fetch
+
+### [LOW] /play — the engagement instructions run long and repeat themselves
+- pass: 10 (commit 10fd9d1)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: The assign-step instruction joins clauses with a semicolon and a parenthesis, against the short-sentence style. The roll-step instruction says "use them" twice.
+- evidence: `apps/web/src/play/engageView.ts:38-40` "Pick dice, then a Skill they fit (a Star fits any slot). A full Skill fires at once...; when no die is left, the enemy dice hit."; `engageView.ts:32` "...or stop rolling and use them. After the last roll, you use them."
+- suggested fix: Split into short sentences: "Select dice. Then choose a Skill they fit. A Star fits any slot. A full Skill fires at once. When no dice are left, the enemy dice hit."
+- source: web-fetch
+
+### [LOW] /play — at 375px the engagement hand has no room to scroll and tiny card text
+- pass: 10 (commit 10fd9d1)
+- viewport: mobile (from CSS, web-fetch)
+- category: mobile
+- observation: On phones the pinned hand shrinks cards to 70px with option text at 0.62rem (about 10px). The strip is centred with no horizontal scroll, so a hand of 5 fills the screen edge to edge and a larger hand would be cut off.
+- evidence: `apps/web/src/play/Play.module.css:1815-1825` `.stripCard { width: 70px }`, `.stripOptions { font-size: 0.62rem }`; `.cardStrip` (line 1575) is fixed with `justify-content: center` and no `overflow-x`.
+- suggested fix: Give `.cardStripList` `overflow-x: auto` with `justify-content: safe center`, and raise `.stripOptions` to at least 0.75rem.
+- source: web-fetch
 
 ### [LOW] all pages — design tools sit in the nav as equals of Play
 - pass: 9 (commit e859de5)
