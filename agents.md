@@ -194,7 +194,9 @@ aggressively for everything else.
 
 The autonomous loop is hermetic for shipping; the awareness layer
 needs tokens. Both live in `.env` (gitignored). Configure once
-per machine.
+per machine. The scripts read `.env` through `scripts/load-env.mjs`:
+the current directory's first, then the main checkout's, so a git
+worktree (which has no `.env` of its own) uses the main one.
 
 ### `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` — deploy gate
 

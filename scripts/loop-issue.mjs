@@ -58,22 +58,13 @@
 //   GH_TOKEN    repo-scoped PAT
 //   GH_REPO     owner/repo, e.g. no-trbl-2-u/survival-dice-builder
 //
-// Reads .env using a simple loader; matches the shape used by
-// scripts/deploy-check.mjs and skills/triage.md.
+// Reads .env through scripts/load-env.mjs (the current directory's,
+// else the main checkout's when run in a worktree).
 
 import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
-
-// --- load .env if present (Node has no built-in .env loader) ---
-if (fs.existsSync('.env')) {
-  for (const line of fs.readFileSync('.env', 'utf-8').split(/\r?\n/)) {
-    const m = line.match(/^\s*([A-Z][A-Z0-9_]*)\s*=\s*(.*?)\s*$/)
-    if (m && !process.env[m[1]]) {
-      process.env[m[1]] = m[2].replace(/^["']|["']$/g, '')
-    }
-  }
-}
+import './load-env.mjs' // .env here, else the main checkout's (worktrees)
 
 const VALID_SEVERITY = new Set(['high', 'med', 'low'])
 const VALID_SOURCE = new Set(['user', 'reader', 'audit', 'external'])

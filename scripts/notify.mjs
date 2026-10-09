@@ -18,17 +18,7 @@
 // never become a new failure mode. Neither var set → prints a
 // one-liner and exits 0 (so skills can call it unconditionally).
 
-import fs from 'node:fs'
-
-// --- load .env if present (matches deploy-check.mjs loader) ---
-if (fs.existsSync('.env')) {
-  for (const line of fs.readFileSync('.env', 'utf-8').split(/\r?\n/)) {
-    const m = line.match(/^\s*([A-Z][A-Z0-9_]*)\s*=\s*(.*?)\s*$/)
-    if (m && !process.env[m[1]]) {
-      process.env[m[1]] = m[2].replace(/^["']|["']$/g, '')
-    }
-  }
-}
+import './load-env.mjs' // .env here, else the main checkout's (worktrees)
 
 function parseArgs(argv) {
   const flags = {}

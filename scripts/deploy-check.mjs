@@ -22,17 +22,7 @@
 // exit 3221226505) after the result has already printed.
 
 import { execSync } from 'node:child_process'
-import fs from 'node:fs'
-
-// --- load .env if present (Node has no built-in .env loader) ---
-if (fs.existsSync('.env')) {
-  for (const line of fs.readFileSync('.env', 'utf-8').split(/\r?\n/)) {
-    const m = line.match(/^\s*([A-Z][A-Z0-9_]*)\s*=\s*(.*?)\s*$/)
-    if (m && !process.env[m[1]]) {
-      process.env[m[1]] = m[2].replace(/^["']|["']$/g, '')
-    }
-  }
-}
+import './load-env.mjs' // .env here, else the main checkout's (worktrees)
 
 const PROVIDER = process.env.DEPLOY_PROVIDER ?? 'cloudflare-pages'  // override per project
 const TIMEOUT_MS = 10 * 60 * 1000   // 10 min default
