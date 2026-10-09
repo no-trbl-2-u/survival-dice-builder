@@ -46,8 +46,17 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
         {p.skills.map((id, si) => {
           const skill = state.content.skills.find((s) => s.id === id)
           if (!skill) return null
-          const mine = ex?.assignments.filter((a) => a.skill === id && a.use === 0) ?? []
-          const fires = mine.length === skill.faces.length
+          // A Skill can fire more than once (18.1 unlimited): show the use being filled now, which
+          // is the one the engine offers dice for, after any full ones.
+          const onSkill = ex?.assignments.filter((a) => a.skill === id) ?? []
+          const uses = [...new Set(onSkill.map((a) => a.use))].sort((a, b) => a - b)
+          const full = (use: number) =>
+            onSkill.filter((a) => a.use === use).length === skill.faces.length
+          const timesFired = uses.filter(full).length
+          const open = ofType(legal, 'assignDie').find((a) => a.skill === id)?.use
+          const shown = uses.find((u) => !full(u)) ?? open ?? uses.at(-1) ?? 0
+          const mine = onSkill.filter((a) => a.use === shown)
+          const fires = full(shown) && mine.length > 0
           const could = !fires && canFire([...freeFaces, ...mine.map((a) => a.asFace)], skill.faces)
           return (
             <li
@@ -89,15 +98,21 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
                     </span>
                   )
                 })
-                const status = fires ? (
-                  <span className={styles.skillState} data-state="fired">
-                    {ex?.engage ? 'fired' : 'fires'}
-                  </span>
-                ) : could && placing ? (
-                  <span className={styles.skillState} data-state="could">
-                    can fire
-                  </span>
-                ) : null
+                const firedText = ex?.engage ? 'fired' : 'fires'
+                const status = (
+                  <>
+                    {timesFired > 0 ? (
+                      <span className={styles.skillState} data-state="fired">
+                        {timesFired > 1 ? `${firedText} ×${timesFired}` : firedText}
+                      </span>
+                    ) : null}
+                    {could && placing ? (
+                      <span className={styles.skillState} data-state="could">
+                        {timesFired > 0 ? 'can fire again' : 'can fire'}
+                      </span>
+                    ) : null}
+                  </>
+                )
                 if (plan) {
                   const dice = plan.map((a) => a.die + 1)
                   const name = `Put ${dice.length === 1 ? 'die' : 'dice'} ${dice.join(', ')} on ${skill.name}`
