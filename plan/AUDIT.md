@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-09 (pass 22, cloud tick)
+
+No finding scores 3.0 or more: no actionable iterate work, handed to `/expand` (pass 7, bold posture). Checked this pass and clean: every internal link resolves to a route, every repository file named on /decisions exists, each route sets its own tab title, and the shell has a favicon, sitemap, robots.txt, and preview card.
+
+## Top 5 findings (scored)
+
+### [ ] [2.8] /play: enemy choice buttons name enemies by engine id (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: waits on the "Player names for every map piece" candidate (re-evidenced in expand pass 7); the ids also reach map titles and the log, so a button-only fix would leave them mixed
+
+### [ ] [2.7] /: home page does not link /decisions (critique LOW)
+- category: external-critique (navigation)
+- impact: 3 (Decisions is already in the nav on every page)
+- ease: 9
+- next: add the Decisions link to the "Also:" line
+
+### [ ] [2.7] all pages: no canonical link in the served shell (critique pass 8 reader note, seo)
+- category: seo
+- impact: 3
+- ease: 9
+- next: covered by the "Static HTML for each page" candidate (re-evidenced in expand pass 7)
+
+### [ ] [2.4] /: the Combat step is one long sentence chain (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: split into short sentences; Exchanges in its own sentence
+
+### [ ] [2.1] /config: pick lists show ids next to names; presets show only ids (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 7
+- next: covered by the "Player names for every map piece" candidate (its /config half)
+
 # Site audit — 2026-10-09 (pass 21, cloud tick)
 
 ## Top 5 findings (scored)
