@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-09 (pass 23, cloud tick)
+
+## Top 5 findings (scored)
+
+### [x] [4.8] all pages: rules sections are cited but the rules are never linked (critique MED, pass 9)
+- category: external-critique (comprehension)
+- impact: 6 (Home, /config and /debug all point at "the written rules" or rule numbers with no way to read them)
+- ease: 8
+- next: export `rulesUrl` from `decisions/Inline.tsx`; link "written rules" on Home, /config, /debug; unit test in HomePage.test.tsx
+- issue: #60
+- fixed: (this commit)
+
+### [ ] [2.8] /play: enemy choice buttons name enemies by engine id (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: waits on the "Player names for every map piece" candidate
+
+### [ ] [2.7] /: home page does not link /decisions (critique LOW)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 9
+- next: add the Decisions link to the "Also:" line
+
+### [ ] [2.7] all pages: one meta description and og:url for every route, no canonical (critique LOW, pass 9)
+- category: seo
+- impact: 3
+- ease: 9
+- next: covered by the "Static HTML for each page" candidate, or set canonical and og:url in the route effect
+
+### [ ] [2.7] /config: the save message names "/play", not the Play page (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: "Saved. New runs on the Play page use this config."
+
 # Site audit — 2026-10-09 (pass 22, cloud tick)
 
 No finding scores 3.0 or more: no actionable iterate work, handed to `/expand` (pass 7, bold posture). Checked this pass and clean: every internal link resolves to a route, every repository file named on /decisions exists, each route sets its own tab title, and the shell has a favicon, sitemap, robots.txt, and preview card.

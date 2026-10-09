@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] all pages — rules sections are cited but the rules are never linked
-- pass: 9 (commit e859de5)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: Home, /config, /debug and /decisions cite "the written rules" and rule numbers, but no page links to the rules. A visitor cannot look up a cited section.
-- evidence: `apps/web/src/home/HomePage.tsx:27` "the Combat in the written rules"; `apps/web/src/config/ConfigPage.tsx:632` "Each field names its rules section."; `apps/web/src/debug/DebugPage.tsx:81` "Numbers in [brackets] are rules sections."; no href to the rules anywhere in `apps/web/src`.
-- suggested fix: Link "the written rules" (and the /config and /debug notes) to `spec/01-spec-v1-rules.md` on GitHub, using the repository-link helper in `apps/web/src/decisions/Inline.tsx`.
-- source: web-fetch
-
 ### [LOW] all pages — nav labels "Tiles" and "Debug" do not match the page headings
 - pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
@@ -106,6 +97,17 @@
 > Pass 8 note: web-fetch engine (cloud, no browser). Every route served only the app shell, so the reader read the shipped copy from source. 2 reader observations were not filed (cap): the /decisions lede counts "rule readings" and "checks" without saying what they are (LOW, partly covered by the status-line row); index.html has no canonical link or Open Graph tags (LOW). The pass 5 observation about raw step ids is no longer true on /play; that form now appears only on /debug.
 
 ## Done
+
+### [x] [MED] all pages — rules sections are cited but the rules are never linked
+- pass: 9 (commit e859de5)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: Home, /config, /debug and /decisions cite "the written rules" and rule numbers, but no page links to the rules. A visitor cannot look up a cited section.
+- evidence: `apps/web/src/home/HomePage.tsx:27` "the Combat in the written rules"; `apps/web/src/config/ConfigPage.tsx:632` "Each field names its rules section."; `apps/web/src/debug/DebugPage.tsx:81` "Numbers in [brackets] are rules sections."; no href to the rules anywhere in `apps/web/src`.
+- suggested fix: Link "the written rules" (and the /config and /debug notes) to `spec/01-spec-v1-rules.md` on GitHub, using the repository-link helper in `apps/web/src/decisions/Inline.tsx`.
+- source: web-fetch
+- issue: #60
+- fixed: (this commit) — "written rules" on Home, /config and /debug links to `spec/01-spec-v1-rules.md` on GitHub (`rulesUrl` in `decisions/Inline.tsx`); /decisions already links the files it names
 
 ### [x] [LOW] /tiles — the tiles are one flat grid with no headings
 - pass: 8 (commit c9bd27d)

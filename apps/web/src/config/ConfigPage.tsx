@@ -5,6 +5,7 @@ import {
   type GameConfig,
 } from '@survival/content'
 import { useEffect, useState, type ReactNode } from 'react'
+import { rulesUrl } from '../decisions/Inline.tsx'
 import styles from './ConfigPage.module.css'
 import {
   browserStorage,
@@ -629,8 +630,9 @@ export function ConfigPage() {
   return (
     <div className={styles.page}>
       <p>
-        Change any rule value or option for playtests. Each field names its rules section. The
-        config is saved in this browser only. A run keeps the config it started with.
+        Change any rule value or option for playtests. Each field names its section of the{' '}
+        <a href={rulesUrl}>written rules</a>. The config is saved in this browser only. A run keeps
+        the config it started with.
       </p>
       {problems.length > 0 ? (
         <div className={styles.problems} role="alert" aria-labelledby="cfg-problems">

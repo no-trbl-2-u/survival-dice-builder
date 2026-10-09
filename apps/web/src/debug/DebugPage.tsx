@@ -8,6 +8,7 @@ import {
   type GameState,
 } from '@survival/engine'
 import { useEffect, useReducer, useRef, useState } from 'react'
+import { rulesUrl } from '../decisions/Inline.tsx'
 import { ActionLabel } from './ActionLabel.tsx'
 import styles from './DebugPage.module.css'
 import { EventLog } from './EventLog.tsx'
@@ -78,7 +79,10 @@ export function DebugPage() {
 
   return (
     <div className={styles.page}>
-      <p>Play the rules engine one action at a time. Numbers in [brackets] are rules sections.</p>
+      <p>
+        Play the rules engine one action at a time. Numbers in [brackets] are sections of the{' '}
+        <a href={rulesUrl}>written rules</a>.
+      </p>
       <form
         className={styles.controls}
         onSubmit={(e) => {
