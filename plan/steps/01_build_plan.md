@@ -58,6 +58,9 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 21 — Core loop v2 II: enemies and Combat (no wave track, move then spawn at every node each Combat, structure-first targeting, cap and promotion, Tower ties and Tower currency, non-attack halves without enemies, knockout instead of run end) — 79bc77e
 - [x] Phase 22 — Experiments: experience curves, Skill caps, and spawn pressure, as a bot comparison report (structural rows 63-70 as default-off options; `docs/reports/phase-22-experiments.md`) — 2599a8d
 
+**Designer playtest follow-ups (2026-10-09):**
+- [ ] Phase 23 — Engagements by default, and a switch that cancels a defeated enemy's dice (config default `combat.model: "engage"`, Start run follows the saved config, `combat.engage.defeatedDice` default `"hit"`, sim comparison)
+
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
 > designer runs them and drops run exports in
@@ -341,6 +344,17 @@ sim -- compare` under the core loop v2 rules and write
 `docs/reports/phase-22-experiments.md`: level by round, end round,
 causes, and how fast the 20-miniature cap is reached, with a
 recommendation and the weak-bot caveat. No default changes.
+### Phase 23 — Engagements by default; defeated enemies' dice
+
+Source: `plan/CRITIQUE.md` rows decided by the designer on
+2026-10-09 ("Config Start run always starts an engagement run" and
+"a defeated enemy's die still hits"). Make `engage` the default
+Combat model (the exchange model stays as an option), drop the
+`&combat=engage` override from Config's Start run, and re-pin the sim
+baseline and the tests that assumed exchanges. Add
+`combat.engage.defeatedDice` (`"hit"` default: every enemy die hits at
+the end, all at once; `"cancelled"`: a defeated enemy's dice do not
+hit) and compare both with `pnpm sim -- compare`.
 ---
 
 ## Carry-overs / known gaps (update as phases ship)
