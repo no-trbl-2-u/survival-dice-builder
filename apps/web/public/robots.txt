@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://survival-dice-builder.pages.dev/sitemap.xml

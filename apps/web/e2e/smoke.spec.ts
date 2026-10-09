@@ -75,3 +75,23 @@ test('the shell links a favicon, and the favicon is served as an SVG image', asy
   expect(icon.headers()['content-type']).toContain('image/svg+xml')
   expect(await icon.text()).toContain('<polygon')
 })
+
+test('the sitemap is served as XML, lists every nav page, and robots.txt names it', async ({
+  page,
+  request,
+}) => {
+  const sitemap = await request.get('/sitemap.xml')
+  expect(sitemap.ok()).toBe(true)
+  expect(sitemap.headers()['content-type']).toMatch(/xml/)
+  const listed = [...(await sitemap.text()).matchAll(/<loc>([^<]+)<\/loc>/g)].map(
+    (m) => new URL(m[1] ?? '').pathname,
+  )
+  await page.goto('/')
+  const nav = await page
+    .getByRole('navigation', { name: 'Main' })
+    .getByRole('link')
+    .evaluateAll((links) => links.map((a) => new URL((a as HTMLAnchorElement).href).pathname))
+  expect([...listed].sort()).toEqual([...nav].sort())
+  const robots = await (await request.get('/robots.txt')).text()
+  expect(robots).toContain('Sitemap: https://survival-dice-builder.pages.dev/sitemap.xml')
+})

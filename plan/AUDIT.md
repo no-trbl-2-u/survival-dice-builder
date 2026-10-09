@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-09 (pass 20, cloud tick)
+
+## Top 5 findings (scored)
+
+### [x] [3.6] all pages: no sitemap; /sitemap.xml serves the HTML shell (audit, seo)
+- category: seo
+- impact: 4 (crawlers find no sitemap and robots.txt names none; the /sitemap.xml request gets 200 text/html, the same shape as the pass 19 favicon finding)
+- ease: 9
+- next: apps/web/public/sitemap.xml lists the seven nav pages, robots.txt names it, and the smoke e2e checks the XML type and that the sitemap matches the nav
+- issue: #58
+- fixed: (this commit)
+
+### [ ] [2.8] /play: enemy choice buttons name enemies by engine id (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: waits on the "Player names for every map piece" candidate; the ids also reach map titles and the log, so a button-only fix would leave them mixed
+
+### [ ] [2.7] /: home page does not link /decisions (critique LOW)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 9
+- next: add the Decisions link to the "Also:" line
+
+### [ ] [2.7] all pages: no canonical link in the served shell (critique pass 8 reader note, seo)
+- category: seo
+- impact: 3
+- ease: 9
+- next: covered by the "Static HTML for each page" candidate (expand pass 6)
+
+### [ ] [2.4] /: the Combat step is one long sentence chain (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: split into short sentences; Exchanges in its own sentence
+
 # Site audit — 2026-10-09 (pass 19, cloud tick)
 
 ## Top 5 findings (scored)
