@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-09 (pass 21, cloud tick)
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play: the log says "you" for every co-op skirmish result and names a repaired defense by bare id (audit, voice)
+- category: content-gaps (log voice)
+- impact: 4 (every co-op skirmish reads "Skirmish won: you move into the hex." whoever fought; every defense repair reads "You repair d2", while every other defense line says "Tower d2")
+- ease: 9
+- next: skirmishEnded names the seat with verb agreement, repaired uses the defense label; unit test in exportRun.test.ts
+- issue: #59
+- fixed: (this commit)
+
+### [ ] [2.8] /play: enemy choice buttons name enemies by engine id (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: waits on the "Player names for every map piece" candidate; the ids also reach map titles and the log, so a button-only fix would leave them mixed
+
+### [ ] [2.7] /: home page does not link /decisions (critique LOW)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 9
+- next: add the Decisions link to the "Also:" line
+
+### [ ] [2.7] all pages: no canonical link in the served shell (critique pass 8 reader note, seo)
+- category: seo
+- impact: 3
+- ease: 9
+- next: covered by the "Static HTML for each page" candidate (expand pass 6)
+
+### [ ] [2.4] /: the Combat step is one long sentence chain (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: split into short sentences; Exchanges in its own sentence
+
 # Site audit — 2026-10-09 (pass 20, cloud tick)
 
 ## Top 5 findings (scored)

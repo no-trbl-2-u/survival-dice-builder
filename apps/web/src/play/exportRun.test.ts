@@ -115,6 +115,33 @@ describe('describeEvent', () => {
     const healed = { type: 'healed', rule: '6.4', player: 'p2', amount: 1, health: 5 }
     expect(describeEvent(healed as never, coop)).toBe('Player 2 healed 1 (health 5).')
   })
+
+  it('names the co-op seat in skirmish results, and a repaired defense by kind', () => {
+    const state = botRun(2).run.state
+    const won = { type: 'skirmishEnded', rule: '6.6', player: 'p1', won: true }
+    const lost = { ...won, won: false }
+    expect(describeEvent(won as never, state)).toBe('Skirmish won: you move into the hex.')
+    expect(describeEvent(lost as never, state)).toBe('Skirmish lost: you stay; the Move ends.')
+    const coop = { ...state, players: [state.players[0]!, { ...state.players[0]!, id: 'p2' }] }
+    expect(describeEvent({ ...won, player: 'p2' } as never, coop)).toBe(
+      'Skirmish won: Player 2 moves into the hex.',
+    )
+    expect(describeEvent({ ...lost, player: 'p2' } as never, coop)).toBe(
+      'Skirmish lost: Player 2 stays; the Move ends.',
+    )
+    const withTower = { ...state, defenses: [{ id: 'd2', kind: 'tower' }] }
+    const repaired = {
+      type: 'repaired',
+      rule: '7.6',
+      player: 'p1',
+      structure: 'd2',
+      amount: 1,
+      health: 3,
+    }
+    expect(describeEvent(repaired as never, withTower as never)).toBe(
+      'You repair Tower d2 for 1 (health 3).',
+    )
+  })
 })
 
 describe('describeEvent voice', () => {
