@@ -20,8 +20,9 @@ scrolled between 4 places for 1 fight.
 +-----------------------------------------------------------------+
 | Skills: [Strike] [Shot] [Mend] [Guard] ... (wrapping row)        |
 +-----------------------------------------------------------------+
-| Cards you can add (only when legal)                              |
 +-----------------------------------------------------------------+
+            [card] [card] [card] [card]   <- hand strip, pinned to
+                                             the screen bottom
 |                         [Roll again (n left)]  [Primary action]  |
 +-----------------------------------------------------------------+
 ```
@@ -60,6 +61,27 @@ scrolled between 4 places for 1 fight.
 - **"Can fire" is green in the modal**, not red (red read as a warning), and
   the Use dice instruction says a Star fits any slot and that the enemy dice
   hit once no die is left.
+
+## Card strip (drag to the felt)
+
+- The hand sits in a strip pinned to the bottom of the screen, over the
+  modal, cards peeking up with their Combat side showing (name and options).
+  The modal ends above the peek. A card the engine offers now has a brass
+  edge and rises on hover or focus; the others are greyed (cards cannot be
+  added while rolling: an engine rule).
+- Play a card by dragging it up onto the felt. Pointer events, so mouse and
+  touch work alike. While a card is in the air, with no words: the felt
+  glows gold and pulses, a dashed card-shaped slot opens in its corner, and
+  everything else in the modal fades back. Over the felt, the felt, slot
+  and card all turn green. Dropped anywhere else, the card returns to the
+  hand.
+- A card with 2 options (Rest: Heal 2 / Reroll all dice) shows its options
+  as chips over the felt once dropped: the card names both, so asking after
+  the drop keeps the drag a single gesture and the choice in the place the
+  player is already looking. A × keeps the card in hand.
+- Not drag-only: a tap, Enter or Space on a card plays it the same way (or
+  opens the chips), and each card's label names its options.
+- Reduced motion: no pulse, no card slide.
 
 ## Behaviour
 

@@ -122,6 +122,11 @@ test('/play Combat v3: Combat cards offer their options, and Engage starts an en
   await expect(modal.getByLabel('Dice', { exact: true })).toBeVisible()
   await expect(modal.getByTestId('engage-rolls')).toContainText('Rolls:')
   await expect(modal.getByLabel('Skills')).toBeVisible()
+  // The hand rides along at the bottom of the screen; no card can be added while rolling.
+  await expect(modal.getByTestId('card-strip')).toBeVisible()
+  await expect(
+    modal.getByRole('list', { name: 'Your hand' }).getByRole('button').first(),
+  ).toHaveAttribute('aria-disabled', 'true')
   // Esc never closes it mid-engagement.
   await page.keyboard.press('Escape')
   await expect(modal).toBeVisible()

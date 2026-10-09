@@ -1,7 +1,7 @@
 import type { Action, GameState } from '@survival/engine'
 import { useEffect, useRef, useState } from 'react'
 import { GameIcon } from '../icons/GameIcon.tsx'
-import { optionText } from './CardView.tsx'
+import { CardStrip, OptionChips, stripCards, type DragState } from './CardStrip.tsx'
 import { describeEvent } from './describeEvent.ts'
 import { DiceTray, EnemyDice } from './DiceTray.tsx'
 import {
@@ -195,6 +195,13 @@ function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek 
   const ex = state.exchange
   const picking = legal.some((a) => a.type === 'resolveSkill' || a.type === 'chooseTarget')
   const targets = useRef<HTMLDivElement>(null)
+  const felt = useRef<HTMLElement>(null)
+  const [drag, setDrag] = useState<DragState>('none')
+  const [choosing, setChoosing] = useState<string | null>(null)
+  // The card whose options the felt offers, while it can still be played.
+  const chosen = choosing
+    ? stripCards(state, legal).find((c) => c.id === choosing && c.plays.length > 1)
+    : undefined
   // A target pick appears at the top of the body: bring it into view (phones scroll the body).
   useEffect(() => {
     if (picking) targets.current?.scrollIntoView({ block: 'nearest' })
@@ -221,11 +228,18 @@ function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek 
       <p className={styles.engageNow} aria-live="polite" data-testid="engage-instruction">
         {engageInstruction(state)}
       </p>
-      <div className={styles.engageBody}>
+      <div className={styles.engageBody} data-drag={drag === 'none' ? undefined : drag}>
         <div ref={targets} className={styles.engageTargetSlot}>
           <Targets state={state} legal={legal} act={act} />
         </div>
-        <section className={`${styles.dice} ${styles.engageFelt}`} aria-label="Dice">
+        <section
+          ref={felt}
+          className={`${styles.dice} ${styles.engageFelt}`}
+          aria-label="Dice"
+          data-drop={drag === 'none' ? undefined : drag}
+        >
+          <span className={styles.dropSlot} aria-hidden="true" />
+          {chosen ? <OptionChips card={chosen} act={act} onDone={() => setChoosing(null)} /> : null}
           <RollPips
             used={ex.rollsUsed}
             max={state.config.combat.maxRolls}
@@ -255,8 +269,15 @@ function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek 
           selected={selected}
           confirmButton={false}
         />
-        <Cards state={state} legal={legal} act={act} />
       </div>
+      <CardStrip
+        state={state}
+        legal={legal}
+        act={act}
+        felt={felt}
+        choose={setChoosing}
+        onDrag={setDrag}
+      />
       <footer className={styles.engageFoot}>
         <span className={styles.engageFootActions}>
           {roll ? (
@@ -340,38 +361,6 @@ function Targets({ state, legal, act }: Readonly<Pick<Props, 'state' | 'legal' |
             </button>
           </li>
         ))}
-      </ul>
-    </section>
-  )
-}
-
-/** Cards the player can add to the engagement now (rerolls, heals). */
-function Cards({ state, legal, act }: Readonly<Pick<Props, 'state' | 'legal' | 'act'>>) {
-  const plays = ofType(legal, 'playOption')
-  if (plays.length === 0) return null
-  const player = state.players[state.current]
-  return (
-    <section className={styles.engageCards} aria-label="Cards you can add">
-      <h3 className={styles.subTitle}>Cards you can add</h3>
-      <ul className={styles.engageCardList}>
-        {player?.hand.map((c) => {
-          const def = state.content.cards.find((d) => d.id === c.def)
-          const mine = plays.filter((a) => a.card === c.id)
-          if (!def || mine.length === 0) return null
-          return (
-            <li key={c.id} className={styles.engageCard}>
-              <strong>{def.name}</strong>
-              {mine.map((a) => {
-                const option = def.combat?.[a.option]
-                return (
-                  <button key={a.option} type="button" onClick={() => act(a)}>
-                    {option ? optionText(option) : 'Play'}
-                  </button>
-                )
-              })}
-            </li>
-          )
-        })}
       </ul>
     </section>
   )
