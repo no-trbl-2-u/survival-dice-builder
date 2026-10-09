@@ -697,7 +697,7 @@ export function ConfigPage() {
               <button
                 type="button"
                 className="brass"
-                onClick={() => play(`/play?seed=${Date.now() % 100000}&combat=engage`)}
+                onClick={() => play(`/play?seed=${Date.now() % 100000}`)}
               >
                 Start run
               </button>

@@ -121,7 +121,7 @@ test('/config: Start run saves the edits first and starts a run with them', asyn
   await page.goto('/config')
   await page.getByLabel('Maximum health', { exact: true }).fill('17')
   await page.getByTestId('config-bar').getByRole('button', { name: 'Start run' }).click()
-  await page.waitForURL(/\/play\?seed=\d+&combat=engage/)
+  await page.waitForURL(/\/play\?seed=\d+$/)
   await expect(page.getByTestId('next-step')).toBeVisible()
   expect(dialogs).toEqual([])
   await page.goto('/config')

@@ -32,9 +32,9 @@ async function step(page: Page): Promise<boolean> {
 
 /** Plays `n` decisions from a fresh seeded run, then returns the autosave. */
 async function playSome(page: Page, dice3d: boolean, n: number) {
-  await page.goto('/play?seed=7')
+  await page.goto('/play?seed=7&combat=exchange')
   await page.evaluate(() => localStorage.clear())
-  await page.goto('/play?seed=7')
+  await page.goto('/play?seed=7&combat=exchange')
   if (dice3d) await page.getByRole('checkbox', { name: '3D dice' }).check()
   let saw3d = false
   for (let i = 0; i < n; i++) {

@@ -54,6 +54,8 @@ export type EngageSummary = Readonly<{
   toGuard: number
   toHealth: number
   ignored: number
+  /** Enemy dice that did not hit: their enemy was defeated (`defeatedDice: "cancelled"`). */
+  cancelled: number
   healed: number
   experience: number
   currency: number
@@ -87,6 +89,7 @@ export function lastEngagement(log: readonly GameEvent[]): EngageSummary | null 
     toGuard: 0,
     toHealth: 0,
     ignored: 0,
+    cancelled: 0,
     healed: 0,
     experience: 0,
     currency: 0,
@@ -106,11 +109,18 @@ export function lastEngagement(log: readonly GameEvent[]): EngageSummary | null 
       sum.toHealth += e.toHealth
     }
     if (e.type === 'hitIgnored') sum.ignored += 1
+    if (e.type === 'enemyDieCancelled') sum.cancelled += 1
     if (e.type === 'healed') sum.healed += e.amount
     if (e.type === 'experienceGained') sum.experience += e.amount
     if (e.type === 'currencyGained') sum.currency += e.amount
   }
   return { ...sum, knockedOut, fired, enemyDice, events }
+}
+
+/** The result line for cancelled enemy dice, or null when none was cancelled. */
+export function cancelledLine(s: EngageSummary): string | null {
+  if (s.cancelled === 0) return null
+  return `${s.cancelled} ${s.cancelled === 1 ? 'die' : 'dice'} of defeated enemies did not hit.`
 }
 
 /** The 1-line verdict at the top of the result. */

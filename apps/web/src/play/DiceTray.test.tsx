@@ -54,4 +54,48 @@ describe('DiceTray enemy dice', () => {
     expect(special.dataset.kind).toBe('elite')
     expect(special.querySelector('svg')?.dataset.icon).toBe('face-enemy-special')
   })
+
+  /** The engaged state with g1 defeated (gone) under the given `defeatedDice`. */
+  const withDefeated = (defeatedDice: 'hit' | 'cancelled'): GameState => {
+    const state = engagedState()
+    return {
+      ...state,
+      config: {
+        ...state.config,
+        combat: {
+          ...state.config.combat,
+          engage: { ...state.config.combat.engage, defeatedDice },
+        },
+      },
+      enemies: state.enemies.filter((e) => e.id !== 'g1'),
+    }
+  }
+  const tray = (state: GameState) =>
+    render(
+      <DiceTray
+        state={state}
+        legal={legalActions(state)}
+        act={() => {}}
+        selected={[]}
+        toggle={() => {}}
+      />,
+    )
+
+  it('Combat v3 "cancelled": the die of a defeated enemy is marked and says so', () => {
+    const state = withDefeated('cancelled')
+    const { hitDamage } = state.config.combat.engage
+    const { container, unmount } = tray(state)
+    expect(container.querySelectorAll('[data-cancelled]')).toHaveLength(2)
+    expect(
+      screen.getByLabelText(
+        `Enemy die of enemy g1: Hit ${hitDamage}, cancelled: its enemy was defeated`,
+      ),
+    ).toBeTruthy()
+    unmount()
+  })
+
+  it('Combat v3 "hit" (default): nothing is marked', () => {
+    const { container } = tray(withDefeated('hit'))
+    expect(container.querySelectorAll('[data-cancelled]')).toHaveLength(0)
+  })
 })

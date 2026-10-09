@@ -1822,3 +1822,9 @@
     font-size: 0.62rem;
   }
 }
+
+/* An enemy die that will not hit: its enemy was defeated (`defeatedDice: "cancelled"`). Only
+   the opacity changes, so the felt does not reflow. */
+.enemyDie[data-cancelled] {
+  opacity: 0.4;
+}

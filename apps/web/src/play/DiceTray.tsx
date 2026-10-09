@@ -1,4 +1,10 @@
-import { sameAction, type Action, type EnemyDieRoll, type GameState } from '@survival/engine'
+import {
+  cancelledEnemyDice,
+  sameAction,
+  type Action,
+  type EnemyDieRoll,
+  type GameState,
+} from '@survival/engine'
 import { lazy, Suspense } from 'react'
 import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
@@ -165,6 +171,8 @@ export function EnemyDice({
 }>) {
   const dice = rolls ?? state.exchange?.engage?.enemyDice
   if (!dice) return null
+  // Dice that will not hit (`combat.engage.defeatedDice: "cancelled"`): the engine decides.
+  const cancelled = new Set(rolls ? [] : cancelledEnemyDice(state))
   return (
     <div data-testid="enemy-dice" className={bare ? styles.engageDiceGroup : undefined}>
       {heading ? (
@@ -189,7 +197,10 @@ export function EnemyDice({
                 className={`${styles.die} ${styles.enemyDie} ${elite ? styles.enemyElite : ''}`}
                 data-face={d.face}
                 data-kind={elite ? 'elite' : 'grunt'}
-                aria-label={`Enemy die of ${who}: ${text.label}`}
+                data-cancelled={cancelled.has(i) ? '' : undefined}
+                aria-label={`Enemy die of ${who}: ${text.label}${
+                  cancelled.has(i) ? ', cancelled: its enemy was defeated' : ''
+                }`}
               >
                 <GameIcon name={`face-enemy-${d.face}`} size="2.4rem" />
               </span>

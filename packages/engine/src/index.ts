@@ -14,6 +14,7 @@ export { AXIAL_DIRECTIONS, hexDistance, hexKey, hexNeighbors, tileHexes } from '
 export { experienceForLevel, levelForExperience } from './progression/levels.ts'
 export { canFire } from './skills/canFire.ts'
 export { enemiesInRange } from './combat/resolve.ts'
+export { cancelledEnemyDice } from './combat/engage.ts'
 export type {
   Assignment,
   CardInstance,

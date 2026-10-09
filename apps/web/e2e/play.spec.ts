@@ -17,7 +17,7 @@ test('/play: start hex, a reveal off the map edge, the Prepare hands, and 1 Comb
   })
   page.on('pageerror', (err) => errors.push(err.message))
 
-  await page.goto('/play?seed=3')
+  await page.goto('/play?seed=3&combat=exchange')
   const bar = page.getByTestId('phase-bar')
   const banner = page.getByTestId('next-step')
   await expect(banner).toContainText('Setup: Click a highlighted base hex')

@@ -223,11 +223,27 @@ export function repair(state: GameState, amount: number): Step {
 }
 
 /**
+ * The enemy dice of the current engagement that will not hit: the indexes into
+ * `exchange.engage.enemyDice` whose enemy was defeated during it. Always empty under
+ * `combat.engage.defeatedDice: "hit"` (the rule: every die rolled hits, all at once).
+ *
+ * @rule Combat v3 (designer 2026-10-09)
+ */
+export function cancelledEnemyDice(state: GameState): number[] {
+  const engage = state.exchange?.engage
+  if (!engage || state.config.combat.engage.defeatedDice !== 'cancelled') return []
+  const alive = new Set(state.enemies.map((e) => e.id))
+  return engage.enemyDice.flatMap((roll, i) => (alive.has(roll.enemy) ? [] : [i]))
+}
+
+/**
  * The end of an engagement, after the Skills resolved: every enemy die rolled hits the player
  * (Hit and Special faces; guard first, an "ignore 1 hit" skips a die), played cards go to the
- * discard pile, and guard is removed. A player at 0 health is knocked out.
+ * discard pile, and guard is removed. A player at 0 health is knocked out. Under
+ * `defeatedDice: "cancelled"` a die of an enemy defeated during the engagement does not hit
+ * and does not use up an "ignore 1 hit".
  *
- * @rule Combat v3 (engagement step 6), 14.2
+ * @rule Combat v3 (engagement step 6, designer 2026-10-09), 14.2
  */
 export function finishEngagement(state: GameState): Step {
   const engage = state.exchange?.engage
@@ -237,10 +253,20 @@ export function finishEngagement(state: GameState): Step {
   const events: GameEvent[] = []
   let current = state
   let ignore = state.exchange?.ignoreHits ?? 0
-  for (const roll of engage.enemyDice) {
+  const cancelled = new Set(cancelledEnemyDice(state))
+  for (const [i, roll] of engage.enemyDice.entries()) {
     const damage =
       roll.face === 'hit' ? cfg.hitDamage : roll.face === 'special' ? cfg.specialDamage : 0
     if (damage === 0) continue
+    if (cancelled.has(i)) {
+      events.push({
+        type: 'enemyDieCancelled',
+        rule: 'Combat v3',
+        enemy: roll.enemy,
+        player: playerId,
+      })
+      continue
+    }
     if (ignore > 0) {
       ignore -= 1
       events.push({ type: 'hitIgnored', rule: 'Combat v3', enemy: roll.enemy, player: playerId })

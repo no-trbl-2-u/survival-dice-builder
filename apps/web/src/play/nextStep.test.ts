@@ -89,7 +89,8 @@ describe('nextStep', () => {
   })
 
   it('Exchanges: the roll and assign banners name the Keep buttons and the Skill rows', () => {
-    let s = createGame(config, 7)
+    const exchange = { ...config, combat: { ...config.combat, model: 'exchange' as const } }
+    let s = createGame(exchange, 7)
     const seen = new Set<string>()
     for (let i = 0; i < 400 && s.phase !== 'ended'; i++) {
       const legal = legalActions(s)

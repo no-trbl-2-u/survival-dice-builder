@@ -84,7 +84,7 @@ until then).
 | 69 | 9.3, core loop v2 | Structure-first targeting makes the Base tile a safe firing position: enemies next to the base target the base, not the player beside them, and a player on the Base tile can never be 2 hexes nearer than a structure (row 56). The player hits them every exchange and is never attacked. Turtling plus row 63 is the dominant line. | **Proposed: every adjacent enemy attacks** (option, default off; measured in phase 22). In a player's exchange every enemy next to the figure attacks it, whatever its target. Bot report: the turtle bot is now attacked, but the base falls in the same round, and the turtle still outlasts the active bot (median 11 against 6, with the row 63 clock). Recommendation: needs a playtest. Report: `docs/reports/phase-22-experiments.md`. | `combat.adjacentAttack: "target-only"` (experiment: `"any-adjacent"`), `rulings.playerPullDistance` | proposed 2026-10-05 (structural; option measured in phase 22) |
 | 70 | Core loop v2, physical edition | Table upkeep per Combat: up to 13 placements, each with spill-over to the nearest empty hex and a nearest-grunt promotion at the 20 cap, every round. | **Proposed: spawn range** (option, default off; measured in phase 22). Only nodes within N hexes of a player figure, a Barricade, a Tower, or a Base tile hex spawn. Bot report (N = 4): end round unchanged; the upkeep saving is a table question. Recommendation: needs a playtest. Report: `docs/reports/phase-22-experiments.md`. | `spawn.nodeRange: null` (experiment: 4), `miniatureLimit` | proposed 2026-10-05 (structural; option measured in phase 22) |
 | 71 | 6.1, 6.4, 6.5, 7.8 step 1, 16.8, 18.1 | Hand size. | **Draw 5** (designer playtest 2026-10-06): the default preset is the 10-card deck with a hand of 5 (`deck-10-hand-5`), so each Combat has 2 exchanges instead of 4. Spec text updated. The 10/3 preset stays as an option. | `deck.preset: "deck-10-hand-5"` | decided 2026-10-06 |
-| 72 | 7.7-7.13, Combat v3 | Combat as engagements instead of exchanges (designer playtest). | **Playtest build:** each Engage card option starts an engagement from anywhere; every adjacent enemy rolls enemy dice; each fired Skill picks its own target in range; enemy dice (2 Hit, 3 Miss, 1 Special) are never rerolled; no enemy attack phase; a siege step at the end of Combat. Readings for the open points: `docs/design/combat-v3.md`. | `combat.model: "exchange"` (playtest: `"engage"`), `combat.engage.*` | proposed 2026-10-06 (designer playtesting) |
+| 72 | 7.7-7.13, Combat v3 | Combat as engagements instead of exchanges (designer playtest). | **Playtest build:** each Engage card option starts an engagement from anywhere; every adjacent enemy rolls enemy dice; each fired Skill picks its own target in range; enemy dice (2 Hit, 3 Miss, 1 Special) are never rerolled; no enemy attack phase; a siege step at the end of Combat. Readings for the open points: `docs/design/combat-v3.md`. | `combat.model: "engage"` (default since 2026-10-09, designer); `"exchange"` is the written-rules option; `combat.engage.*` | decided 2026-10-09 (default) |
 
 ## Structural questions (rows 63-70)
 
@@ -132,6 +132,17 @@ phase 21 experiments), upgraded Skill tiers and Skill caps (rows 9, 46,
   exchange or engagement, as long as the dice fill it again. The default
   `options.skillUses` is now `unlimited`; `once-per-exchange` stays as an
   option. Fold into the next rules issue.
+- Row 72: Combat is played as engagements by default (`combat.model:
+  "engage"`); exchanges (Spec v1 7.8) stay an option in `/config`, on the
+  start panel, and by URL (`/play?combat=exchange`). Saved configs are not
+  migrated.
+- Row 72, defeated enemies' dice: every enemy die rolled in an engagement
+  hits at its end, all at once, including the dice of an enemy the player
+  defeated during it (the rule: everything happens at the same time, so the
+  player still defends against a defeated enemy's attack).
+  `combat.engage.defeatedDice: "cancelled"` measures the alternative (a
+  defeated enemy's dice do not hit); see
+  `docs/reports/phase-23-defeated-dice.md`. Default stays `"hit"`.
 
 ## Physical edition constraint (standing)
 

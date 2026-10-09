@@ -40,9 +40,10 @@ export const GameConfigSchema = z.object({
     /**
      * Combat v3 (docs/design/combat-v3.md): "exchange" is Spec v1 7.8; "engage" plays Combat as
      * engagements, each opened by an Engage card option, with enemy dice rolled back at you and
-     * a siege step instead of enemy attacks.
+     * a siege step instead of enemy attacks. Engagements are the default (designer 2026-10-09);
+     * a stored config without the key gets them.
      */
-    model: z.enum(['exchange', 'engage']).default('exchange'),
+    model: z.enum(['exchange', 'engage']).default('engage'),
     /** Combat v3 numbers (used only when `model` is "engage"). */
     engage: z
       .object({
@@ -58,6 +59,12 @@ export const GameConfigSchema = z.object({
         siegeDamage: NonNegativeInt,
         /** Siege damage of an elite (placeholder for its special siege rule). */
         eliteSiegeDamage: NonNegativeInt,
+        /**
+         * Designer 2026-10-09: "hit" (the rule) — every enemy die rolled hits at the end of the
+         * engagement, even the dice of an enemy defeated during it; "cancelled" (experiment) —
+         * a defeated enemy's dice do not hit.
+         */
+        defeatedDice: z.enum(['hit', 'cancelled']).default('hit'),
       })
       .default({
         enemyDie: ['hit', 'hit', 'miss', 'miss', 'miss', 'special'],
@@ -66,6 +73,7 @@ export const GameConfigSchema = z.object({
         eliteDice: 2,
         siegeDamage: 1,
         eliteSiegeDamage: 3,
+        defeatedDice: 'hit',
       }),
   }),
   experience: z.object({

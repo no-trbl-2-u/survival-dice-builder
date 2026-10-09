@@ -124,11 +124,11 @@
   },
   "combat.model": {
     "label": "Combat model",
-    "help": "Exchanges: the Combat in the written rules. In each exchange you roll, play cards, and fire Skills; then every enemy next to you attacks. Engagements: the designer's playtest Combat. Play Engage to roll from where you stand; each enemy next to you rolls a die back. Enemies hit structures at the end of Combat.",
+    "help": "Engagements (default, designer 2026-10-09): play Engage to roll from where you stand; each enemy next to you rolls a die back, and enemies hit structures at the end of Combat. Exchanges: the Combat in the written rules. In each exchange you roll, play cards, and fire Skills; then every enemy next to you attacks.",
     "rule": "7.8, Combat v3",
     "options": {
-      "exchange": "Exchanges (written rules)",
-      "engage": "Engagements (playtest)"
+      "engage": "Engagements (default)",
+      "exchange": "Exchanges (written rules)"
     }
   },
   "combat.engage": {
@@ -168,6 +168,15 @@
     "help": "Siege damage of an elite, until elites have their own siege rule.",
     "rule": "Combat v3 (siege)",
     "range": [0, 10]
+  },
+  "combat.engage.defeatedDice": {
+    "label": "Defeated enemies' dice",
+    "help": "Hit: every enemy die rolled hits at the end of the engagement, all at once, even the dice of an enemy you defeated (designer rule, 2026-10-09). Cancelled: a defeated enemy's dice do not hit (experiment).",
+    "rule": "Combat v3",
+    "options": {
+      "hit": "Still hit (default)",
+      "cancelled": "Cancelled (experiment)"
+    }
   },
   "experience": {
     "label": "Experience"

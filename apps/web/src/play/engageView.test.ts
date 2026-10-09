@@ -1,6 +1,6 @@
 import type { GameEvent } from '@survival/engine'
 import { describe, expect, it } from 'vitest'
-import { engageHeadline, engageStage, lastEngagement } from './engageView.ts'
+import { cancelledLine, engageHeadline, engageStage, lastEngagement } from './engageView.ts'
 
 const r = 'Combat v3'
 
@@ -53,6 +53,20 @@ describe('engageView', () => {
     expect(engageHeadline({ ...s!, knockedOut: false, defeated: 1 })).toBe(
       'You defeated 1 enemy and took no damage.',
     )
+  })
+
+  it('counts cancelled enemy dice and names them only when there are some', () => {
+    const log: GameEvent[] = [
+      { type: 'engaged', rule: r, player: 'p1', card: 'c1', enemyDice: [] },
+      { type: 'enemyDieCancelled', rule: r, enemy: 'e1', player: 'p1' },
+      { type: 'enemyDieCancelled', rule: r, enemy: 'e1', player: 'p1' },
+      { type: 'exchangeEnded', rule: r, player: 'p1' },
+    ]
+    const s = lastEngagement(log)!
+    expect(s.cancelled).toBe(2)
+    expect(cancelledLine(s)).toBe('2 dice of defeated enemies did not hit.')
+    expect(cancelledLine({ ...s, cancelled: 1 })).toBe('1 die of defeated enemies did not hit.')
+    expect(cancelledLine({ ...s, cancelled: 0 })).toBeNull()
   })
 
   it('is null with no engagement', () => {

@@ -1,5 +1,6 @@
 import { defaultContent } from '@survival/content'
 import { describe, expect, it } from 'vitest'
+import { exchangeConfig } from './helpers/exchangeConfig.ts'
 import { hexDistance, tileHexes } from '../src/hex.ts'
 import { applyAction, createGame, legalActions, type GameState } from '../src/index.ts'
 import { canBuildOn } from '../src/build/defenses.ts'
@@ -7,7 +8,8 @@ import { spawnEnemy } from '../src/map/spawn.ts'
 import { placeTile, slotCovering, TILE_SLOT_OFFSETS } from '../src/map/tiles.ts'
 import { noSpawns } from './helpers/fixtures.ts'
 
-const config = defaultContent.config
+/** Exchange walk-throughs (Spec v1 7.8): engagements are the default since phase 23. */
+const config = exchangeConfig
 const tile = (id: string) => defaultContent.tiles.find((t) => t.id === id)!
 
 /**

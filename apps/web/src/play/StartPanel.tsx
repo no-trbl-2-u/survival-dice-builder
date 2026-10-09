@@ -22,14 +22,16 @@ const COMBAT_HINT: Record<CombatModel, string> = {
 type Props = Readonly<{
   custom: boolean
   store: KeyValue | undefined
+  /** The config's Combat model: the select starts there. */
+  combat: CombatModel
   onStart: (players: number, seed: number, combat: CombatModel) => void
   onLoad: (run: Run) => void
 }>
 
 /** Before a run: player count, seed, config status, load a file, or resume the autosave. */
-export function StartPanel({ custom, store, onStart, onLoad }: Props) {
+export function StartPanel({ custom, store, combat: configCombat, onStart, onLoad }: Props) {
   const [players, setPlayers] = useState(1)
-  const [combat, setCombat] = useState<CombatModel>('engage')
+  const [combat, setCombat] = useState<CombatModel>(configCombat)
   const [seed, setSeed] = useState(() => String(Date.now() % 100000))
   const [error, setError] = useState<string | null>(null)
   const [saved] = useState(() => readAutosave(store))

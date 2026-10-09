@@ -56,7 +56,9 @@ export function PlayPage() {
     if (params.has('resume')) return readAutosave(store)
     const seed = Number.parseInt(params.get('seed') ?? '', 10)
     const players = Number.parseInt(params.get('players') ?? '1', 10) || 1
-    const combat = params.get('combat') === 'engage' ? 'engage' : config.combat.model
+    // `?combat=engage|exchange` picks a model for this run; otherwise the config's (phase 23).
+    const asked = params.get('combat')
+    const combat = asked === 'engage' || asked === 'exchange' ? asked : config.combat.model
     // DEV ONLY (TODO: remove with forceEngagement): `?dice=N` starts each player with N dice,
     // to see a crowded dice tray.
     const dice = Number.parseInt(params.get('dice') ?? '', 10)
@@ -87,6 +89,7 @@ export function PlayPage() {
       <StartPanel
         custom={custom}
         store={store}
+        combat={config.combat.model}
         onStart={(players, seed, combat) =>
           dispatch({
             kind: 'new',

@@ -214,6 +214,8 @@ Terms that appear in the sources and the tabletop term the sheets use instead. B
 - F-128 [Spec v1 12.4]: A defense with 0 health is removed from the map.
 - F-129 [v2 Combat 7]: Players do not move during Combat.
 - F-130 [prototype value config.default.json combat.exchangeRange]: Exchange range 2 (the "within 2 hexes" of Spec v1 7.9; v2 keeps only "damage needs a target in range").
+- F-223 [prototype value config.default.json combat.model]: Combat is played as engagements by default (designer 2026-10-09, OQ 72): each Engage card option starts an engagement and each adjacent enemy rolls enemy dice back; exchanges (Spec v1 7.8) stay an option.
+- F-224 [prototype value config.default.json combat.engage.defeatedDice]: Every enemy die rolled in an engagement hits at its end, all at once, even the dice of an enemy defeated during it (designer 2026-10-09, OQ 72); `"cancelled"` (a defeated enemy's dice do not hit) is a sim experiment, see docs/reports/phase-23-defeated-dice.md.
 
 ### End of round
 

@@ -1,5 +1,6 @@
 import { defaultContent, type GameConfig } from '@survival/content'
 import { describe, expect, it } from 'vitest'
+import { exchangeConfig } from './helpers/exchangeConfig.ts'
 import {
   applyAction,
   createGame,
@@ -11,7 +12,8 @@ import {
 import { noSpawns } from './helpers/fixtures.ts'
 import { scriptedChoice, walk } from './helpers/policy.ts'
 
-const config = defaultContent.config
+/** Exchange walk-throughs (Spec v1 7.8): engagements are the default since phase 23. */
+const config = exchangeConfig
 
 /** A new run with the figure placed on the base centre: round 1 Prepare. */
 function started(seed: number, cfg: GameConfig = config): GameState {

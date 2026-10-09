@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — Start run always starts an engagement run, whatever Combat model is saved
-- pass: 10 (commit 10fd9d1)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: The new Start run button on the Config bar always opens an engagement run. A visitor who sets the Combat model to exchanges on the same page and presses Start run still gets engagements, and the button does not say so.
-- evidence: `apps/web/src/config/ConfigPage.tsx:700` links `/play?seed=...&combat=engage`; `apps/web/src/play/PlayPage.tsx:59` uses the saved `config.combat.model` only when `combat` is not `engage`.
-- suggested fix: (user, 2026-10-09) make 'engage' the config default Combat model and drop the `&combat=engage` override, so Start run follows the saved config; update the sim baseline and tests that assume 'exchange'.
-- source: web-fetch
-
 ### [MED] /play — the engagement result is not announced to screen readers
 - pass: 10 (commit 10fd9d1)
 - viewport: n/a (web-fetch)
@@ -126,16 +117,6 @@
 - suggested fix: Show only the name in options; label presets "Preset 1", "Preset 2".
 - source: web-fetch
 
-### [MED] /play — a defeated enemy's die still hits, and nothing says so
-- pass: user-jot (commit d95a149)
-- viewport: unspecified
-- auth_state: anonymous
-- category: observation
-- observation: In an engagement, killing an enemy does not cancel the die it rolled: the result can read "You defeated 2 enemies" and still "1 enemy die hit you", and the log shows "Grunt e8 is defeated." then "Grunt e8 attacks you for 1." The "Locked" note was removed from the felt, so nothing explains it; the blind tester called it unfair. Decide the rule (keep, or cancel a defeated enemy's dice), then explain or change it.
-- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3 (2026-10-09); `packages/engine/src/combat/engage.ts` finishEngagement hits with every rolled enemy die
-- suggested fix: (user, 2026-10-09) keep the rule: every enemy die hits at the end, all at once, so the player must still defend against a defeated enemy's attack. Add a config toggle (default off) that cancels a defeated enemy's dice, for the simulator to compare.
-- source: user
-
 ### [MED] /play — the pre-selected die is often not the one the player wants
 - pass: user-jot (commit d95a149)
 - viewport: unspecified
@@ -243,6 +224,27 @@
 > Pass 8 note: web-fetch engine (cloud, no browser). Every route served only the app shell, so the reader read the shipped copy from source. 2 reader observations were not filed (cap): the /decisions lede counts "rule readings" and "checks" without saying what they are (LOW, partly covered by the status-line row); index.html has no canonical link or Open Graph tags (LOW). The pass 5 observation about raw step ids is no longer true on /play; that form now appears only on /debug.
 
 ## Done
+
+### [x] [MED] /config — Start run always starts an engagement run, whatever Combat model is saved
+- pass: 10 (commit 10fd9d1)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The new Start run button on the Config bar always opens an engagement run. A visitor who sets the Combat model to exchanges on the same page and presses Start run still gets engagements, and the button does not say so.
+- evidence: `apps/web/src/config/ConfigPage.tsx:700` links `/play?seed=...&combat=engage`; `apps/web/src/play/PlayPage.tsx:59` uses the saved `config.combat.model` only when `combat` is not `engage`.
+- suggested fix: (user, 2026-10-09) make 'engage' the config default Combat model and drop the `&combat=engage` override, so Start run follows the saved config; update the sim baseline and tests that assume 'exchange'.
+- source: web-fetch
+- fixed: phase 23 (this commit) — `combat.model` defaults to "engage"; Start run goes to `/play?seed=<n>` and follows the saved config; `/play?combat=exchange` still reaches exchanges; config e2e checks the URL
+
+### [x] [MED] /play — a defeated enemy's die still hits, and nothing says so
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: observation
+- observation: In an engagement, killing an enemy does not cancel the die it rolled: the result can read "You defeated 2 enemies" and still "1 enemy die hit you", and the log shows "Grunt e8 is defeated." then "Grunt e8 attacks you for 1." The "Locked" note was removed from the felt, so nothing explains it; the blind tester called it unfair. Decide the rule (keep, or cancel a defeated enemy's dice), then explain or change it.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3 (2026-10-09); `packages/engine/src/combat/engage.ts` finishEngagement hits with every rolled enemy die
+- suggested fix: (user, 2026-10-09) keep the rule: every enemy die hits at the end, all at once, so the player must still defend against a defeated enemy's attack. Add a config toggle (default off) that cancels a defeated enemy's dice, for the simulator to compare.
+- source: user
+- fixed: phase 23 (this commit) — the rule stays (every enemy die hits at the end, all at once); `combat.engage.defeatedDice: "cancelled"` cancels a defeated enemy's dice for the sim (greyed on the felt, a log line, a result line); report in docs/reports/phase-23-defeated-dice.md
 
 ### [x] [MED] /play — screen readers hear enemy dice as "hit" or "special" with no damage
 - pass: 10 (commit 10fd9d1)

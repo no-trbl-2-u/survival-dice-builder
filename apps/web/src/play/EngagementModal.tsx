@@ -5,6 +5,7 @@ import { CardStrip, OptionChips, stripCards, type DragState } from './CardStrip.
 import { describeEvent } from './describeEvent.ts'
 import { DiceTray, EnemyDice, enemyKindOf } from './DiceTray.tsx'
 import {
+  cancelledLine,
   ENGAGE_STAGES,
   engageHeadline,
   engageInstruction,
@@ -455,6 +456,8 @@ function SummaryView({
       ? `No enemy die hit you${summary.ignored > 0 ? ` (${summary.ignored} ignored)` : ''}.`
       : `${summary.hitsTaken} enemy ${summary.hitsTaken === 1 ? 'die' : 'dice'} hit you: ${summary.toGuard} to guard, ${summary.toHealth} to health${summary.ignored > 0 ? ` (${summary.ignored} ignored)` : ''}.`,
   )
+  const cancelled = cancelledLine(summary)
+  if (cancelled) lines.push(cancelled)
   return (
     <>
       <Head state={state} stage={ENGAGE_STAGES.length - 1} title="Engagement over" />

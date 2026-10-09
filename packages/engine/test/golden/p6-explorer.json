@@ -116,7 +116,8 @@
       "enemyMoveHexes": 2,
       "moveCostNextToEnemy": 2,
       "enemyAttacks": "every-exchange",
-      "adjacentAttack": "target-only"
+      "adjacentAttack": "target-only",
+      "model": "exchange"
     },
     "experience": {
       "firstStep": 5,

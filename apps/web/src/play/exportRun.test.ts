@@ -96,7 +96,10 @@ describe('describeEvent', () => {
     const names = run.state.content.cards.map((c) => c.name)
     expect(names.some((n) => line.includes(n))).toBe(true)
     // The log shows the newest 60 events; the engine log keeps enough to name their enemies.
-    const shown = run.state.log.slice(-60).filter((x) => x.type === 'enemyDamaged')
+    // Engagements (the default since phase 23) end a run on siege hits and enemy dice.
+    const shown = run.state.log
+      .slice(-60)
+      .filter((x) => x.type === 'enemyDamaged' || x.type === 'enemyAttacked')
     expect(shown.length).toBeGreaterThan(0)
     for (const e of shown) expect(describeEvent(e, run.state)).toMatch(/^(Grunt|Elite) e\d+ /)
   })

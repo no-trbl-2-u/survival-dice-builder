@@ -29,8 +29,8 @@ const DIR = path.join(import.meta.dirname, 'golden')
 
 /**
  * The state without the Combat v3 additions (the card `combat` options and the
- * `combat.model`/`combat.engage` config). Combat v3 is off by default, so with them removed
- * every replay must hash as before.
+ * `combat.model`/`combat.engage` config). The exchange goldens play `model: "exchange"`, so with
+ * them removed every exchange replay must hash as before.
  */
 function withoutCombatV3(state: GameState): GameState {
   const combat = omit(state.config.combat, ['model', 'engage']) as GameState['config']['combat']
@@ -48,6 +48,17 @@ function hash(state: GameState): string {
   return createHash('sha256')
     .update(serialize(withoutCombatV3(state)))
     .digest('hex')
+}
+
+/** The plain hash of a state, Combat v3 included (the engagement goldens). */
+function plainHash(state: GameState): string {
+  return createHash('sha256').update(serialize(state)).digest('hex')
+}
+
+/** The default config with Combat played as exchanges: what the exchange goldens replay. */
+const EXCHANGE_CONFIG: GameConfig = {
+  ...defaultContent.config,
+  combat: { ...defaultContent.config.combat, model: 'exchange' },
 }
 
 /** The phase 22 config keys: every one defaults to the phase 21 rule. */
@@ -86,8 +97,19 @@ function replay(g: Golden): GameState {
   return g.actions.reduce((s, a) => applyAction(s, a).state, createGame(g.config, g.seed))
 }
 
-/** Golden definitions: how each file is produced when regenerating. */
-const GOLDENS = [
+/**
+ * Golden definitions: how each file is produced when regenerating. The exchange goldens replay
+ * with `model: "exchange"` (so a regeneration never switches them to engagements); an
+ * `engage` golden replays the default config (engagements, phase 23) and hashes plainly.
+ */
+const GOLDENS: readonly {
+  file: string
+  description: string
+  seed: number
+  policy: typeof scriptedChoice
+  stop: (s: GameState) => boolean
+  engage?: true
+}[] = [
   {
     file: 'p5-three-rounds.json',
     description: 'Phase 5: 3 rounds, solo, default config, scripted policy (seed 2026).',
@@ -118,6 +140,15 @@ const GOLDENS = [
     policy: builderChoice,
     stop: (s: GameState) => s.phase === 'ended',
   },
+  {
+    file: 'p23-engage-run.json',
+    description:
+      'Phase 23: a full solo run to the end, default config (engagements, designer 2026-10-09), builder policy (seed 23).',
+    seed: 23,
+    policy: builderChoice,
+    stop: (s: GameState) => s.phase === 'ended',
+    engage: true,
+  },
 ]
 
 describe('golden replays', () => {
@@ -125,7 +156,7 @@ describe('golden replays', () => {
     const file = path.join(DIR, g.file)
     if (process.env.UPDATE_GOLDEN === '1') {
       it(`regenerates ${g.file}`, () => {
-        const config = defaultContent.config
+        const config = g.engage ? defaultContent.config : EXCHANGE_CONFIG
         const run = walk(createGame(config, g.seed), g.policy, g.stop, 50_000)
         const before = fs.existsSync(file)
           ? (JSON.parse(fs.readFileSync(file, 'utf-8')) as Golden)
@@ -135,7 +166,7 @@ describe('golden replays', () => {
           seed: g.seed,
           config,
           actions: run.actions,
-          expectedHash: hash(run.states.at(-1)!),
+          expectedHash: (g.engage ? plainHash : hash)(run.states.at(-1)!),
           ...(before?.phase21Hash ? { phase21Hash: before.phase21Hash } : {}),
         }
         fs.mkdirSync(DIR, { recursive: true })
@@ -146,8 +177,9 @@ describe('golden replays', () => {
     it(`${g.file} replays to the same state hash`, () => {
       const golden = JSON.parse(fs.readFileSync(file, 'utf-8')) as Golden
       const final = replay(golden)
-      expect(hash(final)).toBe(golden.expectedHash)
+      expect((g.engage ? plainHash : hash)(final)).toBe(golden.expectedHash)
     })
+    if (g.engage) continue
     it(`${g.file} with every phase 22 option off matches the phase 21 state`, () => {
       const golden = JSON.parse(fs.readFileSync(file, 'utf-8')) as Golden
       const final = toPhase21(withoutCombatV3(replay(golden)))

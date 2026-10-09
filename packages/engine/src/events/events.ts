@@ -36,6 +36,7 @@ export type GameEvent = Readonly<
         faces?: readonly Face[]
       }
     | { type: 'hitIgnored'; enemy: string; player: string }
+    | { type: 'enemyDieCancelled'; enemy: string; player: string }
     | {
         type: 'engaged'
         player: string

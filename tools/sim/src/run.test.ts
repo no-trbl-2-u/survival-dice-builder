@@ -26,9 +26,29 @@ describe('playRun', () => {
   })
 })
 
-describe('the default batch (hand of 5, OPEN-QUESTIONS row 71)', () => {
-  it('matches the hand-5 summary on seeds 1-200', () => {
+describe('the default batch (engagements, designer 2026-10-09)', () => {
+  it('matches the engagement summary on seeds 1-200', () => {
+    expect(config.combat.model).toBe('engage')
     const s = summarize(runBatch(config, 200, 1))
+    expect([s.medianEndRound, s.middleHalf, s.minEndRound, s.maxEndRound]).toEqual([
+      7,
+      [6, 7],
+      5,
+      12,
+    ])
+    expect(s.causes).toEqual({ base: 200 })
+    expect(s.milestones).toEqual({
+      'survive-round-5': 200,
+      'buy-upgrades': 90,
+      'survive-round-10': 11,
+    })
+  })
+})
+
+describe('the exchange batch (hand of 5, OPEN-QUESTIONS row 71)', () => {
+  it('matches the hand-5 exchange summary on seeds 1-200', () => {
+    const exchange = { ...config, combat: { ...config.combat, model: 'exchange' as const } }
+    const s = summarize(runBatch(exchange, 200, 1))
     expect([s.medianEndRound, s.middleHalf, s.minEndRound, s.maxEndRound]).toEqual([
       6,
       [5, 7],

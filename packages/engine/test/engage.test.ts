@@ -1,6 +1,6 @@
 import { defaultContent, type Face, type GameConfig, type SkillFace } from '@survival/content'
 import { describe, expect, it } from 'vitest'
-import { siege } from '../src/combat/engage.ts'
+import { cancelledEnemyDice, finishEngagement, siege } from '../src/combat/engage.ts'
 import {
   applyAction,
   createGame,
@@ -185,5 +185,80 @@ describe('Combat v3 engagements', () => {
       s = applyAction(s, legal[pick % legal.length]!).state
     }
     expect(s.round).toBeGreaterThan(1)
+  })
+})
+
+describe("Combat v3 defeated enemies' dice (designer 2026-10-09)", () => {
+  /**
+   * An engagement about to end: g1 was defeated during it (no longer on the map), g2 is still
+   * there. g1 rolled 2 Hits and a Miss, g2 rolled a Hit.
+   */
+  function ending(defeatedDice: 'hit' | 'cancelled', ignoreHits = 0): GameState {
+    const s = inCombat()
+    const engage = legalActions(s).find((a) => a.type === 'engage')!
+    const opened = applyAction(s, engage).state
+    return {
+      ...opened,
+      config: {
+        ...opened.config,
+        combat: {
+          ...opened.config.combat,
+          engage: { ...opened.config.combat.engage, defeatedDice },
+        },
+      },
+      enemies: opened.enemies.filter((e) => e.id !== 'g1'),
+      exchange: {
+        ...opened.exchange!,
+        ignoreHits,
+        engage: {
+          enemyDice: [
+            { enemy: 'g1', face: 'hit' },
+            { enemy: 'g1', face: 'miss' },
+            { enemy: 'g2', face: 'hit' },
+            { enemy: 'g1', face: 'hit' },
+          ],
+        },
+      },
+    }
+  }
+  const health = (s: GameState) => s.players[0]!.health
+  const hitDamage = config.combat.engage.hitDamage
+
+  it('Combat v3 "hit" (default): every die rolled hits, even a defeated enemy\'s', () => {
+    expect(defaultContent.config.combat.engage.defeatedDice).toBe('hit')
+    const s = ending('hit')
+    const [after, events] = finishEngagement(s)
+    expect(events.filter((e) => e.type === 'enemyAttacked').map((e) => e.enemy)).toEqual([
+      'g1',
+      'g2',
+      'g1',
+    ])
+    expect(events.some((e) => e.type === 'enemyDieCancelled')).toBe(false)
+    expect(health(after)).toBe(health(s) - 3 * hitDamage)
+    expect(cancelledEnemyDice(s)).toEqual([])
+  })
+
+  it('Combat v3 "cancelled": a defeated enemy\'s dice do not hit; the others still do', () => {
+    const s = ending('cancelled')
+    const [after, events] = finishEngagement(s)
+    expect(events.filter((e) => e.type === 'enemyDieCancelled').map((e) => e.enemy)).toEqual([
+      'g1',
+      'g1',
+    ])
+    expect(events.filter((e) => e.type === 'enemyAttacked').map((e) => e.enemy)).toEqual(['g2'])
+    expect(health(after)).toBe(health(s) - hitDamage)
+    expect(cancelledEnemyDice(s)).toEqual([0, 1, 3])
+  })
+
+  it('Combat v3 "cancelled": a cancelled die does not use up an "ignore 1 hit"', () => {
+    const s = ending('cancelled', 1)
+    const [after, events] = finishEngagement(s)
+    expect(events.filter((e) => e.type === 'hitIgnored').map((e) => e.enemy)).toEqual(['g2'])
+    expect(events.some((e) => e.type === 'enemyAttacked')).toBe(false)
+    expect(health(after)).toBe(health(s))
+  })
+
+  it('Combat v3 cancelledEnemyDice is empty outside an engagement', () => {
+    expect(cancelledEnemyDice(inCombat())).toEqual([])
   })
 })
