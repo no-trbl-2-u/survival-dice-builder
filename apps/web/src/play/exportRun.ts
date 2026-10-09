@@ -1,3 +1,4 @@
+import { AUTOSAVE_KEY, type KeyValue } from '../config/configStore.ts'
 import { GameConfigSchema, withConfigDefaults } from '@survival/content'
 import type { Action, GameState } from '@survival/engine'
 import { replay, type Run } from './run.ts'
@@ -83,4 +84,16 @@ export function downloadRun(run: Run, at: number): void {
   a.download = exportFileName(data)
   a.click()
   URL.revokeObjectURL(url)
+}
+
+/** The autosaved run of this browser, if a valid one exists (Start panel, Config bar). */
+export function readAutosave(store: KeyValue | undefined): Run | null {
+  try {
+    const raw = store?.getItem(AUTOSAVE_KEY)
+    if (!raw) return null
+    const loaded = importRun(raw, Date.now())
+    return 'run' in loaded ? loaded.run : null
+  } catch {
+    return null
+  }
 }

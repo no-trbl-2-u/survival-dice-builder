@@ -1,7 +1,6 @@
 import { useState, type ChangeEvent } from 'react'
 import type { KeyValue } from '../config/configStore.ts'
-import { AUTOSAVE_KEY } from '../config/configStore.ts'
-import { importRun } from './exportRun.ts'
+import { importRun, readAutosave } from './exportRun.ts'
 import styles from './Play.module.css'
 import type { Run } from './run.ts'
 
@@ -15,25 +14,13 @@ type Props = Readonly<{
   onLoad: (run: Run) => void
 }>
 
-/** Reads the autosave, if a valid one exists. */
-function autosaved(store: KeyValue | undefined): Run | null {
-  try {
-    const raw = store?.getItem(AUTOSAVE_KEY)
-    if (!raw) return null
-    const loaded = importRun(raw, Date.now())
-    return 'run' in loaded ? loaded.run : null
-  } catch {
-    return null
-  }
-}
-
 /** Before a run: player count, seed, config status, load a file, or resume the autosave. */
 export function StartPanel({ custom, store, onStart, onLoad }: Props) {
   const [players, setPlayers] = useState(1)
   const [combat, setCombat] = useState<CombatModel>('engage')
   const [seed, setSeed] = useState(() => String(Date.now() % 100000))
   const [error, setError] = useState<string | null>(null)
-  const [saved] = useState(() => autosaved(store))
+  const [saved] = useState(() => readAutosave(store))
   const load = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return

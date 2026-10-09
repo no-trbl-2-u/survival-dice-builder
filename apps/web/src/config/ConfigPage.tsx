@@ -4,7 +4,8 @@ import {
   GameConfigSchema,
   type GameConfig,
 } from '@survival/content'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { readAutosave } from '../play/exportRun.ts'
 import styles from './ConfigPage.module.css'
 import {
   browserStorage,
@@ -586,6 +587,8 @@ export function ConfigPage() {
   const [message, setMessage] = useState<string | null>(loaded.error)
   const [problems, setProblems] = useState<ConfigProblem[]>([])
   const [confirming, setConfirming] = useState(false)
+  const [resumable] = useState(() => readAutosave(store))
+  const leaving = useRef(false)
   const dirty = isDirty(draft, saved)
   const onChange = (path: Path, next: unknown) => {
     setDraft((d: unknown) => setAt(d, path, next))
@@ -602,11 +605,14 @@ export function ConfigPage() {
   // Leaving the page (nav links are full page loads) with unsaved edits asks first.
   useEffect(() => {
     if (!dirty) return
-    const warn = (e: BeforeUnloadEvent) => e.preventDefault()
+    const warn = (e: BeforeUnloadEvent) => {
+      if (!leaving.current) e.preventDefault()
+    }
     window.addEventListener('beforeunload', warn)
     return () => window.removeEventListener('beforeunload', warn)
   }, [dirty])
-  const save = () => {
+  /** Saves the draft; true when it was valid and is saved. */
+  const save = (): boolean => {
     const errors = saveConfig(store, draft)
     setProblems(errors)
     if (errors.length === 0) setSaved(draft)
@@ -615,6 +621,13 @@ export function ConfigPage() {
         ? 'Saved. New runs on /play use this config.'
         : `Not saved: ${errors.length === 1 ? '1 field needs' : `${errors.length} fields need`} a fix.`,
     )
+    return errors.length === 0
+  }
+  /** Off to /play: unsaved edits are saved first; a field that needs a fix keeps you here. */
+  const play = (href: string) => {
+    if (dirty && !save()) return
+    leaving.current = true
+    window.location.assign(href)
   }
   const reset = () => {
     resetConfig(store)
@@ -673,6 +686,20 @@ export function ConfigPage() {
             <button type="button" onClick={() => setConfirming(true)}>
               Reset to defaults
             </button>
+            <span className={styles.playActions} role="group" aria-label="Play">
+              {resumable ? (
+                <button type="button" onClick={() => play('/play?resume')}>
+                  Resume run (round {resumable.state.round})
+                </button>
+              ) : null}
+              <button
+                type="button"
+                className="brass"
+                onClick={() => play(`/play?seed=${Date.now() % 100000}&combat=engage`)}
+              >
+                Start run
+              </button>
+            </span>
           </div>
         )}
         <p role="status" className={styles.status}>

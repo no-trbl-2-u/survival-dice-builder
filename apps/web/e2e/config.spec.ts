@@ -109,3 +109,36 @@ test('/config: sliders, toggles, and pick lists; a name can only come from the c
   await page.getByRole('button', { name: 'Start run' }).click()
   await expect(page.getByTestId('player-panel')).toContainText('16 / 16')
 })
+
+test('/config: Start run saves the edits first and starts a run with them', async ({ page }) => {
+  const dialogs: string[] = []
+  page.on('dialog', async (d) => {
+    dialogs.push(d.type())
+    await d.dismiss()
+  })
+  await page.goto('/config')
+  await page.getByLabel('Maximum health', { exact: true }).fill('17')
+  await page.getByTestId('config-bar').getByRole('button', { name: 'Start run' }).click()
+  await page.waitForURL(/\/play\?seed=\d+&combat=engage/)
+  await expect(page.getByTestId('next-step')).toBeVisible()
+  expect(dialogs).toEqual([])
+  await page.goto('/config')
+  await expect(page.getByLabel('Maximum health', { exact: true })).toHaveValue('17')
+})
+
+test('/config: Resume run shows only with an autosave, and carries on with it', async ({
+  page,
+}) => {
+  await page.goto('/config')
+  await expect(page.getByRole('button', { name: /^Resume run/ })).toHaveCount(0)
+  // Take 1 action so the run autosaves, then come back.
+  await page.goto('/play?seed=3')
+  await page
+    .getByRole('button', { name: 'Place your figure on Plains, Base, the base centre' })
+    .click()
+  await page.goto('/config')
+  await page.getByRole('button', { name: /^Resume run \(round 1\)$/ }).click()
+  await page.waitForURL(/\/play\?resume/)
+  await expect(page.getByTestId('play-map')).toBeVisible()
+  await expect(page.getByTestId('start-panel')).toHaveCount(0)
+})

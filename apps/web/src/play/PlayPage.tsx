@@ -10,7 +10,7 @@ import { DiceTray } from './DiceTray.tsx'
 import { atTarget, forceEngagement } from './devEngage.ts'
 import { EngagementModal } from './EngagementModal.tsx'
 import { lastEngagement, type EngageSummary } from './engageView.ts'
-import { downloadRun, exportRun } from './exportRun.ts'
+import { downloadRun, exportRun, readAutosave } from './exportRun.ts'
 import { Hand } from './Hand.tsx'
 import { PhaseBar } from './PhaseBar.tsx'
 import styles from './Play.module.css'
@@ -44,7 +44,7 @@ function reducer(run: Run | null, msg: Msg): Run | null {
 
 /**
  * `/play`: a run for 1-4 players on one screen. `?seed=N` (and `?players=N`) start a run at
- * once (replays, tests); otherwise the start panel asks. Every control is built from
+ * once (replays, tests), `?resume` carries on with the autosave; otherwise the start panel asks. Every control is built from
  * `legalActions`; the page only passes the chosen action back to the engine.
  */
 export function PlayPage() {
@@ -52,6 +52,8 @@ export function PlayPage() {
   const [{ config, custom }] = useState(() => loadConfig(store))
   const [run, dispatch] = useReducer(reducer, null, () => {
     const params = new URLSearchParams(window.location.search)
+    // `?resume`: carry on with this browser's autosaved run (the Config bar links here).
+    if (params.has('resume')) return readAutosave(store)
     const seed = Number.parseInt(params.get('seed') ?? '', 10)
     const players = Number.parseInt(params.get('players') ?? '1', 10) || 1
     const combat = params.get('combat') === 'engage' ? 'engage' : config.combat.model
