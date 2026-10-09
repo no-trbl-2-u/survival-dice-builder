@@ -60,7 +60,7 @@ Tick in this file in the same commit that ships the phase.
 
 **Designer playtest follow-ups (2026-10-09):**
 - [x] Phase 23 — Engagements by default, and a switch that cancels a defeated enemy's dice (config default `combat.model: "engage"`, Start run follows the saved config, `combat.engage.defeatedDice` default `"hit"`, sim comparison) — f4ebbce
-- [ ] Phase 24 — Engagement modal II: no pre-selected die, a damage number on the board after a target pick, phone fit, a first-time card nudge, enemy names (mini map, buttons, title), result read out, touch-drag test, a force-elite dev tool, and an elite blind round
+- [x] Phase 24 — Engagement modal II: no pre-selected die, a damage number on the board after a target pick, phone fit, a first-time card nudge, enemy names (mini map, buttons, title), result read out, touch-drag test, a force-elite dev tool, and an elite blind round — 09780d9
 
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
@@ -398,3 +398,4 @@ stay, plus a force-elite one; an elite blind round closes the phase.
 - phase 20 — d690982 — Base tile alone at setup with player-chosen start hexes, the whole Base tile is the base, no Explore phase, reveal by stepping off the map edge, single-use gathering nodes, 10-card deck with a hand of 3, 2 card copies, skirmish step 1, export version 2; bot batch median end round 5 (was 14)
 - phase 21 — 79bc77e — no wave track: enemies move, then every spawn node spawns each Combat; structure-first targeting with a 2-hex player pull; enemies attack only their target; Tower ties are the builder's choice and pay the builder; exchanges without enemies; knockout and return at half health; state and export version 3; bot batch median end round 6, all 200 end by the base
 - phase 23 — f4ebbce — engagements are the default Combat model (exchanges stay selectable); Start run follows the saved config; combat.engage.defeatedDice ("hit" default, "cancelled" experiment) with greyed dice, log and result lines; bot batch median end round 7 (exchanges 6); report: cancelled takes about 8% fewer hits and does not move the end round
+- phase 24 — 09780d9 — engagement modal II: no pre-selected die, a board damage number after a target pick (modal steps aside 1.2s), phone fit at 375x812, first-time card nudge, enemies named by kind and place, result read out, touch drag tested on a mobile-touch project, Force elite engagement (dev); blind round 4 found no blockers
