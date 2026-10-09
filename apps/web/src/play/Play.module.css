@@ -1290,6 +1290,56 @@
     var(--color-surface);
 }
 
+/* The target step: a small map framed on the player beside the target buttons. */
+.engageTargets {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+}
+
+.engageTargetPick {
+  display: grid;
+  gap: 6px;
+}
+
+.miniMap .map {
+  max-height: 240px;
+  aspect-ratio: 3 / 2;
+  cursor: default;
+}
+
+/* Every enemy the Skill can hit: an orange ring; the one hovered or focused (here or on a
+   button): green and bigger. */
+.miniMap .target circle,
+.miniMap .target rect {
+  stroke: #ffb347;
+  stroke-width: 4;
+}
+
+.miniMap .target {
+  filter: drop-shadow(0 0 4px rgb(255 179 71 / 0.95));
+}
+
+.miniMap .target[data-highlight],
+.miniMap .target:hover {
+  filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 10px #9fd18a);
+}
+
+.miniMap .target[data-highlight] circle,
+.miniMap .target[data-highlight] rect,
+.miniMap .target:hover circle,
+.miniMap .target:hover rect {
+  stroke: #fff;
+  stroke-width: 6;
+}
+
+.engageTargetList button[data-highlight] {
+  box-shadow:
+    0 0 0 3px #9fd18a,
+    var(--lift);
+}
+
 .engageTargets .subTitle {
   margin-top: 0;
 }
@@ -1474,6 +1524,14 @@
   }
 
   /* Phones: still 1 felt, the enemy dice above your dice, the seam across between them. */
+  .engageTargets {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .miniMap .map {
+    max-height: 220px;
+  }
+
   .engageFelt {
     flex-direction: column;
     align-items: stretch;

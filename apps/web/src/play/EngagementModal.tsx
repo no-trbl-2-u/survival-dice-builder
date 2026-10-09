@@ -12,6 +12,7 @@ import {
   type EngageSummary,
 } from './engageView.ts'
 import styles from './Play.module.css'
+import { PlayMap } from './PlayMap.tsx'
 import { SkillBoard } from './SkillBoard.tsx'
 import { firstOf, ofType } from './targets.ts'
 
@@ -39,6 +40,13 @@ export function EngagementModal(props: Props) {
   const dialog = useRef<HTMLDialogElement>(null)
   const opener = useRef<Element | null>(null)
   const [peek, setPeek] = useState(false)
+  // An action taken from the board while it is in view (a target clicked on the main map) moves
+  // the engagement on: come back to show what is next, or the result.
+  const [seen, setSeen] = useState(state)
+  if (seen !== state) {
+    setSeen(state)
+    if (peek) setPeek(false)
+  }
   const open = !peek
 
   useEffect(() => {
@@ -325,9 +333,18 @@ function RollPips({
   )
 }
 
-/** A fired attack Skill picks its enemy here (the engine's own target list). */
+/**
+ * A fired attack Skill picks its enemy here: a small map framed on the player, the enemies in
+ * range highlighted and clickable, and 1 button per target (the keyboard and screen-reader way;
+ * hovering either one highlights the other). The engine's own target list; the next Skill in
+ * the queue goes first.
+ */
 function Targets({ state, legal, act }: Readonly<Pick<Props, 'state' | 'legal' | 'act'>>) {
-  const resolves = ofType(legal, 'resolveSkill')
+  const [hover, setHover] = useState<string | null>(null)
+  const head = state.exchange?.queue[0]
+  const resolves = ofType(legal, 'resolveSkill').filter(
+    (a) => !head || (a.skill === head.skill && a.use === head.use),
+  )
   const chooses = ofType(legal, 'chooseTarget')
   if (resolves.length === 0 && chooses.length === 0) return null
   const enemy = (id: string) => state.enemies.find((e) => e.id === id)
@@ -337,31 +354,72 @@ function Targets({ state, legal, act }: Readonly<Pick<Props, 'state' | 'legal' |
     return e ? `${e.kind} ${id} (health ${e.health}${max ? `/${max}` : ''})` : `enemy ${id}`
   }
   const skillName = (id: string) => state.content.skills.find((s) => s.id === id)?.name ?? id
+  const effect = state.content.skills.find((s) => s.id === head?.skill)?.effect
+  const range = effect?.kind === 'damage' ? effect.range : 1
+  const player = state.players[state.current]
+  const onMap = [...resolves, ...chooses].some((a) => a.enemy !== undefined)
+  const buttonProps = (id: string | undefined) =>
+    id
+      ? {
+          'data-highlight': hover === id || undefined,
+          onPointerEnter: () => setHover(id),
+          onPointerLeave: () => setHover(null),
+          onFocus: () => setHover(id),
+          onBlur: () => setHover(null),
+        }
+      : {}
   return (
     <section
       className={styles.engageTargets}
       aria-label="Choose a target"
       data-testid="engage-targets"
     >
-      <h3 className={styles.subTitle}>Choose a target</h3>
-      <ul className={styles.engageTargetList}>
-        {resolves.map((a) => (
-          <li key={`${a.skill}-${a.use}-${a.enemy ?? 'none'}`}>
-            <button type="button" className={styles.primary} data-primary onClick={() => act(a)}>
-              {a.enemy
-                ? `${skillName(a.skill)} hits ${label(a.enemy)}`
-                : `Fire ${skillName(a.skill)}`}
-            </button>
-          </li>
-        ))}
-        {chooses.map((a) => (
-          <li key={a.enemy}>
-            <button type="button" className={styles.primary} data-primary onClick={() => act(a)}>
-              Target {label(a.enemy)}
-            </button>
-          </li>
-        ))}
-      </ul>
+      {onMap && player ? (
+        <PlayMap
+          state={state}
+          legal={[...resolves, ...chooses]}
+          act={act}
+          around={{ hex: player.hex, radius: Math.max(2, range + 1) }}
+          fixed
+          highlight={hover}
+          onHighlight={setHover}
+          label="Target map"
+          className={styles.miniMap}
+        />
+      ) : null}
+      <div className={styles.engageTargetPick}>
+        <h3 className={styles.subTitle}>Choose a target</h3>
+        <ul className={styles.engageTargetList}>
+          {resolves.map((a) => (
+            <li key={`${a.skill}-${a.use}-${a.enemy ?? 'none'}`}>
+              <button
+                type="button"
+                className={styles.primary}
+                data-primary
+                onClick={() => act(a)}
+                {...buttonProps(a.enemy)}
+              >
+                {a.enemy
+                  ? `${skillName(a.skill)} hits ${label(a.enemy)}`
+                  : `Fire ${skillName(a.skill)}`}
+              </button>
+            </li>
+          ))}
+          {chooses.map((a) => (
+            <li key={a.enemy}>
+              <button
+                type="button"
+                className={styles.primary}
+                data-primary
+                onClick={() => act(a)}
+                {...buttonProps(a.enemy)}
+              >
+                Target {label(a.enemy)}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
   )
 }

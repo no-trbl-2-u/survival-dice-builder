@@ -142,6 +142,14 @@ test('/play Combat v3: Combat cards offer their options, and Engage starts an en
         name: / hits |^Fire |^Put dic?e |^Stop rolling: use these dice$|^Done adding cards$|^Stop rerolling$|^End engagement/,
       })
       .first()
+    // A Skill with an enemy in range: its targets are on a small map in the modal too.
+    if ((await modal.getByRole('button', { name: / hits / }).count()) > 0)
+      await expect(
+        modal
+          .getByLabel('Target map')
+          .getByRole('button', { name: /^Target / })
+          .first(),
+      ).toBeVisible()
     if ((await pick.count()) > 0) await pick.click()
   }
   await expect(summary).toBeVisible()

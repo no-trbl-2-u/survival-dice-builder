@@ -44,10 +44,19 @@ scrolled between 4 places for 1 fight.
   them then), so "Add cards" is not its own stage. Stage 4 is the result.
 - **Fixed height.** The modal does not resize as steps change, so buttons do
   not move under the cursor.
-- **Targets in the modal.** A fired attack Skill lists its legal targets as
-  buttons ("Strike hits elite e8 (health 14/14)"), so the map is never
-  needed mid-engagement. The section sits first in the column and has an
-  orange edge so it is the first thing the eye lands on.
+- **Targets on a mini map.** When a fired attack Skill needs a target, the
+  target box at the top of the body shows a small, fixed map framed on the
+  player (radius: the Skill's range + 1) beside one button per target
+  ("Strike hits elite e8 (health 14/14)"). Enemies in range glow orange and
+  are clickable; the rest of the map is drawn but inert. Hovering or
+  focusing an enemy or its button lights both up (white ring, green glow).
+  The buttons stay as the keyboard and screen-reader way. It reuses PlayMap
+  (new props: `around`, `fixed`, `highlight`, `onHighlight`). On a phone the
+  buttons come first, the map under them. Several fired Skills resolve one
+  at a time, the queue's head first.
+- **Board clicks count.** A target clicked on the main map during "Look at
+  the board" resolves too, and the modal comes back at once to show the next
+  step or the result.
 - **Who you face.** The title names every enemy that rolled dice; health and
   guard sit top right, because the enemy dice hit them at the end.
 - **One primary action.** Brass button, bottom right: Stop rolling: use these dice / Done

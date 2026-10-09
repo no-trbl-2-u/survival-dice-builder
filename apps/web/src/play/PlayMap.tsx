@@ -1,4 +1,10 @@
-import type { Action, GameEvent, GameState } from '@survival/engine'
+import {
+  hexDistance,
+  type Action,
+  type Axial,
+  type GameEvent,
+  type GameState,
+} from '@survival/engine'
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { gameIcons, ICON_VIEWBOX } from '../icons/gameIcons.ts'
 import { describeAction } from '../debug/describeAction.ts'
@@ -21,6 +27,17 @@ type Props = Readonly<{
   act: (a: Action) => void
   /** The last action's events: Tower shots are drawn from them. */
   events?: readonly GameEvent[]
+  /** Frame the view on the hexes within `radius` of `hex` (the rest is still drawn). */
+  around?: Readonly<{ hex: Axial; radius: number }>
+  /** No drag to pan, no wheel to zoom (a small, fixed map). */
+  fixed?: boolean
+  /** The enemy to show as highlighted (hovered or focused somewhere else). */
+  highlight?: string | null
+  /** Called when the pointer or focus moves onto (id) or off (null) a target enemy. */
+  onHighlight?: (enemy: string | null) => void
+  /** The section's name (default "Map"). */
+  label?: string
+  className?: string | undefined
 }>
 
 /** A CSS transform that places a piece; a change of hex animates (see `.mover`). */
@@ -56,7 +73,18 @@ const onKey = (run: () => void) => (e: KeyboardEvent) => {
  * health), defenses, and every legal map target as a focusable SVG button. A step off the map
  * edge is a dashed ghost hex. Drag to pan; wheel to zoom.
  */
-export function PlayMap({ state, legal, act, events = [] }: Props) {
+export function PlayMap({
+  state,
+  legal,
+  act,
+  events = [],
+  around,
+  fixed = false,
+  highlight = null,
+  onHighlight,
+  label: sectionLabel = 'Map',
+  className,
+}: Props) {
   const [view, setView] = useState({ x: 0, y: 0, zoom: 1 })
   const drag = useRef<{ x: number; y: number } | null>(null)
   const svg = useRef<SVGSVGElement>(null)
@@ -71,7 +99,7 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
 
   useEffect(() => {
     const el = svg.current
-    if (!el) return
+    if (!el || fixed) return
     const wheel = (e: WheelEvent) => {
       e.preventDefault()
       setView((v) => ({
@@ -81,7 +109,7 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
     }
     el.addEventListener('wheel', wheel, { passive: false })
     return () => el.removeEventListener('wheel', wheel)
-  }, [])
+  }, [fixed])
 
   const hexes = Object.entries(state.map.hexes).map(([key, hex]) => {
     const [q = 0, r = 0] = key.split(',').map(Number)
@@ -90,8 +118,17 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
   const offMap = (t: { key: string }) => !state.map.hexes[t.key]
   const ghosts = [...targets.values()].filter((t) => t.move && offMap(t))
   const spent = new Set(state.spentNodes.map((n) => `${n.q},${n.r}`))
-  const all = [...hexes.map((h) => h.center), ...ghosts.map((t) => hexToPixel(t, SIZE))]
-  const pad = SIZE * 2
+  const framed = around
+    ? hexes.filter((h) => {
+        const [q = 0, r = 0] = h.key.split(',').map(Number)
+        return hexDistance({ q, r }, around.hex) <= around.radius
+      })
+    : hexes
+  const all = [
+    ...(framed.length > 0 ? framed : hexes).map((h) => h.center),
+    ...(around ? [] : ghosts.map((t) => hexToPixel(t, SIZE))),
+  ]
+  const pad = around ? SIZE * 0.9 : SIZE * 2
   const minX = Math.min(...all.map((p) => p.x)) - pad
   const minY = Math.min(...all.map((p) => p.y)) - pad
   const w = Math.max(...all.map((p) => p.x)) - minX + pad
@@ -101,6 +138,7 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
   const viewBox = `${minX + (w - vw) / 2 - view.x} ${minY + (h - vh) / 2 - view.y} ${vw} ${vh}`
 
   const onDown = (e: PointerEvent<SVGSVGElement>) => {
+    if (fixed) return
     if ((e.target as Element).closest('[role="button"]')) return
     drag.current = { x: e.clientX, y: e.clientY }
   }
@@ -118,7 +156,7 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
   }
 
   return (
-    <section className={styles.mapPanel} aria-label="Map">
+    <section className={`${styles.mapPanel} ${className ?? ''}`} aria-label={sectionLabel}>
       <svg
         ref={svg}
         className={styles.map}
@@ -217,6 +255,7 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
               key={e.id}
               className={`${styles.mover} ${target ? styles.target : ''}`}
               style={place(c.x, c.y)}
+              data-highlight={(target && highlight === e.id) || undefined}
               {...(target
                 ? {
                     role: 'button',
@@ -224,6 +263,10 @@ export function PlayMap({ state, legal, act, events = [] }: Props) {
                     'aria-label': `Target ${name}`,
                     onClick: () => act(target),
                     onKeyDown: onKey(() => act(target)),
+                    onPointerEnter: () => onHighlight?.(e.id),
+                    onPointerLeave: () => onHighlight?.(null),
+                    onFocus: () => onHighlight?.(e.id),
+                    onBlur: () => onHighlight?.(null),
                   }
                 : { role: 'img', 'aria-label': name })}
             >
