@@ -15,7 +15,7 @@
 - category: comprehension
 - observation: The new Start run button on the Config bar always opens an engagement run. A visitor who sets the Combat model to exchanges on the same page and presses Start run still gets engagements, and the button does not say so.
 - evidence: `apps/web/src/config/ConfigPage.tsx:700` links `/play?seed=...&combat=engage`; `apps/web/src/play/PlayPage.tsx:59` uses the saved `config.combat.model` only when `combat` is not `engage`.
-- suggested fix: Keep the engagement playtest start, but name it on the button ("Start engagement run"), or follow the saved Combat model and drop `&combat=engage`.
+- suggested fix: (user, 2026-10-09) make 'engage' the config default Combat model and drop the `&combat=engage` override, so Start run follows the saved config; update the sim baseline and tests that assume 'exchange'.
 - source: web-fetch
 
 ### [MED] /play — screen readers hear enemy dice as "hit" or "special" with no damage
