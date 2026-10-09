@@ -24,6 +24,8 @@ type Props = Readonly<{
   enemyDice?: boolean
   /** Show the roll / stop buttons (off when the engagement modal puts them in its footer). */
   controls?: boolean
+  /** Only the dice (no panel, title, or felt): the engagement modal puts them on its own felt. */
+  bare?: boolean
 }>
 
 /**
@@ -40,6 +42,7 @@ export function DiceTray({
   dice3d = false,
   enemyDice = true,
   controls = true,
+  bare = false,
 }: Props) {
   const ex = state.exchange
   if (!ex) return null
@@ -48,70 +51,81 @@ export function DiceTray({
   const roll = firstOf(legal, 'roll')
   const stop = firstOf(legal, 'stopRolling')
   const endReroll = firstOf(legal, 'endReroll')
+  const dice3dView =
+    dice3d && ex.rollsUsed > 0 ? (
+      <Suspense fallback={<p className={styles.muted}>Loading 3D dice…</p>}>
+        <Dice3D
+          faces={ex.dice.map((d) => d.face)}
+          kept={ex.dice.map((d) => d.kept)}
+          roll={ex.rollsUsed * 100 + ex.rerollsLeft}
+        />
+      </Suspense>
+    ) : null
+  const allPlaced = ex.dice.length > 0 && ex.dice.every((_, i) => placed.has(i))
+  const items = ex.dice.map((d, i) => {
+    if (placed.has(i)) return null
+    const keep = has({ type: 'toggleKeep', die: i })
+    const reroll = has({ type: 'rerollDie', die: i })
+    const canPlace = ex.step === 'assign' && placementsFor(legal, i).length > 0
+    const isSelected = selected.includes(i)
+    return (
+      <li key={i} className={styles.dieItem}>
+        <span
+          className={`${styles.die} ${d.kept ? styles.kept : ''} ${isSelected ? styles.selected : ''}`}
+          aria-label={`Die ${i + 1}: ${d.face}${d.kept ? ', kept' : ''}`}
+        >
+          <GameIcon name={faceIcon(d.face)} size="1.6rem" />
+          <small>{d.face}</small>
+        </span>
+        {keep ? (
+          <button type="button" onClick={() => act(keep)}>
+            {d.kept ? 'Release' : 'Keep'} die {i + 1}
+          </button>
+        ) : null}
+        {reroll ? (
+          <button type="button" onClick={() => act(reroll)}>
+            Reroll die {i + 1}
+          </button>
+        ) : null}
+        {canPlace ? (
+          <button
+            type="button"
+            aria-pressed={isSelected}
+            aria-label={`${isSelected ? 'Unselect' : 'Select'} die ${i + 1}`}
+            onClick={() => toggle(i)}
+          >
+            {isSelected ? 'Unselect' : 'Select'}
+          </button>
+        ) : null}
+      </li>
+    )
+  })
+  if (bare) {
+    return (
+      <>
+        {dice3dView}
+        <ul className={styles.engageDiceList} aria-label="Your dice">
+          {items}
+        </ul>
+        {allPlaced ? <p className={styles.engageFeltNote}>All your dice are on Skills.</p> : null}
+      </>
+    )
+  }
   return (
     <section className={styles.panel} aria-label="Dice">
       <h2 className={styles.panelTitle}>
         Dice — roll {ex.rollsUsed} of {state.config.combat.maxRolls}
         {ex.step === 'reroll' ? ` · rerolls left ${ex.rerollsLeft}` : ''}
       </h2>
-      {dice3d && ex.rollsUsed > 0 ? (
-        <Suspense fallback={<p className={styles.muted}>Loading 3D dice…</p>}>
-          <Dice3D
-            faces={ex.dice.map((d) => d.face)}
-            kept={ex.dice.map((d) => d.kept)}
-            roll={ex.rollsUsed * 100 + ex.rerollsLeft}
-          />
-        </Suspense>
-      ) : null}
+      {dice3dView}
       {ex.engage && enemyDice ? (
         <>
           <EnemyDice state={state} />
           <h3 className={styles.subTitle}>Your dice</h3>
         </>
       ) : null}
-      <ul className={styles.dice}>
-        {ex.dice.map((d, i) => {
-          if (placed.has(i)) return null
-          const keep = has({ type: 'toggleKeep', die: i })
-          const reroll = has({ type: 'rerollDie', die: i })
-          const canPlace = ex.step === 'assign' && placementsFor(legal, i).length > 0
-          const isSelected = selected.includes(i)
-          return (
-            <li key={i} className={styles.dieItem}>
-              <span
-                className={`${styles.die} ${d.kept ? styles.kept : ''} ${isSelected ? styles.selected : ''}`}
-                aria-label={`Die ${i + 1}: ${d.face}${d.kept ? ', kept' : ''}`}
-              >
-                <GameIcon name={faceIcon(d.face)} size="1.6rem" />
-                <small>{d.face}</small>
-              </span>
-              {keep ? (
-                <button type="button" onClick={() => act(keep)}>
-                  {d.kept ? 'Release' : 'Keep'} die {i + 1}
-                </button>
-              ) : null}
-              {reroll ? (
-                <button type="button" onClick={() => act(reroll)}>
-                  Reroll die {i + 1}
-                </button>
-              ) : null}
-              {canPlace ? (
-                <button
-                  type="button"
-                  aria-pressed={isSelected}
-                  aria-label={`${isSelected ? 'Unselect' : 'Select'} die ${i + 1}`}
-                  onClick={() => toggle(i)}
-                >
-                  {isSelected ? 'Unselect' : 'Select'}
-                </button>
-              ) : null}
-            </li>
-          )
-        })}
-      </ul>
-      {ex.dice.length > 0 && ex.dice.every((_, i) => placed.has(i)) ? (
-        <p className={styles.muted}>All your dice are on Skills.</p>
-      ) : null}
+      <ul className={styles.dice}>{items}</ul>
+      {allPlaced ? <p className={styles.muted}>All your dice are on Skills.</p> : null}
       {controls ? (
         <div className={styles.row}>
           {stop ? (
@@ -143,13 +157,20 @@ export function EnemyDice({
   state,
   heading = true,
   rolls,
-}: Readonly<{ state: GameState; heading?: boolean; rolls?: readonly EnemyDieRoll[] }>) {
+  bare = false,
+}: Readonly<{
+  state: GameState
+  heading?: boolean
+  rolls?: readonly EnemyDieRoll[]
+  /** Only the dice, no felt: the engagement modal puts them on its own felt. */
+  bare?: boolean
+}>) {
   const dice = rolls ?? state.exchange?.engage?.enemyDice
   if (!dice) return null
   const cfg = state.config.combat.engage
   const damage = { hit: cfg.hitDamage, special: cfg.specialDamage, miss: 0 }
   return (
-    <div data-testid="enemy-dice">
+    <div data-testid="enemy-dice" className={bare ? styles.engageDiceGroup : undefined}>
       {heading ? (
         <h3 className={styles.subTitle}>
           {dice.length === 0
@@ -157,7 +178,10 @@ export function EnemyDice({
             : 'Enemy dice from adjacent enemies (locked: they hit you after your Skills)'}
         </h3>
       ) : null}
-      <ul className={styles.dice}>
+      <ul
+        className={bare ? styles.engageDiceList : styles.dice}
+        aria-label={bare ? 'Enemy dice' : undefined}
+      >
         {dice.map((d, i) => {
           const kind = enemyKindOf(state, d.enemy)
           const elite = kind === 'elite'

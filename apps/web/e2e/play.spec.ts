@@ -120,7 +120,7 @@ test('/play Combat v3: Combat cards offer their options, and Engage starts an en
   await expect(modal).toBeVisible()
   await expect(modal.getByRole('list', { name: 'Engagement steps' })).toContainText('Roll')
   await expect(modal.getByLabel('Dice', { exact: true })).toBeVisible()
-  await expect(modal.getByLabel('Enemy dice')).toBeVisible()
+  await expect(modal.getByTestId('engage-rolls')).toContainText('Rolls:')
   await expect(modal.getByLabel('Skills')).toBeVisible()
   // Esc never closes it mid-engagement.
   await page.keyboard.press('Escape')

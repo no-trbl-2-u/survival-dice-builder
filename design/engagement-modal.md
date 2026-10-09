@@ -15,9 +15,9 @@ scrolled between 4 places for 1 fight.
 | What to do now, in one sentence                                  |
 +-----------------------------------------------------------------+
 | Choose a target (only when needed)                              |
-+--------------------------+--------------------------------------+
-| Enemy dice (locked)      | Your dice                            |
-+--------------------------+--------------------------------------+
++-----------------------------------------------------------------+
+| felt: [enemy dice] | [your dice]               Rolls: [x][ ][ ]  |
++-----------------------------------------------------------------+
 | Skills: [Strike] [Shot] [Mend] [Guard] ... (wrapping row)        |
 +-----------------------------------------------------------------+
 | Cards you can add (only when legal)                              |
@@ -26,11 +26,12 @@ scrolled between 4 places for 1 fight.
 +-----------------------------------------------------------------+
 ```
 
-- **Desktop (1280x800):** the roll area on top (enemy dice beside your
-  dice, 2:3), the Skills under it as a horizontal, wrapping row of tiles,
-  then cards to add. Dice and the Skills they go on sit one above the other,
-  so the eye moves down, not across. Header, instruction line, and footer
-  are fixed; only the body scrolls.
+- **Desktop (1280x800):** 1 felt for the roll: the black enemy dice, a seam,
+  then your dice (black vs off-white is enough to tell them apart, so there
+  are no panel titles). The roll counter sits in the felt's top right corner
+  ("Rolls:" and 1 pip per roll, filled once used). The Skills sit under it
+  as a horizontal, wrapping row of tiles, then cards to add. Header,
+  instruction line, and footer are fixed; only the body scrolls.
 - **Phone (375 wide):** full screen, 1 column in play order (target, enemy
   dice, your dice, Skills, then cards). A compact header keeps every step
   name. The footer buttons share the width and stay on screen. When a target

@@ -1181,28 +1181,96 @@
 }
 
 .engageBody {
-  /* Top to bottom: a target pick, the roll area (enemy dice | your dice), the Skills in a
-     row-wrapping grid under it, then cards to add. */
-  display: grid;
-  align-content: start;
+  /* Top to bottom: a target pick, the felt (enemy dice, then yours), the Skills in a
+     row-wrapping grid under it, then cards to add. A flex column, each part at its own height
+     (a grid here measured the felt's row too short). */
+  display: flex;
+  flex-direction: column;
   gap: 12px;
   padding: 12px;
   min-height: 0;
   overflow: auto;
 }
 
+.engageBody > * {
+  flex: none;
+}
+
 .engageBody > section {
   margin: 0;
 }
 
-.engageDiceRow {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-  gap: 12px;
+/* One felt for the whole roll: the black enemy dice, a seam, then your dice. The roll counter
+   sits in the top right corner. */
+.engageFelt {
+  position: relative;
+  align-items: flex-start;
+  padding-top: 40px;
 }
 
-.engageDiceRow > section {
+.engageDiceGroup {
+  display: flex;
+}
+
+.engageDiceList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.engageFeltSplit {
+  align-self: stretch;
+  width: 2px;
+  margin-inline: 6px;
+  background: linear-gradient(transparent, rgb(0 0 0 / 0.45), transparent);
+  box-shadow: 1px 0 0 rgb(255 255 255 / 0.08);
+}
+
+.engageFeltNote {
+  margin: 0;
+  align-self: center;
+  color: #f3ead2;
+  font-size: var(--text-sm);
+}
+
+.engageFelt > canvas {
+  flex-basis: 100%;
+}
+
+.engageRolls {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: #f3ead2;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+}
+
+.engagePips {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.engagePip {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 2px solid #f3ead2;
+  opacity: 0.75;
+}
+
+.engagePip[data-used] {
+  border-color: var(--brass-hi, #e8c86a);
+  background: var(--brass-hi, #e8c86a);
+  opacity: 1;
 }
 
 /* The Skills run horizontally under the roll area. */
@@ -1336,7 +1404,7 @@
   }
 
   .engageBody {
-    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
     padding: 8px;
   }
 
@@ -1417,14 +1485,7 @@
     padding: 6px 10px;
   }
 
-  /* Phones: 1 column (target, enemy dice, your dice, Skills, cards). */
-  .engageDiceRow {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
-  }
-
-  .engageBody section[aria-label='Enemy dice'] .dice {
-    min-height: 0;
-    padding: 8px;
+  .engageFelt {
+    padding: 36px 8px 8px;
   }
 }

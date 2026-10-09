@@ -225,20 +225,16 @@ function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek 
         <div ref={targets} className={styles.engageTargetSlot}>
           <Targets state={state} legal={legal} act={act} />
         </div>
-        <div className={styles.engageDiceRow}>
-          <section className={styles.panel} aria-label="Enemy dice">
-            <h2 className={styles.panelTitle}>
-              {ex.engage?.enemyDice.length
-                ? 'Enemy dice · they hit you at the end'
-                : 'Enemy dice · none (no enemy next to you)'}
-            </h2>
-            <EnemyDice state={state} heading={false} />
-            {ex.engage?.enemyDice.length ? (
-              <p className={styles.muted}>
-                Locked: every die hits at the end, even if you defeat the enemy that rolled it.
-              </p>
-            ) : null}
-          </section>
+        <section className={`${styles.dice} ${styles.engageFelt}`} aria-label="Dice">
+          <RollPips
+            used={ex.rollsUsed}
+            max={state.config.combat.maxRolls}
+            cardRerolls={ex.step === 'reroll' ? ex.rerollsLeft : null}
+          />
+          <EnemyDice state={state} heading={false} bare />
+          {ex.engage?.enemyDice.length ? (
+            <span className={styles.engageFeltSplit} aria-hidden="true" />
+          ) : null}
           <DiceTray
             state={state}
             legal={legal}
@@ -248,8 +244,9 @@ function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek 
             dice3d={dice3d}
             enemyDice={false}
             controls={false}
+            bare
           />
-        </div>
+        </section>
         <SkillBoard
           state={state}
           legal={legal}
@@ -282,6 +279,28 @@ function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek 
         </span>
       </footer>
     </>
+  )
+}
+
+/**
+ * The roll counter in the felt's corner: 1 pip per roll, filled for each roll used. During a
+ * card's reroll it also says how many card rerolls are left.
+ */
+function RollPips({
+  used,
+  max,
+  cardRerolls,
+}: Readonly<{ used: number; max: number; cardRerolls: number | null }>) {
+  return (
+    <p className={styles.engageRolls} data-testid="engage-rolls">
+      <span>Rolls:</span>
+      <span role="img" aria-label={`Roll ${used} of ${max}`} className={styles.engagePips}>
+        {Array.from({ length: max }, (_, i) => (
+          <span key={i} className={styles.engagePip} data-used={i < used || undefined} />
+        ))}
+      </span>
+      {cardRerolls !== null ? <span>· card rerolls {cardRerolls}</span> : null}
+    </p>
   )
 }
 
