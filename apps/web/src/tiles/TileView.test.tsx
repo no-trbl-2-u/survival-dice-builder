@@ -29,6 +29,18 @@ describe('TileSheet', () => {
     const { container } = render(<TileSheet />)
     expect(container.querySelectorAll('[data-tile]')).toHaveLength(9)
   })
+
+  it('groups the tiles under an H2 per kind, each tile name an H3', () => {
+    const { container } = render(<TileSheet />)
+    const h2s = [...container.querySelectorAll('h2')].map((h) => h.textContent)
+    expect(h2s).toEqual(['Base tile', 'Countryside tiles', 'Core tiles'])
+    for (const kind of ['base', 'countryside', 'core'] as const) {
+      const names = [...container.querySelectorAll(`[data-tile-kind="${kind}"] h3`)].map(
+        (h) => h.textContent,
+      )
+      expect(names).toEqual(defaultContent.tiles.filter((t) => t.kind === kind).map((t) => t.name))
+    }
+  })
 })
 
 describe('TileSheet hex list', () => {

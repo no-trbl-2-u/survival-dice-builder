@@ -18,15 +18,6 @@
 - suggested fix: Add "the rules questions that wait on you" linked to /decisions to the "Also:" line.
 - source: web-fetch
 
-### [LOW] /tiles — the tiles are one flat grid with no headings
-- pass: 8 (commit c9bd27d)
-- viewport: n/a (web-fetch)
-- category: a11y
-- observation: The lede names Base, countryside and core tiles, and the doc comment says "grouped by kind", but the sheet is one grid with no H2 or H3. Tile names are <strong>, so screen-reader users cannot jump from tile to tile by heading.
-- evidence: `apps/web/src/tiles/TileSheet.tsx:18-19`, `:26`, `:46-51`.
-- suggested fix: Group the grid under an H2 per kind (Base, Countryside, Core) and make each tile name an H3.
-- source: web-fetch
-
 ### [LOW] / — the Combat step is one long sentence chain
 - pass: 8 (commit c9bd27d)
 - viewport: n/a (web-fetch)
@@ -61,6 +52,17 @@
 > Pass 8 note: web-fetch engine (cloud, no browser). Every route served only the app shell, so the reader read the shipped copy from source. 2 reader observations were not filed (cap): the /decisions lede counts "rule readings" and "checks" without saying what they are (LOW, partly covered by the status-line row); index.html has no canonical link or Open Graph tags (LOW). The pass 5 observation about raw step ids is no longer true on /play; that form now appears only on /debug.
 
 ## Done
+
+### [x] [LOW] /tiles — the tiles are one flat grid with no headings
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: The lede names Base, countryside and core tiles, and the doc comment says "grouped by kind", but the sheet is one grid with no H2 or H3. Tile names are <strong>, so screen-reader users cannot jump from tile to tile by heading.
+- evidence: `apps/web/src/tiles/TileSheet.tsx:18-19`, `:26`, `:46-51`.
+- suggested fix: Group the grid under an H2 per kind (Base, Countryside, Core) and make each tile name an H3.
+- source: web-fetch
+- issue: #56
+- fixed: (this commit) — the sheet has an H2 per kind (Base tile, Countryside tiles, Core tiles) and each tile name is an H3
 
 ### [x] [LOW] all pages — the main nav is inside <main> and there is no skip link
 - pass: 8 (commit c9bd27d)
