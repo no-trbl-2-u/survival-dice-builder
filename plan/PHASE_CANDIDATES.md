@@ -36,6 +36,7 @@
   - Pass 5 reader note (not filed, cap): the phase bar and live region print raw step ids such as "Exchange: cards".
   - Commits since pass 4: b91436a (Tower named by id), 86ed988 (starter cards named by id), c30dc34 and 7bb9d7c (Combat model internal labels). Each fixed one surface by hand.
   - Source: ids still reach player text in `apps/web/src/map/places.ts:105` (map piece names), `apps/web/src/play/PlayMap.tsx:214` (enemy aria labels), `apps/web/src/play/describeEvent.ts:55,61` (log), `apps/web/src/debug/describeAction.ts:19` (/play choice buttons), and `apps/web/src/config/ConfigPage.tsx:101,473,505` (pick lists, presets).
+- progress 2026-10-09 (phase 24, 09780d9): the engagement modal, the map's enemy labels, the enemy dice, and Tower-target buttons now use `enemyLabel` (kind and place). Still on ids: the play log (`describeEvent.ts` `enemyLabel`), /play choice buttons through `describeAction`, and the /config pick lists and presets.
 - rationale:
   - 4 commits and 3 pending rows share one cause: each surface names engine pieces itself, and the fallback is the id. One `/iterate` tick per surface fixes the symptom; the next new surface brings it back.
   - Two enemies of one kind on one terrain differ only by id, so the fix needs a naming rule (kind, place, and a plain ordinal when two still match), not a string swap.

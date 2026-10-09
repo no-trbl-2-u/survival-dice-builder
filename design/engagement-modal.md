@@ -201,3 +201,6 @@ engagements at 1280x800 and 375x812.
   Star meanings come late; a fifth Skill and the target pick still need
   scrolling on phones; the mini-map label can cover tokens; Roll again
   stays on with every die kept.
+- Next round: give each tester its own browser context. In round 4 both
+  agents drove one shared Playwright tab for a while (one page jumped to the
+  other's seed), and each had to discard those runs.

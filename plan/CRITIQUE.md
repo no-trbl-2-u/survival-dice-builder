@@ -9,6 +9,24 @@
 
 ## Pending
 
+### [LOW] /play — a hex next to an enemy that costs too much just isn't offered, with no reason
+- pass: session residue (2026-10-09)
+- viewport: n/a
+- category: comprehension
+- observation: With `combat.moveCostNextToEnemy` above 1 (an option since 2026-10-09; the default is now 1), a step next to an enemy costs more, and with too few move points left the hex is simply not highlighted. The designer hit this before the default changed and could not tell why.
+- evidence: session 2026-10-09; `packages/engine/src/movement/move.ts:51`; `apps/web/src/play/PlayMap.tsx` offers only legal hexes
+- suggested fix: When the option is above 1, mark such hexes ("costs 2: next to an enemy") or say it in the Move banner.
+- source: user
+
+### [LOW] sim — the bot cannot measure today's designer changes
+- pass: session residue (2026-10-09)
+- viewport: n/a
+- category: sim
+- observation: The phase 23 report says the bot never picks targets to defeat enemies before their dice hit, so the `defeatedDice` gap is a floor. The draft pool (`draft.unpicked: "pool"`) left both pinned sim batches unchanged, because bot runs rarely reach a second draft. The hand now stays across engagements, but the bot discards whole hands, so longer Combats are under-measured.
+- evidence: session 2026-10-09; `docs/reports/phase-23-defeated-dice.md`; `tools/sim/src/run.test.ts` pins unchanged by 256bdb4; `packages/bot/src/policy.ts`
+- suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
+- source: user
+
 ### [MED] /play — the result after a target pick can read as skipped
 - pass: blind-round-4 (phase 24)
 - viewport: 1280x800 and 375x812
