@@ -380,7 +380,7 @@
   },
   "options.skillUses": {
     "label": "Skill uses",
-    "help": "How often each Skill fires in one combat exchange.",
+    "help": "How often each Skill can fire in one exchange or engagement. Default (designer, 2026-10-09): unlimited, as long as the dice fill it again.",
     "rule": "18.1, 7.8 step 6",
     "options": {
       "once-per-exchange": "Once per exchange",

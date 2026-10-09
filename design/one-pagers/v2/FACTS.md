@@ -203,7 +203,7 @@ Terms that appear in the sources and the tabletop term the sheets use instead. B
 - F-117 [OQ 23 decided]: Cards are played one at a time in any order. "Reroll N dice" rerolls that many different dice, picked one at a time; the player may stop early. "Reroll all" rerolls every die, kept or not. Card rerolls do not count toward the 3-roll maximum.
 - F-118 [OQ 22 decided]: A card's "+N damage" is added once to the first damage Skill that fires this exchange (to each of its targets); it is lost if no damage Skill fires.
 - F-119 [v2 Combat 5.3; Spec v1 7.8 steps 6-7]: Put dice on Skills; use each die 1 time only and each Skill 1 time only; fire every Skill whose faces are all covered.
-- F-120 [prototype value config.default.json options.skillUses]: Each Skill fires once per exchange (standard); unlimited is a playtest option (Spec v1 18.1).
+- F-120 [prototype value config.default.json options.skillUses]: A Skill may fire any number of times per exchange or engagement while the dice fill it (designer change 2026-10-09); once per exchange is an option (Spec v1 18.1).
 - F-121 [Spec v1 Table 3, Table 9]: Range: Strike range 1, Shot range 2; supply Skill ranges as listed in F-042 to F-044. "Each enemy, range 2" Skills hit every enemy within 2 hexes.
 - F-122 [v2 Combat 5.4]: Each enemy next to you that has you as its target attacks you (grunt: 2 damage). Guard takes damage first, then health. Guard is removed; played cards go to the discard pile (overrides Spec v1 7.8 step 8 "each enemy next to you attacks you").
 - F-123 [Spec v1 9.5, 9.6, Table 4]: Grunt attack 2 damage fixed, no dice. Elite attack: roll 6 action dice; Sword, Wand, Bow 1 damage each; Star 2; Shield, Blank 0.

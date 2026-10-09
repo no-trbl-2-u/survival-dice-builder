@@ -174,7 +174,7 @@
   "options": {
     "boughtCards": "add",
     "maxLevel": null,
-    "skillUses": "once-per-exchange"
+    "skillUses": "unlimited"
   },
   "rulings": {
     "enemiesPerHex": 1,

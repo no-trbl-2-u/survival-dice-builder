@@ -33,14 +33,16 @@ describe('the default batch (hand of 5, OPEN-QUESTIONS row 71)', () => {
       6,
       [5, 7],
       5,
-      14,
+      16,
     ])
     expect(s.causes).toEqual({ base: 200 })
+    // Skills fire as often as the dice fill them (designer change 2026-10-09).
     expect(s.milestones).toEqual({
       'survive-round-5': 200,
-      'buy-upgrades': 80,
-      'survive-round-10': 18,
-      'defeat-elite': 10,
+      'buy-upgrades': 83,
+      'survive-round-10': 14,
+      'defeat-elite': 14,
+      'survive-round-15': 1,
     })
   })
 })

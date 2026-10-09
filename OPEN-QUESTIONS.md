@@ -126,6 +126,13 @@ per-card heal targets (row 12), the experience curve (row 17, after the
 phase 21 experiments), upgraded Skill tiers and Skill caps (rows 9, 46,
 50), and Build versus Repair (rows 30, 49).
 
+## Designer change 2026-10-09
+
+- Rules 18.1, 7.8 step 6: a Skill may fire any number of times in an
+  exchange or engagement, as long as the dice fill it again. The default
+  `options.skillUses` is now `unlimited`; `once-per-exchange` stays as an
+  option. Fold into the next rules issue.
+
 ## Physical edition constraint (standing)
 
 The designer intends a physical board game. Every reading

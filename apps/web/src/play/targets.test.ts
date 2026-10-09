@@ -92,8 +92,16 @@ describe('planPlacement (several dice on 1 Skill)', () => {
   it('is null when the chosen dice do not all fit that Skill', () => {
     const s = engagementWith(['Sword', 'Wand', 'Sword'])
     expect(planPlacement(s, 'cleave', [0, 1])).toBeNull()
-    expect(planPlacement(s, 'strike', [0, 2])).toBeNull()
     expect(planPlacement(s, 'cleave', [])).toBeNull()
+    // Once per exchange: a second Sword cannot fire Strike again.
+    const once = {
+      ...s,
+      config: {
+        ...s.config,
+        options: { ...s.config.options, skillUses: 'once-per-exchange' as const },
+      },
+    }
+    expect(planPlacement(once, 'strike', [0, 2])).toBeNull()
   })
 
   it('1 die fits a 1-face Skill', () => {
