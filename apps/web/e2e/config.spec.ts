@@ -57,7 +57,7 @@ test('/config: leaving with unsaved edits warns; Reset asks first', async ({ pag
     warned = dialog.type() === 'beforeunload'
     void dialog.dismiss()
   })
-  await page.getByRole('link', { name: 'Tiles' }).click()
+  await page.getByRole('link', { name: 'Tile sheet' }).click()
   await expect.poll(() => warned).toBe(true)
   await expect(page).toHaveURL(/\/config$/)
 

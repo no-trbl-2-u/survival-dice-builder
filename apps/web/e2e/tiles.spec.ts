@@ -47,7 +47,7 @@ test('/tiles at 375px has no horizontal scroll', async ({ page }) => {
 test('navigation links reach both pages', async ({ page }) => {
   await page.goto('/')
   const nav = page.getByRole('navigation', { name: 'Main' })
-  await nav.getByRole('link', { name: 'Tiles' }).click()
+  await nav.getByRole('link', { name: 'Tile sheet' }).click()
   await expect(page).toHaveURL(/\/tiles$/)
   await nav.getByRole('link', { name: 'Home' }).click()
   await expect(page.locator('polygon[data-hex]')).toHaveCount(7)

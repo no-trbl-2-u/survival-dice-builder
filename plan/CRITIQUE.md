@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] all pages — nav labels "Tiles" and "Debug" do not match the page headings
-- pass: 9 (commit e859de5)
-- viewport: n/a (web-fetch)
-- category: navigation
-- observation: The nav says "Tiles" and "Debug", but the pages they open are headed "Tile sheet" and "Engine console".
-- evidence: `apps/web/src/App.tsx:17,19` nav labels vs `:32,34` route titles.
-- suggested fix: Use one name per page: nav "Tile sheet" and "Engine console", or rename the headings to match the nav.
-- source: web-fetch
-
 ### [LOW] all pages — design tools sit in the nav as equals of Play
 - pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
@@ -97,6 +88,17 @@
 > Pass 8 note: web-fetch engine (cloud, no browser). Every route served only the app shell, so the reader read the shipped copy from source. 2 reader observations were not filed (cap): the /decisions lede counts "rule readings" and "checks" without saying what they are (LOW, partly covered by the status-line row); index.html has no canonical link or Open Graph tags (LOW). The pass 5 observation about raw step ids is no longer true on /play; that form now appears only on /debug.
 
 ## Done
+
+### [x] [LOW] all pages — nav labels "Tiles" and "Debug" do not match the page headings
+- pass: 9 (commit e859de5)
+- viewport: n/a (web-fetch)
+- category: navigation
+- observation: The nav says "Tiles" and "Debug", but the pages they open are headed "Tile sheet" and "Engine console".
+- evidence: `apps/web/src/App.tsx:17,19` nav labels vs `:32,34` route titles.
+- suggested fix: Use one name per page: nav "Tile sheet" and "Engine console", or rename the headings to match the nav.
+- source: web-fetch
+- issue: #61
+- fixed: (this commit) — the nav reads "Tile sheet" and "Engine console", the page headings; e2e checks every nav label is its page heading
 
 ### [x] [MED] all pages — rules sections are cited but the rules are never linked
 - pass: 9 (commit e859de5)

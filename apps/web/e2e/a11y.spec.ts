@@ -4,9 +4,9 @@ const ROUTES = [
   ['/', 'Home', 'Survival Dice-Builder'],
   ['/play', 'Play', 'Play - Survival Dice-Builder'],
   ['/config', 'Config', 'Config - Survival Dice-Builder'],
-  ['/tiles', 'Tiles', 'Tile sheet - Survival Dice-Builder'],
+  ['/tiles', 'Tile sheet', 'Tile sheet - Survival Dice-Builder'],
   ['/decisions', 'Decisions', 'Decisions - Survival Dice-Builder'],
-  ['/debug', 'Debug', 'Engine console - Survival Dice-Builder'],
+  ['/debug', 'Engine console', 'Engine console - Survival Dice-Builder'],
   ['/credits', 'Credits', 'Credits - Survival Dice-Builder'],
 ] as const
 
@@ -20,6 +20,8 @@ for (const [path, link, title] of ROUTES) {
       'aria-current',
       'page',
     )
+    // The nav label is the page heading, so a link lands on the page it names.
+    if (path !== '/') await expect(page.getByRole('heading', { level: 1 })).toHaveText(link)
     // Up to 10 presses, but never past the last focusable control (focus then leaves the page).
     const focusable = await page
       .locator('a[href], button, input, select, textarea, [tabindex="0"]')

@@ -9,14 +9,14 @@ import { PlayPage } from './play/PlayPage.tsx'
 import { documentTitle, matchRoute, SITE_NAME, type Route } from './router.tsx'
 import { TileSheet } from './tiles/TileSheet.tsx'
 
-/** The nav links, in order; each path is a route below. */
+/** The nav links, in order; each path is a route below, and each label is its page heading. */
 const NAV: readonly (readonly [path: string, label: string])[] = [
   ['/', 'Home'],
   ['/play', 'Play'],
   ['/config', 'Config'],
-  ['/tiles', 'Tiles'],
+  ['/tiles', 'Tile sheet'],
   ['/decisions', 'Decisions'],
-  ['/debug', 'Debug'],
+  ['/debug', 'Engine console'],
   ['/credits', 'Credits'],
 ]
 

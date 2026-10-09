@@ -3,6 +3,42 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-09 (pass 24, cloud tick)
+
+## Top 5 findings (scored)
+
+### [x] [3.6] all pages: nav labels "Tiles" and "Debug" do not match the page headings (critique LOW, pass 9)
+- category: external-critique (navigation)
+- impact: 4 (the nav is on every page; two of its seven links land on a page with another name)
+- ease: 9
+- next: nav labels "Tile sheet" and "Engine console"; e2e checks each nav label is its page heading
+- issue: #61
+- fixed: (this commit)
+
+### [ ] [2.8] /play: enemy choice buttons name enemies by engine id (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: waits on the "Player names for every map piece" candidate
+
+### [ ] [2.7] /: home page does not link /decisions (critique LOW)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 9
+- next: add the Decisions link to the "Also:" line
+
+### [ ] [2.7] all pages: one meta description and og:url for every route, no canonical (critique LOW, pass 9)
+- category: seo
+- impact: 3
+- ease: 9
+- next: covered by the "Static HTML for each page" candidate, or set canonical and og:url in the route effect
+
+### [ ] [2.7] /config: the save message names "/play", not the Play page (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: "Saved. New runs on the Play page use this config."
+
 # Site audit — 2026-10-09 (pass 23, cloud tick)
 
 ## Top 5 findings (scored)
