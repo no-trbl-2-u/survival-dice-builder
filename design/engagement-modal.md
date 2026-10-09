@@ -9,10 +9,10 @@ scrolled between 4 places for 1 fight.
 
 ```
 +-----------------------------------------------------------------+
-| Engagement vs elite e8      [Look at the board]  Health · Guard |
+| Engagement vs 2 grunts and 1 elite  [Look at the board]  Health |
 | (1 Roll) (2 Use dice) (3 Pick target) (4 Result)                |
 +-----------------------------------------------------------------+
-| What to do now, in one sentence                                  |
+| What to do now: short sentences (one short line on phones)      |
 +-----------------------------------------------------------------+
 | Choose a target (only when needed)                              |
 +-----------------------------------------------------------------+
@@ -47,26 +47,42 @@ scrolled between 4 places for 1 fight.
 - **Targets on a mini map.** When a fired attack Skill needs a target, the
   target box at the top of the body shows a small, fixed map framed on the
   player (radius: the Skill's range + 1) beside one button per target
-  ("Strike hits elite e8 (health 14/14)"). Enemies in range glow orange and
+  ("Strike hits elite, 1 hex east (health 14/14)"). Enemies in range glow orange and
   are clickable; the rest of the map is drawn but inert. Hovering or
-  focusing an enemy or its button lights both up (white ring, green glow).
+  focusing an enemy or its button lights both up (white ring, green glow),
+  and the highlighted enemy gets a label beside its token: its name
+  ("grunt, 1 hex east") and health, right of the token or left near the
+  edge. Orange rings keep meaning "in range"; no legend.
   The buttons stay as the keyboard and screen-reader way. It reuses PlayMap
   (new props: `around`, `fixed`, `highlight`, `onHighlight`). On a phone the
   buttons come first, the map under them. Several fired Skills resolve one
   at a time, the queue's head first.
 - **Board clicks count.** A target clicked on the main map during "Look at
-  the board" resolves too, and the modal comes back at once to show the next
-  step or the result.
-- **Who you face.** The title names every enemy that rolled dice; health and
-  guard sit top right, because the enemy dice hit them at the end.
+  the board" resolves too, and the modal comes back to show the next step or
+  the result (after the 1.2s step-aside when the pick dealt damage).
+- **Who you face.** The title counts the enemies that rolled dice by kind
+  ("vs 2 grunts and 1 elite"); health and guard sit top right, because the
+  enemy dice hit them at the end. Enemies are named by kind and place
+  ("grunt, 1 hex east"; "grunt, on your hex"; " (1)", " (2)" when two share
+  a name) everywhere in the modal; `/debug` keeps engine ids.
+- **No pre-selected die** (designer 2026-10-09). At Use dice nothing is
+  selected until the player taps dice, then a Skill; meanwhile every Skill
+  the free dice can fill shows "can fire".
 - **One primary action.** Brass button, bottom right: Stop rolling: use these dice / Done
   adding cards / Stop rerolling / End engagement: enemy dice hit. During a
   target pick the target buttons are the primary actions.
 - **The result.** When the engagement ends the modal stays open on
   "Engagement over" with a 1-line verdict ("You defeated 1 enemy and took no
-  damage."), the enemy dice, the Skills that fired, damage dealt, hits taken
+  damage."; "... and your guard stopped 2 damage." when only the guard was
+  hit), read out to screen readers (`role="status"`), the enemy dice, the Skills that fired, damage dealt, hits taken
   (guard / health), rewards, and the full event list under a disclosure.
   "Back to the board" closes it and scrolls the page to the map.
+- **Phone fit (760px and narrower).** One short instruction line ("Pick dice,
+  then a Skill."; screen readers still hear the long one), the Skills in a
+  2-column grid with half padding, a 0.75rem effect text and "2 in range" /
+  "none in range", and the Skills heading heard but not shown. At 375x812
+  with 6 dice and the 4 starter Skills, the last die and the whole Skill
+  grid are on screen together at Use dice (an e2e test measures it).
 - **"Can fire" is green in the modal**, not red (red read as a warning), and
   the Use dice instruction says a Star fits any slot and that the enemy dice
   hit once no die is left.
@@ -90,7 +106,16 @@ scrolled between 4 places for 1 fight.
   player is already looking. A × keeps the card in hand.
 - Not drag-only: a tap, Enter or Space on a card plays it the same way (or
   opens the chips), and each card's label names its options.
-- Reduced motion: no pulse, no card slide.
+- Reduced motion: no pulse, no card slide, no nudge.
+- **First-time nudge.** The first time cards become playable in a run, the
+  first playable card rises 14px toward the felt, tilts, and settles back
+  (700ms, once, no words). Per run, not stored.
+- **Phones and touch.** The hand scrolls sideways when it overflows. On a
+  card, sideways is scroll (`touch-action: pan-x`) and mostly-upward is
+  drag: a press lifts the card only after it has moved 6px and more up than
+  sideways. A held finger opens no menu (no callout, no selection, context
+  menu prevented). `touch.spec.ts` drags with real touch events on a
+  `mobile-touch` Playwright project (Pixel 7).
 
 ## Behaviour
 
@@ -98,6 +123,14 @@ scrolled between 4 places for 1 fight.
   trapped, and the backdrop dims the board.
 - Esc closes only the result screen. Mid-engagement it does nothing, since
   closing would hide choices the engine is waiting on.
+- **Step aside after a target pick.** When a pick damages an enemy, the modal
+  closes (no paused bar), the board scrolls the enemy into view, and the
+  damage floats up off it in red ("-2", 0.9s rise and fade; a defeated
+  enemy's token fades with it). After 1.2s the modal comes back on the next
+  step or the result. Fixed, not skippable, no controls. A hidden status
+  line outside the dialog reads it out ("Strike hit grunt, 1 hex east for 2.
+  1 health left."). Reduced motion: the number shows, still, for the same
+  1.2s. Heals, guard, and a Skill with no enemy do not step aside.
 - "Look at the board" hides the modal and leaves a bar at the bottom of the
   screen ("Back to the engagement"), for checking positions before a target.
 - Focus: on open, the primary action; after each action, the new step's
@@ -105,12 +138,15 @@ scrolled between 4 places for 1 fight.
 - Rules stay in the engine. Every button is a legal action; the step strip
   and the instruction only name `exchange.step`.
 
-## Dev tooling (temporary)
+## Dev tooling (kept)
 
-`Force engagement (dev)` and `Force target pick (dev)` in the footer, dev
-server only (`import.meta.env.DEV`), play the bot forward to an engagement
-(or to a target pick). Remove them with `apps/web/src/play/devEngage.ts`
-once the modal is signed off. `?dice=N` (dev server only) starts each player
+Kept for testing (designer 2026-10-09); never in a production build.
+`Force engagement (dev)`, `Force target pick (dev)`, and `Force elite
+engagement (dev)` in the footer, dev server only (`import.meta.env.DEV`),
+play the bot forward to an engagement (to a target pick; to an engagement
+with an elite die). When no elite comes up, Force elite engagement places
+one elite (full health, id `dev-elite`) next to the player at the first
+legal Engage and applies that Engage through the engine. `?dice=N` (dev server only) starts each player
 with N dice, to see a crowded felt: 8 dice fit 1 row at 1024 and 1280 wide,
 2 rows on a 375 phone.
 
@@ -149,3 +185,19 @@ engagements at 1280x800 and 375x812.
   is often not the one wanted; no in-modal damage note after a target pick;
   on phones, cards peek under the footer and the felt plus Skills need
   scrolling; real touch (long-press vs scroll) is untested.
+- Round 4 (phase 24: elites, die picking, the board damage number), at
+  1280x800 and 375x812, each tester playing two engagements, one against an
+  elite (Force elite engagement). Both finished every engagement; nothing
+  blocked, and no rule was misread (a defeated grunt's die still hitting is
+  the designer's rule, `defeatedDice: "hit"`). Confirmed: nothing
+  pre-selected and "can fire" from the start; place names on target buttons
+  and enemy dice ("Strike hits elite, 1 hex north-west (health 14/14)");
+  the elite's 2 dice and gold labels; the step strip and one-line prompts;
+  at 375 the dice and the 4 starter Skills fit together. Filed as
+  `blind-round-4` rows in `plan/CRITIQUE.md`: the step-aside before the
+  result can read as a skipped result; a 2-slot Skill at 1 die gives no
+  hint; the result does not name who took damage or their health after;
+  "in range" counts versus the engaged enemies; card timing, Special, and
+  Star meanings come late; a fifth Skill and the target pick still need
+  scrolling on phones; the mini-map label can cover tokens; Roll again
+  stays on with every die kept.

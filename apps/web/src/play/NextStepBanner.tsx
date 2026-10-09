@@ -1,6 +1,6 @@
 import type { Action, GameState } from '@survival/engine'
 import { ActionLabel } from '../debug/ActionLabel.tsx'
-import { bannerActions, nextStep } from './nextStep.ts'
+import { bannerActions, nextStep, towerTargetLabel } from './nextStep.ts'
 import styles from './Play.module.css'
 
 type Props = Readonly<{
@@ -30,7 +30,11 @@ export function NextStepBanner({ state, legal, act }: Props) {
         <div className={styles.bannerActions}>
           {extra.map((a) => (
             <button key={JSON.stringify(a)} type="button" onClick={() => act(a)}>
-              <ActionLabel action={a} state={state} />
+              {a.type === 'chooseTowerTarget' ? (
+                towerTargetLabel(state, a)
+              ) : (
+                <ActionLabel action={a} state={state} />
+              )}
             </button>
           ))}
         </div>

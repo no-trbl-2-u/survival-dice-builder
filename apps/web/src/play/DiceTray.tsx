@@ -9,6 +9,7 @@ import { lazy, Suspense } from 'react'
 import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { enemyFaceText } from './effectText.ts'
+import { enemyLabel, playerHex } from './engageView.ts'
 import styles from './Play.module.css'
 import { firstOf, placementsFor } from './targets.ts'
 
@@ -189,7 +190,7 @@ export function EnemyDice({
         {dice.map((d, i) => {
           const kind = enemyKindOf(state, d.enemy)
           const elite = kind === 'elite'
-          const who = `${kind ?? 'enemy'} ${d.enemy}`
+          const who = enemyLabel(state, d.enemy, playerHex(state))
           const text = enemyFaceText(d.face, state.config.combat.engage)
           return (
             <li key={i} className={styles.dieItem}>

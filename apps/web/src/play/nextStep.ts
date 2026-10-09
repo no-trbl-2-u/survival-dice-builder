@@ -1,5 +1,6 @@
 import { enemiesInRange, type Action, type GameState } from '@survival/engine'
 import { defenseName } from '../map/places.ts'
+import { enemyLabel } from './engageView.ts'
 import { ofType } from './targets.ts'
 
 /** What the player does next: the phase it belongs to, and the step in plain words. */
@@ -94,6 +95,27 @@ function attackInReach(state: GameState): boolean {
     const effect = state.content.skills.find((s) => s.id === id)?.effect
     return effect?.kind === 'damage' && enemiesInRange(state, effect.range).length > 0
   })
+}
+
+/**
+ * A Tower-target button: the enemy by kind and place seen from the Tower, and its health. The
+ * Tower itself is not named again (the banner line already says which Tower shoots).
+ *
+ * @param state - the game state.
+ * @param action - a `chooseTowerTarget` action.
+ */
+export function towerTargetLabel(
+  state: GameState,
+  action: Extract<Action, { type: 'chooseTowerTarget' }>,
+): string {
+  const tower = state.defenses.find((d) => d.id === action.tower)
+  const enemy = state.enemies.find((e) => e.id === action.enemy)
+  const max = state.content.enemies.enemies.find((x) => x.id === enemy?.kind)?.health
+  const name = tower
+    ? enemyLabel(state, action.enemy, tower.hex)
+    : enemyLabel(state, action.enemy, { q: 0, r: 0 })
+  const away = tower ? `${name.replace('on your hex', 'on its hex')} of the Tower` : name
+  return `Shoot ${away}${enemy ? ` (health ${enemy.health}/${max ?? enemy.health})` : ''}`
 }
 
 /**

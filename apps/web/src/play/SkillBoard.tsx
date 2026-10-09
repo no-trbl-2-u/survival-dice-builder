@@ -155,13 +155,26 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
   )
 }
 
-/** How many enemies an attack Skill can reach from the figure now. */
+/**
+ * How many enemies an attack Skill can reach from the figure now; phones (760px and narrower)
+ * show a short form ("2 in range", "none in range"), screen readers always hear the long one.
+ */
 function InReach({ count }: Readonly<{ count: number }>) {
   return count === 0 ? (
-    <span className={styles.outOfRange}>No enemy in range: it would hit nothing</span>
+    <span className={styles.outOfRange}>
+      <span className={styles.reachLong}>No enemy in range: it would hit nothing</span>
+      <span className={styles.reachShort} aria-hidden="true">
+        none in range
+      </span>
+    </span>
   ) : (
     <span className={styles.inRange}>
-      {count} {count === 1 ? 'enemy' : 'enemies'} in range
+      <span className={styles.reachLong}>
+        {count} {count === 1 ? 'enemy' : 'enemies'} in range
+      </span>
+      <span className={styles.reachShort} aria-hidden="true">
+        {count} in range
+      </span>
     </span>
   )
 }

@@ -56,6 +56,17 @@ export function placementsFor(legal: readonly Action[], die: number): Of<'assign
 }
 
 /**
+ * The dice the player has chosen for a Skill: only what they picked (nothing is pre-selected),
+ * without dice that no longer fit any Skill.
+ *
+ * @param legal - the legal actions now.
+ * @param picked - the dice the player picked, or null before the first pick.
+ */
+export function chosenDice(legal: readonly Action[], picked: readonly number[] | null): number[] {
+  return (picked ?? []).filter((die) => placementsFor(legal, die).length > 0)
+}
+
+/**
  * The placements that put every chosen die on 1 Skill, in order: each step is a legal
  * `assignDie` of the state the steps before it leave, so the engine still decides every
  * placement (a Skill that fills fires at once in Combat v3, so later dice cannot follow it).

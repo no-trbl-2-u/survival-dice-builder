@@ -9,41 +9,77 @@
 
 ## Pending
 
-### [MED] /play — the engagement result is not announced to screen readers
-- pass: 10 (commit 10fd9d1)
-- viewport: n/a (web-fetch)
-- category: a11y
-- observation: When an engagement ends, the live instruction line is replaced by a result headline that is not a live region, and focus moves to "Back to the board". A screen-reader user hears the button but not the result, such as "You were knocked out."
-- evidence: `apps/web/src/play/EngagementModal.tsx:236` `aria-live="polite"` is on the instruction only; the headline `<p data-testid="engage-headline">` near line 461 has no live role.
-- suggested fix: Give the result headline `role="status"`, or point the dialog's `aria-describedby` at it.
-- source: web-fetch
-
-### [LOW] /play — the engagement headline says "took no damage" when enemy dice hit the guard
-- pass: 10 (commit 10fd9d1)
-- viewport: n/a (web-fetch)
+### [MED] /play — the result after a target pick can read as skipped
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
 - category: comprehension
-- observation: The result headline says "took no damage" whenever health did not drop. The line below can then say "2 enemy dice hit you: 2 to guard, 0 to health", so the two lines seem to disagree.
-- evidence: `apps/web/src/play/engageView.ts:125` `s.toHealth > 0 ? ... : 'took no damage'`; `EngagementModal.tsx:456` the hits line.
-- suggested fix: When `toGuard > 0` and `toHealth` is 0, say "your guard stopped <n> damage" in the headline.
-- source: web-fetch
+- observation: After the last target pick the modal steps aside to the bare board for about a second, then "Engagement over" appears. A tester thought the result screen had been skipped.
+- evidence: blind round 4 (2026-10-09), the step-aside before the result
+- suggested fix: Say on the board what comes next during the step-aside, or skip the step-aside when the pick ended the engagement.
+- source: blind-round-4
 
-### [LOW] /play — the engagement instructions run long and repeat themselves
-- pass: 10 (commit 10fd9d1)
-- viewport: n/a (web-fetch)
-- category: voice
-- observation: The assign-step instruction joins clauses with a semicolon and a parenthesis, against the short-sentence style. The roll-step instruction says "use them" twice.
-- evidence: `apps/web/src/play/engageView.ts:38-40` "Pick dice, then a Skill they fit (a Star fits any slot). A full Skill fires at once...; when no die is left, the enemy dice hit."; `engageView.ts:32` "...or stop rolling and use them. After the last roll, you use them."
-- suggested fix: Split into short sentences: "Select dice. Then choose a Skill they fit. A Star fits any slot. A full Skill fires at once. When no dice are left, the enemy dice hit."
-- source: web-fetch
+### [MED] /play — a Skill needing more dice than the player has gives no hint
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: Spark Burst needs a Wand and a Bow, but the player has 1 action die. Both testers asked whether it could ever fire.
+- evidence: blind round 4 (2026-10-09), the Skills with 2 slots at 1 die
+- suggested fix: Mark a Skill whose slots outnumber the player's dice ("needs 2 dice").
+- source: blind-round-4
 
-### [LOW] /play — at 375px the engagement hand has no room to scroll and tiny card text
-- pass: 10 (commit 10fd9d1)
-- viewport: mobile (from CSS, web-fetch)
-- category: mobile
-- observation: On phones the pinned hand shrinks cards to 70px with option text at 0.62rem (about 10px). The strip is centred with no horizontal scroll, so a hand of 5 fills the screen edge to edge and a larger hand would be cut off.
-- evidence: `apps/web/src/play/Play.module.css:1815-1825` `.stripCard { width: 70px }`, `.stripOptions { font-size: 0.62rem }`; `.cardStrip` (line 1575) is fixed with `justify-content: center` and no `overflow-x`.
-- suggested fix: Give `.cardStripList` `overflow-x: auto` with `justify-content: safe center`, and raise `.stripOptions` to at least 0.75rem.
-- source: web-fetch
+### [LOW] /play — the result does not say who took the damage or their health after
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: "You dealt 2 damage" does not name the elite or its health after (14 to 12); only the full event list does. The defeated grunt's die is labelled "grunt" with no mark that it was defeated.
+- evidence: blind round 4 (2026-10-09), the engagement result
+- suggested fix: Name each damaged enemy and its health left; mark a defeated enemy's dice.
+- source: blind-round-4
+
+### [LOW] /play — "in range" counts differ from the engaged enemies
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: The title says "vs 1 elite" while Shot says "3 enemies in range" (enemies within 2 hexes that did not roll). Testers read it as a contradiction.
+- evidence: blind round 4 (2026-10-09), the Skill reach line vs the title
+- suggested fix: Say what the count is ("3 in range, 1 engaged") or explain range against engaged.
+- source: blind-round-4
+
+### [LOW] /play — card timing and the Special face are explained only later
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: Cards are greyed while rolling with nothing saying when they become playable; the Special face (skull) means 2 damage only on the result; a Star's meaning shows only at Use dice.
+- evidence: blind round 4 (2026-10-09), the Roll step
+- suggested fix: A one-time note at Roll on when cards can be added; the Special and Star meanings at Roll.
+- source: blind-round-4
+
+### [LOW] /play — at 375px a fifth Skill, the target pick, and the hand still need scrolling
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: With 5 Skills the fifth sits behind the footer; during Pick target the map and list push the Skills off screen; the hand strip clips its option text and shows about 4 cards. At 1280x800 a long effect text is cut by the footer.
+- evidence: blind round 4 (2026-10-09), the modal at 375x812 and 1280x800
+- suggested fix: Fit 5+ Skills (3 columns or a smaller tile), and keep strip text whole.
+- source: blind-round-4
+
+### [LOW] /play — the mini-map target label can cover tokens
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: The "grunt, 1 hex north 2/2" label sits over neighbouring tokens and once hid the "You" figure; near the map edge the mini map shows enemies cut off and no hex tiles.
+- evidence: blind round 4 (2026-10-09), the target mini map
+- suggested fix: Place the label away from other tokens; frame the mini map on the map's hexes.
+- source: blind-round-4
+
+### [LOW] /play — Roll again stays on when every die is kept
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: After keeping the only die, "Roll again (2 left)" is still enabled though nothing would roll.
+- evidence: blind round 4 (2026-10-09), the Roll step
+- suggested fix: Disable or hide Roll again when no die is unkept (the engine offers the roll; the UI can say it rolls nothing).
+- source: blind-round-4
 
 ### [LOW] all pages — design tools sit in the nav as equals of Play
 - pass: 9 (commit e859de5)
@@ -99,15 +135,6 @@
 - suggested fix: Split into short sentences, and put Exchanges in its own sentence: "Before a run, you can choose Exchanges, the Combat in the written rules."
 - source: web-fetch
 
-### [LOW] /play — enemy choice buttons name enemies by engine id ("grunt e3")
-- pass: 7 (commit b91436a)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: Target, Tower-target, skirmish and resolve buttons name each enemy as "<kind> <id>", e.g. "Tower on Plains, 2 hexes north of the base centre shoots grunt e3 on Forest, 2 health". The Tower button repeats the Tower's full place, which the banner already gives. Two enemies on the same terrain differ only by the id.
-- evidence: `apps/web/src/debug/describeAction.ts:17-19` `enemyName` returns `${kind} ${id}`; used at `:71`, `:75`, `:88`, `:131`; banner at `apps/web/src/play/nextStep.ts:47`.
-- suggested fix: Name enemies by kind plus place (terrain and direction from the player or Tower, as `stepsAway` does), and leave the Tower out of Tower-target buttons.
-- source: web-fetch
-
 ### [LOW] /config — pick lists show internal ids next to names; presets show only ids
 - pass: 6 (commit e9a9406)
 - viewport: n/a (web-fetch)
@@ -117,7 +144,59 @@
 - suggested fix: Show only the name in options; label presets "Preset 1", "Preset 2".
 - source: web-fetch
 
-### [MED] /play — the pre-selected die is often not the one the player wants
+## Done
+
+### [x] [MED] /play — the engagement result is not announced to screen readers
+- pass: 10 (commit 10fd9d1)
+- viewport: n/a (web-fetch)
+- category: a11y
+- observation: When an engagement ends, the live instruction line is replaced by a result headline that is not a live region, and focus moves to "Back to the board". A screen-reader user hears the button but not the result, such as "You were knocked out."
+- evidence: `apps/web/src/play/EngagementModal.tsx:236` `aria-live="polite"` is on the instruction only; the headline `<p data-testid="engage-headline">` near line 461 has no live role.
+- suggested fix: Give the result headline `role="status"`, or point the dialog's `aria-describedby` at it.
+- source: web-fetch
+- fixed: phase 24 (this commit) — the result headline has `role="status"`; e2e checks it
+
+### [x] [LOW] /play — the engagement headline says "took no damage" when enemy dice hit the guard
+- pass: 10 (commit 10fd9d1)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The result headline says "took no damage" whenever health did not drop. The line below can then say "2 enemy dice hit you: 2 to guard, 0 to health", so the two lines seem to disagree.
+- evidence: `apps/web/src/play/engageView.ts:125` `s.toHealth > 0 ? ... : 'took no damage'`; `EngagementModal.tsx:456` the hits line.
+- suggested fix: When `toGuard > 0` and `toHealth` is 0, say "your guard stopped <n> damage" in the headline.
+- source: web-fetch
+- fixed: phase 24 (this commit) — the headline says "your guard stopped N damage" when only the guard was hit; unit test
+
+### [x] [LOW] /play — the engagement instructions run long and repeat themselves
+- pass: 10 (commit 10fd9d1)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: The assign-step instruction joins clauses with a semicolon and a parenthesis, against the short-sentence style. The roll-step instruction says "use them" twice.
+- evidence: `apps/web/src/play/engageView.ts:38-40` "Pick dice, then a Skill they fit (a Star fits any slot). A full Skill fires at once...; when no die is left, the enemy dice hit."; `engageView.ts:32` "...or stop rolling and use them. After the last roll, you use them."
+- suggested fix: Split into short sentences: "Select dice. Then choose a Skill they fit. A Star fits any slot. A full Skill fires at once. When no dice are left, the enemy dice hit."
+- source: web-fetch
+- fixed: phase 24 (this commit) — the instructions are short sentences, with a one-line short form on phones
+
+### [x] [LOW] /play — at 375px the engagement hand has no room to scroll and tiny card text
+- pass: 10 (commit 10fd9d1)
+- viewport: mobile (from CSS, web-fetch)
+- category: mobile
+- observation: On phones the pinned hand shrinks cards to 70px with option text at 0.62rem (about 10px). The strip is centred with no horizontal scroll, so a hand of 5 fills the screen edge to edge and a larger hand would be cut off.
+- evidence: `apps/web/src/play/Play.module.css:1815-1825` `.stripCard { width: 70px }`, `.stripOptions { font-size: 0.62rem }`; `.cardStrip` (line 1575) is fixed with `justify-content: center` and no `overflow-x`.
+- suggested fix: Give `.cardStripList` `overflow-x: auto` with `justify-content: safe center`, and raise `.stripOptions` to at least 0.75rem.
+- source: web-fetch
+- fixed: phase 24 (this commit) — the hand strip scrolls sideways; option text is at least 0.75rem on phones
+
+### [x] [LOW] /play — enemy choice buttons name enemies by engine id ("grunt e3")
+- pass: 7 (commit b91436a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: Target, Tower-target, skirmish and resolve buttons name each enemy as "<kind> <id>", e.g. "Tower on Plains, 2 hexes north of the base centre shoots grunt e3 on Forest, 2 health". The Tower button repeats the Tower's full place, which the banner already gives. Two enemies on the same terrain differ only by the id.
+- evidence: `apps/web/src/debug/describeAction.ts:17-19` `enemyName` returns `${kind} ${id}`; used at `:71`, `:75`, `:88`, `:131`; banner at `apps/web/src/play/nextStep.ts:47`.
+- suggested fix: Name enemies by kind plus place (terrain and direction from the player or Tower, as `stepsAway` does), and leave the Tower out of Tower-target buttons.
+- source: web-fetch
+- fixed: phase 24 (this commit) — enemies are named by kind and place in the modal, on the map, and on enemy dice; Tower-target buttons say "Shoot grunt, 2 hexes east of the Tower (health 2/3)" without naming the Tower again; /debug keeps ids
+
+### [x] [MED] /play — the pre-selected die is often not the one the player wants
 - pass: user-jot (commit d95a149)
 - viewport: unspecified
 - auth_state: anonymous
@@ -126,8 +205,9 @@
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; `apps/web/src/play/PlayPage.tsx` `firstFit` auto-pick
 - suggested fix: (user, 2026-10-09) no pre-selection: nothing is selected until the player taps dice, then a Skill.
 - source: user
+- fixed: phase 24 (this commit) — nothing is pre-selected; unit and e2e tests
 
-### [MED] /play — no in-modal note of the damage a target pick dealt
+### [x] [MED] /play — no in-modal note of the damage a target pick dealt
 - pass: user-jot (commit d95a149)
 - viewport: unspecified
 - auth_state: anonymous
@@ -136,8 +216,9 @@
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3
 - suggested fix: (user, 2026-10-09) after a target pick, the modal steps aside, a damage number ("-2") floats off the enemy on the board, and the modal comes back after a short delay.
 - source: user
+- fixed: phase 24 (this commit) — after a damaging pick the modal steps aside for 1.2s, -N floats off the enemy on the board, a status line reads it out, and the modal comes back; e2e checks it
 
-### [MED] /play — card drag on a real touch phone is untested
+### [x] [MED] /play — card drag on a real touch phone is untested
 - pass: user-jot (commit d95a149)
 - viewport: unspecified
 - auth_state: anonymous
@@ -146,18 +227,9 @@
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; `apps/web/src/play/CardStrip.tsx`; blind testers drove it with mouse events
 - suggested fix: (user, 2026-10-09) run a touch-emulated Playwright test (mobile Chrome, touch events) and fix what it finds; then the user tries the deployed site on a real phone.
 - source: user
+- fixed: phase 24 (this commit) — touch.spec.ts drags with CDP touch events on a mobile-touch (Pixel 7) project: up onto the felt plays a card with no page scroll; sideways scrolls the hand and plays nothing. The designer's real-phone check stays a follow-up
 
-### [LOW] /play — Heal is offered (and spent) at full health
-- pass: user-jot (commit d95a149)
-- viewport: unspecified
-- auth_state: anonymous
-- category: observation
-- observation: Rest's "Heal 2" (and Mend) can be played at full health and does nothing ("You healed 0"), with no warning before the card is spent.
-- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3
-- suggested fix: (user, 2026-10-09) won't fix: wasting a heal is the player's choice; the engine keeps offering it.
-- source: user
-
-### [LOW] /play — at 375px the dice and Skills are never on screen together
+### [x] [LOW] /play — at 375px the dice and Skills are never on screen together
 - pass: user-jot (commit d95a149)
 - viewport: unspecified
 - auth_state: anonymous
@@ -166,8 +238,9 @@
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; screenshots at 375x812
 - suggested fix: (user, 2026-10-09) cut the instruction to one short line on phones (the long text stays on desktop) and shrink the Skill tiles so the felt and Skills fit together at 375x812.
 - source: user
+- fixed: phase 24 (this commit) — compact Skills (2 columns) and a short instruction line; at 375x812 with 6 dice the last die and the Skill grid fit together (e2e)
 
-### [LOW] /play — nothing says hand cards can be dragged, or why they are greyed
+### [x] [LOW] /play — nothing says hand cards can be dragged, or why they are greyed
 - pass: user-jot (commit d95a149)
 - viewport: unspecified
 - auth_state: anonymous
@@ -176,8 +249,9 @@
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3
 - suggested fix: (user, 2026-10-09) a wordless nudge: the first time cards become playable in a run, the first playable card lifts slightly toward the felt and settles back. Greyed cards stay greyed, no text.
 - source: user
+- fixed: phase 24 (this commit) — the first playable card of a run nudges toward the felt once, with no words
 
-### [LOW] /play — mini map: orange vs white rings are unexplained and tokens are unnamed
+### [x] [LOW] /play — mini map: orange vs white rings are unexplained and tokens are unnamed
 - pass: user-jot (commit d95a149)
 - viewport: unspecified
 - auth_state: anonymous
@@ -186,18 +260,9 @@
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; `apps/web/src/play/Play.module.css` .miniMap .target
 - suggested fix: (user, 2026-10-09) no legend: the hovered or focused enemy on the mini map shows its name and health beside it (its button already lights up). Orange alone means 'in range'.
 - source: user
+- fixed: phase 24 (this commit) — the highlighted target gets a name and health label beside its token; orange stays "in range", no legend
 
-### [LOW] /play — a Star placed on a Skill shows as the slot's face
-- pass: user-jot (commit d95a149)
-- viewport: unspecified
-- auth_state: anonymous
-- category: comprehension
-- observation: Once a Star die is on a Skill the slot shows (and names) the slot face, e.g. "Die 1 (Sword)", so the player wonders where the Star went.
-- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; `apps/web/src/play/SkillBoard.tsx` slot label uses asFace
-- suggested fix: (user, 2026-10-09) won't fix: a Star counts as the slot's face, so it shows that face.
-- source: user
-
-### [LOW] /play — elite enemy dice not yet seen by a blind tester
+### [x] [LOW] /play — elite enemy dice not yet seen by a blind tester
 - pass: user-jot (commit d95a149)
 - viewport: unspecified
 - auth_state: anonymous
@@ -206,8 +271,9 @@
 - evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest rounds 1-3
 - suggested fix: (user, 2026-10-09) run a blind round once this phase's changes land, with the dev tool able to force an elite engagement; it also covers the new die picking and the board damage number.
 - source: user
+- fixed: phase 24 (this commit) — blind round 4 played elite engagements on desktop and phone (Force elite engagement); both finished; findings filed as blind-round-4 rows
 
-### [LOW] /play — remove the dev-only engagement tools once the modal is signed off
+### [x] [LOW] /play — remove the dev-only engagement tools once the modal is signed off
 - pass: user-jot (commit d95a149)
 - viewport: unspecified
 - auth_state: anonymous
@@ -222,8 +288,29 @@
 > Pass 5 note: web-fetch engine (cloud, no browser). The live pages return only the app shell, so the reader read the shipped copy from source as a stand-in. 2 reader observations were not filed (cap): /decisions status lines use process words and point at a hidden row 62 (MED); the phase bar and live region print raw step ids such as "Exchange: cards" (LOW).
 
 > Pass 8 note: web-fetch engine (cloud, no browser). Every route served only the app shell, so the reader read the shipped copy from source. 2 reader observations were not filed (cap): the /decisions lede counts "rule readings" and "checks" without saying what they are (LOW, partly covered by the status-line row); index.html has no canonical link or Open Graph tags (LOW). The pass 5 observation about raw step ids is no longer true on /play; that form now appears only on /debug.
+- fixed: phase 24 (this commit) — the dev tools are kept (comments updated) and Force elite engagement (dev) is added
 
-## Done
+### [x] [LOW] /play — Heal is offered (and spent) at full health
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: observation
+- observation: Rest's "Heal 2" (and Mend) can be played at full health and does nothing ("You healed 0"), with no warning before the card is spent.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3
+- suggested fix: (user, 2026-10-09) won't fix: wasting a heal is the player's choice; the engine keeps offering it.
+- source: user
+- fixed: won't fix (designer 2026-10-09)
+
+### [x] [LOW] /play — a Star placed on a Skill shows as the slot's face
+- pass: user-jot (commit d95a149)
+- viewport: unspecified
+- auth_state: anonymous
+- category: comprehension
+- observation: Once a Star die is on a Skill the slot shows (and names) the slot face, e.g. "Die 1 (Sword)", so the player wonders where the Star went.
+- evidence: user-spotted at 2026-10-09T11:37:32-04:00; blind playtest round 3; `apps/web/src/play/SkillBoard.tsx` slot label uses asFace
+- suggested fix: (user, 2026-10-09) won't fix: a Star counts as the slot's face, so it shows that face.
+- source: user
+- fixed: won't fix (designer 2026-10-09)
 
 ### [x] [MED] /config — Start run always starts an engagement run, whatever Combat model is saved
 - pass: 10 (commit 10fd9d1)

@@ -2,7 +2,7 @@ import { defaultContent } from '@survival/content'
 import { legalActions } from '@survival/engine'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { CardStrip, stripCards } from './CardStrip.tsx'
+import { CardStrip, pressMove, stripCards } from './CardStrip.tsx'
 import { forceEngagement } from './devEngage.ts'
 import { newRun } from './run.ts'
 
@@ -53,5 +53,62 @@ describe('CardStrip', () => {
       if (card.plays.length > 1) expect(choose).toHaveBeenLastCalledWith(card.id)
     })
     expect(act.mock.calls.length + choose.mock.calls.length).toBeGreaterThan(0)
+  })
+
+  it('nudges the first playable card only while the nudge is on', () => {
+    const state = usingDice()
+    const legal = legalActions(state)
+    const first = stripCards(state, legal).find((c) => c.plays.length > 0)!
+    const props = {
+      state,
+      legal,
+      act: () => {},
+      felt: { current: null },
+      choose: () => {},
+      onDrag: () => {},
+      pending: null,
+    }
+    const { container, rerender } = render(<CardStrip {...props} nudge={first.id} />)
+    const nudged = container.querySelectorAll('[data-nudge]')
+    expect(nudged).toHaveLength(1)
+    expect(nudged[0]?.getAttribute('aria-label')).toMatch(new RegExp(`^Play ${first.def.name}`))
+    rerender(<CardStrip {...props} nudge={null} />)
+    expect(container.querySelectorAll('[data-nudge]')).toHaveLength(0)
+  })
+
+  it('touch: a sideways move never lifts a card; a mostly upward one does', () => {
+    expect(pressMove(3, -2)).toBe('press')
+    expect(pressMove(30, -5)).toBe('scroll')
+    expect(pressMove(-30, 10)).toBe('scroll')
+    expect(pressMove(10, 10)).toBe('scroll')
+    expect(pressMove(4, -20)).toBe('drag')
+  })
+
+  it('touch: a sideways pointer move then release plays nothing', () => {
+    const state = usingDice()
+    const legal = legalActions(state)
+    const act = vi.fn()
+    const choose = vi.fn()
+    render(
+      <CardStrip
+        state={state}
+        legal={legal}
+        act={act}
+        felt={{ current: null }}
+        choose={choose}
+        onDrag={() => {}}
+        pending={null}
+      />,
+    )
+    const card = screen
+      .getAllByRole('button')
+      .find((b) => b.getAttribute('data-playable') !== null)!
+    card.setPointerCapture = () => {}
+    fireEvent.pointerDown(card, { button: 0, clientX: 100, clientY: 500, pointerId: 1 })
+    fireEvent.pointerMove(card, { clientX: 160, clientY: 495, pointerId: 1 })
+    expect(card.getAttribute('data-lifted')).toBeNull()
+    fireEvent.pointerUp(card, { clientX: 160, clientY: 495, pointerId: 1 })
+    expect(act).not.toHaveBeenCalled()
+    expect(choose).not.toHaveBeenCalled()
   })
 })

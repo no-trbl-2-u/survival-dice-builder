@@ -1828,3 +1828,197 @@
 .enemyDie[data-cancelled] {
   opacity: 0.4;
 }
+
+/* Phase 24: screen-reader-only text (heard, not seen). */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The instruction in two lengths: the long one on wide screens (and always for screen
+   readers), the short one on phones. */
+.engageShort {
+  display: none;
+}
+
+/* After a target pick: the damage number floats off the enemy on the board. */
+@keyframes float-up {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-26px);
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+.floatAt {
+  pointer-events: none;
+}
+
+.floatNum {
+  font-family: var(--font-number, inherit);
+  font-size: 20px;
+  font-weight: 800;
+  text-anchor: middle;
+  fill: var(--phase-combat);
+  stroke: #fff8e6;
+  stroke-width: 3px;
+  paint-order: stroke;
+  animation: float-up 900ms ease-out forwards;
+}
+
+.fadeOut {
+  animation: fade-out 900ms ease-out forwards;
+}
+
+/* Mini map: the highlighted target's name and health beside its token. */
+.mapTag rect {
+  fill: rgb(20 14 8 / 0.88);
+}
+
+.mapTag text {
+  font-size: 10px;
+  font-weight: 600;
+  fill: #fff;
+}
+
+/* The first playable card of a run rises toward the felt once, tilts, and settles back. */
+@keyframes card-nudge {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+
+  45% {
+    transform: translateY(-14px) rotate(-4deg);
+  }
+}
+
+.stripCard[data-nudge] {
+  animation: card-nudge 700ms ease-in-out 1;
+}
+
+/* Cards: the browser keeps sideways scrolling of the strip; a held finger opens no menu. */
+.stripCard {
+  touch-action: pan-x;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+
+.cardStripList {
+  overflow-x: auto;
+  justify-content: safe center;
+  scroll-snap-type: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The number shows for the same time, still. */
+  .floatNum,
+  .fadeOut {
+    animation: none;
+  }
+
+  .stripCard[data-nudge] {
+    animation: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .engageLong {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .engageShort {
+    display: inline;
+  }
+
+  .engageWide {
+    display: none;
+  }
+
+  .engageNarrow {
+    display: inline;
+  }
+
+  /* Compact Skills: 2 columns, half padding, small effect text, a short reach line. */
+  .engageBody .skills {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .engageBody .skill {
+    padding: 4px 5px;
+    gap: 3px;
+  }
+
+  .engageBody .skill .muted {
+    font-size: 0.75rem;
+  }
+
+  /* The Skills heading is heard, not shown: the tiles say what they are. */
+  .engageBody .panelTitle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .engageBody .panel {
+    padding: 6px;
+  }
+
+  .engageFelt {
+    padding-top: 28px;
+  }
+
+  .engageFelt .dieItem button {
+    padding: 2px 6px;
+  }
+
+  .stripOptions {
+    font-size: 0.75rem;
+  }
+
+  .reachLong {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .reachShort {
+    display: inline;
+  }
+}
+
+.reachShort {
+  display: none;
+}

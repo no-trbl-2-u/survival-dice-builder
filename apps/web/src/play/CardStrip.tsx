@@ -34,10 +34,24 @@ type Props = Readonly<{
   onDrag: (drag: DragState) => void
   /** The card whose options the felt is offering: it has left the hand until chosen. */
   pending: string | null
+  /** The card to nudge toward the felt once (first playable card of the run), or null. */
+  nudge?: string | null
+  /** The nudge has played. */
+  onNudged?: () => void
 }>
 
 /** Pixels a pointer moves before a press becomes a drag (less is a tap). */
 const DRAG_START = 6
+
+/**
+ * What a press that has moved (dx, dy) becomes: still a press (too short), a drag (far enough
+ * and mostly upward, toward the felt), or nothing (mostly sideways: the strip scrolls; the card
+ * never lifts).
+ */
+export function pressMove(dx: number, dy: number): 'press' | 'drag' | 'scroll' {
+  if (Math.hypot(dx, dy) < DRAG_START) return 'press'
+  return -dy > Math.abs(dx) ? 'drag' : 'scroll'
+}
 
 /**
  * The hand during an engagement, pinned to the bottom of the screen. A playable card is dragged
@@ -45,7 +59,17 @@ const DRAG_START = 6
  * plays it too. A card with 2 options asks which on the felt. A card the engine does not offer
  * now is dimmed and does nothing.
  */
-export function CardStrip({ state, legal, act, felt, choose, onDrag, pending }: Props) {
+export function CardStrip({
+  state,
+  legal,
+  act,
+  felt,
+  choose,
+  onDrag,
+  pending,
+  nudge = null,
+  onNudged,
+}: Props) {
   const cards = stripCards(state, legal)
   const [held, setHeld] = useState<{ id: string; dx: number; dy: number; over: boolean } | null>(
     null,
@@ -74,7 +98,15 @@ export function CardStrip({ state, legal, act, felt, choose, onDrag, pending }: 
     if (!s) return
     const dx = e.clientX - s.x
     const dy = e.clientY - s.y
-    if (!s.moved && Math.hypot(dx, dy) < DRAG_START) return
+    if (!s.moved) {
+      const kind = pressMove(dx, dy)
+      if (kind === 'press') return
+      if (kind === 'scroll') {
+        // Sideways: the hand scrolls; this press never lifts the card.
+        start.current = null
+        return
+      }
+    }
     s.moved = true
     const over = overFelt(e.clientX, e.clientY)
     setHeld({ id: s.id, dx, dy, over })
@@ -116,6 +148,11 @@ export function CardStrip({ state, legal, act, felt, choose, onDrag, pending }: 
                 type="button"
                 className={styles.stripCard}
                 data-playable={playable || undefined}
+                data-nudge={(playable && card.id === nudge) || undefined}
+                onAnimationEnd={(e) => {
+                  if (e.animationName.includes('nudge')) onNudged?.()
+                }}
+                onContextMenu={(e) => e.preventDefault()}
                 data-lifted={lifted ? (lifted.over ? 'over' : 'drag') : undefined}
                 style={
                   lifted

@@ -9,7 +9,15 @@ export default defineConfig({
   retries: 0,
   reporter: process.env.CI ? 'github' : 'list',
   use: { baseURL: `http://localhost:${PORT}` },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+      testIgnore: /touch\.spec\.ts/,
+    },
+    // A touch phone (isMobile, hasTouch): card drag with real touch input (phase 24).
+    { name: 'mobile-touch', use: { ...devices['Pixel 7'] }, testMatch: /touch\.spec\.ts/ },
+  ],
   // Hermetic: e2e runs against the production build on its own port, never the dev server.
   webServer: {
     command: 'pnpm preview',

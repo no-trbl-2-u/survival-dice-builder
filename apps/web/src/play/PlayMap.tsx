@@ -10,6 +10,8 @@ import { gameIcons, ICON_VIEWBOX } from '../icons/gameIcons.ts'
 import { describeAction } from '../debug/describeAction.ts'
 import { hexPolygonPoints, hexToPixel } from '../map/geometry.ts'
 import { hexTitle } from '../map/places.ts'
+import type { DamageFloat } from './damageFloats.ts'
+import { enemyLabel, playerHex } from './engageView.ts'
 import styles from './Play.module.css'
 import { hexTargets, ofType } from './targets.ts'
 
@@ -35,6 +37,10 @@ type Props = Readonly<{
   highlight?: string | null
   /** Called when the pointer or focus moves onto (id) or off (null) a target enemy. */
   onHighlight?: (enemy: string | null) => void
+  /** Damage numbers to float off enemies after a target pick (the main board). */
+  floats?: readonly DamageFloat[] | undefined
+  /** Changes with each new set of floats, so the same numbers animate again. */
+  floatKey?: number | undefined
   /** The section's name (default "Map"). */
   label?: string
   className?: string | undefined
@@ -84,10 +90,21 @@ export function PlayMap({
   onHighlight,
   label: sectionLabel = 'Map',
   className,
+  floats = [],
+  floatKey,
 }: Props) {
   const [view, setView] = useState({ x: 0, y: 0, zoom: 1 })
   const drag = useRef<{ x: number; y: number } | null>(null)
   const svg = useRef<SVGSVGElement>(null)
+  const from = playerHex(state)
+
+  // A target pick: bring the damaged enemy into view (instant) while its number floats.
+  useEffect(() => {
+    if (floatKey === undefined) return
+    svg.current
+      ?.querySelector('[data-float]')
+      ?.scrollIntoView({ block: 'center', behavior: 'instant' })
+  }, [floatKey])
   const targets = hexTargets(legal)
   // Enemies to click: a Skill's target (v1), or the target of a Combat v3 Skill that just fired.
   const enemyTargets = new Map<string, Action>([
@@ -249,7 +266,14 @@ export function PlayMap({
           const target = enemyTargets.get(e.id)
           const r = SIZE * 0.55
           // Row 65 (once per Combat): a tipped-over enemy has attacked and waits for next Combat.
-          const name = `${e.kind} ${e.id}, ${e.health} of ${max} health${e.attackedThisCombat ? ', attacked' : ''}`
+          const called = enemyLabel(state, e.id, from)
+          const name = `${called}, ${e.health} of ${max} health${e.attackedThisCombat ? ', attacked' : ''}`
+          // The mini map names the highlighted target beside its token (right, or left when it
+          // would leave the frame).
+          const tag = around && highlight === e.id && target ? called : null
+          const tagW = (tag?.length ?? 0) * 5.4 + 12
+          const viewRight = minX + (w + vw) / 2 - view.x
+          const tagLeft = c.x + r + 4 + tagW > viewRight
           return (
             <g
               key={e.id}
@@ -284,6 +308,49 @@ export function PlayMap({
                   Attacked
                 </text>
               ) : null}
+              {tag ? (
+                <g className={styles.mapTag} aria-hidden="true" data-testid="map-tag">
+                  <rect
+                    x={tagLeft ? -r - 4 - tagW : r + 4}
+                    y={-15}
+                    width={tagW}
+                    height={30}
+                    rx={4}
+                  />
+                  <text x={tagLeft ? -r - 4 - tagW + 6 : r + 10} y={-3}>
+                    {tag}
+                  </text>
+                  <text x={tagLeft ? -r - 4 - tagW + 6 : r + 10} y={10}>
+                    {e.health}/{max}
+                  </text>
+                </g>
+              ) : null}
+            </g>
+          )
+        })}
+
+        {floats.map((f) => {
+          const c = hexToPixel(f.hex, SIZE)
+          const r = SIZE * 0.55
+          return (
+            <g
+              key={`float-${floatKey ?? 0}-${f.enemy}`}
+              style={place(c.x, c.y)}
+              className={styles.floatAt}
+              aria-hidden="true"
+            >
+              {f.defeated ? (
+                <g className={styles.fadeOut}>
+                  {f.kind === 'elite' ? (
+                    <rect className={styles.elite} x={-r} y={-r} width={r * 2} height={r * 2} />
+                  ) : (
+                    <circle className={styles.grunt} cx={0} cy={0} r={r} />
+                  )}
+                </g>
+              ) : null}
+              <text className={styles.floatNum} data-float x={0} y={-r}>
+                -{f.amount}
+              </text>
             </g>
           )
         })}

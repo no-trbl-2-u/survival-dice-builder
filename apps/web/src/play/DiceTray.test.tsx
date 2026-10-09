@@ -44,13 +44,18 @@ describe('DiceTray enemy dice', () => {
         toggle={() => {}}
       />,
     )
-    const hit = screen.getByLabelText(`Enemy die of grunt g1: Hit ${hitDamage}`)
+    const hit = screen.getByLabelText(
+      new RegExp(`^Enemy die of grunt, \\d+ hex(es)? [a-z-]+: Hit ${hitDamage}$`),
+    )
     expect(hit.dataset.kind).toBe('grunt')
     expect(hit.querySelector('svg')?.dataset.icon).toBe('face-enemy-hit')
     expect(
-      screen.getByLabelText('Enemy die of grunt g1: Miss').querySelector('svg')?.dataset.icon,
+      screen.getByLabelText(/^Enemy die of grunt, \d+ hex(es)? [a-z-]+: Miss$/).querySelector('svg')
+        ?.dataset.icon,
     ).toBe('face-enemy-miss')
-    const special = screen.getByLabelText(`Enemy die of elite x1: Special ${specialDamage}`)
+    const special = screen.getByLabelText(
+      new RegExp(`^Enemy die of elite, \\d+ hex(es)? [a-z-]+: Special ${specialDamage}$`),
+    )
     expect(special.dataset.kind).toBe('elite')
     expect(special.querySelector('svg')?.dataset.icon).toBe('face-enemy-special')
   })
@@ -88,7 +93,7 @@ describe('DiceTray enemy dice', () => {
     expect(container.querySelectorAll('[data-cancelled]')).toHaveLength(2)
     expect(
       screen.getByLabelText(
-        `Enemy die of enemy g1: Hit ${hitDamage}, cancelled: its enemy was defeated`,
+        `Enemy die of enemy: Hit ${hitDamage}, cancelled: its enemy was defeated`,
       ),
     ).toBeTruthy()
     unmount()

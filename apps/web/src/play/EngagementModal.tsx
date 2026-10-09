@@ -3,13 +3,17 @@ import { useEffect, useRef, useState } from 'react'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { CardStrip, OptionChips, stripCards, type DragState } from './CardStrip.tsx'
 import { describeEvent } from './describeEvent.ts'
-import { DiceTray, EnemyDice, enemyKindOf } from './DiceTray.tsx'
+import { DiceTray, EnemyDice } from './DiceTray.tsx'
 import {
   cancelledLine,
   ENGAGE_STAGES,
+  engageFoes,
   engageHeadline,
   engageInstruction,
+  engageInstructionShort,
   engageStage,
+  enemyLabel,
+  playerHex,
   type EngageSummary,
 } from './engageView.ts'
 import styles from './Play.module.css'
@@ -25,6 +29,11 @@ type Props = Readonly<{
   selected: readonly number[]
   toggle: (die: number) => void
   dice3d: boolean
+  /** A target pick is playing out on the board: the modal steps aside until it is false. */
+  aside: boolean
+  /** The card to nudge toward the felt once (the first playable card of the run), or null. */
+  nudge: string | null
+  onNudged: () => void
   /** Set once the engagement is over: the modal shows what happened until it is closed. */
   summary: EngageSummary | null
   onClose: () => void
@@ -37,7 +46,7 @@ type Props = Readonly<{
  * closes it only on the result, never mid-engagement.
  */
 export function EngagementModal(props: Props) {
-  const { state, summary, onClose } = props
+  const { state, summary, onClose, aside } = props
   const dialog = useRef<HTMLDialogElement>(null)
   const opener = useRef<Element | null>(null)
   const [peek, setPeek] = useState(false)
@@ -48,7 +57,7 @@ export function EngagementModal(props: Props) {
     setSeen(state)
     if (peek) setPeek(false)
   }
-  const open = !peek
+  const open = !peek && !aside
 
   useEffect(() => {
     const el = dialog.current
@@ -147,16 +156,13 @@ function Head({
   onPeek,
 }: Readonly<{ state: GameState; stage: number; title?: string; onPeek?: () => void }>) {
   const player = state.players[state.current]
-  const ids = [...new Set(state.exchange?.engage?.enemyDice.map((d) => d.enemy) ?? [])]
-  const foes = ids.map((id) => `${enemyKindOf(state, id) ?? 'enemy'} ${id}`)
+  const foes = engageFoes(state)
   return (
     <header className={styles.engageHead}>
       <div className={styles.engageTitleRow}>
         <h2 id="engage-title" className={styles.engageTitle}>
           {title}
-          {foes.length > 0 ? (
-            <span className={styles.engageFoes}> vs {foes.join(', ')}</span>
-          ) : null}
+          {foes ? <span className={styles.engageFoes}> vs {foes}</span> : null}
         </h2>
         {onPeek ? (
           <button
@@ -200,7 +206,18 @@ function Head({
 type LiveProps = Props & Readonly<{ onPeek: () => void }>
 
 /** The engagement while it runs. */
-function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek }: LiveProps) {
+function LiveView({
+  state,
+  legal,
+  act,
+  actAll,
+  selected,
+  toggle,
+  dice3d,
+  nudge,
+  onNudged,
+  onPeek,
+}: LiveProps) {
   const ex = state.exchange
   const picking = legal.some((a) => a.type === 'resolveSkill' || a.type === 'chooseTarget')
   const targets = useRef<HTMLDivElement>(null)
@@ -235,7 +252,10 @@ function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek 
     <>
       <Head state={state} stage={stage} onPeek={onPeek} />
       <p className={styles.engageNow} aria-live="polite" data-testid="engage-instruction">
-        {engageInstruction(state)}
+        <span className={styles.engageLong}>{engageInstruction(state)}</span>
+        <span className={styles.engageShort} aria-hidden="true">
+          {engageInstructionShort(state)}
+        </span>
       </p>
       <div className={styles.engageBody} data-drag={drag === 'none' ? undefined : drag}>
         <div ref={targets} className={styles.engageTargetSlot}>
@@ -287,6 +307,8 @@ function LiveView({ state, legal, act, actAll, selected, toggle, dice3d, onPeek 
         choose={setChoosing}
         onDrag={setDrag}
         pending={chosen?.id ?? null}
+        nudge={nudge}
+        onNudged={onNudged}
       />
       <footer className={styles.engageFoot}>
         <span className={styles.engageFootActions}>
@@ -353,10 +375,12 @@ function Targets({ state, legal, act }: Readonly<Pick<Props, 'state' | 'legal' |
   const chooses = ofType(legal, 'chooseTarget')
   if (resolves.length === 0 && chooses.length === 0) return null
   const enemy = (id: string) => state.enemies.find((e) => e.id === id)
+  const from = playerHex(state)
   const label = (id: string) => {
     const e = enemy(id)
     const max = e ? state.content.enemies.enemies.find((d) => d.id === e.kind)?.health : undefined
-    return e ? `${e.kind} ${id} (health ${e.health}${max ? `/${max}` : ''})` : `enemy ${id}`
+    const name = enemyLabel(state, id, from)
+    return e ? `${name} (health ${e.health}${max ? `/${max}` : ''})` : name
   }
   const skillName = (id: string) => state.content.skills.find((s) => s.id === id)?.name ?? id
   const player = state.players[state.current]
@@ -463,6 +487,7 @@ function SummaryView({
       <Head state={state} stage={ENGAGE_STAGES.length - 1} title="Engagement over" />
       <p
         className={`${styles.engageNow} ${summary.knockedOut ? styles.engageKo : ''}`}
+        role="status"
         data-testid="engage-headline"
       >
         {engageHeadline(summary)}

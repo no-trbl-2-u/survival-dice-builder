@@ -51,7 +51,13 @@ describe('engageView', () => {
     expect(s?.enemyDice).toHaveLength(2)
     expect(engageHeadline(s!)).toBe('You were knocked out.')
     expect(engageHeadline({ ...s!, knockedOut: false, defeated: 1 })).toBe(
+      'You defeated 1 enemy and your guard stopped 1 damage.',
+    )
+    expect(engageHeadline({ ...s!, knockedOut: false, defeated: 1, toGuard: 0 })).toBe(
       'You defeated 1 enemy and took no damage.',
+    )
+    expect(engageHeadline({ ...s!, knockedOut: false, toHealth: 2, toGuard: 1 })).toBe(
+      'You dealt 2 damage and took 2 damage.',
     )
   })
 
