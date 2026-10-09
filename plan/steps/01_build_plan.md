@@ -59,7 +59,7 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 22 — Experiments: experience curves, Skill caps, and spawn pressure, as a bot comparison report (structural rows 63-70 as default-off options; `docs/reports/phase-22-experiments.md`) — 2599a8d
 
 **Designer playtest follow-ups (2026-10-09):**
-- [ ] Phase 23 — Engagements by default, and a switch that cancels a defeated enemy's dice (config default `combat.model: "engage"`, Start run follows the saved config, `combat.engage.defeatedDice` default `"hit"`, sim comparison)
+- [x] Phase 23 — Engagements by default, and a switch that cancels a defeated enemy's dice (config default `combat.model: "engage"`, Start run follows the saved config, `combat.engage.defeatedDice` default `"hit"`, sim comparison) — f4ebbce
 - [ ] Phase 24 — Engagement modal II: no pre-selected die, a damage number on the board after a target pick, phone fit, a first-time card nudge, enemy names (mini map, buttons, title), result read out, touch-drag test, a force-elite dev tool, and an elite blind round
 
 > **After phase 16:** the loop transitions to `/iterate`.
@@ -397,3 +397,4 @@ stay, plus a force-elite one; an elite blind round closes the phase.
 - phase 19 — 8326abe — config.meta.json labels, help, and rules sections for every config field; /config plain errors, sticky Save, unsaved-changes warning, confirmed Reset
 - phase 20 — d690982 — Base tile alone at setup with player-chosen start hexes, the whole Base tile is the base, no Explore phase, reveal by stepping off the map edge, single-use gathering nodes, 10-card deck with a hand of 3, 2 card copies, skirmish step 1, export version 2; bot batch median end round 5 (was 14)
 - phase 21 — 79bc77e — no wave track: enemies move, then every spawn node spawns each Combat; structure-first targeting with a 2-hex player pull; enemies attack only their target; Tower ties are the builder's choice and pay the builder; exchanges without enemies; knockout and return at half health; state and export version 3; bot batch median end round 6, all 200 end by the base
+- phase 23 — f4ebbce — engagements are the default Combat model (exchanges stay selectable); Start run follows the saved config; combat.engage.defeatedDice ("hit" default, "cancelled" experiment) with greyed dice, log and result lines; bot batch median end round 7 (exchanges 6); report: cancelled takes about 8% fewer hits and does not move the end round
