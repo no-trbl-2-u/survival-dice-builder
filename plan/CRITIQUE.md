@@ -9,6 +9,15 @@
 
 ## Pending
 
+### [LOW] /play — the "reveal 10 tiles" milestone may be unreachable
+- pass: oversight (2026-10-10)
+- viewport: n/a
+- category: rules
+- observation: `milestones.tilesRevealed` is 10, but `packages/content/data/tiles.json` holds 9 tiles. If the Base tile is one of them, at most 8 can be revealed and the milestone never fires. Unverified: oversight did not trace the engine.
+- evidence: `packages/content/data/config.default.json` `milestones.tilesRevealed=10`; `tiles.json` (9 ids); expand candidate "Rule text" pass 5 row ("Reveal 10 tiles", only 8 can be revealed)
+- suggested fix: Verify the reachable count; if unreachable, file an `OPEN-QUESTIONS.md` reading (proposed: cap the milestone at the revealable count) rather than change the rule value silently.
+- source: oversight
+
 ### [LOW] /play — a hex next to an enemy that costs too much just isn't offered, with no reason
 - pass: session residue (2026-10-09)
 - viewport: n/a

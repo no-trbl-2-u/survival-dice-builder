@@ -9,120 +9,6 @@
 
 ## Pending
 
-### [ ] [score 5.5] Engagement modal III: the blind round 4 residue
-- proposed: 2026-10-10, expand pass 9
-- source signals:
-  - `plan/CRITIQUE.md` blind-round-4 rows (phase 24, 2026-10-09), all on the engagement modal and all still pending:
-    - [MED] the result after a target pick can read as skipped (the step-aside before "Engagement over").
-    - [MED] a Skill that needs more dice than the player has gives no hint.
-    - [LOW] the result does not say who took the damage or their health after.
-    - [LOW] "in range" counts differ from the engaged enemies.
-    - [LOW] card timing and the Special face are explained only later.
-    - [LOW] at 375px a fifth Skill, the target pick, and the hand still need scrolling.
-    - [LOW] the mini-map target label can cover tokens.
-    - [LOW] Roll again stays on when every die is kept.
-  - Critique pass 11 (2376ca3) adds 2 more on the same flow: [LOW] the banner names a "Finish engagement" button that does not exist (`nextStep.ts:23` against `EngagementModal.tsx:250`), and [LOW] the engagement log ends with "The exchange ends." (`describeEvent.ts:143-144`).
-  - Commits since pass 8: 10 of 33 touched the modal (8f8e341 through b0bc5dd), and phase 24 was itself a follow-up phase. `design/engagement-modal.md` plans a round 5 with one browser context per tester.
-- rationale:
-  - 10 pending rows on one component from two independent sources (blind testers and the web-fetch reader). One `/iterate` tick each would open `EngagementModal.tsx` 10 times, and three rows (the step-aside, the 375px scroll, the mini-map label) are layout work that interacts.
-  - Engagements are the default Combat, so this is the surface every playtest run goes through.
-- proposed scope: 1 phase.
-  - The result: no bare step-aside when the pick ends the engagement; the result names who took damage and their health after.
-  - The dice and Skills: a hint on a Skill that needs more dice than the player rolled; Roll again off when every die is kept; card timing and Special explained at first sight.
-  - Layout: 375px fit for a fifth Skill and the target pick; the mini-map label clears the tokens; "in range" counts match the engaged enemies.
-  - Copy: the banner and the log use the modal's own words (shared with "Rule text from one source").
-  - Blind round 5 with one browser context per tester, as the design note asks.
-- estimated phases: 1
-- conflicts: none. No rule or config value changes. The two copy rows overlap "Rule text from one source"; oversight may fold them into either.
-
-### [ ] [score 4.0] Static HTML for each page: the copy, title, and preview card are in the served file
-- proposed: 2026-10-09, expand pass 6
-- source signals:
-  - `plan/CRITIQUE.md` pass 4, 5, and 8 notes: the web-fetch reader got only the app shell on every route, so it read the shipped copy from source. Pass 4 could not review the /decisions and /config copy at all. Cloud critique is the only critique the loop runs on a schedule.
-  - Pass 8 reader note (not filed, cap): `index.html` has no canonical link.
-  - Commits since pass 5 that patched the one shared shell by hand: de20235 (`<noscript>` line), 768f098 (noindex on unknown paths, set by script after load), 0219e35 (Open Graph tags). Every route serves the same title, description, and preview card, because `apps/web/public/_redirects` sends `/*` to `/index.html`.
-- rationale:
-  - 3 critique passes and 3 shell commits share one cause: the server sends one empty page for every path, and everything a reader, an unfurler, or a crawler sees is added later by script. Each per-route fix (title, description, canonical, 404 status) has to be faked in that one file.
-  - The critique gap is the bigger cost: a regression in client-rendered copy on /decisions or /config can ship and never be seen by a scheduled critique pass.
-- proposed scope: 1 phase.
-  - A build step that renders the static routes (/, /tiles, /decisions, /credits, /config with defaults) to their own HTML files with React `renderToString`, then hydrates. /play and /debug keep a shell with their own title and description.
-  - Per-route `<title>`, description, `og:title`, `og:url`, and canonical from one route table, which the in-app `document.title` also reads.
-  - A real 404 page for unknown paths (HTTP 404 in place of the `/*` rewrite and the script-set noindex).
-  - The smoke e2e fetches each route without JavaScript and checks its heading and title.
-- estimated phases: 1
-- conflicts: none with spec (still a static build on Cloudflare Pages; bearings "static build"). Watch hydration of /config, which reads local storage: render the defaults, then load saved edits after hydration.
-- last re-evidenced: 2026-10-09 (expand pass 8)
-  - Pass 8: critique pass 9 (25a398a) files the per-route gap as its own row: every route serves the home description and an `og:url` fixed to the home page, with no canonical (`apps/web/index.html:6,16`). Audit passes 23 to 25 score it 2.7 and leave it waiting here, because a canonical set by script does not reach unfurlers that skip JavaScript.
-  - Pass 7: Two more hand patches of the one shared shell since pass 6: 1aaa6a9 (favicon link) and 5a93dde (sitemap and robots.txt). The sitemap now lists 7 pages, and every one of them is served the same title, description, and preview card, with no canonical link. Audit passes 17 to 22 leave the canonical row waiting on this candidate.
-
-### [ ] [score 4.5] Player names for every map piece: no engine ids on /play or /config
-- proposed: 2026-10-08, expand pass 5
-- source signals:
-  - `plan/CRITIQUE.md` pass 7: [LOW] enemy choice buttons name enemies by engine id ("grunt e3"); [LOW] /config pick lists show ids next to names, and presets show only ids ("preset-2").
-  - Pass 5 reader note (not filed, cap): the phase bar and live region print raw step ids such as "Exchange: cards".
-  - Commits since pass 4: b91436a (Tower named by id), 86ed988 (starter cards named by id), c30dc34 and 7bb9d7c (Combat model internal labels). Each fixed one surface by hand.
-  - Source: ids still reach player text in `apps/web/src/map/places.ts:105` (map piece names), `apps/web/src/play/PlayMap.tsx:214` (enemy aria labels), `apps/web/src/play/describeEvent.ts:55,61` (log), `apps/web/src/debug/describeAction.ts:19` (/play choice buttons), and `apps/web/src/config/ConfigPage.tsx:101,473,505` (pick lists, presets).
-- progress 2026-10-09 (phase 24, 09780d9): the engagement modal, the map's enemy labels, the enemy dice, and Tower-target buttons now use `enemyLabel` (kind and place). Still on ids: the play log (`describeEvent.ts` `enemyLabel`), /play choice buttons through `describeAction`, and the /config pick lists and presets.
-- rationale:
-  - 4 commits and 3 pending rows share one cause: each surface names engine pieces itself, and the fallback is the id. One `/iterate` tick per surface fixes the symptom; the next new surface brings it back.
-  - Two enemies of one kind on one terrain differ only by id, so the fix needs a naming rule (kind, place, and a plain ordinal when two still match), not a string swap.
-- proposed scope: 1 phase.
-  - One pure naming module for /play: enemies, defenses, the Tower, and cards by kind and place (as `stepsAway` does), with an ordinal only to tell two matching pieces apart. Map labels, aria labels, choice buttons, the log, and the phase bar all read from it. /debug keeps its ids.
-  - /config: names only in pick lists; presets as "Preset 1", "Preset 2".
-  - A test that renders /play states from seeded runs and fails when player text contains an engine id pattern.
-- estimated phases: 1
-- conflicts: none. No rule or config value changes. Overlaps "Rule text from one source" (both are copy built from data); oversight may merge them.
-- last re-evidenced: 2026-10-09 (expand pass 8)
-  - Pass 8: audit passes 23 to 25 again leave the enemy-id row at 2.8, waiting on this candidate; it is now the oldest pending critique row (pass 7). The two /config id rows (pass 6) are also still pending.
-  - Pass 7: fbce568 fixed one more log surface by hand: a repair now reads "Tower d2" in place of the bare "d2", which matches the other defense lines but still shows the id. Audit pass 22 is the 11th in a row to score the enemy-id row below 3.0 while it waits on this naming rule.
-  - Pass 6: critique pass 8 (4a4fe28) left both pass 6 and pass 7 id rows pending. `apps/web/src/map/places.test.ts:49` and `describeAction.test.ts:48` still pin "grunt e1" and "grunt e3" in player text.
-
-### [ ] [score 6.0] Combat v3 in the bot and the sim, so the engagement playtest has numbers
-- proposed: 2026-10-06, expand pass 4
-- source signals:
-  - 673198c: `combat.model: "engage"` (OPEN-QUESTIONS row 72, proposed, designer playtesting) is the /play start panel's default, but `packages/bot` and `tools/sim` have no engage support. The only bot change in that commit is one `resolve` case for the exchange model. No batch, compare run, or report covers engagements.
-  - `docs/design/combat-v3.md` "Open": siege timing (once per Combat or per hand), how many Engage plays a 10-card deck holds, 1 Skill or every filled Skill per engagement, Hit damage and guard. Each is a config number under `combat.engage` that a batch could rank before the designer plays it.
-  - `plan/AUDIT.md` needs-user-call "Balance after phase 21" and the phase 22 report: every balance number on record is for the exchange model. If the designer adopts engagements, the 8-14 band check starts from zero.
-  - `RULES-COVERAGE.md` has no row for row 72; `packages/engine/test/engage.test.ts` is the only coverage.
-- rationale:
-  - The designer is changing Combat now (5 commits on 2026-10-06 reshaped /play around it). Exchanges have 3 reports of bot numbers; engagements have none, so the designer has only their own hand-played runs to judge them.
-  - A bot that plays engagements also gives the engage model a full-run property test (no stalls, no illegal states), which a 341-line new combat module lacks.
-- proposed scope: 1 phase.
-  - Bot policy for the engage step types: play Engage when an enemy is adjacent or a ranged Skill can reach one, use dice on Skills, pick targets, finish the engagement, Move/Heal/Repair between engagements. Pure and seeded, with policy tests.
-  - `pnpm sim -- run --combat engage` and `compare` across `combat.model`, plus a full-run property test on the engage model (200 seeds, no errors, no stalls).
-  - A short report: exchange against engage at defaults (median end round, damage taken, enemies defeated), and one table per open point that is already a config number. RULES-COVERAGE row for 72.
-- estimated phases: 1
-- conflicts: none. No default changes; row 72 stays proposed until the designer decides. Overlaps the "defending bot policy" candidate (both touch `packages/bot`); oversight may merge them.
-- progress 2026-10-10 (expand pass 9): phase 23 (f4ebbce) made engagements the default, and the bot already played them (200 runs, 0 errors, 0 stalls); `tools/sim/src/run.test.ts` pins the default batch on engagements and keeps an exchange batch. Left of this candidate: an engage-aware policy (pick targets, keep cards) and the exchange against engage report. Both now sit inside "A defending bot policy"; oversight should merge this row into that one.
-
-### [ ] [score 6.5] Rule text from one source: every rule statement on the site comes from config and content
-- proposed: 2026-10-05, expand pass 3
-- source signals:
-  - `plan/CRITIQUE.md` pass 5: 5 of 6 rows are v1 rule text that outlived the v2 rule change:
-    - [HIGH] /config: three rulings the engine never reads, and the miniature limit help gives the v1 rule.
-    - [MED] /play start panel: the v1 lose condition ("keep every player alive").
-    - [MED] / and /play: nothing says that exploring adds enemies.
-    - [MED] /play: the Gather card does not say it needs an unspent node.
-    - [MED] /play run summary: milestone labels are a fixed table ("Reveal 10 tiles", only 8 can be revealed) and ignore `config.milestones`.
-  - Pass 5 reader notes (not filed, cap): /decisions status lines use process words; the phase bar prints raw step ids.
-  - Commits: phases 20, 21, and 22 changed the round, the lose condition, spawning, and Gather in 2 days (d690982, 79bc77e, 2599a8d). Each change left copy behind in components.
-  - Standing rule 7: no hardcoded copy or rule numbers in components. `RunSummary.tsx`, `StartPanel.tsx`, `HomePage.tsx`, and `CardView.tsx` each hold rule text by hand.
-  - Pass 4: critique pass 6 (a87360c) repeats the pattern on the Combat v3 surfaces. [HIGH] the next-step banner describes controls that changed (`nextStep.ts` hardcodes the step copy); [MED] enemy dice read "SPECIAL" with no damage, though `combat.engage.specialDamage` is in config; [MED] the start panel's Combat choice ignores the saved `combat.model` and uses internal labels. Two pass 5 rows (exploring adds enemies, milestone labels) are still pending.
-- rationale:
-  - The 5 rows share one cause: rule text is written by hand in 5 components and in `config.meta.json`, so a rule change in the engine leaves the copy behind. Fixing them one per `/iterate` tick fixes the symptoms, and the next rule change brings them back.
-  - The designer reads this copy to check the rules. Text that states the old rule makes a playtest test the wrong game.
-- proposed scope: 1 phase.
-  - A pure `ruleText` module in content (or the engine's describe layer) that builds each rule phrase from config: the goal and lose condition, the reveal cost, Gather, the milestone labels, and the miniature limit.
-  - /, /play (start panel, cards, run summary, log), and /config help all read from it.
-  - /config marks or hides rulings no engine code reads. A unit test lists every config leaf the engine never reads, so new inert keys fail the test.
-  - A test that fails when a component string contains a rule number not read from config.
-- estimated phases: 1
-- conflicts: none. It changes no rule value or default; it only makes the copy match the engine.
-- last re-evidenced: 2026-10-10 (expand pass 9)
-  - Pass 5: 6 of 13 commits since pass 4 hand-fixed rule text in components: f85de8f (Exchanges banner), d8bfcfa (enemy dice damage), 2d3def3 (exploring adds enemies), 7bb9d7c (start panel Combat choice), 9f68ef9 (milestone labels), 2050970 (home Combat step). Critique pass 7 adds the enemy dice case row.
-  - Pass 6: c9bd27d hand-fixed the enemy dice case again (a third pass on that string). Critique pass 8 files a new row on the home Combat step (`HomePage.tsx:25-29`), the same hand-written rule text that 2050970 patched one pass earlier.
-  - Pass 9: two more rule changes left copy behind within a day. 9ba3222 (Combat lasts until the cards run out) and 256bdb4 (the draft pool) changed the engine, and critique pass 11 (2376ca3) files 5 of its 6 rows on the stale text: [MED] nothing says unplayed cards stay in hand or when Combat ends (`HomePage.tsx:26`, `StartPanel.tsx:17`, `nextStep.ts:82`); [MED] /decisions rows 65, 66 and 69 describe exchanges with no note that engagements are the default; [LOW] the draft dialog does not say unkept Skills go to the pool (`DecisionDialog.tsx:31`); [LOW] "The exchange ends." in the engagement log; [LOW] build notes ("designer 2026-10-09", "Combat v3 numbers") in `config.meta.json:103,127,135`.
-
 ### [ ] [score 5.5] Try the proposals: experiment presets on /decisions and /play for rows 63-70
 - proposed: 2026-10-05, expand pass 3
 - source signals:
@@ -141,24 +27,7 @@
 - conflicts: must not change any default. Presets change only the player's local config; rows 63-70 stay open until the designer decides.
 - last re-evidenced: 2026-10-10 (expand pass 9)
   - Pass 9: critique pass 11 [MED] says /decisions rows 65, 66 and 69 describe exchanges with no note that engagements are the default. The phase 22 tables were all measured on the exchange model, so a preset built from them now plays a different Combat. Scope should re-measure rows 63-70 under engagements (after the bot work) or mark each preset "exchanges only".
-
-### [ ] [score 5.0] A defending bot policy, so tuning numbers stop resting on a floor
-- proposed: 2026-10-03, expand pass 2 (Considered, score 3.5); re-scored and moved to Pending in pass 3
-- source signals:
-  - `docs/reports/phase-22-experiments.md` caveat: the bot builds few defenses, does not defend the base, and plays to no plan, so "every number here is a floor". The default median end round is 6, against the 8-14 band.
-  - Same report: the turtle bot with the row 63 clock outlasts the active bot (median 11 against 6). The scripted "good" player is worse than one that never moves.
-  - Same report: Skill caps 4, 6, and 8 give identical batches because runs are too short for a cap to bind. Row 9 cannot be measured with this bot.
-  - `docs/reports/phase-9-bot-batch.md` already called the bot a floor (expand pass 2 note).
-- rationale:
-  - 3 independent signals now say the same thing: the compare tool (phase 14) and the experiment reports can only rank configs by a weak player. Rows 9, 17, and 63-70 all wait on numbers this bot cannot give.
-  - Playtests are still the final answer, but a stronger bot cuts the configs the designer needs to try by hand.
-- proposed scope: 1 phase.
-  - A `defender` policy in `packages/bot`: builds and repairs defenses near the base, uses Tower targets, and returns to the base when enemies near it. Pure, seeded, with policy tests.
-  - `pnpm sim -- compare --policy defender`, and a re-run of the phase 22 tables with it as a short addendum to the report.
-- estimated phases: 1
-- conflicts: none. It changes no rule; the bot only calls the engine API.
-- last re-evidenced: 2026-10-10 (expand pass 9)
-  - Pass 9: the session residue row "sim — the bot cannot measure today's designer changes" (8402ba3) names three designer changes the bot cannot see: it does not pick targets to defeat enemies before their dice hit, so the phase 23 `defeatedDice` gap is a floor (`docs/reports/phase-23-defeated-dice.md`, about 8% fewer hits); it rarely reaches a second draft, so the draft pool (256bdb4) left both pinned batches unchanged; it discards whole hands, so the hand kept across engagements (9ba3222) is under-measured. Scope should add those three behaviours (target picks, keeping cards, buying Training) and re-run the defeated-dice and draft-pool comparisons.
+- deferred: 2026-10-10 via oversight. Blocked on phase 26: the phase 22 numbers were measured with exchanges, and rows 65 and 69 are now "Exchanges only". Re-score after phase 26 re-measures rows 63-70 under engagements.
 
 ## Considered (below threshold)
 
@@ -185,6 +54,98 @@
   - Rule 19.4 says to make the base game work first.
 
 ## Promoted
+
+### [x] [score 6.5] Rule text from one source: every rule statement on the site comes from config and content
+- proposed: 2026-10-05, expand pass 3
+- source signals:
+  - `plan/CRITIQUE.md` pass 5: 5 of 6 rows are v1 rule text that outlived the v2 rule change:
+    - [HIGH] /config: three rulings the engine never reads, and the miniature limit help gives the v1 rule.
+    - [MED] /play start panel: the v1 lose condition ("keep every player alive").
+    - [MED] / and /play: nothing says that exploring adds enemies.
+    - [MED] /play: the Gather card does not say it needs an unspent node.
+    - [MED] /play run summary: milestone labels are a fixed table ("Reveal 10 tiles", only 8 can be revealed) and ignore `config.milestones`.
+  - Pass 5 reader notes (not filed, cap): /decisions status lines use process words; the phase bar prints raw step ids.
+  - Commits: phases 20, 21, and 22 changed the round, the lose condition, spawning, and Gather in 2 days (d690982, 79bc77e, 2599a8d). Each change left copy behind in components.
+  - Standing rule 7: no hardcoded copy or rule numbers in components. `RunSummary.tsx`, `StartPanel.tsx`, `HomePage.tsx`, and `CardView.tsx` each hold rule text by hand.
+  - Pass 4: critique pass 6 (a87360c) repeats the pattern on the Combat v3 surfaces. [HIGH] the next-step banner describes controls that changed (`nextStep.ts` hardcodes the step copy); [MED] enemy dice read "SPECIAL" with no damage, though `combat.engage.specialDamage` is in config; [MED] the start panel's Combat choice ignores the saved `combat.model` and uses internal labels. Two pass 5 rows (exploring adds enemies, milestone labels) are still pending.
+- rationale:
+  - The 5 rows share one cause: rule text is written by hand in 5 components and in `config.meta.json`, so a rule change in the engine leaves the copy behind. Fixing them one per `/iterate` tick fixes the symptoms, and the next rule change brings them back.
+  - The designer reads this copy to check the rules. Text that states the old rule makes a playtest test the wrong game.
+- proposed scope: 1 phase.
+  - A pure `ruleText` module in content (or the engine's describe layer) that builds each rule phrase from config: the goal and lose condition, the reveal cost, Gather, the milestone labels, and the miniature limit.
+  - /, /play (start panel, cards, run summary, log), and /config help all read from it.
+  - /config marks or hides rulings no engine code reads. A unit test lists every config leaf the engine never reads, so new inert keys fail the test.
+  - A test that fails when a component string contains a rule number not read from config.
+- estimated phases: 1
+- conflicts: none. It changes no rule value or default; it only makes the copy match the engine.
+- last re-evidenced: 2026-10-10 (expand pass 9)
+  - Pass 5: 6 of 13 commits since pass 4 hand-fixed rule text in components: f85de8f (Exchanges banner), d8bfcfa (enemy dice damage), 2d3def3 (exploring adds enemies), 7bb9d7c (start panel Combat choice), 9f68ef9 (milestone labels), 2050970 (home Combat step). Critique pass 7 adds the enemy dice case row.
+  - Pass 6: c9bd27d hand-fixed the enemy dice case again (a third pass on that string). Critique pass 8 files a new row on the home Combat step (`HomePage.tsx:25-29`), the same hand-written rule text that 2050970 patched one pass earlier.
+  - Pass 9: two more rule changes left copy behind within a day. 9ba3222 (Combat lasts until the cards run out) and 256bdb4 (the draft pool) changed the engine, and critique pass 11 (2376ca3) files 5 of its 6 rows on the stale text: [MED] nothing says unplayed cards stay in hand or when Combat ends (`HomePage.tsx:26`, `StartPanel.tsx:17`, `nextStep.ts:82`); [MED] /decisions rows 65, 66 and 69 describe exchanges with no note that engagements are the default; [LOW] the draft dialog does not say unkept Skills go to the pool (`DecisionDialog.tsx:31`); [LOW] "The exchange ends." in the engagement log; [LOW] build notes ("designer 2026-10-09", "Combat v3 numbers") in `config.meta.json:103,127,135`.
+- promoted: 2026-10-10 via oversight, as phase 25. Ruling audit: no conflict; the symptoms listed above were all hand-fixed by 2026-10-10, the cause remains. Lose condition is knockout (phase 21).
+
+### [x] [score 5.0] A defending bot policy, so tuning numbers stop resting on a floor
+- proposed: 2026-10-03, expand pass 2 (Considered, score 3.5); re-scored and moved to Pending in pass 3
+- source signals:
+  - `docs/reports/phase-22-experiments.md` caveat: the bot builds few defenses, does not defend the base, and plays to no plan, so "every number here is a floor". The default median end round is 6, against the 8-14 band.
+  - Same report: the turtle bot with the row 63 clock outlasts the active bot (median 11 against 6). The scripted "good" player is worse than one that never moves.
+  - Same report: Skill caps 4, 6, and 8 give identical batches because runs are too short for a cap to bind. Row 9 cannot be measured with this bot.
+  - `docs/reports/phase-9-bot-batch.md` already called the bot a floor (expand pass 2 note).
+- rationale:
+  - 3 independent signals now say the same thing: the compare tool (phase 14) and the experiment reports can only rank configs by a weak player. Rows 9, 17, and 63-70 all wait on numbers this bot cannot give.
+  - Playtests are still the final answer, but a stronger bot cuts the configs the designer needs to try by hand.
+- proposed scope: 1 phase.
+  - A `defender` policy in `packages/bot`: builds and repairs defenses near the base, uses Tower targets, and returns to the base when enemies near it. Pure, seeded, with policy tests.
+  - `pnpm sim -- compare --policy defender`, and a re-run of the phase 22 tables with it as a short addendum to the report.
+- estimated phases: 1
+- conflicts: none. It changes no rule; the bot only calls the engine API.
+- last re-evidenced: 2026-10-10 (expand pass 9)
+  - Pass 9: the session residue row "sim — the bot cannot measure today's designer changes" (8402ba3) names three designer changes the bot cannot see: it does not pick targets to defeat enemies before their dice hit, so the phase 23 `defeatedDice` gap is a floor (`docs/reports/phase-23-defeated-dice.md`, about 8% fewer hits); it rarely reaches a second draft, so the draft pool (256bdb4) left both pinned batches unchanged; it discards whole hands, so the hand kept across engagements (9ba3222) is under-measured. Scope should add those three behaviours (target picks, keeping cards, buying Training) and re-run the defeated-dice and draft-pool comparisons.
+- promoted: 2026-10-10 via oversight, as phase 26, merged with the rejected "Combat v3 in the bot and the sim". Ruling audit: row 72 decided 2026-10-09, so re-measure under engagements, not the phase 22 exchange tables.
+
+### [x] [score 4.5] Player names for every map piece: no engine ids on /play or /config
+- proposed: 2026-10-08, expand pass 5
+- source signals:
+  - `plan/CRITIQUE.md` pass 7: [LOW] enemy choice buttons name enemies by engine id ("grunt e3"); [LOW] /config pick lists show ids next to names, and presets show only ids ("preset-2").
+  - Pass 5 reader note (not filed, cap): the phase bar and live region print raw step ids such as "Exchange: cards".
+  - Commits since pass 4: b91436a (Tower named by id), 86ed988 (starter cards named by id), c30dc34 and 7bb9d7c (Combat model internal labels). Each fixed one surface by hand.
+  - Source: ids still reach player text in `apps/web/src/map/places.ts:105` (map piece names), `apps/web/src/play/PlayMap.tsx:214` (enemy aria labels), `apps/web/src/play/describeEvent.ts:55,61` (log), `apps/web/src/debug/describeAction.ts:19` (/play choice buttons), and `apps/web/src/config/ConfigPage.tsx:101,473,505` (pick lists, presets).
+- progress 2026-10-09 (phase 24, 09780d9): the engagement modal, the map's enemy labels, the enemy dice, and Tower-target buttons now use `enemyLabel` (kind and place). Still on ids: the play log (`describeEvent.ts` `enemyLabel`), /play choice buttons through `describeAction`, and the /config pick lists and presets.
+- rationale:
+  - 4 commits and 3 pending rows share one cause: each surface names engine pieces itself, and the fallback is the id. One `/iterate` tick per surface fixes the symptom; the next new surface brings it back.
+  - Two enemies of one kind on one terrain differ only by id, so the fix needs a naming rule (kind, place, and a plain ordinal when two still match), not a string swap.
+- proposed scope: 1 phase.
+  - One pure naming module for /play: enemies, defenses, the Tower, and cards by kind and place (as `stepsAway` does), with an ordinal only to tell two matching pieces apart. Map labels, aria labels, choice buttons, the log, and the phase bar all read from it. /debug keeps its ids.
+  - /config: names only in pick lists; presets as "Preset 1", "Preset 2".
+  - A test that renders /play states from seeded runs and fails when player text contains an engine id pattern.
+- estimated phases: 1
+- conflicts: none. No rule or config value changes. Overlaps "Rule text from one source" (both are copy built from data); oversight may merge them.
+- last re-evidenced: 2026-10-09 (expand pass 8)
+  - Pass 8: audit passes 23 to 25 again leave the enemy-id row at 2.8, waiting on this candidate; it is now the oldest pending critique row (pass 7). The two /config id rows (pass 6) are also still pending.
+  - Pass 7: fbce568 fixed one more log surface by hand: a repair now reads "Tower d2" in place of the bare "d2", which matches the other defense lines but still shows the id. Audit pass 22 is the 11th in a row to score the enemy-id row below 3.0 while it waits on this naming rule.
+  - Pass 6: critique pass 8 (4a4fe28) left both pass 6 and pass 7 id rows pending. `apps/web/src/map/places.test.ts:49` and `describeAction.test.ts:48` still pin "grunt e1" and "grunt e3" in player text.
+- promoted: 2026-10-10 via oversight, as phase 27. Ruling audit: no conflict; "Exchange: cards" above is an exchange-model example, the id problem stands.
+
+### [x] [score 4.0] Static HTML for each page: the copy, title, and preview card are in the served file
+- proposed: 2026-10-09, expand pass 6
+- source signals:
+  - `plan/CRITIQUE.md` pass 4, 5, and 8 notes: the web-fetch reader got only the app shell on every route, so it read the shipped copy from source. Pass 4 could not review the /decisions and /config copy at all. Cloud critique is the only critique the loop runs on a schedule.
+  - Pass 8 reader note (not filed, cap): `index.html` has no canonical link.
+  - Commits since pass 5 that patched the one shared shell by hand: de20235 (`<noscript>` line), 768f098 (noindex on unknown paths, set by script after load), 0219e35 (Open Graph tags). Every route serves the same title, description, and preview card, because `apps/web/public/_redirects` sends `/*` to `/index.html`.
+- rationale:
+  - 3 critique passes and 3 shell commits share one cause: the server sends one empty page for every path, and everything a reader, an unfurler, or a crawler sees is added later by script. Each per-route fix (title, description, canonical, 404 status) has to be faked in that one file.
+  - The critique gap is the bigger cost: a regression in client-rendered copy on /decisions or /config can ship and never be seen by a scheduled critique pass.
+- proposed scope: 1 phase.
+  - A build step that renders the static routes (/, /tiles, /decisions, /credits, /config with defaults) to their own HTML files with React `renderToString`, then hydrates. /play and /debug keep a shell with their own title and description.
+  - Per-route `<title>`, description, `og:title`, `og:url`, and canonical from one route table, which the in-app `document.title` also reads.
+  - A real 404 page for unknown paths (HTTP 404 in place of the `/*` rewrite and the script-set noindex).
+  - The smoke e2e fetches each route without JavaScript and checks its heading and title.
+- estimated phases: 1
+- conflicts: none with spec (still a static build on Cloudflare Pages; bearings "static build"). Watch hydration of /config, which reads local storage: render the defaults, then load saved edits after hydration.
+- last re-evidenced: 2026-10-09 (expand pass 8)
+  - Pass 8: critique pass 9 (25a398a) files the per-route gap as its own row: every route serves the home description and an `og:url` fixed to the home page, with no canonical (`apps/web/index.html:6,16`). Audit passes 23 to 25 score it 2.7 and leave it waiting here, because a canonical set by script does not reach unfurlers that skip JavaScript.
+  - Pass 7: Two more hand patches of the one shared shell since pass 6: 1aaa6a9 (favicon link) and 5a93dde (sitemap and robots.txt). The sitemap now lists 7 pages, and every one of them is served the same title, description, and preview card, with no canonical link. Audit passes 17 to 22 leave the canonical row waiting on this candidate.
+- promoted: 2026-10-10 via oversight, as phase 28. Ruling audit: no ruling applies.
 
 ### [x] [score 6.5] Accessibility and navigation pass for the secondary pages (/tiles, /debug, shell)
 - proposed: 2026-10-03, expand pass 1
@@ -249,6 +210,48 @@
 
 ## Rejected
 
-(empty — populated as `/oversight` rejects candidates)
+### [-] [score 6.0] Combat v3 in the bot and the sim, so the engagement playtest has numbers
+- proposed: 2026-10-06, expand pass 4
+- source signals:
+  - 673198c: `combat.model: "engage"` (OPEN-QUESTIONS row 72, proposed, designer playtesting) is the /play start panel's default, but `packages/bot` and `tools/sim` have no engage support. The only bot change in that commit is one `resolve` case for the exchange model. No batch, compare run, or report covers engagements.
+  - `docs/design/combat-v3.md` "Open": siege timing (once per Combat or per hand), how many Engage plays a 10-card deck holds, 1 Skill or every filled Skill per engagement, Hit damage and guard. Each is a config number under `combat.engage` that a batch could rank before the designer plays it.
+  - `plan/AUDIT.md` needs-user-call "Balance after phase 21" and the phase 22 report: every balance number on record is for the exchange model. If the designer adopts engagements, the 8-14 band check starts from zero.
+  - `RULES-COVERAGE.md` has no row for row 72; `packages/engine/test/engage.test.ts` is the only coverage.
+- rationale:
+  - The designer is changing Combat now (5 commits on 2026-10-06 reshaped /play around it). Exchanges have 3 reports of bot numbers; engagements have none, so the designer has only their own hand-played runs to judge them.
+  - A bot that plays engagements also gives the engage model a full-run property test (no stalls, no illegal states), which a 341-line new combat module lacks.
+- proposed scope: 1 phase.
+  - Bot policy for the engage step types: play Engage when an enemy is adjacent or a ranged Skill can reach one, use dice on Skills, pick targets, finish the engagement, Move/Heal/Repair between engagements. Pure and seeded, with policy tests.
+  - `pnpm sim -- run --combat engage` and `compare` across `combat.model`, plus a full-run property test on the engage model (200 seeds, no errors, no stalls).
+  - A short report: exchange against engage at defaults (median end round, damage taken, enemies defeated), and one table per open point that is already a config number. RULES-COVERAGE row for 72.
+- estimated phases: 1
+- conflicts: none. No default changes; row 72 stays proposed until the designer decides. Overlaps the "defending bot policy" candidate (both touch `packages/bot`); oversight may merge them.
+- progress 2026-10-10 (expand pass 9): phase 23 (f4ebbce) made engagements the default, and the bot already played them (200 runs, 0 errors, 0 stalls); `tools/sim/src/run.test.ts` pins the default batch on engagements and keeps an exchange batch. Left of this candidate: an engage-aware policy (pick targets, keep cards) and the exchange against engage report. Both now sit inside "A defending bot policy"; oversight should merge this row into that one.
+- rejected: 2026-10-10 via oversight. Stale: row 72 was decided 2026-10-09 (engagements default), the bot already plays engagements, and RULES-COVERAGE covers Combat v3. The residue (engage-aware policy, report) is merged into phase 26.
 
-
+### [-] [score 5.5] Engagement modal III: the blind round 4 residue
+- proposed: 2026-10-10, expand pass 9
+- source signals:
+  - `plan/CRITIQUE.md` blind-round-4 rows (phase 24, 2026-10-09), all on the engagement modal and all still pending:
+    - [MED] the result after a target pick can read as skipped (the step-aside before "Engagement over").
+    - [MED] a Skill that needs more dice than the player has gives no hint.
+    - [LOW] the result does not say who took the damage or their health after.
+    - [LOW] "in range" counts differ from the engaged enemies.
+    - [LOW] card timing and the Special face are explained only later.
+    - [LOW] at 375px a fifth Skill, the target pick, and the hand still need scrolling.
+    - [LOW] the mini-map target label can cover tokens.
+    - [LOW] Roll again stays on when every die is kept.
+  - Critique pass 11 (2376ca3) adds 2 more on the same flow: [LOW] the banner names a "Finish engagement" button that does not exist (`nextStep.ts:23` against `EngagementModal.tsx:250`), and [LOW] the engagement log ends with "The exchange ends." (`describeEvent.ts:143-144`).
+  - Commits since pass 8: 10 of 33 touched the modal (8f8e341 through b0bc5dd), and phase 24 was itself a follow-up phase. `design/engagement-modal.md` plans a round 5 with one browser context per tester.
+- rationale:
+  - 10 pending rows on one component from two independent sources (blind testers and the web-fetch reader). One `/iterate` tick each would open `EngagementModal.tsx` 10 times, and three rows (the step-aside, the 375px scroll, the mini-map label) are layout work that interacts.
+  - Engagements are the default Combat, so this is the surface every playtest run goes through.
+- proposed scope: 1 phase.
+  - The result: no bare step-aside when the pick ends the engagement; the result names who took damage and their health after.
+  - The dice and Skills: a hint on a Skill that needs more dice than the player rolled; Roll again off when every die is kept; card timing and Special explained at first sight.
+  - Layout: 375px fit for a fifth Skill and the target pick; the mini-map label clears the tokens; "in range" counts match the engaged enemies.
+  - Copy: the banner and the log use the modal's own words (shared with "Rule text from one source").
+  - Blind round 5 with one browser context per tester, as the design note asks.
+- estimated phases: 1
+- conflicts: none. No rule or config value changes. The two copy rows overlap "Rule text from one source"; oversight may fold them into either.
+- rejected: 2026-10-10 via oversight. 4 of its 10 rows shipped after pass 9 (18e28f3, 9c02068, 66d451f, 832c578); the 6 left are all LOW and stay in `plan/CRITIQUE.md` for `/iterate`.

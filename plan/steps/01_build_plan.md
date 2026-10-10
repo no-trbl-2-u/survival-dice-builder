@@ -62,6 +62,12 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 23 — Engagements by default, and a switch that cancels a defeated enemy's dice (config default `combat.model: "engage"`, Start run follows the saved config, `combat.engage.defeatedDice` default `"hit"`, sim comparison) — f4ebbce
 - [x] Phase 24 — Engagement modal II: no pre-selected die, a damage number on the board after a target pick, phone fit, a first-time card nudge, enemy names (mini map, buttons, title), result read out, touch-drag test, a force-elite dev tool, and an elite blind round — 09780d9
 
+**Promoted via oversight 2026-10-10 (phase candidates audited against every ruling through 256bdb4):**
+- [ ] Phase 25 — Rule text from one source: a pure `ruleText` module builds every rule phrase from config (reveal cost, Gather, knockout, milestones, miniature limit, Combat end, draft pool); /, /play, and /config help read it; a test lists config leaves no engine code reads; a test fails on rule numbers hardcoded in components
+- [ ] Phase 26 — A defending bot policy: builds and repairs defenses near the base, uses Tower targets, picks targets to defeat enemies before their dice hit, keeps cards across engagements, buys Training; `pnpm sim -- compare --policy defender`; re-measure rows 63-70, defeated dice, and the draft pool under engagements (absorbs the rejected "Combat v3 in the bot and the sim" candidate)
+- [ ] Phase 27 — Player names for every map piece: one pure naming module (kind, place, ordinal only to tell two apart) for the /play log, choice buttons, phase bar, and aria labels; /config pick lists by name and presets as "Preset N"; a test that fails on engine ids in player text
+- [ ] Phase 28 — Static HTML for each page: prerender /, /tiles, /decisions, /credits, /config (defaults) with per-route title, description, og:url, and canonical from one route table; /play and /debug get their own shell meta; a real 404 for unknown paths; a no-JS e2e fetch per route
+
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
 > designer runs them and drops run exports in
@@ -368,6 +374,43 @@ by kind and place (mini-map hover label, target buttons, title); the
 result announced to screen readers; guard damage in the headline; the
 phone hand strip scrolls; a touch-emulated drag test; the dev tools
 stay, plus a force-elite one; an elite blind round closes the phase.
+### Phase 25 — Rule text from one source
+
+Source: `plan/PHASE_CANDIDATES.md` "Rule text from one source" (score
+6.5, expand passes 3-9), promoted via oversight 2026-10-10. Every rule
+change since phase 20 left hand-written copy behind (14+ hand fixes,
+latest 6accc3e, 9c43308, 4ae424d, b7074c2). Build each rule phrase
+from config in one pure module; components only read it. The lose
+condition is knockout (phase 21), not "keep every player alive". No
+rule value or default changes.
+
+### Phase 26 — A defending bot policy
+
+Source: `plan/PHASE_CANDIDATES.md` "A defending bot policy" (score
+5.0) with the residue of "Combat v3 in the bot and the sim" (rejected,
+merged here), promoted via oversight 2026-10-10. Row 72 is decided
+(engagements are the default), so every comparison runs under
+engagements; the phase 22 exchange tables are not re-run as is. Add
+the three behaviours the 2026-10-09 session residue names (target
+picks, keeping cards, buying Training). Report: defender against the
+current bot, rows 63-70 re-measured, defeated dice and draft pool
+re-run. Unblocks the deferred "Try the proposals" candidate.
+
+### Phase 27 — Player names for every map piece
+
+Source: `plan/PHASE_CANDIDATES.md` "Player names for every map piece"
+(score 4.5), promoted via oversight 2026-10-10. Phase 24 named enemies
+in the engagement modal and map; ids remain in `describeEvent.ts`,
+`describeAction.ts`, `map/places.ts`, and `ConfigPage.tsx` presets.
+/debug keeps its ids.
+
+### Phase 28 — Static HTML for each page
+
+Source: `plan/PHASE_CANDIDATES.md` "Static HTML for each page" (score
+4.0), promoted via oversight 2026-10-10. `apps/web/index.html` serves
+one description and `og:url` for every route and `_redirects` sends
+`/*` to `/index.html` with 200. Still a static Cloudflare Pages build.
+/config renders defaults, then loads saved edits after hydration.
 ---
 
 ## Carry-overs / known gaps (update as phases ship)
