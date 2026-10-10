@@ -100,7 +100,7 @@
   },
   "combat.moveCostNextToEnemy": {
     "label": "Move cost next to an enemy",
-    "help": "Hexes a Move pays to enter a hex next to an enemy. 1 (default, designer 2026-10-09): no extra cost. 2: the written rule (6.9).",
+    "help": "Hexes a Move pays to enter a hex next to an enemy. 1 (default): no extra cost. 2: the written rule (6.9).",
     "rule": "6.9",
     "range": [1, 6]
   },
@@ -126,7 +126,7 @@
   },
   "combat.model": {
     "label": "Combat model",
-    "help": "Engagements (default, designer 2026-10-09): play Engage to roll from where you stand; each enemy next to you rolls a die back, and enemies hit structures at the end of Combat. Exchanges: the Combat in the written rules. In each exchange you roll, play cards, and fire Skills; then every enemy next to you attacks.",
+    "help": "Engagements (default): play Engage to roll from where you stand; each enemy next to you rolls a die back, and enemies hit structures at the end of Combat. Exchanges: the Combat in the written rules. In each exchange you roll, play cards, and fire Skills; then every enemy next to you attacks.",
     "rule": "7.8, Combat v3",
     "options": {
       "engage": "Engagements (default)",
@@ -134,7 +134,7 @@
     }
   },
   "combat.engage": {
-    "label": "Combat v3 numbers"
+    "label": "Engagement numbers"
   },
   "combat.engage.enemyDie": {
     "label": "Enemy die faces",
@@ -173,7 +173,7 @@
   },
   "combat.engage.defeatedDice": {
     "label": "Defeated enemies' dice",
-    "help": "Hit: every enemy die rolled hits at the end of the engagement, all at once, even the dice of an enemy you defeated (designer rule, 2026-10-09). Cancelled: a defeated enemy's dice do not hit (experiment).",
+    "help": "Hit: every enemy die rolled hits at the end of the engagement, all at once, even the dice of an enemy you defeated (default). Cancelled: a defeated enemy's dice do not hit (experiment).",
     "rule": "Combat v3",
     "options": {
       "hit": "Still hit (default)",
@@ -305,7 +305,7 @@
   },
   "draft.unpicked": {
     "label": "Skills you do not keep",
-    "help": "Pool (default, designer 2026-10-09): they go to your own pool, and each later draft offers the new Skills plus your whole pool, so the choice grows and is not tied to one training level. Supply: they go to the bottom of their supply (the written rule).",
+    "help": "Pool (default): they go to your own pool, and each later draft offers the new Skills plus your whole pool, so the choice grows and is not tied to one training level. Supply: they go to the bottom of their supply (the written rule).",
     "rule": "11.7",
     "options": {
       "pool": "Your pool (default)",
@@ -400,7 +400,7 @@
   },
   "options.skillUses": {
     "label": "Skill uses",
-    "help": "How often each Skill can fire in one exchange or engagement. Default (designer, 2026-10-09): unlimited, as long as the dice fill it again.",
+    "help": "How often each Skill can fire in one exchange or engagement. Default: unlimited, as long as the dice fill it again.",
     "rule": "18.1, 7.8 step 6",
     "options": {
       "once-per-exchange": "Once per exchange",

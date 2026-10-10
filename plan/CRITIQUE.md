@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play and /config — copy says "the designer's playtest Combat", "designer 2026-10-09", and "Combat v3"
-- pass: 11 (commit 8402ba3)
-- viewport: desktop
-- category: voice
-- observation: The start panel hint calls the default model "The designer's playtest Combat" and never says "Engagements", while the select next to it does. Several /config help lines carry build notes ("default, designer 2026-10-09") and one group is labelled with the internal version "Combat v3 numbers".
-- evidence: `apps/web/src/play/StartPanel.tsx:17`; `packages/content/data/config.meta.json:103`, `:127`, `:135`
-- suggested fix: Start the hint with "Engagements: play Engage ..."; shorten the help notes to "(default)"; rename the group "Engagement numbers".
-- source: web-fetch
-
 ### [LOW] /play — the Skill draft does not say unkept Skills go to the pool
 - pass: 11 (commit 8402ba3)
 - viewport: desktop
@@ -163,6 +154,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play and /config — copy says "the designer's playtest Combat", "designer 2026-10-09", and "Combat v3"
+- pass: 11 (commit 8402ba3)
+- viewport: desktop
+- category: voice
+- observation: The start panel hint calls the default model "The designer's playtest Combat" and never says "Engagements", while the select next to it does. Several /config help lines carry build notes ("default, designer 2026-10-09") and one group is labelled with the internal version "Combat v3 numbers".
+- evidence: `apps/web/src/play/StartPanel.tsx:17`; `packages/content/data/config.meta.json:103`, `:127`, `:135`
+- suggested fix: Start the hint with "Engagements: play Engage ..."; shorten the help notes to "(default)"; rename the group "Engagement numbers".
+- source: web-fetch
+- issue: #69
+- fixed: (this commit) — the start hint opens "Engagements: play Engage ..."; the /config help notes say "(default)" with no build dates; the group is "Engagement numbers".
 
 ### [x] [LOW] /play — the engagement log ends with "The exchange ends."
 - pass: 11 (commit 8402ba3)

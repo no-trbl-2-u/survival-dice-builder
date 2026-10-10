@@ -82,7 +82,9 @@ test('/play: the start panel says what a run is and what the seed does', async (
     'The same seed and the same choices give the same game.',
   )
   const combat = panel.getByRole('combobox', { name: /Combat/ })
-  await expect(combat).toHaveAccessibleDescription(/Play Engage to roll from where you stand/)
+  await expect(combat).toHaveAccessibleDescription(
+    /Engagements: play Engage to roll from where you stand/,
+  )
   await combat.selectOption('exchange')
   await expect(combat).toHaveAccessibleDescription(/In each exchange you roll, play cards/)
   await expect(panel).not.toContainText('Spec v1')

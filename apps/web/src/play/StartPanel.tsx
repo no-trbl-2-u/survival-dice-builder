@@ -14,7 +14,7 @@ const COMBAT_LABEL = defaultConfigMeta['combat.model']?.options ?? {}
 /** One line per Combat choice: how a Combat plays under it. */
 const COMBAT_HINT: Record<CombatModel, string> = {
   engage:
-    "The designer's playtest Combat. Play Engage to roll from where you stand; each enemy next to you rolls a die back. Cards you did not play stay in your hand; Combat ends when every hand and deck is empty. Enemies hit structures at the end of Combat.",
+    'Engagements: play Engage to roll from where you stand; each enemy next to you rolls a die back. Cards you did not play stay in your hand; Combat ends when every hand and deck is empty. Enemies hit structures at the end of Combat.',
   exchange:
     'The Combat in the written rules. In each exchange you roll, play cards, and fire Skills; then every enemy next to you attacks.',
 }

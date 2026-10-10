@@ -3,6 +3,32 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-10 (pass 33, cloud tick)
+
+The queue is unchanged since pass 32 apart from its shipped top row. The voice row from critique pass 11 now leads. Besides the three places the row names, two more /config help lines carried "designer, 2026-10-09" (defeated enemies' dice, Skill uses); they say "(default)" too. Rule tags and code comments keep their dates; only visitor copy changes.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play and /config: copy says "the designer's playtest Combat", "designer 2026-10-09", and "Combat v3" (critique LOW, pass 11)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: "Engagements: play Engage ..." in the hint; "(default)" in help notes; group "Engagement numbers"
+- issue: #69
+- fixed: (this commit)
+
+### [ ] [3.0] /play: the Skill draft does not say unkept Skills go to the pool (critique LOW, pass 11)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: a muted line under the draft title
+
+### [ ] [2.4] /play: a hex next to an enemy that costs too much is not offered, with no reason (session residue LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: when `combat.moveCostNextToEnemy` is above 1, say it in the Move banner
+
 # Site audit — 2026-10-10 (pass 32, cloud tick)
 
 The queue is unchanged since pass 31 apart from its shipped top row. The engagement log row now leads. The engine already tags an engagement's end with the Combat v3 rule and an exchange's with 7.8, so the log reads that tag; no engine event changes, so the golden replays keep their hashes.
