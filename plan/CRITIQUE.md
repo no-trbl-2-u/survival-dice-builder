@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — nothing says unplayed cards stay in hand or when Combat ends
-- pass: 11 (commit 8402ba3)
-- viewport: desktop
-- category: comprehension
-- observation: Combat now lasts until the hand and deck are empty, and cards not played into an engagement stay in hand. The home Combat step, the start panel hint, the Combat banner, and the engagement result all leave this out, so a player cannot tell why Combat goes on after the first engagement or when it ends.
-- evidence: `apps/web/src/home/HomePage.tsx:26`; `apps/web/src/play/StartPanel.tsx:17`; `apps/web/src/play/nextStep.ts:82` "Play each card: Engage ..., another option, or discard it"; the rule appears only in `OPEN-QUESTIONS.md:150`
-- suggested fix: Add one line to the start panel hint and the engagement result: "Cards you did not play stay in your hand. Combat ends when your hand and deck are empty."
-- source: web-fetch
-
 ### [MED] /decisions — open rows 65, 66 and 69 describe exchanges, with no note that engagements are now the default
 - pass: 11 (commit 8402ba3)
 - viewport: desktop
@@ -217,6 +208,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — nothing says unplayed cards stay in hand or when Combat ends
+- pass: 11 (commit 8402ba3)
+- viewport: desktop
+- category: comprehension
+- observation: Combat now lasts until the hand and deck are empty, and cards not played into an engagement stay in hand. The home Combat step, the start panel hint, the Combat banner, and the engagement result all leave this out, so a player cannot tell why Combat goes on after the first engagement or when it ends.
+- evidence: `apps/web/src/home/HomePage.tsx:26`; `apps/web/src/play/StartPanel.tsx:17`; `apps/web/src/play/nextStep.ts:82` "Play each card: Engage ..., another option, or discard it"; the rule appears only in `OPEN-QUESTIONS.md:150`
+- suggested fix: Add one line to the start panel hint and the engagement result: "Cards you did not play stay in your hand. Combat ends when your hand and deck are empty."
+- source: web-fetch
+- issue: #63
+- fixed: (this commit) — the start panel hint, the home Combat step, and the engagement result say unplayed cards stay in hand and Combat ends when every hand and deck is empty; e2e checks the result line
 
 ### [x] [MED] /play — the engagement result is not announced to screen readers
 - pass: 10 (commit 10fd9d1)

@@ -482,6 +482,9 @@ function SummaryView({
   )
   const cancelled = cancelledLine(summary)
   if (cancelled) lines.push(cancelled)
+  lines.push(
+    'Cards you did not play stay in your hand. Combat ends when every hand and deck is empty.',
+  )
   return (
     <>
       <Head state={state} stage={ENGAGE_STAGES.length - 1} title="Engagement over" />

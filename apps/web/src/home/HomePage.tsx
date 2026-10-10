@@ -25,9 +25,10 @@ export function HomePage() {
           <li>
             <strong>Combat:</strong> play Engage to roll your dice, plus 1 enemy die for each enemy
             next to you. Put your dice on your Skills one at a time; the enemy dice hit last, after
-            your guard. Or choose Exchanges, the Combat in the <a href={rulesUrl}>written rules</a>,
-            on the start panel: in each exchange you roll, play cards, and fire Skills, then every
-            enemy next to you attacks.
+            your guard. Cards you do not play stay in your hand, and Combat ends when every hand and
+            deck is empty. Or choose Exchanges, the Combat in the{' '}
+            <a href={rulesUrl}>written rules</a>, on the start panel: in each exchange you roll,
+            play cards, and fire Skills, then every enemy next to you attacks.
           </li>
         </ol>
         <p>

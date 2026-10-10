@@ -3,6 +3,44 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-10 (pass 27, cloud tick)
+
+Critique pass 11 refilled the queue with 2 MED and 4 LOW rows. The two MED comprehension rows from pass 11 tie on impact; the unplayed-cards line is copy only and touches every Combat, so it wins.
+
+## Top 5 findings (scored)
+
+### [x] [5.4] /play: nothing says unplayed cards stay in hand or when Combat ends (critique MED, pass 11)
+- category: external-critique (comprehension)
+- impact: 6 (every engagement Combat; the default model)
+- ease: 9
+- next: one line in the start panel hint, the home Combat step, and the engagement result
+- issue: #63
+- fixed: (this commit)
+
+### [ ] [4.9] /decisions: open rows 65, 66, 69 speak of exchanges with no note that engagements are the default (critique MED, pass 11)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: an "Exchanges only" tag on those rows and one intro line
+
+### [ ] [4.2] /play: the result after a target pick can read as skipped (blind round 4 MED)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7
+- next: skip the step-aside when the pick ended the engagement, or say what comes next on the board
+
+### [ ] [4.2] /play: a Skill needing more dice than the player has gives no hint (blind round 4 MED)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7
+- next: mark a Skill whose slots outnumber the player's dice ("needs 2 dice")
+
+### [ ] [3.6] /play: the engagement banner names a "Finish engagement" button that does not exist (critique LOW, pass 11)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: "Repeat, or choose End engagement"
+
 # Site audit — 2026-10-09 (pass 26, cloud tick)
 
 Critique pass 10 and the user's jot of 2026-10-09 refilled the queue. The two MED a11y rows tie; the enemy-dice label is the one-line fix.
