@@ -1,5 +1,6 @@
 import {
   decisionsMarkdown,
+  defaultConfigMeta,
   defaultContent,
   GameConfigSchema,
   parseQuestions,
@@ -143,6 +144,7 @@ if (command === 'decisions') {
     parseQuestions(fs.readFileSync(path.join(REPO, 'OPEN-QUESTIONS.md'), 'utf-8')),
     parseUserCalls(fs.readFileSync(path.join(REPO, 'plan', 'AUDIT.md'), 'utf-8')),
     defaultContent.config,
+    defaultConfigMeta,
   )
   const out = args.get('out')
   if (out) {

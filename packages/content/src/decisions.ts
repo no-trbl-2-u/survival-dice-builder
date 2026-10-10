@@ -1,4 +1,5 @@
 import type { GameConfig } from './schemas/config.ts'
+import type { ConfigMeta } from './schemas/configMeta.ts'
 
 /** One row of the `OPEN-QUESTIONS.md` table (cells keep their markdown). */
 export type QuestionRow = Readonly<{
@@ -156,6 +157,34 @@ export function flagSettings(flag: string, config: GameConfig): FlagSetting[] {
 }
 
 /**
+ * The one Combat model a row applies under, or null when it applies under both. The row's first
+ * setting is the option its reading proposes, so its `combatModel` (config metadata) decides.
+ *
+ * @param settings - the row's settings (`flagSettings`).
+ * @param meta - the config metadata.
+ * @rule 7.8, Combat v3
+ */
+export function settingsCombatModel(
+  settings: readonly FlagSetting[],
+  meta: ConfigMeta,
+): 'engage' | 'exchange' | null {
+  const path = settings[0]?.path
+  return (path ? meta[path]?.combatModel : undefined) ?? null
+}
+
+/** The tag on a reading that applies under one Combat model: "Exchanges only". */
+export function combatModelTag(model: 'engage' | 'exchange'): string {
+  return model === 'engage' ? 'Engagements only' : 'Exchanges only'
+}
+
+/** One line on the default Combat model: a reading tagged with the other one changes nothing. */
+export function combatModelLine(config: GameConfig): string {
+  const engage = config.combat.model === 'engage'
+  const other = combatModelTag(engage ? 'exchange' : 'engage')
+  return `Combat uses ${engage ? 'engagements' : 'exchanges'} by default. A reading marked "${other}" changes nothing until the Combat model is switched on the Config page.`
+}
+
+/**
  * Reads every `- [needs-user-call] **Title** body` line.
  *
  * @param md - the text of `plan/AUDIT.md`.
@@ -191,11 +220,13 @@ function settingsLine(settings: readonly FlagSetting[], flag: string): string {
  * @param questions - every question row (the open ones are picked here).
  * @param calls - the needs-user-call checks.
  * @param config - the config whose values are shown (normally the default config).
+ * @param meta - the config metadata (marks the readings that apply under one Combat model).
  */
 export function decisionsMarkdown(
   questions: readonly QuestionRow[],
   calls: readonly UserCall[],
   config: GameConfig,
+  meta: ConfigMeta,
 ): string {
   const open = openQuestions(questions)
   const lines = [
@@ -209,16 +240,21 @@ export function decisionsMarkdown(
     'Evidence: the bot batch report (`docs/reports/phase-9-bot-batch.md`) and the playtest',
     'kit (`docs/playtests/`, `pnpm sim -- playtests`).',
     '',
+    combatModelLine(config),
+    '',
     '## Rule readings',
     '',
   ]
   for (const q of open) {
+    const settings = flagSettings(q.flag, config)
+    const model = settingsCombatModel(settings, meta)
+    const tag = model ? ` [${combatModelTag(model)}]` : ''
     lines.push(
-      `### ${q.number}. ${q.question.replace(/\.$/, '')} (rule ${q.rule})`,
+      `### ${q.number}. ${q.question.replace(/\.$/, '')} (rule ${q.rule})${tag}`,
       '',
       `- Status: ${q.status}`,
       `- Reading: ${q.reading}`,
-      `- Setting: ${settingsLine(flagSettings(q.flag, config), q.flag)}`,
+      `- Setting: ${settingsLine(settings, q.flag)}`,
       '',
     )
   }

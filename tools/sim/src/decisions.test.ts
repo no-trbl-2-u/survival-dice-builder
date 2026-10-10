@@ -1,5 +1,6 @@
 import {
   decisionsMarkdown,
+  defaultConfigMeta,
   defaultContent,
   parseQuestions,
   parseUserCalls,
@@ -16,6 +17,7 @@ describe('docs/DECISIONS.md', () => {
       parseQuestions(read('OPEN-QUESTIONS.md')),
       parseUserCalls(read('plan/AUDIT.md')),
       defaultContent.config,
+      defaultConfigMeta,
     )
     expect(read('docs/DECISIONS.md').replace(/\r\n/g, '\n')).toBe(expected)
   })

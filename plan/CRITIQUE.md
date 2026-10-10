@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — open rows 65, 66 and 69 describe exchanges, with no note that engagements are now the default
-- pass: 11 (commit 8402ba3)
-- viewport: desktop
-- category: comprehension
-- observation: The open readings 65, 66 and 69 (and their bot numbers) speak of "every exchange". Engagements are now the default Combat, and the page never says so; the decided row that records it is hidden by the open-only list.
-- evidence: `OPEN-QUESTIONS.md:80`, `:81`, `:84`; `apps/web/src/decisions/DecisionsPage.tsx:56`
-- suggested fix: Tag those rows "Exchanges only" on the page and add one intro line: "Combat uses engagements by default."
-- source: web-fetch
-
 ### [LOW] /play — the engagement banner names a "Finish engagement" button that does not exist
 - pass: 11 (commit 8402ba3)
 - viewport: desktop
@@ -208,6 +199,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — open rows 65, 66 and 69 describe exchanges, with no note that engagements are now the default
+- pass: 11 (commit 8402ba3)
+- viewport: desktop
+- category: comprehension
+- observation: The open readings 65, 66 and 69 (and their bot numbers) speak of "every exchange". Engagements are now the default Combat, and the page never says so; the decided row that records it is hidden by the open-only list.
+- evidence: `OPEN-QUESTIONS.md:80`, `:81`, `:84`; `apps/web/src/decisions/DecisionsPage.tsx:56`
+- suggested fix: Tag those rows "Exchanges only" on the page and add one intro line: "Combat uses engagements by default."
+- source: web-fetch
+- issue: #64
+- fixed: (this commit) — rows 65 and 69 tagged "Exchanges only"; row 66 applies under both models
 
 ### [x] [MED] /play — nothing says unplayed cards stay in hand or when Combat ends
 - pass: 11 (commit 8402ba3)

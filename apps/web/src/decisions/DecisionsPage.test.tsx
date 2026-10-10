@@ -35,6 +35,17 @@ describe('DecisionsPage', () => {
     expect(container.textContent).not.toMatch(/undefined|\*\*/)
   })
 
+  it('says the default Combat model and marks the readings for the other one', () => {
+    const { container } = render(<DecisionsPage />)
+    expect(container.textContent).toContain('Combat uses engagements by default.')
+    const tag = (n: number) =>
+      container.querySelector(`[data-question="${n}"] [data-testid="combat-model"]`)?.textContent
+    expect(tag(65)).toBe('Exchanges only')
+    expect(tag(69)).toBe('Exchanges only')
+    // Row 66's tile delay applies under both models.
+    expect(tag(66)).toBeUndefined()
+  })
+
   it('links each row it names: to the listed reading, or to the full table for a settled row', () => {
     const { container } = render(<DecisionsPage />)
     const row = (n: number) => container.querySelector(`[data-question="${n}"]`)

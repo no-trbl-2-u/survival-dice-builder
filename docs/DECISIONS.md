@@ -8,6 +8,8 @@ change its status in `OPEN-QUESTIONS.md`; to change its value, use `/config`.
 Evidence: the bot batch report (`docs/reports/phase-9-bot-batch.md`) and the playtest
 kit (`docs/playtests/`, `pnpm sim -- playtests`).
 
+Combat uses engagements by default. A reading marked "Exchanges only" changes nothing until the Combat model is switched on the Config page.
+
 ## Rule readings
 
 ### 4. "Reveal 10 tiles" is unreachable with 8 non-base tiles (rule 17)
@@ -118,7 +120,7 @@ kit (`docs/playtests/`, `pnpm sim -- playtests`).
 - Reading: **Proposed: spawn ramp** (option, default off; measured in phase 22). Each node spawns `1 + floor((round - 1) / N)` enemies per Combat, with the usual spill-over and cap. Bot report (N = 4): end round unchanged (runs end before the ramp builds), cap reached in 180 of 200 runs. Recommendation: needs a playtest with the combined set. Report: `docs/reports/phase-22-experiments.md`.
 - Setting: `spawn.rampEvery` = `empty`
 
-### 65. Exchange count is coupled to deck size: deck 10 with hand 3 gives 4 exchanges per Combat (deck 6 gave 2), and enemies attack once per exchange. One adjacent grunt deals 8 per round against 15 health, and every bought card adds an exchange. Phase 20 batch: median end round 5, 199 of 200 runs end by player death; phase 21 batch: median round 6, all by base fall. Intended? (rule 7.8 step 8, core loop v2)
+### 65. Exchange count is coupled to deck size: deck 10 with hand 3 gives 4 exchanges per Combat (deck 6 gave 2), and enemies attack once per exchange. One adjacent grunt deals 8 per round against 15 health, and every bought card adds an exchange. Phase 20 batch: median end round 5, 199 of 200 runs end by player death; phase 21 batch: median round 6, all by base fall. Intended? (rule 7.8 step 8, core loop v2) [Exchanges only]
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
 - Reading: **Proposed: each enemy attacks once per Combat** (option, default off; measured in phase 22). An enemy that has attacked is tipped over and does not attack again until the next Combat start. Bot report: median end round 6 to 7. Recommendation: turn on. Report: `docs/reports/phase-22-experiments.md`.
@@ -142,7 +144,7 @@ kit (`docs/playtests/`, `pnpm sim -- playtests`).
 - Reading: **Proposed: seat scaling** (option, default off; measured in phase 22). Each node spawns 1 enemy per 2 seats, rounded up. Bot report: same as the default at 2 seats (by construction); at 4 seats median 5 to 4. Co-op is already shorter than solo for the bot. Recommendation: keep off. Report: `docs/reports/phase-22-experiments.md`.
 - Setting: `spawn.perSeat` = `false`
 
-### 69. Structure-first targeting makes the Base tile a safe firing position: enemies next to the base target the base, not the player beside them, and a player on the Base tile can never be 2 hexes nearer than a structure (row 56). The player hits them every exchange and is never attacked. Turtling plus row 63 is the dominant line (rule 9.3, core loop v2)
+### 69. Structure-first targeting makes the Base tile a safe firing position: enemies next to the base target the base, not the player beside them, and a player on the Base tile can never be 2 hexes nearer than a structure (row 56). The player hits them every exchange and is never attacked. Turtling plus row 63 is the dominant line (rule 9.3, core loop v2) [Exchanges only]
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
 - Reading: **Proposed: every adjacent enemy attacks** (option, default off; measured in phase 22). In a player's exchange every enemy next to the figure attacks it, whatever its target. Bot report: the turtle bot is now attacked, but the base falls in the same round, and the turtle still outlasts the active bot (median 11 against 6, with the row 63 clock). Recommendation: needs a playtest. Report: `docs/reports/phase-22-experiments.md`.

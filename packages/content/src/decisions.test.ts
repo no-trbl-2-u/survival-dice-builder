@@ -1,12 +1,15 @@
 import fs from 'node:fs'
 import { describe, expect, it } from 'vitest'
+import { defaultConfigMeta } from './configMeta.ts'
 import { defaultContent } from './content.ts'
 import {
+  combatModelLine,
   decisionsMarkdown,
   flagSettings,
   openQuestions,
   parseQuestions,
   parseUserCalls,
+  settingsCombatModel,
   statusLabel,
 } from './decisions.ts'
 
@@ -88,10 +91,31 @@ describe('decisions', () => {
       parseQuestions(questionsMd),
       [{ title: 'Check.', body: 'Do it.' }],
       config,
+      defaultConfigMeta,
     )
     expect(md).toContain('## Rule readings')
     expect(md).toContain('## Checks')
     expect(md).toContain('- **Check.** Do it.')
     expect(md).not.toMatch(/undefined|null/)
+  })
+
+  it('marks the readings that apply only under the other Combat model', () => {
+    const rows = parseQuestions(questionsMd)
+    const model = (n: number) => {
+      const row = rows.find((r) => r.number === n)!
+      return settingsCombatModel(flagSettings(row.flag, config), defaultConfigMeta)
+    }
+    // Rows 65 and 69 set exchange-only options; row 69's second setting applies under both.
+    expect(model(65)).toBe('exchange')
+    expect(model(69)).toBe('exchange')
+    // Row 66's tile delay applies under both models; row 1 names a ruling.
+    expect(model(66)).toBeNull()
+    expect(model(1)).toBeNull()
+    expect(combatModelLine(config)).toMatch(
+      /^Combat uses engagements by default\. .*"Exchanges only"/,
+    )
+    const md = decisionsMarkdown(rows, [], config, defaultConfigMeta)
+    expect(md).toMatch(/^### 65\. .* \[Exchanges only\]$/m)
+    expect(md).not.toMatch(/^### 66\. .*\[Exchanges only\]$/m)
   })
 })

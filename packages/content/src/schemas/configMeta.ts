@@ -19,6 +19,8 @@ export const ConfigMetaEntrySchema = z.strictObject({
   range: z.tuple([z.number().int().nonnegative(), z.number().int().positive()]).optional(),
   /** An id field's choices on /config: the content list (or the deck presets) it names. */
   source: z.enum(['skills', 'cards', 'presets']).optional(),
+  /** The engine reads this field only under this Combat model (`combat.model`). */
+  combatModel: z.enum(['engage', 'exchange']).optional(),
 })
 export type ConfigMetaEntry = z.infer<typeof ConfigMetaEntrySchema>
 

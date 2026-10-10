@@ -108,6 +108,7 @@
     "label": "Enemy attacks per Combat",
     "help": "Row 65: how often an enemy attacks in one Combat. Off: the current rule (every exchange). Once per Combat: an enemy that has attacked is tipped over and does not attack again until the next Combat starts.",
     "rule": "7.8 step 8 (open question 65)",
+    "combatModel": "exchange",
     "options": {
       "every-exchange": "Every exchange (off)",
       "once-per-combat": "Once per Combat"
@@ -117,6 +118,7 @@
     "label": "Which adjacent enemies attack",
     "help": "Row 69: at the end of a player's exchange, which enemies next to the figure attack it. Off: the current rule (only enemies that target that player).",
     "rule": "9.3, 7.8 step 8 (open question 69)",
+    "combatModel": "exchange",
     "options": {
       "target-only": "Only enemies that target the player (off)",
       "any-adjacent": "Every adjacent enemy"

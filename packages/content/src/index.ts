@@ -47,11 +47,14 @@ export {
   type TileKind,
 } from './schemas/tiles.ts'
 export {
+  combatModelLine,
+  combatModelTag,
   decisionsMarkdown,
   flagSettings,
   openQuestions,
   parseQuestions,
   parseUserCalls,
+  settingsCombatModel,
   statusLabel,
   type FlagSetting,
   type QuestionRow,

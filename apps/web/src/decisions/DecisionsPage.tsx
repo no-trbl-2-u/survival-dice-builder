@@ -1,10 +1,13 @@
 import {
+  combatModelLine,
+  combatModelTag,
   defaultConfigMeta,
   defaultContent,
   flagSettings,
   openQuestions,
   parseQuestions,
   parseUserCalls,
+  settingsCombatModel,
   statusLabel,
   type QuestionRow,
 } from '@survival/content'
@@ -64,27 +67,47 @@ export function DecisionsPage() {
         status in <RepoFile path="OPEN-QUESTIONS.md" />. The same list is in{' '}
         <RepoFile path="docs/DECISIONS.md" />.
       </p>
+      <p>{combatModelLine(defaultContent.config)}</p>
       <nav aria-label="On this page">
         <a href="#readings">Rule readings</a> · <a href="#checks">Checks</a>
       </nav>
 
       <h2 id="readings">Rule readings</h2>
       <ol className={styles.list} data-testid="readings">
-        {open.map((q) => (
-          <li key={q.number} id={rowId(q.number)} className={styles.item} data-question={q.number}>
-            <h3 className={styles.question}>
-              {q.number}. <Inline text={q.question} rows={shown} />{' '}
-              <span className={styles.muted}>(rule {q.rule})</span>
-            </h3>
-            <p className={styles.muted}>Status: {statusLabel(q.status)}</p>
-            <p>
-              <Inline text={q.reading} rows={shown} />
-            </p>
-            <p>
-              Setting: <Settings row={q} />
-            </p>
-          </li>
-        ))}
+        {open.map((q) => {
+          const model = settingsCombatModel(
+            flagSettings(q.flag, defaultContent.config),
+            defaultConfigMeta,
+          )
+          return (
+            <li
+              key={q.number}
+              id={rowId(q.number)}
+              className={styles.item}
+              data-question={q.number}
+            >
+              <h3 className={styles.question}>
+                {q.number}. <Inline text={q.question} rows={shown} />{' '}
+                <span className={styles.muted}>(rule {q.rule})</span>
+                {model ? (
+                  <>
+                    {' '}
+                    <span className={styles.tag} data-testid="combat-model">
+                      {combatModelTag(model)}
+                    </span>
+                  </>
+                ) : null}
+              </h3>
+              <p className={styles.muted}>Status: {statusLabel(q.status)}</p>
+              <p>
+                <Inline text={q.reading} rows={shown} />
+              </p>
+              <p>
+                Setting: <Settings row={q} />
+              </p>
+            </li>
+          )
+        })}
       </ol>
 
       <h2 id="checks">Checks</h2>
