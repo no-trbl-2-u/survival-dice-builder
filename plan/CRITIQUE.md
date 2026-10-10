@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the engagement log ends with "The exchange ends."
-- pass: 11 (commit 8402ba3)
-- viewport: desktop
-- category: voice
-- observation: The engagement result's full log prints the Exchanges word for the end of an engagement, now the default model.
-- evidence: `apps/web/src/play/describeEvent.ts:143-144`, shown in the engagement result log
-- suggested fix: Print "The engagement ends." when the exchange was an engagement.
-- source: web-fetch
-
 ### [LOW] /play and /config — copy says "the designer's playtest Combat", "designer 2026-10-09", and "Combat v3"
 - pass: 11 (commit 8402ba3)
 - viewport: desktop
@@ -172,6 +163,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the engagement log ends with "The exchange ends."
+- pass: 11 (commit 8402ba3)
+- viewport: desktop
+- category: voice
+- observation: The engagement result's full log prints the Exchanges word for the end of an engagement, now the default model.
+- evidence: `apps/web/src/play/describeEvent.ts:143-144`, shown in the engagement result log
+- suggested fix: Print "The engagement ends." when the exchange was an engagement.
+- source: web-fetch
+- issue: #68
+- fixed: (this commit) — the log reads the engine's rule tag: an engagement ends with "The engagement ends.", an exchange still with "The exchange ends."
 
 ### [x] [LOW] /play — the engagement banner names a "Finish engagement" button that does not exist
 - pass: 11 (commit 8402ba3)

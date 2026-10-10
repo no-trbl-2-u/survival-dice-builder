@@ -3,6 +3,38 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-10 (pass 32, cloud tick)
+
+The queue is unchanged since pass 31 apart from its shipped top row. The engagement log row now leads. The engine already tags an engagement's end with the Combat v3 rule and an exchange's with 7.8, so the log reads that tag; no engine event changes, so the golden replays keep their hashes.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play: the engagement log ends with "The exchange ends." (critique LOW, pass 11)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: print "The engagement ends." for an engagement
+- issue: #68
+- fixed: (this commit)
+
+### [ ] [3.2] /play and /config: copy says "the designer's playtest Combat", "designer 2026-10-09", and "Combat v3" (critique LOW, pass 11)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: "Engagements: play Engage ..." in the hint; "(default)" in help notes; group "Engagement numbers"
+
+### [ ] [3.0] /play: the Skill draft does not say unkept Skills go to the pool (critique LOW, pass 11)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: a muted line under the draft title
+
+### [ ] [2.4] /play: a hex next to an enemy that costs too much is not offered, with no reason (session residue LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: when `combat.moveCostNextToEnemy` is above 1, say it in the Move banner
+
 # Site audit — 2026-10-10 (pass 31, cloud tick)
 
 The queue is unchanged since pass 30 apart from its shipped top row. The two LOW voice rows from critique pass 11 tie at 3.6; the banner row is older in the file, so it goes first. The Skill board under the modal said "Finish engagement" too, so it now uses the modal's words.

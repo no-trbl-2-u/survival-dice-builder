@@ -141,7 +141,8 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'playerDamaged':
       return `${who(event.player)} ${s('lose')} ${event.toGuard} guard and ${event.toHealth} health (health ${event.health}).`
     case 'exchangeEnded':
-      return 'The exchange ends.'
+      // The engine tags an engagement's end with the engagement rule (Combat v3), an exchange's with 7.8.
+      return event.rule === 'Combat v3' ? 'The engagement ends.' : 'The exchange ends.'
     case 'stepDeferred':
       return `Not yet in the engine: ${event.step}.`
     case 'tilePlaced':

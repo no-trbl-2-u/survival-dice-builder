@@ -104,6 +104,14 @@ describe('describeEvent', () => {
     for (const e of shown) expect(describeEvent(e, run.state)).toMatch(/^(Grunt|Elite) e\d+ /)
   })
 
+  it('ends an engagement with the engagement word, and an exchange with its own', () => {
+    const { run, events } = botRun(2)
+    const ended = events.find((e) => e.type === 'exchangeEnded')!
+    expect(describeEvent(ended, run.state)).toBe('The engagement ends.')
+    const exchange = { type: 'exchangeEnded', rule: '7.8', player: 'p1' }
+    expect(describeEvent(exchange as never, run.state)).toBe('The exchange ends.')
+  })
+
   it('explains a gather of 0 and names co-op seats', () => {
     const state = botRun(2).run.state
     const gathered = { type: 'gathered', rule: '6.7', player: 'p1', amount: 0, materials: 0 }
