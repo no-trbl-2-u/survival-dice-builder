@@ -9,6 +9,51 @@
 
 ## Pending
 
+### [MED] /decisions — the public page lists repo housekeeping
+- pass: discovery 1 (2026-10-10, bee25b5)
+- viewport: 1280x800
+- category: content
+- observation: The checks list shows operations notes to every visitor: "Replace GH_TOKEN and add GH_REPO to the main checkout's .env", "GitHub rejects the current token (401 Bad credentials)", and the `.env` keys DEPLOY_PROVIDER, CF_PAGES_PROJECT, NOTIFY_NTFY_TOPIC. No secret values appear.
+- evidence: `packages/content/src/decisions.ts:194` reads every `- [needs-user-call]` line of `plan/AUDIT.md`, including the operations rows at `plan/AUDIT.md:1191,1195`.
+- suggested fix: Skip needs-user-call rows that name `.env`, a token, or a local checkout (or tag them `ops` in AUDIT and filter the tag); regenerate `docs/DECISIONS.md`.
+- source: discovery
+
+### [LOW] tooling — pulse prints "last pass NaNd ago" and always 0 audit rows
+- pass: discovery 1 (2026-10-10, bee25b5)
+- viewport: n/a
+- category: tooling
+- observation: `node scripts/pulse.mjs` prints "critique 16 pending, last pass NaNd ago" and "audit 0 pending".
+- evidence: `scripts/pulse.mjs:105` appends `T00:00:00Z` to the whole header value ("2026-10-10 at commit 8402ba3"); `pulse.mjs:42` counts rows under `## Pending`, which `plan/AUDIT.md` does not have.
+- suggested fix: Take only the leading `YYYY-MM-DD` before building the date; count AUDIT's scored findings from its real sections. The larger loop-visibility work is the candidate "Loop telemetry".
+- source: discovery
+
+### [LOW] all pages — the main script is 650 kB, over the build's own 600 kB warning
+- pass: discovery 1 (2026-10-10, bee25b5)
+- viewport: n/a
+- category: perf
+- observation: `pnpm --filter @survival/web build` warns "Some chunks are larger than 600 kB": `index-*.js` is 649.80 kB (198.36 kB gzip). The 3D dice are already a separate chunk (530 kB).
+- evidence: build output at bee25b5; every route is imported eagerly in `apps/web/src/App.tsx:25-43`.
+- suggested fix: Lazy-load the design-tool routes (/config, /decisions, /debug, /tiles) with `React.lazy`, so a player's first load carries / and /play only.
+- source: discovery
+
+### [LOW] /config — a deck preset's "Hand size" reads as the deck total
+- pass: discovery 1 (2026-10-10, bee25b5)
+- viewport: 1280x800
+- category: comprehension
+- observation: Under each deck preset the label "Hand size" sits right before "10 cards", so `deck-10-hand-3` reads as a hand of 10.
+- evidence: `apps/web/src/config/ConfigPage.tsx:506`; reader pass (discovery 1).
+- suggested fix: Put each value on its own labelled line ("Deck: 10 cards", "Hand: 3 cards").
+- source: discovery
+
+### [LOW] / — the "written rules" link leaves the site with no sign
+- pass: discovery 1 (2026-10-10, bee25b5)
+- viewport: 1280x800
+- category: navigation
+- observation: The home page's "written rules" link opens a GitHub markdown file with nothing to say it leaves the site.
+- evidence: `apps/web/src/home/HomePage.tsx` (link pinned by `HomePage.test.tsx:26-28`); reader pass (discovery 1).
+- suggested fix: Add "(on GitHub)" to the link text or an external-link mark with an accessible name.
+- source: discovery
+
 ### [LOW] /play — the "reveal 10 tiles" milestone may be unreachable
 - pass: oversight (2026-10-10)
 - viewport: n/a
