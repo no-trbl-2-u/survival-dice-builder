@@ -1,6 +1,6 @@
+import { milestoneLabel } from '@survival/content'
 import { hexKey, type GameEvent, type GameState } from '@survival/engine'
 import { hexLabel } from '../tiles/TileView.tsx'
-import { milestoneLabel } from './milestoneText.ts'
 
 /** What the log needs to name ids: the content, plus the pieces in play (usually the state). */
 type Names = Readonly<{

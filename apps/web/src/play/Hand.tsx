@@ -38,7 +38,7 @@ export function Hand({ state, legal, act }: Props) {
           return (
             <li key={c.id} className={styles.handCard}>
               <div className={styles.rotator} data-up={up}>
-                <CardView def={def} up={up} engage={engageMode} />
+                <CardView def={def} up={up} config={state.config} engage={engageMode} />
               </div>
               <div className={styles.cardButtons}>
                 {engageMode && up === 'bottom' ? (

@@ -5,30 +5,45 @@ import { describe, expect, it } from 'vitest'
 
 const SRC = path.join(import.meta.dirname, '..', 'src')
 
-/** Every engine source file, read as text. */
+/** Code with its comments removed, so a key named only in TSDoc does not count as read. */
+const stripComments = (code: string) =>
+  code.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')
+
+/** Every engine source file (tests excluded), read as code. */
 function engineSource(dir: string): string {
   return fs
     .readdirSync(dir, { withFileTypes: true })
     .map((entry) => {
       const full = path.join(dir, entry.name)
       if (entry.isDirectory()) return engineSource(full)
-      return entry.name.endsWith('.ts') ? fs.readFileSync(full, 'utf8') : ''
+      const code = entry.name.endsWith('.ts') && !entry.name.endsWith('.test.ts')
+      return code ? stripComments(fs.readFileSync(full, 'utf8')) : ''
     })
     .join('\n')
 }
 
+/** True when the code reads `key` as a property (`.key`, `?.key`, or `{ key }` destructured). */
+const readsKey = (source: string, key: string) =>
+  new RegExp(`\\.${key}\\b|[{,]\\s*${key}\\s*[,}:=]`).test(source)
+
 describe('/config "not used by the engine yet" marks (rule 18.1)', () => {
-  it('a field is marked unused exactly when the engine never names it', () => {
+  it('a field is marked unused exactly when no engine code reads it', () => {
     const source = engineSource(SRC)
     const fields = configMetaPaths(defaultContent.config).filter((p) => !p.group)
     const wrong = fields.flatMap(({ path: field }) => {
       const key = field.split('.').at(-1) ?? field
-      const read = new RegExp(`\\b${key}\\b`).test(source)
+      const read = readsKey(source, key)
       const marked = defaultConfigMeta[field]?.unused === true
       if (read && marked) return [`${field}: read by the engine but marked unused`]
       if (!read && !marked) return [`${field}: never read by the engine but not marked unused`]
       return []
     })
     expect(wrong).toEqual([])
+  })
+
+  it('a key named only in a comment or a test does not count as read', () => {
+    expect(readsKey(stripComments('/** reads `config.ghost` */ const a = 1'), 'ghost')).toBe(false)
+    expect(readsKey('const a = state.config.ghost', 'ghost')).toBe(true)
+    expect(readsKey('const { ghost } = state.config', 'ghost')).toBe(true)
   })
 })

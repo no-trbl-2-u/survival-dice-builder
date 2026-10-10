@@ -1,6 +1,20 @@
+import {
+  combatText,
+  defaultContent,
+  goalText,
+  knockoutText,
+  playersText,
+  revealText,
+  spawnText,
+} from '@survival/content'
 import { rulesUrl } from '../decisions/Inline.tsx'
 import { HexTile } from '../map/HexTile.tsx'
 import styles from './HomePage.module.css'
+
+/** `/` describes the default rules: every rule phrase comes from `ruleText`. */
+const config = defaultContent.config
+
+const lower = (text: string) => text.charAt(0).toLowerCase() + text.slice(1)
 
 /** `/`: what the game is, how a run goes, and the way in. */
 export function HomePage() {
@@ -8,8 +22,8 @@ export function HomePage() {
     <div className={styles.home}>
       <div className={styles.text}>
         <p className={styles.pitch}>
-          Defend the base, build your dice, survive one more round. A survival dice-builder for 1 to
-          4 players, on one screen.
+          Defend the base, build your dice, survive one more round. A survival dice-builder for{' '}
+          {playersText(config)}, on one screen.
         </p>
         <a className={styles.start} href="/play">
           Start a run
@@ -18,22 +32,17 @@ export function HomePage() {
         <ol className={styles.steps}>
           <li>
             <strong>Prepare:</strong> play the top halves of your cards to move, gather materials,
-            and build Barricades and Towers. Step off the edge of the map to reveal a new tile. Each
-            new tile's spawn nodes add enemies at every Combat, and enemies go for the nearest
-            structure first.
+            and build Barricades and Towers. {revealText(config)} {spawnText(config)}
           </li>
           <li>
-            <strong>Combat:</strong> play Engage to roll your dice, plus 1 enemy die for each enemy
-            next to you. Put your dice on your Skills one at a time; the enemy dice hit last, after
-            your guard. Cards you do not play stay in your hand, and Combat ends when every hand and
-            deck is empty. Or choose Exchanges, the Combat in the{' '}
-            <a href={rulesUrl}>written rules</a>, on the start panel: in each exchange you roll,
-            play cards, and fire Skills, then every enemy next to you attacks.
+            <strong>Combat:</strong> {combatText(config, 'engage')} Or choose Exchanges, the Combat
+            in the <a href={rulesUrl}>written rules</a>, on the start panel:{' '}
+            {lower(combatText(config, 'exchange'))}
           </li>
         </ol>
         <p>
-          A player at 0 health is knocked out and comes back next round. The run ends when the base
-          falls. Level up, buy cards in the Shop, and draft Skills to last longer.
+          {goalText()} {knockoutText(config)} Level up, buy cards in the Shop, and draft Skills to
+          last longer.
         </p>
         <p className={styles.more}>
           Also: <a href="/tiles">the proposed tiles</a>, <a href="/config">the rules config</a>, and{' '}

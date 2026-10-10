@@ -47,6 +47,7 @@ describe('config metadata (rule 18.1)', () => {
       .map(([path]) => path)
     expect(unused).toEqual([
       'combat.exchangeRange',
+      'draft.keep',
       'rulings.enemiesPerHex',
       'rulings.tileRotation',
       'rulings.shopRefill',

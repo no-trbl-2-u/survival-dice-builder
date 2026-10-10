@@ -2,6 +2,7 @@ import {
   defaultConfigMeta,
   defaultContent,
   GameConfigSchema,
+  ruleLineFor,
   type GameConfig,
 } from '@survival/content'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
@@ -59,6 +60,23 @@ export const fieldId = (path: Path | string) =>
 /** The smallest value a number field takes: 0 when the schema allows 0, else 1. */
 export function numberMin(schema: Readonly<{ safeParse: (v: unknown) => { success: boolean } }>) {
   return schema.safeParse(0).success ? 0 : 1
+}
+
+/** The draft as a valid config, parsed once per draft (null while it has problems). */
+const parsed = new WeakMap<object, GameConfig | null>()
+function validDraft(draft: unknown): GameConfig | null {
+  if (typeof draft !== 'object' || draft === null) return null
+  if (!parsed.has(draft)) {
+    const result = GameConfigSchema.safeParse(draft)
+    parsed.set(draft, result.success ? result.data : null)
+  }
+  return parsed.get(draft) ?? null
+}
+
+/** The rule phrase a field sets, with the draft's values (from `ruleText`), or null. */
+export function liveRuleLine(path: Path, draft: unknown): string | null {
+  const config = validDraft(draft)
+  return config ? ruleLineFor(path.join('.'), config, defaultContent) : null
 }
 
 type FieldProps = Readonly<{
@@ -187,6 +205,7 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
     )
   }
   const errors = problems.get(path.join('.')) ?? []
+  const live = liveRuleLine(path, draft)
   const helpId = `${id}-help`
   const errorId = `${id}-error`
   const labelId = `${id}-label`
@@ -224,6 +243,7 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
           </strong>
         ) : null}
         {meta?.rule ? <span className={styles.rule}> Rules {meta.rule}.</span> : null}
+        {live ? <span className={styles.live}> With these values: {live}</span> : null}
       </p>
       {errors.length > 0 ? (
         <p id={errorId} className={styles.error}>

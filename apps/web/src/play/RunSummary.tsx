@@ -1,6 +1,6 @@
+import { milestoneIds, milestoneLabel } from '@survival/content'
 import { useEffect, useRef } from 'react'
 import { downloadRun } from './exportRun.ts'
-import { milestoneIds, milestoneLabel } from './milestoneText.ts'
 import styles from './Play.module.css'
 import type { Run } from './run.ts'
 

@@ -1,13 +1,20 @@
-import type { CardDef, CombatEffect, CombatOption, PrepareEffect } from '@survival/content'
+import {
+  gatherText,
+  type CardDef,
+  type CombatEffect,
+  type CombatOption,
+  type GameConfig,
+  type PrepareEffect,
+} from '@survival/content'
 import styles from './Play.module.css'
 
-/** Plain text for a top-half (Prepare) effect. */
-export function topText(e: PrepareEffect): string {
+/** Plain text for a top-half (Prepare) effect; Gather reads the config's node rules. */
+export function topText(e: PrepareEffect, config: GameConfig): string {
   switch (e.kind) {
     case 'move':
       return `Move ${e.hexes}${e.ignoreEnemyCost ? ', no extra cost next to enemies' : ''}`
     case 'gather':
-      return `Gather ${e.amount} on an unspent gathering node (the node is spent)`
+      return gatherText(e.amount, config)
     case 'build':
       return `Build${e.costReduction > 0 ? `, cost -${e.costReduction}` : ''}${e.times > 1 ? ` ${e.times} times` : ''}`
     case 'rest':
@@ -58,19 +65,19 @@ export function combatSideText(def: CardDef, engage: boolean): string {
     : def.bottom.map(bottomText).join(', ')
 }
 
-type Props = Readonly<{ def: CardDef; up: 'top' | 'bottom'; engage?: boolean }>
+type Props = Readonly<{ def: CardDef; up: 'top' | 'bottom'; config: GameConfig; engage?: boolean }>
 
 /**
  * One card with both halves. The bottom half is printed upside down, as on the physical card;
  * the hand turns the whole card in Combat. The active half is also named in text.
  */
-export function CardView({ def, up, engage = false }: Props) {
+export function CardView({ def, up, config, engage = false }: Props) {
   return (
     <div className={styles.card} data-up={up}>
       <div className={`${styles.half} ${styles.topHalf}`}>
         <span className={styles.band}>Top · Prepare</span>
         <strong>{def.name}</strong>
-        <span>{topText(def.top)}</span>
+        <span>{topText(def.top, config)}</span>
       </div>
       <div className={styles.cardMeta}>
         <span>{def.level === 0 ? 'Starter' : `Level ${'I'.repeat(def.level)}`}</span>
@@ -82,7 +89,9 @@ export function CardView({ def, up, engage = false }: Props) {
       </div>
       <span className="visually-hidden">
         Active half:{' '}
-        {up === 'top' ? `Prepare, ${topText(def.top)}` : `Combat, ${combatSideText(def, engage)}`}
+        {up === 'top'
+          ? `Prepare, ${topText(def.top, config)}`
+          : `Combat, ${combatSideText(def, engage)}`}
       </span>
     </div>
   )

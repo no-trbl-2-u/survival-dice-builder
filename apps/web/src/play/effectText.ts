@@ -26,10 +26,11 @@ export function skillText(e: SkillEffect): string {
  * Both halves of a card in one line: "Prepare: Move 3. Combat: +1 guard."
  *
  * @param def - the card from content.
+ * @param config - the run config (the Gather text reads it).
  * @rule 2.6, 2.7, Table 2, Table 8
  */
-export function cardText(def: CardDef): string {
-  return `Prepare: ${topText(def.top)}. Combat: ${def.bottom.map(bottomText).join(', ')}.`
+export function cardText(def: CardDef, config: GameConfig): string {
+  return `Prepare: ${topText(def.top, config)}. Combat: ${def.bottom.map(bottomText).join(', ')}.`
 }
 
 /**

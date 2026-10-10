@@ -22,6 +22,18 @@ test('/config: a ruling the engine does not read yet says so', async ({ page }) 
   )
 })
 
+test('/config: a field shows the rule phrase it sets, with the edited value', async ({ page }) => {
+  await page.goto('/config')
+  const limit = page.getByLabel('Enemy miniature limit', { exact: true })
+  await expect(limit).toHaveAccessibleDescription(
+    /With these values: At most 20 enemies stand on the map\./,
+  )
+  await limit.fill('12')
+  await expect(limit).toHaveAccessibleDescription(
+    /With these values: At most 12 enemies stand on the map\./,
+  )
+})
+
 test('/config: the phase 22 experiment options default off, with help that names the row', async ({
   page,
 }) => {

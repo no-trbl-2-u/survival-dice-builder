@@ -13,8 +13,14 @@ describe('HomePage', () => {
 
   it('names both Combat models the start panel offers', () => {
     render(<HomePage />)
-    const combat = screen.getAllByText(/play Engage to roll/)[0]
+    const combat = screen.getAllByText(/Play Engage to roll/)[0]
     expect(combat?.textContent).toMatch(/Or choose Exchanges, the Combat in the written rules/)
+  })
+
+  it('states the player count and knockout from config', () => {
+    render(<HomePage />)
+    expect(screen.getAllByText(/knocked out and comes back next round with half/)[0]).toBeTruthy()
+    expect(screen.getAllByText(/for 1 to 4 players/)[0]).toBeTruthy()
   })
 
   it('links the written rules it cites', () => {

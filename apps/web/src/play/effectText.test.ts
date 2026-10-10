@@ -17,7 +17,7 @@ describe('effect text', () => {
 
   it('describes both halves of every card', () => {
     for (const c of defaultContent.cards) {
-      expect(cardText(c)).toMatch(/^Prepare: .+\. Combat: .+\.$/)
+      expect(cardText(c, defaultContent.config)).toMatch(/^Prepare: .+\. Combat: .+\.$/)
     }
   })
 

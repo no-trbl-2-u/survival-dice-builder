@@ -1,3 +1,4 @@
+import { draftFullText, draftPoolText, draftTitle } from '@survival/content'
 import type { Action, GameState } from '@survival/engine'
 import { useEffect, useRef } from 'react'
 import { cardText, skillText } from './effectText.ts'
@@ -8,7 +9,7 @@ import { ofType } from './targets.ts'
 type Props = Readonly<{ state: GameState; legal: readonly Action[]; act: (a: Action) => void }>
 
 /**
- * A modal for choices that block the run: the Skill draft (keep 1; then, with full slots, the
+ * A modal for choices that block the run: the Skill draft (keep one; then, with full slots, the
  * Skill it replaces) and the replace-starter return. Focus moves to its first button.
  */
 export function DecisionDialog({ state, legal, act }: Props) {
@@ -28,10 +29,10 @@ export function DecisionDialog({ state, legal, act }: Props) {
     return def ? `: ${skillText(def.effect)}` : ''
   }
   const title = drafts.length
-    ? 'Skill draft: keep 1 Skill'
+    ? draftTitle()
     : replaces.length
-      ? `Your 6 draft slots are full: ${skill(state.draft?.kept ?? '')?.name ?? ''} replaces 1 Skill`
-      : 'Return 1 starter card'
+      ? draftFullText(state.config, skill(state.draft?.kept ?? '')?.name ?? '')
+      : 'Return a starter card'
   return (
     <div className={styles.backdrop}>
       <div
@@ -44,14 +45,10 @@ export function DecisionDialog({ state, legal, act }: Props) {
         <h2 id="decision-title" className={styles.panelTitle}>
           {title}
         </h2>
-        {drafts.length > 0 && state.config.draft.unpicked === 'pool' && (
-          <p className={styles.muted}>
-            The Skills you do not keep go to your pool. Later drafts offer them again.
-          </p>
-        )}
+        {drafts.length > 0 && <p className={styles.muted}>{draftPoolText(state.config)}</p>}
         {returns.length > 0 && (
           <p className={styles.muted}>
-            You bought a card, so 1 starter card leaves your deck for good.
+            You bought a card, so a starter card leaves your deck for good.
           </p>
         )}
         <ul className={styles.choices}>
@@ -79,7 +76,7 @@ export function DecisionDialog({ state, legal, act }: Props) {
               <button type="button" onClick={() => act(action)}>
                 Return {def.name}
                 {copies > 1 && ` (you have ${copies})`}
-                <span className={styles.muted}>: {cardText(def)}</span>
+                <span className={styles.muted}>: {cardText(def, state.config)}</span>
               </button>
             </li>
           ))}

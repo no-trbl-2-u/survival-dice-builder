@@ -295,7 +295,8 @@
     "label": "Skills kept",
     "help": "Skills each player keeps from a draft.",
     "rule": "11.7",
-    "range": [1, 6]
+    "range": [1, 6],
+    "unused": true
   },
   "draft.everyNRounds": {
     "label": "Draft every N rounds",

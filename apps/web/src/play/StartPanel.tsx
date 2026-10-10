@@ -1,5 +1,11 @@
 import { useState, type ChangeEvent } from 'react'
-import { defaultConfigMeta } from '@survival/content'
+import {
+  combatText,
+  defaultConfigMeta,
+  defaultContent,
+  goalText,
+  knockoutText,
+} from '@survival/content'
 import type { KeyValue } from '../config/configStore.ts'
 import { importRun, readAutosave } from './exportRun.ts'
 import styles from './Play.module.css'
@@ -11,12 +17,10 @@ export type CombatModel = 'exchange' | 'engage'
 /** The Combat choice names, shared with /config. */
 const COMBAT_LABEL = defaultConfigMeta['combat.model']?.options ?? {}
 
-/** One line per Combat choice: how a Combat plays under it. */
+/** One line per Combat choice: how a Combat plays under it, from `ruleText`. */
 const COMBAT_HINT: Record<CombatModel, string> = {
-  engage:
-    'Engagements: play Engage to roll from where you stand; each enemy next to you rolls a die back. Cards you did not play stay in your hand; Combat ends when every hand and deck is empty. Enemies hit structures at the end of Combat.',
-  exchange:
-    'The Combat in the written rules. In each exchange you roll, play cards, and fire Skills; then every enemy next to you attacks.',
+  engage: `Engagements: ${combatText(defaultContent.config, 'engage')} Enemies hit structures at the end of Combat.`,
+  exchange: `The Combat in the written rules. ${combatText(defaultContent.config, 'exchange')}`,
 }
 
 type Props = Readonly<{
@@ -48,8 +52,7 @@ export function StartPanel({ custom, store, combat: configCombat, onStart, onLoa
         New run
       </h2>
       <p>
-        Keep the base standing for as many rounds as you can. A player at 0 health is knocked out
-        and comes back next round.
+        {goalText()} {knockoutText(defaultContent.config)}
       </p>
       <form
         className={styles.startForm}

@@ -68,3 +68,20 @@ export {
   type ConfigMetaPath,
 } from './configMeta.ts'
 export { ConfigMetaSchema, type ConfigMeta, type ConfigMetaEntry } from './schemas/configMeta.ts'
+export {
+  combatEndText,
+  combatText,
+  draftFullText,
+  draftPoolText,
+  draftTitle,
+  gatherText,
+  goalText,
+  knockoutText,
+  milestoneIds,
+  milestoneLabel,
+  miniatureLimitText,
+  playersText,
+  revealText,
+  ruleLineFor,
+  spawnText,
+} from './ruleText.ts'
