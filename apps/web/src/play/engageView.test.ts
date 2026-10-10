@@ -1,10 +1,21 @@
 import type { GameEvent } from '@survival/engine'
 import { describe, expect, it } from 'vitest'
-import { cancelledLine, engageHeadline, engageStage, lastEngagement } from './engageView.ts'
+import {
+  asideNote,
+  cancelledLine,
+  engageHeadline,
+  engageStage,
+  lastEngagement,
+} from './engageView.ts'
 
 const r = 'Combat v3'
 
 describe('engageView', () => {
+  it('says what comes next while the modal steps aside', () => {
+    expect(asideNote(true)).toBe('Engagement over. The result comes next.')
+    expect(asideNote(false)).toBe('Back to the engagement in a moment.')
+  })
+
   it('maps each exchange step to its stage', () => {
     expect(engageStage('roll')).toBe(0)
     expect(engageStage('cards')).toBe(1)

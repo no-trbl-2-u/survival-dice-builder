@@ -78,6 +78,10 @@ test('/play engagement II: no pre-selected die, place names, the board damage nu
       picked = true
       // The modal steps aside, the number floats off the enemy on the board, and it returns.
       await expect(modal).toBeHidden()
+      // The board says what comes next, so the result never reads as skipped.
+      await expect(page.getByTestId('aside-note')).toHaveText(
+        /^(Engagement over\. The result comes next\.|Back to the engagement in a moment\.)$/,
+      )
       await expect(page.getByLabel('Map', { exact: true }).locator('[data-float]')).toHaveCount(1, {
         timeout: 1000,
       })

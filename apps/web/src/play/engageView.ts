@@ -160,6 +160,16 @@ export function hitLine(before: GameState, events: readonly GameEvent[]): string
     .join(' ')
 }
 
+/**
+ * What comes next, shown on the board while the modal steps aside after a target pick: the
+ * result when the pick ended the engagement, else the engagement again.
+ *
+ * @param ended - the pick ended the engagement.
+ */
+export function asideNote(ended: boolean): string {
+  return ended ? 'Engagement over. The result comes next.' : 'Back to the engagement in a moment.'
+}
+
 /** The totals of 1 finished engagement, read from its events. */
 export type EngageSummary = Readonly<{
   dealt: number

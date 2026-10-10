@@ -63,15 +63,6 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [MED] /play — the result after a target pick can read as skipped
-- pass: blind-round-4 (phase 24)
-- viewport: 1280x800 and 375x812
-- category: comprehension
-- observation: After the last target pick the modal steps aside to the bare board for about a second, then "Engagement over" appears. A tester thought the result screen had been skipped.
-- evidence: blind round 4 (2026-10-09), the step-aside before the result
-- suggested fix: Say on the board what comes next during the step-aside, or skip the step-aside when the pick ended the engagement.
-- source: blind-round-4
-
 ### [MED] /play — a Skill needing more dice than the player has gives no hint
 - pass: blind-round-4 (phase 24)
 - viewport: 1280x800 and 375x812
@@ -199,6 +190,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — the result after a target pick can read as skipped
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: After the last target pick the modal steps aside to the bare board for about a second, then "Engagement over" appears. A tester thought the result screen had been skipped.
+- evidence: blind round 4 (2026-10-09), the step-aside before the result
+- suggested fix: Say on the board what comes next during the step-aside, or skip the step-aside when the pick ended the engagement.
+- source: blind-round-4
+- issue: #65
+- fixed: (this commit) — while the modal steps aside, the board shows "Engagement over. The result comes next." (or "Back to the engagement in a moment."), and the screen-reader line says it too; e2e checks the caption
 
 ### [x] [MED] /decisions — open rows 65, 66 and 69 describe exchanges, with no note that engagements are now the default
 - pass: 11 (commit 8402ba3)

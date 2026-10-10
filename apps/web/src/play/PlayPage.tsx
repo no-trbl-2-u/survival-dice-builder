@@ -16,7 +16,7 @@ import { DiceTray } from './DiceTray.tsx'
 import { damageFloats, type DamageFloat } from './damageFloats.ts'
 import { atTarget, forceEliteEngagement, forceEngagement } from './devEngage.ts'
 import { EngagementModal } from './EngagementModal.tsx'
-import { hitLine, lastEngagement, type EngageSummary } from './engageView.ts'
+import { asideNote, hitLine, lastEngagement, type EngageSummary } from './engageView.ts'
 import { downloadRun, exportRun, readAutosave } from './exportRun.ts'
 import { Hand } from './Hand.tsx'
 import { PhaseBar } from './PhaseBar.tsx'
@@ -45,8 +45,11 @@ function withCombat(config: GameConfig, model: GameConfig['combat']['model']): G
 /** How long the engagement modal steps aside after a target pick (fixed, not skippable). */
 const ASIDE_MS = 1200
 
-/** A target pick in progress on the board: the numbers to float and the line read out. */
-type Aside = Readonly<{ floats: readonly DamageFloat[]; line: string; at: number }>
+/**
+ * A target pick in progress on the board: the numbers to float, the line read out, and what
+ * comes next (shown on the board).
+ */
+type Aside = Readonly<{ floats: readonly DamageFloat[]; line: string; note: string; at: number }>
 
 /**
  * What a run of actions from an engagement does to enemies: the damage numbers and the line
@@ -70,7 +73,9 @@ function asideFor(state: GameState, actions: readonly Action[], at: number): Asi
     const line = hitLine(prev, events)
     if (line) lines.push(line)
   }
-  return floats.length > 0 ? { floats, line: lines.join(' '), at } : null
+  if (floats.length === 0) return null
+  const note = asideNote(!current.exchange?.engage)
+  return { floats, line: [...lines, note].join(' '), note, at }
 }
 
 /** The first playable card of the engagement hand, or null. */
@@ -253,6 +258,11 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
       <p className={styles.srOnly} role="status" data-testid="hit-line">
         {said}
       </p>
+      {aside ? (
+        <p className={styles.asideNote} aria-hidden="true" data-testid="aside-note">
+          {aside.note}
+        </p>
+      ) : null}
       <div className={`${styles.layout} ${styles.boardRow}`}>
         <PlayMap
           state={state}
