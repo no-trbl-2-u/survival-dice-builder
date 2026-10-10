@@ -20,7 +20,7 @@ const ENGAGE: Record<NonNullable<GameState['exchange']>['step'], string> = {
   cards: 'Add cards to the engagement (rerolls, heals), or choose Done adding cards',
   reroll: 'Choose dice to reroll, or stop rerolling',
   assign:
-    'Select dice, then a Skill they fit: a full Skill fires at once. Repeat, or Finish engagement; then the enemy dice hit you',
+    'Select dice, then a Skill they fit: a full Skill fires at once. Repeat, or choose End engagement; then the enemy dice hit you',
   resolve: 'Click a highlighted enemy on the map to hit',
   targets: 'Click a highlighted enemy on the map to target it',
 }

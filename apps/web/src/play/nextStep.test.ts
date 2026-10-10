@@ -88,6 +88,23 @@ describe('nextStep', () => {
     }
   })
 
+  it('Engagements: the assign banner names the End engagement button by its words', () => {
+    const engage = { ...config, combat: { ...config.combat, model: 'engage' as const } }
+    let s = createGame(engage, 5)
+    let seen = false
+    for (let i = 0; i < 600 && s.phase !== 'ended'; i++) {
+      const legal = legalActions(s)
+      if (s.exchange?.engage && s.exchange.step === 'assign') {
+        const text = nextStep(s, legal).step
+        expect(text).toContain('choose End engagement')
+        expect(text).not.toContain('Finish engagement')
+        seen = true
+      }
+      s = applyAction(s, legal[i % legal.length] as Action).state
+    }
+    expect(seen).toBe(true)
+  })
+
   it('Exchanges: the roll and assign banners name the Keep buttons and the Skill rows', () => {
     const exchange = { ...config, combat: { ...config.combat, model: 'exchange' as const } }
     let s = createGame(exchange, 7)

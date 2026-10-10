@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the engagement banner names a "Finish engagement" button that does not exist
-- pass: 11 (commit 8402ba3)
-- viewport: desktop
-- category: voice
-- observation: In the assign step the next-step banner says "Repeat, or Finish engagement", but the modal button reads "End engagement: enemy dice hit". With "Look at the board" open, the banner names a control the player cannot find.
-- evidence: `apps/web/src/play/nextStep.ts:23`; `apps/web/src/play/EngagementModal.tsx:250`
-- suggested fix: Use the button's words: "Repeat, or choose End engagement."
-- source: web-fetch
-
 ### [LOW] /play — the engagement log ends with "The exchange ends."
 - pass: 11 (commit 8402ba3)
 - viewport: desktop
@@ -181,6 +172,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the engagement banner names a "Finish engagement" button that does not exist
+- pass: 11 (commit 8402ba3)
+- viewport: desktop
+- category: voice
+- observation: In the assign step the next-step banner says "Repeat, or Finish engagement", but the modal button reads "End engagement: enemy dice hit". With "Look at the board" open, the banner names a control the player cannot find.
+- evidence: `apps/web/src/play/nextStep.ts:23`; `apps/web/src/play/EngagementModal.tsx:250`
+- suggested fix: Use the button's words: "Repeat, or choose End engagement."
+- source: web-fetch
+- issue: #67
+- fixed: (this commit) — the banner says "Repeat, or choose End engagement"; the Skill board button under the modal now reads "End engagement: enemy dice hit", the same words as the modal
 
 ### [x] [MED] /play — a Skill needing more dice than the player has gives no hint
 - pass: blind-round-4 (phase 24)

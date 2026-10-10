@@ -3,6 +3,44 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-10 (pass 31, cloud tick)
+
+The queue is unchanged since pass 30 apart from its shipped top row. The two LOW voice rows from critique pass 11 tie at 3.6; the banner row is older in the file, so it goes first. The Skill board under the modal said "Finish engagement" too, so it now uses the modal's words.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play: the engagement banner names a "Finish engagement" button that does not exist (critique LOW, pass 11)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: "Repeat, or choose End engagement"
+- issue: #67
+- fixed: (this commit)
+
+### [ ] [3.6] /play: the engagement log ends with "The exchange ends." (critique LOW, pass 11)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: print "The engagement ends." for an engagement
+
+### [ ] [3.2] /play and /config: copy says "the designer's playtest Combat", "designer 2026-10-09", and "Combat v3" (critique LOW, pass 11)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: "Engagements: play Engage ..." in the hint; "(default)" in help notes; group "Engagement numbers"
+
+### [ ] [3.0] /play: the Skill draft does not say unkept Skills go to the pool (critique LOW, pass 11)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: a muted line under the draft title
+
+### [ ] [2.4] /play: a hex next to an enemy that costs too much is not offered, with no reason (session residue LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: when `combat.moveCostNextToEnemy` is above 1, say it in the Move banner
+
 # Site audit — 2026-10-10 (pass 30, cloud tick)
 
 The queue is unchanged since pass 29 apart from its shipped top row. The last blind-round-4 MED row now leads: a Skill with more slots than the player has dice says how many it needs.
