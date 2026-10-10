@@ -63,15 +63,6 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [MED] /play — a Skill needing more dice than the player has gives no hint
-- pass: blind-round-4 (phase 24)
-- viewport: 1280x800 and 375x812
-- category: comprehension
-- observation: Spark Burst needs a Wand and a Bow, but the player has 1 action die. Both testers asked whether it could ever fire.
-- evidence: blind round 4 (2026-10-09), the Skills with 2 slots at 1 die
-- suggested fix: Mark a Skill whose slots outnumber the player's dice ("needs 2 dice").
-- source: blind-round-4
-
 ### [LOW] /play — the result does not say who took the damage or their health after
 - pass: blind-round-4 (phase 24)
 - viewport: 1280x800 and 375x812
@@ -190,6 +181,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — a Skill needing more dice than the player has gives no hint
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: Spark Burst needs a Wand and a Bow, but the player has 1 action die. Both testers asked whether it could ever fire.
+- evidence: blind round 4 (2026-10-09), the Skills with 2 slots at 1 die
+- suggested fix: Mark a Skill whose slots outnumber the player's dice ("needs 2 dice").
+- source: blind-round-4
+- issue: #66
+- fixed: (this commit) — a Skill with more slots than the player has dice says "Needs 2 dice, you have 1. A level up or a card that adds a die gives you more." (phones: "needs 2 dice"); in Combat it counts the dice rolled so far
 
 ### [x] [MED] /play — the result after a target pick can read as skipped
 - pass: blind-round-4 (phase 24)

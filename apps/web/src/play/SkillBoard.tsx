@@ -23,7 +23,8 @@ type Props = Readonly<{
  * own placements, 1 die at a time); a filled slot takes its die back. "Fires" = every slot is filled; "can fire" = the free dice could
  * fill it (engine `canFire`). An attack Skill says how many enemies are in its range now: out
  * of range it fires and hits nothing. When the chosen dice fit no Skill together, a line
- * above the list says so and asks the player to unselect a die.
+ * above the list says so and asks the player to unselect a die. A Skill with more slots than
+ * the player has dice says how many it needs (in Combat, the dice rolled so far).
  */
 export function SkillBoard({ state, legal, act, actAll, selected, confirmButton = true }: Props) {
   const p = state.players[state.current]
@@ -34,6 +35,7 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
   const confirm = firstOf(legal, 'confirmAssignment')
   const placed = new Set(ex?.assignments.map((a) => a.die) ?? [])
   const freeFaces = ex ? ex.dice.filter((_, i) => !placed.has(i)).map((d) => d.face) : []
+  const diceHeld = ex ? ex.dice.length : p.dice
   return (
     <section className={styles.panel} aria-label="Skills">
       <h2 className={styles.panelTitle}>Skills</h2>
@@ -139,6 +141,9 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
                 )
               })()}
               <span className={styles.muted}>{skillText(skill.effect)}</span>
+              {skill.faces.length > diceHeld ? (
+                <NeedsDice needed={skill.faces.length} held={diceHeld} />
+              ) : null}
               {skill.effect.kind === 'damage' ? (
                 <InReach count={enemiesInRange(state, skill.effect.range).length} />
               ) : null}
@@ -152,6 +157,23 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
         </button>
       ) : null}
     </section>
+  )
+}
+
+/**
+ * A Skill with more slots than the player has dice: how many it needs, and how to get more.
+ * Phones (760px and narrower) show the short form, screen readers always hear the long one.
+ */
+function NeedsDice({ needed, held }: Readonly<{ needed: number; held: number }>) {
+  return (
+    <span className={styles.needsDice}>
+      <span className={styles.reachLong}>
+        Needs {needed} dice, you have {held}. A level up or a card that adds a die gives you more.
+      </span>
+      <span className={styles.reachShort} aria-hidden="true">
+        needs {needed} dice
+      </span>
+    </span>
   )
 }
 

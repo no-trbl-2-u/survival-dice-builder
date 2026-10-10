@@ -3,6 +3,44 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-10 (pass 30, cloud tick)
+
+The queue is unchanged since pass 29 apart from its shipped top row. The last blind-round-4 MED row now leads: a Skill with more slots than the player has dice says how many it needs.
+
+## Top 5 findings (scored)
+
+### [x] [4.2] /play: a Skill needing more dice than the player has gives no hint (blind round 4 MED)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7
+- next: mark a Skill whose slots outnumber the player's dice ("needs 2 dice")
+- issue: #66
+- fixed: (this commit)
+
+### [ ] [3.6] /play: the engagement banner names a "Finish engagement" button that does not exist (critique LOW, pass 11)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: "Repeat, or choose End engagement"
+
+### [ ] [3.6] /play: the engagement log ends with "The exchange ends." (critique LOW, pass 11)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: print "The engagement ends." for an engagement
+
+### [ ] [3.2] /play and /config: copy says "the designer's playtest Combat", "designer 2026-10-09", and "Combat v3" (critique LOW, pass 11)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: "Engagements: play Engage ..." in the hint; "(default)" in help notes; group "Engagement numbers"
+
+### [ ] [3.0] /play: the Skill draft does not say unkept Skills go to the pool (critique LOW, pass 11)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: a muted line under the draft title
+
 # Site audit — 2026-10-10 (pass 29, cloud tick)
 
 The queue is unchanged since pass 28 apart from its shipped top row. The two blind-round-4 MED rows tie; the step-aside row is copy and one board caption, so it goes first. The board now says what comes next while the modal steps aside, which keeps the damage number on the board that phase 24 asked for.

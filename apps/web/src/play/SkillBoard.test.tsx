@@ -82,3 +82,42 @@ describe('SkillBoard: a Skill that fires more than once', () => {
     expect(screen.queryByRole('button', { name: 'Put die 3 on Strike' })).toBeNull()
   })
 })
+
+describe('SkillBoard: a Skill with more slots than the player has dice', () => {
+  function game(startingDice: number): GameState {
+    return createGame(
+      {
+        ...config,
+        player: { ...config.player, startingDice, starterSkills: ['strike', 'spark-burst'] },
+      },
+      4,
+    )
+  }
+  const renderBoard = (state: GameState) =>
+    render(
+      <SkillBoard
+        state={state}
+        legal={legalActions(state)}
+        act={() => {}}
+        actAll={() => {}}
+        selected={[]}
+      />,
+    )
+
+  it('at 1 die, a 2-slot Skill says it needs 2 dice and how to get more', () => {
+    renderBoard(game(1))
+    const spark = screen.getByText('Spark Burst:').closest('li')!
+    expect(
+      within(spark).getByText(
+        'Needs 2 dice, you have 1. A level up or a card that adds a die gives you more.',
+      ),
+    ).toBeTruthy()
+    const strike = screen.getByText('Strike:').closest('li')!
+    expect(within(strike).queryByText(/Needs \d dice/)).toBeNull()
+  })
+
+  it('at 2 dice, no Skill says it needs more', () => {
+    renderBoard(game(2))
+    expect(screen.queryByText(/Needs \d dice/)).toBeNull()
+  })
+})

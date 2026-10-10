@@ -1004,6 +1004,12 @@
   color: var(--phase-combat);
 }
 
+/* A Skill with more slots than the player has dice */
+.needsDice {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
 /* Attack Skill reach */
 .outOfRange {
   font-size: var(--text-sm);
