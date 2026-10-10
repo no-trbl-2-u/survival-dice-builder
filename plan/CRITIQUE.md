@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-09 at commit 10fd9d1
-> Pass count: 10
+> Last pass: 2026-10-10 at commit 8402ba3
+> Pass count: 11
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /play — nothing says unplayed cards stay in hand or when Combat ends
+- pass: 11 (commit 8402ba3)
+- viewport: desktop
+- category: comprehension
+- observation: Combat now lasts until the hand and deck are empty, and cards not played into an engagement stay in hand. The home Combat step, the start panel hint, the Combat banner, and the engagement result all leave this out, so a player cannot tell why Combat goes on after the first engagement or when it ends.
+- evidence: `apps/web/src/home/HomePage.tsx:26`; `apps/web/src/play/StartPanel.tsx:17`; `apps/web/src/play/nextStep.ts:82` "Play each card: Engage ..., another option, or discard it"; the rule appears only in `OPEN-QUESTIONS.md:150`
+- suggested fix: Add one line to the start panel hint and the engagement result: "Cards you did not play stay in your hand. Combat ends when your hand and deck are empty."
+- source: web-fetch
+
+### [MED] /decisions — open rows 65, 66 and 69 describe exchanges, with no note that engagements are now the default
+- pass: 11 (commit 8402ba3)
+- viewport: desktop
+- category: comprehension
+- observation: The open readings 65, 66 and 69 (and their bot numbers) speak of "every exchange". Engagements are now the default Combat, and the page never says so; the decided row that records it is hidden by the open-only list.
+- evidence: `OPEN-QUESTIONS.md:80`, `:81`, `:84`; `apps/web/src/decisions/DecisionsPage.tsx:56`
+- suggested fix: Tag those rows "Exchanges only" on the page and add one intro line: "Combat uses engagements by default."
+- source: web-fetch
+
+### [LOW] /play — the engagement banner names a "Finish engagement" button that does not exist
+- pass: 11 (commit 8402ba3)
+- viewport: desktop
+- category: voice
+- observation: In the assign step the next-step banner says "Repeat, or Finish engagement", but the modal button reads "End engagement: enemy dice hit". With "Look at the board" open, the banner names a control the player cannot find.
+- evidence: `apps/web/src/play/nextStep.ts:23`; `apps/web/src/play/EngagementModal.tsx:250`
+- suggested fix: Use the button's words: "Repeat, or choose End engagement."
+- source: web-fetch
+
+### [LOW] /play — the engagement log ends with "The exchange ends."
+- pass: 11 (commit 8402ba3)
+- viewport: desktop
+- category: voice
+- observation: The engagement result's full log prints the Exchanges word for the end of an engagement, now the default model.
+- evidence: `apps/web/src/play/describeEvent.ts:143-144`, shown in the engagement result log
+- suggested fix: Print "The engagement ends." when the exchange was an engagement.
+- source: web-fetch
+
+### [LOW] /play and /config — copy says "the designer's playtest Combat", "designer 2026-10-09", and "Combat v3"
+- pass: 11 (commit 8402ba3)
+- viewport: desktop
+- category: voice
+- observation: The start panel hint calls the default model "The designer's playtest Combat" and never says "Engagements", while the select next to it does. Several /config help lines carry build notes ("default, designer 2026-10-09") and one group is labelled with the internal version "Combat v3 numbers".
+- evidence: `apps/web/src/play/StartPanel.tsx:17`; `packages/content/data/config.meta.json:103`, `:127`, `:135`
+- suggested fix: Start the hint with "Engagements: play Engage ..."; shorten the help notes to "(default)"; rename the group "Engagement numbers".
+- source: web-fetch
+
+### [LOW] /play — the Skill draft does not say unkept Skills go to the pool
+- pass: 11 (commit 8402ba3)
+- viewport: desktop
+- category: comprehension
+- observation: With the new draft pool, Skills not kept come back in later drafts, but the dialog says only "keep 1 Skill" and the "(from your pool)" tag gets no explanation. The rule shows only afterwards, as a log line.
+- evidence: `apps/web/src/play/DecisionDialog.tsx:31`, `:59`; `apps/web/src/play/describeEvent.ts:210`
+- suggested fix: Add a muted line under the title: "The Skills you do not keep go to your pool. Later drafts offer them again."
+- source: web-fetch
 
 ### [LOW] /play — a hex next to an enemy that costs too much just isn't offered, with no reason
 - pass: session residue (2026-10-09)
