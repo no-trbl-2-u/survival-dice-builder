@@ -44,6 +44,11 @@ export function DecisionDialog({ state, legal, act }: Props) {
         <h2 id="decision-title" className={styles.panelTitle}>
           {title}
         </h2>
+        {drafts.length > 0 && state.config.draft.unpicked === 'pool' && (
+          <p className={styles.muted}>
+            The Skills you do not keep go to your pool. Later drafts offer them again.
+          </p>
+        )}
         {returns.length > 0 && (
           <p className={styles.muted}>
             You bought a card, so 1 starter card leaves your deck for good.

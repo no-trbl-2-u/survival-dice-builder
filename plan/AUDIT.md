@@ -3,6 +3,32 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+# Site audit — 2026-10-10 (pass 34, cloud tick)
+
+The queue is unchanged since pass 33 apart from its shipped top row. The draft pool row now leads. The line shows only while `draft.unpicked` is `"pool"` (the default); with `"supply"` unkept Skills leave, so the dialog says nothing.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /play: the Skill draft does not say unkept Skills go to the pool (critique LOW, pass 11)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: a muted line under the draft title
+- issue: #70
+- fixed: (this commit)
+
+### [ ] [2.4] /play: a hex next to an enemy that costs too much is not offered, with no reason (session residue LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: when `combat.moveCostNextToEnemy` is above 1, say it in the Move banner
+
+### [ ] [2.4] /play: Roll again stays on when every die is kept (blind round 4 LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: disable Roll again when no die is unkept
+
 # Site audit — 2026-10-10 (pass 33, cloud tick)
 
 The queue is unchanged since pass 32 apart from its shipped top row. The voice row from critique pass 11 now leads. Besides the three places the row names, two more /config help lines carried "designer, 2026-10-09" (defeated enemies' dice, Skill uses); they say "(default)" too. Rule tags and code comments keep their dates; only visitor copy changes.

@@ -26,4 +26,33 @@ describe('DecisionDialog', () => {
     expect(buttons[0]!.textContent).toContain('Prepare:')
     expect(buttons[0]!.textContent).not.toContain(first.id)
   })
+
+  it('says unkept Skills go to the pool only when the config pools them', () => {
+    const skills = defaultContent.skills.slice(0, 2).map((s) => s.id)
+    const legal = skills.map((skill) => ({ type: 'draftSkill' as const, skill }))
+    const state = createGame(defaultContent.config, 1)
+    const { unmount } = render(
+      <DecisionDialog
+        state={{
+          ...state,
+          config: { ...state.config, draft: { ...state.config.draft, unpicked: 'pool' } },
+        }}
+        legal={legal}
+        act={() => {}}
+      />,
+    )
+    expect(screen.getByText(/do not keep go to your pool/)).toBeTruthy()
+    unmount()
+    render(
+      <DecisionDialog
+        state={{
+          ...state,
+          config: { ...state.config, draft: { ...state.config.draft, unpicked: 'supply' } },
+        }}
+        legal={legal}
+        act={() => {}}
+      />,
+    )
+    expect(screen.queryByText(/do not keep go to your pool/)).toBeNull()
+  })
 })

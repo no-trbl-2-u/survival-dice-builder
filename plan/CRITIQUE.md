@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the Skill draft does not say unkept Skills go to the pool
-- pass: 11 (commit 8402ba3)
-- viewport: desktop
-- category: comprehension
-- observation: With the new draft pool, Skills not kept come back in later drafts, but the dialog says only "keep 1 Skill" and the "(from your pool)" tag gets no explanation. The rule shows only afterwards, as a log line.
-- evidence: `apps/web/src/play/DecisionDialog.tsx:31`, `:59`; `apps/web/src/play/describeEvent.ts:210`
-- suggested fix: Add a muted line under the title: "The Skills you do not keep go to your pool. Later drafts offer them again."
-- source: web-fetch
-
 ### [LOW] /play — a hex next to an enemy that costs too much just isn't offered, with no reason
 - pass: session residue (2026-10-09)
 - viewport: n/a
@@ -154,6 +145,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the Skill draft does not say unkept Skills go to the pool
+- pass: 11 (commit 8402ba3)
+- viewport: desktop
+- category: comprehension
+- observation: With the new draft pool, Skills not kept come back in later drafts, but the dialog says only "keep 1 Skill" and the "(from your pool)" tag gets no explanation. The rule shows only afterwards, as a log line.
+- evidence: `apps/web/src/play/DecisionDialog.tsx:31`, `:59`; `apps/web/src/play/describeEvent.ts:210`
+- suggested fix: Add a muted line under the title: "The Skills you do not keep go to your pool. Later drafts offer them again."
+- source: web-fetch
+- issue: #70
+- fixed: (this commit)
 
 ### [x] [LOW] /play and /config — copy says "the designer's playtest Combat", "designer 2026-10-09", and "Combat v3"
 - pass: 11 (commit 8402ba3)
