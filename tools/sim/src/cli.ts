@@ -1,5 +1,8 @@
 import {
   decisionsMarkdown,
+  fillKit,
+  KIT_BLOCKS,
+  type KitFile,
   defaultConfigMeta,
   defaultContent,
   GameConfigSchema,
@@ -25,6 +28,7 @@ const usage = `Usage:
   pnpm sim -- playtests [--dir docs/playtests/runs] [--estimate 8.5] [--out report.md]
   pnpm sim -- decisions [--out docs/DECISIONS.md]
   pnpm sim -- rules [--out docs/RULES-AS-PLAYED.md]
+  pnpm sim -- kit
 
 Plays <n> bot runs (default 200) and prints a summary. --config reads a config JSON: keys it
 leaves out take the default (a partial config works). --seats plays 1-4 seats (default 1);
@@ -33,7 +37,8 @@ compare: a bot batch per config (same seeds, seats, and policy), as a markdown t
 timing: minutes per round and time shares per phase and decision, from real run exports.
 playtests: every run export in a folder, against the 8-9 minutes-per-round estimate.
 decisions: the designer decision digest from OPEN-QUESTIONS.md and plan/AUDIT.md.
-rules: each Spec v1 rule as written beside what the engine does (the rules as played).`
+rules: each Spec v1 rule as written beside what the engine does (the rules as played).
+kit: rewrites the generated rule blocks of docs/playtests/PROTOCOL.md, SURVEY.md and REPORT.md.`
 
 /** Reads `--name value` pairs. */
 function parse(argv: readonly string[]): Map<string, string> {
@@ -85,7 +90,7 @@ function report(md: string, out: string | undefined): void {
 }
 
 const argv = process.argv.slice(2).filter((a) => a !== '--')
-const COMMANDS = ['compare', 'timing', 'playtests', 'decisions', 'rules'] as const
+const COMMANDS = ['compare', 'timing', 'playtests', 'decisions', 'rules', 'kit'] as const
 const command = COMMANDS.find((c) => c === argv[0]) ?? 'batch'
 const args = parse(argv)
 if (args.has('help')) {
@@ -168,6 +173,15 @@ if (command === 'rules') {
     fs.writeFileSync(here(out), md)
     console.log(`wrote ${out}`)
   } else console.log(md)
+  process.exit(0)
+}
+
+if (command === 'kit') {
+  for (const file of Object.keys(KIT_BLOCKS) as KitFile[]) {
+    const target = path.join(REPO, 'docs', 'playtests', file)
+    fs.writeFileSync(target, fillKit(file, fs.readFileSync(target, 'utf-8'), defaultContent))
+    console.log(`wrote docs/playtests/${file}`)
+  }
   process.exit(0)
 }
 

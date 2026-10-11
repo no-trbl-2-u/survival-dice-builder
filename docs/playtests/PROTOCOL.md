@@ -15,14 +15,24 @@ designer and **3 co-op sessions** with others (spec phase C).
 
 ## Teach (time it)
 
-- Explain: the base, the 6-card deck that turns over (Prepare halves, then Combat halves),
-  rolling and keeping dice, putting dice on Skills, the wave track, and how the run ends.
+Teach these rules (generated from the game's config: `pnpm sim -- kit`):
+
+<!-- kit:teach -->
+- Keep the base standing for as many rounds as you can. The run ends when the base falls.
+- Your 10-card deck is played twice each round: top halves in Prepare, then bottom halves in Combat. Draw 5 at a time.
+- Step off the edge of the map to reveal a new tile; the step costs 1 hex of movement. Each new tile's spawn nodes add enemies at every Combat, and enemies go for the nearest structure first.
+- Gather 2 on an unspent gathering node (the node is spent). Each node gives materials once.
+- Combat: Play Engage to roll your dice from where you stand, plus 1 enemy die for each grunt and 2 dice for each elite next to you. Put your dice on your Skills one at a time; the enemy dice hit last, after your guard. Cards you do not play stay in your hand, and Combat ends when every hand and deck is empty.
+- A player at 0 health is knocked out and comes back next round with half of their maximum health, rounded up. The materials they carry are lost.
+- Every 2 rounds, once the Training Ground is open, each player drafts a Skill. The Skills you do not keep go to your pool. Later drafts offer them again.
+<!-- /kit:teach -->
+
 - Stop the timer when the first card is played. Write the teach time down.
 - Answer questions during play, and write each one down (they are friction evidence).
 
 ## Play
 
-- Play to the end of the run (the base or a player falls). Do not coach decisions.
+- Play to the end of the run (the base falls). Do not coach decisions.
 - Note out loud moments: "tense", "tedious", "confused", "fun". A tally on paper is enough.
 - If the session must stop early, still save the run: it counts as "unfinished".
 

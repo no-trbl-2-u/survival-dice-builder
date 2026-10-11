@@ -15,9 +15,12 @@ Build: <deploy date / commit> · Sessions: <n solo> solo, <n co-op> co-op · Dat
 | Median minutes per round | |
 | Simulator estimate | about 8-9 minutes per round (spec phase C) |
 | Real vs estimate | <ratio>x: <faster / on / slower> |
-| Bot floor (median end round) | 14 (`docs/reports/phase-14-regression.md`) |
 | Median teach time | |
-| End causes | base <n>, player <n>, unfinished <n> |
+| End causes | base falls <n>, unfinished <n> |
+
+<!-- kit:bot -->
+Bot baseline (median end round): run the default batch with `pnpm sim -- --runs 200`; the pinned summary is in `tools/sim/src/run.test.ts`.
+<!-- /kit:bot -->
 
 Where the time went (phase and decision shares): paste the "Where the time went" tables.
 
@@ -33,16 +36,21 @@ Where the time went (phase and decision shares): paste the "Where the time went"
 
 ## 3. Survey summary
 
+<!-- kit:survey-summary -->
 | Question | Median (1-5) | Notable answers |
 | --- | --- | --- |
 | Base trip tense | | |
-| Deck size right | | |
-| Wave fair | | |
+| Deck and hand right | | |
+| Reveal a real choice | | |
+| Nodes pace right | | |
+| Engagements fair | | |
 | Dice fun | | |
 | Knew what to do | | |
+| Knockout fair | | |
 | Length right | | |
 | Co-op pace | | |
 | Play again | | |
+<!-- /kit:survey-summary -->
 
 Best Skill: <tally> · Useless Skill: <tally>
 

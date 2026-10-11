@@ -2,6 +2,9 @@ import {
   decisionsMarkdown,
   defaultConfigMeta,
   defaultContent,
+  fillKit,
+  KIT_BLOCKS,
+  type KitFile,
   parseQuestions,
   parseUserCalls,
   rulesAsPlayedMarkdown,
@@ -22,6 +25,15 @@ describe('docs/DECISIONS.md', () => {
     )
     expect(read('docs/DECISIONS.md').replace(/\r\n/g, '\n')).toBe(expected)
   })
+})
+
+describe('docs/playtests kit', () => {
+  for (const file of Object.keys(KIT_BLOCKS) as KitFile[]) {
+    it(`${file} rule blocks match the config (regenerate with: pnpm sim -- kit)`, () => {
+      const text = read(`docs/playtests/${file}`).replace(/\r\n/g, '\n')
+      expect(text).toBe(fillKit(file, text, defaultContent))
+    })
+  }
 })
 
 describe('docs/RULES-AS-PLAYED.md', () => {

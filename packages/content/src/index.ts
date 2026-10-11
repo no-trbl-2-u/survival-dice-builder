@@ -95,3 +95,4 @@ export {
   type SpecRule,
   type SpecSection,
 } from './rulesAsPlayed.ts'
+export { fillKit, KIT_BLOCKS, kitBlock, surveyQuestions, type KitFile } from './playtestKit.ts'
