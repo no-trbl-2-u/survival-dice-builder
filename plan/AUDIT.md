@@ -3,6 +3,8 @@
 > Latest findings from `/iterate audit`. Rewritten on each audit
 > pass. `[needs-user-call]` rows below are durable.
 
+> Bias: external-critique MED (set via oversight 2026-10-11)
+
 # Site audit — 2026-10-10 (pass 34, cloud tick)
 
 The queue is unchanged since pass 33 apart from its shipped top row. The draft pool row now leads. The line shows only while `draft.unpicked` is `"pool"` (the default); with `"supply"` unkept Skills leave, so the dialog says nothing.

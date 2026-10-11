@@ -74,13 +74,15 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 31 — Player names for every map piece: one pure naming module (kind, place, ordinal only to tell two apart) for the /play log, choice buttons, phase bar, and aria labels; /config pick lists by name and presets as "Preset N"; a test that fails on engine ids in player text — a3ae8f1
 - [x] Phase 32 — Release v0.1.0: every package to 0.1.0; `CHANGELOG.md` from the phase log; the version in the site footer, run exports and config saves; annotated tag `v0.1.0` and a GitHub release; the open spec criteria that need people (sessions, feel checks, the bot's 8-14 band) listed as known gaps, not blockers — 280ede4
 
-**After v0.1.0 — the content era (oversight 2026-10-11: Spec v2 fold-in first, then Skills; the loop ships 33, 36 and 37 while the design rows wait):**
+**After v0.1.0 — the content era (oversight 2026-10-11: Spec v2 fold-in first, then Skills; the loop ships 33, 36 and 37 while the design rows wait; second oversight 2026-10-11: the loop drafts 34 for review, batch and presets as 38 and 39, static HTML last as 40):**
 - [x] Phase 33 — Rule text II: `nextStep`, the decision dialogs, and `config.meta.json` help read rule phrases from `ruleText` (the Exchanges sentence from `combat.adjacentAttack`, enemy dice per grunt and elite, the target-order and hand-emptying lines); no row or phase numbers in help (a source field /decisions shows); the rule-number scan covers `config.meta.json` and word-form rules; a build-word scan over player text; closes critique pass 12 rows 1-5 — 387f899
-- [blocked: designer session via /oversight 2026-10-11] Phase 34 — Spec v2 fold-in: the designer folds `docs/RULES-AS-PLAYED.md` (and `docs/design/core-loop-v2.md`, `combat-v3.md`) into `spec/` in an `/oversight` session; the loop then refreshes `RULES-COVERAGE.md` and the rules-as-played doc against Spec v2
+- [ ] Phase 34 — Spec v2 fold-in: the loop drafts Spec v2 in `docs/spec-v2-draft/` from `docs/RULES-AS-PLAYED.md`, `docs/design/core-loop-v2.md` and `combat-v3.md`, with every rule that changes from Spec v1 listed for the designer's sign-off (a review table, one row per changed rule id, old and new text); no default or engine change; `spec/` itself changes only when the designer signs the table off at `/oversight` (bearings rule 9), after which the loop refreshes `RULES-COVERAGE.md` and the rules-as-played doc against Spec v2 (unblocked via oversight 2026-10-11: the loop drafts, the designer reviews the diff)
 - [blocked: needs the Skills design session after phase 34 2026-10-11] Phase 35 — Skills I: the first content phase; scope set by the designer's Skills session (upgraded tiers, caps, heal targets, draft supply levels; rows 9, 46, 50); the brief is written from that session
 - [x] Phase 36 — A defending bot policy: builds and repairs defenses near the base, uses Tower targets, picks targets to defeat enemies before their dice hit, keeps cards across engagements, buys Training; `pnpm sim -- compare --policy defender`; re-measure rows 63-70, defeated dice, and the draft pool under engagements (absorbs the rejected "Combat v3 in the bot and the sim" candidate) — 5890e54
 - [x] Phase 37 — The rulings the engagement model bypasses: new OPEN-QUESTIONS rows for siege (`rulings.structureDamage`, 7.11 adjacency) and rows 65/69 under engagements (readings: as shipped), decided rows for the 2026-10-09 changes (skill uses unlimited, move cost next to enemies 1, unkept Skills to the pool); a "decided recently" section on /decisions; "Exchanges only" tags in `config.meta.json`; `docs/DECISIONS.md` regenerated — 2bbf942
-- [ ] Phase 38 — Static HTML for each page: prerender /, /tiles, /decisions, /credits, /config (defaults) with per-route title, description, og:url, and canonical from one route table; /play and /debug get their own shell meta; a real 404 for unknown paths; a no-JS e2e fetch per route (moved to the end via oversight 2026-10-11: after the content work)
+- [ ] Phase 38 — A designer's batch: `pnpm sim -- sweep --set key=a,b,c --seats --policy default,defender` writing one table; `compare` takes N configs; `RunResult` gains hits taken, health lost, knockouts, cancelled dice and table upkeep per Combat; `--rec` and `--exp` option sets with a test that fails when `--rec` equals the defaults (promoted via oversight 2026-10-11)
+- [ ] Phase 39 — Try the proposals: the rows 63-70 experiments as named presets in content (Zod-validated, re-measured under engagements with the phase 38 batch, or marked "Exchanges only"); /decisions shows each row's measured effect and "Try this on /play"; /config and /play apply a preset with a "playing with" mark and a reset; run exports record the preset; no default changes (promoted via oversight 2026-10-11)
+- [ ] Phase 40 — Static HTML for each page: prerender /, /tiles, /decisions, /credits, /config (defaults) with per-route title, description, og:url, and canonical from one route table; /play and /debug get their own shell meta; a real 404 for unknown paths; a no-JS e2e fetch per route (was 38; moved to the end via oversight 2026-10-11: after the content work)
 
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
@@ -485,6 +487,12 @@ Source: oversight 2026-10-11 (the designer: fold the spec in before designing co
 9). Input: `docs/RULES-AS-PLAYED.md` (124 rules by status), the two design notes, and the open
 rows. After the session the loop re-runs `pnpm sim -- rules` and the coverage checker against
 Spec v2. Blocked until the designer runs the session.
+Unblocked via oversight 2026-10-11 (the designer: the loop drafts, I
+review). The loop writes the draft to `docs/spec-v2-draft/` with a
+review table (rule id, Spec v1 text, draft text, source: as played,
+core-loop-v2, combat-v3, or a decided row) and changes nothing in
+`spec/`, content, or the engine. The fold into `spec/` and the
+coverage refresh follow the designer's sign-off at `/oversight`.
 
 ### Phase 35 — Skills I (designer-scoped)
 
@@ -516,7 +524,23 @@ bypasses" (score 5.0, discovery pass 1), promoted via oversight
 shipped; changes no value. The designer answers the new rows.
 Renumbered from 34 to 37 via oversight 2026-10-11.
 
-### Phase 38 — Static HTML for each page
+### Phase 38 — A designer's batch
+
+Source: `plan/PHASE_CANDIDATES.md` "A designer's batch" (score 5.5,
+discovery pass 1), promoted via oversight 2026-10-11. `compare` takes
+two configs only and `RunResult` lacks the event counts the phase 22
+and 23 reports pulled by hand. Every batch runs under engagements; the
+`defender` policy comes from phase 36. Changes no default.
+
+### Phase 39 — Try the proposals
+
+Source: `plan/PHASE_CANDIDATES.md` "Try the proposals" (score 5.5,
+expand pass 3), promoted via oversight 2026-10-11. Deferred until
+phase 36 shipped; ships after phase 38 so each preset's numbers are
+measured under engagements (or the preset says "Exchanges only").
+Presets change only the player's local config; rows 63-70 stay open.
+
+### Phase 40 — Static HTML for each page
 
 Source: `plan/PHASE_CANDIDATES.md` "Static HTML for each page" (score
 4.0), promoted via oversight 2026-10-10. `apps/web/index.html` serves
@@ -525,6 +549,7 @@ one description and `og:url` for every route and `_redirects` sends
 /config renders defaults, then loads saved edits after hydration.
 Renumbered from 28 to 35 via oversight 2026-10-10; after v0.1.0.
 Renumbered from 35 to 38 and moved to the end via oversight 2026-10-11.
+Renumbered from 38 to 40 via the second oversight 2026-10-11.
 ---
 
 ## Carry-overs / known gaps (update as phases ship)

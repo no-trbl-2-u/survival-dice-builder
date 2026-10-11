@@ -10,46 +10,10 @@
 
 ## Pending
 
-### [ ] [score 5.5] Try the proposals: experiment presets on /decisions and /play for rows 63-70
-- proposed: 2026-10-05, expand pass 3
-- source signals:
-  - `docs/reports/phase-22-experiments.md` (2599a8d): row 63 and row 65 are recommended "turn on", row 67 is the only single option that puts the bot in the 8-14 band, and "all proposed" gives median 8. Each table is a JSON file in `docs/reports/phase-22/`.
-  - `OPEN-QUESTIONS.md` rows 63-70: all proposed readings with options off by default, waiting on the designer.
-  - `plan/AUDIT.md` needs-user-call: designer reviews and playtests are the bottleneck. To play a proposal today, the designer has to copy keys from a JSON file into /config by hand.
-  - Critique pass 5 reader note: /decisions status lines use process words and point at a hidden row 62.
-- rationale:
-  - The bot cannot settle rows 63-70 (see the report caveat). The designer has to play them. A one-click preset turns "read a report, edit 3-7 fields" into "press Try, play a round".
-  - /decisions already links each row to its /config fields (phase 18). This adds the report finding and a preset button to the same rows.
-- proposed scope: 1 phase.
-  - The phase 22 experiment files become named presets in content, validated by Zod against the config schema.
-  - /decisions shows each structural row's measured effect (median end round, default against option) and its recommendation in plain words, with "Try this on /play".
-  - /config and /play: apply a preset to the local config, with a clear "playing with: <preset>" mark and a reset to the defaults. Run exports record the preset name, so playtest runs say which rules they used.
-- estimated phases: 1
-- conflicts: must not change any default. Presets change only the player's local config; rows 63-70 stay open until the designer decides.
-- last re-evidenced: 2026-10-10 (expand pass 9)
-  - Pass 9: critique pass 11 [MED] says /decisions rows 65, 66 and 69 describe exchanges with no note that engagements are the default. The phase 22 tables were all measured on the exchange model, so a preset built from them now plays a different Combat. Scope should re-measure rows 63-70 under engagements (after the bot work) or mark each preset "exchanges only".
-- deferred: 2026-10-10 via oversight. Blocked on phase 36 (was 26): the phase 22 numbers were measured with exchanges, and rows 65 and 69 are now "Exchanges only". Re-score after phase 26 re-measures rows 63-70 under engagements.
-
 > Discovery pass 1 (2026-10-10). Each row below adds a `ruling audit` field. "Loop scope" refers to the
 > owner ruling of 2026-10-06 (`docs/retrospective-2026-10-06.md:210,231,248`): the loop ships docs, bot
 > policy, rule-text sync, and ratified phases only. A row marked "outside" needs the designer's yes at
 > `/oversight` before promotion, as phases 27 and 28 did.
-
-### [ ] [score 5.5] A designer's batch: sweeps, N-way compares, per-side seats and policy, and event counts in the sim
-- proposed: 2026-10-10, discovery pass 1
-- source signals:
-  - `tools/sim/src/cli.ts:85-106`: `compare` takes exactly two configs that share seats and policy; there is no `--set key=value`, no range, no preset flag. Each value tried needs its own JSON file.
-  - `tools/sim/src/run.ts:9-27`: `RunResult` has no hits taken, health lost, knockouts, cancelled dice, placements, spill-overs or promotions. The phase 23 report pulled these by hand from events (`docs/reports/phase-23-defeated-dice.md:66-68`); row 70's upkeep saving is "a table question" the bot "cannot measure" (`docs/reports/phase-22-experiments.md:299`).
-  - Retrospective Track C3 (`docs/retrospective-2026-10-06.md:270`): split recommended options (`--rec`, with a drift guard against the defaults) from experiments (`--exp`, deleted unless promoted).
-  - Phase 36 (was 26) adds `--policy defender`, but its comparison needs both policies side by side ("Report both a floor bot and a greedy-defend bot per experiment", retrospective :271).
-- rationale: every open structural row (63-70) waits on numbers, and each number costs a hand-made JSON file and a hand count from events. A sweep with event counts turns a report day into one command.
-- proposed scope: 1 phase.
-  - `pnpm sim -- sweep --set spawn.rampEvery=2,3,4 --seats 1,2,4 --policy default,defender` writing one table; `compare` takes N configs.
-  - `RunResult` gains hits taken, health lost, knockouts, cancelled dice, and table upkeep per Combat (placements, spill-overs, promotions), with tests.
-  - `--rec` (the options rows 63-70 recommend) and `--exp`, with a test that fails when `--rec` silently equals the defaults.
-- estimated phases: 1
-- conflicts: none. It reads config; it changes no default. Depends on phase 36 (was 26) only for the `defender` value.
-- ruling audit: rows 63-70 (proposed), 72 (decided) checked; every batch runs under engagements by default, as phase 36 (was 26) requires. No conflict. Loop scope: in (bot and sim).
 
 ### [ ] [score 5.0] Log a cardboard session: a tabletop session record the playtest tools can read
 - proposed: 2026-10-10, discovery pass 1
@@ -96,7 +60,7 @@
   - AUDIT rows gain a kind (`design` or `ops`); the digest shows only design rows.
   - The URL contract amended to match HEAD (needs `/oversight`, since it is locked).
 - estimated phases: 1
-- conflicts: the locked URL contract text must change; routes do not. Overlaps phase 38's (was 28) route table; ship after it.
+- conflicts: the locked URL contract text must change; routes do not. Overlaps phase 40's (was 38) route table; ship after it.
 - ruling audit: no rule rows; bearings URL contract checked (locked, out of date on 3 points). Loop scope: outside (navigation); needs the designer's yes.
 
 ### [ ] [score 4.5] Co-op at 2, 3 and 4 seats, proven: engine, bot batch and browser
@@ -222,6 +186,44 @@
   - Rule 19.4 says to make the base game work first.
 
 ## Promoted
+
+### [x] [score 5.5] A designer's batch: sweeps, N-way compares, per-side seats and policy, and event counts in the sim
+- proposed: 2026-10-10, discovery pass 1
+- source signals:
+  - `tools/sim/src/cli.ts:85-106`: `compare` takes exactly two configs that share seats and policy; there is no `--set key=value`, no range, no preset flag. Each value tried needs its own JSON file.
+  - `tools/sim/src/run.ts:9-27`: `RunResult` has no hits taken, health lost, knockouts, cancelled dice, placements, spill-overs or promotions. The phase 23 report pulled these by hand from events (`docs/reports/phase-23-defeated-dice.md:66-68`); row 70's upkeep saving is "a table question" the bot "cannot measure" (`docs/reports/phase-22-experiments.md:299`).
+  - Retrospective Track C3 (`docs/retrospective-2026-10-06.md:270`): split recommended options (`--rec`, with a drift guard against the defaults) from experiments (`--exp`, deleted unless promoted).
+  - Phase 36 (was 26) adds `--policy defender`, but its comparison needs both policies side by side ("Report both a floor bot and a greedy-defend bot per experiment", retrospective :271).
+- rationale: every open structural row (63-70) waits on numbers, and each number costs a hand-made JSON file and a hand count from events. A sweep with event counts turns a report day into one command.
+- proposed scope: 1 phase.
+  - `pnpm sim -- sweep --set spawn.rampEvery=2,3,4 --seats 1,2,4 --policy default,defender` writing one table; `compare` takes N configs.
+  - `RunResult` gains hits taken, health lost, knockouts, cancelled dice, and table upkeep per Combat (placements, spill-overs, promotions), with tests.
+  - `--rec` (the options rows 63-70 recommend) and `--exp`, with a test that fails when `--rec` silently equals the defaults.
+- estimated phases: 1
+- conflicts: none. It reads config; it changes no default. Depends on phase 36 (was 26) only for the `defender` value.
+- ruling audit: rows 63-70 (proposed), 72 (decided) checked; every batch runs under engagements by default, as phase 36 (was 26) requires. No conflict. Loop scope: in (bot and sim).
+- promoted: 2026-10-11 via oversight, as phase 38. Loop scope: in (bot and sim). No default changes.
+
+### [x] [score 5.5] Try the proposals: experiment presets on /decisions and /play for rows 63-70
+- proposed: 2026-10-05, expand pass 3
+- source signals:
+  - `docs/reports/phase-22-experiments.md` (2599a8d): row 63 and row 65 are recommended "turn on", row 67 is the only single option that puts the bot in the 8-14 band, and "all proposed" gives median 8. Each table is a JSON file in `docs/reports/phase-22/`.
+  - `OPEN-QUESTIONS.md` rows 63-70: all proposed readings with options off by default, waiting on the designer.
+  - `plan/AUDIT.md` needs-user-call: designer reviews and playtests are the bottleneck. To play a proposal today, the designer has to copy keys from a JSON file into /config by hand.
+  - Critique pass 5 reader note: /decisions status lines use process words and point at a hidden row 62.
+- rationale:
+  - The bot cannot settle rows 63-70 (see the report caveat). The designer has to play them. A one-click preset turns "read a report, edit 3-7 fields" into "press Try, play a round".
+  - /decisions already links each row to its /config fields (phase 18). This adds the report finding and a preset button to the same rows.
+- proposed scope: 1 phase.
+  - The phase 22 experiment files become named presets in content, validated by Zod against the config schema.
+  - /decisions shows each structural row's measured effect (median end round, default against option) and its recommendation in plain words, with "Try this on /play".
+  - /config and /play: apply a preset to the local config, with a clear "playing with: <preset>" mark and a reset to the defaults. Run exports record the preset name, so playtest runs say which rules they used.
+- estimated phases: 1
+- conflicts: must not change any default. Presets change only the player's local config; rows 63-70 stay open until the designer decides.
+- last re-evidenced: 2026-10-10 (expand pass 9)
+  - Pass 9: critique pass 11 [MED] says /decisions rows 65, 66 and 69 describe exchanges with no note that engagements are the default. The phase 22 tables were all measured on the exchange model, so a preset built from them now plays a different Combat. Scope should re-measure rows 63-70 under engagements (after the bot work) or mark each preset "exchanges only".
+- deferred: 2026-10-10 via oversight. Blocked on phase 36 (was 26): the phase 22 numbers were measured with exchanges, and rows 65 and 69 are now "Exchanges only". Re-score after phase 26 re-measures rows 63-70 under engagements.
+- promoted: 2026-10-11 via oversight, as phase 39, after the phase 38 batch so presets carry engagement numbers. Phase 36 shipped, which lifts the deferral. No default changes.
 
 ### [x] [score 4.5] Rule text II: word-form rules in /play steps, dialogs, and /config help
 - proposed: 2026-10-10, discovery pass 1
