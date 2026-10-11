@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-10 at commit c34753b
-> Pass count: 12
+> Last pass: 2026-10-11 at commit 23315d6
+> Pass count: 13
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /play, / and /config — four different accounts of when the enemy dice hit in an engagement
+- pass: 13 (commit 23315d6)
+- viewport: n/a
+- category: voice
+- observation: The /play banner says the enemy dice hit after you choose End engagement; the engagement modal says they hit "when no dice are left"; / says "the enemy dice hit last, after your guard" (reads as if guard acts first); /config says "guard first" and "at the end of the engagement, all at once". The same rule is said four ways.
+- evidence: `apps/web/src/play/nextStep.ts:23`, `apps/web/src/play/engageView.ts:48`, `packages/content/src/ruleText.ts:90`, `packages/content/data/config.meta.json:146,176`.
+- suggested fix: One `ruleText` phrase ("When you end the engagement, every enemy die hits at once; your guard takes the damage first") read by the banner, the modal, / and /config.
+- source: web-fetch
+
+### [MED] /play — during an engagement the banner says click the map; the modal says choose in the modal
+- pass: 13 (commit 23315d6)
+- viewport: n/a
+- category: comprehension
+- observation: When a Skill fires, the phase banner says "click a highlighted enemy on the map to hit", while the modal in front says "Choose the enemy it hits." The modal has no map; targets are picked in it. The banner's engagement lines are still hand-written.
+- evidence: `apps/web/src/play/nextStep.ts:20-25,54` vs `apps/web/src/play/engageView.ts:35,55`.
+- suggested fix: During an engagement, have the banner read `engageInstruction` (or a short form of it) instead of the `ENGAGE` table, and drop the table.
+- source: web-fetch
+
+### [MED] / and /config — the enemy target rule is stated two ways
+- pass: 13 (commit 23315d6)
+- viewport: n/a
+- category: voice
+- observation: / says "enemies go for the nearest structure first" and stops; /config says they turn to a player who is at least 2 hexes nearer, with a tie order. A visitor reading / learns enemies ignore players.
+- evidence: `packages/content/src/ruleText.ts:57` (spawnText) vs `packages/content/src/ruleText.ts:134-138` (targetOrderText).
+- suggested fix: Drop the targeting clause from `spawnText` and show `targetOrderText` (or a short form built from the same config) on /.
+- source: web-fetch
+
+### [MED] / — the home page never says how the base takes damage under engagements
+- pass: 13 (commit 23315d6)
+- viewport: n/a
+- category: comprehension
+- observation: / says the run ends when the base falls, but the Combat step does not mention siege. "Enemies hit structures at the end of Combat" appears only on the /play start panel and in /config help, typed by hand, with no damage numbers (grunt 1, elite 3 in config).
+- evidence: `apps/web/src/play/StartPanel.tsx:24`, `packages/content/data/config.meta.json:129`; siege damage in `packages/content/data/config.default.json`; nothing in `combatText(config, 'engage')`.
+- suggested fix: Add a `siegeText(config)` to `ruleText` ("At the end of Combat, each grunt next to a Barricade, Tower, or the base deals 1 damage to it; each elite deals 3") and use it on /, the start panel and /config.
+- source: web-fetch
+
+### [LOW] /config — the rules note prints "Rules engagements." and "Rules core loop (open question 55)."
+- pass: 13 (commit 23315d6)
+- viewport: n/a
+- category: comprehension
+- observation: `ruleCitation` maps design-document tags to player words, so fields with no written-rules section end with a citation that is not a section anyone can look up.
+- evidence: `apps/web/src/config/ConfigPage.tsx:248`; tags "Combat v3", "Combat v3 (siege)", "Core loop v2 (open question 55)" in `config.meta.json`; mapping at `packages/content/src/ruleText.ts:151-154`.
+- suggested fix: For a field with no written-rules section, print "Not in the written rules (open question N)" or nothing.
+- source: web-fetch
+
+### [LOW] /config — help texts name the baseline three ways and carry roadmap wording
+- pass: 13 (commit 23315d6)
+- viewport: n/a
+- category: voice
+- observation: Help says "(default)", "Off: the current rule", and "the written rule" for baselines; one keeps a section number "(6.9)" next to the rules note. Two engagement help texts say "until each grunt type has its own Special" and "until elites have their own siege rule", which the build-word scan misses; die faces are "hit, miss, or special" in one line and "Hit face" in the next.
+- evidence: `packages/content/data/config.meta.json:103,109,141,146,152,170,200`.
+- suggested fix: One pattern ("(default)" for the shipped value, "as in the written rules" for the printed rule), drop "(6.9)" and the "until ..." clauses, one casing for face names.
+- source: web-fetch
 
 ### [LOW] /tiles — the legend says only which terrains are impassable, not what the others do
 - pass: 12 (commit c34753b)
