@@ -28,78 +28,12 @@
 - conflicts: must not change any default. Presets change only the player's local config; rows 63-70 stay open until the designer decides.
 - last re-evidenced: 2026-10-10 (expand pass 9)
   - Pass 9: critique pass 11 [MED] says /decisions rows 65, 66 and 69 describe exchanges with no note that engagements are the default. The phase 22 tables were all measured on the exchange model, so a preset built from them now plays a different Combat. Scope should re-measure rows 63-70 under engagements (after the bot work) or mark each preset "exchanges only".
-- deferred: 2026-10-10 via oversight. Blocked on phase 26: the phase 22 numbers were measured with exchanges, and rows 65 and 69 are now "Exchanges only". Re-score after phase 26 re-measures rows 63-70 under engagements.
+- deferred: 2026-10-10 via oversight. Blocked on phase 33 (was 26): the phase 22 numbers were measured with exchanges, and rows 65 and 69 are now "Exchanges only". Re-score after phase 26 re-measures rows 63-70 under engagements.
 
 > Discovery pass 1 (2026-10-10). Each row below adds a `ruling audit` field. "Loop scope" refers to the
 > owner ruling of 2026-10-06 (`docs/retrospective-2026-10-06.md:210,231,248`): the loop ships docs, bot
 > policy, rule-text sync, and ratified phases only. A row marked "outside" needs the designer's yes at
 > `/oversight` before promotion, as phases 27 and 28 did.
-
-### [ ] [score 6.5] Playtest kit on the current rules: PROTOCOL, SURVEY and REPORT built from ruleText
-- proposed: 2026-10-10, discovery pass 1
-- source signals:
-  - The kit teaches a game the engine no longer runs: `docs/playtests/PROTOCOL.md:18-19` (the 6-card deck, the wave track), `docs/playtests/SURVEY.md:9-10,26` (deck size and "wave track felt fair" questions), `docs/playtests/REPORT.md:40` (a "Wave fair" row) and its "Bot floor 14" line (HEAD pins median 6, `tools/sim/src/run.test.ts:34`).
-  - The retrospective names this the first code-track step (`docs/retrospective-2026-10-06.md:268`) and calls the stale kit a failure ("teaches rules the engine no longer runs", :212). Nothing has changed since: last kit commit is a7a0e7f (phase 16).
-  - Phase 25 (625edbc) built the pure `ruleText` module in content. The kit is the one rule-text surface it did not reach.
-  - Acceptance matrix (`plan/DISCOVERY.md`): every spec phase C criterion is unmet or partly met; no session has used the kit.
-- rationale: the next human session, solo at a table or in the browser, will be run from this kit. A protocol that explains a wave track makes the session test the wrong game. The text and the engine have drifted three times since phase 16 (phases 20, 21, 23), so a hand rewrite would drift again.
-- proposed scope: 1 phase.
-  - A `pnpm sim -- kit` (or a script) that writes the rule lines of PROTOCOL (the teach list) and the rules-dependent SURVEY items from `ruleText` and `config.default.json`, between generated markers; the prose stays hand-written.
-  - Questions on the current loop (the 10-card deck and hand, stepping off the edge, single-use nodes, knockout, engagements) in place of the deck-size and wave questions.
-  - REPORT: drop the fixed bot floor; the template reads the current pinned batch.
-  - A freshness test, like `tools/sim/src/decisions.test.ts`, that fails when the generated block differs from the files.
-- estimated phases: 1
-- conflicts: none. Docs and a script; no rule or default changes.
-- ruling audit: rows 55, 63, 71, 72 and the 2026-10-09 changes (9ba3222, 256bdb4) checked; no conflict. Lose condition is knockout (row 55, proposed but shipped); Combat is engagements (row 72 decided). Loop scope: in (rule-text sync, playtest kit).
-
-### [ ] [score 5.5] Rules coverage that still pins the rules: repair stale rows and test every citation
-- proposed: 2026-10-10, discovery pass 1
-- source signals:
-  - `rules-lawyer` (discovery pass 1): 4 rows cite tests that were renamed or deleted (`RULES-COVERAGE.md:24,27,64,74`); 2 rows are mislabelled: `deck.test.ts:35` "6.1 draws 3 cards" (6.1 says 5) and `assign.test.ts:31` "used 1 time only (default)" (the default is now `"unlimited"`, config `options.skillUses`).
-  - 16.7 is cited against `checkPlayerDown` (`packages/engine/src/combat/resolve.ts:331`), which knocks the player out; nothing pins 16.7 as written or marks it superseded.
-  - Missing rows: siege (`packages/engine/src/combat/engage.ts:314`, `engage.test.ts:173`), the engagement steps (`engage.test.ts:60-179`), 5.3 (`api.test.ts:442`).
-  - agents.md rule 6: "Every rule maps to at least one test, tracked in RULES-COVERAGE.md". The file is hand-kept, and the rules changed 5 times in 7 days.
-- rationale: a coverage table whose citations are wrong is worse than none; the next rules-lawyer review trusts it. A test that checks each cited test title exists makes the drift loud at the commit that causes it.
-- proposed scope: 1 phase.
-  - Fix the 6 rows; add rows for siege, the engagement steps and 5.3; mark superseded rules (4.2, 4.4-4.5, 7.3-7.4, 9.2, 10.2-10.4, 14.2, 15, 16.6, 16.7) as `superseded by <row or doc>` instead of citing an unrelated test.
-  - Rename the 2 mislabelled tests so the label says which option they pin.
-  - A vitest in `tools/sim` (or `scripts/__tests__`) that parses every quoted test title in `RULES-COVERAGE.md` and fails when no test file contains it.
-- estimated phases: 1
-- conflicts: none. No rule or engine behaviour changes.
-- ruling audit: rows 55, 71, 72 and the 2026-10-09 designer changes checked; no conflict. Superseded marks follow the decided and superseded rows; they do not decide anything. Loop scope: in (docs, tests).
-
-### [ ] [score 5.5] Saved configs that follow the rules: a versioned config store and run exports that say which game they were
-- proposed: 2026-10-10, discovery pass 1
-- source signals:
-  - `plan/AUDIT.md:1193` [needs-user-call]: "Saved configs are not migrated"; the designer had to reset /config by hand after 2026-10-09 to get engagements and the new move cost.
-  - Code: `apps/web/src/config/configStore.ts:11` stores `survival.config.v1` with no schema version; `packages/content/src/configDefaults.ts:16-26` fills only missing keys, so a changed default never reaches a save; an invalid save silently falls back to defaults (`configStore.ts:30-56`).
-  - Run exports are version 4 and accept v3 by filling new options at defaults (`apps/web/src/play/exportRun.ts:9,40-52`), but record no app commit and no list of non-default keys.
-  - Rulings changed 5 times in 7 days; each change re-opens the same trap for any playtester with a saved config.
-- rationale: a playtest on a stale saved config plays an old game without saying so. That is the same failure as stale rule text, one layer down, and it hits the deferred "Try the proposals" candidate first (presets write the local config).
-- proposed scope: 1 phase.
-  - A config version in content; the store saves `{ version, values, changedKeys }`; a pure migration list moves an old save forward and resets keys whose default changed unless the player had changed them.
-  - On /config and the /play start panel: "Playing with N changes from the standard rules" with a list and a reset.
-  - Run exports record the app commit and the non-default keys; `pnpm sim -- playtests` prints them per run.
-  - Tests: fixtures of the default sets at phases 21, 23 and 25 migrate to today's defaults.
-- estimated phases: 1
-- conflicts: none with spec. Must not change any default; it only stops old saves from hiding a default change.
-- ruling audit: rows 72 (engagements default), 6.9 move cost (9ba3222) and the draft pool (256bdb4) checked: these are the defaults a stale save hides today. No conflict. Loop scope: outside (web storage and UI); needs the designer's yes.
-
-### [ ] [score 5.5] Loop telemetry: a tick that does nothing says why
-- proposed: 2026-10-10, discovery pass 1
-- source signals:
-  - `scripts/pulse.mjs:105` appends `T00:00:00Z` to the whole header value ("2026-10-10 at commit 8402ba3"), so pulse prints `last pass NaNd ago` (observed); the audit row always shows 0 pending because `plan/AUDIT.md` has no `## Pending` section (`pulse.mjs:42`).
-  - `.github/workflows/march.yml:121-133`: at the weighted ceiling (12 per 24h) a tick echoes one line and exits green. 14 of the last 30 commits carry `Cloud-Run:`, and bee25b5 ticked a phase box, and the run logs confirm it: 7 of the 8 scheduled runs from 12:40Z to 19:26Z on 2026-10-10 lasted 34-52 s and printed "Cloud ceiling reached ... no work this tick" (budget 12/12 at 15:29Z, 15/12 at 19:26Z; runs 38063788371, 38079789214), each a green check with no issue and no notice.
-  - The agent prompt allows a green run with no commit (`march.yml:201-202`).
-  - `scripts/one-pagers.mjs:25` hardcodes `/opt/pw-browsers/chromium`, a Linux path; retrospective rule 7 (`docs/retrospective-2026-10-06.md`) asks every artefact to run on the owner's Windows machine.
-- rationale: the owner judges the loop by what it ships. A loop that is idle for half a day looks the same as one that is stuck. Standing rule 8 ("blocked is loud") covers failures, not quiet skips.
-- proposed scope: 1 phase.
-  - march.yml writes a job summary for every tick (ceiling budget, skip reason, commit or "no commit: <reason>"), and the agent's no-op exit writes its reason to a small `plan/LOOP-LOG.md` ring of the last 20 ticks.
-  - pulse: parse dates strictly, read AUDIT's real sections, add a `cloud` row (budget against ceiling, last tick outcome from `gh run list` when a token is present).
-  - Unit tests for pulse's parsers (`scripts/__tests__`), and the one-pagers Chromium path from Playwright's own registry.
-- estimated phases: 1
-- conflicts: none. Tooling only.
-- ruling audit: no ruling applies (no rule or content). Loop scope: in (tooling for the loop itself).
 
 ### [ ] [score 5.5] A designer's batch: sweeps, N-way compares, per-side seats and policy, and event counts in the sim
 - proposed: 2026-10-10, discovery pass 1
@@ -107,15 +41,15 @@
   - `tools/sim/src/cli.ts:85-106`: `compare` takes exactly two configs that share seats and policy; there is no `--set key=value`, no range, no preset flag. Each value tried needs its own JSON file.
   - `tools/sim/src/run.ts:9-27`: `RunResult` has no hits taken, health lost, knockouts, cancelled dice, placements, spill-overs or promotions. The phase 23 report pulled these by hand from events (`docs/reports/phase-23-defeated-dice.md:66-68`); row 70's upkeep saving is "a table question" the bot "cannot measure" (`docs/reports/phase-22-experiments.md:299`).
   - Retrospective Track C3 (`docs/retrospective-2026-10-06.md:270`): split recommended options (`--rec`, with a drift guard against the defaults) from experiments (`--exp`, deleted unless promoted).
-  - Phase 26 adds `--policy defender`, but its comparison needs both policies side by side ("Report both a floor bot and a greedy-defend bot per experiment", retrospective :271).
+  - Phase 33 (was 26) adds `--policy defender`, but its comparison needs both policies side by side ("Report both a floor bot and a greedy-defend bot per experiment", retrospective :271).
 - rationale: every open structural row (63-70) waits on numbers, and each number costs a hand-made JSON file and a hand count from events. A sweep with event counts turns a report day into one command.
 - proposed scope: 1 phase.
   - `pnpm sim -- sweep --set spawn.rampEvery=2,3,4 --seats 1,2,4 --policy default,defender` writing one table; `compare` takes N configs.
   - `RunResult` gains hits taken, health lost, knockouts, cancelled dice, and table upkeep per Combat (placements, spill-overs, promotions), with tests.
   - `--rec` (the options rows 63-70 recommend) and `--exp`, with a test that fails when `--rec` silently equals the defaults.
 - estimated phases: 1
-- conflicts: none. It reads config; it changes no default. Depends on phase 26 only for the `defender` value.
-- ruling audit: rows 63-70 (proposed), 72 (decided) checked; every batch runs under engagements by default, as phase 26 requires. No conflict. Loop scope: in (bot and sim).
+- conflicts: none. It reads config; it changes no default. Depends on phase 33 (was 26) only for the `defender` value.
+- ruling audit: rows 63-70 (proposed), 72 (decided) checked; every batch runs under engagements by default, as phase 33 (was 26) requires. No conflict. Loop scope: in (bot and sim).
 
 ### [ ] [score 5.0] Log a cardboard session: a tabletop session record the playtest tools can read
 - proposed: 2026-10-10, discovery pass 1
@@ -133,22 +67,6 @@
 - conflicts: none. Docs, a schema and the sim; no rule changes.
 - ruling audit: no ruling applies to the format; rule options recorded are the config keys of rows 63-72. Loop scope: in (playtest kit).
 
-### [ ] [score 5.0] The rulings the engagement model bypasses: readings for siege, inert options, and the 2026-10-09 changes
-- proposed: 2026-10-10, discovery pass 1
-- source signals:
-  - `rules-lawyer`: siege (`packages/engine/src/combat/engage.ts:314-341`) does not read `rulings.structureDamage` (row 7) and has no 7.11 "not next to a player" check, while the exchange step does (`enemies/structures.ts:126-127`). /config does not tag `structureDamage` "Exchanges only" (`packages/content/data/config.meta.json:451-459`), so it looks live.
-  - Rows 65 and 69 are inert under engagements (`config.meta.json:111,121`); phase 26 re-measures them anyway (`plan/steps/01_build_plan.md:67`).
-  - Three designer changes of 2026-10-09 have config keys but no OPEN-QUESTIONS row, so /decisions never shows them: `options.skillUses: "unlimited"` (cc92fe3), `combat.moveCostNextToEnemy: 1` (9ba3222), `draft.unpicked: "pool"` (256bdb4). `packages/content/src/decisions.ts:65` shows only proposed and pending-spec rows.
-  - Critique pass 11 [MED] (now done) and reader pass 1: /decisions rows 65, 66 and 69 read as exchange rules.
-- rationale: the designer reads /decisions to know what is open. Today it hides three rule changes they made and shows settings that do nothing under the default Combat. That is the decision digest (phase 18) out of step with Combat v3.
-- proposed scope: 1 phase. **Needs OPEN-QUESTIONS readings**; it decides none of them.
-  - New rows to add (status `proposed`, values unchanged from today's engine): "Under engagements, does siege use `rulings.structureDamage` and the 7.11 adjacency check?" (reading: as shipped, siege ignores both); "Do rows 65 and 69 apply under engagements?" (reading: no, exchanges only).
-  - New rows (status `decided 2026-10-09`, from the commits): skill uses unlimited, move cost next to enemies 1, unkept Skills to the pool.
-  - /decisions: a "decided recently" section (last 14 days) beside the open ones; tags in `config.meta.json` for every key the default model ignores; `docs/DECISIONS.md` regenerated.
-- estimated phases: 1
-- conflicts: none. No value changes; the readings record what the engine does.
-- ruling audit: rows 7, 65, 69, 72 read (statuses pending-spec, proposed, proposed, decided); commits cc92fe3, 9ba3222, 256bdb4 checked at HEAD. No conflict. Loop scope: in (rule-text sync).
-
 ### [ ] [score 5.0] Physical parity: printed numbers trace to config, and every piece of game state has a table marker
 - proposed: 2026-10-10, discovery pass 1
 - source signals:
@@ -165,22 +83,6 @@
 - conflicts: none. No rule changes; findings go to OPEN-QUESTIONS.
 - ruling audit: rows 63, 66, 70 (proposed) and the bearings constraint checked; no conflict. Loop scope: in (docs, tests).
 
-### [ ] [score 4.5] Rules as played: a generated rulebook of the game the engine runs, for the Spec v2 fold-in
-- proposed: 2026-10-10, discovery pass 1
-- source signals:
-  - `plan/AUDIT.md:1200,1202` [needs-user-call]: `spec/` is still Spec v1; core loop v2 is "settled" in `docs/design/core-loop-v2.md` but not folded in. Combat v3 and the 2026-10-09 changes are in neither.
-  - Acceptance matrix: 14 Spec v1 criteria are superseded rather than met or unmet (Explore phase, wave track, 14.2, 16.7); the matrix can only say so by reading three files.
-  - Hard rule 9 (`plan/bearings.md`): `spec/` is edited only via `/oversight`, so the loop cannot fold it in itself.
-  - Retrospective rule 4: "the printed text is the spec".
-- rationale: the designer has to rebuild the current game from a v1 rulebook, two design notes, 72 question rows and a commit log. A generated "as played" text, section by section against Spec v1, cuts the fold-in to an edit pass.
-- proposed scope: 1 phase.
-  - `docs/RULES-AS-PLAYED.md`, generated by `pnpm sim -- rules`: for each Spec v1 section, the text as written, then "as played" built from `ruleText`, config and decided rows, with a status (same, changed by row N, superseded by doc, open).
-  - A freshness test, as for `docs/DECISIONS.md`.
-  - The designer's fold-in stays an `/oversight` act.
-- estimated phases: 1 (2 if `ruleText` lacks phrases for sections 9-12)
-- conflicts: none. It writes a doc beside `spec/`, never into it.
-- ruling audit: rows 1-72 statuses read; generated text states readings, decides none. Loop scope: in (docs, rule-text sync).
-
 ### [ ] [score 4.5] Rule text II: word-form rules in /play steps, dialogs, and /config help
 - proposed: 2026-10-10, discovery pass 1
 - source signals:
@@ -194,7 +96,7 @@
   - `config.meta.json` help: rule phrases by reference to `ruleText` keys; no row or phase numbers in help (they move to a "source" field that /decisions shows).
   - Extend the scan to `config.meta.json` and to a list of rule verbs; add a build-word scan (row N, phase N, v1, v2, Combat v3) over player text.
 - estimated phases: 1
-- conflicts: none. Overlaps phase 27 only in `describeEvent.ts`; ship after it.
+- conflicts: none. Overlaps phase 31 (was 27) only in `describeEvent.ts`; ship after it.
 - ruling audit: rows 63-72 checked for the help text they feed; no conflict. Phase 25 premise confirmed at HEAD (625edbc). Loop scope: in (rule-text sync).
 
 ### [ ] [score 4.5] The public site and the designer's workbench: one player path, one design area
@@ -210,7 +112,7 @@
   - AUDIT rows gain a kind (`design` or `ops`); the digest shows only design rows.
   - The URL contract amended to match HEAD (needs `/oversight`, since it is locked).
 - estimated phases: 1
-- conflicts: the locked URL contract text must change; routes do not. Overlaps phase 28's route table; ship after it.
+- conflicts: the locked URL contract text must change; routes do not. Overlaps phase 35's (was 28) route table; ship after it.
 - ruling audit: no rule rows; bearings URL contract checked (locked, out of date on 3 points). Loop scope: outside (navigation); needs the designer's yes.
 
 ### [ ] [score 4.5] Co-op at 2, 3 and 4 seats, proven: engine, bot batch and browser
@@ -266,14 +168,14 @@
 - proposed: 2026-10-10, discovery pass 1
 - source signals:
   - Retrospective rule 6 (`docs/retrospective-2026-10-06.md:214`): "a measurement needs a pilot with a known ceiling and floor before it drives a ruling".
-  - Every report calls the bot a floor (`docs/reports/phase-9-bot-batch.md:7-10`, `phase-22-experiments.md:23-25`, `phase-23-defeated-dice.md:10-12`). Phase 26 adds a better floor, not a ceiling.
+  - Every report calls the bot a floor (`docs/reports/phase-9-bot-batch.md:7-10`, `phase-22-experiments.md:23-25`, `phase-23-defeated-dice.md:10-12`). Phase 33 (was 26) adds a better floor, not a ceiling.
   - The engine is pure and seeded, so a rollout bot (try each legal action, play out N seeds with the defender, keep the best) needs no engine change.
 - rationale: with a floor and a ceiling, a ruling's effect is a range a table run can be placed in. Without a ceiling, every number is a lower bound.
 - proposed scope: 1 phase.
   - A `lookahead` policy in `packages/bot` (bounded rollouts at decision points that matter: target picks, builds, Move goals), seeded and time-boxed.
   - `pnpm sim -- compare --policy defender,lookahead` on rows 63-70 under engagements.
 - estimated phases: 1 (2 if rollouts are too slow for 200 runs)
-- conflicts: none. Depends on phase 26.
+- conflicts: none. Depends on phase 33 (was 26).
 - ruling audit: rows 63-70 (proposed), 72 (decided) checked. Loop scope: in (bot).
 
 ### [ ] [score 2.5] Print-and-play kit from content: cards, tiles and tokens as a printable PDF
@@ -337,6 +239,110 @@
 
 ## Promoted
 
+### [x] [score 5.5] Loop telemetry: a tick that does nothing says why
+- proposed: 2026-10-10, discovery pass 1
+- source signals:
+  - `scripts/pulse.mjs:105` appends `T00:00:00Z` to the whole header value ("2026-10-10 at commit 8402ba3"), so pulse prints `last pass NaNd ago` (observed); the audit row always shows 0 pending because `plan/AUDIT.md` has no `## Pending` section (`pulse.mjs:42`).
+  - `.github/workflows/march.yml:121-133`: at the weighted ceiling (12 per 24h) a tick echoes one line and exits green. 14 of the last 30 commits carry `Cloud-Run:`, and bee25b5 ticked a phase box, and the run logs confirm it: 7 of the 8 scheduled runs from 12:40Z to 19:26Z on 2026-10-10 lasted 34-52 s and printed "Cloud ceiling reached ... no work this tick" (budget 12/12 at 15:29Z, 15/12 at 19:26Z; runs 38063788371, 38079789214), each a green check with no issue and no notice.
+  - The agent prompt allows a green run with no commit (`march.yml:201-202`).
+  - `scripts/one-pagers.mjs:25` hardcodes `/opt/pw-browsers/chromium`, a Linux path; retrospective rule 7 (`docs/retrospective-2026-10-06.md`) asks every artefact to run on the owner's Windows machine.
+- rationale: the owner judges the loop by what it ships. A loop that is idle for half a day looks the same as one that is stuck. Standing rule 8 ("blocked is loud") covers failures, not quiet skips.
+- proposed scope: 1 phase.
+  - march.yml writes a job summary for every tick (ceiling budget, skip reason, commit or "no commit: <reason>"), and the agent's no-op exit writes its reason to a small `plan/LOOP-LOG.md` ring of the last 20 ticks.
+  - pulse: parse dates strictly, read AUDIT's real sections, add a `cloud` row (budget against ceiling, last tick outcome from `gh run list` when a token is present).
+  - Unit tests for pulse's parsers (`scripts/__tests__`), and the one-pagers Chromium path from Playwright's own registry.
+- estimated phases: 1
+- conflicts: none. Tooling only.
+- ruling audit: no ruling applies (no rule or content). Loop scope: in (tooling for the loop itself).
+- promoted: 2026-10-10 via oversight, as phase 26. Ruling audit: no ruling applies. First of the v0.1.0 checkpoint.
+
+### [x] [score 5.5] Rules coverage that still pins the rules: repair stale rows and test every citation
+- proposed: 2026-10-10, discovery pass 1
+- source signals:
+  - `rules-lawyer` (discovery pass 1): 4 rows cite tests that were renamed or deleted (`RULES-COVERAGE.md:24,27,64,74`); 2 rows are mislabelled: `deck.test.ts:35` "6.1 draws 3 cards" (6.1 says 5) and `assign.test.ts:31` "used 1 time only (default)" (the default is now `"unlimited"`, config `options.skillUses`).
+  - 16.7 is cited against `checkPlayerDown` (`packages/engine/src/combat/resolve.ts:331`), which knocks the player out; nothing pins 16.7 as written or marks it superseded.
+  - Missing rows: siege (`packages/engine/src/combat/engage.ts:314`, `engage.test.ts:173`), the engagement steps (`engage.test.ts:60-179`), 5.3 (`api.test.ts:442`).
+  - agents.md rule 6: "Every rule maps to at least one test, tracked in RULES-COVERAGE.md". The file is hand-kept, and the rules changed 5 times in 7 days.
+- rationale: a coverage table whose citations are wrong is worse than none; the next rules-lawyer review trusts it. A test that checks each cited test title exists makes the drift loud at the commit that causes it.
+- proposed scope: 1 phase.
+  - Fix the 6 rows; add rows for siege, the engagement steps and 5.3; mark superseded rules (4.2, 4.4-4.5, 7.3-7.4, 9.2, 10.2-10.4, 14.2, 15, 16.6, 16.7) as `superseded by <row or doc>` instead of citing an unrelated test.
+  - Rename the 2 mislabelled tests so the label says which option they pin.
+  - A vitest in `tools/sim` (or `scripts/__tests__`) that parses every quoted test title in `RULES-COVERAGE.md` and fails when no test file contains it.
+- estimated phases: 1
+- conflicts: none. No rule or engine behaviour changes.
+- ruling audit: rows 55, 71, 72 and the 2026-10-09 designer changes checked; no conflict. Superseded marks follow the decided and superseded rows; they do not decide anything. Loop scope: in (docs, tests).
+- promoted: 2026-10-10 via oversight, as phase 27. Ruling audit: no conflict; superseded marks follow decided rows.
+
+### [x] [score 4.5] Rules as played: a generated rulebook of the game the engine runs, for the Spec v2 fold-in
+- proposed: 2026-10-10, discovery pass 1
+- source signals:
+  - `plan/AUDIT.md:1200,1202` [needs-user-call]: `spec/` is still Spec v1; core loop v2 is "settled" in `docs/design/core-loop-v2.md` but not folded in. Combat v3 and the 2026-10-09 changes are in neither.
+  - Acceptance matrix: 14 Spec v1 criteria are superseded rather than met or unmet (Explore phase, wave track, 14.2, 16.7); the matrix can only say so by reading three files.
+  - Hard rule 9 (`plan/bearings.md`): `spec/` is edited only via `/oversight`, so the loop cannot fold it in itself.
+  - Retrospective rule 4: "the printed text is the spec".
+- rationale: the designer has to rebuild the current game from a v1 rulebook, two design notes, 72 question rows and a commit log. A generated "as played" text, section by section against Spec v1, cuts the fold-in to an edit pass.
+- proposed scope: 1 phase.
+  - `docs/RULES-AS-PLAYED.md`, generated by `pnpm sim -- rules`: for each Spec v1 section, the text as written, then "as played" built from `ruleText`, config and decided rows, with a status (same, changed by row N, superseded by doc, open).
+  - A freshness test, as for `docs/DECISIONS.md`.
+  - The designer's fold-in stays an `/oversight` act.
+- estimated phases: 1 (2 if `ruleText` lacks phrases for sections 9-12)
+- conflicts: none. It writes a doc beside `spec/`, never into it.
+- ruling audit: rows 1-72 statuses read; generated text states readings, decides none. Loop scope: in (docs, rule-text sync).
+- promoted: 2026-10-10 via oversight, as phase 28. Ruling audit: no conflict; the generated text states readings, decides none. The rulebook the v0.1.0 tag carries.
+
+### [x] [score 6.5] Playtest kit on the current rules: PROTOCOL, SURVEY and REPORT built from ruleText
+- proposed: 2026-10-10, discovery pass 1
+- source signals:
+  - The kit teaches a game the engine no longer runs: `docs/playtests/PROTOCOL.md:18-19` (the 6-card deck, the wave track), `docs/playtests/SURVEY.md:9-10,26` (deck size and "wave track felt fair" questions), `docs/playtests/REPORT.md:40` (a "Wave fair" row) and its "Bot floor 14" line (HEAD pins median 6, `tools/sim/src/run.test.ts:34`).
+  - The retrospective names this the first code-track step (`docs/retrospective-2026-10-06.md:268`) and calls the stale kit a failure ("teaches rules the engine no longer runs", :212). Nothing has changed since: last kit commit is a7a0e7f (phase 16).
+  - Phase 25 (625edbc) built the pure `ruleText` module in content. The kit is the one rule-text surface it did not reach.
+  - Acceptance matrix (`plan/DISCOVERY.md`): every spec phase C criterion is unmet or partly met; no session has used the kit.
+- rationale: the next human session, solo at a table or in the browser, will be run from this kit. A protocol that explains a wave track makes the session test the wrong game. The text and the engine have drifted three times since phase 16 (phases 20, 21, 23), so a hand rewrite would drift again.
+- proposed scope: 1 phase.
+  - A `pnpm sim -- kit` (or a script) that writes the rule lines of PROTOCOL (the teach list) and the rules-dependent SURVEY items from `ruleText` and `config.default.json`, between generated markers; the prose stays hand-written.
+  - Questions on the current loop (the 10-card deck and hand, stepping off the edge, single-use nodes, knockout, engagements) in place of the deck-size and wave questions.
+  - REPORT: drop the fixed bot floor; the template reads the current pinned batch.
+  - A freshness test, like `tools/sim/src/decisions.test.ts`, that fails when the generated block differs from the files.
+- estimated phases: 1
+- conflicts: none. Docs and a script; no rule or default changes.
+- ruling audit: rows 55, 63, 71, 72 and the 2026-10-09 changes (9ba3222, 256bdb4) checked; no conflict. Lose condition is knockout (row 55, proposed but shipped); Combat is engagements (row 72 decided). Loop scope: in (rule-text sync, playtest kit).
+- promoted: 2026-10-10 via oversight, as phase 29. Ruling audit: no conflict; lose condition is knockout, Combat is engagements (row 72).
+
+### [x] [score 5.5] Saved configs that follow the rules: a versioned config store and run exports that say which game they were
+- proposed: 2026-10-10, discovery pass 1
+- source signals:
+  - `plan/AUDIT.md:1193` [needs-user-call]: "Saved configs are not migrated"; the designer had to reset /config by hand after 2026-10-09 to get engagements and the new move cost.
+  - Code: `apps/web/src/config/configStore.ts:11` stores `survival.config.v1` with no schema version; `packages/content/src/configDefaults.ts:16-26` fills only missing keys, so a changed default never reaches a save; an invalid save silently falls back to defaults (`configStore.ts:30-56`).
+  - Run exports are version 4 and accept v3 by filling new options at defaults (`apps/web/src/play/exportRun.ts:9,40-52`), but record no app commit and no list of non-default keys.
+  - Rulings changed 5 times in 7 days; each change re-opens the same trap for any playtester with a saved config.
+- rationale: a playtest on a stale saved config plays an old game without saying so. That is the same failure as stale rule text, one layer down, and it hits the deferred "Try the proposals" candidate first (presets write the local config).
+- proposed scope: 1 phase.
+  - A config version in content; the store saves `{ version, values, changedKeys }`; a pure migration list moves an old save forward and resets keys whose default changed unless the player had changed them.
+  - On /config and the /play start panel: "Playing with N changes from the standard rules" with a list and a reset.
+  - Run exports record the app commit and the non-default keys; `pnpm sim -- playtests` prints them per run.
+  - Tests: fixtures of the default sets at phases 21, 23 and 25 migrate to today's defaults.
+- estimated phases: 1
+- conflicts: none with spec. Must not change any default; it only stops old saves from hiding a default change.
+- ruling audit: rows 72 (engagements default), 6.9 move cost (9ba3222) and the draft pool (256bdb4) checked: these are the defaults a stale save hides today. No conflict. Loop scope: outside (web storage and UI); needs the designer's yes.
+- promoted: 2026-10-10 via oversight, as phase 30. Designer's yes given in chat (outside loop scope). Ruling audit: no conflict; changes no default.
+
+### [x] [score 5.0] The rulings the engagement model bypasses: readings for siege, inert options, and the 2026-10-09 changes
+- proposed: 2026-10-10, discovery pass 1
+- source signals:
+  - `rules-lawyer`: siege (`packages/engine/src/combat/engage.ts:314-341`) does not read `rulings.structureDamage` (row 7) and has no 7.11 "not next to a player" check, while the exchange step does (`enemies/structures.ts:126-127`). /config does not tag `structureDamage` "Exchanges only" (`packages/content/data/config.meta.json:451-459`), so it looks live.
+  - Rows 65 and 69 are inert under engagements (`config.meta.json:111,121`); phase 33 (was 26) re-measures them anyway (`plan/steps/01_build_plan.md`).
+  - Three designer changes of 2026-10-09 have config keys but no OPEN-QUESTIONS row, so /decisions never shows them: `options.skillUses: "unlimited"` (cc92fe3), `combat.moveCostNextToEnemy: 1` (9ba3222), `draft.unpicked: "pool"` (256bdb4). `packages/content/src/decisions.ts:65` shows only proposed and pending-spec rows.
+  - Critique pass 11 [MED] (now done) and reader pass 1: /decisions rows 65, 66 and 69 read as exchange rules.
+- rationale: the designer reads /decisions to know what is open. Today it hides three rule changes they made and shows settings that do nothing under the default Combat. That is the decision digest (phase 18) out of step with Combat v3.
+- proposed scope: 1 phase. **Needs OPEN-QUESTIONS readings**; it decides none of them.
+  - New rows to add (status `proposed`, values unchanged from today's engine): "Under engagements, does siege use `rulings.structureDamage` and the 7.11 adjacency check?" (reading: as shipped, siege ignores both); "Do rows 65 and 69 apply under engagements?" (reading: no, exchanges only).
+  - New rows (status `decided 2026-10-09`, from the commits): skill uses unlimited, move cost next to enemies 1, unkept Skills to the pool.
+  - /decisions: a "decided recently" section (last 14 days) beside the open ones; tags in `config.meta.json` for every key the default model ignores; `docs/DECISIONS.md` regenerated.
+- estimated phases: 1
+- conflicts: none. No value changes; the readings record what the engine does.
+- ruling audit: rows 7, 65, 69, 72 read (statuses pending-spec, proposed, proposed, decided); commits cc92fe3, 9ba3222, 256bdb4 checked at HEAD. No conflict. Loop scope: in (rule-text sync).
+- promoted: 2026-10-10 via oversight, as phase 34. After the v0.1.0 tag, with the content era. Ruling audit: no conflict; records readings as shipped. The designer answers the new rows.
+
 ### [x] [score 6.5] Rule text from one source: every rule statement on the site comes from config and content
 - proposed: 2026-10-05, expand pass 3
 - source signals:
@@ -383,6 +389,7 @@
 - conflicts: none. It changes no rule; the bot only calls the engine API.
 - last re-evidenced: 2026-10-10 (expand pass 9)
   - Pass 9: the session residue row "sim — the bot cannot measure today's designer changes" (8402ba3) names three designer changes the bot cannot see: it does not pick targets to defeat enemies before their dice hit, so the phase 23 `defeatedDice` gap is a floor (`docs/reports/phase-23-defeated-dice.md`, about 8% fewer hits); it rarely reaches a second draft, so the draft pool (256bdb4) left both pinned batches unchanged; it discards whole hands, so the hand kept across engagements (9ba3222) is under-measured. Scope should add those three behaviours (target picks, keeping cards, buying Training) and re-run the defeated-dice and draft-pool comparisons.
+- renumbered: 2026-10-10 via oversight, phase 26 to phase 33 (after the v0.1.0 tag).
 - promoted: 2026-10-10 via oversight, as phase 26, merged with the rejected "Combat v3 in the bot and the sim". Ruling audit: row 72 decided 2026-10-09, so re-measure under engagements, not the phase 22 exchange tables.
 
 ### [x] [score 4.5] Player names for every map piece: no engine ids on /play or /config
@@ -406,6 +413,7 @@
   - Pass 8: audit passes 23 to 25 again leave the enemy-id row at 2.8, waiting on this candidate; it is now the oldest pending critique row (pass 7). The two /config id rows (pass 6) are also still pending.
   - Pass 7: fbce568 fixed one more log surface by hand: a repair now reads "Tower d2" in place of the bare "d2", which matches the other defense lines but still shows the id. Audit pass 22 is the 11th in a row to score the enemy-id row below 3.0 while it waits on this naming rule.
   - Pass 6: critique pass 8 (4a4fe28) left both pass 6 and pass 7 id rows pending. `apps/web/src/map/places.test.ts:49` and `describeAction.test.ts:48` still pin "grunt e1" and "grunt e3" in player text.
+- renumbered: 2026-10-10 via oversight, phase 27 to phase 31 (before the v0.1.0 tag).
 - promoted: 2026-10-10 via oversight, as phase 27. Ruling audit: no conflict; "Exchange: cards" above is an exchange-model example, the id problem stands.
 
 ### [x] [score 4.0] Static HTML for each page: the copy, title, and preview card are in the served file
@@ -427,6 +435,7 @@
 - last re-evidenced: 2026-10-09 (expand pass 8)
   - Pass 8: critique pass 9 (25a398a) files the per-route gap as its own row: every route serves the home description and an `og:url` fixed to the home page, with no canonical (`apps/web/index.html:6,16`). Audit passes 23 to 25 score it 2.7 and leave it waiting here, because a canonical set by script does not reach unfurlers that skip JavaScript.
   - Pass 7: Two more hand patches of the one shared shell since pass 6: 1aaa6a9 (favicon link) and 5a93dde (sitemap and robots.txt). The sitemap now lists 7 pages, and every one of them is served the same title, description, and preview card, with no canonical link. Audit passes 17 to 22 leave the canonical row waiting on this candidate.
+- renumbered: 2026-10-10 via oversight, phase 28 to phase 35 (after the v0.1.0 tag).
 - promoted: 2026-10-10 via oversight, as phase 28. Ruling audit: no ruling applies.
 
 ### [x] [score 6.5] Accessibility and navigation pass for the secondary pages (/tiles, /debug, shell)

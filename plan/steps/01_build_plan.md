@@ -64,9 +64,20 @@ Tick in this file in the same commit that ships the phase.
 
 **Promoted via oversight 2026-10-10 (phase candidates audited against every ruling through 256bdb4):**
 - [x] Phase 25 — Rule text from one source: a pure `ruleText` module builds every rule phrase from config (reveal cost, Gather, knockout, milestones, miniature limit, Combat end, draft pool); /, /play, and /config help read it; a test lists config leaves no engine code reads; a test fails on rule numbers hardcoded in components — 625edbc
-- [ ] Phase 26 — A defending bot policy: builds and repairs defenses near the base, uses Tower targets, picks targets to defeat enemies before their dice hit, keeps cards across engagements, buys Training; `pnpm sim -- compare --policy defender`; re-measure rows 63-70, defeated dice, and the draft pool under engagements (absorbs the rejected "Combat v3 in the bot and the sim" candidate)
-- [ ] Phase 27 — Player names for every map piece: one pure naming module (kind, place, ordinal only to tell two apart) for the /play log, choice buttons, phase bar, and aria labels; /config pick lists by name and presets as "Preset N"; a test that fails on engine ids in player text
-- [ ] Phase 28 — Static HTML for each page: prerender /, /tiles, /decisions, /credits, /config (defaults) with per-route title, description, og:url, and canonical from one route table; /play and /debug get their own shell meta; a real 404 for unknown paths; a no-JS e2e fetch per route
+
+**v0.1.0 checkpoint (phases 26–32) — promoted via oversight 2026-10-10; a stable baseline before the content era (cards, Skills, enemy effects, Towers, structures):**
+- [ ] Phase 26 — Loop telemetry: every cloud tick writes a job summary (ceiling budget, skip reason, commit or "no commit: <reason>"); a no-op tick logs its reason to `plan/LOOP-LOG.md` (last 20); pulse parses dates strictly, reads AUDIT's real sections, adds a `cloud` row; one-pagers finds Chromium through Playwright; parser unit tests
+- [ ] Phase 27 — Rules coverage that still pins the rules: fix the 6 stale `RULES-COVERAGE.md` rows, add siege, the engagement steps and 5.3, mark superseded rules as superseded, rename the 2 mislabelled tests, and a test that fails when a cited test title does not exist
+- [ ] Phase 28 — Rules as played: `pnpm sim -- rules` writes `docs/RULES-AS-PLAYED.md` (per Spec v1 section: as written, as played from `ruleText`/config/decided rows, and a status), with a freshness test; the `spec/` fold-in stays an `/oversight` act
+- [ ] Phase 29 — Playtest kit on the current rules: PROTOCOL teach list and the rules-dependent SURVEY items generated from `ruleText` between markers; questions on the v2 loop and engagements replace deck-size and wave-track items; REPORT drops the fixed bot floor; a freshness test
+- [ ] Phase 30 — Saved configs that follow the rules: a config version in content; the store saves `{ version, values, changedKeys }` with a pure migration list; "Playing with N changes from the standard rules" on /config and the /play start panel; run exports record the app commit and non-default keys; migration fixtures for the phase 21, 23 and 25 defaults (designer approved 2026-10-10)
+- [ ] Phase 31 — Player names for every map piece: one pure naming module (kind, place, ordinal only to tell two apart) for the /play log, choice buttons, phase bar, and aria labels; /config pick lists by name and presets as "Preset N"; a test that fails on engine ids in player text
+- [ ] Phase 32 — Release v0.1.0: every package to 0.1.0; `CHANGELOG.md` from the phase log; the version in the site footer, run exports and config saves; annotated tag `v0.1.0` and a GitHub release; the open spec criteria that need people (sessions, feel checks, the bot's 8-14 band) listed as known gaps, not blockers
+
+**After v0.1.0 — the content era (promoted via oversight 2026-10-10):**
+- [ ] Phase 33 — A defending bot policy: builds and repairs defenses near the base, uses Tower targets, picks targets to defeat enemies before their dice hit, keeps cards across engagements, buys Training; `pnpm sim -- compare --policy defender`; re-measure rows 63-70, defeated dice, and the draft pool under engagements (absorbs the rejected "Combat v3 in the bot and the sim" candidate)
+- [ ] Phase 34 — The rulings the engagement model bypasses: new OPEN-QUESTIONS rows for siege (`rulings.structureDamage`, 7.11 adjacency) and rows 65/69 under engagements (readings: as shipped), decided rows for the 2026-10-09 changes (skill uses unlimited, move cost next to enemies 1, unkept Skills to the pool); a "decided recently" section on /decisions; "Exchanges only" tags in `config.meta.json`; `docs/DECISIONS.md` regenerated
+- [ ] Phase 35 — Static HTML for each page: prerender /, /tiles, /decisions, /credits, /config (defaults) with per-route title, description, og:url, and canonical from one route table; /play and /debug get their own shell meta; a real 404 for unknown paths; a no-JS e2e fetch per route
 
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
@@ -384,11 +395,82 @@ from config in one pure module; components only read it. The lose
 condition is knockout (phase 21), not "keep every player alive". No
 rule value or default changes.
 
-### Phase 26 — A defending bot policy
+### Phase 26 — Loop telemetry
+
+Source: `plan/PHASE_CANDIDATES.md` "Loop telemetry" (score 5.5,
+discovery pass 1), promoted via oversight 2026-10-10. 7 of 8 cloud
+ticks on 2026-10-10 skipped at the 24h ceiling with a green check and
+no notice (`.github/workflows/march.yml:121-133`); pulse prints
+`NaNd ago` (`scripts/pulse.mjs:105`) and always 0 audit pending
+(`pulse.mjs:42`). Tooling only; no rule or content changes.
+
+### Phase 27 — Rules coverage that still pins the rules
+
+Source: `plan/PHASE_CANDIDATES.md` "Rules coverage that still pins the
+rules" (score 5.5, discovery pass 1), promoted via oversight
+2026-10-10. `rules-lawyer` found 4 rows citing renamed or deleted
+tests (`RULES-COVERAGE.md:24,27,64,74`), 2 mislabelled tests
+(`deck.test.ts:35`, `assign.test.ts:31`), and no rows for siege, the
+engagement steps or 5.3. Superseded marks record decided rows; they
+decide nothing. No engine behaviour changes.
+
+### Phase 28 — Rules as played
+
+Source: `plan/PHASE_CANDIDATES.md` "Rules as played" (score 4.5,
+discovery pass 1), promoted via oversight 2026-10-10 as the rulebook
+the v0.1.0 tag carries. `spec/` is still Spec v1 (`plan/AUDIT.md:1200,
+1202`). Writes a doc beside `spec/`, never into it (bearings hard
+rule 9). May grow to 2 phases if `ruleText` lacks phrases for sections
+9-12; split at the brief, not mid-ship.
+
+### Phase 29 — Playtest kit on the current rules
+
+Source: `plan/PHASE_CANDIDATES.md` "Playtest kit on the current rules"
+(score 6.5, discovery pass 1), promoted via oversight 2026-10-10.
+`docs/playtests/PROTOCOL.md:18-19` and `SURVEY.md:9-10,26` teach the
+6-card deck and the wave track; `REPORT.md` holds a stale "Bot floor
+14". Builds on phase 25's `ruleText` and phase 28's generator. Prose
+stays hand-written; rule lines are generated.
+
+### Phase 30 — Saved configs that follow the rules
+
+Source: `plan/PHASE_CANDIDATES.md` "Saved configs that follow the
+rules" (score 5.5, discovery pass 1), promoted via oversight
+2026-10-10 with the designer's yes (outside loop scope: web storage
+and UI). `configStore.ts:11` stores `survival.config.v1` with no
+schema version and `configDefaults.ts:16-26` fills only missing keys,
+so a changed default never reaches a save. Changes no default. The
+content era will change config often; this makes every old save say
+so.
+
+### Phase 31 — Player names for every map piece
+
+Source: `plan/PHASE_CANDIDATES.md` "Player names for every map piece"
+(score 4.5), promoted via oversight 2026-10-10. Phase 24 named enemies
+in the engagement modal and map; ids remain in `describeEvent.ts`,
+`describeAction.ts`, `map/places.ts`, and `ConfigPage.tsx` presets.
+/debug keeps its ids. Renumbered from 27 to 31 via oversight 2026-10-10; ships before v0.1.0 so new content piece kinds use one naming rule.
+
+### Phase 32 — Release v0.1.0
+
+Source: oversight 2026-10-10 (designer: cut v0.1.0 as a stable
+baseline before the content era). Every package is at 0.0.0, with no
+tags and no CHANGELOG. Bump every `package.json` to 0.1.0; write
+`CHANGELOG.md` (one v0.1.0 section summarising phases 1-31 by
+milestone, from the phase log); show the version in the site footer
+and record it in run exports and config saves (one source: the root
+`package.json`, read at build time). After the verify and deploy
+gates are green on the release commit: `git tag -a v0.1.0` on it,
+`git push origin v0.1.0`, and `gh release create v0.1.0` with the
+CHANGELOG section as notes. Known gaps listed in the release notes:
+playtest sessions (spec C), the bot's 8-14 median band (phase 33),
+frame rate and 2-person read checks, tile art and recorded sound.
+
+### Phase 33 — A defending bot policy
 
 Source: `plan/PHASE_CANDIDATES.md` "A defending bot policy" (score
 5.0) with the residue of "Combat v3 in the bot and the sim" (rejected,
-merged here), promoted via oversight 2026-10-10. Row 72 is decided
+merged here), promoted via oversight 2026-10-10. Renumbered from 26 to 33 via oversight 2026-10-10 (v0.1.0 checkpoint first); rebuild the defense logic alongside the Tower and structure work. Row 72 is decided
 (engagements are the default), so every comparison runs under
 engagements; the phase 22 exchange tables are not re-run as is. Add
 the three behaviours the 2026-10-09 session residue names (target
@@ -396,21 +478,24 @@ picks, keeping cards, buying Training). Report: defender against the
 current bot, rows 63-70 re-measured, defeated dice and draft pool
 re-run. Unblocks the deferred "Try the proposals" candidate.
 
-### Phase 27 — Player names for every map piece
+### Phase 34 — The rulings the engagement model bypasses
 
-Source: `plan/PHASE_CANDIDATES.md` "Player names for every map piece"
-(score 4.5), promoted via oversight 2026-10-10. Phase 24 named enemies
-in the engagement modal and map; ids remain in `describeEvent.ts`,
-`describeAction.ts`, `map/places.ts`, and `ConfigPage.tsx` presets.
-/debug keeps its ids.
+Source: `plan/PHASE_CANDIDATES.md` "The rulings the engagement model
+bypasses" (score 5.0, discovery pass 1), promoted via oversight
+2026-10-10. Siege (`engage.ts:314-341`) ignores
+`rulings.structureDamage` and the 7.11 adjacency check; rows 65 and
+69 are inert under engagements; three 2026-10-09 changes (cc92fe3,
+9ba3222, 256bdb4) have no OPEN-QUESTIONS row. Records readings as
+shipped; changes no value. The designer answers the new rows.
 
-### Phase 28 — Static HTML for each page
+### Phase 35 — Static HTML for each page
 
 Source: `plan/PHASE_CANDIDATES.md` "Static HTML for each page" (score
 4.0), promoted via oversight 2026-10-10. `apps/web/index.html` serves
 one description and `og:url` for every route and `_redirects` sends
 `/*` to `/index.html` with 200. Still a static Cloudflare Pages build.
 /config renders defaults, then loads saved edits after hydration.
+Renumbered from 28 to 35 via oversight 2026-10-10; after v0.1.0.
 ---
 
 ## Carry-overs / known gaps (update as phases ship)
