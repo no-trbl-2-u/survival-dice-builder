@@ -22,7 +22,8 @@ const DIR = path.join(ROOT, 'design/one-pagers/v2')
 const PAGES = path.join(DIR, 'pages')
 const OUT = path.join(DIR, 'build')
 const PDF = path.join(DIR, 'survival-dice-builder-v2-one-pagers.pdf')
-const CHROMIUM = '/opt/pw-browsers/chromium'
+// Playwright's own Chromium by default; PW_CHROMIUM names another binary.
+const CHROMIUM = process.env.PW_CHROMIUM || undefined
 
 // Words that betray the digital prototype. The sheets describe a board game.
 const BANNED = [
@@ -160,7 +161,7 @@ const loadPlaywright = () => {
 async function render(files) {
   fs.mkdirSync(OUT, { recursive: true })
   const { chromium } = loadPlaywright()
-  const browser = await chromium.launch({ executablePath: CHROMIUM })
+  const browser = await chromium.launch(CHROMIUM ? { executablePath: CHROMIUM } : {})
   try {
     for (const file of files) {
       const html = fs.readFileSync(file, 'utf8')

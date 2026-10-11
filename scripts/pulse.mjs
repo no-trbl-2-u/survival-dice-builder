@@ -4,23 +4,37 @@
 // `/oversight`, `/oversight audit`, and `/digest` (if adopted) each
 // hand-derive the same numbers from the same plan/ files. This
 // script computes them once: last-commit age, build-plan
-// pending/blocked counts, AUDIT pending count, CRITIQUE pending
+// pending/blocked counts, AUDIT open rows, CRITIQUE pending
 // count + last-pass age, PHASE_CANDIDATES pending count +
-// oldest-pending age.
+// oldest-pending age, and the cloud loop's weighted budget.
 //
 //   node scripts/pulse.mjs
 //
 // Reads git log and plan/ locally. No network calls, ever — the
 // gh-backed numbers (workflow runs, issue labels) stay in whatever
-// skill already fetches them. Always exits 0: this is a report,
-// not a gate. A file that can't be read prints "unreadable" on its
-// line and the script keeps going.
+// skill already fetches them; each cloud run writes its own job
+// summary. Always exits 0: this is a report, not a gate. A file
+// that can't be read prints "unreadable" on its line and the script
+// keeps going. The parsers live in scripts/pulse-lib.mjs.
 
 import { execSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 
+import {
+  ago,
+  auditPending,
+  ceilingFromWorkflow,
+  cloudBudget,
+  countRows,
+  header,
+  headerCommit,
+  headerDate,
+  pendingSection,
+} from './pulse-lib.mjs'
+
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..')
+const NOW = Date.now()
 
 function readSafe(rel) {
   try {
@@ -30,34 +44,29 @@ function readSafe(rel) {
   }
 }
 
-function ago(iso) {
-  const ms = Date.now() - new Date(iso).getTime()
-  const hours = ms / (1000 * 60 * 60)
-  if (hours < 48) return `${Math.round(hours)}h ago`
-  return `${Math.round(hours / 24)}d ago`
-}
-
-function pendingSection(text) {
-  const lines = text.split(/\r?\n/)
-  const start = lines.findIndex((l) => /^## Pending\s*$/.test(l))
-  if (start === -1) return []
-  const rest = lines.slice(start + 1)
-  const end = rest.findIndex((l) => /^## /.test(l))
-  return end === -1 ? rest : rest.slice(0, end)
-}
-
-function countRows(section) {
-  return section.filter((l) => /^### /.test(l)).length
-}
-
-function header(text, key) {
-  const re = new RegExp(`^> ${key}:\\s*(.+)$`, 'm')
-  const m = text.match(re)
-  return m ? m[1].trim() : null
+function git(args) {
+  return execSync(`git ${args}`, { cwd: ROOT, encoding: 'utf-8' }).trim()
 }
 
 function printRow(label, value) {
   console.log(`  ${label.padEnd(18)}${value}`)
+}
+
+// A header's commit time when it names a commit git knows, else its date.
+function passTime(value) {
+  const sha = headerCommit(value)
+  if (sha) {
+    try {
+      return git(`log -1 --format=%cI ${sha}`)
+    } catch {
+      // unknown sha: fall back to the date
+    }
+  }
+  return headerDate(value)
+}
+
+function age(iso) {
+  return ago(iso, NOW) ?? 'date unreadable'
 }
 
 // --- last commit --------------------------------------------------------
@@ -66,10 +75,10 @@ console.log(`pulse — survival-dice-builder`)
 console.log('')
 
 try {
-  const iso = execSync('git log -1 --format=%cI', { cwd: ROOT, encoding: 'utf-8' }).trim()
-  const sha = execSync('git log -1 --format=%h', { cwd: ROOT, encoding: 'utf-8' }).trim()
-  const subject = execSync('git log -1 --format=%s', { cwd: ROOT, encoding: 'utf-8' }).trim()
-  printRow('last commit', `${ago(iso)}  ${sha} ${subject}`)
+  const iso = git('log -1 --format=%cI')
+  const sha = git('log -1 --format=%h')
+  const subject = git('log -1 --format=%s')
+  printRow('last commit', `${age(iso)}  ${sha} ${subject}`)
 } catch {
   printRow('last commit', 'unreadable (not a git checkout?)')
 }
@@ -91,7 +100,8 @@ const audit = readSafe('plan/AUDIT.md')
 if (audit === null) {
   printRow('audit', 'unreadable (plan/AUDIT.md)')
 } else {
-  printRow('audit', `${countRows(pendingSection(audit))} pending`)
+  const { open, userCalls } = auditPending(audit)
+  printRow('audit', `${open} open in the latest pass, ${userCalls} needs-user-call`)
 }
 
 // --- critique --------------------------------------------------------------
@@ -102,8 +112,8 @@ if (critique === null) {
 } else {
   const count = countRows(pendingSection(critique))
   const lastPass = header(critique, 'Last pass')
-  const age = lastPass && lastPass !== 'never' ? `, last pass ${ago(`${lastPass}T00:00:00Z`)}` : ''
-  printRow('critique', `${count} pending${age}`)
+  const when = lastPass && lastPass !== 'never' ? `, last pass ${age(passTime(lastPass))}` : ''
+  printRow('critique', `${count} pending${when}`)
 }
 
 // --- candidates --------------------------------------------------------------
@@ -119,8 +129,28 @@ if (candidates === null) {
     .filter(Boolean)
     .map((m) => m[1])
     .sort()
-  const oldest = proposedDates.length ? `, oldest ${ago(`${proposedDates[0]}T00:00:00Z`)}` : ''
+  const oldest = proposedDates.length ? `, oldest ${age(headerDate(proposedDates[0]))}` : ''
   printRow('candidates', `${count} pending${oldest}`)
+}
+
+// --- cloud loop --------------------------------------------------------------
+
+try {
+  const ceiling = ceilingFromWorkflow(readSafe('.github/workflows/march.yml'))
+  const since = new Date(NOW - 24 * 60 * 60 * 1000).toISOString()
+  const lines = git(`log --since=${since} --grep=Cloud-Run: --format=%H%x09%cI`)
+  const commits = lines
+    ? lines.split(/\r?\n/).map((line) => {
+        const [sha, time] = line.split('\t')
+        const diff = git(`show --format= ${sha} -- plan/steps/01_build_plan.md`)
+        return { time, phase: /^\+.*\[x\]/m.test(diff) }
+      })
+    : []
+  const b = cloudBudget(commits, new Date(NOW).toISOString(), ceiling)
+  const tail = b.skipping ? `, ticks skip until ${b.freesAt?.slice(0, 16).replace('T', ' ')}Z` : ''
+  printRow('cloud', `${b.budget}/${b.ceiling} weighted budget in 24h${tail}`)
+} catch {
+  printRow('cloud', 'unreadable (git log)')
 }
 
 console.log('')

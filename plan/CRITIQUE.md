@@ -72,15 +72,6 @@
 - suggested fix: Skip needs-user-call rows that name `.env`, a token, or a local checkout (or tag them `ops` in AUDIT and filter the tag); regenerate `docs/DECISIONS.md`.
 - source: discovery
 
-### [LOW] tooling — pulse prints "last pass NaNd ago" and always 0 audit rows
-- pass: discovery 1 (2026-10-10, bee25b5)
-- viewport: n/a
-- category: tooling
-- observation: `node scripts/pulse.mjs` prints "critique 16 pending, last pass NaNd ago" and "audit 0 pending".
-- evidence: `scripts/pulse.mjs:105` appends `T00:00:00Z` to the whole header value ("2026-10-10 at commit 8402ba3"); `pulse.mjs:42` counts rows under `## Pending`, which `plan/AUDIT.md` does not have.
-- suggested fix: Take only the leading `YYYY-MM-DD` before building the date; count AUDIT's scored findings from its real sections. The larger loop-visibility work is the candidate "Loop telemetry".
-- source: discovery
-
 ### [LOW] all pages — the main script is 650 kB, over the build's own 600 kB warning
 - pass: discovery 1 (2026-10-10, bee25b5)
 - viewport: n/a
@@ -253,6 +244,16 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] tooling — pulse prints "last pass NaNd ago" and always 0 audit rows
+- pass: discovery 1 (2026-10-10, bee25b5)
+- viewport: n/a
+- category: tooling
+- observation: `node scripts/pulse.mjs` prints "critique 16 pending, last pass NaNd ago" and "audit 0 pending".
+- evidence: `scripts/pulse.mjs:105` appends `T00:00:00Z` to the whole header value ("2026-10-10 at commit 8402ba3"); `pulse.mjs:42` counts rows under `## Pending`, which `plan/AUDIT.md` does not have.
+- suggested fix: Take only the leading `YYYY-MM-DD` before building the date; count AUDIT's scored findings from its real sections. The larger loop-visibility work is the candidate "Loop telemetry".
+- source: discovery
+- addressed: phase 26 (loop telemetry); pulse parses the leading date or the header's commit time, and counts AUDIT's latest-pass open rows and needs-user-call rows.
 
 ### [x] [LOW] /play — the Skill draft does not say unkept Skills go to the pool
 - pass: 11 (commit 8402ba3)
