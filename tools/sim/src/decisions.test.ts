@@ -4,6 +4,7 @@ import {
   defaultContent,
   parseQuestions,
   parseUserCalls,
+  rulesAsPlayedMarkdown,
 } from '@survival/content'
 import fs from 'node:fs'
 import { describe, expect, it } from 'vitest'
@@ -20,5 +21,16 @@ describe('docs/DECISIONS.md', () => {
       defaultConfigMeta,
     )
     expect(read('docs/DECISIONS.md').replace(/\r\n/g, '\n')).toBe(expected)
+  })
+})
+
+describe('docs/RULES-AS-PLAYED.md', () => {
+  it('matches its sources (regenerate with: pnpm sim -- rules --out docs/RULES-AS-PLAYED.md)', () => {
+    const expected = rulesAsPlayedMarkdown(
+      read('spec/01-spec-v1-rules.md'),
+      parseQuestions(read('OPEN-QUESTIONS.md')),
+      defaultContent.config,
+    )
+    expect(read('docs/RULES-AS-PLAYED.md').replace(/\r\n/g, '\n')).toBe(expected)
   })
 })

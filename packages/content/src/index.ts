@@ -85,3 +85,13 @@ export {
   ruleLineFor,
   spawnText,
 } from './ruleText.ts'
+export {
+  parseSpec,
+  rowsFor,
+  rulesAsPlayed,
+  rulesAsPlayedMarkdown,
+  type PlayStatus,
+  type RuleAsPlayed,
+  type SpecRule,
+  type SpecSection,
+} from './rulesAsPlayed.ts'

@@ -5,6 +5,7 @@ import {
   GameConfigSchema,
   parseQuestions,
   parseUserCalls,
+  rulesAsPlayedMarkdown,
   withConfigDefaults,
 } from '@survival/content'
 import fs from 'node:fs'
@@ -23,6 +24,7 @@ const usage = `Usage:
   pnpm sim -- timing <export.json ...> [--out report.md]
   pnpm sim -- playtests [--dir docs/playtests/runs] [--estimate 8.5] [--out report.md]
   pnpm sim -- decisions [--out docs/DECISIONS.md]
+  pnpm sim -- rules [--out docs/RULES-AS-PLAYED.md]
 
 Plays <n> bot runs (default 200) and prints a summary. --config reads a config JSON: keys it
 leaves out take the default (a partial config works). --seats plays 1-4 seats (default 1);
@@ -30,7 +32,8 @@ leaves out take the default (a partial config works). --seats plays 1-4 seats (d
 compare: a bot batch per config (same seeds, seats, and policy), as a markdown table.
 timing: minutes per round and time shares per phase and decision, from real run exports.
 playtests: every run export in a folder, against the 8-9 minutes-per-round estimate.
-decisions: the designer decision digest from OPEN-QUESTIONS.md and plan/AUDIT.md.`
+decisions: the designer decision digest from OPEN-QUESTIONS.md and plan/AUDIT.md.
+rules: each Spec v1 rule as written beside what the engine does (the rules as played).`
 
 /** Reads `--name value` pairs. */
 function parse(argv: readonly string[]): Map<string, string> {
@@ -82,7 +85,7 @@ function report(md: string, out: string | undefined): void {
 }
 
 const argv = process.argv.slice(2).filter((a) => a !== '--')
-const COMMANDS = ['compare', 'timing', 'playtests', 'decisions'] as const
+const COMMANDS = ['compare', 'timing', 'playtests', 'decisions', 'rules'] as const
 const command = COMMANDS.find((c) => c === argv[0]) ?? 'batch'
 const args = parse(argv)
 if (args.has('help')) {
@@ -145,6 +148,20 @@ if (command === 'decisions') {
     parseUserCalls(fs.readFileSync(path.join(REPO, 'plan', 'AUDIT.md'), 'utf-8')),
     defaultContent.config,
     defaultConfigMeta,
+  )
+  const out = args.get('out')
+  if (out) {
+    fs.writeFileSync(here(out), md)
+    console.log(`wrote ${out}`)
+  } else console.log(md)
+  process.exit(0)
+}
+
+if (command === 'rules') {
+  const md = rulesAsPlayedMarkdown(
+    fs.readFileSync(path.join(REPO, 'spec', '01-spec-v1-rules.md'), 'utf-8'),
+    parseQuestions(fs.readFileSync(path.join(REPO, 'OPEN-QUESTIONS.md'), 'utf-8')),
+    defaultContent.config,
   )
   const out = args.get('out')
   if (out) {
