@@ -44,7 +44,7 @@ export function placeTile(map: GameMap, tile: TileDef, center: Axial, revealedRo
  * Every slot where a new tile can go: next to a placed tile, and not overlapping one.
  * Ordered by placed tile, then by `TILE_SLOT_OFFSETS`; duplicates removed.
  *
- * @rule 4.2, 10.1
+ * @rule 10.1, core loop v2 (reveal by stepping off the edge)
  */
 export function emptySlots(map: GameMap): Axial[] {
   const taken = new Set(map.tiles.map((t) => hexKey(t.center)))

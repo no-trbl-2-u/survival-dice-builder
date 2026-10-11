@@ -385,7 +385,7 @@ describe('the Base tile is the base (row 16)', () => {
 })
 
 describe('end of round (10.6-10.9, core loop v2)', () => {
-  it('core loop v2 there is no Explore phase and no wave track: Combat is followed by the next Prepare', () => {
+  it('7.13, core loop v2 there is no Explore phase and no wave track: Combat is followed by the next Prepare', () => {
     const s0 = createGame(config, 1)
     let s: GameState = { ...applyAction(s0, legalActions(s0)[0]!).state, tileDeck: [] }
     for (let i = 0; i < 300 && s.round === 1 && s.phase !== 'ended'; i++) {

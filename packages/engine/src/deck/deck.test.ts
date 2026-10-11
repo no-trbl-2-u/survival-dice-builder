@@ -32,7 +32,7 @@ function player(deck: number, discard = 0): Player {
 }
 
 describe('deck', () => {
-  it('6.1 draws 3 cards from the top of the deck', () => {
+  it('6.1 draws a hand of the given size (3 here) from the top of the deck', () => {
     const [p, drawn] = drawHand(player(6), 3)
     expect(drawn).toEqual(['c1', 'c2', 'c3'])
     expect(p.deck.map((c) => c.id)).toEqual(['c4', 'c5', 'c6'])

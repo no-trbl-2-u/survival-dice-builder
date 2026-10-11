@@ -58,7 +58,7 @@ export function nodeInRange(state: GameState, node: SpawnNode): boolean {
  * The nodes that spawn at this Combat: `spawnNodes` whose tile has waited `spawn.newTileDelay`
  * rounds (row 66) and that are within `spawn.nodeRange` (row 70).
  *
- * @rule 9.2, core loop v2 rows 66, 70
+ * @rule core loop v2 (Combat step 3), rows 66, 70
  */
 export function activeSpawnNodes(state: GameState): SpawnNode[] {
   return spawnNodes(state).filter(
@@ -71,7 +71,7 @@ export function activeSpawnNodes(state: GameState): SpawnNode[] {
  * `spawn.perSeat` (row 68), plus 1 for every `spawn.rampEvery` rounds after round 1 (row 64:
  * `floor((round - 1) / N)`).
  *
- * @rule 9.2, core loop v2 rows 64, 68 (proposed: spawn ramp, seat scaling)
+ * @rule core loop v2 (Combat step 3), rows 64, 68 (proposed: spawn ramp, seat scaling)
  */
 export function spawnCount(state: GameState): number {
   const { rampEvery, perSeat } = state.config.spawn
@@ -87,7 +87,7 @@ export function spawnCount(state: GameState): number {
  * past the miniature limit the grunt nearest the base becomes an elite instead (10.5, row 32).
  * There is no wave track.
  *
- * @rule 9.2, 9.8, 10.5, core loop v2 (Combat step 3), rows 64, 66, 68, 70
+ * @rule 9.8, 10.5, core loop v2 (Combat step 3), rows 64, 66, 68, 70
  */
 export function spawnAtNodes(state: GameState): Step {
   let current = state

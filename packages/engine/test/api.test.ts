@@ -44,6 +44,10 @@ describe('createGame (section 4)', () => {
     expect(serialize(createGame(config, 7))).not.toBe(serialize(createGame(config, 8)))
   })
 
+  it('4.13 a new game starts at round 1', () => {
+    expect(createGame(config, 1).round).toBe(1)
+  })
+
   it('4.1, core loop v2 places the Base tile alone and waits for the start hex', () => {
     const s = createGame(config, 1)
     expect(s.phase).toBe('setup')
@@ -439,7 +443,7 @@ describe('deck flow across a round (5.3, 7.9, 10.7)', () => {
       .flatMap((e) => (e as { cards: readonly string[] }).cards)
       .sort()
 
-  it('5.3 each round passes through the deck twice: every card is drawn in Prepare and in Combat', () => {
+  it('5.2, 5.3 each round passes through the deck twice: every card is drawn in Prepare and in Combat', () => {
     const log = roundOneLog()
     const all = Array.from({ length: 10 }, (_, i) => `c${i + 1}`).sort()
     expect(drawnBy(log, ['6.1', '6.5'])).toEqual(all)

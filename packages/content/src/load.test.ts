@@ -17,6 +17,13 @@ describe('default content', () => {
     expect(errorsOf(rawCopy())).toEqual([])
   })
 
+  it('2.6, 2.7 every card has a top half (Prepare) and a bottom half (Combat)', () => {
+    for (const card of defaultContent.cards) {
+      expect(card.top, card.id).toBeDefined()
+      expect(card.bottom.length, card.id).toBeGreaterThan(0)
+    }
+  })
+
   it('core loop v2, row 19: the default starter deck has 10 cards and a hand of 5 (row 71)', () => {
     const { deck } = defaultContent.config
     const preset = deck.presets.find((p) => p.id === deck.preset)

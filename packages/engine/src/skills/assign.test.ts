@@ -28,7 +28,7 @@ describe('Skill assignment', () => {
     ).toEqual([])
   })
 
-  it('7.8 step 6 each Skill is used 1 time only (default)', () => {
+  it('7.8 step 6 with skillUses "once" each Skill is used 1 time only', () => {
     const placed: Assignment[] = [{ die: 0, skill: 'strike', use: 0, slot: 0, asFace: 'Sword' }]
     expect(legalPlacements(dice('Sword', 'Sword'), [skill('strike')], placed, false)).toEqual([])
   })

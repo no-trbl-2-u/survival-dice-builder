@@ -37,7 +37,7 @@ export function nextInt(rng: number, n: number): readonly [number, number] {
  * Returns a shuffled copy of a list (Fisher-Yates) and the next RNG state. The input is not
  * changed.
  *
- * @rule 4.2, 4.8, 4.12, 7.1
+ * @rule 4.3, 4.8, 4.12, 7.1
  * @param rng - the current RNG state.
  * @param items - the list to shuffle.
  */
