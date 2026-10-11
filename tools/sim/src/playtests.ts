@@ -8,6 +8,7 @@ export type PlaytestExport = TimedExport &
     endedBecause?: 'base' | 'player' | null
     milestones?: readonly string[]
     commit?: string
+    appVersion?: string
     changedKeys?: readonly string[]
   }>
 
@@ -64,6 +65,10 @@ const list = (r: Readonly<Record<string, number>>) =>
     .map(([k, v]) => `${k} ${v}`)
     .join(', ') || '-'
 
+/** A run's build: "v0.1.0 abc1234", the commit alone, or "-" for an older file. */
+const build = (d: PlaytestExport) =>
+  d.commit === undefined ? '-' : d.appVersion ? `v${d.appVersion} ${d.commit}` : d.commit
+
 /** A run's rule changes: "standard", the changed fields, or "-" for an older file. */
 const changes = (keys: readonly string[] | undefined) =>
   keys === undefined ? '-' : keys.length === 0 ? 'standard' : keys.join(', ')
@@ -100,11 +105,11 @@ export function playtestReport(
     `| Median minutes per round | ${fmt(s.medianMinutesPerRound)} |`,
     `| Against the estimate (${s.estimate} min) | ${fmt(s.ratio, 2)}x: ${verdict(s.medianMinutesPerRound)} |`,
     '',
-    '| File | Players | Rounds | End | Minutes | Minutes per round | Commit | Rule changes |',
+    '| File | Players | Rounds | End | Minutes | Minutes per round | Build | Rule changes |',
     '| --- | --- | --- | --- | --- | --- | --- | --- |',
     ...files.map(
       ({ name, data: d }) =>
-        `| ${name} | ${d.players ?? 1} | ${d.round} | ${d.endedBecause ?? 'unfinished'} | ${d.sessionMs === undefined ? '-' : fmt(d.sessionMs / 60_000)} | ${fmt(minutesPerRound(d))} | ${d.commit ?? '-'} | ${changes(d.changedKeys)} |`,
+        `| ${name} | ${d.players ?? 1} | ${d.round} | ${d.endedBecause ?? 'unfinished'} | ${d.sessionMs === undefined ? '-' : fmt(d.sessionMs / 60_000)} | ${fmt(minutesPerRound(d))} | ${build(d)} | ${changes(d.changedKeys)} |`,
     ),
     '',
     '## Where the time went',

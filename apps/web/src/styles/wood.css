@@ -317,3 +317,11 @@ svg[data-icon^='face-enemy-'] {
   stroke: #000;
   stroke-width: 12px;
 }
+
+/* The release line under every page (phase 32). */
+.site-footer {
+  margin-top: var(--gutter);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}

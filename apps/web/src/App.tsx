@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { APP_COMMIT, APP_VERSION } from './appInfo.ts'
 import { ConfigPage } from './config/ConfigPage.tsx'
 import { CreditsPage } from './credits/CreditsPage.tsx'
 import { DebugPage } from './debug/DebugPage.tsx'
@@ -77,6 +78,9 @@ export function App() {
         <h1 className={route.quietTitle ? 'visually-hidden' : undefined}>{route.title}</h1>
         {route.render()}
       </main>
+      <footer className="site-footer" data-testid="site-footer">
+        {SITE_NAME} v{APP_VERSION} · build {APP_COMMIT}
+      </footer>
     </div>
   )
 }

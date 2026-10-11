@@ -5,7 +5,7 @@ import {
   GameConfigSchema,
   withConfigDefaults,
 } from '@survival/content'
-import { APP_COMMIT } from '../appInfo.ts'
+import { APP_COMMIT, APP_VERSION } from '../appInfo.ts'
 import type { Action, GameState } from '@survival/engine'
 import { replay, type Run } from './run.ts'
 import { closeTiming, resumeTiming, sessionMs, type Timing } from './timing.ts'
@@ -25,6 +25,8 @@ export type RunExport = Readonly<{
   sessionMs?: number
   /** The app commit the run was played on (phase 30). */
   commit?: string
+  /** The release version the run was played on (phase 32). */
+  appVersion?: string
   /** The config fields that differ from the standard rules (phase 30). */
   changedKeys?: readonly string[]
 }>
@@ -44,6 +46,7 @@ export function exportRun(run: Run, at = run.timing.lastAt): RunExport {
     timing,
     sessionMs: sessionMs(timing),
     commit: APP_COMMIT,
+    appVersion: APP_VERSION,
     changedKeys: changedFields(run.config, defaultContent.config),
   }
 }

@@ -1,5 +1,6 @@
 {
   "name": "survival-dice-builder",
+  "version": "0.1.0",
   "private": true,
   "description": "Defend the base, build your dice, survive one more round.",
   "type": "module",

@@ -10,6 +10,10 @@ test('home renders the title and a 7-hex tile with no console errors', async ({ 
   await page.goto('/')
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Survival Dice-Builder')
   await expect(page.locator('polygon[data-hex]')).toHaveCount(7)
+  // Every page ends with the release line (phase 32).
+  await expect(page.getByTestId('site-footer')).toHaveText(
+    /^Survival Dice-Builder v\d+\.\d+\.\d+ · build \S+$/,
+  )
   // The page says what the game is and links straight into a run.
   await expect(page.locator('main')).toContainText('Defend the base, build your dice')
   await page.getByRole('link', { name: 'Start a run' }).click()

@@ -63,10 +63,15 @@ describe('playtest summary', () => {
       { name: 'a.json', data: run(10, 7, { commit: 'abc1234', changedKeys: [] }) },
       { name: 'b.json', data: run(10, 7, { commit: 'def5678', changedKeys: ['miniatureLimit'] }) },
       { name: 'c.json', data: run(10, 7) },
+      {
+        name: 'd.json',
+        data: run(10, 7, { commit: 'aaa1111', appVersion: '0.1.0', changedKeys: [] }),
+      },
     ]
     const md = playtestReport(files)
     expect(md).toContain('| abc1234 | standard |')
     expect(md).toContain('| def5678 | miniatureLimit |')
+    expect(md).toContain('| v0.1.0 aaa1111 | standard |')
     expect(md).toMatch(/\| c\.json .*\| - \| - \|$/m)
   })
 

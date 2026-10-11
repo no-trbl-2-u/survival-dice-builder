@@ -9,6 +9,7 @@ import {
   withConfigDefaults,
   type GameConfig,
 } from '@survival/content'
+import { APP_VERSION } from '../appInfo.ts'
 
 /** Browser storage keys (this browser only). */
 export const CONFIG_KEY = 'survival.config.v2'
@@ -29,7 +30,13 @@ export function browserStorage(): KeyValue | undefined {
 }
 
 /** What the store holds: the config, the version it was saved at, and the fields changed. */
-export type StoredConfig = Readonly<{ version: number; values: unknown; changedKeys: string[] }>
+export type StoredConfig = Readonly<{
+  version: number
+  values: unknown
+  changedKeys: string[]
+  /** The release the config was saved with (phase 32); not read back. */
+  appVersion?: string
+}>
 
 /** A loaded config and how it differs from the standard rules. */
 export type LoadedConfig = Readonly<{
@@ -171,6 +178,7 @@ export function saveConfig(store: KeyValue | undefined, value: unknown): ConfigP
       version: CONFIG_VERSION,
       values: parsed.data,
       changedKeys: changedFields(parsed.data, defaultContent.config),
+      appVersion: APP_VERSION,
     }
     store?.setItem(CONFIG_KEY, JSON.stringify(stored))
     store?.removeItem(LEGACY_CONFIG_KEY)
