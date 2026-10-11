@@ -7,6 +7,8 @@ export type PlaytestExport = TimedExport &
     players?: number
     endedBecause?: 'base' | 'player' | null
     milestones?: readonly string[]
+    commit?: string
+    changedKeys?: readonly string[]
   }>
 
 /** The spec's simulator estimate: "about 8 to 9 minutes per round at a normal table". */
@@ -62,6 +64,10 @@ const list = (r: Readonly<Record<string, number>>) =>
     .map(([k, v]) => `${k} ${v}`)
     .join(', ') || '-'
 
+/** A run's rule changes: "standard", the changed fields, or "-" for an older file. */
+const changes = (keys: readonly string[] | undefined) =>
+  keys === undefined ? '-' : keys.length === 0 ? 'standard' : keys.join(', ')
+
 /** Where the real minutes per round sit against the 8-9 band. */
 export function verdict(minutes: number): string {
   if (!Number.isFinite(minutes)) return 'no timed sessions yet'
@@ -94,11 +100,11 @@ export function playtestReport(
     `| Median minutes per round | ${fmt(s.medianMinutesPerRound)} |`,
     `| Against the estimate (${s.estimate} min) | ${fmt(s.ratio, 2)}x: ${verdict(s.medianMinutesPerRound)} |`,
     '',
-    '| File | Players | Rounds | End | Minutes | Minutes per round |',
-    '| --- | --- | --- | --- | --- | --- |',
+    '| File | Players | Rounds | End | Minutes | Minutes per round | Commit | Rule changes |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- |',
     ...files.map(
       ({ name, data: d }) =>
-        `| ${name} | ${d.players ?? 1} | ${d.round} | ${d.endedBecause ?? 'unfinished'} | ${d.sessionMs === undefined ? '-' : fmt(d.sessionMs / 60_000)} | ${fmt(minutesPerRound(d))} |`,
+        `| ${name} | ${d.players ?? 1} | ${d.round} | ${d.endedBecause ?? 'unfinished'} | ${d.sessionMs === undefined ? '-' : fmt(d.sessionMs / 60_000)} | ${fmt(minutesPerRound(d))} | ${d.commit ?? '-'} | ${changes(d.changedKeys)} |`,
     ),
     '',
     '## Where the time went',

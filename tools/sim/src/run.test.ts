@@ -44,7 +44,7 @@ describe('the default batch (engagements, designer 2026-10-09)', () => {
       'defeat-elite': 21,
       'survive-round-10': 3,
     })
-  })
+  }, 30_000) // 200 full runs: past the 5 s default when the gate runs every suite at once
 })
 
 describe('the exchange batch (hand of 5, OPEN-QUESTIONS row 71)', () => {
@@ -66,7 +66,7 @@ describe('the exchange batch (hand of 5, OPEN-QUESTIONS row 71)', () => {
       'survive-round-10': 8,
       'survive-round-15': 1,
     })
-  })
+  }, 30_000)
 })
 
 describe('summary maths', () => {

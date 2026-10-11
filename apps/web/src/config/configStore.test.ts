@@ -5,13 +5,14 @@ import { numberMin, setAt } from './ConfigPage.tsx'
 import {
   CONFIG_KEY,
   isDirty,
+  LEGACY_CONFIG_KEY,
   loadConfig,
   plainMessage,
   resetConfig,
   saveConfig,
   type KeyValue,
 } from './configStore.ts'
-import { GameConfigSchema } from '@survival/content'
+import { CONFIG_VERSION, defaultsAt, GameConfigSchema } from '@survival/content'
 
 /** An in-memory storage. */
 function memory(): KeyValue & { data: Map<string, string> } {
@@ -73,7 +74,10 @@ describe('config store (spec 6)', () => {
   it('a stored config that names a missing card falls back to the defaults', () => {
     const store = memory()
     const bad = setAt(defaultContent.config, ['deck', 'presets', 0, 'cards', 0, 'card'], 'gone')
-    store.setItem(CONFIG_KEY, JSON.stringify(bad))
+    store.setItem(
+      CONFIG_KEY,
+      JSON.stringify({ version: CONFIG_VERSION, values: bad, changedKeys: [] }),
+    )
     expect(loadConfig(store)).toMatchObject({
       config: defaultContent.config,
       custom: false,
@@ -98,6 +102,44 @@ describe('config store (spec 6)', () => {
     store.setItem(CONFIG_KEY, '{oops')
     expect(loadConfig(store)).toMatchObject({ custom: false, error: expect.any(String) })
     resetConfig(store)
-    expect(loadConfig(store)).toEqual({ config: defaultContent.config, custom: false, error: null })
+    expect(loadConfig(store)).toEqual({
+      config: defaultContent.config,
+      custom: false,
+      error: null,
+      changes: [],
+      updated: [],
+    })
+  })
+
+  it('saves the version and the changed fields, and lists them on load', () => {
+    const store = memory()
+    const changed = setAt(defaultContent.config, ['miniatureLimit'], 12)
+    expect(saveConfig(store, changed)).toEqual([])
+    expect(JSON.parse(store.data.get(CONFIG_KEY) ?? '')).toMatchObject({
+      version: CONFIG_VERSION,
+      changedKeys: ['miniatureLimit'],
+    })
+    expect(loadConfig(store)).toMatchObject({
+      custom: true,
+      changes: ['miniatureLimit'],
+      updated: [],
+    })
+  })
+
+  it('a config saved before versions moves to the new defaults and keeps its own changes', () => {
+    const store = memory()
+    const old = setAt(defaultsAt(1, defaultContent.config), ['miniatureLimit'], 12)
+    store.setItem(LEGACY_CONFIG_KEY, JSON.stringify(old))
+    const loaded = loadConfig(store)
+    expect(loaded.config).toEqual(setAt(defaultContent.config, ['miniatureLimit'], 12))
+    expect(loaded.changes).toEqual(['miniatureLimit'])
+    expect(loaded.updated).toEqual([
+      'combat.model',
+      'combat.moveCostNextToEnemy',
+      'deck.preset',
+      'options.skillUses',
+    ])
+    expect(saveConfig(store, loaded.config)).toEqual([])
+    expect(store.data.has(LEGACY_CONFIG_KEY)).toBe(false)
   })
 })

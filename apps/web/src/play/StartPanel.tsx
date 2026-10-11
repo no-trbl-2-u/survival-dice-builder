@@ -5,7 +5,9 @@ import {
   defaultContent,
   goalText,
   knockoutText,
+  type GameConfig,
 } from '@survival/content'
+import { ConfigChanges } from '../config/ConfigChanges.tsx'
 import type { KeyValue } from '../config/configStore.ts'
 import { importRun, readAutosave } from './exportRun.ts'
 import styles from './Play.module.css'
@@ -24,7 +26,10 @@ const COMBAT_HINT: Record<CombatModel, string> = {
 }
 
 type Props = Readonly<{
-  custom: boolean
+  /** The config new runs use, and the fields where it differs from the standard rules. */
+  config: GameConfig
+  changes: readonly string[]
+  updated: readonly string[]
   store: KeyValue | undefined
   /** The config's Combat model: the select starts there. */
   combat: CombatModel
@@ -33,7 +38,15 @@ type Props = Readonly<{
 }>
 
 /** Before a run: player count, seed, config status, load a file, or resume the autosave. */
-export function StartPanel({ custom, store, combat: configCombat, onStart, onLoad }: Props) {
+export function StartPanel({
+  config,
+  changes,
+  updated,
+  store,
+  combat: configCombat,
+  onStart,
+  onLoad,
+}: Props) {
   const [players, setPlayers] = useState(1)
   const [combat, setCombat] = useState<CombatModel>(configCombat)
   const [seed, setSeed] = useState(() => String(Date.now() % 100000))
@@ -101,10 +114,10 @@ export function StartPanel({ custom, store, combat: configCombat, onStart, onLoa
       <p id="combat-hint" className={styles.muted}>
         Combat: {COMBAT_HINT[combat]}
       </p>
-      <p className={styles.muted}>
-        Config: {custom ? 'custom (changed on the Config page)' : 'default rules'}.{' '}
-        <a href="/config">Change the config</a>
-      </p>
+      <div className={styles.muted}>
+        <ConfigChanges config={config} changes={changes} updated={updated} reviewHref="/config" />
+        {changes.length === 0 ? <a href="/config">Change the config</a> : null}
+      </div>
       {saved ? (
         <p>
           <button type="button" onClick={() => onLoad(saved)}>

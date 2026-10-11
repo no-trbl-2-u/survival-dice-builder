@@ -1,4 +1,5 @@
 import {
+  changedFields,
   defaultConfigMeta,
   defaultContent,
   GameConfigSchema,
@@ -8,6 +9,7 @@ import {
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { rulesUrl } from '../decisions/Inline.tsx'
 import { readAutosave } from '../play/exportRun.ts'
+import { ConfigChanges } from './ConfigChanges.tsx'
 import styles from './ConfigPage.module.css'
 import {
   browserStorage,
@@ -608,6 +610,7 @@ export function ConfigPage() {
   const [message, setMessage] = useState<string | null>(loaded.error)
   const [problems, setProblems] = useState<ConfigProblem[]>([])
   const [confirming, setConfirming] = useState(false)
+  const [updatedNotice, setUpdatedNotice] = useState<readonly string[]>(loaded.updated)
   const [resumable] = useState(() => readAutosave(store))
   const leaving = useRef(false)
   const dirty = isDirty(draft, saved)
@@ -657,6 +660,7 @@ export function ConfigPage() {
     setVersion((v) => v + 1)
     setProblems([])
     setConfirming(false)
+    setUpdatedNotice([])
     setMessage('Reset to the defaults.')
   }
   const fields = byField(problems)
@@ -667,6 +671,11 @@ export function ConfigPage() {
         <a href={rulesUrl}>written rules</a>. The config is saved in this browser only. A run keeps
         the config it started with.
       </p>
+      <ConfigChanges
+        config={saved}
+        changes={changedFields(saved, defaultContent.config)}
+        updated={updatedNotice}
+      />
       {problems.length > 0 ? (
         <div className={styles.problems} role="alert" aria-labelledby="cfg-problems">
           <p id="cfg-problems">These fields need a fix before the config can be saved:</p>

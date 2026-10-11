@@ -97,7 +97,7 @@ function reducer(run: Run | null, msg: Msg): Run | null {
  */
 export function PlayPage() {
   const store = browserStorage()
-  const [{ config, custom }] = useState(() => loadConfig(store))
+  const [{ config, changes, updated }] = useState(() => loadConfig(store))
   const [run, dispatch] = useReducer(reducer, null, () => {
     const params = new URLSearchParams(window.location.search)
     // `?resume`: carry on with this browser's autosaved run (the Config bar links here).
@@ -135,7 +135,9 @@ export function PlayPage() {
   if (!run) {
     return (
       <StartPanel
-        custom={custom}
+        config={config}
+        changes={changes}
+        updated={updated}
         store={store}
         combat={config.combat.model}
         onStart={(players, seed, combat) =>

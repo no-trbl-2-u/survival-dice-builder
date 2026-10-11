@@ -1,6 +1,9 @@
 import {
+  changedFields,
+  CONFIG_VERSION,
   configReferenceProblems,
   defaultContent,
+  migrateConfig,
   GameConfigSchema,
   metaFor,
   withConfigDefaults,
@@ -8,7 +11,9 @@ import {
 } from '@survival/content'
 
 /** Browser storage keys (this browser only). */
-export const CONFIG_KEY = 'survival.config.v1'
+export const CONFIG_KEY = 'survival.config.v2'
+/** The key of a config saved before config versions (phase 30): read once, then replaced. */
+export const LEGACY_CONFIG_KEY = 'survival.config.v1'
 export const AUTOSAVE_KEY = 'survival.autosave.v1'
 
 /** The part of `Storage` the stores use, so tests can pass a plain map. */
@@ -23,35 +28,72 @@ export function browserStorage(): KeyValue | undefined {
   }
 }
 
-/**
- * The config new runs use: the stored one when it is valid, else the defaults. Keys a stored
- * config does not have yet (options added after it was saved) take their default values.
- */
-export function loadConfig(store: KeyValue | undefined): Readonly<{
+/** What the store holds: the config, the version it was saved at, and the fields changed. */
+export type StoredConfig = Readonly<{ version: number; values: unknown; changedKeys: string[] }>
+
+/** A loaded config and how it differs from the standard rules. */
+export type LoadedConfig = Readonly<{
   config: GameConfig
   custom: boolean
   error: string | null
-}> {
+  /** The /config fields that differ from the defaults (empty for the standard rules). */
+  changes: readonly string[]
+  /** Fields that took a new default because the rules changed since the save. */
+  updated: readonly string[]
+}>
+
+const standard = (error: string | null): LoadedConfig => ({
+  config: defaultContent.config,
+  custom: false,
+  error,
+  changes: [],
+  updated: [],
+})
+
+/** The saved value, its version, and the fields the player changed (null: work them out). */
+function readStored(store: KeyValue | undefined): StoredConfig | null | 'legacy' {
+  const raw = store?.getItem(CONFIG_KEY)
+  if (raw) {
+    const data = JSON.parse(raw) as Partial<StoredConfig>
+    if (typeof data.version !== 'number' || !Array.isArray(data.changedKeys)) throw new Error()
+    return { version: data.version, values: data.values, changedKeys: data.changedKeys }
+  }
+  return store?.getItem(LEGACY_CONFIG_KEY) ? 'legacy' : null
+}
+
+/**
+ * The config new runs use: the stored one when it is valid, else the defaults. Keys a stored
+ * config does not have yet take their default values, and a field whose default changed since
+ * the save takes the new default unless the player had changed it (`migrateConfig`). A config
+ * saved before versions (`survival.config.v1`) is read as version 1.
+ */
+export function loadConfig(store: KeyValue | undefined): LoadedConfig {
   const defaults = defaultContent.config
   try {
-    const raw = store?.getItem(CONFIG_KEY)
-    if (!raw) return { config: defaults, custom: false, error: null }
-    const parsed = GameConfigSchema.safeParse(withConfigDefaults(JSON.parse(raw)))
+    const stored = readStored(store)
+    if (stored === null) return standard(null)
+    const legacy = stored === 'legacy'
+    const values = legacy ? JSON.parse(store?.getItem(LEGACY_CONFIG_KEY) ?? 'null') : stored.values
+    const moved = migrateConfig(
+      withConfigDefaults(values),
+      legacy ? 1 : stored.version,
+      legacy ? null : stored.changedKeys,
+      defaults as unknown,
+    )
+    const parsed = GameConfigSchema.safeParse(moved.values)
     if (!parsed.success || configReferenceProblems(parsed.data, defaultContent).length > 0) {
-      return {
-        config: defaults,
-        custom: false,
-        error: 'The saved config is not valid; using the defaults.',
-      }
+      return standard('The saved config is not valid; using the defaults.')
     }
-    const custom = JSON.stringify(parsed.data) !== JSON.stringify(defaults)
-    return { config: parsed.data, custom, error: null }
-  } catch {
+    const changes = changedFields(parsed.data, defaults)
     return {
-      config: defaults,
-      custom: false,
-      error: 'The saved config cannot be read; using the defaults.',
+      config: parsed.data,
+      custom: changes.length > 0,
+      error: null,
+      changes,
+      updated: moved.updated,
     }
+  } catch {
+    return standard('The saved config cannot be read; using the defaults.')
   }
 }
 
@@ -125,7 +167,13 @@ export function saveConfig(store: KeyValue | undefined, value: unknown): ConfigP
   if (refs.length > 0)
     return refs.map((r) => toProblem({ code: 'custom', message: r.message, path: r.path }))
   try {
-    store?.setItem(CONFIG_KEY, JSON.stringify(parsed.data))
+    const stored: StoredConfig = {
+      version: CONFIG_VERSION,
+      values: parsed.data,
+      changedKeys: changedFields(parsed.data, defaultContent.config),
+    }
+    store?.setItem(CONFIG_KEY, JSON.stringify(stored))
+    store?.removeItem(LEGACY_CONFIG_KEY)
     return []
   } catch {
     return [{ path: 'config', message: 'This browser does not allow saving.' }]
@@ -141,6 +189,7 @@ export function isDirty(draft: unknown, saved: unknown): boolean {
 export function resetConfig(store: KeyValue | undefined): void {
   try {
     store?.removeItem(CONFIG_KEY)
+    store?.removeItem(LEGACY_CONFIG_KEY)
   } catch {
     // Nothing stored or storage blocked: the defaults apply either way.
   }

@@ -1,5 +1,11 @@
 import { AUTOSAVE_KEY, type KeyValue } from '../config/configStore.ts'
-import { GameConfigSchema, withConfigDefaults } from '@survival/content'
+import {
+  changedFields,
+  defaultContent,
+  GameConfigSchema,
+  withConfigDefaults,
+} from '@survival/content'
+import { APP_COMMIT } from '../appInfo.ts'
 import type { Action, GameState } from '@survival/engine'
 import { replay, type Run } from './run.ts'
 import { closeTiming, resumeTiming, sessionMs, type Timing } from './timing.ts'
@@ -17,6 +23,10 @@ export type RunExport = Readonly<{
   /** Real time per phase, decision type, and round (milliseconds); the parts sum to sessionMs. */
   timing?: Timing
   sessionMs?: number
+  /** The app commit the run was played on (phase 30). */
+  commit?: string
+  /** The config fields that differ from the standard rules (phase 30). */
+  changedKeys?: readonly string[]
 }>
 
 /** Builds the save file for a run; `at` closes the open wait (default: the last action). */
@@ -33,6 +43,8 @@ export function exportRun(run: Run, at = run.timing.lastAt): RunExport {
     milestones: run.state.milestones,
     timing,
     sessionMs: sessionMs(timing),
+    commit: APP_COMMIT,
+    changedKeys: changedFields(run.config, defaultContent.config),
   }
 }
 

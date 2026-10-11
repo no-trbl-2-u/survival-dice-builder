@@ -96,3 +96,11 @@ export {
   type SpecSection,
 } from './rulesAsPlayed.ts'
 export { fillKit, KIT_BLOCKS, kitBlock, surveyQuestions, type KitFile } from './playtestKit.ts'
+export {
+  CONFIG_HISTORY,
+  CONFIG_VERSION,
+  changedFields,
+  defaultsAt,
+  migrateConfig,
+  type ConfigStep,
+} from './configVersions.ts'

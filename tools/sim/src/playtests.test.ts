@@ -58,6 +58,18 @@ describe('playtest summary', () => {
     expect(md).toContain('## Where the time went')
   })
 
+  it('names the commit and the rule changes of each run (older files show "-")', () => {
+    const files = [
+      { name: 'a.json', data: run(10, 7, { commit: 'abc1234', changedKeys: [] }) },
+      { name: 'b.json', data: run(10, 7, { commit: 'def5678', changedKeys: ['miniatureLimit'] }) },
+      { name: 'c.json', data: run(10, 7) },
+    ]
+    const md = playtestReport(files)
+    expect(md).toContain('| abc1234 | standard |')
+    expect(md).toContain('| def5678 | miniatureLimit |')
+    expect(md).toMatch(/\| c\.json .*\| - \| - \|$/m)
+  })
+
   it('says so when there are no sessions yet', () => {
     expect(playtestReport([])).toMatch(/^No sessions yet/)
   })

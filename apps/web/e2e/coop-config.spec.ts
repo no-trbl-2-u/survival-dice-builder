@@ -38,7 +38,10 @@ test('/config: a changed value is used by the next run', async ({ page }) => {
   await page.getByRole('button', { name: 'Save config' }).click()
   await expect(page.getByRole('status')).toContainText('Saved')
   await page.goto('/play')
-  await expect(page.getByTestId('start-panel')).toContainText('custom')
+  await expect(page.getByTestId('start-panel')).toContainText(
+    'Playing with 1 change from the standard rules',
+  )
+  await expect(page.getByTestId('config-changes')).toContainText('Maximum health: 21')
   await page.getByRole('button', { name: 'Start run' }).click()
   await expect(page.getByTestId('player-panel')).toContainText('21 / 21')
   // Reset for other tests in this browser context.

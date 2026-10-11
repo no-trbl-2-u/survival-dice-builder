@@ -31,6 +31,13 @@ describe('exportRun', () => {
     expect(exportFileName(data)).toBe(`survival-run-4-round-${run.state.round}.json`)
   })
 
+  it('records the app commit and the fields changed from the standard rules', () => {
+    const { run } = botRun(4)
+    expect(exportRun(run)).toMatchObject({ commit: expect.any(String), changedKeys: [] })
+    const changed = newRun({ ...config, miniatureLimit: config.miniatureLimit + 1 }, 4)
+    expect(exportRun(changed).changedKeys).toEqual(['miniatureLimit'])
+  })
+
   it('records the base health at the start of each round', () => {
     const { run } = botRun(4)
     expect(run.baseCurve).toHaveLength(run.state.round)
