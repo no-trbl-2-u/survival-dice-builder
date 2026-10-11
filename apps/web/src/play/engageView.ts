@@ -1,5 +1,5 @@
-import type { Axial, Enemy, EnemyDieRoll, GameEvent, GameState } from '@survival/engine'
-import { stepsAway } from '../map/places.ts'
+import type { Axial, EnemyDieRoll, GameEvent, GameState } from '@survival/engine'
+import { enemyName } from '../names/pieceNames.ts'
 
 /**
  * The 4 stages of an engagement, in play order, as the modal's step strip names them. Cards are
@@ -85,23 +85,7 @@ export function engageInstructionShort(state: GameState): string {
  * @param from - the hex the player looks from (the current player's hex).
  */
 export function enemyLabel(state: GameState, id: string, from: Axial): string {
-  const place = (e: Enemy) => {
-    const away = stepsAway(from, e.hex)
-    return `${e.kind}, ${away === 'here' ? 'on your hex' : away}`
-  }
-  const enemy = state.enemies.find((e) => e.id === id)
-  if (!enemy) {
-    const kind = state.log.flatMap((ev) =>
-      ev.type === 'enemyDefeated' && ev.enemy === id ? [ev.kind] : [],
-    )[0]
-    return kind ?? 'enemy'
-  }
-  const name = place(enemy)
-  const same = state.enemies
-    .filter((e) => place(e) === name)
-    .map((e) => e.id)
-    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
-  return same.length > 1 ? `${name} (${same.indexOf(id) + 1})` : name
+  return enemyName(state, id, from)
 }
 
 /** The current player's hex (where enemy names are seen from). */

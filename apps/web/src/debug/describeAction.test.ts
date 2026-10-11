@@ -45,7 +45,7 @@ describe('describeAction', () => {
     }
     const label = describeAction({ type: 'chooseTowerTarget', tower: 'd1', enemy: 'e3' }, state)
     expect(label).toMatch(
-      /^Tower on .+, 1 hex north of the base centre shoots grunt e3 on .+, 2 health$/,
+      /^Tower on .+, 1 hex north of the base centre shoots grunt, .+ on .+, 2 health$/,
     )
     expect(label).not.toContain('d1')
   })

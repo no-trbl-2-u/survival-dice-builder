@@ -1,5 +1,6 @@
 import { milestoneLabel } from '@survival/content'
 import { hexKey, type GameEvent, type GameState } from '@survival/engine'
+import { defenseNameFromBase, enemyNameFromBase } from '../names/pieceNames.ts'
 import { hexLabel } from '../tiles/TileView.tsx'
 
 /** What the log needs to name ids: the content, plus the pieces in play (usually the state). */
@@ -39,27 +40,15 @@ function cardLabel(n: Names, instance: string): string {
   return n.content.cards.some((c) => c.id === instance) ? cardName(n, instance) : 'a card'
 }
 
-/** An enemy's kind: on the map now, or from the event that put it there. */
-function enemyKind(n: Names, id: string): string | undefined {
-  const live = n.enemies?.find((e) => e.id === id)?.kind
-  if (live) return live
-  for (const e of n.log ?? []) {
-    if (e.type === 'enemySpawned' && e.enemy === id) return e.kind
-    if (e.type === 'eliteReplaced' && e.elite === id) return 'elite'
-    if (e.type === 'enemyDefeated' && e.enemy === id) return e.kind
-  }
-  return undefined
-}
-
-/** "grunt e3": an enemy by kind and id (the id tells 2 grunts apart). */
+/** An enemy by kind and place from the base centre ("grunt 2 hexes north of the base centre"). */
 function enemyLabel(n: Names, id: string, kind?: string): string {
-  return `${kind ?? enemyKind(n, id) ?? 'enemy'} ${id}`
+  const name = enemyNameFromBase(n, id)
+  return name === 'enemy' && kind ? kind : name
 }
 
-/** "Tower d2": a defense by kind and id. */
+/** A defense by kind and place from the base centre ("Tower 1 hex west of the base centre"). */
 function defenseLabel(n: Names, id: string): string {
-  const kind = n.defenses?.find((d) => d.id === id)?.kind
-  return kind ? `${kind[0]?.toUpperCase()}${kind.slice(1)} ${id}` : `Defense ${id}`
+  return defenseNameFromBase(n, id)
 }
 
 const solo = (n: Names) => (n.players?.length ?? 1) === 1
@@ -178,7 +167,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'baseDamaged':
       return `The base takes ${event.amount} damage (health ${event.health}).`
     case 'eliteReplaced':
-      return `Miniature limit: grunt ${event.grunt} becomes elite ${event.elite}.`
+      return `Miniature limit: the ${enemyLabel(names, event.elite).replace(/^elite /, 'grunt ')} becomes an elite.`
     case 'tileRevealed':
       return `Tile revealed: ${tileName(names, event.tile)}.`
     case 'figurePlaced':

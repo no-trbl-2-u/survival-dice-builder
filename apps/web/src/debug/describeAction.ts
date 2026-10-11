@@ -1,5 +1,6 @@
 import { hexKey, type Action, type Axial, type GameState } from '@survival/engine'
 import { baseHex, defenseName, hexName, stepsAway } from '../map/places.ts'
+import { enemyName as namedEnemy } from '../names/pieceNames.ts'
 import { optionText } from '../play/CardView.tsx'
 
 /** The printed name of a card instance in the current player's hand. */
@@ -13,10 +14,15 @@ function skillName(state: GameState, id: string): string {
   return state.content.skills.find((s) => s.id === id)?.name ?? id
 }
 
-/** An enemy by kind and id ("grunt e1"; game terms stay lowercase, as in the rules). */
+/** Label options: /debug shows engine ids beside the names; /play never does. */
+export type LabelOptions = Readonly<{ ids?: boolean }>
+
+let showIds = false
+
+/** An enemy by kind and place from the current player ("grunt, 1 hex east"). */
 function enemyName(state: GameState, id: string): string {
-  const kind = state.enemies.find((e) => e.id === id)?.kind
-  return kind ? `${kind} ${id}` : id
+  const name = namedEnemy(state, id, here(state))
+  return showIds ? `${name} [${id}]` : name
 }
 
 /** Where the current player stands. */
@@ -42,7 +48,16 @@ function dieLabel(state: GameState, die: number): string {
  * @param action - a legal action.
  * @param state - the state the action applies to (for card, Skill, and die names).
  */
-export function describeAction(action: Action, state: GameState): string {
+export function describeAction(action: Action, state: GameState, opts: LabelOptions = {}): string {
+  showIds = opts.ids ?? false
+  try {
+    return label(action, state)
+  } finally {
+    showIds = false
+  }
+}
+
+function label(action: Action, state: GameState): string {
   const half = state.phase === 'prepare' ? 'top' : 'bottom'
   switch (action.type) {
     case 'playCard':
@@ -105,7 +120,7 @@ export function describeAction(action: Action, state: GameState): string {
         (c) => c.id === action.card,
       )?.def
       const name = state.content.cards.find((c) => c.id === def)?.name ?? action.card
-      return `Return starter ${name} [${action.card}]`
+      return showIds ? `Return starter ${name} [${action.card}]` : `Return starter ${name}`
     }
     case 'buyUpgrade': {
       const def = state.content.upgrades.find((u) => u.id === action.upgrade)

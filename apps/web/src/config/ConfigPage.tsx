@@ -99,8 +99,8 @@ function choicesFor(
   if (source === 'skills') return defaultContent.skills.map((s) => [s.id, s.name] as const)
   if (source === 'cards') return defaultContent.cards.map((c) => [c.id, c.name] as const)
   if (source === 'presets') {
-    const presets = (getAt(draft, ['deck', 'presets']) ?? []) as readonly { id: string }[]
-    return presets.map((p) => [p.id, p.id] as const)
+    const presets = (getAt(draft, ['deck', 'presets']) ?? []) as readonly Preset[]
+    return presets.map((p, i) => [p.id, presetName(p, i)] as const)
   }
   return []
 }
@@ -120,7 +120,7 @@ function ChoiceSelect(
       {known ? null : <option value={props.value}>{props.value} (missing)</option>}
       {props.choices.map(([id, name]) => (
         <option key={id} value={id}>
-          {name === id ? id : `${name} (${id})`}
+          {name}
         </option>
       ))}
     </select>
@@ -477,6 +477,12 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
 
 type Preset = { id: string; handSize: number; cards: { card: string; quantity: number }[] }
 
+/** A deck preset by its place in the list and its deck: "Preset 2: 10 cards, hand of 5". */
+export function presetName(preset: Preset, index: number): string {
+  const size = (preset.cards ?? []).reduce((n, c) => n + (Number(c.quantity) || 0), 0)
+  return `Preset ${index + 1}: ${size} cards, hand of ${preset.handSize}`
+}
+
 /** Deck presets: each one's id, hand size, and cards (picked from the card list) with quantities. */
 function PresetsEditor(
   props: Readonly<{
@@ -494,7 +500,7 @@ function PresetsEditor(
       {props.value.map((preset, p) => {
         const size = preset.cards.reduce((n, c) => n + (Number(c.quantity) || 0), 0)
         return (
-          <section key={p} className={styles.preset} aria-label={`Preset ${preset.id}`}>
+          <section key={p} className={styles.preset} aria-label={`Preset ${p + 1}`}>
             <div className={styles.presetHead}>
               <label>
                 Id
@@ -526,7 +532,7 @@ function PresetsEditor(
               {preset.cards.map((entry, i) => (
                 <li key={i}>
                   <ChoiceSelect
-                    a11y={{ 'aria-label': `${preset.id}: card ${i + 1}` }}
+                    a11y={{ 'aria-label': `Preset ${p + 1}: card ${i + 1}` }}
                     choices={cards}
                     value={entry.card}
                     onChange={(card) =>

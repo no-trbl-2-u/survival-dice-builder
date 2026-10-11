@@ -108,9 +108,9 @@ test('/config: sliders, toggles, and pick lists; a name can only come from the c
   // Starter Skills are toggles; a starter deck card is a pick from the card list.
   const skills = page.locator('#cfg-player-starterSkills')
   await skills.getByLabel('Cleave', { exact: true }).check()
-  await page.getByLabel('deck-10-hand-5: card 1', { exact: true }).selectOption('sprint')
+  await page.getByLabel('Preset 3: card 1', { exact: true }).selectOption('sprint')
   // Renaming the preset in use is caught on save, at the field that names it.
-  await page.getByRole('region', { name: 'Preset deck-10-hand-5' }).getByLabel('Id').fill('mine')
+  await page.getByRole('region', { name: 'Preset 3' }).getByLabel('Id').fill('mine')
   await page.getByRole('button', { name: 'Save config' }).click()
   await expect(
     page.getByRole('alert').getByRole('link', { name: 'Deck and hand preset' }),

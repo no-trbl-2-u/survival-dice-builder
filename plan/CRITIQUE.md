@@ -234,7 +234,9 @@
 - suggested fix: Split into short sentences, and put Exchanges in its own sentence: "Before a run, you can choose Exchanges, the Combat in the written rules."
 - source: web-fetch
 
-### [LOW] /config — pick lists show internal ids next to names; presets show only ids
+## Done
+
+### [x] [LOW] /config — pick lists show internal ids next to names; presets show only ids
 - pass: 6 (commit e9a9406)
 - viewport: n/a (web-fetch)
 - category: voice
@@ -242,8 +244,7 @@
 - evidence: `apps/web/src/config/ConfigPage.tsx:101` ```${name} (${id})` ``; `ConfigPage.tsx:81` `presets.map((p) => [p.id, p.id])`.
 - suggested fix: Show only the name in options; label presets "Preset 1", "Preset 2".
 - source: web-fetch
-
-## Done
+- addressed: phase 31 (player names); pick lists show names only, presets read "Preset N: 10 cards, hand of 5".
 
 ### [x] [LOW] tooling — pulse prints "last pass NaNd ago" and always 0 audit rows
 - pass: discovery 1 (2026-10-10, bee25b5)

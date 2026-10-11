@@ -2,6 +2,7 @@ import { botChoice } from '@survival/bot'
 import { defaultContent } from '@survival/content'
 import { serialize, type GameEvent } from '@survival/engine'
 import { describe, expect, it } from 'vitest'
+import { baseCentre, ENGINE_ID } from '../names/pieceNames.ts'
 import { describeEvent } from './describeEvent.ts'
 import { exportFileName, exportRun, importRun, replayExport } from './exportRun.ts'
 import { newRun, step, undo, type Run } from './run.ts'
@@ -108,7 +109,11 @@ describe('describeEvent', () => {
       .slice(-60)
       .filter((x) => x.type === 'enemyDamaged' || x.type === 'enemyAttacked')
     expect(shown.length).toBeGreaterThan(0)
-    for (const e of shown) expect(describeEvent(e, run.state)).toMatch(/^(Grunt|Elite) e\d+ /)
+    for (const e of shown) {
+      const line = describeEvent(e, run.state)
+      expect(line).toMatch(/^(Grunt|Elite) /)
+      expect(line).not.toMatch(ENGINE_ID)
+    }
   })
 
   it('ends an engagement with the engagement word, and an exchange with its own', () => {
@@ -147,7 +152,9 @@ describe('describeEvent', () => {
     expect(describeEvent({ ...lost, player: 'p2' } as never, coop)).toBe(
       'Skirmish lost: Player 2 stays; the Move ends.',
     )
-    const withTower = { ...state, defenses: [{ id: 'd2', kind: 'tower' }] }
+    const base = baseCentre(state.map)
+    const north = { q: base.q, r: base.r - 1 }
+    const withTower = { ...state, defenses: [{ id: 'd2', kind: 'tower', hex: north }] }
     const repaired = {
       type: 'repaired',
       rule: '7.6',
@@ -157,7 +164,7 @@ describe('describeEvent', () => {
       health: 3,
     }
     expect(describeEvent(repaired as never, withTower as never)).toBe(
-      'You repair Tower d2 for 1 (health 3).',
+      'You repair Tower 1 hex north of the base centre for 1 (health 3).',
     )
   })
 })

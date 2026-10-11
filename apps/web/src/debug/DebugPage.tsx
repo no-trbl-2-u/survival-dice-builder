@@ -126,7 +126,7 @@ export function DebugPage() {
             {actions.map((action) => (
               <li key={JSON.stringify(action)}>
                 <button type="button" onClick={() => step({ kind: 'act', action })}>
-                  <ActionLabel action={action} state={run.state} />
+                  <ActionLabel action={action} state={run.state} ids />
                 </button>
               </li>
             ))}

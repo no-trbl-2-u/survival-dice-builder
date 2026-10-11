@@ -46,8 +46,8 @@ describe('places', () => {
       enemies: [{ id: 'e1', kind: 'grunt', hex, health: 1, attackedThisCombat: false }],
     }
     const max = start.content.enemies.enemies.find((e) => e.id === 'grunt')!.health
-    expect(hexContents(state, hex)[0]).toBe(`grunt e1 (1 of ${max} health)`)
-    expect(hexTitle(state, hex)).toMatch(/, Base: grunt e1/)
+    expect(hexContents(state, hex)[0]).toBe(`grunt (1 of ${max} health)`)
+    expect(hexTitle(state, hex)).toMatch(/, Base: grunt \(/)
   })
 
   it('row 65 names a tipped-over enemy as attacked', () => {
