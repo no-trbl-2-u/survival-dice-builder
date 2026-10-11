@@ -22,7 +22,7 @@ Teach these rules (generated from the game's config: `pnpm sim -- kit`):
 - Your 10-card deck is played twice each round: top halves in Prepare, then bottom halves in Combat. Draw 5 at a time.
 - Step off the edge of the map to reveal a new tile; the step costs 1 hex of movement. Each new tile's spawn nodes add enemies at every Combat, and enemies go for the nearest structure first.
 - Gather 2 on an unspent gathering node (the node is spent). Each node gives materials once.
-- Combat: Play Engage to roll your dice from where you stand, plus 1 enemy die for each grunt and 2 dice for each elite next to you. Put your dice on your Skills one at a time; the enemy dice hit last, after your guard. Cards you do not play stay in your hand, and Combat ends when every hand and deck is empty.
+- Combat: Play Engage to roll your dice from where you stand, plus 1 enemy die for each grunt and 2 dice for each elite next to you. Put your dice on your Skills one at a time; the enemy dice hit last, after your guard. Play or discard each card. Cards you do not play yet stay in your hand between engagements, and Combat ends when every hand and deck is empty.
 - A player at 0 health is knocked out and comes back next round with half of their maximum health, rounded up. The materials they carry are lost.
 - Every 2 rounds, once the Training Ground is open, each player drafts a Skill. The Skills you do not keep go to your pool. Later drafts offer them again.
 <!-- /kit:teach -->

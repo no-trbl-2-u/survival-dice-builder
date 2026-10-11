@@ -156,7 +156,7 @@ function engageEnd(
   const e = c.combat.engage
   const siege = `Siege, once at the end of Combat: each enemy next to a structure deals ${e.siegeDamage} damage to it (an elite: ${e.eliteSiegeDamage}).`
   return {
-    '7.10': { status: 'changed', asPlayed: `${combatEndText()} Then the siege step.`, source: V3 },
+    '7.10': { status: 'changed', asPlayed: `${combatEndText(c)} Then the siege step.`, source: V3 },
     '7.11': {
       status: 'open',
       asPlayed: `${siege} An enemy next to a player also sieges; \`rulings.structureDamage\` (row 7) is not read under engagements. Both readings are open.`,

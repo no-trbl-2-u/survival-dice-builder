@@ -154,7 +154,7 @@ test('/play Combat v3: Combat cards offer their options, and Engage starts an en
   }
   await expect(summary).toBeVisible()
   await expect(modal).toContainText('Engagement over')
-  await expect(summary).toContainText('Cards you did not play stay in your hand')
+  await expect(summary).toContainText('Cards you do not play yet stay in your hand')
   await modal.getByRole('button', { name: 'Back to the board' }).click()
   await expect(modal).toBeHidden()
   expect(errors).toEqual([])

@@ -69,6 +69,7 @@ export {
 } from './configMeta.ts'
 export { ConfigMetaSchema, type ConfigMeta, type ConfigMetaEntry } from './schemas/configMeta.ts'
 export {
+  cardStepText,
   combatEndText,
   combatText,
   draftFullText,
@@ -81,9 +82,12 @@ export {
   milestoneLabel,
   miniatureLimitText,
   playersText,
+  returnStarterText,
   revealText,
+  ruleCitation,
   ruleLineFor,
   spawnText,
+  targetOrderText,
 } from './ruleText.ts'
 export {
   parseSpec,

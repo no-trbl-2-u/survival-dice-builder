@@ -34,14 +34,16 @@ test('/config: a field shows the rule phrase it sets, with the edited value', as
   )
 })
 
-test('/config: the phase 22 experiment options default off, with help that names the row', async ({
+test('/config: the experiment options default off; the rules note names the open question', async ({
   page,
 }) => {
   await page.goto('/config')
   const reveal = page.getByLabel('Forced reveal every', { exact: true })
   await expect(reveal).toHaveValue('')
   await expect(reveal).toHaveAttribute('placeholder', 'off')
-  await expect(reveal).toHaveAccessibleDescription(/Row 63: .* Rules 10\.1 \(open question 63\)\./)
+  await expect(reveal).toHaveAccessibleDescription(
+    /^At round end, .* Rules 10\.1 \(open question 63\)\./,
+  )
   const attacks = page.getByLabel('Enemy attacks per Combat', { exact: true })
   await expect(attacks.locator('option:checked')).toHaveText('Every exchange (off)')
 })

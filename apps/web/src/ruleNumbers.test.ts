@@ -1,13 +1,29 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { ruleCitation } from '@survival/content'
 import { describe, expect, it } from 'vitest'
 
 const SRC = path.dirname(fileURLToPath(import.meta.url))
 
-/** A number followed by a rule word: "keep 1 Skill", "6 draft slots", "1 to 4 players". */
-const RULE_NUMBER =
-  /\b[1-9]\d*(?: to [1-9]\d*)? (?:draft slots?|Skills?|health|hex(?:es)?|dice|die|tiles?|rounds?|enem(?:y|ies)|materials?|cards?|damage|guard|moves?|players?|copies|offers?|levels?|XP|experience)\b/g
+const NUMBER =
+  '(?:[1-9]\\d*|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|half|twice)'
+const RULE_WORD =
+  '(?:draft slots?|Skills?|health|hex(?:es)?|dice|die|tiles?|rounds?|enem(?:y|ies)|materials?|cards?|damage|guard|moves?|players?|copies|offers?|levels?|XP|experience)'
+
+/**
+ * A number, in digits or words, followed by a rule word: "keep 1 Skill", "6 draft slots",
+ * "1 to 4 players", "one round".
+ */
+const RULE_NUMBER = new RegExp(`\\b${NUMBER}(?: to ${NUMBER})? ${RULE_WORD}\\b`, 'g')
+
+/** Build-process words a player cannot place: a spreadsheet row, a plan phase, a design draft. */
+const BUILD_WORD = /\b(?:[Rr]ows? \d+|[Pp]hases? \d+|Combat v\d|[Cc]ore loop v\d|Spec v\d)\b/g
+
+/** Code that names an engine log tag to compare it, not to show it. */
+const BUILD_ALLOWED: Readonly<Record<string, readonly string[]>> = {
+  'play/describeEvent.ts': ['Combat v3'],
+}
 
 /**
  * Facts of the pieces, not rule numbers from config: a tile has 7 hexes (Table 1), and a
@@ -39,6 +55,28 @@ function ruleNumbersIn(file: string, code: string): string[] {
   return found.filter((text) => !(ALLOWED[file] ?? []).includes(text)).map((t) => `${file}: "${t}"`)
 }
 
+/** The build words a file shows, minus the allowed tag comparisons. */
+function buildWordsIn(file: string, code: string): string[] {
+  const found = stripComments(code).match(BUILD_WORD) ?? []
+  return found
+    .filter((text) => !(BUILD_ALLOWED[file] ?? []).includes(text))
+    .map((t) => `${file}: "${t}"`)
+}
+
+/** Every rule tag the engine writes into its log (`rule: '7.8'`), read from its source. */
+function engineRuleTags(): string[] {
+  const dir = path.resolve(SRC, '../../../packages/engine/src')
+  const walk = (d: string): string[] =>
+    fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => {
+      const full = path.join(d, e.name)
+      return e.isDirectory() ? walk(full) : /\.ts$/.test(e.name) ? [full] : []
+    })
+  const tags = walk(dir).flatMap((file) =>
+    [...fs.readFileSync(file, 'utf8').matchAll(/\brule: '([^']+)'/g)].map((m) => m[1] ?? ''),
+  )
+  return [...new Set(tags)]
+}
+
 describe('rule text comes from config (standing rule 7)', () => {
   it('no component or view writes a rule number by hand; ruleText builds it from config', () => {
     const found = sources(SRC).flatMap((file) =>
@@ -55,5 +93,27 @@ describe('rule text comes from config (standing rule 7)', () => {
       'x.tsx: "1 to 4 players"',
     ])
     expect(ruleNumbersIn('x.tsx', '/** keep 1 Skill */ const a = 1')).toEqual([])
+    expect(ruleNumbersIn('x.tsx', "const s = 'new tiles wait one round'")).toEqual([
+      'x.tsx: "one round"',
+    ])
+  })
+
+  it('no component or view shows a row, phase, or design-draft name', () => {
+    const found = sources(SRC).flatMap((file) =>
+      buildWordsIn(file, fs.readFileSync(path.join(SRC, file), 'utf8')),
+    )
+    expect(found).toEqual([])
+  })
+
+  it('every engine log tag reads as player words once cited (the /play log)', () => {
+    const tags = engineRuleTags()
+    expect(tags).toContain('Combat v3')
+    expect(tags.flatMap((t) => ruleCitation(t).match(BUILD_WORD) ?? [])).toEqual([])
+  })
+
+  it('catches a hand-written build word, but not one in a comment', () => {
+    expect(buildWordsIn('x.tsx', '<p>Row 65: once per Combat</p>')).toEqual(['x.tsx: "Row 65"'])
+    expect(buildWordsIn('x.tsx', "const s = 'rule Combat v3'")).toEqual(['x.tsx: "Combat v3"'])
+    expect(buildWordsIn('x.tsx', '// phase 22 experiment\nconst a = 1')).toEqual([])
   })
 })

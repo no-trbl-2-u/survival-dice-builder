@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { defaultContent } from './content.ts'
 import {
+  cardStepText,
+  combatEndText,
   combatText,
   draftFullText,
   draftPoolText,
@@ -11,9 +13,12 @@ import {
   milestoneLabel,
   miniatureLimitText,
   playersText,
+  returnStarterText,
   revealText,
+  ruleCitation,
   ruleLineFor,
   spawnText,
+  targetOrderText,
 } from './ruleText.ts'
 import type { GameConfig } from './schemas/config.ts'
 
@@ -63,6 +68,65 @@ describe('rule text from config', () => {
     expect(combatText(base, 'exchange')).toMatch(/^In each exchange/)
   })
 
+  it('Exchanges: who attacks follows combat.adjacentAttack (row 69)', () => {
+    expect(base.combat.adjacentAttack).toBe('target-only')
+    expect(combatText(base, 'exchange')).toBe(
+      'In each exchange you roll, play cards, and fire Skills; then each enemy next to you that targets you attacks.',
+    )
+    const any = With((c) => ({ ...c, combat: { ...c.combat, adjacentAttack: 'any-adjacent' } }))
+    expect(combatText(any, 'exchange')).toMatch(/; then every enemy next to you attacks\.$/)
+  })
+
+  it('Combat end: discarding is named unless every card must be played (row 10)', () => {
+    expect(combatEndText(base)).toBe(
+      'Play or discard each card. Cards you do not play yet stay in your hand between engagements, and Combat ends when every hand and deck is empty.',
+    )
+    const must = With((c) => ({ ...c, rulings: { ...c.rulings, mandatoryPlays: true } }))
+    expect(combatEndText(must)).toMatch(/^Play each card\. /)
+    expect(combatText(must, 'engage')).toContain(combatEndText(must))
+  })
+
+  it('card step: the discard choice follows rulings.mandatoryPlays under both models', () => {
+    expect(cardStepText(base, 'exchange')).toBe('Play or discard each card in your hand')
+    expect(cardStepText(base, 'engage')).toBe(
+      'Play each card: Engage (roll to attack from where you stand), another option, or discard it',
+    )
+    const must = With((c) => ({ ...c, rulings: { ...c.rulings, mandatoryPlays: true } }))
+    expect(cardStepText(must, 'exchange')).toBe('Play each card in your hand')
+    expect(cardStepText(must, 'engage')).not.toMatch(/discard/)
+  })
+
+  it('target order: nearest structure first, pull distance, tie-break only for ties (9.3)', () => {
+    expect(targetOrderText(base)).toBe(
+      'Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer. Between equally near targets they pick a player, then a Tower, then a Barricade, then the base.',
+    )
+    const plain = With((c) => ({
+      ...c,
+      rulings: {
+        ...c.rulings,
+        playerPullDistance: 0,
+        targetTieBreak: ['base', 'tower', 'barricade', 'player'],
+      },
+    }))
+    expect(targetOrderText(plain)).toBe(
+      'Enemies head for the nearest structure or player. Between equally near targets they pick the base, then a Tower, then a Barricade, then a player.',
+    )
+  })
+
+  it('starter return: one fixed line, read by the dialog', () => {
+    expect(returnStarterText()).toMatch(/starter card leaves your deck/)
+  })
+
+  it('rule citations: design-document tags become plain words; sections pass through', () => {
+    expect(ruleCitation('Combat v3')).toBe('engagements')
+    expect(ruleCitation('Combat v3 (siege)')).toBe('engagements (siege)')
+    expect(ruleCitation('9.3, core loop v2 (open question 56)')).toBe(
+      '9.3, core loop (open question 56)',
+    )
+    expect(ruleCitation('Core loop v2 (open question 55)')).toBe('core loop (open question 55)')
+    expect(ruleCitation('7.8 step 8')).toBe('7.8 step 8')
+  })
+
   it('draft: slots and pool follow config (11.8)', () => {
     expect(draftTitle()).toBe('Skill draft: keep a Skill')
     const two = With((c) => ({ ...c, draft: { ...c.draft, unpicked: 'supply' } }))
@@ -107,6 +171,11 @@ describe('rule text from config', () => {
     expect(line('milestones.surviveRounds')).toBe(
       'Survive to round 5; Survive to round 10; Survive to round 15.',
     )
+    expect(line('combat.model')).toBe(combatText(base, 'engage'))
+    expect(line('combat.adjacentAttack')).toBe(combatText(base, 'exchange'))
+    expect(line('rulings.mandatoryPlays')).toBe(combatEndText(base))
+    expect(line('rulings.targetTieBreak')).toBe(targetOrderText(base))
+    expect(line('rulings.playerPullDistance')).toBe(targetOrderText(base))
     expect(line('player.maxHealth')).toBeNull()
   })
 })

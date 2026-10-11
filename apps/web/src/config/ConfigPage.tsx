@@ -3,6 +3,7 @@ import {
   defaultConfigMeta,
   defaultContent,
   GameConfigSchema,
+  ruleCitation,
   ruleLineFor,
   type GameConfig,
 } from '@survival/content'
@@ -244,7 +245,7 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
             Not used by the engine yet: changing it changes nothing.
           </strong>
         ) : null}
-        {meta?.rule ? <span className={styles.rule}> Rules {meta.rule}.</span> : null}
+        {meta?.rule ? <span className={styles.rule}> Rules {ruleCitation(meta.rule)}.</span> : null}
         {live ? <span className={styles.live}> With these values: {live}</span> : null}
       </p>
       {errors.length > 0 ? (

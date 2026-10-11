@@ -1,3 +1,4 @@
+import { combatEndText } from '@survival/content'
 import type { Action, GameState } from '@survival/engine'
 import { useEffect, useRef, useState } from 'react'
 import { GameIcon } from '../icons/GameIcon.tsx'
@@ -482,9 +483,7 @@ function SummaryView({
   )
   const cancelled = cancelledLine(summary)
   if (cancelled) lines.push(cancelled)
-  lines.push(
-    'Cards you did not play stay in your hand. Combat ends when every hand and deck is empty.',
-  )
+  lines.push(combatEndText(state.config))
   return (
     <>
       <Head state={state} stage={ENGAGE_STAGES.length - 1} title="Engagement over" />

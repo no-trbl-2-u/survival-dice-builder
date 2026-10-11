@@ -1,3 +1,4 @@
+import { ruleCitation } from '@survival/content'
 import type { GameState } from '@survival/engine'
 import { describeEvent } from './describeEvent.ts'
 import styles from './Play.module.css'
@@ -16,8 +17,8 @@ export function PlayLog({ state }: Props) {
         {events.map((e, i) => (
           <li key={`${state.log.length - i}`}>
             {describeEvent(e, state)}{' '}
-            <span className={styles.rule} title={`Rules section ${e.rule}`}>
-              rule {e.rule}
+            <span className={styles.rule} title={`Rules section ${ruleCitation(e.rule)}`}>
+              rule {ruleCitation(e.rule)}
             </span>
           </li>
         ))}

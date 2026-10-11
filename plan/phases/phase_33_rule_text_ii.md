@@ -19,8 +19,8 @@
      `rulings.targetTieBreak` only between equally near targets — MED row 3;
    - a new `cardStepText` for the card step of an exchange and of an engagement Combat;
    - a new `returnStarterText` for the starter-return dialog;
-   - a new `ruleCitation` that shows a rule tag in player words ("Combat v3" -> "engagement
-     rules", "core loop v2" -> "core loop rules").
+   - a new `ruleCitation` that shows a rule tag in player words ("Combat v3" -> "engagements",
+     "core loop v2" -> "core loop").
 2. `nextStep` (the exchange card step and the engagement Combat line), `DecisionDialog` (the
    starter-return line), and `EngagementModal` (the end-of-engagement hand line) read those
    phrases. The /play log and the /config rules note show tags through `ruleCitation`.

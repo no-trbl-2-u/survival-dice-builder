@@ -106,7 +106,7 @@
   },
   "combat.enemyAttacks": {
     "label": "Enemy attacks per Combat",
-    "help": "Row 65: how often an enemy attacks in one Combat. Off: the current rule (every exchange). Once per Combat: an enemy that has attacked is tipped over and does not attack again until the next Combat starts.",
+    "help": "How often an enemy attacks in one Combat. Off: the current rule (every exchange). Once per Combat: an enemy that has attacked is tipped over and does not attack again until the next Combat starts.",
     "rule": "7.8 step 8 (open question 65)",
     "combatModel": "exchange",
     "options": {
@@ -116,7 +116,7 @@
   },
   "combat.adjacentAttack": {
     "label": "Which adjacent enemies attack",
-    "help": "Row 69: at the end of a player's exchange, which enemies next to the figure attack it. Off: the current rule (only enemies that target that player).",
+    "help": "At the end of a player's exchange, which enemies next to the figure attack it. Off: the current rule.",
     "rule": "9.3, 7.8 step 8 (open question 69)",
     "combatModel": "exchange",
     "options": {
@@ -126,7 +126,7 @@
   },
   "combat.model": {
     "label": "Combat model",
-    "help": "Engagements (default): play Engage to roll from where you stand; each enemy next to you rolls a die back, and enemies hit structures at the end of Combat. Exchanges: the Combat in the written rules. In each exchange you roll, play cards, and fire Skills; then every enemy next to you attacks.",
+    "help": "How a Combat plays. Engagements (default): play Engage to roll from where you stand, and enemies hit structures at the end of Combat. Exchanges: the Combat in the written rules.",
     "rule": "7.8, Combat v3",
     "options": {
       "engage": "Engagements (default)",
@@ -197,13 +197,13 @@
   },
   "experience.eliteBonus": {
     "label": "Extra experience for an elite",
-    "help": "Row 17: experience added when an elite is defeated, on top of its normal experience. Off: the current rule (0).",
+    "help": "Experience added when an elite is defeated, on top of its normal experience. Off: the current rule (0).",
     "rule": "8.1 (open question 17)",
     "range": [0, 10]
   },
   "experience.levelPerEliteSpawn": {
     "label": "1 level for each elite that spawns",
-    "help": "Row 17: when ticked, the level rises by 1 each time an elite spawns (also when the miniature limit turns a grunt into an elite), and experience no longer raises the level. Off: the current rule.",
+    "help": "When ticked, the level rises by 1 each time an elite spawns (also when the miniature limit turns a grunt into an elite), and experience no longer raises the level. Off: the current rule.",
     "rule": "8.3 (open question 17)"
   },
   "miniatureLimit": {
@@ -217,7 +217,7 @@
   },
   "clock.forcedRevealEvery": {
     "label": "Forced reveal every",
-    "help": "Row 63: at round end, if no tile was revealed in this many rounds, the top tile of the tile deck is revealed in the open slot nearest the base. Off: the current rule.",
+    "help": "At round end, if no tile was revealed in this many rounds, the top tile of the tile deck is revealed in the open slot nearest the base. Off: the current rule.",
     "rule": "10.1 (open question 63)",
     "empty": "off",
     "range": [1, 10]
@@ -227,25 +227,25 @@
   },
   "spawn.rampEvery": {
     "label": "Spawn ramp every",
-    "help": "Row 64: each spawn node spawns 1 more enemy every this many rounds (1 + (round - 1) / N, rounded down). Off: the current rule.",
+    "help": "Each spawn node spawns 1 more enemy every this many rounds (1 + (round - 1) / N, rounded down). Off: the current rule.",
     "rule": "9.2 (open question 64)",
     "empty": "off",
     "range": [1, 10]
   },
   "spawn.newTileDelay": {
     "label": "New tile waits",
-    "help": "Row 66: rounds a newly revealed tile waits before its spawn nodes spawn. 1: new tiles wait one round. Off: the current rule (0).",
+    "help": "Rounds a newly revealed tile waits before its spawn nodes spawn. Off: the current rule (0).",
     "rule": "9.2, 10.1 (open question 66)",
     "range": [0, 6]
   },
   "spawn.perSeat": {
     "label": "Spawns scale with seats",
-    "help": "Row 68: when ticked, each spawn node spawns 1 enemy per 2 seats, rounded up (1 for 1-2 seats, 2 for 3-4). Off: the current rule.",
+    "help": "When ticked, each spawn node spawns 1 enemy per 2 seats, rounded up (1 for 1-2 seats, 2 for 3-4). Off: the current rule.",
     "rule": "9.2, 16 (open question 68)"
   },
   "spawn.nodeRange": {
     "label": "Spawn range",
-    "help": "Row 70: only spawn nodes within this many hexes of a player figure, a Barricade, a Tower, or the base spawn. Off: the current rule.",
+    "help": "Only spawn nodes within this many hexes of a player figure, a Barricade, a Tower, or the base spawn. Off: the current rule.",
     "rule": "9.2 (open question 70)",
     "empty": "off",
     "range": [1, 10]
@@ -255,7 +255,7 @@
   },
   "gather.offNodeAmount": {
     "label": "Gather off a node",
-    "help": "Row 67: materials a Gather gives on a spent node or off any node. Nodes stay single-use. Off: the current rule (0).",
+    "help": "Materials a Gather gives on a spent node or off any node. Nodes stay single-use. Off: the current rule (0).",
     "rule": "6.7 (open question 67)",
     "range": [0, 5]
   },
@@ -413,14 +413,14 @@
   },
   "rulings.enemiesPerHex": {
     "label": "Enemies per hex",
-    "help": "The most enemies one hex can hold.",
+    "help": "The most enemies a hex can hold.",
     "rule": "3.7 (open question 1)",
     "unused": true,
     "range": [1, 4]
   },
   "rulings.figuresPerHex": {
     "label": "Figures per hex",
-    "help": "The most player figures one hex can hold.",
+    "help": "The most player figures a hex can hold.",
     "rule": "3.8",
     "range": [1, 4]
   },
@@ -441,7 +441,7 @@
   },
   "rulings.coopPrepareOrder": {
     "label": "Co-op Prepare order",
-    "help": "How 2 to 4 players take turns in the Prepare phase.",
+    "help": "How players take turns in the Prepare phase when more than one plays.",
     "rule": "16.8 (open question 6)",
     "options": {
       "alternate-hands": "Players alternate hands of cards",
@@ -453,7 +453,7 @@
     "help": "How enemies damage Barricades, Towers, and the base in the structure attack step.",
     "rule": "7.11, 9.5 (open question 7)",
     "options": {
-      "v1": "As an attack on a player (grunt 2, elite 6 dice)",
+      "v1": "As an attack on a player (each enemy rolls its attack dice)",
       "grunt-die": "Each grunt rolls 1 die"
     }
   },
@@ -531,12 +531,12 @@
   },
   "rulings.targetTieBreak": {
     "label": "Enemy target order",
-    "help": "Which equally near target an enemy picks first, top to bottom.",
+    "help": "Only breaks ties between equally near targets, top to bottom; see Player pull distance.",
     "rule": "9.3 (open question 15)"
   },
   "rulings.playerPullDistance": {
     "label": "Player pull distance",
-    "help": "Enemies head for the nearest structure; they turn to a player only when the player is at least this many hexes nearer. 0 ranks players by distance alone.",
+    "help": "How many hexes nearer a player must be before an enemy turns from the nearest structure to the player. 0 ranks players by distance alone.",
     "rule": "9.3, core loop v2 (open question 56)",
     "range": [0, 6]
   }

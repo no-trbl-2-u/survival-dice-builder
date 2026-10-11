@@ -1,3 +1,4 @@
+import { cardStepText } from '@survival/content'
 import { enemiesInRange, type Action, type GameState } from '@survival/engine'
 import { defenseName } from '../map/places.ts'
 import { enemyLabel } from './engageView.ts'
@@ -6,9 +7,8 @@ import { ofType } from './targets.ts'
 /** What the player does next: the phase it belongs to, and the step in plain words. */
 export type NextStep = Readonly<{ phase: string; step: string }>
 
-const EXCHANGE: Record<NonNullable<GameState['exchange']>['step'], string> = {
+const EXCHANGE: Record<Exclude<NonNullable<GameState['exchange']>['step'], 'cards'>, string> = {
   roll: 'Keep dice, then roll again or stop rolling',
-  cards: 'Play or discard each card in your hand',
   reroll: 'Choose dice to reroll, or stop rerolling',
   assign: 'Select dice, then click a Skill they fit. Confirm when done',
   targets: 'Click a highlighted enemy on the map to target it',
@@ -57,10 +57,11 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
   if (state.exchange) {
     const name = state.exchange.skirmish ? 'Skirmish' : 'Combat'
     const far = state.exchange.step === 'assign' && !attackInReach(state)
-    return step(
-      name,
-      `${EXCHANGE[state.exchange.step]}${far ? ' (no enemy is in range of your attack Skills)' : ''}`,
-    )
+    const text =
+      state.exchange.step === 'cards'
+        ? cardStepText(state.config, 'exchange')
+        : EXCHANGE[state.exchange.step]
+    return step(name, `${text}${far ? ' (no enemy is in range of your attack Skills)' : ''}`)
   }
   if (state.active?.kind === 'move')
     return step(
@@ -77,10 +78,7 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
     )
   }
   if (state.phase === 'combat' && state.config.combat.model === 'engage')
-    return step(
-      'Combat',
-      'Play each card: Engage (roll to attack from where you stand), another option, or discard it',
-    )
+    return step('Combat', cardStepText(state.config, 'engage'))
   if (state.phase === 'prepare') {
     const shop = has('buyCard') || has('buyUpgrade') ? ', or buy at the base' : ''
     return step('Prepare', `Play a card from your hand${shop}`)

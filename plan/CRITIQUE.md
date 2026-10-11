@@ -9,51 +9,6 @@
 
 ## Pending
 
-### [HIGH] / and /config — Exchanges text says every adjacent enemy attacks; the default is only enemies that target you
-- pass: 12 (commit c34753b)
-- viewport: desktop
-- category: comprehension
-- observation: The home page and /config describe Exchanges as "then every enemy next to you attacks". The default `combat.adjacentAttack` is `"target-only"`, and /decisions row 56 says an enemy attacks only its target. A player who picks Exchanges gets other behaviour than the text promises.
-- evidence: `packages/content/src/ruleText.ts:81` returns the sentence as a fixed string and does not read `combat.adjacentAttack` (`config.default.json:116`); /config "Which adjacent enemies attack" default "Only enemies that target the player".
-- suggested fix: Build the sentence in `ruleText` from `combat.adjacentAttack` ("then each enemy next to you that targets you attacks" for `target-only`), with a test per option.
-- source: browser
-
-### [MED] /config — the Combat model help says each enemy rolls one die back; elites roll 2
-- pass: 12 (commit c34753b)
-- viewport: desktop
-- category: comprehension
-- observation: The Engagements help says "each enemy next to you rolls a die back". The same page (elite enemy dice) and the home page say an elite rolls 2 dice.
-- evidence: `packages/content/data/config.meta.json:129` (hand-written help, not from `ruleText`).
-- suggested fix: Take the dice counts from config through `ruleText`: "each grunt next to you rolls 1 die back, each elite rolls 2".
-- source: browser
-
-### [MED] /config — the enemy target order lists Player first, while the rest of the site says enemies go for the nearest structure
-- pass: 12 (commit c34753b)
-- viewport: desktop
-- category: comprehension
-- observation: "Enemy target order: 1. Player, 2. Tower, 3. Barricade, 4. Base" reads as a contradiction of "enemies go for the nearest structure first" on /. The rule that reconciles them (Player pull distance) is in a separate field further down.
-- evidence: /config "Which equally near target an enemy picks first"; "Player pull distance: Enemies head for the nearest structure; they turn to a player only when the player is at least this many hexes nearer."
-- suggested fix: Add to the target-order help: "Only breaks ties between equally near targets; see Player pull distance."
-- source: browser
-
-### [MED] / and /play — "Combat ends when every hand and deck is empty" does not say how a kept hand empties
-- pass: 12 (commit c34753b)
-- viewport: desktop
-- category: comprehension
-- observation: The text says unplayed cards stay in hand and that Combat ends only when every hand and deck is empty. A new player cannot tell whether they must play or discard every card. "Every card must be played" is off by default, so discarding is allowed but never named.
-- evidence: `packages/content/src/ruleText.ts:96`; `apps/web/src/play/EngagementModal.tsx:486`.
-- suggested fix: In `ruleText`: "Play or discard each card. Cards stay in your hand between engagements; Combat ends when every hand and deck is empty." Read the discard part from the ruling.
-- source: browser
-
-### [LOW] /config — help texts start with "Row N:", which means nothing to a visitor
-- pass: 12 (commit c34753b)
-- viewport: desktop
-- category: voice
-- observation: Eight help texts open with a spreadsheet row number ("Row 65:", "Row 17:", "Row 63:" ...). The page never says what a row is.
-- evidence: `packages/content/data/config.meta.json:109,119,200,206,220,230,237,243,248,258`.
-- suggested fix: Drop the "Row N:" prefixes, or replace them with a link to the matching /decisions entry ("open question 65").
-- source: browser
-
 ### [LOW] /tiles — the legend says only which terrains are impassable, not what the others do
 - pass: 12 (commit c34753b)
 - viewport: desktop
@@ -235,6 +190,56 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [HIGH] / and /config — Exchanges text says every adjacent enemy attacks; the default is only enemies that target you
+- pass: 12 (commit c34753b)
+- viewport: desktop
+- category: comprehension
+- observation: The home page and /config describe Exchanges as "then every enemy next to you attacks". The default `combat.adjacentAttack` is `"target-only"`, and /decisions row 56 says an enemy attacks only its target. A player who picks Exchanges gets other behaviour than the text promises.
+- evidence: `packages/content/src/ruleText.ts:81` returns the sentence as a fixed string and does not read `combat.adjacentAttack` (`config.default.json:116`); /config "Which adjacent enemies attack" default "Only enemies that target the player".
+- suggested fix: Build the sentence in `ruleText` from `combat.adjacentAttack` ("then each enemy next to you that targets you attacks" for `target-only`), with a test per option.
+- source: browser
+- addressed: phase 33 (rule text II); `combatText` reads `combat.adjacentAttack`: "then each enemy next to you that targets you attacks" by default, and /config shows it as the live line under Which adjacent enemies attack.
+
+### [x] [MED] /config — the Combat model help says each enemy rolls one die back; elites roll 2
+- pass: 12 (commit c34753b)
+- viewport: desktop
+- category: comprehension
+- observation: The Engagements help says "each enemy next to you rolls a die back". The same page (elite enemy dice) and the home page say an elite rolls 2 dice.
+- evidence: `packages/content/data/config.meta.json:129` (hand-written help, not from `ruleText`).
+- suggested fix: Take the dice counts from config through `ruleText`: "each grunt next to you rolls 1 die back, each elite rolls 2".
+- source: browser
+- addressed: phase 33; the Combat model help no longer counts enemy dice, and its live line reads "1 enemy die for each grunt and 2 dice for each elite" from config.
+
+### [x] [MED] /config — the enemy target order lists Player first, while the rest of the site says enemies go for the nearest structure
+- pass: 12 (commit c34753b)
+- viewport: desktop
+- category: comprehension
+- observation: "Enemy target order: 1. Player, 2. Tower, 3. Barricade, 4. Base" reads as a contradiction of "enemies go for the nearest structure first" on /. The rule that reconciles them (Player pull distance) is in a separate field further down.
+- evidence: /config "Which equally near target an enemy picks first"; "Player pull distance: Enemies head for the nearest structure; they turn to a player only when the player is at least this many hexes nearer."
+- suggested fix: Add to the target-order help: "Only breaks ties between equally near targets; see Player pull distance."
+- source: browser
+- addressed: phase 33; target-order help reads "Only breaks ties between equally near targets, top to bottom; see Player pull distance", and `targetOrderText` gives both fields one live line.
+
+### [x] [MED] / and /play — "Combat ends when every hand and deck is empty" does not say how a kept hand empties
+- pass: 12 (commit c34753b)
+- viewport: desktop
+- category: comprehension
+- observation: The text says unplayed cards stay in hand and that Combat ends only when every hand and deck is empty. A new player cannot tell whether they must play or discard every card. "Every card must be played" is off by default, so discarding is allowed but never named.
+- evidence: `packages/content/src/ruleText.ts:96`; `apps/web/src/play/EngagementModal.tsx:486`.
+- suggested fix: In `ruleText`: "Play or discard each card. Cards stay in your hand between engagements; Combat ends when every hand and deck is empty." Read the discard part from the ruling.
+- source: browser
+- addressed: phase 33; `combatEndText` reads `rulings.mandatoryPlays`: "Play or discard each card. Cards you do not play yet stay in your hand between engagements ..." on /, /play (engagement result, step line) and /config.
+
+### [x] [LOW] /config — help texts start with "Row N:", which means nothing to a visitor
+- pass: 12 (commit c34753b)
+- viewport: desktop
+- category: voice
+- observation: Eight help texts open with a spreadsheet row number ("Row 65:", "Row 17:", "Row 63:" ...). The page never says what a row is.
+- evidence: `packages/content/data/config.meta.json:109,119,200,206,220,230,237,243,248,258`.
+- suggested fix: Drop the "Row N:" prefixes, or replace them with a link to the matching /decisions entry ("open question 65").
+- source: browser
+- addressed: phase 33; no help starts with "Row N:" (the open question stays in the rules note), and a content test fails on row, phase, or design-draft names in /config text.
 
 ### [x] [LOW] /config — pick lists show internal ids next to names; presets show only ids
 - pass: 6 (commit e9a9406)

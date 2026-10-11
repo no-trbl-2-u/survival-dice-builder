@@ -1,4 +1,4 @@
-import { defaultContent } from '@survival/content'
+import { cardStepText, defaultContent } from '@survival/content'
 import {
   applyAction,
   createGame,
@@ -33,6 +33,19 @@ describe('nextStep', () => {
       /^Choose which enemy the Tower on .+, 1 hex north of the base centre shoots$/,
     )
     expect(step).not.toContain('d1')
+  })
+
+  it('the engagement Combat card line offers discarding only when the rules allow it', () => {
+    const start = createGame(config, 1)
+    const placed = applyAction(start, { type: 'placeFigure', q: 0, r: 0 }).state
+    const combat = { ...placed, phase: 'combat' as const, active: null, exchange: null }
+    expect(nextStep(combat, []).step).toBe(cardStepText(config, 'engage'))
+    expect(nextStep(combat, []).step).toMatch(/or discard it$/)
+    const must = {
+      ...combat,
+      config: { ...config, rulings: { ...config.rulings, mandatoryPlays: true } },
+    }
+    expect(nextStep(must, []).step).not.toMatch(/discard/)
   })
 
   it('names the setup step, then Prepare once the figure is placed', () => {

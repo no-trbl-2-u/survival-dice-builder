@@ -74,26 +74,94 @@ export function gatherText(amount: number, config: GameConfig): string {
 /**
  * How a Combat plays under a Combat model, and when it ends.
  *
- * @rule 7, Combat v3 (engagements), OPEN-QUESTIONS row 72
+ * @rule 7, 9.3, Combat v3 (engagements), OPEN-QUESTIONS rows 69, 72
  */
 export function combatText(config: GameConfig, model: GameConfig['combat']['model']): string {
-  if (model === 'exchange')
-    return 'In each exchange you roll, play cards, and fire Skills; then every enemy next to you attacks.'
+  if (model === 'exchange') {
+    const attackers =
+      config.combat.adjacentAttack === 'target-only'
+        ? 'each enemy next to you that targets you attacks'
+        : 'every enemy next to you attacks'
+    return `In each exchange you roll, play cards, and fire Skills; then ${attackers}.`
+  }
   const elite = plural(config.combat.engage.eliteDice, 'die', 'dice')
   return (
     `Play Engage to roll your dice from where you stand, plus 1 enemy die for each grunt and ${elite} for each elite next to you. ` +
     'Put your dice on your Skills one at a time; the enemy dice hit last, after your guard. ' +
-    combatEndText()
+    combatEndText(config)
   )
 }
 
 /**
- * When an engagement Combat ends.
+ * How a hand empties in an engagement Combat, and when the Combat ends.
  *
- * @rule Combat v3 (engagements)
+ * @rule 6.2, Combat v3 (engagements), OPEN-QUESTIONS row 10
  */
-export function combatEndText(): string {
-  return 'Cards you do not play stay in your hand, and Combat ends when every hand and deck is empty.'
+export function combatEndText(config: GameConfig): string {
+  const play = config.rulings.mandatoryPlays ? 'Play each card' : 'Play or discard each card'
+  return `${play}. Cards you do not play yet stay in your hand between engagements, and Combat ends when every hand and deck is empty.`
+}
+
+/**
+ * The step line when a player has cards to play: in an exchange, or in an engagement Combat.
+ *
+ * @rule 6.2, 7.8 step 5, OPEN-QUESTIONS row 10
+ */
+export function cardStepText(config: GameConfig, model: GameConfig['combat']['model']): string {
+  const discard = !config.rulings.mandatoryPlays
+  if (model === 'exchange')
+    return discard ? 'Play or discard each card in your hand' : 'Play each card in your hand'
+  return `Play each card: Engage (roll to attack from where you stand)${discard ? ', another option, or discard it' : ' or another option'}`
+}
+
+/** Each tie-break target as the order sentence names it: "a player, then a Tower, ...". */
+const TARGET_NAME: Record<GameConfig['rulings']['targetTieBreak'][number], string> = {
+  player: 'a player',
+  tower: 'a Tower',
+  barricade: 'a Barricade',
+  base: 'the base',
+}
+
+/**
+ * Which target an enemy heads for: the nearest structure, a player only when much nearer, and
+ * the tie-break order only between equally near targets.
+ *
+ * @rule 9.3, OPEN-QUESTIONS rows 15, 56
+ */
+export function targetOrderText(config: GameConfig): string {
+  const { playerPullDistance: pull, targetTieBreak } = config.rulings
+  const head =
+    pull === 0
+      ? 'Enemies head for the nearest structure or player.'
+      : `Enemies head for the nearest structure, and turn to a player only when the player is at least ${plural(pull, 'hex', 'hexes')} nearer.`
+  const order = targetTieBreak.map((t) => TARGET_NAME[t]).join(', then ')
+  return `${head} Between equally near targets they pick ${order}.`
+}
+
+/**
+ * The starter-return dialog's line: a bought card sends a starter card away.
+ *
+ * @rule 18.1 (bought cards replace a starter)
+ */
+export function returnStarterText(): string {
+  return 'You bought a card, so a starter card leaves your deck for good.'
+}
+
+/** Design-document tags in player words: the documents are build history, not rules names. */
+const CITATIONS: readonly (readonly [RegExp, string])[] = [
+  [/Combat v3/g, 'engagements'],
+  [/core loop v2/gi, 'core loop'],
+]
+
+/**
+ * A rule tag as a player reads it: section numbers pass through, design-document names become
+ * plain words ("Combat v3 (siege)" -> "engagements (siege)").
+ *
+ * @param rule - an engine log tag or a config field's rules section.
+ * @rule 18.1
+ */
+export function ruleCitation(rule: string): string {
+  return CITATIONS.reduce((text, [from, to]) => text.replace(from, to), rule)
 }
 
 /**
@@ -217,6 +285,11 @@ export function ruleLineFor(
   if (path === 'player.draftSlots') return `${draftFullText(config, 'the new Skill')}.`
   if (path === 'draft.unpicked') return draftPoolText(config)
   if (path === 'combat.engage.eliteDice') return combatText(config, 'engage')
+  if (path === 'combat.model') return combatText(config, config.combat.model)
+  if (path === 'combat.adjacentAttack') return combatText(config, 'exchange')
+  if (path === 'rulings.mandatoryPlays') return combatEndText(config)
+  if (path === 'rulings.targetTieBreak' || path === 'rulings.playerPullDistance')
+    return targetOrderText(config)
   if (group === 'players') return `For ${playersText(config)}.`
   if (group === 'milestones') {
     const m = config.milestones
