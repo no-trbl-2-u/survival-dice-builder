@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-10 at commit 8402ba3
-> Pass count: 11
+> Last pass: 2026-10-10 at commit c34753b
+> Pass count: 12
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [HIGH] / and /config — Exchanges text says every adjacent enemy attacks; the default is only enemies that target you
+- pass: 12 (commit c34753b)
+- viewport: desktop
+- category: comprehension
+- observation: The home page and /config describe Exchanges as "then every enemy next to you attacks". The default `combat.adjacentAttack` is `"target-only"`, and /decisions row 56 says an enemy attacks only its target. A player who picks Exchanges gets other behaviour than the text promises.
+- evidence: `packages/content/src/ruleText.ts:81` returns the sentence as a fixed string and does not read `combat.adjacentAttack` (`config.default.json:116`); /config "Which adjacent enemies attack" default "Only enemies that target the player".
+- suggested fix: Build the sentence in `ruleText` from `combat.adjacentAttack` ("then each enemy next to you that targets you attacks" for `target-only`), with a test per option.
+- source: browser
+
+### [MED] /config — the Combat model help says each enemy rolls one die back; elites roll 2
+- pass: 12 (commit c34753b)
+- viewport: desktop
+- category: comprehension
+- observation: The Engagements help says "each enemy next to you rolls a die back". The same page (elite enemy dice) and the home page say an elite rolls 2 dice.
+- evidence: `packages/content/data/config.meta.json:129` (hand-written help, not from `ruleText`).
+- suggested fix: Take the dice counts from config through `ruleText`: "each grunt next to you rolls 1 die back, each elite rolls 2".
+- source: browser
+
+### [MED] /config — the enemy target order lists Player first, while the rest of the site says enemies go for the nearest structure
+- pass: 12 (commit c34753b)
+- viewport: desktop
+- category: comprehension
+- observation: "Enemy target order: 1. Player, 2. Tower, 3. Barricade, 4. Base" reads as a contradiction of "enemies go for the nearest structure first" on /. The rule that reconciles them (Player pull distance) is in a separate field further down.
+- evidence: /config "Which equally near target an enemy picks first"; "Player pull distance: Enemies head for the nearest structure; they turn to a player only when the player is at least this many hexes nearer."
+- suggested fix: Add to the target-order help: "Only breaks ties between equally near targets; see Player pull distance."
+- source: browser
+
+### [MED] / and /play — "Combat ends when every hand and deck is empty" does not say how a kept hand empties
+- pass: 12 (commit c34753b)
+- viewport: desktop
+- category: comprehension
+- observation: The text says unplayed cards stay in hand and that Combat ends only when every hand and deck is empty. A new player cannot tell whether they must play or discard every card. "Every card must be played" is off by default, so discarding is allowed but never named.
+- evidence: `packages/content/src/ruleText.ts:96`; `apps/web/src/play/EngagementModal.tsx:486`.
+- suggested fix: In `ruleText`: "Play or discard each card. Cards stay in your hand between engagements; Combat ends when every hand and deck is empty." Read the discard part from the ruling.
+- source: browser
+
+### [LOW] /config — help texts start with "Row N:", which means nothing to a visitor
+- pass: 12 (commit c34753b)
+- viewport: desktop
+- category: voice
+- observation: Eight help texts open with a spreadsheet row number ("Row 65:", "Row 17:", "Row 63:" ...). The page never says what a row is.
+- evidence: `packages/content/data/config.meta.json:109,119,200,206,220,230,237,243,248,258`.
+- suggested fix: Drop the "Row N:" prefixes, or replace them with a link to the matching /decisions entry ("open question 65").
+- source: browser
+
+### [LOW] /tiles — the legend says only which terrains are impassable, not what the others do
+- pass: 12 (commit c34753b)
+- viewport: desktop
+- category: comprehension
+- observation: The legend lists Plains, Forest, Hills, Wasteland, Lake (Impassable), Mountain (Impassable). Nothing on /tiles or / says whether Forest, Hills or Wasteland change movement.
+- evidence: /tiles legend; / "How a run goes" does not mention terrain.
+- suggested fix: Add each terrain's effect after its name in the legend ("no effect" or its move cost), taken from config.
+- source: browser
 
 ### [MED] /decisions — the public page lists repo housekeeping
 - pass: discovery 1 (2026-10-10, bee25b5)
