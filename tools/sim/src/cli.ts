@@ -17,13 +17,14 @@ import { describe, toCsv, toJson } from './format.ts'
 import { playtestReport, type PlaytestExport } from './playtests.ts'
 import { compareTable, timingReport, type TimedExport } from './report.ts'
 import { runBatch, summarize, type RunOptions } from './run.ts'
+import type { BotPolicy } from '@survival/bot'
 
 /** The median end-round band the spec targets (spec phase 7 acceptance). */
 const BAND = [8, 14] as const
 
 const usage = `Usage:
-  pnpm sim -- [--runs <n>] [--seed <first seed>] [--config <file.json>] [--seats <1-4>] [--policy <default|turtle>] [--out <file.csv|file.json>]
-  pnpm sim -- compare --a <config.json|default> --b <config.json|default> [--runs <n>] [--seats <1-4>] [--policy <default|turtle>] [--out report.md]
+  pnpm sim -- [--runs <n>] [--seed <first seed>] [--config <file.json>] [--seats <1-4>] [--policy <default|turtle|defender>] [--out <file.csv|file.json>]
+  pnpm sim -- compare --a <config.json|default> --b <config.json|default> [--runs <n>] [--seats <1-4>] [--policy <p>] [--a-policy <p>] [--b-policy <p>] [--out report.md]
   pnpm sim -- timing <export.json ...> [--out report.md]
   pnpm sim -- playtests [--dir docs/playtests/runs] [--estimate 8.5] [--out report.md]
   pnpm sim -- decisions [--out docs/DECISIONS.md]
@@ -32,8 +33,10 @@ const usage = `Usage:
 
 Plays <n> bot runs (default 200) and prints a summary. --config reads a config JSON: keys it
 leaves out take the default (a partial config works). --seats plays 1-4 seats (default 1);
---policy turtle keeps every figure on the Base tile. --out writes every run as CSV or JSON.
-compare: a bot batch per config (same seeds, seats, and policy), as a markdown table.
+--policy turtle keeps every figure on the Base tile; --policy defender defends the base. --out
+writes every run as CSV or JSON.
+compare: a bot batch per side (same seeds and seats), as a markdown table. --policy sets both
+sides; --a-policy and --b-policy set one side (compare --b-policy defender: the two bots).
 timing: minutes per round and time shares per phase and decision, from real run exports.
 playtests: every run export in a folder, against the 8-9 minutes-per-round estimate.
 decisions: the designer decision digest from OPEN-QUESTIONS.md and plan/AUDIT.md.
@@ -69,15 +72,21 @@ function readConfig(file: string | undefined) {
     : defaultContent.config
 }
 
-/** `--seats` and `--policy`, checked. */
-function runOptions(args: Map<string, string>): RunOptions {
+const POLICIES: readonly BotPolicy[] = ['default', 'turtle', 'defender']
+
+/** A bot policy name, checked. */
+function policyOf(name: string, flag: string): BotPolicy {
+  const policy = POLICIES.find((p) => p === name)
+  if (!policy) throw new Error(`--${flag} must be ${POLICIES.join(', ')}`)
+  return policy
+}
+
+/** `--seats` and `--policy` (or `--<flag>`, which wins when given), checked. */
+function runOptions(args: Map<string, string>, flag = 'policy'): RunOptions {
   const seats = Number(args.get('seats') ?? 1)
-  const policy = args.get('policy') ?? 'default'
   if (!Number.isInteger(seats) || seats < 1 || seats > 4) throw new Error('--seats must be 1-4')
-  if (policy !== 'default' && policy !== 'turtle') {
-    throw new Error('--policy must be default or turtle')
-  }
-  return { seats, policy }
+  const name = args.get(flag) ?? args.get('policy') ?? 'default'
+  return { seats, policy: policyOf(name, args.has(flag) ? flag : 'policy') }
 }
 
 /** Prints markdown and writes it to `--out` when given. */
@@ -103,9 +112,11 @@ const options = runOptions(args)
 
 if (command === 'compare') {
   const side = (key: 'a' | 'b') => {
-    const name = args.get(key) ?? 'default'
-    const summary = summarize(runBatch(readConfig(name), runs, seed, options))
-    return { name, summary }
+    const config = args.get(key) ?? 'default'
+    const sideOptions = runOptions(args, `${key}-policy`)
+    const summary = summarize(runBatch(readConfig(config), runs, seed, sideOptions))
+    const policy = sideOptions.policy === 'default' ? '' : ` (${sideOptions.policy} bot)`
+    return { name: `${config}${policy}`, summary }
   }
   const a = side('a')
   const b = side('b')

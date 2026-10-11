@@ -1,8 +1,11 @@
 import type { GameConfig } from '@survival/content'
 import { botChoice, type BotPolicy } from '@survival/bot'
-import { applyAction, createGame, type GameState } from '@survival/engine'
+import { applyAction, createGame, type GameEvent, type GameState } from '@survival/engine'
 
-/** A run that takes more actions than this is stopped and reported as stalled. */
+/**
+ * A run that takes more actions than this per seat is stopped and reported as stalled (per seat
+ * since phase 36: 4 defending bots reach 5000 actions by round 10).
+ */
 export const MAX_ACTIONS = 5000
 
 /** One bot run, start to end. */
@@ -24,13 +27,69 @@ export type RunResult = Readonly<{
   skills: readonly string[]
   milestones: readonly string[]
   actions: number
+  /** What happened in play: enemy dice, health, defeats, defenses (phase 36). */
+  tally: Tally
 }>
+
+/** Counts of play events over 1 run (phase 36: how the policies differ, not only how long). */
+export type Tally = Readonly<{
+  /** Enemy dice and attacks that hit a player (`enemyAttacked`). */
+  hits: number
+  /** Enemy dice cancelled because their enemy was defeated (`defeatedDice: "cancelled"`). */
+  cancelled: number
+  /** Health players lost (after guard). */
+  healthLost: number
+  knockouts: number
+  enemiesDefeated: number
+  defensesBuilt: number
+  /** Health the base and defenses got back from Repair. */
+  repaired: number
+  upgradesBought: number
+}>
+
+/** A tally with every count at 0. */
+export const EMPTY_TALLY: Tally = {
+  hits: 0,
+  cancelled: 0,
+  healthLost: 0,
+  knockouts: 0,
+  enemiesDefeated: 0,
+  defensesBuilt: 0,
+  repaired: 0,
+  upgradesBought: 0,
+}
+
+/** Adds 1 action's events to a tally. */
+export function addEvents(tally: Tally, events: readonly GameEvent[]): Tally {
+  return events.reduce<Tally>((t, e) => {
+    switch (e.type) {
+      case 'enemyAttacked':
+        return { ...t, hits: t.hits + 1 }
+      case 'enemyDieCancelled':
+        return { ...t, cancelled: t.cancelled + 1 }
+      case 'playerDamaged':
+        return { ...t, healthLost: t.healthLost + e.toHealth }
+      case 'playerKnockedOut':
+        return { ...t, knockouts: t.knockouts + 1 }
+      case 'enemyDefeated':
+        return { ...t, enemiesDefeated: t.enemiesDefeated + 1 }
+      case 'defenseBuilt':
+        return { ...t, defensesBuilt: t.defensesBuilt + 1 }
+      case 'repaired':
+        return { ...t, repaired: t.repaired + e.amount }
+      case 'upgradeBought':
+        return { ...t, upgradesBought: t.upgradesBought + 1 }
+      default:
+        return t
+    }
+  }, tally)
+}
 
 /** How a batch is played: seats (1-4, default 1) and the bot policy (default `default`). */
 export type RunOptions = Readonly<{ seats?: number; policy?: BotPolicy }>
 
 /**
- * Plays 1 run with the bot to the end (or to `MAX_ACTIONS`). Same config + seed + options =
+ * Plays 1 run with the bot to the end (or to `MAX_ACTIONS` per seat). Same config + seed + options =
  * same result. With 2-4 seats the bot plays every seat.
  */
 export function playRun(config: GameConfig, seed: number, options: RunOptions = {}): RunResult {
@@ -42,8 +101,10 @@ export function playRun(config: GameConfig, seed: number, options: RunOptions = 
   let round = 0
   let actions = 0
   let error: string | null = null
+  let tally = EMPTY_TALLY
+  const cap = MAX_ACTIONS * (options.seats ?? 1)
   try {
-    while (state.phase !== 'ended' && actions < MAX_ACTIONS) {
+    while (state.phase !== 'ended' && actions < cap) {
       if (state.round !== round && state.phase === 'prepare') {
         round = state.round
         baseCurve.push(state.base.health)
@@ -52,7 +113,9 @@ export function playRun(config: GameConfig, seed: number, options: RunOptions = 
       }
       const action = botChoice(state, { policy })
       if (!action) break
-      state = applyAction(state, action).state
+      const next = applyAction(state, action)
+      state = next.state
+      tally = addEvents(tally, next.events)
       actions += 1
     }
   } catch (e) {
@@ -73,6 +136,7 @@ export function playRun(config: GameConfig, seed: number, options: RunOptions = 
     skills: state.players[0]?.skills ?? [],
     milestones: state.milestones,
     actions,
+    tally,
   }
 }
 
@@ -101,6 +165,8 @@ export type Summary = Readonly<{
   capReached: number
   medianCapRound: number
   rounds: Readonly<Record<string, number>>
+  /** Every run's tally added up. */
+  totals: Tally
 }>
 
 /** The median level at the start of `round`, over the runs that reached it (NaN when none). */
@@ -138,6 +204,13 @@ export function summarize(results: readonly RunResult[]): Summary {
     capReached: caps.length,
     medianCapRound: quantile(caps, 0.5),
     rounds: count(ends.map(String)),
+    totals: results.reduce<Tally>(
+      (sum, r) =>
+        Object.fromEntries(
+          Object.entries(sum).map(([k, v]) => [k, v + r.tally[k as keyof Tally]]),
+        ) as Tally,
+      EMPTY_TALLY,
+    ),
   }
 }
 

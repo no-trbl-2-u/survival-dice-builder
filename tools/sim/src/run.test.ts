@@ -1,7 +1,16 @@
 import { defaultContent } from '@survival/content'
 import { describe, expect, it } from 'vitest'
 import { csvField, toCsv } from './format.ts'
-import { levelAt, playRun, quantile, runBatch, summarize, type RunResult } from './run.ts'
+import {
+  addEvents,
+  EMPTY_TALLY,
+  levelAt,
+  playRun,
+  quantile,
+  runBatch,
+  summarize,
+  type RunResult,
+} from './run.ts'
 
 const config = defaultContent.config
 
@@ -45,6 +54,19 @@ describe('the default batch (engagements, designer 2026-10-09)', () => {
       'survive-round-10': 3,
     })
   }, 30_000) // 200 full runs: past the 5 s default when the gate runs every suite at once
+})
+
+describe('the defender batch (phase 36)', () => {
+  it('defends the base: longer runs, more defeats and defenses than the default bot', () => {
+    const d = summarize(runBatch(config, 200, 1, { policy: 'defender' }))
+    const a = summarize(runBatch(config, 200, 1))
+    expect([d.medianEndRound, d.middleHalf, d.minEndRound]).toEqual([10, [9, 14], 6])
+    expect(d.errors).toBe(0)
+    expect(d.stalled).toBe(26) // turtle-like: no new tiles, no new spawns (row 63)
+    expect(d.medianEndRound).toBeGreaterThan(a.medianEndRound)
+    expect(d.totals.enemiesDefeated).toBeGreaterThan(a.totals.enemiesDefeated)
+    expect(d.totals.defensesBuilt).toBeGreaterThan(a.totals.defensesBuilt)
+  }, 60_000)
 })
 
 describe('the exchange batch (hand of 5, OPEN-QUESTIONS row 71)', () => {
@@ -92,6 +114,7 @@ describe('summary maths', () => {
       skills: [],
       milestones: ['survive-round-5'],
       actions: 1,
+      tally: { ...EMPTY_TALLY, enemiesDefeated: 2 },
     })
     const s = summarize([run(9, 'base'), run(12, 'stalled'), run(15, 'error')])
     expect(s.medianEndRound).toBe(12)
@@ -100,6 +123,60 @@ describe('summary maths', () => {
     expect(s.milestones).toEqual({ 'survive-round-5': 3 })
     expect(levelAt([run(9, 'base')], 3)).toBe(2)
     expect(levelAt([run(9, 'base')], 6)).toBeNaN()
+    expect(s.totals).toEqual({ ...EMPTY_TALLY, enemiesDefeated: 6 })
+  })
+
+  it('addEvents counts hits, cancelled dice, health, defeats, defenses, repairs, upgrades', () => {
+    const t = addEvents(EMPTY_TALLY, [
+      { type: 'enemyAttacked', rule: 'Combat v3', enemy: 'e1', player: 'p1', damage: 2 },
+      {
+        type: 'playerDamaged',
+        rule: 'Combat v3',
+        player: 'p1',
+        toGuard: 1,
+        toHealth: 1,
+        health: 9,
+      },
+      { type: 'enemyDieCancelled', rule: 'Combat v3', enemy: 'e2', player: 'p1' },
+      { type: 'enemyDefeated', rule: '9.1', enemy: 'e2', kind: 'grunt', by: 'p1' },
+      { type: 'playerKnockedOut', rule: '14.2', player: 'p1', materialsLost: 0 },
+      {
+        type: 'defenseBuilt',
+        rule: '12.1',
+        player: 'p1',
+        defense: 'd1',
+        kind: 'tower',
+        hex: { q: 2, r: 0 },
+        cost: 4,
+      },
+      {
+        type: 'repaired',
+        rule: 'Combat v3',
+        player: 'p1',
+        structure: 'base',
+        amount: 2,
+        health: 20,
+      },
+      {
+        type: 'upgradeBought',
+        rule: '11.2',
+        player: 'p1',
+        upgrade: 'training-1',
+        cost: 3,
+        baseHealth: 25,
+      },
+      { type: 'exchangeEnded', rule: 'Combat v3', player: 'p1' },
+    ])
+    expect(t).toEqual({
+      hits: 1,
+      cancelled: 1,
+      healthLost: 1,
+      knockouts: 1,
+      enemiesDefeated: 1,
+      defensesBuilt: 1,
+      repaired: 2,
+      upgradesBought: 1,
+    })
   })
 })
 

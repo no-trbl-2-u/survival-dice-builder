@@ -1,20 +1,21 @@
 import { hexDistance, legalActions, type Action, type GameState } from '@survival/engine'
 import {
   atGoal,
+  BASE,
+  cheapestDefense,
   cheapestUpgrade,
   enemyOn,
   goal,
   me,
   onBaseTile,
+  POST_RANGE,
   siteAt,
   spent,
+  threat,
   type BotPolicy,
 } from './goals.ts'
-
-type Of<T extends Action['type']> = Extract<Action, { type: T }>
-
-const ofType = <T extends Action['type']>(actions: readonly Action[], type: T): Of<T>[] =>
-  actions.filter((a): a is Of<T> => a.type === type)
+import { defenderChoice } from './defender.ts'
+import { ofType, type Of } from './actions.ts'
 
 /** Skill effect order for dice placement: damage first, then guard, heal, and Dodge. */
 const EFFECT_ORDER = ['damage', 'guard', 'heal', 'ignoreHit'] as const
@@ -27,7 +28,8 @@ export type BotOptions = Readonly<{ policy?: BotPolicy }>
  * fixed priorities (no randomness). Undefined when the run has ended.
  *
  * @param state - any engine state.
- * @param options - `policy: "turtle"` keeps the figure on the Base tile (phase 22 sim option).
+ * @param options - `policy: "turtle"` keeps the figure on the Base tile (phase 22 sim option);
+ *   `policy: "defender"` defends the base (phase 36, `defenderChoice`).
  * @returns a legal action, or undefined when there is none.
  */
 export function botChoice(state: GameState, options: BotOptions = {}): Action | undefined {
@@ -35,6 +37,7 @@ export function botChoice(state: GameState, options: BotOptions = {}): Action | 
   const actions = legalActions(state)
   if (actions.length === 0) return undefined
   return (
+    (policy === 'defender' ? defenderChoice(state, actions) : undefined) ??
     required(state, actions, policy) ??
     ofType(actions, 'buyCard')[0] ??
     building(state, actions) ??
@@ -156,7 +159,7 @@ function combat(state: GameState, actions: readonly Action[]): Action | undefine
 
 /**
  * A Prepare card: Build on the base when an upgrade is affordable (or off the base when every
- * upgrade is bought), Gather on an unspent gathering node (or anywhere when `gather.offNodeAmount`
+ * upgrade is bought; the defender also near the base while an enemy threatens it), Gather on an unspent gathering node (or anywhere when `gather.offNodeAmount`
  * gives materials, row 67), Rest when hurt, Move when away from the goal.
  * A card with no use is discarded (when discarding is allowed).
  */
@@ -181,6 +184,10 @@ function prepareCard(
         const reduction = top.costReduction ?? 0
         const upgrade = cheapestUpgrade(state)
         if (onBase) return player.materials + reduction >= upgrade ? 4 : -1
+        // The defender builds a defense near the base while an enemy comes for it.
+        const post = hexDistance(player.hex, BASE) <= POST_RANGE + 1
+        const affordable = player.materials + reduction >= cheapestDefense(state)
+        if (policy === 'defender' && threat(state) && post && affordable) return 4
         return upgrade === Number.POSITIVE_INFINITY && player.materials >= 2 ? 1 : -1
       }
       case 'gather':

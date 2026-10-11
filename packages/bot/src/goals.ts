@@ -3,6 +3,7 @@ import {
   hexKey,
   hexNeighbors,
   type Axial,
+  type Enemy,
   type GameState,
   type Player,
 } from '@survival/engine'
@@ -90,17 +91,77 @@ export function edgeHex(state: GameState): Axial | null {
 
 /**
  * The bot's play style. `default` gathers, explores, and builds; `turtle` never leaves the Base
- * tile (phase 22: it measures OPEN-QUESTIONS rows 63 and 69). A sim option only.
+ * tile (phase 22: it measures OPEN-QUESTIONS rows 63 and 69); `defender` stays near the base,
+ * builds defenses next to it, and fights the enemies that come for it (phase 36). A sim option
+ * only.
  */
-export type BotPolicy = 'default' | 'turtle'
+export type BotPolicy = 'default' | 'turtle' | 'defender'
+
+/** An enemy this close to the base hex is a threat: the defender comes home for it. */
+export const THREAT_RANGE = 4
+
+/** The defender builds its defenses this close to the base hex (the Base tile and 1 ring out). */
+export const POST_RANGE = 2
+
+/** The enemy nearest the base hex within `THREAT_RANGE` (ties: the weaker, then id), if any. */
+export function threat(state: GameState): Enemy | undefined {
+  return state.enemies
+    .filter((e) => hexDistance(e.hex, BASE) <= THREAT_RANGE)
+    .sort(
+      (a, b) =>
+        hexDistance(a.hex, BASE) - hexDistance(b.hex, BASE) ||
+        a.health - b.health ||
+        a.id.localeCompare(b.id),
+    )[0]
+}
+
+/** The material cost of the cheapest defense. Infinity when the content has none. */
+export function cheapestDefense(state: GameState): number {
+  return Math.min(Number.POSITIVE_INFINITY, ...state.content.defenses.map((d) => d.cost))
+}
+
+/**
+ * A guard post: the hex `POST_RANGE` from the base hex nearest `toward` (ties: hex key), on the
+ * map, with no enemy on it. From there a Build reaches the hexes between the base and the enemy.
+ */
+export function guardPost(state: GameState, toward: Axial): Axial | null {
+  return (
+    Object.keys(state.map.hexes)
+      .map((key) => {
+        const [q = 0, r = 0] = key.split(',').map(Number)
+        return { q, r }
+      })
+      .filter((h) => hexDistance(h, BASE) === POST_RANGE && !enemyOn(state, h))
+      .sort(
+        (a, b) =>
+          hexDistance(a, toward) - hexDistance(b, toward) || hexKey(a).localeCompare(hexKey(b)),
+      )[0] ?? null
+  )
+}
+
+/**
+ * Where the defender wants to be. In Combat: next to the threat (else the base). In Prepare: the
+ * base while it can pay for an upgrade; a guard post toward the threat while it can pay for a
+ * defense; else materials, as the default bot.
+ */
+function defenderGoal(state: GameState): Axial {
+  const near = threat(state)
+  if (state.phase === 'combat') return near?.hex ?? BASE
+  const player = me(state)
+  if (player.materials >= cheapestUpgrade(state)) return BASE
+  if (near && player.materials >= cheapestDefense(state)) return guardPost(state, near.hex) ?? BASE
+  return homeNode(state) ?? edgeHex(state) ?? BASE
+}
 
 /**
  * Where the figure wants to be: an unspent gathering node while it cannot pay for the next
  * upgrade (or the map edge, to reveal a tile, when no node is left), else the base (to buy
- * upgrades and Shop cards, and to defend it). The turtle always wants the base.
+ * upgrades and Shop cards, and to defend it). The turtle always wants the base; the defender
+ * see `defenderGoal`.
  */
 export function goal(state: GameState, policy: BotPolicy = 'default'): Axial {
   if (policy === 'turtle') return BASE
+  if (policy === 'defender') return defenderGoal(state)
   const player = me(state)
   if (player.materials < cheapestUpgrade(state)) return homeNode(state) ?? edgeHex(state) ?? BASE
   return BASE

@@ -22,7 +22,7 @@ const causes = (s: Summary) =>
     .map(([k, v]) => `${k} ${v}`)
     .join(', ')
 
-/** Markdown comparison of two bot batches (config A against config B). */
+/** Markdown comparison of two bot batches (config or policy A against B), with play totals. */
 export function compareTable(
   a: Readonly<{ name: string; summary: Summary }>,
   b: Readonly<{ name: string; summary: Summary }>,
@@ -45,6 +45,14 @@ export function compareTable(
     row('Runs that reach the miniature limit', (s) => `${s.capReached} of ${s.runs}`),
     row('Median round the limit is first reached', (s) => fmt(s.medianCapRound, 0)),
     row('Causes', causes),
+    row('Enemy hits taken (all runs)', (s) => String(s.totals.hits)),
+    row('Enemy dice cancelled', (s) => String(s.totals.cancelled)),
+    row('Health lost', (s) => String(s.totals.healthLost)),
+    row('Knock-outs', (s) => String(s.totals.knockouts)),
+    row('Enemies defeated', (s) => String(s.totals.enemiesDefeated)),
+    row('Defenses built', (s) => String(s.totals.defensesBuilt)),
+    row('Health repaired', (s) => String(s.totals.repaired)),
+    row('Upgrades bought', (s) => String(s.totals.upgradesBought)),
     '',
     'Bot runs have no wall clock, so minutes per round come only from real run exports:',
     '`pnpm sim -- timing <export.json ...>`.',

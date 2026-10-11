@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { compareTable, minutesPerRound, timingReport, type TimedExport } from './report.ts'
-import { summarize, type RunResult } from './run.ts'
+import { EMPTY_TALLY, summarize, type RunResult } from './run.ts'
 
 const result = (
   seed: number,
@@ -20,6 +20,7 @@ const result = (
   levelCurve: [1, 1, 2, 2, 2, 3],
   capReachedRound,
   error: null,
+  tally: { ...EMPTY_TALLY, hits: 3, defensesBuilt: endRound },
 })
 
 describe('compareTable', () => {
@@ -34,6 +35,9 @@ describe('compareTable', () => {
     expect(md).toContain('| Median level at round 3 / 6 / 9 | 2 / 3 / - | 2 / 3 / - |')
     expect(md).toContain('| Runs that reach the miniature limit | 0 of 2 | 1 of 2 |')
     expect(md).toContain('| Median round the limit is first reached | - | 7 |')
+    // Play totals add every run's tally (phase 36).
+    expect(md).toContain('| Enemy hits taken (all runs) | 6 | 6 |')
+    expect(md).toContain('| Defenses built | 22 | 30 |')
     expect(md).toContain('pnpm sim -- timing')
   })
 })
