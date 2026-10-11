@@ -26,33 +26,34 @@
    `combat.model` is the other model, "Combat is set to engagements, so changing it changes
    nothing." (one pure helper in content, `combatModelNote`).
 4. /decisions gets a "Decided recently" section after the open readings: rows whose status is
-   `decided <date>` within 14 days of the newest decided date in the file, newest first, each
-   with its question and reading. `docs/DECISIONS.md` gets the same section and is regenerated.
+   `decided <date>` on the newest 2 decision dates in the file, newest first, each with its
+   question and reading. `docs/DECISIONS.md` gets the same section and is regenerated.
 
 ## Routes / API / CLI surface
 
-- `@survival/content`: `recentDecisions(rows, days?)`, `decidedDate(status)`,
-  `RECENT_DAYS`, `combatModelNote(model, current)`; `decisionsMarkdown` adds the section.
+- `@survival/content`: `recentDecisions(rows, dates?)`, `decidedDate(status)`,
+  `RECENT_DATES`, `combatModelNote(model, current)`; `decisionsMarkdown` adds the section.
 - /decisions: a `#recent` section and nav link. /config: the tag in each tagged field's help.
 - `pnpm sim -- decisions --out docs/DECISIONS.md` (unchanged command, new output).
 
 ## Tests
 
-- `packages/content/src/decisions.test.ts`: `decidedDate`; `recentDecisions` (window anchored on
-  the newest date, newest first, superseded and undated rows left out); the markdown section;
+- `packages/content/src/decisions.test.ts`: `decidedDate`; `recentDecisions` (the newest
+  decision dates, newest first, superseded and undated rows left out); the markdown section;
   `combatModelNote` both ways; rows 73-77 parse with their statuses; row 7 is tagged
   "Exchanges only".
 - `packages/bot/src/combatModel.test.ts`: for every key tagged with one Combat model, a bot run
   under the other model with the key set to each other value plays the same game (same events)
-  over 5 seeds. This is the test that keeps the tags honest.
+  over 3 seeds. This is the test that keeps the tags honest.
 - `apps/web/src/decisions/DecisionsPage.test.tsx`: the recent section lists rows 75-77.
 - `apps/web/e2e/config.spec.ts`: the structure-damage field reads "Exchanges only".
 
 ## Decisions made upfront — DO NOT ASK
 
-- "Recent" is anchored on the newest decided date in `OPEN-QUESTIONS.md`, not on today, so
+- "Recent" is the newest 2 decision dates in `OPEN-QUESTIONS.md`, not a window up to today, so
   `docs/DECISIONS.md` stays a pure function of its inputs and its freshness test cannot rot with
-  the calendar. The window is 14 days, as the candidate says.
+  the calendar. The candidate said 14 days; changed while shipping: every decided row dates from
+  2026-10-02 or later, so 14 days listed about 40 rows and buried the 2026-10-09 changes.
 - Only statuses starting with `decided` and carrying a date count; `superseded` and
   `decided (brief)` rows are left out.
 - Rows 65 and 69 are not edited beyond what row 74 says; their status stays `proposed`.

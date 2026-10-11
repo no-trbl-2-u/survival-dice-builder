@@ -76,6 +76,40 @@ export function openQuestions(rows: readonly QuestionRow[]): QuestionRow[] {
     .sort((a, b) => rank(a) - rank(b) || a.number - b.number)
 }
 
+/** How many decision dates "Decided recently" covers, newest first. */
+export const RECENT_DATES = 2
+
+/**
+ * The date a `decided` status carries (`decided 2026-10-09 (default)` gives `2026-10-09`), or
+ * null for any other status and for a decided status with no date (`decided (brief)`).
+ *
+ * @param status - the Status cell.
+ */
+export function decidedDate(status: string): string | null {
+  return /^decided (\d{4}-\d{2}-\d{2})/.exec(status)?.[1] ?? null
+}
+
+/**
+ * The rows the designer decided recently, newest first (then by number): every dated `decided`
+ * row from the newest `dates` decision dates in the file (a row still partly open stays with the
+ * open ones). Dates, not a window up to today: the digest depends only on `OPEN-QUESTIONS.md`,
+ * and the first decisions of the project are not "recent" for ever after.
+ *
+ * @param rows - every question row.
+ * @param dates - how many decision dates to cover.
+ */
+export function recentDecisions(rows: readonly QuestionRow[], dates = RECENT_DATES): QuestionRow[] {
+  const dated = rows.flatMap((row) => {
+    const date = OPEN.test(row.status) ? null : decidedDate(row.status)
+    return date ? [{ row, date }] : []
+  })
+  const newest = [...new Set(dated.map((d) => d.date))].sort().reverse().slice(0, dates)
+  return dated
+    .filter((d) => newest.includes(d.date))
+    .sort((a, b) => b.date.localeCompare(a.date) || a.row.number - b.row.number)
+    .map((d) => d.row)
+}
+
 /**
  * A row's status in plain words for the designer: what it waits on, with no dates, phase
  * numbers or build terms. A note in brackets is kept only when it names a topic
@@ -185,6 +219,24 @@ export function combatModelLine(config: GameConfig): string {
 }
 
 /**
+ * The note on a /config field the engine reads under one Combat model only: the tag, and when
+ * the config plays the other model, that changing the field changes nothing.
+ *
+ * @param model - the field's Combat model (`combatModel` in config metadata).
+ * @param current - the config's `combat.model`.
+ * @rule 7.8, Combat v3
+ */
+export function combatModelNote(
+  model: 'engage' | 'exchange',
+  current: 'engage' | 'exchange',
+): string {
+  const tag = `${combatModelTag(model)}.`
+  if (model === current) return tag
+  const playing = current === 'engage' ? 'engagements' : 'exchanges'
+  return `${tag} Combat is set to ${playing}, so changing it changes nothing.`
+}
+
+/**
  * Reads every `- [needs-user-call] **Title** body` line.
  *
  * @param md - the text of `plan/AUDIT.md`.
@@ -214,8 +266,9 @@ function settingsLine(settings: readonly FlagSetting[], flag: string): string {
 }
 
 /**
- * The decision digest as markdown: open readings, then pending checks. It holds no dates or
- * hashes, so it changes only when `OPEN-QUESTIONS.md` or `plan/AUDIT.md` change.
+ * The decision digest as markdown: open readings, the readings decided recently, then pending
+ * checks. Its only dates come from the rows, so it changes only when `OPEN-QUESTIONS.md` or
+ * `plan/AUDIT.md` change.
  *
  * @param questions - every question row (the open ones are picked here).
  * @param calls - the needs-user-call checks.
@@ -258,6 +311,19 @@ export function decisionsMarkdown(
       '',
     )
   }
+  const recent = recentDecisions(questions)
+  lines.push(
+    '## Decided recently',
+    '',
+    `Readings the designer decided on the last ${RECENT_DATES} decision dates, newest first.`,
+    '',
+  )
+  for (const q of recent) {
+    lines.push(
+      `- **${q.number}. ${q.question.replace(/\.$/, '')}** (rule ${q.rule}, ${decidedDate(q.status)}) ${q.reading}`,
+    )
+  }
+  lines.push('')
   lines.push('## Checks', '')
   for (const c of calls) lines.push(c.title ? `- **${c.title}** ${c.body}` : `- ${c.body}`)
   return `${lines.join('\n')}\n`

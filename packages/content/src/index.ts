@@ -48,12 +48,16 @@ export {
 } from './schemas/tiles.ts'
 export {
   combatModelLine,
+  combatModelNote,
   combatModelTag,
+  decidedDate,
   decisionsMarkdown,
   flagSettings,
   openQuestions,
   parseQuestions,
   parseUserCalls,
+  RECENT_DATES,
+  recentDecisions,
   settingsCombatModel,
   statusLabel,
   type FlagSetting,

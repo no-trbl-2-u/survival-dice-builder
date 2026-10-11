@@ -1,5 +1,6 @@
 import {
   changedFields,
+  combatModelNote,
   defaultConfigMeta,
   defaultContent,
   GameConfigSchema,
@@ -74,6 +75,12 @@ function validDraft(draft: unknown): GameConfig | null {
     parsed.set(draft, result.success ? result.data : null)
   }
   return parsed.get(draft) ?? null
+}
+
+/** The draft's Combat model; a draft without a valid one plays the default config's. */
+export function draftCombatModel(draft: unknown): GameConfig['combat']['model'] {
+  const model = getAt(draft, ['combat', 'model'])
+  return model === 'engage' || model === 'exchange' ? model : defaultContent.config.combat.model
 }
 
 /** The rule phrase a field sets, with the draft's values (from `ruleText`), or null. */
@@ -243,6 +250,12 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
           <strong className={styles.unused}>
             {' '}
             Not used by the engine yet: changing it changes nothing.
+          </strong>
+        ) : null}
+        {meta?.combatModel ? (
+          <strong className={styles.unused} data-testid="combat-model">
+            {' '}
+            {combatModelNote(meta.combatModel, draftCombatModel(draft))}
           </strong>
         ) : null}
         {meta?.rule ? <span className={styles.rule}> Rules {ruleCitation(meta.rule)}.</span> : null}

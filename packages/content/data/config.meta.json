@@ -139,42 +139,49 @@
   "combat.engage.enemyDie": {
     "label": "Enemy die faces",
     "help": "The 6 faces of an enemy die: hit, miss, or special.",
-    "rule": "Combat v3"
+    "rule": "Combat v3",
+    "combatModel": "engage"
   },
   "combat.engage.hitDamage": {
     "label": "Hit damage",
     "help": "Damage a Hit face deals to you (guard first).",
     "rule": "Combat v3",
+    "combatModel": "engage",
     "range": [0, 6]
   },
   "combat.engage.specialDamage": {
     "label": "Special damage",
     "help": "Damage a Special face deals, until each grunt type has its own Special.",
     "rule": "Combat v3",
+    "combatModel": "engage",
     "range": [0, 6]
   },
   "combat.engage.eliteDice": {
     "label": "Elite enemy dice",
     "help": "Enemy dice an elite rolls when you engage it or stand next to it.",
     "rule": "Combat v3",
+    "combatModel": "engage",
     "range": [1, 4]
   },
   "combat.engage.siegeDamage": {
     "label": "Siege damage",
     "help": "At the end of Combat, each grunt next to a structure deals this much to it.",
     "rule": "Combat v3 (siege)",
+    "combatModel": "engage",
     "range": [0, 6]
   },
   "combat.engage.eliteSiegeDamage": {
     "label": "Elite siege damage",
     "help": "Siege damage of an elite, until elites have their own siege rule.",
     "rule": "Combat v3 (siege)",
+    "combatModel": "engage",
     "range": [0, 10]
   },
   "combat.engage.defeatedDice": {
     "label": "Defeated enemies' dice",
     "help": "Hit: every enemy die rolled hits at the end of the engagement, all at once, even the dice of an enemy you defeated (default). Cancelled: a defeated enemy's dice do not hit (experiment).",
     "rule": "Combat v3",
+    "combatModel": "engage",
     "options": {
       "hit": "Still hit (default)",
       "cancelled": "Cancelled (experiment)"
@@ -452,6 +459,7 @@
     "label": "Structure damage",
     "help": "How enemies damage Barricades, Towers, and the base in the structure attack step.",
     "rule": "7.11, 9.5 (open question 7)",
+    "combatModel": "exchange",
     "options": {
       "v1": "As an attack on a player (each enemy rolls its attack dice)",
       "grunt-die": "Each grunt rolls 1 die"

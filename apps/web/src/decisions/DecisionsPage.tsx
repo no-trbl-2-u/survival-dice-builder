@@ -1,12 +1,15 @@
 import {
   combatModelLine,
   combatModelTag,
+  decidedDate,
   defaultConfigMeta,
   defaultContent,
   flagSettings,
   openQuestions,
   parseQuestions,
   parseUserCalls,
+  RECENT_DATES,
+  recentDecisions,
   settingsCombatModel,
   statusLabel,
   type QuestionRow,
@@ -56,7 +59,9 @@ function Settings({ row }: Readonly<{ row: QuestionRow }>) {
  * the pending checks. Read-only: values change on /config, statuses in OPEN-QUESTIONS.md.
  */
 export function DecisionsPage() {
-  const open = openQuestions(parseQuestions(questionsMd))
+  const questions = parseQuestions(questionsMd)
+  const open = openQuestions(questions)
+  const recent = recentDecisions(questions)
   const calls = parseUserCalls(auditMd)
   const shown = new Set(open.map((q) => q.number))
   return (
@@ -69,7 +74,8 @@ export function DecisionsPage() {
       </p>
       <p>{combatModelLine(defaultContent.config)}</p>
       <nav aria-label="On this page">
-        <a href="#readings">Rule readings</a> · <a href="#checks">Checks</a>
+        <a href="#readings">Rule readings</a> · <a href="#recent">Decided recently</a> ·{' '}
+        <a href="#checks">Checks</a>
       </nav>
 
       <h2 id="readings">Rule readings</h2>
@@ -108,6 +114,27 @@ export function DecisionsPage() {
             </li>
           )
         })}
+      </ol>
+
+      <h2 id="recent">Decided recently</h2>
+      <p>
+        Readings the designer decided on the last {RECENT_DATES} decision dates, newest first. The
+        game plays each of them now.
+      </p>
+      <ol className={styles.list} data-testid="recent">
+        {recent.map((q) => (
+          <li key={q.number} className={styles.item} data-decided={q.number}>
+            <h3 className={styles.question}>
+              {q.number}. <Inline text={q.question} rows={shown} />{' '}
+              <span className={styles.muted}>
+                (rule {q.rule}, decided {decidedDate(q.status)})
+              </span>
+            </h3>
+            <p>
+              <Inline text={q.reading} rows={shown} />
+            </p>
+          </li>
+        ))}
       </ol>
 
       <h2 id="checks">Checks</h2>

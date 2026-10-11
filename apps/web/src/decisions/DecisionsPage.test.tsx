@@ -46,6 +46,20 @@ describe('DecisionsPage', () => {
     expect(tag(66)).toBeUndefined()
   })
 
+  it('lists the readings decided recently, newest first (phase 37)', () => {
+    const { container } = render(<DecisionsPage />)
+    const recent = [...container.querySelectorAll('[data-testid="recent"] > li')]
+    const numbers = recent.map((li) => Number(li.getAttribute('data-decided')))
+    // The three designer changes of 2026-10-09 and row 72 lead the list.
+    expect(numbers.slice(0, 4).sort((a, b) => a - b)).toEqual([72, 75, 76, 77])
+    expect(container.querySelector('[data-decided="76"]')?.textContent).toContain(
+      'decided 2026-10-09',
+    )
+    // Open readings are not listed as decided.
+    expect(numbers).not.toContain(73)
+    expect(container.querySelector('nav a[href="#recent"]')).not.toBeNull()
+  })
+
   it('links each row it names: to the listed reading, or to the full table for a settled row', () => {
     const { container } = render(<DecisionsPage />)
     const row = (n: number) => container.querySelector(`[data-question="${n}"]`)

@@ -22,6 +22,24 @@ test('/config: a ruling the engine does not read yet says so', async ({ page }) 
   )
 })
 
+test('/config: a field one Combat model ignores is tagged, and says so under the other (phase 37)', async ({
+  page,
+}) => {
+  await page.goto('/config')
+  const damage = page.getByLabel('Structure damage', { exact: true })
+  const siege = page.getByLabel('Siege damage', { exact: true })
+  await expect(damage).toHaveAccessibleDescription(
+    /Exchanges only\. Combat is set to engagements, so changing it changes nothing\./,
+  )
+  await expect(siege).toHaveAccessibleDescription(/Engagements only\./)
+  await expect(siege).not.toHaveAccessibleDescription(/changes nothing/)
+  await page.getByLabel('Combat model', { exact: true }).selectOption('exchange')
+  await expect(damage).not.toHaveAccessibleDescription(/changes nothing/)
+  await expect(siege).toHaveAccessibleDescription(
+    /Engagements only\. Combat is set to exchanges, so changing it changes nothing\./,
+  )
+})
+
 test('/config: a field shows the rule phrase it sets, with the edited value', async ({ page }) => {
   await page.goto('/config')
   const limit = page.getByLabel('Enemy miniature limit', { exact: true })
