@@ -74,10 +74,13 @@ Tick in this file in the same commit that ships the phase.
 - [x] Phase 31 — Player names for every map piece: one pure naming module (kind, place, ordinal only to tell two apart) for the /play log, choice buttons, phase bar, and aria labels; /config pick lists by name and presets as "Preset N"; a test that fails on engine ids in player text — a3ae8f1
 - [x] Phase 32 — Release v0.1.0: every package to 0.1.0; `CHANGELOG.md` from the phase log; the version in the site footer, run exports and config saves; annotated tag `v0.1.0` and a GitHub release; the open spec criteria that need people (sessions, feel checks, the bot's 8-14 band) listed as known gaps, not blockers — 280ede4
 
-**After v0.1.0 — the content era (promoted via oversight 2026-10-10):**
-- [ ] Phase 33 — A defending bot policy: builds and repairs defenses near the base, uses Tower targets, picks targets to defeat enemies before their dice hit, keeps cards across engagements, buys Training; `pnpm sim -- compare --policy defender`; re-measure rows 63-70, defeated dice, and the draft pool under engagements (absorbs the rejected "Combat v3 in the bot and the sim" candidate)
-- [ ] Phase 34 — The rulings the engagement model bypasses: new OPEN-QUESTIONS rows for siege (`rulings.structureDamage`, 7.11 adjacency) and rows 65/69 under engagements (readings: as shipped), decided rows for the 2026-10-09 changes (skill uses unlimited, move cost next to enemies 1, unkept Skills to the pool); a "decided recently" section on /decisions; "Exchanges only" tags in `config.meta.json`; `docs/DECISIONS.md` regenerated
-- [ ] Phase 35 — Static HTML for each page: prerender /, /tiles, /decisions, /credits, /config (defaults) with per-route title, description, og:url, and canonical from one route table; /play and /debug get their own shell meta; a real 404 for unknown paths; a no-JS e2e fetch per route
+**After v0.1.0 — the content era (oversight 2026-10-11: Spec v2 fold-in first, then Skills; the loop ships 33, 36 and 37 while the design rows wait):**
+- [ ] Phase 33 — Rule text II: `nextStep`, the decision dialogs, and `config.meta.json` help read rule phrases from `ruleText` (the Exchanges sentence from `combat.adjacentAttack`, enemy dice per grunt and elite, the target-order and hand-emptying lines); no row or phase numbers in help (a source field /decisions shows); the rule-number scan covers `config.meta.json` and word-form rules; a build-word scan over player text; closes critique pass 12 rows 1-5
+- [blocked: designer session via /oversight 2026-10-11] Phase 34 — Spec v2 fold-in: the designer folds `docs/RULES-AS-PLAYED.md` (and `docs/design/core-loop-v2.md`, `combat-v3.md`) into `spec/` in an `/oversight` session; the loop then refreshes `RULES-COVERAGE.md` and the rules-as-played doc against Spec v2
+- [blocked: needs the Skills design session after phase 34 2026-10-11] Phase 35 — Skills I: the first content phase; scope set by the designer's Skills session (upgraded tiers, caps, heal targets, draft supply levels; rows 9, 46, 50); the brief is written from that session
+- [ ] Phase 36 — A defending bot policy: builds and repairs defenses near the base, uses Tower targets, picks targets to defeat enemies before their dice hit, keeps cards across engagements, buys Training; `pnpm sim -- compare --policy defender`; re-measure rows 63-70, defeated dice, and the draft pool under engagements (absorbs the rejected "Combat v3 in the bot and the sim" candidate)
+- [ ] Phase 37 — The rulings the engagement model bypasses: new OPEN-QUESTIONS rows for siege (`rulings.structureDamage`, 7.11 adjacency) and rows 65/69 under engagements (readings: as shipped), decided rows for the 2026-10-09 changes (skill uses unlimited, move cost next to enemies 1, unkept Skills to the pool); a "decided recently" section on /decisions; "Exchanges only" tags in `config.meta.json`; `docs/DECISIONS.md` regenerated
+- [ ] Phase 38 — Static HTML for each page: prerender /, /tiles, /decisions, /credits, /config (defaults) with per-route title, description, og:url, and canonical from one route table; /play and /debug get their own shell meta; a real 404 for unknown paths; a no-JS e2e fetch per route (moved to the end via oversight 2026-10-11: after the content work)
 
 > **After phase 16:** the loop transitions to `/iterate`.
 > Real playtest sessions (spec C, item 2) need people; the
@@ -466,7 +469,30 @@ CHANGELOG section as notes. Known gaps listed in the release notes:
 playtest sessions (spec C), the bot's 8-14 median band (phase 33),
 frame rate and 2-person read checks, tile art and recorded sound.
 
-### Phase 33 — A defending bot policy
+### Phase 33 — Rule text II
+
+Source: `plan/PHASE_CANDIDATES.md` "Rule text II" (score 4.5, discovery pass 1), promoted via
+oversight 2026-10-11 to close the critique pass 12 cluster: the Exchanges sentence ignores
+`combat.adjacentAttack` (`ruleText.ts:81`, HIGH), the Combat model help says one die per enemy
+(`config.meta.json:129`), the target order reads as a contradiction, the hand-emptying line, and
+the "Row N:" prefixes. Phase 25 fixed the cause for numbers; this phase fixes it for words. No
+rule value or default changes.
+
+### Phase 34 — Spec v2 fold-in (designer session)
+
+Source: oversight 2026-10-11 (the designer: fold the spec in before designing content). An
+`/oversight` act, not a loop phase: `spec/` is edited only via `/oversight` (bearings hard rule
+9). Input: `docs/RULES-AS-PLAYED.md` (124 rules by status), the two design notes, and the open
+rows. After the session the loop re-runs `pnpm sim -- rules` and the coverage checker against
+Spec v2. Blocked until the designer runs the session.
+
+### Phase 35 — Skills I (designer-scoped)
+
+Source: oversight 2026-10-11 (the designer chose Skills as the first content area). Today the
+Skills are placeholders (rows 9, 46, 50: Skill design pending-spec). Blocked until a Skills
+design session (after phase 34) sets the scope; the brief is written from that session.
+
+### Phase 36 — A defending bot policy
 
 Source: `plan/PHASE_CANDIDATES.md` "A defending bot policy" (score
 5.0) with the residue of "Combat v3 in the bot and the sim" (rejected,
@@ -477,8 +503,9 @@ the three behaviours the 2026-10-09 session residue names (target
 picks, keeping cards, buying Training). Report: defender against the
 current bot, rows 63-70 re-measured, defeated dice and draft pool
 re-run. Unblocks the deferred "Try the proposals" candidate.
+Renumbered from 33 to 36 via oversight 2026-10-11 (Rule text II and the design rows first).
 
-### Phase 34 — The rulings the engagement model bypasses
+### Phase 37 — The rulings the engagement model bypasses
 
 Source: `plan/PHASE_CANDIDATES.md` "The rulings the engagement model
 bypasses" (score 5.0, discovery pass 1), promoted via oversight
@@ -487,8 +514,9 @@ bypasses" (score 5.0, discovery pass 1), promoted via oversight
 69 are inert under engagements; three 2026-10-09 changes (cc92fe3,
 9ba3222, 256bdb4) have no OPEN-QUESTIONS row. Records readings as
 shipped; changes no value. The designer answers the new rows.
+Renumbered from 34 to 37 via oversight 2026-10-11.
 
-### Phase 35 — Static HTML for each page
+### Phase 38 — Static HTML for each page
 
 Source: `plan/PHASE_CANDIDATES.md` "Static HTML for each page" (score
 4.0), promoted via oversight 2026-10-10. `apps/web/index.html` serves
@@ -496,6 +524,7 @@ one description and `og:url` for every route and `_redirects` sends
 `/*` to `/index.html` with 200. Still a static Cloudflare Pages build.
 /config renders defaults, then loads saved edits after hydration.
 Renumbered from 28 to 35 via oversight 2026-10-10; after v0.1.0.
+Renumbered from 35 to 38 and moved to the end via oversight 2026-10-11.
 ---
 
 ## Carry-overs / known gaps (update as phases ship)

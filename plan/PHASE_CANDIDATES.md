@@ -28,7 +28,7 @@
 - conflicts: must not change any default. Presets change only the player's local config; rows 63-70 stay open until the designer decides.
 - last re-evidenced: 2026-10-10 (expand pass 9)
   - Pass 9: critique pass 11 [MED] says /decisions rows 65, 66 and 69 describe exchanges with no note that engagements are the default. The phase 22 tables were all measured on the exchange model, so a preset built from them now plays a different Combat. Scope should re-measure rows 63-70 under engagements (after the bot work) or mark each preset "exchanges only".
-- deferred: 2026-10-10 via oversight. Blocked on phase 33 (was 26): the phase 22 numbers were measured with exchanges, and rows 65 and 69 are now "Exchanges only". Re-score after phase 26 re-measures rows 63-70 under engagements.
+- deferred: 2026-10-10 via oversight. Blocked on phase 36 (was 26): the phase 22 numbers were measured with exchanges, and rows 65 and 69 are now "Exchanges only". Re-score after phase 26 re-measures rows 63-70 under engagements.
 
 > Discovery pass 1 (2026-10-10). Each row below adds a `ruling audit` field. "Loop scope" refers to the
 > owner ruling of 2026-10-06 (`docs/retrospective-2026-10-06.md:210,231,248`): the loop ships docs, bot
@@ -41,15 +41,15 @@
   - `tools/sim/src/cli.ts:85-106`: `compare` takes exactly two configs that share seats and policy; there is no `--set key=value`, no range, no preset flag. Each value tried needs its own JSON file.
   - `tools/sim/src/run.ts:9-27`: `RunResult` has no hits taken, health lost, knockouts, cancelled dice, placements, spill-overs or promotions. The phase 23 report pulled these by hand from events (`docs/reports/phase-23-defeated-dice.md:66-68`); row 70's upkeep saving is "a table question" the bot "cannot measure" (`docs/reports/phase-22-experiments.md:299`).
   - Retrospective Track C3 (`docs/retrospective-2026-10-06.md:270`): split recommended options (`--rec`, with a drift guard against the defaults) from experiments (`--exp`, deleted unless promoted).
-  - Phase 33 (was 26) adds `--policy defender`, but its comparison needs both policies side by side ("Report both a floor bot and a greedy-defend bot per experiment", retrospective :271).
+  - Phase 36 (was 26) adds `--policy defender`, but its comparison needs both policies side by side ("Report both a floor bot and a greedy-defend bot per experiment", retrospective :271).
 - rationale: every open structural row (63-70) waits on numbers, and each number costs a hand-made JSON file and a hand count from events. A sweep with event counts turns a report day into one command.
 - proposed scope: 1 phase.
   - `pnpm sim -- sweep --set spawn.rampEvery=2,3,4 --seats 1,2,4 --policy default,defender` writing one table; `compare` takes N configs.
   - `RunResult` gains hits taken, health lost, knockouts, cancelled dice, and table upkeep per Combat (placements, spill-overs, promotions), with tests.
   - `--rec` (the options rows 63-70 recommend) and `--exp`, with a test that fails when `--rec` silently equals the defaults.
 - estimated phases: 1
-- conflicts: none. It reads config; it changes no default. Depends on phase 33 (was 26) only for the `defender` value.
-- ruling audit: rows 63-70 (proposed), 72 (decided) checked; every batch runs under engagements by default, as phase 33 (was 26) requires. No conflict. Loop scope: in (bot and sim).
+- conflicts: none. It reads config; it changes no default. Depends on phase 36 (was 26) only for the `defender` value.
+- ruling audit: rows 63-70 (proposed), 72 (decided) checked; every batch runs under engagements by default, as phase 36 (was 26) requires. No conflict. Loop scope: in (bot and sim).
 
 ### [ ] [score 5.0] Log a cardboard session: a tabletop session record the playtest tools can read
 - proposed: 2026-10-10, discovery pass 1
@@ -83,22 +83,6 @@
 - conflicts: none. No rule changes; findings go to OPEN-QUESTIONS.
 - ruling audit: rows 63, 66, 70 (proposed) and the bearings constraint checked; no conflict. Loop scope: in (docs, tests).
 
-### [ ] [score 4.5] Rule text II: word-form rules in /play steps, dialogs, and /config help
-- proposed: 2026-10-10, discovery pass 1
-- source signals:
-  - `apps/web/src/ruleNumbers.test.ts:10` matches only a digit before a rule word, and scans only `apps/web/src`. Word-form rules slip through: `apps/web/src/play/nextStep.ts:11,82`, `DecisionDialog.tsx:51` (code-reality agent).
-  - `packages/content/data/config.meta.json` holds 73 hand-written help strings outside the scan, with rule numbers (:243 "1 enemy", :444 "2 to 4 players") and 21 build-process words ("Row 65", "phase 22", "Combat v3", "core loop v2"; counted by grep).
-  - Churn: `nextStep.ts` 4 `play:` commits, `config.meta.json` 4 fix commits, `describeEvent.ts` 4 in the last 200 commits.
-  - Reader pass 1 [MED]: /config help cites "Row 65:", "(open question 69)", "Combat v3".
-- rationale: phase 25 fixed the cause for numbers. The same cause (hand-written rule prose) is still alive for step text and help, so the next rule change will leave them behind again.
-- proposed scope: 1 phase.
-  - `nextStep` and the decision dialogs read their rule phrases from `ruleText`.
-  - `config.meta.json` help: rule phrases by reference to `ruleText` keys; no row or phase numbers in help (they move to a "source" field that /decisions shows).
-  - Extend the scan to `config.meta.json` and to a list of rule verbs; add a build-word scan (row N, phase N, v1, v2, Combat v3) over player text.
-- estimated phases: 1
-- conflicts: none. Overlaps phase 31 (was 27) only in `describeEvent.ts`; ship after it.
-- ruling audit: rows 63-72 checked for the help text they feed; no conflict. Phase 25 premise confirmed at HEAD (625edbc). Loop scope: in (rule-text sync).
-
 ### [ ] [score 4.5] The public site and the designer's workbench: one player path, one design area
 - proposed: 2026-10-10, discovery pass 1
 - source signals:
@@ -112,7 +96,7 @@
   - AUDIT rows gain a kind (`design` or `ops`); the digest shows only design rows.
   - The URL contract amended to match HEAD (needs `/oversight`, since it is locked).
 - estimated phases: 1
-- conflicts: the locked URL contract text must change; routes do not. Overlaps phase 35's (was 28) route table; ship after it.
+- conflicts: the locked URL contract text must change; routes do not. Overlaps phase 38's (was 28) route table; ship after it.
 - ruling audit: no rule rows; bearings URL contract checked (locked, out of date on 3 points). Loop scope: outside (navigation); needs the designer's yes.
 
 ### [ ] [score 4.5] Co-op at 2, 3 and 4 seats, proven: engine, bot batch and browser
@@ -168,14 +152,14 @@
 - proposed: 2026-10-10, discovery pass 1
 - source signals:
   - Retrospective rule 6 (`docs/retrospective-2026-10-06.md:214`): "a measurement needs a pilot with a known ceiling and floor before it drives a ruling".
-  - Every report calls the bot a floor (`docs/reports/phase-9-bot-batch.md:7-10`, `phase-22-experiments.md:23-25`, `phase-23-defeated-dice.md:10-12`). Phase 33 (was 26) adds a better floor, not a ceiling.
+  - Every report calls the bot a floor (`docs/reports/phase-9-bot-batch.md:7-10`, `phase-22-experiments.md:23-25`, `phase-23-defeated-dice.md:10-12`). Phase 36 (was 26) adds a better floor, not a ceiling.
   - The engine is pure and seeded, so a rollout bot (try each legal action, play out N seeds with the defender, keep the best) needs no engine change.
 - rationale: with a floor and a ceiling, a ruling's effect is a range a table run can be placed in. Without a ceiling, every number is a lower bound.
 - proposed scope: 1 phase.
   - A `lookahead` policy in `packages/bot` (bounded rollouts at decision points that matter: target picks, builds, Move goals), seeded and time-boxed.
   - `pnpm sim -- compare --policy defender,lookahead` on rows 63-70 under engagements.
 - estimated phases: 1 (2 if rollouts are too slow for 200 runs)
-- conflicts: none. Depends on phase 33 (was 26).
+- conflicts: none. Depends on phase 36 (was 26).
 - ruling audit: rows 63-70 (proposed), 72 (decided) checked. Loop scope: in (bot).
 
 ### [ ] [score 2.5] Print-and-play kit from content: cards, tiles and tokens as a printable PDF
@@ -238,6 +222,23 @@
   - Rule 19.4 says to make the base game work first.
 
 ## Promoted
+
+### [x] [score 4.5] Rule text II: word-form rules in /play steps, dialogs, and /config help
+- proposed: 2026-10-10, discovery pass 1
+- source signals:
+  - `apps/web/src/ruleNumbers.test.ts:10` matches only a digit before a rule word, and scans only `apps/web/src`. Word-form rules slip through: `apps/web/src/play/nextStep.ts:11,82`, `DecisionDialog.tsx:51` (code-reality agent).
+  - `packages/content/data/config.meta.json` holds 73 hand-written help strings outside the scan, with rule numbers (:243 "1 enemy", :444 "2 to 4 players") and 21 build-process words ("Row 65", "phase 22", "Combat v3", "core loop v2"; counted by grep).
+  - Churn: `nextStep.ts` 4 `play:` commits, `config.meta.json` 4 fix commits, `describeEvent.ts` 4 in the last 200 commits.
+  - Reader pass 1 [MED]: /config help cites "Row 65:", "(open question 69)", "Combat v3".
+- rationale: phase 25 fixed the cause for numbers. The same cause (hand-written rule prose) is still alive for step text and help, so the next rule change will leave them behind again.
+- proposed scope: 1 phase.
+  - `nextStep` and the decision dialogs read their rule phrases from `ruleText`.
+  - `config.meta.json` help: rule phrases by reference to `ruleText` keys; no row or phase numbers in help (they move to a "source" field that /decisions shows).
+  - Extend the scan to `config.meta.json` and to a list of rule verbs; add a build-word scan (row N, phase N, v1, v2, Combat v3) over player text.
+- estimated phases: 1
+- conflicts: none. Overlaps phase 31 (was 27) only in `describeEvent.ts`; ship after it.
+- ruling audit: rows 63-72 checked for the help text they feed; no conflict. Phase 25 premise confirmed at HEAD (625edbc). Loop scope: in (rule-text sync).
+- promoted: 2026-10-11 via oversight, as phase 33, to close the critique pass 12 rule-text cluster (1 HIGH, 3 MED, 1 LOW). Ruling audit: no conflict; no value changes.
 
 ### [x] [score 5.5] Loop telemetry: a tick that does nothing says why
 - proposed: 2026-10-10, discovery pass 1
@@ -330,7 +331,7 @@
 - proposed: 2026-10-10, discovery pass 1
 - source signals:
   - `rules-lawyer`: siege (`packages/engine/src/combat/engage.ts:314-341`) does not read `rulings.structureDamage` (row 7) and has no 7.11 "not next to a player" check, while the exchange step does (`enemies/structures.ts:126-127`). /config does not tag `structureDamage` "Exchanges only" (`packages/content/data/config.meta.json:451-459`), so it looks live.
-  - Rows 65 and 69 are inert under engagements (`config.meta.json:111,121`); phase 33 (was 26) re-measures them anyway (`plan/steps/01_build_plan.md`).
+  - Rows 65 and 69 are inert under engagements (`config.meta.json:111,121`); phase 36 (was 26) re-measures them anyway (`plan/steps/01_build_plan.md`).
   - Three designer changes of 2026-10-09 have config keys but no OPEN-QUESTIONS row, so /decisions never shows them: `options.skillUses: "unlimited"` (cc92fe3), `combat.moveCostNextToEnemy: 1` (9ba3222), `draft.unpicked: "pool"` (256bdb4). `packages/content/src/decisions.ts:65` shows only proposed and pending-spec rows.
   - Critique pass 11 [MED] (now done) and reader pass 1: /decisions rows 65, 66 and 69 read as exchange rules.
 - rationale: the designer reads /decisions to know what is open. Today it hides three rule changes they made and shows settings that do nothing under the default Combat. That is the decision digest (phase 18) out of step with Combat v3.
@@ -341,6 +342,7 @@
 - estimated phases: 1
 - conflicts: none. No value changes; the readings record what the engine does.
 - ruling audit: rows 7, 65, 69, 72 read (statuses pending-spec, proposed, proposed, decided); commits cc92fe3, 9ba3222, 256bdb4 checked at HEAD. No conflict. Loop scope: in (rule-text sync).
+- renumbered: 2026-10-11 via oversight, phase 34 to phase 37.
 - promoted: 2026-10-10 via oversight, as phase 34. After the v0.1.0 tag, with the content era. Ruling audit: no conflict; records readings as shipped. The designer answers the new rows.
 
 ### [x] [score 6.5] Rule text from one source: every rule statement on the site comes from config and content
@@ -389,7 +391,7 @@
 - conflicts: none. It changes no rule; the bot only calls the engine API.
 - last re-evidenced: 2026-10-10 (expand pass 9)
   - Pass 9: the session residue row "sim — the bot cannot measure today's designer changes" (8402ba3) names three designer changes the bot cannot see: it does not pick targets to defeat enemies before their dice hit, so the phase 23 `defeatedDice` gap is a floor (`docs/reports/phase-23-defeated-dice.md`, about 8% fewer hits); it rarely reaches a second draft, so the draft pool (256bdb4) left both pinned batches unchanged; it discards whole hands, so the hand kept across engagements (9ba3222) is under-measured. Scope should add those three behaviours (target picks, keeping cards, buying Training) and re-run the defeated-dice and draft-pool comparisons.
-- renumbered: 2026-10-10 via oversight, phase 26 to phase 33 (after the v0.1.0 tag).
+- renumbered: 2026-10-10 via oversight, phase 26 to phase 33 (after the v0.1.0 tag); 2026-10-11, 33 to 36.
 - promoted: 2026-10-10 via oversight, as phase 26, merged with the rejected "Combat v3 in the bot and the sim". Ruling audit: row 72 decided 2026-10-09, so re-measure under engagements, not the phase 22 exchange tables.
 
 ### [x] [score 4.5] Player names for every map piece: no engine ids on /play or /config
@@ -435,7 +437,7 @@
 - last re-evidenced: 2026-10-09 (expand pass 8)
   - Pass 8: critique pass 9 (25a398a) files the per-route gap as its own row: every route serves the home description and an `og:url` fixed to the home page, with no canonical (`apps/web/index.html:6,16`). Audit passes 23 to 25 score it 2.7 and leave it waiting here, because a canonical set by script does not reach unfurlers that skip JavaScript.
   - Pass 7: Two more hand patches of the one shared shell since pass 6: 1aaa6a9 (favicon link) and 5a93dde (sitemap and robots.txt). The sitemap now lists 7 pages, and every one of them is served the same title, description, and preview card, with no canonical link. Audit passes 17 to 22 leave the canonical row waiting on this candidate.
-- renumbered: 2026-10-10 via oversight, phase 28 to phase 35 (after the v0.1.0 tag).
+- renumbered: 2026-10-10 via oversight, phase 28 to phase 35 (after the v0.1.0 tag); 2026-10-11, 35 to 38 (the end).
 - promoted: 2026-10-10 via oversight, as phase 28. Ruling audit: no ruling applies.
 
 ### [x] [score 6.5] Accessibility and navigation pass for the secondary pages (/tiles, /debug, shell)
