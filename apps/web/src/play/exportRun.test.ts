@@ -1,5 +1,5 @@
 import { botChoice } from '@survival/bot'
-import { defaultContent } from '@survival/content'
+import { applyProposal, defaultContent, defaultProposals } from '@survival/content'
 import { serialize, type GameEvent } from '@survival/engine'
 import { describe, expect, it } from 'vitest'
 import { baseCentre, ENGINE_ID } from '../names/pieceNames.ts'
@@ -37,6 +37,13 @@ describe('exportRun', () => {
     expect(exportRun(run)).toMatchObject({ commit: expect.any(String), changedKeys: [] })
     const changed = newRun({ ...config, miniatureLimit: config.miniatureLimit + 1 }, 4)
     expect(exportRun(changed).changedKeys).toEqual(['miniatureLimit'])
+  })
+
+  it('records the proposals the config carries (phase 39)', () => {
+    expect(exportRun(newRun(config, 4)).proposals).toEqual([])
+    const reveal = defaultProposals[0]
+    if (!reveal) throw new Error('no proposals')
+    expect(exportRun(newRun(applyProposal(config, reveal), 4)).proposals).toEqual([reveal.id])
   })
 
   it('records the base health at the start of each round', () => {

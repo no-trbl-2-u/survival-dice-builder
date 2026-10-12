@@ -176,3 +176,36 @@ test('/config: Resume run shows only with an autosave, and carries on with it', 
   await expect(page.getByTestId('play-map')).toBeVisible()
   await expect(page.getByTestId('start-panel')).toHaveCount(0)
 })
+
+test('/decisions: Try this on /play plays a proposal, and the start panel resets it (phase 39)', async ({
+  page,
+}) => {
+  await page.goto('/decisions')
+  const row = page.locator('[data-question="63"]')
+  await expect(row).toContainText('Measured under engagements')
+  await row.getByRole('button', { name: 'Try this on /play' }).click()
+  await expect(page).toHaveURL(/\/play$/)
+  const changes = page.getByTestId('config-changes')
+  await expect(changes).toContainText('Playing with the proposal: Forced reveal.')
+  await expect(page.getByRole('link', { name: 'Forced reveal' })).toHaveAttribute(
+    'href',
+    '/decisions#q-63',
+  )
+  await page.getByRole('button', { name: 'Reset to the standard rules' }).click()
+  await expect(changes).toContainText('Playing with the standard rules.')
+  await expect(page.getByTestId('config-proposals')).toHaveCount(0)
+})
+
+test('/config: Apply sets a proposal in the draft, and Save marks it (phase 39)', async ({
+  page,
+}) => {
+  await page.goto('/config')
+  await page.getByText(/Proposals to try/).click()
+  await page.getByRole('button', { name: 'Apply Spawn range' }).click()
+  await expect(page.getByRole('status')).toContainText('Applied the proposal Spawn range.')
+  await page.getByRole('button', { name: 'Save config' }).click()
+  await expect(page.getByTestId('config-proposals')).toHaveText(
+    'Playing with the proposal: Spawn range.',
+  )
+  await expect(page.getByTestId('config-proposal-list')).toContainText('In this config.')
+})

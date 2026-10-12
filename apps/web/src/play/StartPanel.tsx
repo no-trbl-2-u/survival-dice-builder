@@ -8,7 +8,7 @@ import {
   type GameConfig,
 } from '@survival/content'
 import { ConfigChanges } from '../config/ConfigChanges.tsx'
-import type { KeyValue } from '../config/configStore.ts'
+import { resetConfig, type KeyValue } from '../config/configStore.ts'
 import { importRun, readAutosave } from './exportRun.ts'
 import styles from './Play.module.css'
 import type { Run } from './run.ts'
@@ -116,7 +116,19 @@ export function StartPanel({
       </p>
       <div className={styles.muted}>
         <ConfigChanges config={config} changes={changes} updated={updated} reviewHref="/config" />
-        {changes.length === 0 ? <a href="/config">Change the config</a> : null}
+        {changes.length === 0 ? (
+          <a href="/config">Change the config</a>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              resetConfig(store)
+              window.location.assign('/play')
+            }}
+          >
+            Reset to the standard rules
+          </button>
+        )}
       </div>
       {saved ? (
         <p>

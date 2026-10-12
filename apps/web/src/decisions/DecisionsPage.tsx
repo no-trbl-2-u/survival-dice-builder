@@ -8,6 +8,7 @@ import {
   openQuestions,
   parseQuestions,
   parseUserCalls,
+  proposalForRow,
   RECENT_DATES,
   recentDecisions,
   settingsCombatModel,
@@ -18,6 +19,7 @@ import questionsMd from '../../../../OPEN-QUESTIONS.md?raw'
 import auditMd from '../../../../plan/AUDIT.md?raw'
 import styles from './DecisionsPage.module.css'
 import { Inline, RepoFile, rowId } from './Inline.tsx'
+import { ProposalTry } from './ProposalTry.tsx'
 
 /** The config field id on /config for a dotted path (`rulings.enemiesPerHex`). */
 const fieldId = (path: string) => `cfg-${path.split('.').join('-')}`
@@ -81,6 +83,7 @@ export function DecisionsPage() {
       <h2 id="readings">Rule readings</h2>
       <ol className={styles.list} data-testid="readings">
         {open.map((q) => {
+          const proposal = proposalForRow(q.number)
           const model = settingsCombatModel(
             flagSettings(q.flag, defaultContent.config),
             defaultConfigMeta,
@@ -111,6 +114,7 @@ export function DecisionsPage() {
               <p>
                 Setting: <Settings row={q} />
               </p>
+              {proposal ? <ProposalTry proposal={proposal} /> : null}
             </li>
           )
         })}

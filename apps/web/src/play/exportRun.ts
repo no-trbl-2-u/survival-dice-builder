@@ -3,6 +3,7 @@ import {
   changedFields,
   defaultContent,
   GameConfigSchema,
+  proposalsIn,
   withConfigDefaults,
 } from '@survival/content'
 import { APP_COMMIT, APP_VERSION } from '../appInfo.ts'
@@ -29,6 +30,8 @@ export type RunExport = Readonly<{
   appVersion?: string
   /** The config fields that differ from the standard rules (phase 30). */
   changedKeys?: readonly string[]
+  /** The proposals the config carries, by id (phase 39). */
+  proposals?: readonly string[]
 }>
 
 /** Builds the save file for a run; `at` closes the open wait (default: the last action). */
@@ -48,6 +51,7 @@ export function exportRun(run: Run, at = run.timing.lastAt): RunExport {
     commit: APP_COMMIT,
     appVersion: APP_VERSION,
     changedKeys: changedFields(run.config, defaultContent.config),
+    proposals: proposalsIn(run.config).map((p) => p.id),
   }
 }
 

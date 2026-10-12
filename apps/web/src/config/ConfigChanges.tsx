@@ -1,4 +1,5 @@
-import { defaultConfigMeta } from '@survival/content'
+import { defaultConfigMeta, proposalsIn } from '@survival/content'
+import { rowId } from '../decisions/Inline.tsx'
 
 /** The part of a value a short list can show: a number, a word, on/off, or "changed". */
 export function shortValue(value: unknown): string {
@@ -30,14 +31,33 @@ type Props = Readonly<{
   reviewHref?: string
 }>
 
+/** "Playing with proposals: Forced reveal, Spawn range.", each linked to its /decisions row. */
+function ProposalsLine({ config }: Readonly<{ config: unknown }>) {
+  const found = proposalsIn(config)
+  if (found.length === 0) return null
+  return (
+    <p data-testid="config-proposals">
+      Playing with {found.length === 1 ? 'the proposal' : 'proposals'}:{' '}
+      {found.map((p, i) => (
+        <span key={p.id}>
+          {i > 0 ? ', ' : null}
+          <a href={`/decisions#${rowId(p.row)}`}>{p.label}</a>
+        </span>
+      ))}
+      .
+    </p>
+  )
+}
+
 /**
  * "Playing with N changes from the standard rules", with each changed field and its value, so a
- * playtest on a saved config says which game it is. Also says which saved fields took a new
- * default after a rule change.
+ * playtest on a saved config says which game it is. Names the proposals the config carries,
+ * and says which saved fields took a new default after a rule change.
  */
 export function ConfigChanges({ config, changes, updated = [], reviewHref }: Props) {
   return (
     <div data-testid="config-changes">
+      <ProposalsLine config={config} />
       {changes.length === 0 ? (
         <p>Playing with the standard rules.</p>
       ) : (

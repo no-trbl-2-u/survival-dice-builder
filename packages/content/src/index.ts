@@ -112,3 +112,19 @@ export {
   migrateConfig,
   type ConfigStep,
 } from './configVersions.ts'
+export {
+  adviceText,
+  applyProposal,
+  defaultProposals,
+  measuredText,
+  proposalForRow,
+  proposalProblems,
+  proposalsIn,
+  withProposal,
+} from './proposals.ts'
+export {
+  ProposalSchema,
+  ProposalsFileSchema,
+  type Measured,
+  type Proposal,
+} from './schemas/proposals.ts'

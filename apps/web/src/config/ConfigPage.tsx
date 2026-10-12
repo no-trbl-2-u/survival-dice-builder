@@ -6,13 +6,16 @@ import {
   GameConfigSchema,
   ruleCitation,
   ruleLineFor,
+  withProposal,
   type GameConfig,
+  type Proposal,
 } from '@survival/content'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { rulesUrl } from '../decisions/Inline.tsx'
 import { readAutosave } from '../play/exportRun.ts'
 import { ConfigChanges } from './ConfigChanges.tsx'
 import styles from './ConfigPage.module.css'
+import { ProposalList } from './ProposalList.tsx'
 import {
   browserStorage,
   isDirty,
@@ -683,6 +686,12 @@ export function ConfigPage() {
     setUpdatedNotice([])
     setMessage('Reset to the defaults.')
   }
+  /** Sets a proposal's values in the draft; the player saves as usual. */
+  const applyProposal = (proposal: Proposal) => {
+    setDraft((d: unknown) => withProposal(d, proposal))
+    setVersion((v) => v + 1)
+    setMessage(`Applied the proposal ${proposal.label}. Save to play with it.`)
+  }
   const fields = byField(problems)
   return (
     <div className={styles.page}>
@@ -696,6 +705,7 @@ export function ConfigPage() {
         changes={changedFields(saved, defaultContent.config)}
         updated={updatedNotice}
       />
+      <ProposalList draft={draft} onApply={applyProposal} />
       {problems.length > 0 ? (
         <div className={styles.problems} role="alert" aria-labelledby="cfg-problems">
           <p id="cfg-problems">These fields need a fix before the config can be saved:</p>

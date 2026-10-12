@@ -1,0 +1,152 @@
+[
+  {
+    "id": "forced-reveal",
+    "row": 63,
+    "label": "Forced reveal",
+    "about": "When no tile was revealed for a while, the top tile is revealed in the open slot nearest the base, so a run cannot stall.",
+    "options": [{ "path": "clock.forcedRevealEvery", "value": 3 }],
+    "advice": "turn-on",
+    "measured": {
+      "seats": 1,
+      "runs": 200,
+      "bots": {
+        "default": {
+          "standard": { "median": 6, "middle": [6, 7], "stalled": 0 },
+          "proposal": { "median": 6, "middle": [6, 7], "stalled": 0 }
+        },
+        "defender": {
+          "standard": { "median": 10, "middle": [9, 14], "stalled": 26 },
+          "proposal": { "median": 10, "middle": [9, 12], "stalled": 1 }
+        }
+      }
+    }
+  },
+  {
+    "id": "spawn-ramp",
+    "row": 64,
+    "label": "Spawn ramp",
+    "about": "Each spawn node spawns more enemies as the run goes on.",
+    "options": [{ "path": "spawn.rampEvery", "value": 4 }],
+    "advice": "playtest",
+    "measured": {
+      "seats": 1,
+      "runs": 200,
+      "bots": {
+        "default": {
+          "standard": { "median": 6, "middle": [6, 7], "stalled": 0 },
+          "proposal": { "median": 6, "middle": [5, 6], "stalled": 0 }
+        },
+        "defender": {
+          "standard": { "median": 10, "middle": [9, 14], "stalled": 26 },
+          "proposal": { "median": 9, "middle": [7, 11], "stalled": 1 }
+        }
+      }
+    }
+  },
+  {
+    "id": "once-per-combat",
+    "row": 65,
+    "label": "Each enemy attacks once per Combat",
+    "about": "An enemy that has attacked does not attack again until the next Combat.",
+    "options": [{ "path": "combat.enemyAttacks", "value": "once-per-combat" }],
+    "advice": "turn-on",
+    "combatModel": "exchange"
+  },
+  {
+    "id": "new-tile-delay",
+    "row": 66,
+    "label": "New tiles wait a round",
+    "about": "The nodes of a new tile first spawn at the Combat of the next round, not the Combat right after the reveal.",
+    "options": [{ "path": "spawn.newTileDelay", "value": 1 }],
+    "advice": "turn-on",
+    "measured": {
+      "seats": 1,
+      "runs": 200,
+      "bots": {
+        "default": {
+          "standard": { "median": 6, "middle": [6, 7], "stalled": 0 },
+          "proposal": { "median": 7, "middle": [7, 8], "stalled": 0 }
+        },
+        "defender": {
+          "standard": { "median": 10, "middle": [9, 14], "stalled": 26 },
+          "proposal": { "median": 10, "middle": [9, 12], "stalled": 7 }
+        }
+      }
+    }
+  },
+  {
+    "id": "gather-off-node",
+    "row": 67,
+    "label": "Gather off a node",
+    "about": "Gather on a spent node, or off any node, still gives materials; nodes stay single-use.",
+    "options": [{ "path": "gather.offNodeAmount", "value": 1 }],
+    "advice": "playtest",
+    "measured": {
+      "seats": 1,
+      "runs": 200,
+      "bots": {
+        "default": {
+          "standard": { "median": 6, "middle": [6, 7], "stalled": 0 },
+          "proposal": { "median": 8, "middle": [7, 10], "stalled": 1 }
+        },
+        "defender": {
+          "standard": { "median": 10, "middle": [9, 14], "stalled": 26 },
+          "proposal": { "median": 23, "middle": [21, 25], "stalled": 157 }
+        }
+      }
+    }
+  },
+  {
+    "id": "seat-scaling",
+    "row": 68,
+    "label": "Seat scaling",
+    "about": "Each node spawns more enemies when more players sit at the table.",
+    "options": [{ "path": "spawn.perSeat", "value": true }],
+    "advice": "keep-off",
+    "measured": {
+      "seats": 4,
+      "runs": 200,
+      "bots": {
+        "default": {
+          "standard": { "median": 5, "middle": [4, 6], "stalled": 30 },
+          "proposal": { "median": 3, "middle": [3, 4], "stalled": 19 }
+        },
+        "defender": {
+          "standard": { "median": 24, "middle": [23, 25], "stalled": 184 },
+          "proposal": { "median": 23, "middle": [5, 25], "stalled": 134 }
+        }
+      }
+    }
+  },
+  {
+    "id": "any-adjacent",
+    "row": 69,
+    "label": "Every adjacent enemy attacks",
+    "about": "In an exchange, every enemy next to a player figure attacks it, whatever its target.",
+    "options": [{ "path": "combat.adjacentAttack", "value": "any-adjacent" }],
+    "advice": "playtest",
+    "combatModel": "exchange"
+  },
+  {
+    "id": "spawn-range",
+    "row": 70,
+    "label": "Spawn range",
+    "about": "Only nodes near a player figure, a Barricade, a Tower, or the Base tile spawn, so there are fewer miniatures to place.",
+    "options": [{ "path": "spawn.nodeRange", "value": 4 }],
+    "advice": "playtest",
+    "measured": {
+      "seats": 1,
+      "runs": 200,
+      "bots": {
+        "default": {
+          "standard": { "median": 6, "middle": [6, 7], "stalled": 0 },
+          "proposal": { "median": 6, "middle": [6, 7], "stalled": 0 }
+        },
+        "defender": {
+          "standard": { "median": 10, "middle": [9, 14], "stalled": 26 },
+          "proposal": { "median": 10, "middle": [9, 13], "stalled": 21 }
+        }
+      }
+    }
+  }
+]

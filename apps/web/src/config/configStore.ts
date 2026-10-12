@@ -7,7 +7,9 @@ import {
   GameConfigSchema,
   metaFor,
   withConfigDefaults,
+  withProposal,
   type GameConfig,
+  type Proposal,
 } from '@survival/content'
 import { APP_VERSION } from '../appInfo.ts'
 
@@ -186,6 +188,17 @@ export function saveConfig(store: KeyValue | undefined, value: unknown): ConfigP
   } catch {
     return [{ path: 'config', message: 'This browser does not allow saving.' }]
   }
+}
+
+/**
+ * Sets a proposal's options in the stored config (the player's other changes stay) and saves
+ * it, so new runs play with it. Returns the save problems (none for a shipped proposal).
+ */
+export function applyProposalToStore(
+  store: KeyValue | undefined,
+  proposal: Proposal,
+): ConfigProblem[] {
+  return saveConfig(store, withProposal(loadConfig(store).config, proposal))
 }
 
 /** True when the draft differs from the config last saved (or loaded). */

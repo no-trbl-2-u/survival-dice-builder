@@ -46,6 +46,19 @@ describe('DecisionsPage', () => {
     expect(tag(66)).toBeUndefined()
   })
 
+  it('shows each proposal with its measured effect and a Try button (phase 39)', () => {
+    const { container } = render(<DecisionsPage />)
+    const row63 = container.querySelector('[data-question="63"] [data-proposal]')
+    expect(row63?.textContent).toContain('Proposal: Forced reveal.')
+    expect(row63?.textContent).toContain('Measured under engagements')
+    expect(row63?.textContent).toContain('Recommendation from the bot batches')
+    expect(row63?.querySelector('button')?.textContent).toBe('Try this on /play')
+    const row65 = container.querySelector('[data-question="65"] [data-proposal]')
+    expect(row65?.textContent).toContain('Not measured under engagements')
+    expect(row65?.querySelector('button')).toBeNull()
+    expect(container.querySelectorAll('[data-proposal]').length).toBe(8)
+  })
+
   it('lists the readings decided recently, newest first (phase 37)', () => {
     const { container } = render(<DecisionsPage />)
     const recent = [...container.querySelectorAll('[data-testid="recent"] > li')]

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { newRun } from '../play/run.ts'
 import { numberMin, setAt } from './ConfigPage.tsx'
 import {
+  applyProposalToStore,
   CONFIG_KEY,
   isDirty,
   LEGACY_CONFIG_KEY,
@@ -12,7 +13,13 @@ import {
   saveConfig,
   type KeyValue,
 } from './configStore.ts'
-import { CONFIG_VERSION, defaultsAt, GameConfigSchema } from '@survival/content'
+import {
+  CONFIG_VERSION,
+  defaultProposals,
+  defaultsAt,
+  GameConfigSchema,
+  proposalsIn,
+} from '@survival/content'
 
 /** An in-memory storage. */
 function memory(): KeyValue & { data: Map<string, string> } {
@@ -26,6 +33,18 @@ function memory(): KeyValue & { data: Map<string, string> } {
 }
 
 describe('config store (spec 6)', () => {
+  it('applyProposalToStore saves the proposal and keeps the other changes (phase 39)', () => {
+    const store = memory()
+    expect(saveConfig(store, { ...defaultContent.config, miniatureLimit: 12 })).toEqual([])
+    const reveal = defaultProposals[0]
+    if (!reveal) throw new Error('no proposals')
+    expect(applyProposalToStore(store, reveal)).toEqual([])
+    const loaded = loadConfig(store)
+    expect(loaded.config.miniatureLimit).toBe(12)
+    expect(proposalsIn(loaded.config)).toEqual([reveal])
+    expect(loaded.changes).toEqual(expect.arrayContaining(['miniatureLimit']))
+  })
+
   it('a changed config value is used by the next new run', () => {
     const store = memory()
     const changed = setAt(defaultContent.config, ['player', 'maxHealth'], 21)

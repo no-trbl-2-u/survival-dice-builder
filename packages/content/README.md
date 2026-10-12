@@ -12,3 +12,11 @@ content files, `config.default.json`, and a validating loader.
 a one-line help, its rules section, and a phrase for each select value. `/config` and
 `/decisions` read it through `defaultConfigMeta` and `metaFor`. It is checked at load against
 the default config: a config key with no entry fails the build and the tests.
+
+**Proposals (phase 39):** `data/proposals.json` holds one proposal per structural
+`OPEN-QUESTIONS.md` row (63-70): the config values it sets, a plain label, the measured effect
+under engagements (both bots, `docs/reports/phase-39-proposals.md`), and a recommendation.
+`defaultProposals` is checked at load by `proposalProblems` (unknown path, a value equal to the
+default, a result the schema rejects, repeated ids or rows). `applyProposal`, `withProposal`,
+`proposalsIn`, `measuredText`, and `adviceText` serve /decisions, /config, /play, and run
+exports. A proposal changes only the player's local config, never a default.
