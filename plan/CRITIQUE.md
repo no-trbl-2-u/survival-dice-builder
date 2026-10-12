@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-11 at commit 23315d6
-> Pass count: 13
+> Last pass: 2026-10-12 at commit f95875e
+> Pass count: 14
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /decisions — each "Setting:" line shows raw config keys and code values
+- pass: 14 (commit f95875e)
+- viewport: desktop
+- category: voice
+- observation: Each reading's setting line prints the dotted config path and the raw value in code type; long values become "a list or table" and a mismatch reads "(the row says X: differs)". A visitor cannot read the current rule in plain words.
+- evidence: `apps/web/src/decisions/DecisionsPage.tsx:41-43` ("= a list or table", "(the row says {s.named}: differs)").
+- suggested fix: Lead with the field's plain label and a plain value from `config.meta.json` (e.g. "Enemies per hex: 1"); keep the path only as the /config link target; reword the mismatch note ("This row names X; the game uses Y.").
+- source: web-fetch
+
+### [MED] /decisions — says the Combat model changes only on the Config page; /play can also pick it per run
+- pass: 14 (commit f95875e)
+- viewport: desktop
+- category: comprehension
+- observation: The intro says a reading marked for the other Combat model "changes nothing until the Combat model is switched on the Config page", but the /play start panel has its own Combat select for one run.
+- evidence: `packages/content/src/decisions.ts:218`; `apps/web/src/play/StartPanel.tsx` Combat select.
+- suggested fix: "...changes nothing unless you choose Exchanges on the Play start panel (one run) or on the Config page (every new run)."
+- source: web-fetch
+
+### [MED] / — "Level up, buy cards in the Shop, and draft Skills" gives no when or how
+- pass: 14 (commit f95875e)
+- viewport: desktop
+- category: comprehension
+- observation: The home page closes with three ways to grow in one sentence. It does not say when the Shop opens, what you pay with, or what earns a level and a Skill draft. The Shop is named nowhere else on the page.
+- evidence: `apps/web/src/home/HomePage.tsx:44` "Level up, buy cards in the Shop, and draft Skills to last longer."
+- suggested fix: One short `ruleText` line each for the Shop (when, currency) and levels (experience earns a level; a level gives a Skill draft), with numbers from config.
+- source: web-fetch
+
+### [LOW] /play — the start panel Combat hint repeats its label
+- pass: 14 (commit f95875e)
+- viewport: desktop
+- category: voice
+- observation: The hint is prefixed "Combat:" and the text itself starts with "Engagements:" or "The Combat in the written rules", so it reads "Combat: Engagements: ..." and "Combat: The Combat in the written rules."
+- evidence: `apps/web/src/play/StartPanel.tsx:23-25,115`.
+- suggested fix: Drop the "Combat:" prefix at line 115, or drop the label from each hint so the text starts with the rule.
+- source: web-fetch
+
+### [LOW] /tiles — "Proposed layouts for review" does not say if /play uses them
+- pass: 14 (commit f95875e)
+- viewport: desktop
+- category: comprehension
+- observation: The intro says the layouts are proposed "for review" but not by whom, or whether the game plays these tiles now. It also writes "countryside tiles" and "core tiles" in lowercase next to "Base tile", while the headings capitalise all three.
+- evidence: `apps/web/src/tiles/TileSheet.tsx:31`.
+- suggested fix: One sentence: "The game on the Play page uses these tiles." (or what is true); match the capitals of the headings.
+- source: web-fetch
+
+### [LOW] /play — the phase bar arrow is read aloud and the enemy cap is unexplained
+- pass: 14 (commit f95875e)
+- viewport: desktop
+- category: a11y
+- observation: The current phase starts with a text "▶ " that screen readers read, although `aria-current="step"` already marks it. The counter "Enemies 3/20" does not say that 20 is the miniature limit.
+- evidence: `apps/web/src/play/PhaseBar.tsx:33,40-41`.
+- suggested fix: Wrap the arrow in `<span aria-hidden="true">`; label the counter "Enemies 3 of 20 (limit)" or add a title/visually-hidden "miniature limit".
+- source: web-fetch
 
 ### [MED] /play, / and /config — four different accounts of when the enemy dice hit in an engagement
 - pass: 13 (commit 23315d6)
