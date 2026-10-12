@@ -1,4 +1,4 @@
-import { quantile, type Summary } from './run.ts'
+import { quantile, upkeepPerCombat, type Summary } from './run.ts'
 
 /** The timing part of a real run export (apps/web `RunExport`); milliseconds. */
 export type TimedExport = Readonly<{
@@ -22,16 +22,20 @@ const causes = (s: Summary) =>
     .map(([k, v]) => `${k} ${v}`)
     .join(', ')
 
-/** Markdown comparison of two bot batches (config or policy A against B), with play totals. */
-export function compareTable(
-  a: Readonly<{ name: string; summary: Summary }>,
-  b: Readonly<{ name: string; summary: Summary }>,
-): string {
+/** A compared batch: its name and summary. */
+export type Side = Readonly<{ name: string; summary: Summary }>
+
+/**
+ * Markdown comparison of 2 or more bot batches (configs or policies), a column each (A, B, C,
+ * ...), with play totals and table upkeep per Combat (phase 38).
+ */
+export function compareTable(sides: readonly Side[]): string {
   const row = (label: string, f: (s: Summary) => string) =>
-    `| ${label} | ${f(a.summary)} | ${f(b.summary)} |`
+    `| ${label} | ${sides.map((side) => f(side.summary)).join(' | ')} |`
+  const letter = (i: number) => String.fromCharCode(65 + i)
   return [
-    `| | A: ${a.name} | B: ${b.name} |`,
-    '| --- | --- | --- |',
+    `| | ${sides.map((side, i) => `${letter(i)}: ${side.name}`).join(' | ')} |`,
+    `| --- | ${sides.map(() => '---').join(' | ')} |`,
     row('Runs', (s) => String(s.runs)),
     row('Errors', (s) => String(s.errors)),
     row('Stalled', (s) => String(s.stalled)),
@@ -53,6 +57,9 @@ export function compareTable(
     row('Defenses built', (s) => String(s.totals.defensesBuilt)),
     row('Health repaired', (s) => String(s.totals.repaired)),
     row('Upgrades bought', (s) => String(s.totals.upgradesBought)),
+    row('Placements per Combat', (s) => fmt(upkeepPerCombat(s.totals).placements, 2)),
+    row('Spill-overs per Combat', (s) => fmt(upkeepPerCombat(s.totals).spillOvers, 2)),
+    row('Promotions per Combat', (s) => fmt(upkeepPerCombat(s.totals).promotions, 2)),
     '',
     'Bot runs have no wall clock, so minutes per round come only from real run exports:',
     '`pnpm sim -- timing <export.json ...>`.',

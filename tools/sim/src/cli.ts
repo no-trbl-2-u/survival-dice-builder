@@ -16,15 +16,19 @@ import path from 'node:path'
 import { describe, toCsv, toJson } from './format.ts'
 import { playtestReport, type PlaytestExport } from './playtests.ts'
 import { compareTable, timingReport, type TimedExport } from './report.ts'
+import { applyOptions, optionSet, OPTION_SETS, setPath } from './optionSets.ts'
 import { runBatch, summarize, type RunOptions } from './run.ts'
+import { parseSet, sweepCells, sweepTable } from './sweep.ts'
 import type { BotPolicy } from '@survival/bot'
 
 /** The median end-round band the spec targets (spec phase 7 acceptance). */
 const BAND = [8, 14] as const
 
 const usage = `Usage:
-  pnpm sim -- [--runs <n>] [--seed <first seed>] [--config <file.json>] [--seats <1-4>] [--policy <default|turtle|defender>] [--out <file.csv|file.json>]
-  pnpm sim -- compare --a <config.json|default> --b <config.json|default> [--runs <n>] [--seats <1-4>] [--policy <p>] [--a-policy <p>] [--b-policy <p>] [--out report.md]
+  pnpm sim -- [--runs <n>] [--seed <first seed>] [--config <file.json|rec|exp>] [--rec|--exp] [--seats <1-4>] [--policy <default|turtle|defender>] [--out <file.csv|file.json>]
+  pnpm sim -- compare --a <config> --b <config> [--runs <n>] [--seats <1-4>] [--policy <p>] [--a-policy <p>] [--b-policy <p>] [--out report.md]
+  pnpm sim -- compare --configs <config,config,...> [--runs <n>] [--seats <1-4>] [--policy <p>] [--out report.md]
+  pnpm sim -- sweep --set <key=a,b,c> [--set ...] [--seats 1,2,4] [--policy default,defender] [--base <config>] [--runs <n>] [--out report.md]
   pnpm sim -- timing <export.json ...> [--out report.md]
   pnpm sim -- playtests [--dir docs/playtests/runs] [--estimate 8.5] [--out report.md]
   pnpm sim -- decisions [--out docs/DECISIONS.md]
@@ -35,8 +39,13 @@ Plays <n> bot runs (default 200) and prints a summary. --config reads a config J
 leaves out take the default (a partial config works). --seats plays 1-4 seats (default 1);
 --policy turtle keeps every figure on the Base tile; --policy defender defends the base. --out
 writes every run as CSV or JSON.
+A <config> is a JSON file, default, or a named option set: rec (${OPTION_SETS.rec.about}) or
+exp (${OPTION_SETS.exp.about}). --rec and --exp play the batch with that set.
 compare: a bot batch per side (same seeds and seats), as a markdown table. --policy sets both
 sides; --a-policy and --b-policy set one side (compare --b-policy defender: the two bots).
+--configs compares 2 or more configs, a column each.
+sweep: a batch for every value of every --set (a dotted config key), seat count and policy, over
+--base (default: the default config), as one table with table upkeep per Combat.
 timing: minutes per round and time shares per phase and decision, from real run exports.
 playtests: every run export in a folder, against the 8-9 minutes-per-round estimate.
 decisions: the designer decision digest from OPEN-QUESTIONS.md and plan/AUDIT.md.
@@ -53,6 +62,11 @@ function parse(argv: readonly string[]): Map<string, string> {
   return args
 }
 
+/** Every value of a flag that can repeat (`--set a=1 --set b=2`). */
+function all(argv: readonly string[], flag: string): string[] {
+  return argv.flatMap((a, i) => (a === `--${flag}` && argv[i + 1] ? [argv[i + 1] as string] : []))
+}
+
 /**
  * A path as the user typed it: relative to where `pnpm sim` was run (pnpm sets INIT_CWD), not
  * to tools/sim, where `pnpm --filter` runs the script.
@@ -63,10 +77,13 @@ const here = (p: string) => path.resolve(process.env.INIT_CWD ?? process.cwd(), 
 const REPO = path.resolve(import.meta.dirname, '..', '..', '..')
 
 /**
- * A config file, or the default config for `default` or nothing. A partial config (only the
- * keys an experiment changes) is merged over the default.
+ * A config file, a named option set (`rec`, `exp`) over the default, or the default config for
+ * `default` or nothing. A partial config (only the keys an experiment changes) is merged over
+ * the default.
  */
 function readConfig(file: string | undefined) {
+  const set = file ? optionSet(file) : undefined
+  if (set) return applyOptions(defaultContent.config, set)
   return file && file !== 'default'
     ? GameConfigSchema.parse(withConfigDefaults(JSON.parse(fs.readFileSync(here(file), 'utf-8'))))
     : defaultContent.config
@@ -99,7 +116,7 @@ function report(md: string, out: string | undefined): void {
 }
 
 const argv = process.argv.slice(2).filter((a) => a !== '--')
-const COMMANDS = ['compare', 'timing', 'playtests', 'decisions', 'rules', 'kit'] as const
+const COMMANDS = ['compare', 'sweep', 'timing', 'playtests', 'decisions', 'rules', 'kit'] as const
 const command = COMMANDS.find((c) => c === argv[0]) ?? 'batch'
 const args = parse(argv)
 if (args.has('help')) {
@@ -108,20 +125,42 @@ if (args.has('help')) {
 }
 const runs = Number(args.get('runs') ?? 200)
 const seed = Number(args.get('seed') ?? 1)
-const options = runOptions(args)
 
 if (command === 'compare') {
-  const side = (key: 'a' | 'b') => {
-    const config = args.get(key) ?? 'default'
-    const sideOptions = runOptions(args, `${key}-policy`)
+  const side = (config: string, sideOptions: RunOptions) => {
     const summary = summarize(runBatch(readConfig(config), runs, seed, sideOptions))
     const policy = sideOptions.policy === 'default' ? '' : ` (${sideOptions.policy} bot)`
     return { name: `${config}${policy}`, summary }
   }
-  const a = side('a')
-  const b = side('b')
-  report(compareTable(a, b), args.get('out'))
-  process.exit(a.summary.errors + b.summary.errors > 0 ? 1 : 0)
+  const configs = args.get('configs')?.split(',').filter(Boolean)
+  if (configs && configs.length < 2) throw new Error('--configs needs 2 or more configs')
+  const sides = configs
+    ? configs.map((c) => side(c, runOptions(args)))
+    : (['a', 'b'] as const).map((k) =>
+        side(args.get(k) ?? 'default', runOptions(args, `${k}-policy`)),
+      )
+  report(compareTable(sides), args.get('out'))
+  process.exit(sides.some((s) => s.summary.errors > 0) ? 1 : 0)
+}
+
+if (command === 'sweep') {
+  const sets = all(argv, 'set').map(parseSet)
+  if (sets.length === 0) throw new Error('sweep needs at least 1 --set key=a,b,c')
+  const seats = (args.get('seats') ?? '1').split(',').map(Number)
+  if (seats.some((n) => !Number.isInteger(n) || n < 1 || n > 4))
+    throw new Error('--seats must be 1-4 (a list: 1,2,4)')
+  const policies = (args.get('policy') ?? 'default').split(',').map((p) => policyOf(p, 'policy'))
+  const baseName = args.get('base') ?? 'default'
+  const base = readConfig(baseName)
+  const rows = sweepCells(sets, seats, policies).map((cell) => {
+    const config = cell.values.reduce((c, v) => setPath(c, v.path, v.value), base)
+    const summary = summarize(
+      runBatch(config, runs, seed, { seats: cell.seats, policy: cell.policy }),
+    )
+    return { cell, summary }
+  })
+  report(sweepTable(baseName, rows), args.get('out'))
+  process.exit(rows.some((r) => r.summary.errors > 0) ? 1 : 0)
 }
 
 if (command === 'timing') {
@@ -196,7 +235,11 @@ if (command === 'kit') {
   process.exit(0)
 }
 
-const config = readConfig(args.get('config'))
+const options = runOptions(args)
+const named = args.has('rec') ? 'rec' : args.has('exp') ? 'exp' : undefined
+const config = named
+  ? applyOptions(readConfig(args.get('config')), OPTION_SETS[named])
+  : readConfig(args.get('config'))
 
 const results = runBatch(config, runs, seed, options)
 const summary = summarize(results)

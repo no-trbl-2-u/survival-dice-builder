@@ -20,14 +20,24 @@ const result = (
   levelCurve: [1, 1, 2, 2, 2, 3],
   capReachedRound,
   error: null,
-  tally: { ...EMPTY_TALLY, hits: 3, defensesBuilt: endRound },
+  tally: {
+    ...EMPTY_TALLY,
+    hits: 3,
+    defensesBuilt: endRound,
+    combats: endRound,
+    placements: 2 * endRound,
+    spillOvers: endRound,
+  },
 })
 
 describe('compareTable', () => {
   it('puts both summaries side by side', () => {
     const a = summarize([result(1, 10), result(2, 12)])
     const b = summarize([result(1, 14, 7), result(2, 16)])
-    const md = compareTable({ name: 'default', summary: a }, { name: 'hard.json', summary: b })
+    const md = compareTable([
+      { name: 'default', summary: a },
+      { name: 'hard.json', summary: b },
+    ])
     expect(md).toContain('| | A: default | B: hard.json |')
     expect(md).toContain('| Median end round | 10 | 14 |')
     expect(md).toContain('| Middle half | 10-12 | 14-16 |')
@@ -39,6 +49,32 @@ describe('compareTable', () => {
     expect(md).toContain('| Enemy hits taken (all runs) | 6 | 6 |')
     expect(md).toContain('| Defenses built | 22 | 30 |')
     expect(md).toContain('pnpm sim -- timing')
+    // Table upkeep per Combat (phase 38): totals over combats.
+    expect(md).toContain('| Placements per Combat | 2.00 | 2.00 |')
+    expect(md).toContain('| Spill-overs per Combat | 1.00 | 1.00 |')
+    expect(md).toContain('| Promotions per Combat | 0.00 | 0.00 |')
+  })
+
+  it('takes N sides, a lettered column each (phase 38)', () => {
+    const s = (end: number) => summarize([result(1, end)])
+    const md = compareTable([
+      { name: 'default', summary: s(6) },
+      { name: 'rec', summary: s(9) },
+      { name: 'exp', summary: s(7) },
+    ])
+    expect(md).toContain('| | A: default | B: rec | C: exp |')
+    expect(md).toContain('| --- | --- | --- | --- |')
+    expect(md).toContain('| Median end round | 6 | 9 | 7 |')
+  })
+
+  it('shows - for upkeep when no Combat was played', () => {
+    const none = summarize([])
+    expect(
+      compareTable([
+        { name: 'a', summary: none },
+        { name: 'b', summary: none },
+      ]),
+    ).toContain('| Placements per Combat | - | - |')
   })
 })
 

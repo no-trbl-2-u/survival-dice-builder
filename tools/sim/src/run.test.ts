@@ -9,6 +9,7 @@ import {
   quantile,
   runBatch,
   summarize,
+  upkeepPerCombat,
   type RunResult,
 } from './run.ts'
 
@@ -21,6 +22,10 @@ describe('playRun', () => {
     expect(a.cause).toBe('base')
     expect(a.baseCurve).toHaveLength(a.endRound)
     expect(a.levelCurve).toHaveLength(a.endRound)
+    // One Combat per round; the run ends in the last round's Combat (phase 38).
+    expect(a.tally.combats).toBe(a.endRound)
+    expect(a.tally.placements).toBeGreaterThan(0)
+    expect(a.tally.spillOvers).toBeLessThanOrEqual(a.tally.placements)
   })
 
   it('plays every seat with --seats', () => {
@@ -176,7 +181,40 @@ describe('summary maths', () => {
       defensesBuilt: 1,
       repaired: 2,
       upgradesBought: 1,
+      placements: 0,
+      spillOvers: 0,
+      promotions: 0,
+      combats: 0,
     })
+  })
+
+  it('addEvents counts table upkeep: placements, spill-overs, promotions (phase 38)', () => {
+    const t = addEvents(EMPTY_TALLY, [
+      {
+        type: 'enemySpawned',
+        rule: '10.2',
+        enemy: 'e1',
+        kind: 'grunt',
+        hex: { q: 3, r: 0 },
+        spilled: false,
+      },
+      {
+        type: 'enemySpawned',
+        rule: '9.8',
+        enemy: 'e2',
+        kind: 'grunt',
+        hex: { q: 3, r: 1 },
+        spilled: true,
+      },
+      { type: 'eliteReplaced', rule: '10.5', grunt: 'e1', elite: 'e3', hex: { q: 3, r: 0 } },
+    ])
+    expect([t.placements, t.spillOvers, t.promotions, t.combats]).toEqual([3, 1, 1, 0])
+    expect(upkeepPerCombat({ ...t, combats: 2 })).toEqual({
+      placements: 1.5,
+      spillOvers: 0.5,
+      promotions: 0.5,
+    })
+    expect(upkeepPerCombat(t).placements).toBeNaN()
   })
 })
 

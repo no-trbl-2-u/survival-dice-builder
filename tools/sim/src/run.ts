@@ -45,6 +45,14 @@ export type Tally = Readonly<{
   /** Health the base and defenses got back from Repair. */
   repaired: number
   upgradesBought: number
+  /** Enemy miniatures put on the map: spawns plus elite swaps (table upkeep, row 70; phase 38). */
+  placements: number
+  /** Spawns that went to the nearest empty hex instead of their node (9.8). */
+  spillOvers: number
+  /** Grunts swapped for an elite at the miniature limit (10.5). */
+  promotions: number
+  /** Combat phases played (counted by `playRun`, not from events). */
+  combats: number
 }>
 
 /** A tally with every count at 0. */
@@ -57,6 +65,10 @@ export const EMPTY_TALLY: Tally = {
   defensesBuilt: 0,
   repaired: 0,
   upgradesBought: 0,
+  placements: 0,
+  spillOvers: 0,
+  promotions: 0,
+  combats: 0,
 }
 
 /** Adds 1 action's events to a tally. */
@@ -79,6 +91,14 @@ export function addEvents(tally: Tally, events: readonly GameEvent[]): Tally {
         return { ...t, repaired: t.repaired + e.amount }
       case 'upgradeBought':
         return { ...t, upgradesBought: t.upgradesBought + 1 }
+      case 'enemySpawned':
+        return {
+          ...t,
+          placements: t.placements + 1,
+          spillOvers: t.spillOvers + (e.spilled ? 1 : 0),
+        }
+      case 'eliteReplaced':
+        return { ...t, placements: t.placements + 1, promotions: t.promotions + 1 }
       default:
         return t
     }
@@ -114,8 +134,10 @@ export function playRun(config: GameConfig, seed: number, options: RunOptions = 
       const action = botChoice(state, { policy })
       if (!action) break
       const next = applyAction(state, action)
+      const enteredCombat = state.phase !== 'combat' && next.state.phase === 'combat'
       state = next.state
       tally = addEvents(tally, next.events)
+      if (enteredCombat) tally = { ...tally, combats: tally.combats + 1 }
       actions += 1
     }
   } catch (e) {
@@ -211,6 +233,18 @@ export function summarize(results: readonly RunResult[]): Summary {
         ) as Tally,
       EMPTY_TALLY,
     ),
+  }
+}
+
+/** Table upkeep per Combat over a batch: placements, spill-overs, promotions (NaN: no Combat). */
+export function upkeepPerCombat(
+  totals: Tally,
+): Readonly<{ placements: number; spillOvers: number; promotions: number }> {
+  const per = (n: number) => (totals.combats > 0 ? n / totals.combats : Number.NaN)
+  return {
+    placements: per(totals.placements),
+    spillOvers: per(totals.spillOvers),
+    promotions: per(totals.promotions),
   }
 }
 
