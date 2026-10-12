@@ -1,6 +1,7 @@
 import { adviceText, measuredText, proposalsIn, type Proposal } from '@survival/content'
 import { useState } from 'react'
 import { applyProposalToStore, browserStorage, loadConfig } from '../config/configStore.ts'
+import { useClient } from '../useClient.ts'
 import styles from './DecisionsPage.module.css'
 
 /**
@@ -10,9 +11,10 @@ import styles from './DecisionsPage.module.css'
  */
 export function ProposalTry({ proposal }: Readonly<{ proposal: Proposal }>) {
   const [error, setError] = useState<string | null>(null)
-  const [playing] = useState(() =>
-    proposalsIn(loadConfig(browserStorage()).config).some((p) => p.id === proposal.id),
-  )
+  // The build cannot see this browser's config: it offers the button, then the browser checks.
+  const client = useClient()
+  const playing =
+    client && proposalsIn(loadConfig(browserStorage()).config).some((p) => p.id === proposal.id)
   const tryIt = () => {
     const problems = applyProposalToStore(browserStorage(), proposal)
     if (problems.length > 0) {

@@ -4,7 +4,12 @@ import type { ReactNode } from 'react'
 export type Route = Readonly<{
   path: string
   title: string
-  render: () => ReactNode
+  /** One sentence for the served description and the link preview. */
+  description: string
+  /** `page`: rendered to static HTML at build time; `shell`: served with an empty root. */
+  served: 'page' | 'shell'
+  /** The page for a pathname (only the not-found page reads it). */
+  render: (pathname: string) => ReactNode
   /** Keep the page title for screen readers only (the nav already marks the page). */
   quietTitle?: boolean
   /** Ask search engines not to index the page (every path is served with status 200). */
@@ -13,8 +18,7 @@ export type Route = Readonly<{
 
 /**
  * Picks the route for a pathname. Exact match; trailing slashes are ignored, and an empty path
- * is the home page. Unknown paths get the not-found route: Cloudflare's `_redirects` serves
- * index.html for every path, so the app itself must say that a link was wrong.
+ * is the home page. Unknown paths get the not-found route (served as `404.html`).
  *
  * @param routes - the app's routes.
  * @param pathname - `window.location.pathname`.

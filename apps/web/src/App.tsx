@@ -1,59 +1,21 @@
 import { useEffect } from 'react'
 import { APP_COMMIT, APP_VERSION } from './appInfo.ts'
-import { ConfigPage } from './config/ConfigPage.tsx'
-import { CreditsPage } from './credits/CreditsPage.tsx'
-import { DebugPage } from './debug/DebugPage.tsx'
-import { DecisionsPage } from './decisions/DecisionsPage.tsx'
-import { HomePage } from './home/HomePage.tsx'
-import { NotFoundPage } from './notfound/NotFoundPage.tsx'
-import { PlayPage } from './play/PlayPage.tsx'
-import { documentTitle, matchRoute, SITE_NAME, type Route } from './router.tsx'
-import { TileSheet } from './tiles/TileSheet.tsx'
-
-/** The nav links, in order; each path is a route below, and each label is its page heading. */
-const NAV: readonly (readonly [path: string, label: string])[] = [
-  ['/', 'Home'],
-  ['/play', 'Play'],
-  ['/config', 'Config'],
-  ['/tiles', 'Tile sheet'],
-  ['/decisions', 'Decisions'],
-  ['/debug', 'Engine console'],
-  ['/credits', 'Credits'],
-]
-
-const routes: readonly Route[] = [
-  {
-    path: '/',
-    title: SITE_NAME,
-    render: () => <HomePage />,
-  },
-  // The board needs the height; the nav's current tab already says "Play".
-  { path: '/play', title: 'Play', render: () => <PlayPage />, quietTitle: true },
-  { path: '/config', title: 'Config', render: () => <ConfigPage /> },
-  { path: '/tiles', title: 'Tile sheet', render: () => <TileSheet /> },
-  { path: '/decisions', title: 'Decisions', render: () => <DecisionsPage /> },
-  { path: '/debug', title: 'Engine console', render: () => <DebugPage /> },
-  { path: '/credits', title: 'Credits', render: () => <CreditsPage /> },
-]
-
-/** Any path no route matches; its empty path marks no nav link as current. */
-const notFound: Route = {
-  path: '',
-  title: 'Page not found',
-  noindex: true,
-  render: () => <NotFoundPage path={window.location.pathname} />,
-}
+import { documentTitle, SITE_NAME } from './router.tsx'
+import { NAV, routeFor } from './routes.tsx'
 
 /**
  * App shell: a skip link, the navigation in a header (the current page marked), then the page
- * title and the page itself in the main landmark. The
- * not-found page also gets a robots noindex tag, so a mistyped URL is not indexed as a page.
+ * title and the page itself in the main landmark. The served HTML already carries the page's
+ * head (phase 40); the tab title and the not-found page's robots noindex are set again here
+ * for a page reached on a server that serves one file for every path (`vite dev`).
+ *
+ * @param pathname - the path being shown: `window.location.pathname`, or the prerendered path.
  */
-export function App() {
-  const route = matchRoute(routes, window.location.pathname, notFound)
+export function App({ pathname }: Readonly<{ pathname: string }>) {
+  const route = routeFor(pathname)
   useEffect(() => {
     document.title = documentTitle(route)
-    if (!route.noindex) return
+    if (!route.noindex || document.querySelector('meta[name="robots"]')) return
     const robots = document.createElement('meta')
     robots.name = 'robots'
     robots.content = 'noindex'
@@ -76,7 +38,7 @@ export function App() {
       </header>
       <main id="main" tabIndex={-1}>
         <h1 className={route.quietTitle ? 'visually-hidden' : undefined}>{route.title}</h1>
-        {route.render()}
+        {route.render(pathname)}
       </main>
       <footer className="site-footer" data-testid="site-footer">
         {SITE_NAME} v{APP_VERSION} · build {APP_COMMIT}

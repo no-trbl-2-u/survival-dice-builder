@@ -92,8 +92,12 @@ Single-page app, hash-free client routing is not needed for v1.
 Routes are client-side via a 25-line hand router
 (`apps/web/src/router.tsx`, `matchRoute` on
 `window.location.pathname`, no dependency; decided in phase 4).
-Navigation uses plain `<a href>` links. Cloudflare Pages gets a
-`_redirects` file `/* /index.html 200` so deep links load.
+Navigation uses plain `<a href>` links. Since phase 40 each route
+is its own file: `pnpm build` prerenders the pages (`index.html`,
+`tiles.html`, ...) and writes `/play` and `/debug` shells, all from
+the route table in `apps/web/src/routes.tsx`; there is no
+`_redirects` rewrite, so Pages serves `404.html` with status 404
+for an unknown path.
 
 ## Engine API contract (locked)
 

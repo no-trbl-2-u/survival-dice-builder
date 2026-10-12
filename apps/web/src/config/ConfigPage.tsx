@@ -13,6 +13,7 @@ import {
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { rulesUrl } from '../decisions/Inline.tsx'
 import { readAutosave } from '../play/exportRun.ts'
+import { useClient } from '../useClient.ts'
 import { ConfigChanges } from './ConfigChanges.tsx'
 import styles from './ConfigPage.module.css'
 import { ProposalList } from './ProposalList.tsx'
@@ -23,6 +24,7 @@ import {
   resetConfig,
   saveConfig,
   type ConfigProblem,
+  type KeyValue,
 } from './configStore.ts'
 
 /** Minimal view of a Zod 4 schema node, enough to pick an input. */
@@ -625,7 +627,16 @@ function byField(problems: readonly ConfigProblem[]): Map<string, string[]> {
  * `config.meta.json`. Saved in this browser; new runs on /play use it.
  */
 export function ConfigPage() {
-  const store = browserStorage()
+  const client = useClient()
+  // The build renders the defaults; once in the browser the form mounts again with the saved
+  // config (a key change resets every field's state to it).
+  return (
+    <ConfigForm key={client ? 'saved' : 'defaults'} store={client ? browserStorage() : undefined} />
+  )
+}
+
+/** The /config form over a store (none: the defaults, as the build renders them). */
+function ConfigForm({ store }: Readonly<{ store: KeyValue | undefined }>) {
   const [loaded] = useState(() => loadConfig(store))
   const [saved, setSaved] = useState<unknown>(loaded.config)
   const [draft, setDraft] = useState<unknown>(loaded.config)

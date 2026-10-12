@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { documentTitle, matchRoute, SITE_NAME, type Route } from './router.tsx'
 
+const page = { description: 'A page.', served: 'page', render: () => null } as const
 const routes: Route[] = [
-  { path: '/', title: 'Home', render: () => null },
-  { path: '/tiles', title: 'Tiles', render: () => null },
+  { ...page, path: '/', title: 'Home' },
+  { ...page, path: '/tiles', title: 'Tiles' },
 ]
-const notFound: Route = { path: '', title: 'Page not found', render: () => null }
+const notFound: Route = { ...page, path: '', title: 'Page not found' }
 
 describe('matchRoute', () => {
   it('matches exact paths and ignores a trailing slash', () => {
@@ -22,8 +23,8 @@ describe('matchRoute', () => {
 
 describe('documentTitle', () => {
   it('puts the page title before the site name, and keeps the home page bare', () => {
-    const page = { path: '/tiles', title: 'Tile sheet', render: () => null }
-    expect(documentTitle(page)).toBe('Tile sheet - Survival Dice-Builder')
-    expect(documentTitle({ ...page, path: '/', title: SITE_NAME })).toBe(SITE_NAME)
+    const tiles = { ...page, path: '/tiles', title: 'Tile sheet' }
+    expect(documentTitle(tiles)).toBe('Tile sheet - Survival Dice-Builder')
+    expect(documentTitle({ ...tiles, path: '/', title: SITE_NAME })).toBe(SITE_NAME)
   })
 })

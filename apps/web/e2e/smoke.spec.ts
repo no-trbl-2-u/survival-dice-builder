@@ -44,15 +44,15 @@ test('an unknown path says the page was not found and links home', async ({ page
   await expect(page.locator('meta[name="robots"]')).toHaveCount(0)
 })
 
-test('the served shell carries link-preview tags for chat apps that do not run JavaScript', async ({
+test('the served /play shell carries its own link-preview tags for apps that run no JavaScript', async ({
   request,
 }) => {
   const html = await (await request.get('/play')).text()
-  expect(html).toContain('<meta property="og:title" content="Survival Dice-Builder" />')
+  expect(html).toContain('<meta property="og:title" content="Play - Survival Dice-Builder" />')
   expect(html).toContain(
-    '<meta property="og:url" content="https://survival-dice-builder.pages.dev/" />',
+    '<meta property="og:url" content="https://survival-dice-builder.pages.dev/play" />',
   )
-  expect(html).toMatch(/property="og:description"\s+content="Defend the base/)
+  expect(html).toMatch(/property="og:description"\s+content="Start a run/)
   expect(html).toContain('<meta name="twitter:card" content="summary" />')
 })
 
