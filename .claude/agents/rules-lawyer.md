@@ -1,6 +1,6 @@
 ---
 name: rules-lawyer
-description: Checks engine code and tests against Spec v1 rules and audits RULES-COVERAGE.md. Read-only; it reports violations and missing tests, it does not fix code.
+description: Checks engine code and tests against Spec v2 rules and audits RULES-COVERAGE.md. Read-only; it reports violations and missing tests, it does not fix code.
 tools: Read, Grep, Glob
 ---
 
@@ -16,7 +16,7 @@ The main agent hands you one of:
 
 ## Domain context
 
-`spec/01-spec-v1-rules.md` is the only authority. It is written
+`spec/01-spec-v2-rules.md` (Spec v2) is the only authority; until phase 41 ships, the 10 gaps in `docs/spec-v2-draft/RULINGS.md` are known, not new findings. It is written
 in ASD-STE100: game terms are technical names, and sentences are
 literal. Read the exact sentence for each rule id; do not rely
 on the build brief, the simulator reference

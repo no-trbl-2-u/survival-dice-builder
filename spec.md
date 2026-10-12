@@ -2,7 +2,7 @@
 
 The product spec lives in [`spec/`](./spec/). Read in this order:
 
-1. [`spec/01-spec-v1-rules.md`](./spec/01-spec-v1-rules.md) — the game rules (Spec v1, ASD-STE100). **The rules win over every other file.**
+1. [`spec/01-spec-v2-rules.md`](./spec/01-spec-v2-rules.md) — the game rules (Spec v2, ASD-STE100, signed off 2026-10-12). **The rules win over every other file.** Spec v1 ([`spec/01-spec-v1-rules.md`](./spec/01-spec-v1-rules.md)) stays for history; `docs/spec-v2-draft/RULINGS.md` records why each rule changed.
 2. [`spec/02-build-plan.md`](./spec/02-build-plan.md) — the designer's 12 phases, milestones, handoff rules.
 3. [`spec/03-build-brief.md`](./spec/03-build-brief.md) — stack, architecture, engine API, data model, UI, testing, non-goals.
 4. [`spec/phases/`](./spec/phases/) — one spec per designer phase, with acceptance criteria.

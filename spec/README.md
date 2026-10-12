@@ -2,7 +2,7 @@
 
 Package for the agents building the web prototype. Read in this order:
 
-1. `01-spec-v1-rules.md` — the game rules (ASD-STE100). The rules win over every other file.
+1. `01-spec-v2-rules.md` — the game rules (ASD-STE100), Spec v2 since 2026-10-12. The rules win over every other file. `01-spec-v1-rules.md` is kept for history.
 2. `02-build-plan.md` — 12 phases, dependencies, milestones, handoff rules.
 3. `03-build-brief.md` — stack, architecture, engine API, data model, UI, testing.
 4. `phases/` — one spec per phase with scope, deliverables, and acceptance criteria.

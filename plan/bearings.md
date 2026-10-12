@@ -10,7 +10,7 @@
 The `spec/` folder is the product spec; `spec.md` at the repo
 root is its index. Precedence, highest first:
 
-1. `spec/01-spec-v1-rules.md` — the game rules (ASD-STE100). **The rules win over every other file.**
+1. `spec/01-spec-v2-rules.md` — the game rules (ASD-STE100, Spec v2 since 2026-10-12). **The rules win over every other file.** `spec/01-spec-v1-rules.md` is kept for history.
 2. `spec/03-build-brief.md` — stack, architecture, engine API, data model, UI, testing.
 3. `spec/02-build-plan.md` + `spec/phases/*.md` — the designer's phase specs with acceptance criteria.
 4. This file and `plan/phases/*.md` — how the loop executes those specs.

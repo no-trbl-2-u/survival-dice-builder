@@ -87,12 +87,15 @@ later".
 
 ### 6. The rules win. Never change a rule.
 
-`spec/01-spec-v1-rules.md` (Spec v1) beats every other file,
+`spec/01-spec-v2-rules.md` (Spec v2, signed off 2026-10-12) beats every other file,
 including this one. If a rule is unclear, add it to
 `OPEN-QUESTIONS.md` with the rule id and a proposed reading,
 implement the proposed reading behind a config flag, and
 continue. Every rule maps to at least one test, tracked in
 `RULES-COVERAGE.md` (rule id -> function -> test).
+Until phase 41 ships, the engine still plays the Spec v1
+readings in `docs/RULES-AS-PLAYED.md`; the 10 known gaps are
+listed in `docs/spec-v2-draft/RULINGS.md`.
 
 The engine is a functional core: pure functions over plain
 data. No classes, no mutation of inputs, no I/O, no `Date` or
@@ -252,7 +255,7 @@ failure-mode condition rather than inventing a placeholder.
 | How a skill works | `skills/<skill>.md` |
 | What a sub-agent does | `.claude/agents/<name>.md` |
 | Latest weaknesses | `plan/AUDIT.md` |
-| The rules | `spec/01-spec-v1-rules.md` |
+| The rules | `spec/01-spec-v2-rules.md` (Spec v1 kept for history) |
 | Rule -> test map | `RULES-COVERAGE.md` |
 | Unclear rules | `OPEN-QUESTIONS.md` |
 | Critique queue | `plan/CRITIQUE.md` |

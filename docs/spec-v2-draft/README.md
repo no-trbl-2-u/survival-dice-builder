@@ -7,7 +7,10 @@ This folder holds the next rules issue while the designer reviews it.
 - `01-spec-v2-rules.md`: the Spec v2 rules text written from Spec v1
   and those rulings (phase 34). It ends with a review table.
 
-Nothing here is the spec yet. `spec/` changes only at `/oversight`
+Signed off 2026-10-12: the rules now live at `spec/01-spec-v2-rules.md`.
+This folder keeps the rulings and the draft as the record.
+
+Before the sign-off, nothing here was the spec. `spec/` changes only at `/oversight`
 (bearings rule 9). To sign off:
 
 1. Read the review table; correct any rule in the draft.
