@@ -1190,6 +1190,7 @@ outside the top 5 and is the core of that candidate.
 
 ## Needs user call (from adoption, 2026-10-02)
 
+- [needs-user-call] **Write the Event Calendar experiment spec (2026-10-11).** The designer's planned experiment for more consistent runs; it may replace the spawn cadence (Spec v2 ruling 14) and the gathering-node rule (ruling 9). See `docs/spec-v2-draft/RULINGS.md`.
 - [needs-user-call] **Replace `GH_TOKEN` and add `GH_REPO` to the main checkout's `.env` (2026-10-09).** GitHub rejects the current token (401 Bad credentials), and `GH_REPO` is missing (`GH_REPO=no-trbl-2-u/survival-dice-builder`). Until then `/triage` and the phase mirror cannot run; the phase 23 and 24 mirror issues were never opened (ship commits f4ebbce and 09780d9). Worktrees now read the main checkout's `.env` (a9a44fe), so one fix covers every worktree.
 - [needs-user-call] **Try card drag on a real phone (phase 24 follow-up).** Open https://survival-dice-builder.pages.dev/play on a phone, start an engagement, and drag a card up onto the felt; also swipe the hand sideways. `touch.spec.ts` covers this with emulated touch only. File anything odd with `/jot`.
 - [needs-user-call] **Reset `/config` once (2026-10-09).** Saved configs are not migrated: a config saved before today keeps `combat.model: "exchange"` if it was set, and keeps `combat.moveCostNextToEnemy: 2`. Reset picks up engagements by default and no move surcharge. (The draft pool applies to old configs anyway: the key is new.)
