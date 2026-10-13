@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-12 at commit f95875e
-> Pass count: 14
+> Last pass: 2026-10-13 at commit 255362f
+> Pass count: 15
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [HIGH] / and /play — Exchanges is called "the Combat in the written rules"; Spec v2 deletes it
+- pass: 15 (commit 255362f)
+- viewport: desktop
+- category: comprehension
+- observation: The home page says "Or choose Exchanges, the Combat in the written rules, on the start panel" and links the rules; the /play start-panel hint for Exchanges begins "The Combat in the written rules." Spec v2 (6.10) deletes the skirmish and makes Engage the only way to attack, so the linked rules now describe engagements only. The text sends players to the wrong mode as the rules mode.
+- evidence: `apps/web/src/home/HomePage.tsx:38-39`; `apps/web/src/play/StartPanel.tsx:25`; `spec/01-spec-v2-rules.md` 6.10 "Deleted in Spec v2: the skirmish."
+- suggested fix: Call Exchanges the older Combat kept for playtests (as the /config help does), and drop the "written rules" link from it; if a rules link stays, put it on the Engagements text.
+- source: web-fetch
+
+### [MED] /config — two help texts call the Spec v1 option "the written rule"
+- pass: 15 (commit 255362f)
+- viewport: desktop
+- category: comprehension
+- observation: "Move cost next to an enemy" says "2: the written rule (6.9)", and "Skills you do not keep" labels Supply "(written rules)". Spec v2 6.9 sets no surcharge (cost 1) and 11.7 sends unkept Skills to the draft pool, so the defaults are now the written rules and the alternatives are the old ones.
+- evidence: `packages/content/data/config.meta.json:103` and `:279-282`; `spec/01-spec-v2-rules.md` 6.9, 11.7.
+- suggested fix: "1 (default): the written rule (6.9). 2: the older rule, for playtests." and "Your pool (default, written rules)" / "Back to the supply (older rule)".
+- source: web-fetch
+
+### [MED] /config — "Rolls per exchange" names the old Combat and the wrong step
+- pass: 15 (commit 255362f)
+- viewport: desktop
+- category: voice
+- observation: The roll limit is labelled "Rolls per exchange" with help "in one combat exchange" and cites "7.8 step 4". Engagements are the default and the only Combat in Spec v2; the 3-roll limit is 7.8 step 3.
+- evidence: `packages/content/data/config.meta.json:83-85`; `spec/01-spec-v2-rules.md:164` (7.8 step 3 "The maximum is 3 rolls.").
+- suggested fix: Label "Rolls per engagement", help "The most times a player rolls dice in one engagement.", rule "7.8 step 3".
+- source: web-fetch
+
+### [MED] /decisions — row 17 still says the engine uses steps of 5
+- pass: 15 (commit 255362f)
+- viewport: desktop
+- category: comprehension
+- observation: The reading says "Current engine: steps grow by 5 (level 2 at 5, 3 at 15, 4 at 30, 5 at 50)", while its own Setting line shows `firstStep = 3; stepIncrease = 3`, which Spec v2 8.5 makes the default. The heading quotes the Spec v1 rule text.
+- evidence: `docs/DECISIONS.md:33-37` (generated from `OPEN-QUESTIONS.md` row 17); `packages/content/data/config.default.json:58-59`; Spec v2 8.5.
+- suggested fix: Quote Spec v2 8.5 in the heading and say the engine plays steps of 3; keep only what is still open (whether the step stays a playtest option).
+- source: web-fetch
+
+### [MED] /decisions — decided row 60 gives the old Gather amounts
+- pass: 15 (commit 255362f)
+- viewport: desktop
+- category: comprehension
+- observation: Row 60 says "Forage 1, Excavate 3, Quarry 5 (starter Gather 2)" and "Forage now gathers less than the starter card". The cards the engine plays, and Spec v2 Table 8, use Haul 3, Forage 2, Excavate 4, Quarry 6. A tester reading the row expects the wrong amounts.
+- evidence: `docs/DECISIONS.md:121`; `packages/content/data/cards.json` Gather values for Haul, Forage, Excavate, Quarry; Spec v2 Table 8.
+- suggested fix: Mark row 60 as replaced by Spec v2 and state the current amounts.
+- source: web-fetch
+
+### [LOW] /decisions — decided rows 74 and 75 describe options phase 41 removed
+- pass: 15 (commit 255362f)
+- viewport: desktop
+- category: comprehension
+- observation: Row 75 says "Once per exchange stays an option" and row 74 discusses the exchange-only enemy options; phase 41 dropped both, and the config has no such keys.
+- evidence: `docs/DECISIONS.md:125`, `:127`; `packages/content/data/config.default.json` (no Skill-fire limit key).
+- suggested fix: Add "Option removed in Spec v2" to rows 74 and 75 and delete "stays an option".
+- source: web-fetch
 
 ### [MED] /decisions — each "Setting:" line shows raw config keys and code values
 - pass: 14 (commit f95875e)
