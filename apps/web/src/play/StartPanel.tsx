@@ -5,6 +5,7 @@ import {
   defaultContent,
   goalText,
   knockoutText,
+  siegeText,
   type GameConfig,
 } from '@survival/content'
 import { ConfigChanges } from '../config/ConfigChanges.tsx'
@@ -21,8 +22,8 @@ const COMBAT_LABEL = defaultConfigMeta['combat.model']?.options ?? {}
 
 /** One line per Combat choice: how a Combat plays under it, from `ruleText`. */
 const COMBAT_HINT: Record<CombatModel, string> = {
-  engage: `Engagements: ${combatText(defaultContent.config, 'engage')} Enemies hit structures at the end of Combat.`,
-  exchange: `The older Combat, kept for playtests. ${combatText(defaultContent.config, 'exchange')}`,
+  engage: `Engagements: ${combatText(defaultContent.config, 'engage')} ${siegeText(defaultContent)}`,
+  exchange: `The older Combat, kept for playtests. ${combatText(defaultContent.config, 'exchange')} ${siegeText(defaultContent)}`,
 }
 
 type Props = Readonly<{

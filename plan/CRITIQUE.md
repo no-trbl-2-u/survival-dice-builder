@@ -63,15 +63,6 @@
 - suggested fix: Drop the targeting clause from `spawnText` and show `targetOrderText` (or a short form built from the same config) on /.
 - source: web-fetch
 
-### [MED] / — the home page never says how the base takes damage under engagements
-- pass: 13 (commit 23315d6)
-- viewport: n/a
-- category: comprehension
-- observation: / says the run ends when the base falls, but the Combat step does not mention siege. "Enemies hit structures at the end of Combat" appears only on the /play start panel and in /config help, typed by hand, with no damage numbers (grunt 1, elite 3 in config).
-- evidence: `apps/web/src/play/StartPanel.tsx:24`, `packages/content/data/config.meta.json:129`; siege damage in `packages/content/data/config.default.json`; nothing in `combatText(config, 'engage')`.
-- suggested fix: Add a `siegeText(config)` to `ruleText` ("At the end of Combat, each grunt next to a Barricade, Tower, or the base deals 1 damage to it; each elite deals 3") and use it on /, the start panel and /config.
-- source: web-fetch
-
 ### [LOW] /config — the rules note prints "Rules engagements." and "Rules core loop (open question 55)."
 - pass: 13 (commit 23315d6)
 - viewport: n/a
@@ -271,6 +262,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — the home page never says how the base takes damage under engagements
+- pass: 13 (commit 23315d6)
+- viewport: n/a
+- category: comprehension
+- observation: / says the run ends when the base falls, but the Combat step does not mention siege. "Enemies hit structures at the end of Combat" appears only on the /play start panel and in /config help, typed by hand, with no damage numbers (grunt 1, elite 3 in config).
+- evidence: `apps/web/src/play/StartPanel.tsx:24`, `packages/content/data/config.meta.json:129`; siege damage in `packages/content/data/config.default.json`; nothing in `combatText(config, 'engage')`.
+- suggested fix: Add a `siegeText(config)` to `ruleText` ("At the end of Combat, each grunt next to a Barricade, Tower, or the base deals 1 damage to it; each elite deals 3") and use it on /, the start panel and /config.
+- source: web-fetch
+- issue: #93
+- fixed: (this commit). One `siegeText(content)` in `ruleText`, built from each enemy record's siege damage (the numbers live in `enemies.json`, not the config): "When Combat ends, each enemy next to a Barricade, a Tower, or the base hits one of them (a Barricade first, then a Tower, then the base), even when it is next to a player too: a grunt deals 1 damage, an elite 3." / reads it at the end of the Combat step ("Either way, ..."), the start panel's Combat hint reads it under both models (replacing the hand-typed line), and /config's Combat model rule line appends it.
 
 ### [x] [MED] /play, / and /config — four different accounts of when the enemy dice hit in an engagement
 - pass: 13 (commit 23315d6)

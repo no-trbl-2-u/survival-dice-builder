@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-13 (pass 40, cloud tick)
+
+Pass 39's top row shipped. The siege row is next: / says the run ends when the base falls but never says how the base takes damage, and the start panel's "Enemies hit structures at the end of Combat" was typed by hand with no numbers.
+
+## Top 5 findings (scored)
+
+### [x] [5.4] /: the home page never says how the base takes damage under engagements (critique MED, pass 13)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 6
+- next: `siegeText(content)` in `ruleText`, from each enemy record's siege damage, used on /, the start panel and /config
+- issue: #93
+- fixed: (this commit)
+
+### [ ] [4.5] /decisions: each "Setting:" line shows raw config keys and code values (critique MED, pass 14)
+- category: external-critique (voice)
+- impact: 6
+- ease: 5
+- next: lead with the plain label and value from `config.meta.json`
+
+### [ ] [4.5] / and /config: the enemy target rule is stated two ways (critique MED, pass 13)
+- category: external-critique (voice)
+- impact: 5
+- ease: 6
+- next: drop the targeting clause from `spawnText`; show a short `targetOrderText` on /
+
+### [ ] [4.5] /decisions: the public page lists repo housekeeping (critique MED)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 6
+- next: see the CRITIQUE.md row
+
+### [ ] [3.6] /decisions: rows 74 and 75 describe options phase 41 removed (critique LOW, pass 15)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 9
+- next: mark both "Option removed in Spec v2"
+
 # Site audit — 2026-10-13 (pass 39, cloud tick)
 
 Pass 38's top row shipped. The pass 13 MED rows stay on top under the MED bias (x1.5). The enemy dice timing comes first: the banner and the modal now agree, but / and /config still told it two other ways, and "after your guard" read as if guard acted first.

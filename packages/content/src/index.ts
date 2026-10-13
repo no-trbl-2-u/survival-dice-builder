@@ -88,6 +88,7 @@ export {
   ruleCitation,
   ruleLineFor,
   shopText,
+  siegeText,
   spawnText,
   targetOrderText,
   trainingText,

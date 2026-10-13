@@ -19,6 +19,15 @@ describe('HomePage', () => {
     expect(combat?.textContent).not.toMatch(/Exchanges, the Combat in the written rules/)
   })
 
+  it('says how the base and its defenses take damage when Combat ends', () => {
+    render(<HomePage />)
+    const combat = screen.getAllByText(/Play Engage to roll/)[0]
+    expect(combat?.textContent).toMatch(
+      /Either way, when Combat ends, each enemy next to a Barricade/,
+    )
+    expect(combat?.textContent).toMatch(/a grunt deals 1 damage, an elite 3\./)
+  })
+
   it('states the player count and knockout from config', () => {
     render(<HomePage />)
     expect(screen.getAllByText(/knocked out and comes back next round with half/)[0]).toBeTruthy()

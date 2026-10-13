@@ -20,6 +20,7 @@ import {
   ruleCitation,
   ruleLineFor,
   shopText,
+  siegeText,
   spawnText,
   targetOrderText,
   trainingText,
@@ -120,6 +121,14 @@ describe('rule text from config', () => {
     )
   })
 
+  it("siege: when Combat ends, structures take each enemy record's siege damage (7.10-7.12)", () => {
+    expect(siegeText(defaultContent)).toBe(
+      'When Combat ends, each enemy next to a Barricade, a Tower, or the base hits one of them (a Barricade first, then a Tower, then the base), even when it is next to a player too: a grunt deals 1 damage, an elite 3.',
+    )
+    const elite = { enemies: { enemies: [{ ...defaultContent.enemies.enemies[1]!, siege: 5 }] } }
+    expect(siegeText(elite)).toMatch(/: an elite deals 5 damage\.$/)
+  })
+
   it('Combat end: discarding is named unless every card must be played (row 10)', () => {
     expect(combatEndText(base)).toBe(
       'Play or discard each card. Cards you do not play yet stay in your hand between engagements, and Combat ends when every hand and deck is empty.',
@@ -214,7 +223,7 @@ describe('rule text from config', () => {
     expect(line('milestones.surviveRounds')).toBe(
       'Survive to round 5; Survive to round 10; Survive to round 15.',
     )
-    expect(line('combat.model')).toBe(combatText(base, 'engage'))
+    expect(line('combat.model')).toBe(`${combatText(base, 'engage')} ${siegeText(defaultContent)}`)
     expect(line('rulings.mandatoryPlays')).toBe(combatEndText(base))
     expect(line('rulings.targetTieBreak')).toBe(targetOrderText(base))
     expect(line('rulings.playerPullDistance')).toBe(targetOrderText(base))

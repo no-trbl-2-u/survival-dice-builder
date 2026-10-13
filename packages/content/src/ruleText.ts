@@ -160,6 +160,28 @@ export function enemyHitText(config: GameConfig): string {
   return `When you choose End engagement or no dice are left, every enemy die hits you at once, ${defeated}. Your guard takes the damage first, then your health.`
 }
 
+type Enemies = Pick<Content, 'enemies'>
+
+/** "a grunt" or "an elite". */
+const withArticle = (word: string) => `${/^[aeiou]/i.test(word) ? 'an' : 'a'} ${word}`
+
+/**
+ * The siege step: how the base and its defenses take damage at the end of Combat (both Combat
+ * models), with each enemy record's siege damage.
+ *
+ * @rule 7.10-7.12, 9.5, Table 5 (Spec v2)
+ */
+export function siegeText(content: Enemies): string {
+  const damage = content.enemies.enemies
+    .filter((e) => e.siege > 0)
+    .map(
+      (e, i) =>
+        `${withArticle(e.name.toLowerCase())}${i === 0 ? ` deals ${e.siege} damage` : ` ${e.siege}`}`,
+    )
+    .join(', ')
+  return `When Combat ends, each enemy next to a Barricade, a Tower, or the base hits one of them (a Barricade first, then a Tower, then the base), even when it is next to a player too: ${damage}.`
+}
+
 /**
  * How a hand empties in an engagement Combat, and when the Combat ends.
  *
@@ -341,7 +363,7 @@ export function milestoneLabel(
 export function ruleLineFor(
   path: string,
   config: GameConfig,
-  content: Pick<Content, 'skills'>,
+  content: Pick<Content, 'skills' | 'enemies'>,
 ): string | null {
   const [group, key] = path.split('.')
   if (path === 'miniatureLimit') return miniatureLimitText(config)
@@ -352,7 +374,8 @@ export function ruleLineFor(
     return `${gatherText(2, config)}.`
   if (path === 'player.draftSlots') return `${draftFullText(config, 'the new Skill')}.`
   if (path === 'draft.unpicked') return draftPoolText(config)
-  if (path === 'combat.model') return combatText(config, config.combat.model)
+  if (path === 'combat.model')
+    return `${combatText(config, config.combat.model)} ${siegeText(content)}`
   if (path === 'combat.engage.hitDamage' || path === 'combat.engage.defeatedDice')
     return enemyHitText(config)
   if (path === 'rulings.mandatoryPlays') return combatEndText(config)
