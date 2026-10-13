@@ -211,11 +211,12 @@ export function combatModelTag(model: 'engage' | 'exchange'): string {
   return model === 'engage' ? 'Engagements only' : 'Exchanges only'
 }
 
-/** One line on the default Combat model: a reading tagged with the other one changes nothing. */
+/** One line on the default Combat model: a reading tagged with the other one changes nothing unless that model is chosen on /play or /config. */
 export function combatModelLine(config: GameConfig): string {
   const engage = config.combat.model === 'engage'
   const other = combatModelTag(engage ? 'exchange' : 'engage')
-  return `Combat uses ${engage ? 'engagements' : 'exchanges'} by default. A reading marked "${other}" changes nothing until the Combat model is switched on the Config page.`
+  const choice = engage ? 'Exchanges' : 'Engagements'
+  return `Combat uses ${engage ? 'engagements' : 'exchanges'} by default. A reading marked "${other}" changes nothing unless you choose ${choice} on the Play start panel (one run) or on the Config page (every new run).`
 }
 
 /**

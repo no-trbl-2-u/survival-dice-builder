@@ -27,15 +27,6 @@
 - suggested fix: Lead with the field's plain label and a plain value from `config.meta.json` (e.g. "Enemies per hex: 1"); keep the path only as the /config link target; reword the mismatch note ("This row names X; the game uses Y.").
 - source: web-fetch
 
-### [MED] /decisions — says the Combat model changes only on the Config page; /play can also pick it per run
-- pass: 14 (commit f95875e)
-- viewport: desktop
-- category: comprehension
-- observation: The intro says a reading marked for the other Combat model "changes nothing until the Combat model is switched on the Config page", but the /play start panel has its own Combat select for one run.
-- evidence: `packages/content/src/decisions.ts:218`; `apps/web/src/play/StartPanel.tsx` Combat select.
-- suggested fix: "...changes nothing unless you choose Exchanges on the Play start panel (one run) or on the Config page (every new run)."
-- source: web-fetch
-
 ### [MED] / — "Level up, buy cards in the Shop, and draft Skills" gives no when or how
 - pass: 14 (commit f95875e)
 - viewport: desktop
@@ -307,6 +298,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — says the Combat model changes only on the Config page; /play can also pick it per run
+- pass: 14 (commit f95875e)
+- viewport: desktop
+- category: comprehension
+- observation: The intro says a reading marked for the other Combat model "changes nothing until the Combat model is switched on the Config page", but the /play start panel has its own Combat select for one run.
+- evidence: `packages/content/src/decisions.ts:218`; `apps/web/src/play/StartPanel.tsx` Combat select.
+- suggested fix: "...changes nothing unless you choose Exchanges on the Play start panel (one run) or on the Config page (every new run)."
+- source: web-fetch
+- issue: #89
+- fixed: (this commit)
 
 ### [x] [MED] /decisions — row 17 still says the engine uses steps of 5
 - pass: 15 (commit 255362f)

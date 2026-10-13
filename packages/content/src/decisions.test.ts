@@ -112,6 +112,9 @@ describe('decisions', () => {
     expect(combatModelLine(config)).toMatch(
       /^Combat uses engagements by default\. .*"Exchanges only"/,
     )
+    expect(combatModelLine(config)).toMatch(
+      /choose Exchanges on the Play start panel \(one run\) or on the Config page \(every new run\)\.$/,
+    )
     const md = decisionsMarkdown(rows, [], config, defaultConfigMeta)
     expect(md).not.toMatch(/\[Exchanges only\]$/m)
   })

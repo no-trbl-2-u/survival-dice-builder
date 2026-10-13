@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-13 (pass 36, cloud tick)
+
+Pass 15's MED rows are shipped. The queue still holds pass 13 and 14 MED rows, which the MED bias (x1.5) lifts above the pass 15 LOW row. The cheapest is the /decisions Combat model line, which names only the Config page although /play picks the Combat model per run.
+
+## Top 5 findings (scored)
+
+### [x] [6.8] /decisions: the Combat model line names only the Config page (critique MED, pass 14)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: name the Play start panel (one run) and the Config page (every new run) in `combatModelLine`
+- issue: #89
+- fixed: (this commit)
+
+### [ ] [6.3] /: "Level up, buy cards in the Shop, and draft Skills" gives no when or how (critique MED, pass 14)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7
+- next: one `ruleText` line each for the Shop and for levels, numbers from config
+
+### [ ] [4.5] /decisions: each "Setting:" line shows raw config keys and code values (critique MED, pass 14)
+- category: external-critique (voice)
+- impact: 6
+- ease: 5
+- next: lead with the plain label and value from `config.meta.json`
+
+### [ ] [3.6] /decisions: rows 74 and 75 describe options phase 41 removed (critique LOW, pass 15)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 9
+- next: mark both "Option removed in Spec v2"
+
+### [ ] [3.6] /play: the start panel Combat hint repeats its label (critique LOW, pass 14)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: drop the "Combat:" prefix on the hint
+
 # Site audit — 2026-10-13 (pass 35, cloud tick)
 
 Critique pass 15 filed six rows after phase 41 moved the engine to Spec v2. The HIGH row leads: / and /play called Exchanges "the Combat in the written rules", while Spec v2 6.10 makes Engage the only Combat. The MED rows on the same drift (config.meta.json help, /decisions rows 17 and 60) score 7.2 with the MED bias and follow.

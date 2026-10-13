@@ -8,7 +8,7 @@ change its status in `OPEN-QUESTIONS.md`; to change its value, use `/config`.
 Evidence: the bot batch report (`docs/reports/phase-9-bot-batch.md`) and the playtest
 kit (`docs/playtests/`, `pnpm sim -- playtests`).
 
-Combat uses engagements by default. A reading marked "Exchanges only" changes nothing until the Combat model is switched on the Config page.
+Combat uses engagements by default. A reading marked "Exchanges only" changes nothing unless you choose Exchanges on the Play start panel (one run) or on the Config page (every new run).
 
 ## Rule readings
 
