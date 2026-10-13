@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-13 (pass 35, cloud tick)
+
+Critique pass 15 filed six rows after phase 41 moved the engine to Spec v2. The HIGH row leads: / and /play called Exchanges "the Combat in the written rules", while Spec v2 6.10 makes Engage the only Combat. The MED rows on the same drift (config.meta.json help, /decisions rows 17 and 60) score 7.2 with the MED bias and follow.
+
+## Top 5 findings (scored)
+
+### [x] [7.2] / and /play: Exchanges is called the Combat in the written rules (critique HIGH, pass 15)
+- category: external-critique (comprehension)
+- impact: 9
+- ease: 8
+- next: link the written rules from the Engagements text; Exchanges is "the older Combat kept for playtests"
+- issue: #85
+- fixed: (this commit)
+
+### [ ] [7.2] /config: two help texts call the Spec v1 option "the written rule" (critique MED, pass 15)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: swap the "written rule" marks in `config.meta.json` for 6.9 and 11.7
+
+### [ ] [7.2] /config: "Rolls per exchange" names the old Combat and the wrong step (critique MED, pass 15)
+- category: external-critique (voice)
+- impact: 6
+- ease: 8
+- next: "Rolls per engagement", rule 7.8 step 3
+
+### [ ] [6.3] /decisions: rows 17 and 60 give Spec v1 numbers (critique MED, pass 15)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7
+- next: update `OPEN-QUESTIONS.md` rows 17 and 60, regenerate `docs/DECISIONS.md`
+
+### [ ] [3.6] /decisions: rows 74 and 75 describe options phase 41 removed (critique LOW, pass 15)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 9
+- next: mark both "Option removed in Spec v2"
+
 # Site audit — 2026-10-10 (pass 34, cloud tick)
 
 The queue is unchanged since pass 33 apart from its shipped top row. The draft pool row now leads. The line shows only while `draft.unpicked` is `"pool"` (the default); with `"supply"` unkept Skills leave, so the dialog says nothing.

@@ -35,9 +35,9 @@ export function HomePage() {
             and build Barricades and Towers. {revealText(config)} {spawnText(config)}
           </li>
           <li>
-            <strong>Combat:</strong> {combatText(config, 'engage')} Or choose Exchanges, the Combat
-            in the <a href={rulesUrl}>written rules</a>, on the start panel:{' '}
-            {lower(combatText(config, 'exchange'))}
+            <strong>Combat:</strong> {combatText(config, 'engage')} This is the Combat in the{' '}
+            <a href={rulesUrl}>written rules</a>. Or choose Exchanges, the older Combat kept for
+            playtests, on the start panel: {lower(combatText(config, 'exchange'))}
           </li>
         </ol>
         <p>

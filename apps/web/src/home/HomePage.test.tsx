@@ -14,7 +14,9 @@ describe('HomePage', () => {
   it('names both Combat models the start panel offers', () => {
     render(<HomePage />)
     const combat = screen.getAllByText(/Play Engage to roll/)[0]
-    expect(combat?.textContent).toMatch(/Or choose Exchanges, the Combat in the written rules/)
+    expect(combat?.textContent).toMatch(/This is the Combat in the written rules\./)
+    expect(combat?.textContent).toMatch(/Or choose Exchanges, the older Combat kept for playtests/)
+    expect(combat?.textContent).not.toMatch(/Exchanges, the Combat in the written rules/)
   })
 
   it('states the player count and knockout from config', () => {

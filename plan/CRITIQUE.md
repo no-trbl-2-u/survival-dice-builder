@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [HIGH] / and /play — Exchanges is called "the Combat in the written rules"; Spec v2 deletes it
-- pass: 15 (commit 255362f)
-- viewport: desktop
-- category: comprehension
-- observation: The home page says "Or choose Exchanges, the Combat in the written rules, on the start panel" and links the rules; the /play start-panel hint for Exchanges begins "The Combat in the written rules." Spec v2 (6.10) deletes the skirmish and makes Engage the only way to attack, so the linked rules now describe engagements only. The text sends players to the wrong mode as the rules mode.
-- evidence: `apps/web/src/home/HomePage.tsx:38-39`; `apps/web/src/play/StartPanel.tsx:25`; `spec/01-spec-v2-rules.md` 6.10 "Deleted in Spec v2: the skirmish."
-- suggested fix: Call Exchanges the older Combat kept for playtests (as the /config help does), and drop the "written rules" link from it; if a rules link stays, put it on the Engagements text.
-- source: web-fetch
-
 ### [MED] /config — two help texts call the Spec v1 option "the written rule"
 - pass: 15 (commit 255362f)
 - viewport: desktop
@@ -352,6 +343,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [HIGH] / and /play — Exchanges is called "the Combat in the written rules"; Spec v2 deletes it
+- pass: 15 (commit 255362f)
+- viewport: desktop
+- category: comprehension
+- observation: The home page says "Or choose Exchanges, the Combat in the written rules, on the start panel" and links the rules; the /play start-panel hint for Exchanges begins "The Combat in the written rules." Spec v2 (6.10) deletes the skirmish and makes Engage the only way to attack, so the linked rules now describe engagements only. The text sends players to the wrong mode as the rules mode.
+- evidence: `apps/web/src/home/HomePage.tsx:38-39`; `apps/web/src/play/StartPanel.tsx:25`; `spec/01-spec-v2-rules.md` 6.10 "Deleted in Spec v2: the skirmish."
+- suggested fix: Call Exchanges the older Combat kept for playtests (as the /config help does), and drop the "written rules" link from it; if a rules link stays, put it on the Engagements text.
+- source: web-fetch
+- issue: #85
+- addressed: iterate (this commit); / says "This is the Combat in the written rules." after the Engagements text and calls Exchanges "the older Combat kept for playtests"; the /play hint for Exchanges starts "The older Combat, kept for playtests."; HomePage and new StartPanel tests pin both.
 
 ### [x] [HIGH] / and /config — Exchanges text says every adjacent enemy attacks; the default is only enemies that target you
 - pass: 12 (commit c34753b)

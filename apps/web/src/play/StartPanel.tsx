@@ -13,7 +13,7 @@ import { importRun, readAutosave } from './exportRun.ts'
 import styles from './Play.module.css'
 import type { Run } from './run.ts'
 
-/** Which Combat a new run plays: Spec v1 exchanges, or the Combat v3 playtest. */
+/** Which Combat a new run plays: engagements (Spec v2), or the older exchanges kept for playtests. */
 export type CombatModel = 'exchange' | 'engage'
 
 /** The Combat choice names, shared with /config. */
@@ -22,7 +22,7 @@ const COMBAT_LABEL = defaultConfigMeta['combat.model']?.options ?? {}
 /** One line per Combat choice: how a Combat plays under it, from `ruleText`. */
 const COMBAT_HINT: Record<CombatModel, string> = {
   engage: `Engagements: ${combatText(defaultContent.config, 'engage')} Enemies hit structures at the end of Combat.`,
-  exchange: `The Combat in the written rules. ${combatText(defaultContent.config, 'exchange')}`,
+  exchange: `The older Combat, kept for playtests. ${combatText(defaultContent.config, 'exchange')}`,
 }
 
 type Props = Readonly<{
