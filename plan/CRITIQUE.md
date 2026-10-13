@@ -54,15 +54,6 @@
 - suggested fix: Wrap the arrow in `<span aria-hidden="true">`; label the counter "Enemies 3 of 20 (limit)" or add a title/visually-hidden "miniature limit".
 - source: web-fetch
 
-### [MED] /play, / and /config — four different accounts of when the enemy dice hit in an engagement
-- pass: 13 (commit 23315d6)
-- viewport: n/a
-- category: voice
-- observation: The /play banner says the enemy dice hit after you choose End engagement; the engagement modal says they hit "when no dice are left"; / says "the enemy dice hit last, after your guard" (reads as if guard acts first); /config says "guard first" and "at the end of the engagement, all at once". The same rule is said four ways.
-- evidence: `apps/web/src/play/nextStep.ts:23`, `apps/web/src/play/engageView.ts:48`, `packages/content/src/ruleText.ts:90`, `packages/content/data/config.meta.json:146,176`.
-- suggested fix: One `ruleText` phrase ("When you end the engagement, every enemy die hits at once; your guard takes the damage first") read by the banner, the modal, / and /config.
-- source: web-fetch
-
 ### [MED] / and /config — the enemy target rule is stated two ways
 - pass: 13 (commit 23315d6)
 - viewport: n/a
@@ -280,6 +271,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play, / and /config — four different accounts of when the enemy dice hit in an engagement
+- pass: 13 (commit 23315d6)
+- viewport: n/a
+- category: voice
+- observation: The /play banner says the enemy dice hit after you choose End engagement; the engagement modal says they hit "when no dice are left"; / says "the enemy dice hit last, after your guard" (reads as if guard acts first); /config says "guard first" and "at the end of the engagement, all at once". The same rule is said four ways.
+- evidence: `apps/web/src/play/nextStep.ts:23`, `apps/web/src/play/engageView.ts:48`, `packages/content/src/ruleText.ts:90`, `packages/content/data/config.meta.json:146,176`.
+- suggested fix: One `ruleText` phrase ("When you end the engagement, every enemy die hits at once; your guard takes the damage first") read by the banner, the modal, / and /config.
+- source: web-fetch
+- issue: #92
+- fixed: (this commit). One `enemyHitText(config)` in `ruleText`: "When you choose End engagement or no dice are left, every enemy die hits you at once, even the dice of an enemy you defeated. Your guard takes the damage first, then your health." `combatText` (/, the start panel, the playtest kit), the modal's assign line (and so the banner), and /config help for Hit damage and Defeated enemies' dice all read it; the "cancelled" experiment changes the phrase with it.
 
 ### [x] [MED] /play — during an engagement the banner says click the map; the modal says choose in the modal
 - pass: 13 (commit 23315d6)

@@ -4,6 +4,7 @@ import {
   cardStepText,
   combatEndText,
   combatText,
+  enemyHitText,
   draftFullText,
   draftPoolText,
   draftTitle,
@@ -100,6 +101,22 @@ describe('rule text from config', () => {
     expect(combatText(base, 'engage')).toMatch(/Combat ends when every hand and deck is empty/)
     expect(combatText(base, 'exchange')).toBe(
       'In each exchange you roll, play cards, and fire Skills; then each enemy next to you that targets you rolls its enemy dice at you.',
+    )
+  })
+
+  it('enemy dice: one phrase for when they hit, whose dice, and guard first (7.8 steps 7-8, row 72)', () => {
+    expect(enemyHitText(base)).toBe(
+      'When you choose End engagement or no dice are left, every enemy die hits you at once, even the dice of an enemy you defeated. Your guard takes the damage first, then your health.',
+    )
+    const cancelled = With((c) => ({
+      ...c,
+      combat: { ...c.combat, engage: { ...c.combat.engage, defeatedDice: 'cancelled' } },
+    }))
+    expect(enemyHitText(cancelled)).toMatch(/except the dice of an enemy you defeated/)
+    expect(combatText(base, 'engage')).toContain(enemyHitText(base))
+    expect(ruleLineFor('combat.engage.hitDamage', base, defaultContent)).toBe(enemyHitText(base))
+    expect(ruleLineFor('combat.engage.defeatedDice', cancelled, defaultContent)).toBe(
+      enemyHitText(cancelled),
     )
   })
 

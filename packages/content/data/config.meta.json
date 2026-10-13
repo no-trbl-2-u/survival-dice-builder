@@ -123,7 +123,7 @@
   },
   "combat.engage.hitDamage": {
     "label": "Hit damage",
-    "help": "Damage a Hit face deals to you (guard first).",
+    "help": "Damage a Hit face deals to you.",
     "rule": "Table 4",
     "range": [0, 6]
   },
@@ -135,7 +135,7 @@
   },
   "combat.engage.defeatedDice": {
     "label": "Defeated enemies' dice",
-    "help": "Hit: every enemy die rolled hits at the end of the engagement, all at once, even the dice of an enemy you defeated (default). Cancelled: a defeated enemy's dice do not hit (experiment).",
+    "help": "Hit: a defeated enemy's dice still hit (default). Cancelled: they do not hit (experiment).",
     "rule": "Combat v3",
     "combatModel": "engage",
     "options": {

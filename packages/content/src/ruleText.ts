@@ -141,9 +141,23 @@ export function combatText(config: GameConfig, model: GameConfig['combat']['mode
   }
   return (
     'Play Engage to roll your dice from where you stand, plus the enemy dice of each enemy next to you (each enemy record gives its dice). ' +
-    'Put your dice on your Skills one at a time; the enemy dice hit last, after your guard. ' +
+    'Put your dice on your Skills one at a time. ' +
+    `${enemyHitText(config)} ` +
     combatEndText(config)
   )
+}
+
+/**
+ * When the enemy dice of an engagement hit, whose dice hit, and what takes the damage.
+ *
+ * @rule 7.8 steps 7-8 (Spec v2), OPEN-QUESTIONS row 72
+ */
+export function enemyHitText(config: GameConfig): string {
+  const defeated =
+    config.combat.engage.defeatedDice === 'hit'
+      ? 'even the dice of an enemy you defeated'
+      : 'except the dice of an enemy you defeated'
+  return `When you choose End engagement or no dice are left, every enemy die hits you at once, ${defeated}. Your guard takes the damage first, then your health.`
 }
 
 /**
@@ -339,6 +353,8 @@ export function ruleLineFor(
   if (path === 'player.draftSlots') return `${draftFullText(config, 'the new Skill')}.`
   if (path === 'draft.unpicked') return draftPoolText(config)
   if (path === 'combat.model') return combatText(config, config.combat.model)
+  if (path === 'combat.engage.hitDamage' || path === 'combat.engage.defeatedDice')
+    return enemyHitText(config)
   if (path === 'rulings.mandatoryPlays') return combatEndText(config)
   if (path === 'rulings.targetTieBreak' || path === 'rulings.playerPullDistance')
     return targetOrderText(config)

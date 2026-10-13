@@ -126,7 +126,7 @@ describe('instructions in two lengths (phase 24)', () => {
     }
     const assign = withEnemies([], 'assign')
     expect(engageInstruction(assign)).toBe(
-      'Select dice. Then choose a Skill they fit. A Star fits any slot. A full Skill fires at once. When you choose End engagement or no dice are left, the enemy dice hit.',
+      'Select dice. Then choose a Skill they fit. A Star fits any slot. A full Skill fires at once. When you choose End engagement or no dice are left, every enemy die hits you at once, even the dice of an enemy you defeated. Your guard takes the damage first, then your health.',
     )
     expect(engageInstructionShort(assign)).toBe('Pick dice, then a Skill.')
     expect(engageInstructionShort(withEnemies([], 'resolve'))).toBe('Strike: pick its target.')

@@ -71,6 +71,7 @@ export {
   cardStepText,
   combatEndText,
   combatText,
+  enemyHitText,
   draftFullText,
   draftPoolText,
   draftTitle,
