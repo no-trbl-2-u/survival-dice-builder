@@ -9,6 +9,7 @@ import {
   draftTitle,
   gatherText,
   knockoutText,
+  levelText,
   milestoneIds,
   milestoneLabel,
   miniatureLimitText,
@@ -17,8 +18,10 @@ import {
   revealText,
   ruleCitation,
   ruleLineFor,
+  shopText,
   spawnText,
   targetOrderText,
+  trainingText,
 } from './ruleText.ts'
 import type { GameConfig } from './schemas/config.ts'
 
@@ -27,6 +30,38 @@ const m = base.milestones
 const With = (patch: (c: GameConfig) => GameConfig) => patch(structuredClone(base))
 
 describe('rule text from config', () => {
+  it('levels: the experience steps and the new die follow config (Spec v2 8.1-8.5)', () => {
+    expect(levelText(base)).toBe(
+      'Each defeated enemy gives experience to all players. Level 2 needs 3 experience, and each next level needs 3 more than the step before. At each new level, every player gets 1 more action die.',
+    )
+    const elite = With((c) => ({
+      ...c,
+      experience: { ...c.experience, levelPerEliteSpawn: true },
+      options: { ...c.options, maxLevel: 4 },
+    }))
+    expect(levelText(elite)).toBe(
+      'The level rises by 1 each time an elite spawns. At each new level, every player gets 1 more action die. The level stops at 4.',
+    )
+  })
+
+  it('shop: the opening upgrade, offers and timing follow content and config (6.8, Table 6)', () => {
+    expect(shopText(base, defaultContent)).toBe(
+      'Buy Shop I on the base (a Build card and 4 materials) to open the Shop with 3 card offers. Pay for cards with currency, which you get for each enemy you defeat; buy at any time you stand on the base.',
+    )
+    const prepare = With((c) => ({ ...c, rulings: { ...c.rulings, shopTiming: 'prepare-only' } }))
+    expect(shopText(prepare, defaultContent)).toMatch(/in the Prepare phase\.$/)
+  })
+
+  it('training: the draft round and the Skills shown follow config (10.8, 11.6)', () => {
+    expect(trainingText(base, defaultContent)).toBe(
+      'Training I (3 materials) opens the Training Ground: every 2nd round, each player looks at 2 Skills and keeps 1 for free.',
+    )
+    const often = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 1, reveal: 3 } }))
+    expect(trainingText(often, defaultContent)).toMatch(
+      /every round, each player looks at 3 Skills/,
+    )
+  })
+
   it('knockout: the return share and the losses follow config (Spec v2 14.2, 14.4)', () => {
     expect(knockoutText(base)).toBe(
       'A player at 0 health is knocked out and comes back next round with half of their maximum health, rounded up. They lose all their materials and currency.',

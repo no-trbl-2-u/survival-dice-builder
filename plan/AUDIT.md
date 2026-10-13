@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-13 (pass 37, cloud tick)
+
+Pass 36's top row shipped. The home page growth line is next: it gave no when or how, and it said levels bring Skill drafts, which Spec v2 8.4 does not (a level gives a die; the Training Ground drafts).
+
+## Top 5 findings (scored)
+
+### [x] [6.3] /: "Level up, buy cards in the Shop, and draft Skills" gives no when or how (critique MED, pass 14)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7
+- next: `levelText`, `shopText`, `trainingText` in `ruleText`, read by / under "How you grow"
+- issue: #90
+- fixed: (this commit)
+
+### [ ] [4.5] /decisions: each "Setting:" line shows raw config keys and code values (critique MED, pass 14)
+- category: external-critique (voice)
+- impact: 6
+- ease: 5
+- next: lead with the plain label and value from `config.meta.json`
+
+### [ ] [3.6] /decisions: rows 74 and 75 describe options phase 41 removed (critique LOW, pass 15)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 9
+- next: mark both "Option removed in Spec v2"
+
+### [ ] [3.6] /play: the start panel Combat hint repeats its label (critique LOW, pass 14)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: drop the "Combat:" prefix on the hint
+
+### [ ] [3.6] /play: the phase bar arrow is read aloud and the enemy cap is unexplained (critique LOW, pass 14)
+- category: external-critique (a11y)
+- impact: 4
+- ease: 9
+- next: `aria-hidden` on the arrow; say 20 is the miniature limit
+
 # Site audit — 2026-10-13 (pass 36, cloud tick)
 
 Pass 15's MED rows are shipped. The queue still holds pass 13 and 14 MED rows, which the MED bias (x1.5) lifts above the pass 15 LOW row. The cheapest is the /decisions Combat model line, which names only the Config page although /play picks the Combat model per run.
@@ -19,7 +57,7 @@ Pass 15's MED rows are shipped. The queue still holds pass 13 and 14 MED rows, w
 - issue: #89
 - fixed: (this commit)
 
-### [ ] [6.3] /: "Level up, buy cards in the Shop, and draft Skills" gives no when or how (critique MED, pass 14)
+### [x] [6.3] /: "Level up, buy cards in the Shop, and draft Skills" gives no when or how (critique MED, pass 14)
 - category: external-critique (comprehension)
 - impact: 6
 - ease: 7

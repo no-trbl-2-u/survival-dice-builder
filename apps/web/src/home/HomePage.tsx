@@ -3,9 +3,12 @@ import {
   defaultContent,
   goalText,
   knockoutText,
+  levelText,
   playersText,
   revealText,
+  shopText,
   spawnText,
+  trainingText,
 } from '@survival/content'
 import { rulesUrl } from '../decisions/Inline.tsx'
 import { HexTile } from '../map/HexTile.tsx'
@@ -41,9 +44,20 @@ export function HomePage() {
           </li>
         </ol>
         <p>
-          {goalText()} {knockoutText(config)} Level up, buy cards in the Shop, and draft Skills to
-          last longer.
+          {goalText()} {knockoutText(config)}
         </p>
+        <h2 className={styles.heading}>How you grow</h2>
+        <ul className={styles.steps}>
+          <li>
+            <strong>Levels:</strong> {levelText(config)}
+          </li>
+          <li>
+            <strong>Shop:</strong> {shopText(config, defaultContent)}
+          </li>
+          <li>
+            <strong>Skills:</strong> {trainingText(config, defaultContent)}
+          </li>
+        </ul>
         <p className={styles.more}>
           Also: <a href="/tiles">the proposed tiles</a>, <a href="/config">the rules config</a>, and{' '}
           <a href="/credits">credits</a>.

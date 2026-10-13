@@ -59,6 +59,64 @@ export function spawnText(config: GameConfig): string {
 }
 
 /**
+ * What raises the shared level, and what a new level gives.
+ *
+ * @rule 8.1, 8.3, 8.4, 8.5, 18.1, OPEN-QUESTIONS row 17
+ */
+export function levelText(config: GameConfig): string {
+  const { firstStep, stepIncrease, levelPerEliteSpawn } = config.experience
+  const next =
+    stepIncrease === 0
+      ? `each next level needs ${firstStep} more`
+      : `each next level needs ${stepIncrease} more than the step before`
+  const raise = levelPerEliteSpawn
+    ? 'The level rises by 1 each time an elite spawns.'
+    : `Each defeated enemy gives experience to all players. Level 2 needs ${firstStep} experience, and ${next}.`
+  const max = config.options.maxLevel
+  const cap = max === null ? '' : ` The level stops at ${max}.`
+  return `${raise} At each new level, every player gets 1 more action die.${cap}`
+}
+
+type Upgrades = Pick<Content, 'upgrades'>
+
+/** The first upgrade of a base track: "Shop I" and its cost in materials. */
+const firstUpgrade = (track: string, content: Upgrades) =>
+  content.upgrades.find((u) => u.track === track && u.tier === 1)
+
+/**
+ * How the Shop opens, what pays for its cards, and when a player can buy.
+ *
+ * @rule 6.8, 8.2, 11.2, Table 6
+ */
+export function shopText(config: GameConfig, content: Upgrades): string {
+  const shop = firstUpgrade('shop', content)
+  const open = shop
+    ? `Buy ${shop.name} on the base (a Build card and ${plural(shop.cost, 'material', 'materials')}) to open the Shop`
+    : 'Open the Shop on the base'
+  const when =
+    config.rulings.shopTiming === 'prepare-only'
+      ? 'while you stand on the base in the Prepare phase'
+      : 'at any time you stand on the base'
+  return `${open} with ${plural(config.shop.offers, 'card offer', 'card offers')}. Pay for cards with currency, which you get for each enemy you defeat; buy ${when}.`
+}
+
+/**
+ * How the Training Ground opens, and when its Skill draft happens.
+ *
+ * @rule 10.8, 11.6, 11.7, Table 6
+ */
+export function trainingText(config: GameConfig, content: Upgrades): string {
+  const training = firstUpgrade('training', content)
+  const open = training
+    ? `${training.name} (${plural(training.cost, 'material', 'materials')}) opens the Training Ground`
+    : 'The Training Ground opens a Skill draft'
+  const n = config.draft.everyNRounds
+  const every =
+    n === 1 ? 'every round' : `every ${n}${n === 2 ? 'nd' : n === 3 ? 'rd' : 'th'} round`
+  return `${open}: ${every}, each player looks at ${plural(config.draft.reveal, 'Skill', 'Skills')} and keeps 1 for free.`
+}
+
+/**
  * A Gather card's top half: where it gathers, and what it spends.
  *
  * @param amount - the card's materials.

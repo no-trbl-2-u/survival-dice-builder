@@ -27,15 +27,6 @@
 - suggested fix: Lead with the field's plain label and a plain value from `config.meta.json` (e.g. "Enemies per hex: 1"); keep the path only as the /config link target; reword the mismatch note ("This row names X; the game uses Y.").
 - source: web-fetch
 
-### [MED] / — "Level up, buy cards in the Shop, and draft Skills" gives no when or how
-- pass: 14 (commit f95875e)
-- viewport: desktop
-- category: comprehension
-- observation: The home page closes with three ways to grow in one sentence. It does not say when the Shop opens, what you pay with, or what earns a level and a Skill draft. The Shop is named nowhere else on the page.
-- evidence: `apps/web/src/home/HomePage.tsx:44` "Level up, buy cards in the Shop, and draft Skills to last longer."
-- suggested fix: One short `ruleText` line each for the Shop (when, currency) and levels (experience earns a level; a level gives a Skill draft), with numbers from config.
-- source: web-fetch
-
 ### [LOW] /play — the start panel Combat hint repeats its label
 - pass: 14 (commit f95875e)
 - viewport: desktop
@@ -298,6 +289,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — "Level up, buy cards in the Shop, and draft Skills" gives no when or how
+- pass: 14 (commit f95875e)
+- viewport: desktop
+- category: comprehension
+- observation: The home page closes with three ways to grow in one sentence. It does not say when the Shop opens, what you pay with, or what earns a level and a Skill draft. The Shop is named nowhere else on the page.
+- evidence: `apps/web/src/home/HomePage.tsx:44` "Level up, buy cards in the Shop, and draft Skills to last longer."
+- suggested fix: One short `ruleText` line each for the Shop (when, currency) and levels (experience earns a level; a level gives a Skill draft), with numbers from config.
+- source: web-fetch
+- issue: #90
+- fixed: (this commit). Spec v2 8.4 gives a new die per level, not a Skill draft; the draft comes from the Training Ground (10.8), so / now has one line each for levels, the Shop and Skills.
 
 ### [x] [MED] /decisions — says the Combat model changes only on the Config page; /play can also pick it per run
 - pass: 14 (commit f95875e)

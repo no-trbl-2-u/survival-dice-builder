@@ -77,6 +77,7 @@ export {
   gatherText,
   goalText,
   knockoutText,
+  levelText,
   milestoneIds,
   milestoneLabel,
   miniatureLimitText,
@@ -85,8 +86,10 @@ export {
   revealText,
   ruleCitation,
   ruleLineFor,
+  shopText,
   spawnText,
   targetOrderText,
+  trainingText,
 } from './ruleText.ts'
 export {
   parseSpec,

@@ -25,6 +25,16 @@ describe('HomePage', () => {
     expect(screen.getAllByText(/for 1 to 4 players/)[0]).toBeTruthy()
   })
 
+  it('says how levels, the Shop and the Skill draft work, with numbers from config', () => {
+    render(<HomePage />)
+    expect(screen.getAllByText(/Level 2 needs 3 experience/)[0]).toBeTruthy()
+    expect(screen.getAllByText(/Buy Shop I on the base .* 4 materials/)[0]).toBeTruthy()
+    expect(
+      screen.getAllByText(/Training I \(3 materials\) opens the Training Ground/)[0],
+    ).toBeTruthy()
+    expect(screen.queryByText(/Level up, buy cards in the Shop, and draft Skills/)).toBeNull()
+  })
+
   it('links the written rules it cites', () => {
     render(<HomePage />)
     const link = screen.getAllByRole('link', { name: 'written rules' })[0]
