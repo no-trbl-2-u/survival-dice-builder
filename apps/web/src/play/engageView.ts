@@ -45,7 +45,7 @@ export function engageInstruction(state: GameState): string {
     case 'reroll':
       return 'Choose dice to reroll, or stop rerolling.'
     case 'assign':
-      return `Select dice. Then choose a Skill they fit. A Star fits any slot. A full Skill fires at once. When no dice are left, the enemy dice hit.`
+      return `Select dice. Then choose a Skill they fit. A Star fits any slot. A full Skill fires at once. When you choose End engagement or no dice are left, the enemy dice hit.`
     case 'targets':
     case 'resolve':
       return `${headSkill(state)} fires. Choose the enemy it hits.`

@@ -7,6 +7,7 @@ import {
   type ActionType,
 } from '@survival/engine'
 import { describe, expect, it } from 'vitest'
+import { engageInstruction } from './engageView.ts'
 import { bannerActions, nextStep } from './nextStep.ts'
 import { COVERED } from './targets.ts'
 
@@ -116,6 +117,23 @@ describe('nextStep', () => {
       s = applyAction(s, legal[i % legal.length] as Action).state
     }
     expect(seen).toBe(true)
+  })
+
+  it('Engagements: the banner says what the modal says, and never points at the map', () => {
+    const engage = { ...config, combat: { ...config.combat, model: 'engage' as const } }
+    let s = createGame(engage, 5)
+    const seen = new Set<string>()
+    for (let i = 0; i < 600 && s.phase !== 'ended'; i++) {
+      const legal = legalActions(s)
+      if (s.exchange?.engage && legal.every((a) => a.type !== 'chooseTowerTarget')) {
+        const text = nextStep(s, legal).step
+        expect(text).toBe(engageInstruction(s))
+        expect(text).not.toMatch(/map/i)
+        seen.add(s.exchange.step)
+      }
+      s = applyAction(s, legal[i % legal.length] as Action).state
+    }
+    expect(seen.has('assign')).toBe(true)
   })
 
   it('Exchanges: the roll and assign banners name the Keep buttons and the Skill rows', () => {

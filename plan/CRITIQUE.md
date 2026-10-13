@@ -63,15 +63,6 @@
 - suggested fix: One `ruleText` phrase ("When you end the engagement, every enemy die hits at once; your guard takes the damage first") read by the banner, the modal, / and /config.
 - source: web-fetch
 
-### [MED] /play — during an engagement the banner says click the map; the modal says choose in the modal
-- pass: 13 (commit 23315d6)
-- viewport: n/a
-- category: comprehension
-- observation: When a Skill fires, the phase banner says "click a highlighted enemy on the map to hit", while the modal in front says "Choose the enemy it hits." The modal has no map; targets are picked in it. The banner's engagement lines are still hand-written.
-- evidence: `apps/web/src/play/nextStep.ts:20-25,54` vs `apps/web/src/play/engageView.ts:35,55`.
-- suggested fix: During an engagement, have the banner read `engageInstruction` (or a short form of it) instead of the `ENGAGE` table, and drop the table.
-- source: web-fetch
-
 ### [MED] / and /config — the enemy target rule is stated two ways
 - pass: 13 (commit 23315d6)
 - viewport: n/a
@@ -289,6 +280,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — during an engagement the banner says click the map; the modal says choose in the modal
+- pass: 13 (commit 23315d6)
+- viewport: n/a
+- category: comprehension
+- observation: When a Skill fires, the phase banner says "click a highlighted enemy on the map to hit", while the modal in front says "Choose the enemy it hits." The modal has no map; targets are picked in it. The banner's engagement lines are still hand-written.
+- evidence: `apps/web/src/play/nextStep.ts:20-25,54` vs `apps/web/src/play/engageView.ts:35,55`.
+- suggested fix: During an engagement, have the banner read `engageInstruction` (or a short form of it) instead of the `ENGAGE` table, and drop the table.
+- source: web-fetch
+- issue: #91
+- fixed: (this commit). The banner reads `engageInstruction`, the modal's own line, at every engagement step; the `ENGAGE` table is gone. The modal's assign line now names End engagement, as the old banner did.
 
 ### [x] [MED] / — "Level up, buy cards in the Shop, and draft Skills" gives no when or how
 - pass: 14 (commit f95875e)

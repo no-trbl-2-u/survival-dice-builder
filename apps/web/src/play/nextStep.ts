@@ -1,7 +1,7 @@
 import { cardStepText } from '@survival/content'
 import { enemiesInRange, type Action, type GameState } from '@survival/engine'
 import { defenseName } from '../map/places.ts'
-import { enemyLabel } from './engageView.ts'
+import { engageInstruction, enemyLabel } from './engageView.ts'
 import { ofType } from './targets.ts'
 
 /** What the player does next: the phase it belongs to, and the step in plain words. */
@@ -13,16 +13,6 @@ const EXCHANGE: Record<Exclude<NonNullable<GameState['exchange']>['step'], 'card
   assign: 'Select dice, then click a Skill they fit. Confirm when done',
   targets: 'Click a highlighted enemy on the map to target it',
   resolve: 'Resolve your fired Skills in any order',
-}
-
-const ENGAGE: Record<NonNullable<GameState['exchange']>['step'], string> = {
-  roll: 'Keep and reroll your dice (enemy dice stay as rolled), or stop rolling',
-  cards: 'Add cards to the engagement (rerolls, heals), or choose Done adding cards',
-  reroll: 'Choose dice to reroll, or stop rerolling',
-  assign:
-    'Select dice, then a Skill they fit: a full Skill fires at once. Repeat, or choose End engagement; then the enemy dice hit you',
-  resolve: 'Click a highlighted enemy on the map to hit',
-  targets: 'Click a highlighted enemy on the map to target it',
 }
 
 /**
@@ -46,14 +36,8 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
   const tower = ofType(legal, 'chooseTowerTarget')[0]
   if (tower)
     return step('Combat', `Choose which enemy the ${defenseName(state, tower.tower)} shoots`)
-  const engage = state.exchange?.engage
-  if (engage) {
-    const head = state.exchange?.queue[0]
-    const skill = state.content.skills.find((s) => s.id === head?.skill)?.name
-    if (state.exchange?.step === 'resolve' && skill)
-      return step('Engagement', `${skill} fires: click a highlighted enemy on the map to hit`)
-    return step('Engagement', ENGAGE[state.exchange?.step ?? 'roll'])
-  }
+  // An engagement: the modal's own instruction, so the banner and the modal never disagree.
+  if (state.exchange?.engage) return step('Engagement', engageInstruction(state))
   if (state.exchange) {
     const name = 'Combat'
     const far = state.exchange.step === 'assign' && !attackInReach(state)

@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-13 (pass 38, cloud tick)
+
+Pass 37's top row shipped. Re-scoring the whole critique queue with the MED bias (x1.5) lifts the pass 13 MED rows above the pass 37 list: the engagement banner tells the player to click the map while the modal in front of it picks targets with no map. A wrong instruction on the main play surface, and a cheap fix.
+
+## Top 5 findings (scored)
+
+### [x] [6.3] /play: during an engagement the banner says click the map; the modal says choose in the modal (critique MED, pass 13)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7
+- next: the banner reads `engageInstruction`; drop the `ENGAGE` table
+- issue: #91
+- fixed: (this commit)
+
+### [ ] [5.4] /play, / and /config: four accounts of when the enemy dice hit in an engagement (critique MED, pass 13)
+- category: external-critique (voice)
+- impact: 6
+- ease: 6
+- next: one `ruleText` phrase read by the modal, /, and /config help
+
+### [ ] [5.4] /: the home page never says how the base takes damage under engagements (critique MED, pass 13)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 6
+- next: `siegeText(config)` in `ruleText`, used on /, the start panel and /config
+
+### [ ] [4.5] /decisions: each "Setting:" line shows raw config keys and code values (critique MED, pass 14)
+- category: external-critique (voice)
+- impact: 6
+- ease: 5
+- next: lead with the plain label and value from `config.meta.json`
+
+### [ ] [4.5] / and /config: the enemy target rule is stated two ways (critique MED, pass 13)
+- category: external-critique (voice)
+- impact: 5
+- ease: 6
+- next: drop the targeting clause from `spawnText`; show a short `targetOrderText` on /
+
 # Site audit — 2026-10-13 (pass 37, cloud tick)
 
 Pass 36's top row shipped. The home page growth line is next: it gave no when or how, and it said levels bring Skill drafts, which Spec v2 8.4 does not (a level gives a die; the Training Ground drafts).
