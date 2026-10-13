@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-10 at commit 2376ca3
-> Pass count: 9
+> Last pass: 2026-10-13 at commit 164890c
+> Pass count: 10
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -9,6 +9,50 @@
 > `/oversight`. See `skills/expand.md` for the contract.
 
 ## Pending
+
+### [ ] [score 6.5] Player text on Spec v2: the site stops calling Spec v1 options "the written rules"
+- proposed: 2026-10-13, expand pass 10
+- source signals:
+  - Spec v2 signed off 2026-10-12 (`1aec080`, `spec/01-spec-v2-rules.md`); phase 41 (`6f26cd6`) moved the engine but not the copy around it.
+  - Critique pass 15 (commit 255362f), 6 rows, one cause: [HIGH] / and /play call Exchanges "the Combat in the written rules" (`apps/web/src/home/HomePage.tsx:38-39`, `apps/web/src/play/StartPanel.tsx:25`); [MED] /config calls the old move surcharge and "back to the supply" the written rules (`packages/content/data/config.meta.json:103`, `:279-282`); [MED] "Rolls per exchange" names the old Combat; [MED] /decisions row 17 says steps of 5; [MED] row 60 gives the old Gather amounts; [LOW] rows 74 and 75 describe options phase 41 removed.
+  - Critique pass 13, still pending: four accounts of when the enemy dice hit in an engagement, and the target rule stated two ways (/, /play, /config).
+  - 8 non-test source strings say "written rule" (`apps/web/src`, `packages/content`); none is checked against which option is the Spec v2 default.
+- rationale: the rules changed under the site. Each row is a one-string fix, but the cause is shared: copy that names "the written rule" by hand. Fixed one tick at a time, the next rules change breaks it again.
+- proposed scope: 1 phase.
+  - "The written rule" and "the older rule" phrases come from `ruleText`, keyed on the Spec v2 default of each option; a test fails when help text calls a non-default value the written rule.
+  - Home, start panel and /config help on Spec v2 (closes pass 15 rows 1-3, pass 13 timing and target rows).
+  - OPEN-QUESTIONS rows that Spec v2 now writes into the rules (17, 60, 74, 75) marked "in Spec v2" and shown under that heading on /decisions, not as live readings.
+- estimated phases: 1
+- conflicts: none for the copy. Re-labelling decided OPEN-QUESTIONS rows records what `spec/` already says; it decides nothing, but the designer may want to see the list at `/oversight`.
+- ruling audit: Spec v2 6.9, 6.10, 8.5, 11.7, 18.1, Table 8; OPEN-QUESTIONS 17, 60, 74, 75. No rule changes. Loop scope: in (rule-text sync).
+
+### [ ] [score 6.0] The table sheets on Spec v2: one-pager facts rewritten, and a test that ties them to config
+- proposed: 2026-10-13, expand pass 10
+- source signals:
+  - `design/one-pagers/v2/FACTS.md` still prints Spec v1: the skirmish (F-071 to F-075; Spec v2 6.10 deletes it), the old Gather amounts (F-033 to F-036, F-081, F-189: Haul 2, Forage 1, Excavate 3, Quarry 5; Spec v2 Table 8 has 3, 2, 4, 6), and experience steps of 5 (F-142; Spec v2 8.5 has steps of 3). The rendered PDF (`survival-dice-builder-v2-one-pagers.pdf`) carries the same numbers.
+  - The designer plays on cardboard (`docs/retrospective-2026-10-06.md:230`): the sheets are what the table reads, and they now disagree with the engine.
+  - Pending candidate "Physical parity" (score 5.0) asks for the FACTS-to-config test; nothing caught this drift because it does not exist yet.
+  - Spec v2 signed off 2026-10-12 (urgency).
+- rationale: the next cardboard session would play rules the engine no longer plays, and its log would measure the wrong game.
+- proposed scope: 1 phase.
+  - FACTS.md rewritten against `spec/01-spec-v2-rules.md` (each fact cites a Spec v2 rule id, not v1 or an OQ row the spec now settles); pages and PDF re-rendered with `scripts/one-pagers.mjs`.
+  - The parity half of "Physical parity": facts gain a `config:` column where one applies, and a test fails when config disagrees.
+- estimated phases: 1
+- conflicts: overlaps the "Physical parity" candidate (this takes its FACTS test; the table-state doc stays there). Promote together or let this one absorb that half.
+- ruling audit: Spec v2 6.10, 8.5, Table 8 read; no rule changes. Loop scope: in (docs, tests).
+
+### [ ] [score 5.0] The exchange Combat model after Spec v2: retire it, or fence it as a labelled playtest option
+- proposed: 2026-10-13, expand pass 10
+- source signals:
+  - Phase 41 brief (`plan/phases/phase_41_engine_spec_v2.md`, "Decisions made upfront"): "The exchange Combat model stays as a non-default playtest option ... Removing the model is a separate candidate."
+  - Spec v2 6.10: the skirmish is deleted and Engage is the only way to attack; the written rules no longer describe exchanges at all.
+  - Critique pass 15 [HIGH] and [MED] ("Rolls per exchange"), pass 14 [MED] (/decisions on where the Combat model changes): three player-facing rows exist only because exchanges remain.
+  - 32 non-test source files in `apps/web/src` and `packages/engine/src` mention exchanges; every rule-text, bot and sim change pays for both models.
+- rationale: a second Combat model the rules no longer contain costs every later phase double work and keeps confusing strangers. Either it earns its place as a named playtest option, or it goes.
+- proposed scope: 1 phase either way. Retire: remove the model, its config keys, copy and tests, with a config migration. Fence: one "Older Combat (exchanges), for playtests" label from `ruleText`, kept off the home page, with its options grouped under it.
+- estimated phases: 1
+- conflicts: [needs-user-call] which branch. The designer kept exchanges as an option at phase 41; removal is theirs to approve.
+- ruling audit: Spec v2 6.10, 7.8; phase 41 upfront decision. Loop scope: outside until the designer picks a branch.
 
 > Discovery pass 1 (2026-10-10). Each row below adds a `ruling audit` field. "Loop scope" refers to the
 > owner ruling of 2026-10-06 (`docs/retrospective-2026-10-06.md:210,231,248`): the loop ships docs, bot
@@ -54,6 +98,7 @@
   - Reader pass 1 [HIGH]: /decisions publishes repo housekeeping (`.env` keys, "GitHub rejects the current token") because `packages/content/src/decisions.ts:194` reads every `[needs-user-call]` row, including operations rows.
   - `plan/CRITIQUE.md` pending [LOW] "design tools sit in the nav as equals of Play" (pass 9) and Considered "Design tools apart from the game in the nav" (2.5, one signal; now three).
   - URL contract drift (`plan/bearings.md:80-91`): it lists `/summary` (no route; `App.tsx:25-43`, the summary is inline on /play) and "11 proposed tile layouts" (9 exist), and omits `/decisions`.
+  - Critique pass 14 [MED] (still pending): /decisions "Setting:" lines show raw config keys and code values; the page still reads as a workbench to a stranger.
 - rationale: the site has two audiences with different needs, and the nav serves neither well. Each fix one tick at a time (nav label, filter, contract line) touches the same shell.
 - proposed scope: 1 phase.
   - Nav: Home, Play, Credits for players; a "Design tools" group (Config, Decisions, Tiles, Engine console).
@@ -61,6 +106,7 @@
   - The URL contract amended to match HEAD (needs `/oversight`, since it is locked).
 - estimated phases: 1
 - conflicts: the locked URL contract text must change; routes do not. Overlaps phase 40's (was 38) route table; ship after it.
+- last re-evidenced: 2026-10-13
 - ruling audit: no rule rows; bearings URL contract checked (locked, out of date on 3 points). Loop scope: outside (navigation); needs the designer's yes.
 
 ### [ ] [score 4.5] Co-op at 2, 3 and 4 seats, proven: engine, bot batch and browser
@@ -163,6 +209,8 @@
 
 ## Considered (below threshold)
 
+- [score 3.0] **/decisions readability** (pass 14 MED raw config keys, discovery MED housekeeping). The housekeeping half lives in "The public site and the designer's workbench"; the key-to-label half is one formatter, so it fits `/iterate`.
+- [score 2.5] **Home page "how a round goes"** (pass 14 MED "level up ... no when or how", pass 8 LOW long Combat sentence, pass 13 MED base damage). One surface; wait for the Spec v2 copy phase above, which rewrites the same text.
 - [score 2.5] **Design tools apart from the game in the nav** (critique pass 9 LOW, navigation; pass 8). One signal, one surface (`apps/web/src/App.tsx` NAV). A labelled "Design tools" group for Tile sheet, Decisions, and Engine console fits `/iterate`. Re-evaluate if a second pass flags the nav again.
 - [score 2.5] **Unknown paths served with HTTP 200** (critique pass 7 LOW, seo). One surface, one fix (a noindex meta on the not-found route, or a 404 page in `_redirects`). Fits `/iterate`.
 
