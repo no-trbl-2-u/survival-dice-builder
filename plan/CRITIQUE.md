@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — two help texts call the Spec v1 option "the written rule"
-- pass: 15 (commit 255362f)
-- viewport: desktop
-- category: comprehension
-- observation: "Move cost next to an enemy" says "2: the written rule (6.9)", and "Skills you do not keep" labels Supply "(written rules)". Spec v2 6.9 sets no surcharge (cost 1) and 11.7 sends unkept Skills to the draft pool, so the defaults are now the written rules and the alternatives are the old ones.
-- evidence: `packages/content/data/config.meta.json:103` and `:279-282`; `spec/01-spec-v2-rules.md` 6.9, 11.7.
-- suggested fix: "1 (default): the written rule (6.9). 2: the older rule, for playtests." and "Your pool (default, written rules)" / "Back to the supply (older rule)".
-- source: web-fetch
-
 ### [MED] /config — "Rolls per exchange" names the old Combat and the wrong step
 - pass: 15 (commit 255362f)
 - viewport: desktop
@@ -343,6 +334,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /config — two help texts call the Spec v1 option "the written rule"
+- pass: 15 (commit 255362f)
+- viewport: desktop
+- category: comprehension
+- observation: "Move cost next to an enemy" says "2: the written rule (6.9)", and "Skills you do not keep" labels Supply "(written rules)". Spec v2 6.9 sets no surcharge (cost 1) and 11.7 sends unkept Skills to the draft pool, so the defaults are now the written rules and the alternatives are the old ones.
+- evidence: `packages/content/data/config.meta.json:103` and `:279-282`; `spec/01-spec-v2-rules.md` 6.9, 11.7.
+- suggested fix: "1 (default): the written rule (6.9). 2: the older rule, for playtests." and "Your pool (default, written rules)" / "Back to the supply (older rule)".
+- source: web-fetch
+- issue: #86
+- addressed: iterate (this commit); "Move cost next to an enemy" now reads "1 (default): no extra cost, as in the written rules. 2: the older rule, kept for playtests."; "Skills you do not keep" options read "Your pool (default, written rules)" and "Back to the supply (older rule)", and its help calls Supply the older rule; configMetaText tests pin both.
 
 ### [x] [HIGH] / and /play — Exchanges is called "the Combat in the written rules"; Spec v2 deletes it
 - pass: 15 (commit 255362f)

@@ -69,3 +69,20 @@ describe('config.meta.json player text (standing rule 7)', () => {
     expect(buildWordsIn(planted)).toEqual(['a.b: "Row 66"'])
   })
 })
+
+describe('config.meta.json marks the Spec v2 rule as the written one', () => {
+  it('6.9: cost 1 is the written rule; the surcharge is the older rule', () => {
+    const help = defaultConfigMeta['combat.moveCostNextToEnemy']?.help ?? ''
+    expect(help).toContain('1 (default): no extra cost, as in the written rules.')
+    expect(help).toContain('2: the older rule, kept for playtests.')
+  })
+
+  it('11.7: the pool is the written rule; the supply is the older rule', () => {
+    const entry = defaultConfigMeta['draft.unpicked']
+    expect(entry?.options).toEqual({
+      pool: 'Your pool (default, written rules)',
+      supply: 'Back to the supply (older rule)',
+    })
+    expect(entry?.help).not.toContain('(the written rule)')
+  })
+})

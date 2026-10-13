@@ -100,7 +100,7 @@
   },
   "combat.moveCostNextToEnemy": {
     "label": "Move cost next to an enemy",
-    "help": "Hexes a Move pays to enter a hex next to an enemy. 1 (default): no extra cost. 2: the written rule (6.9).",
+    "help": "Hexes a Move pays to enter a hex next to an enemy. 1 (default): no extra cost, as in the written rules. 2: the older rule, kept for playtests.",
     "rule": "6.9",
     "range": [1, 6]
   },
@@ -274,11 +274,11 @@
   },
   "draft.unpicked": {
     "label": "Skills you do not keep",
-    "help": "Pool (default): they go to your own pool, and each later draft offers the new Skills plus your whole pool, so the choice grows and is not tied to one training level. Supply: they go to the bottom of their supply (the written rule).",
+    "help": "Pool (default): they go to your own pool, and each later draft offers the new Skills plus your whole pool, so the choice grows and is not tied to one training level. Supply: they go to the bottom of their supply (the older rule, kept for playtests).",
     "rule": "11.7",
     "options": {
-      "pool": "Your pool (default)",
-      "supply": "Back to the supply (written rules)"
+      "pool": "Your pool (default, written rules)",
+      "supply": "Back to the supply (older rule)"
     }
   },
   "supplies": {
