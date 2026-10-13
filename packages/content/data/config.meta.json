@@ -80,9 +80,9 @@
     "label": "Combat"
   },
   "combat.maxRolls": {
-    "label": "Rolls per exchange",
-    "help": "The most times a player rolls dice in one combat exchange.",
-    "rule": "7.8 step 4",
+    "label": "Rolls per engagement",
+    "help": "The most times a player rolls dice in one engagement.",
+    "rule": "7.8 step 3",
     "range": [1, 6]
   },
   "combat.exchangeRange": {

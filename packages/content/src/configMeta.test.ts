@@ -34,6 +34,13 @@ describe('config metadata (rule 18.1)', () => {
     ])
   })
 
+  it('names the roll limit for engagements, as Spec v2 7.8 step 3 does', () => {
+    expect(defaultConfigMeta['combat.maxRolls']).toMatchObject({
+      label: 'Rolls per engagement',
+      rule: '7.8 step 3',
+    })
+  })
+
   it('lists groups and fields; a list is a field', () => {
     const paths = configMetaPaths(defaultContent.config)
     expect(paths).toContainEqual({ path: 'rulings', group: true })

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — "Rolls per exchange" names the old Combat and the wrong step
-- pass: 15 (commit 255362f)
-- viewport: desktop
-- category: voice
-- observation: The roll limit is labelled "Rolls per exchange" with help "in one combat exchange" and cites "7.8 step 4". Engagements are the default and the only Combat in Spec v2; the 3-roll limit is 7.8 step 3.
-- evidence: `packages/content/data/config.meta.json:83-85`; `spec/01-spec-v2-rules.md:164` (7.8 step 3 "The maximum is 3 rolls.").
-- suggested fix: Label "Rolls per engagement", help "The most times a player rolls dice in one engagement.", rule "7.8 step 3".
-- source: web-fetch
-
 ### [MED] /decisions — row 17 still says the engine uses steps of 5
 - pass: 15 (commit 255362f)
 - viewport: desktop
@@ -335,6 +326,17 @@
 
 ## Done
 
+### [x] [MED] /config — "Rolls per exchange" names the old Combat and the wrong step
+- pass: 15 (commit 255362f)
+- viewport: desktop
+- category: voice
+- observation: The roll limit is labelled "Rolls per exchange" with help "in one combat exchange" and cites "7.8 step 4". Engagements are the default and the only Combat in Spec v2; the 3-roll limit is 7.8 step 3.
+- evidence: `packages/content/data/config.meta.json:83-85`; `spec/01-spec-v2-rules.md:164` (7.8 step 3 "The maximum is 3 rolls.").
+- suggested fix: Label "Rolls per engagement", help "The most times a player rolls dice in one engagement.", rule "7.8 step 3".
+- source: web-fetch
+- issue: #87
+- addressed: iterate (this commit); the /config field now reads "Rolls per engagement", help "The most times a player rolls dice in one engagement.", rule 7.8 step 3; a configMeta test pins the label and rule.
+
 ### [x] [MED] /config — two help texts call the Spec v1 option "the written rule"
 - pass: 15 (commit 255362f)
 - viewport: desktop
@@ -344,7 +346,7 @@
 - suggested fix: "1 (default): the written rule (6.9). 2: the older rule, for playtests." and "Your pool (default, written rules)" / "Back to the supply (older rule)".
 - source: web-fetch
 - issue: #86
-- addressed: iterate (this commit); "Move cost next to an enemy" now reads "1 (default): no extra cost, as in the written rules. 2: the older rule, kept for playtests."; "Skills you do not keep" options read "Your pool (default, written rules)" and "Back to the supply (older rule)", and its help calls Supply the older rule; configMetaText tests pin both.
+- addressed: iterate (7dfe010); "Move cost next to an enemy" now reads "1 (default): no extra cost, as in the written rules. 2: the older rule, kept for playtests."; "Skills you do not keep" options read "Your pool (default, written rules)" and "Back to the supply (older rule)", and its help calls Supply the older rule; configMetaText tests pin both.
 
 ### [x] [HIGH] / and /play — Exchanges is called "the Combat in the written rules"; Spec v2 deletes it
 - pass: 15 (commit 255362f)
@@ -355,7 +357,7 @@
 - suggested fix: Call Exchanges the older Combat kept for playtests (as the /config help does), and drop the "written rules" link from it; if a rules link stays, put it on the Engagements text.
 - source: web-fetch
 - issue: #85
-- addressed: iterate (this commit); / says "This is the Combat in the written rules." after the Engagements text and calls Exchanges "the older Combat kept for playtests"; the /play hint for Exchanges starts "The older Combat, kept for playtests."; HomePage and new StartPanel tests pin both.
+- addressed: iterate (f0ad808); / says "This is the Combat in the written rules." after the Engagements text and calls Exchanges "the older Combat kept for playtests"; the /play hint for Exchanges starts "The older Combat, kept for playtests."; HomePage and new StartPanel tests pin both.
 
 ### [x] [HIGH] / and /config — Exchanges text says every adjacent enemy attacks; the default is only enemies that target you
 - pass: 12 (commit c34753b)

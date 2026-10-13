@@ -25,13 +25,15 @@ Critique pass 15 filed six rows after phase 41 moved the engine to Spec v2. The 
 - ease: 8
 - next: swap the "written rule" marks in `config.meta.json` for 6.9 and 11.7
 - issue: #86
-- fixed: (this commit)
+- fixed: 7dfe010
 
-### [ ] [7.2] /config: "Rolls per exchange" names the old Combat and the wrong step (critique MED, pass 15)
+### [x] [7.2] /config: "Rolls per exchange" names the old Combat and the wrong step (critique MED, pass 15)
 - category: external-critique (voice)
 - impact: 6
 - ease: 8
 - next: "Rolls per engagement", rule 7.8 step 3
+- issue: #87
+- fixed: (this commit)
 
 ### [ ] [6.3] /decisions: rows 17 and 60 give Spec v1 numbers (critique MED, pass 15)
 - category: external-critique (comprehension)
