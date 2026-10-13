@@ -33,13 +33,15 @@ Critique pass 15 filed six rows after phase 41 moved the engine to Spec v2. The 
 - ease: 8
 - next: "Rolls per engagement", rule 7.8 step 3
 - issue: #87
-- fixed: (this commit)
+- fixed: 091c25e
 
-### [ ] [6.3] /decisions: rows 17 and 60 give Spec v1 numbers (critique MED, pass 15)
+### [x] [6.3] /decisions: rows 17 and 60 give Spec v1 numbers (critique MED, pass 15)
 - category: external-critique (comprehension)
 - impact: 6
 - ease: 7
 - next: update `OPEN-QUESTIONS.md` rows 17 and 60, regenerate `docs/DECISIONS.md`
+- issue: #88
+- fixed: (this commit)
 
 ### [ ] [3.6] /decisions: rows 74 and 75 describe options phase 41 removed (critique LOW, pass 15)
 - category: external-critique (comprehension)

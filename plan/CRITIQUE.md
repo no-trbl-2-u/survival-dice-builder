@@ -9,24 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — row 17 still says the engine uses steps of 5
-- pass: 15 (commit 255362f)
-- viewport: desktop
-- category: comprehension
-- observation: The reading says "Current engine: steps grow by 5 (level 2 at 5, 3 at 15, 4 at 30, 5 at 50)", while its own Setting line shows `firstStep = 3; stepIncrease = 3`, which Spec v2 8.5 makes the default. The heading quotes the Spec v1 rule text.
-- evidence: `docs/DECISIONS.md:33-37` (generated from `OPEN-QUESTIONS.md` row 17); `packages/content/data/config.default.json:58-59`; Spec v2 8.5.
-- suggested fix: Quote Spec v2 8.5 in the heading and say the engine plays steps of 3; keep only what is still open (whether the step stays a playtest option).
-- source: web-fetch
-
-### [MED] /decisions — decided row 60 gives the old Gather amounts
-- pass: 15 (commit 255362f)
-- viewport: desktop
-- category: comprehension
-- observation: Row 60 says "Forage 1, Excavate 3, Quarry 5 (starter Gather 2)" and "Forage now gathers less than the starter card". The cards the engine plays, and Spec v2 Table 8, use Haul 3, Forage 2, Excavate 4, Quarry 6. A tester reading the row expects the wrong amounts.
-- evidence: `docs/DECISIONS.md:121`; `packages/content/data/cards.json` Gather values for Haul, Forage, Excavate, Quarry; Spec v2 Table 8.
-- suggested fix: Mark row 60 as replaced by Spec v2 and state the current amounts.
-- source: web-fetch
-
 ### [LOW] /decisions — decided rows 74 and 75 describe options phase 41 removed
 - pass: 15 (commit 255362f)
 - viewport: desktop
@@ -325,6 +307,28 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — row 17 still says the engine uses steps of 5
+- pass: 15 (commit 255362f)
+- viewport: desktop
+- category: comprehension
+- observation: The reading says "Current engine: steps grow by 5 (level 2 at 5, 3 at 15, 4 at 30, 5 at 50)", while its own Setting line shows `firstStep = 3; stepIncrease = 3`, which Spec v2 8.5 makes the default. The heading quotes the Spec v1 rule text.
+- evidence: `docs/DECISIONS.md:33-37` (generated from `OPEN-QUESTIONS.md` row 17); `packages/content/data/config.default.json:58-59`; Spec v2 8.5.
+- suggested fix: Quote Spec v2 8.5 in the heading and say the engine plays steps of 3; keep only what is still open (whether the step stays a playtest option).
+- source: web-fetch
+- issue: #88
+- fixed: (this commit)
+
+### [x] [MED] /decisions — decided row 60 gives the old Gather amounts
+- pass: 15 (commit 255362f)
+- viewport: desktop
+- category: comprehension
+- observation: Row 60 says "Forage 1, Excavate 3, Quarry 5 (starter Gather 2)" and "Forage now gathers less than the starter card". The cards the engine plays, and Spec v2 Table 8, use Haul 3, Forage 2, Excavate 4, Quarry 6. A tester reading the row expects the wrong amounts.
+- evidence: `docs/DECISIONS.md:121`; `packages/content/data/cards.json` Gather values for Haul, Forage, Excavate, Quarry; Spec v2 Table 8.
+- suggested fix: Mark row 60 as replaced by Spec v2 and state the current amounts.
+- source: web-fetch
+- issue: #88
+- fixed: (this commit)
 
 ### [x] [MED] /config — "Rolls per exchange" names the old Combat and the wrong step
 - pass: 15 (commit 255362f)
