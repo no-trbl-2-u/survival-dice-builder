@@ -43,21 +43,11 @@ describe('places', () => {
     const hex = baseHex(start)
     const state = {
       ...start,
-      enemies: [{ id: 'e1', kind: 'grunt', hex, health: 1, attackedThisCombat: false }],
+      enemies: [{ id: 'e1', kind: 'grunt', hex, health: 1 }],
     }
     const max = start.content.enemies.enemies.find((e) => e.id === 'grunt')!.health
     expect(hexContents(state, hex)[0]).toBe(`grunt (1 of ${max} health)`)
     expect(hexTitle(state, hex)).toMatch(/, Base: grunt \(/)
-  })
-
-  it('row 65 names a tipped-over enemy as attacked', () => {
-    const start = createGame(defaultContent.config, 1)
-    const hex = baseHex(start)
-    const state = {
-      ...start,
-      enemies: [{ id: 'e1', kind: 'grunt', hex, health: 1, attackedThisCombat: true }],
-    }
-    expect(hexContents(state, hex)[0]).toMatch(/health, attacked\)$/)
   })
 
   it('row 66 names a node of a waiting tile with the round it spawns from', () => {

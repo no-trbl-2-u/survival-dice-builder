@@ -8,12 +8,11 @@ import { SkillBoard } from './SkillBoard.tsx'
 const config = defaultContent.config
 
 /** An engagement at its Use dice step with Sword, Wand, Sword; Strike already fired with die 1. */
-function strikeFiredOnce(skillUses: 'unlimited' | 'once-per-exchange'): GameState {
+function strikeFiredOnce(): GameState {
   const cfg = {
     ...config,
     player: { ...config.player, startingDice: 3, starterSkills: ['cleave', 'strike'] },
     combat: { ...config.combat, model: 'engage' as const },
-    options: { ...config.options, skillUses },
   }
   let s = createGame(cfg, 4)
   for (let i = 0; i < 2000 && s.exchange?.step !== 'assign'; i++) {
@@ -39,7 +38,7 @@ const strikeTile = () => screen.getByText('Strike:').closest('li')!
 
 describe('SkillBoard: a Skill that fires more than once', () => {
   it('unlimited: a fired Skill says so and offers its next use to a fitting die', () => {
-    const state = strikeFiredOnce('unlimited')
+    const state = strikeFiredOnce()
     render(
       <SkillBoard
         state={state}
@@ -54,7 +53,7 @@ describe('SkillBoard: a Skill that fires more than once', () => {
   })
 
   it('unlimited, nothing chosen: a fired Skill that the free dice fill again can fire again', () => {
-    const state = strikeFiredOnce('unlimited')
+    const state = strikeFiredOnce()
     render(
       <SkillBoard
         state={state}
@@ -65,21 +64,6 @@ describe('SkillBoard: a Skill that fires more than once', () => {
       />,
     )
     expect(within(strikeTile()).getByText('can fire again')).toBeTruthy()
-  })
-
-  it('once per exchange: a fired Skill takes no more dice', () => {
-    const state = strikeFiredOnce('once-per-exchange')
-    render(
-      <SkillBoard
-        state={state}
-        legal={legalActions(state)}
-        act={() => {}}
-        actAll={() => {}}
-        selected={[2]}
-      />,
-    )
-    expect(within(strikeTile()).getByText('fired')).toBeTruthy()
-    expect(screen.queryByRole('button', { name: 'Put die 3 on Strike' })).toBeNull()
   })
 })
 

@@ -21,7 +21,6 @@ const grunt = (id: string, q: number, r: number): Enemy => ({
   kind: 'grunt',
   health: 2,
   hex: { q, r },
-  attackedThisCombat: false,
 })
 
 /** Plays the first legal action until `stop`. */
@@ -173,7 +172,7 @@ describe('Combat v3 engagements', () => {
   it('siege: each enemy next to a structure deals siege damage to it', () => {
     const s = inCombat()
     const sieged = siege({ ...s, enemies: [grunt('g1', 2, 0)] })[0]
-    expect(sieged.base.health).toBe(s.base.health - config.combat.engage.siegeDamage)
+    expect(sieged.base.health).toBe(s.base.health - defaultContent.enemies.enemies[0]!.siege)
   })
 
   it('a full run in engage mode plays to an end with no errors', () => {

@@ -8,39 +8,34 @@ const dice = (...faces: Die['face'][]): Die[] => faces.map((face) => ({ face, ke
 
 describe('Skill assignment', () => {
   it('7.8 step 6 a die fits a slot of its own face', () => {
-    const p = legalPlacements(dice('Sword'), [skill('strike'), skill('shot')], [], false)
+    const p = legalPlacements(dice('Sword'), [skill('strike'), skill('shot')], [])
     expect(p).toEqual([{ die: 0, skill: 'strike', use: 0, slot: 0, asFace: 'Sword' }])
   })
 
   it('2.4 a Star fits any slot and counts as that slot face', () => {
-    const p = legalPlacements(dice('Star'), [skill('strike'), skill('mend')], [], false)
+    const p = legalPlacements(dice('Star'), [skill('strike'), skill('mend')], [])
     expect(p.map((a) => a.asFace)).toEqual(['Sword', 'Wand'])
   })
 
   it('2.5 a Blank fits nothing', () => {
-    expect(legalPlacements(dice('Blank'), [skill('strike')], [], false)).toEqual([])
+    expect(legalPlacements(dice('Blank'), [skill('strike')], [])).toEqual([])
   })
 
   it('7.8 step 6 each die is used 1 time only', () => {
     const placed: Assignment[] = [{ die: 0, skill: 'strike', use: 0, slot: 0, asFace: 'Sword' }]
     expect(
-      legalPlacements(dice('Sword'), [skill('strike'), skill('cleave')], placed, false),
+      legalPlacements(dice('Sword'), [skill('strike'), skill('cleave')], placed),
     ).toEqual([])
   })
 
-  it('7.8 step 6 with skillUses "once" each Skill is used 1 time only', () => {
+  it('Spec v2 7.8 step 5 a Skill fires again when dice fill it again (no once-per-engagement option)', () => {
     const placed: Assignment[] = [{ die: 0, skill: 'strike', use: 0, slot: 0, asFace: 'Sword' }]
-    expect(legalPlacements(dice('Sword', 'Sword'), [skill('strike')], placed, false)).toEqual([])
-  })
-
-  it('18.1 unlimited Skill uses opens a second use when the first is full', () => {
-    const placed: Assignment[] = [{ die: 0, skill: 'strike', use: 0, slot: 0, asFace: 'Sword' }]
-    const p = legalPlacements(dice('Sword', 'Sword'), [skill('strike')], placed, true)
+    const p = legalPlacements(dice('Sword', 'Sword'), [skill('strike')], placed)
     expect(p).toEqual([{ die: 1, skill: 'strike', use: 1, slot: 0, asFace: 'Sword' }])
   })
 
   it('equivalent slots of the same face are offered once', () => {
-    const p = legalPlacements(dice('Sword'), [skill('cleave')], [], false)
+    const p = legalPlacements(dice('Sword'), [skill('cleave')], [])
     expect(p).toHaveLength(1)
   })
 

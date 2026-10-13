@@ -22,12 +22,7 @@ export {
   type ConfigRefProblem,
 } from './configRefs.ts'
 export type { CombatEffect, CombatOption, PrepareEffect, SkillEffect } from './schemas/effects.ts'
-export {
-  EnemyDefSchema,
-  type EnemiesFile,
-  type EnemyAttack,
-  type EnemyDef,
-} from './schemas/enemies.ts'
+export { EnemyDefSchema, type EnemiesFile, type EnemyDef } from './schemas/enemies.ts'
 export {
   FaceSchema,
   SkillFaceSchema,
@@ -95,7 +90,9 @@ export {
 } from './ruleText.ts'
 export {
   parseSpec,
+  plainRuleText,
   rowsFor,
+  SPEC_V2_SIGNED,
   rulesAsPlayed,
   rulesAsPlayedMarkdown,
   type PlayStatus,

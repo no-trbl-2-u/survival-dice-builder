@@ -32,7 +32,6 @@ const enemy = (id: string, kind: string, health: number, q: number, r: number): 
   kind,
   health,
   hex: { q, r },
-  attackedThisCombat: false,
 })
 
 /** A Combat state between engagements, with this hand. */
@@ -82,7 +81,6 @@ describe('the defender bot (phase 36)', () => {
       ignoreHits: 0,
       assignments: [],
       queue: [],
-      skirmish: null,
       engage: {
         enemyDice: [
           { enemy: 'e2', face: 'hit' as const },
@@ -109,11 +107,11 @@ describe('the defender bot (phase 36)', () => {
     })
   })
 
-  it('buys Training before a cheaper Shop tier', () => {
+  it('buys Training before a cheaper Shop tier (a Build II card)', () => {
     const s = withPlayer(
       started({
         upgrades: ['training-1'],
-        active: { kind: 'build', buildsLeft: 1, costReduction: 0 },
+        active: { kind: 'build', buildsLeft: 1, costReduction: 0, level: 2 },
       }),
       { materials: 6 },
     )
@@ -125,7 +123,7 @@ describe('the defender bot (phase 36)', () => {
     const s = withPlayer(
       started({
         enemies: [enemy('e1', 'grunt', 2, 4, 0)],
-        active: { kind: 'build', buildsLeft: 1, costReduction: 0 },
+        active: { kind: 'build', buildsLeft: 1, costReduction: 0, level: 1 },
       }),
       { materials: 4, hex: { q: 2, r: 0 } },
     )

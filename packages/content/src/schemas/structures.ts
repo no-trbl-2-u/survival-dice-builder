@@ -2,13 +2,15 @@ import { z } from 'zod'
 import { IdSchema, PositiveInt } from './primitives.ts'
 
 /**
- * A defense token. `blocksEnemies` = Barricade (12, Table 7); `attack` = Tower (12.3).
+ * A defense token. `level`: the lowest Build level that builds it (Spec v2 12.1);
+ * `blocksEnemies` = Barricade (12, Table 7); `attack` = Tower (12.3).
  *
- * @rule 12, Table 7
+ * @rule 12, 12.1, Table 7
  */
 export const DefenseDefSchema = z.object({
   id: IdSchema,
   name: z.string().min(1),
+  level: PositiveInt.default(1),
   cost: PositiveInt,
   health: PositiveInt,
   blocksEnemies: z.boolean(),

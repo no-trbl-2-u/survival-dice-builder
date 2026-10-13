@@ -38,13 +38,13 @@ describe('default content', () => {
     expect(deck.minimumSize).toBe(10)
   })
 
-  it('core loop v2, row 20: each Gather card sets its amount (starter 2, Haul 2)', () => {
+  it('Spec v2 Table 8, ruling 13: each Gather card sets its amount (starter 2, Haul 3)', () => {
     const amount = (id: string) => {
       const top = defaultContent.cards.find((c) => c.id === id)?.top
       return top?.kind === 'gather' ? top.amount : undefined
     }
     expect(amount('starter-gather')).toBe(2)
-    expect(amount('haul')).toBe(2)
+    expect(amount('haul')).toBe(3)
   })
 
   it('Tables 3 and 9: 4 starter Skills and 14 draft Skills', () => {
@@ -65,19 +65,18 @@ describe('default content', () => {
     expect(kinds.filter((k) => k === 'core')).toHaveLength(5)
   })
 
-  it('Table 4: elite die faces deal 1 (weapons), 2 (Star), 0 (Shield, Blank)', () => {
-    expect(defaultContent.enemies.enemyDieDamage).toEqual({
-      Sword: 1,
-      Wand: 1,
-      Bow: 1,
-      Star: 2,
-      Shield: 0,
-      Blank: 0,
+  it('Spec v2 Table 5: each enemy record gives its enemy dice and siege damage', () => {
+    const rec = (id: string) => defaultContent.enemies.enemies.find((e) => e.id === id)!
+    expect(rec('grunt')).toMatchObject({ health: 2, dice: 1, siege: 1, experience: 1, currency: 1 })
+    expect(rec('elite')).toMatchObject({
+      health: 14,
+      dice: 2,
+      siege: 3,
+      experience: 4,
+      currency: 4,
     })
   })
-})
 
-describe('invalid content fails with a clear message', () => {
   it('a Skill with 0 faces names the file and the field', () => {
     const raw = rawCopy()
     ;(raw['skills.json'] as { skills: { faces: string[] }[] }).skills[3]!.faces = []

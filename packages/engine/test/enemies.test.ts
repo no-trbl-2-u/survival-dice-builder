@@ -3,7 +3,8 @@ import { describe, expect, it } from 'vitest'
 import { exchangeAttackers } from '../src/combat/resolve.ts'
 import { currentTarget, moveEnemies } from '../src/enemies/movement.ts'
 import { spawnAtNodes, spawnNodes } from '../src/enemies/spawning.ts'
-import { structureAttacks, towerAttacks } from '../src/enemies/structures.ts'
+import { siege } from '../src/combat/engage.ts'
+import { towerAttacks } from '../src/enemies/structures.ts'
 import { rankTargets } from '../src/enemies/targets.ts'
 import { hexKey, type Axial } from '../src/hex.ts'
 import { applyAction, createGame, legalActions, type GameState } from '../src/index.ts'
@@ -54,7 +55,6 @@ const grunt = (id: string, q: number, r: number): Enemy => ({
   kind: 'grunt',
   health: 2,
   hex: { q, r },
-  attackedThisCombat: false,
 })
 
 /** A defense token built by p1. */
@@ -152,9 +152,9 @@ describe('enemy movement (7.5, 9.4, 9.7)', () => {
     })
     const [moved] = moveEnemies(s)
     expect(at(moved, 'e1')).toEqual({ q: 3, r: 0 })
-    const [attacked, events] = structureAttacks(moved)
-    expect(events[0]).toMatchObject({ type: 'structureAttacked', structure: 'd1', damage: 2 })
-    expect(attacked.defenses[0]!.health).toBe(2)
+    const [attacked, events] = siege(moved)
+    expect(events[0]).toMatchObject({ type: 'structureAttacked', structure: 'd1', damage: 1 })
+    expect(attacked.defenses[0]!.health).toBe(3)
   })
 
   it('9.7 enemies in the way force a detour', () => {
@@ -329,42 +329,31 @@ describe('Towers and structures (7.6, 7.11-7.12, 12.3, 14.1)', () => {
     const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 1, 0)], {
       defenses: [defense('d1', 'barricade', 2, 0, 4)],
     })
-    expect(structureAttacks(s)[1][0]).toMatchObject({ structure: 'd1' })
+    expect(siege(s)[1][0]).toMatchObject({ structure: 'd1' })
   })
 
-  it('7.11 an enemy next to a player does not attack a structure', () => {
+  it('Spec v2 7.11 an enemy next to a player also does the siege', () => {
     const s = board(corridor(-6, 6), { q: 2, r: 0 }, [grunt('e1', 1, 0)])
-    expect(structureAttacks(s)[1]).toEqual([])
+    expect(siege(s)[1][0]).toMatchObject({ type: 'structureAttacked', structure: 'base' })
   })
 
   it('12.4 a defense at 0 health is removed', () => {
     const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 3, 0)], {
-      defenses: [defense('d1', 'tower', 4, 0, 2)],
+      defenses: [defense('d1', 'tower', 4, 0, 1)],
     })
-    const [after, events] = structureAttacks(s)
+    const [after, events] = siege(s)
     expect(after.defenses).toEqual([])
     expect(events.map((e) => e.type)).toContain('defenseRemoved')
   })
 
   it('14.1 the run ends when the base reaches 0 health', () => {
     const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 1, 0)], {
-      base: { health: 2, maxHealth: 20 },
+      base: { health: 1, maxHealth: 20 },
     })
-    const [after, events] = structureAttacks(s)
+    const [after, events] = siege(s)
     expect(after.phase).toBe('ended')
     expect(after.endedBecause).toBe('base')
     expect(events.at(-1)).toMatchObject({ type: 'runEnded', rule: '14.1', because: 'base' })
-  })
-
-  it('7.11 row 7 with structureDamage "grunt-die" a grunt rolls 1 action die', () => {
-    const dice = {
-      ...config,
-      rulings: { ...config.rulings, structureDamage: 'grunt-die' as const },
-    }
-    const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 1, 0)], { config: dice })
-    const attack = structureAttacks(s)[1][0]
-    if (attack?.type !== 'structureAttacked') throw new Error('expected a structure attack')
-    expect(attack.faces).toHaveLength(1)
   })
 })
 
@@ -372,9 +361,9 @@ describe('the Base tile is the base (row 16)', () => {
   it('row 16 an enemy next to an outer Base tile hex attacks the base', () => {
     // (2,0) touches the outer base hex (1,0), not the base centre.
     const s = board(twoTiles(), { q: -1, r: 0 }, [grunt('e1', 2, 0)])
-    const [after, events] = structureAttacks(s)
+    const [after, events] = siege(s)
     expect(events[0]).toMatchObject({ type: 'structureAttacked', structure: 'base' })
-    expect(after.base.health).toBe(s.base.health - 2)
+    expect(after.base.health).toBe(s.base.health - 1)
   })
 
   it('row 16 enemies rank the base by its nearest Base tile hex', () => {

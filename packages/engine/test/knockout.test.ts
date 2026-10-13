@@ -19,24 +19,29 @@ const grunt = (id: string, q: number, r: number) => ({
   kind: 'grunt',
   health: 2,
   hex: { q, r },
-  attackedThisCombat: false,
 })
 
 describe('knockout (core loop v2, row 55)', () => {
-  it('row 55 a knocked-out player loses the materials and puts every card on the discard pile', () => {
+  it('Spec v2 14.2 a knocked-out player loses all materials and all currency and puts every card on the discard pile', () => {
     const s = duo()
     const p1 = s.players[0]!
     const [out, events] = knockOut(
-      { ...s, players: [{ ...p1, materials: 4 }, s.players[1]!] },
+      { ...s, players: [{ ...p1, materials: 4, currency: 5 }, s.players[1]!] },
       'p1',
     )
-    expect(out.players[0]).toMatchObject({ knockedOut: true, health: 0, materials: 0, guard: 0 })
+    expect(out.players[0]).toMatchObject({
+      knockedOut: true,
+      health: 0,
+      materials: 0,
+      currency: 0,
+      guard: 0,
+    })
     expect(out.players[0]!.deck).toEqual([])
     expect(out.players[0]!.hand).toEqual([])
     expect(out.players[0]!.discard).toHaveLength(10)
     expect(out.active).toBeNull()
     expect(events).toEqual([
-      { type: 'playerKnockedOut', rule: '14.2', player: 'p1', materialsLost: 4 },
+      { type: 'playerKnockedOut', rule: '14.2', player: 'p1', materialsLost: 4, currencyLost: 5 },
     ])
   })
 
@@ -59,7 +64,7 @@ describe('knockout (core loop v2, row 55)', () => {
     expect(next.current).toBe(1)
   })
 
-  it('14.2, core loop v2 a knockout in Prepare (a lost skirmish) ends the Move in progress', () => {
+  it('14.2, core loop v2 a knockout in Prepare (a Prepare engagement) ends the Move in progress', () => {
     const moving: GameState = {
       ...duo(),
       active: { kind: 'move', hexesLeft: 2, ignoreEnemyCost: false },

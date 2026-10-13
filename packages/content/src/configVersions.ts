@@ -8,6 +8,21 @@ import type { ConfigMeta } from './schemas/configMeta.ts'
  * their value. Pure: no I/O.
  */
 
+const STARTER = (move: number, gather: number) => [
+  { card: 'starter-move', quantity: move },
+  { card: 'starter-gather', quantity: gather },
+  { card: 'starter-build', quantity: 1 },
+  { card: 'starter-rest', quantity: 1 },
+]
+
+/** The deck presets before Spec v2 dropped every preset but `deck-10-hand-5` (ruling 7). */
+const PRESETS_BEFORE_V5 = [
+  { id: 'deck-6-hand-3', handSize: 3, cards: STARTER(2, 2) },
+  { id: 'deck-8-hand-4', handSize: 4, cards: STARTER(3, 3) },
+  { id: 'deck-10-hand-5', handSize: 5, cards: STARTER(4, 4) },
+  { id: 'deck-10-hand-3', handSize: 3, cards: STARTER(4, 4) },
+]
+
 /** One step of the default history: the defaults of the fields that changed, before the step. */
 export type ConfigStep = Readonly<{
   version: number
@@ -38,7 +53,18 @@ export const CONFIG_HISTORY: readonly ConfigStep[] = [
     version: 4,
     date: '2026-10-09',
     note: 'designer changes: Skill uses, move cost next to enemies',
-    before: { 'options.skillUses': 'once-per-exchange', 'combat.moveCostNextToEnemy': 2 },
+    // `options.skillUses` was in this step; Spec v2 removed the key (ruling 31).
+    before: { 'combat.moveCostNextToEnemy': 2 },
+  },
+  {
+    version: 5,
+    date: '2026-10-13',
+    note: 'Spec v2: experience steps of 3; the 10-card deck with a hand of 5 is the only preset',
+    before: {
+      'experience.firstStep': 5,
+      'experience.stepIncrease': 5,
+      'deck.presets': PRESETS_BEFORE_V5,
+    },
   },
 ]
 

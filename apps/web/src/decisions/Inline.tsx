@@ -5,7 +5,7 @@ export const repoFileUrl = (path: string) =>
   `https://github.com/no-trbl-2-u/survival-dice-builder/blob/main/${path}`
 
 /** The written rules (Spec v1) on GitHub: what a cited rules section points into. */
-export const rulesUrl = repoFileUrl('spec/01-spec-v1-rules.md')
+export const rulesUrl = repoFileUrl('spec/01-spec-v2-rules.md')
 
 /**
  * A `code` span that names a repository document by its full path

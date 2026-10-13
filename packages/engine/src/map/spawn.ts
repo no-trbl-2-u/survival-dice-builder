@@ -71,7 +71,6 @@ export function replaceGruntWithElite(state: GameState): Step {
     kind: 'elite',
     health: enemyDef(state, 'elite').health,
     hex: grunt.hex,
-    attackedThisCombat: grunt.attackedThisCombat,
   }
   const replaced: GameState = {
     ...state,
@@ -107,7 +106,7 @@ export function spawnEnemy(state: GameState, kind: string, node: Axial, rule = '
   const def = enemyDef(state, kind)
   const id = `e${state.nextEnemyId}`
   const spilled = !sameHex(hex, node)
-  const enemy: Enemy = { id, kind, health: def.health, hex, attackedThisCombat: false }
+  const enemy: Enemy = { id, kind, health: def.health, hex }
   const placed: GameState = {
     ...state,
     enemies: [...state.enemies, enemy],

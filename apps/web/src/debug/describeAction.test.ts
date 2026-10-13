@@ -38,9 +38,7 @@ describe('describeAction', () => {
     const placed = applyAction(start, { type: 'placeFigure', q: 0, r: 0 }).state
     const state = {
       ...placed,
-      enemies: [
-        { id: 'e3', kind: 'grunt', health: 2, hex: { q: 1, r: 0 }, attackedThisCombat: false },
-      ],
+      enemies: [{ id: 'e3', kind: 'grunt', health: 2, hex: { q: 1, r: 0 } }],
       defenses: [{ id: 'd1', kind: 'tower', hex: { q: 0, r: -1 }, health: 3, builder: 'p1' }],
     }
     const label = describeAction({ type: 'chooseTowerTarget', tower: 'd1', enemy: 'e3' }, state)
@@ -69,7 +67,6 @@ describe('describeAction', () => {
         rollsUsed: 1,
         rerollsLeft: 0,
         rerolled: [],
-        skirmish: null,
         bonusDamage: 0,
         ignoreHits: 0,
         assignments: [],

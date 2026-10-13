@@ -65,12 +65,12 @@ describe('config store (spec 6)', () => {
 
   it('problems are in plain words and filed under their field, naming the list item', () => {
     let bad = setAt(defaultContent.config, ['player', 'maxHealth'], '')
-    bad = setAt(bad, ['deck', 'presets', 1, 'cards', 0, 'quantity'], 1.5)
+    bad = setAt(bad, ['deck', 'presets', 0, 'cards', 0, 'quantity'], 1.5)
     bad = setAt(bad, ['rulings', 'targetTieBreak'], ['player'])
     bad = setAt(bad, ['rulings', 'shopRefill'], 'later')
     expect(saveConfig(memory(), bad)).toEqual([
       { path: 'player.maxHealth', message: 'Enter a number.' },
-      { path: 'deck.presets', message: 'Item 2, cards, item 1, quantity: Enter a whole number.' },
+      { path: 'deck.presets', message: 'Item 1, cards, item 1, quantity: Enter a whole number.' },
       { path: 'rulings.shopRefill', message: 'Use one of: immediate, end-of-turn.' },
       { path: 'rulings.targetTieBreak', message: 'List exactly 4 items.' },
     ])
@@ -156,7 +156,9 @@ describe('config store (spec 6)', () => {
       'combat.model',
       'combat.moveCostNextToEnemy',
       'deck.preset',
-      'options.skillUses',
+      'deck.presets',
+      'experience.firstStep',
+      'experience.stepIncrease',
     ])
     expect(saveConfig(store, loaded.config)).toEqual([])
     expect(store.data.has(LEGACY_CONFIG_KEY)).toBe(false)

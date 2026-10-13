@@ -13,74 +13,8 @@
     "preset": "deck-10-hand-5",
     "presets": [
       {
-        "id": "deck-6-hand-3",
-        "handSize": 3,
-        "cards": [
-          {
-            "card": "starter-move",
-            "quantity": 2
-          },
-          {
-            "card": "starter-gather",
-            "quantity": 2
-          },
-          {
-            "card": "starter-build",
-            "quantity": 1
-          },
-          {
-            "card": "starter-rest",
-            "quantity": 1
-          }
-        ]
-      },
-      {
-        "id": "deck-8-hand-4",
-        "handSize": 4,
-        "cards": [
-          {
-            "card": "starter-move",
-            "quantity": 3
-          },
-          {
-            "card": "starter-gather",
-            "quantity": 3
-          },
-          {
-            "card": "starter-build",
-            "quantity": 1
-          },
-          {
-            "card": "starter-rest",
-            "quantity": 1
-          }
-        ]
-      },
-      {
         "id": "deck-10-hand-5",
         "handSize": 5,
-        "cards": [
-          {
-            "card": "starter-move",
-            "quantity": 4
-          },
-          {
-            "card": "starter-gather",
-            "quantity": 4
-          },
-          {
-            "card": "starter-build",
-            "quantity": 1
-          },
-          {
-            "card": "starter-rest",
-            "quantity": 1
-          }
-        ]
-      },
-      {
-        "id": "deck-10-hand-3",
-        "handSize": 3,
         "cards": [
           {
             "card": "starter-move",
@@ -112,22 +46,17 @@
     "exchangeRange": 2,
     "enemyMoveHexes": 2,
     "moveCostNextToEnemy": 1,
-    "enemyAttacks": "every-exchange",
-    "adjacentAttack": "target-only",
     "model": "engage",
     "engage": {
       "enemyDie": ["hit", "hit", "miss", "miss", "miss", "special"],
       "hitDamage": 1,
       "specialDamage": 2,
-      "eliteDice": 2,
-      "siegeDamage": 1,
-      "eliteSiegeDamage": 3,
       "defeatedDice": "hit"
     }
   },
   "experience": {
-    "firstStep": 5,
-    "stepIncrease": 5,
+    "firstStep": 3,
+    "stepIncrease": 3,
     "eliteBonus": 0,
     "levelPerEliteSpawn": false
   },
@@ -146,7 +75,8 @@
   },
   "knockout": {
     "returnHealthDivisor": 2,
-    "loseMaterials": true
+    "loseMaterials": true,
+    "loseCurrency": true
   },
   "shop": {
     "offers": 3
@@ -175,8 +105,7 @@
   },
   "options": {
     "boughtCards": "add",
-    "maxLevel": null,
-    "skillUses": "unlimited"
+    "maxLevel": null
   },
   "rulings": {
     "enemiesPerHex": 1,
@@ -184,8 +113,6 @@
     "blockedPathRule": "next-target",
     "tileRotation": false,
     "coopPrepareOrder": "alternate-hands",
-    "structureDamage": "v1",
-    "skirmishFail": "stay-lose-move",
     "fullBoardDraft": "swap",
     "mandatoryPlays": false,
     "shopTiming": "any-time-on-base",
@@ -195,6 +122,7 @@
     "buildOnNode": true,
     "gatherNeedsNode": true,
     "targetTieBreak": ["player", "tower", "barricade", "base"],
-    "playerPullDistance": 2
+    "playerPullDistance": 2,
+    "buildLevels": "levelled"
   }
 }

@@ -41,30 +41,29 @@ export function blockedByFigure(state: GameState, hex: Axial, playerId: string):
 
 /**
  * The cost to move into a hex: 1, or `combat.moveCostNextToEnemy` when the hex is next to an
- * enemy (6.9), unless the card ignores that surcharge (Blink). The step into an enemy's hex (a
- * skirmish) costs 1 (OPEN-QUESTIONS rows 26, 28).
+ * enemy (a config option; Spec v2 6.9: 1), unless the card ignores that surcharge (Blink).
  *
- * @rule 6.7, 6.9, 6.15, Table 8 (Blink), OPEN-QUESTIONS rows 26, 28
+ * @rule 6.7, 6.9, Table 8 (Blink), OPEN-QUESTIONS rows 26, 28
  */
 export function moveCost(state: GameState, to: Axial, ignoreEnemyCost: boolean): number {
-  if (ignoreEnemyCost || enemyAt(state, to)) return 1
+  if (ignoreEnemyCost) return 1
   return nextToEnemy(state, to) ? state.config.combat.moveCostNextToEnemy : 1
 }
 
 /**
- * A step the current player can take now, with its cost, whether it starts a skirmish, and
- * whether it steps off the map edge to reveal a tile (core loop v2).
+ * A step the current player can take now, with its cost, and whether it steps off the map edge
+ * to reveal a tile (6.7 Explore).
  */
-export type MoveOption = Readonly<{ to: Axial; cost: number; skirmish: boolean; reveal: boolean }>
+export type MoveOption = Readonly<{ to: Axial; cost: number; reveal: boolean }>
 
 /**
  * The hexes the current player can step into with the movement left: adjacent, on the map,
- * not lake or mountain (3.4), not blocked by another figure (3.8), and affordable. A hex with
- * an enemy is a skirmish and needs its full cost (6.10, 6.15). While the tile deck has tiles, a
- * hex just off the map edge is a step too: it costs `tiles.revealMoveCost` and reveals the next
- * tile under that hex (core loop v2).
+ * not lake or mountain (3.4), not blocked by another figure (3.8), not holding an enemy (6.9;
+ * there is no skirmish, 6.10), and affordable. While the tile deck has tiles, a hex just off the
+ * map edge is a step too: it costs `tiles.revealMoveCost` and reveals the next tile under that
+ * hex (6.7 Explore).
  *
- * @rule 3.4, 3.8, 6.7, 6.9, 6.10, 6.15, 10.1, core loop v2 (exploring)
+ * @rule Spec v2 3.4, 3.8, 6.7, 6.9, 6.10, 10.3
  */
 export function legalMoves(
   state: GameState,
@@ -76,11 +75,12 @@ export function legalMoves(
     if (!state.map.hexes[hexKey(to)]) {
       const cost = state.config.tiles.revealMoveCost
       const canReveal = state.tileDeck.length > 0 && cost <= hexesLeft
-      return canReveal ? [{ to, cost, skirmish: false, reveal: true }] : []
+      return canReveal ? [{ to, cost, reveal: true }] : []
     }
     if (!isPassable(state.map, to) || blockedByFigure(state, to, player.id)) return []
+    if (enemyAt(state, to)) return []
     const cost = moveCost(state, to, ignoreEnemyCost)
     if (cost > hexesLeft) return []
-    return [{ to, cost, skirmish: !!enemyAt(state, to), reveal: false }]
+    return [{ to, cost, reveal: false }]
   })
 }

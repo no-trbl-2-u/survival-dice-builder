@@ -28,17 +28,30 @@ export function enemyOn(state: GameState, hex: Axial): boolean {
   return state.enemies.some((e) => e.hex.q === hex.q && e.hex.r === hex.r)
 }
 
+/** The highest Build level among the current player's cards (0 with no Build card). */
+export function buildLevel(state: GameState): number {
+  const player = me(state)
+  const ids = [...player.hand, ...player.deck, ...player.discard, ...player.inPlay].map(
+    (c) => c.def,
+  )
+  return state.content.cards
+    .filter((c) => ids.includes(c.id))
+    .reduce((max, c) => (c.top.kind === 'build' ? Math.max(max, c.top.level) : max), 0)
+}
+
 /**
- * The material cost of the cheapest base upgrade still to buy (the next tier of each track).
- * Infinity when every upgrade is bought.
+ * The material cost of the cheapest base upgrade still to buy (the next tier of each track) that
+ * a Build of `level` can buy (Spec v2 11.4; any level with `rulings.buildLevels: "any"`).
+ * Infinity when there is none.
  */
-export function cheapestUpgrade(state: GameState): number {
+export function cheapestUpgrade(state: GameState, level = Number.POSITIVE_INFINITY): number {
+  const reaches = (tier: number) => state.config.rulings.buildLevels === 'any' || tier <= level
   const costs = (['shop', 'training'] as const).flatMap((track) => {
     const bought = state.content.upgrades.filter(
       (u) => u.track === track && state.upgrades.includes(u.id),
     ).length
     const next = state.content.upgrades.find((u) => u.track === track && u.tier === bought + 1)
-    return next ? [next.cost] : []
+    return next && reaches(next.tier) ? [next.cost] : []
   })
   return costs.length > 0 ? Math.min(...costs) : Number.POSITIVE_INFINITY
 }
@@ -148,7 +161,7 @@ function defenderGoal(state: GameState): Axial {
   const near = threat(state)
   if (state.phase === 'combat') return near?.hex ?? BASE
   const player = me(state)
-  if (player.materials >= cheapestUpgrade(state)) return BASE
+  if (player.materials >= cheapestUpgrade(state, buildLevel(state))) return BASE
   if (near && player.materials >= cheapestDefense(state)) return guardPost(state, near.hex) ?? BASE
   return homeNode(state) ?? edgeHex(state) ?? BASE
 }
@@ -163,7 +176,8 @@ export function goal(state: GameState, policy: BotPolicy = 'default'): Axial {
   if (policy === 'turtle') return BASE
   if (policy === 'defender') return defenderGoal(state)
   const player = me(state)
-  if (player.materials < cheapestUpgrade(state)) return homeNode(state) ?? edgeHex(state) ?? BASE
+  if (player.materials < cheapestUpgrade(state, buildLevel(state)))
+    return homeNode(state) ?? edgeHex(state) ?? BASE
   return BASE
 }
 

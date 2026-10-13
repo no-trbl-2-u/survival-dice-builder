@@ -16,7 +16,7 @@ describe('CardView', () => {
 
   it('writes effects in plain text', () => {
     expect(topText(card('blink').top, config)).toBe('Move 5, no extra cost next to enemies')
-    expect(topText(card('architect').top, config)).toBe('Build 2 times')
+    expect(topText(card('architect').top, config)).toBe('Build I 2 times')
     expect(topText({ kind: 'gather', amount: 2 }, config)).toBe(
       'Gather 2 on an unspent gathering node (the node is spent)',
     )

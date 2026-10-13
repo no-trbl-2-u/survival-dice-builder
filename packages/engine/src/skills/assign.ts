@@ -9,23 +9,18 @@ function placed(assignments: readonly Assignment[], skill: string, use: number):
   return assignments.filter((a) => a.skill === skill && a.use === use)
 }
 
-/** True when every slot of a Skill use has a die. */
+/** True when every slot of a Skill use has a die. @rule 7.8 step 5 */
 export function isFull(skill: SkillDef, assignments: readonly Assignment[], use: number): boolean {
   return placed(assignments, skill.id, use).length === skill.faces.length
 }
 
 /**
- * The uses of a Skill a die can go on now. With 1 use per exchange (default) only use 0;
- * with unlimited uses (18.1) also the next use once every earlier use is full.
+ * The use of a Skill a die can go on now: the first use that is not full. A Skill fires again
+ * whenever the dice fill it again (Spec v2 7.8 step 5, ruling 31).
  *
- * @rule 7.8 step 6, 18.1
+ * @rule 7.8 step 5
  */
-export function openUses(
-  skill: SkillDef,
-  assignments: readonly Assignment[],
-  unlimited: boolean,
-): number[] {
-  if (!unlimited) return isFull(skill, assignments, 0) ? [] : [0]
+export function openUses(skill: SkillDef, assignments: readonly Assignment[]): number[] {
   let use = 0
   while (isFull(skill, assignments, use)) use += 1
   return [use]
@@ -40,21 +35,19 @@ export function openUses(
  * @param dice - the exchange dice.
  * @param skills - the player's Skills, in board order.
  * @param assignments - dice already placed.
- * @param unlimited - 18.1 Skill uses option.
- * @rule 2.4, 2.5, 7.8 step 6
+ * @rule 2.4, 2.5, 7.8 steps 4-5
  */
 export function legalPlacements(
   dice: readonly Die[],
   skills: readonly SkillDef[],
   assignments: readonly Assignment[],
-  unlimited: boolean,
 ): Assignment[] {
   const usedDice = new Set(assignments.map((a) => a.die))
   const out: Assignment[] = []
   dice.forEach((die, d) => {
     if (usedDice.has(d) || die.face === 'Blank') return
     for (const skill of skills) {
-      for (const use of openUses(skill, assignments, unlimited)) {
+      for (const use of openUses(skill, assignments)) {
         const taken = new Set(placed(assignments, skill.id, use).map((a) => a.slot))
         const offeredFaces = new Set<string>()
         skill.faces.forEach((face, slot) => {

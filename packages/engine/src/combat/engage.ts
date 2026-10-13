@@ -35,13 +35,40 @@ export function combatOptions(state: GameState, defId: string): readonly CombatO
   return cardDef(state, defId).combat ?? [{ kind: 'engage' }]
 }
 
-/** True when an enemy is an elite: it rolls dice on the enemy die table (Table 5). */
-function isElite(state: GameState, enemy: Enemy): boolean {
-  return enemyDef(state, enemy.kind).attack.kind === 'dice'
+/**
+ * The enemy dice an enemy rolls, from its record (grunt 1, elite 2).
+ *
+ * @rule Spec v2 9.6, Table 5
+ */
+export function enemyDiceCount(state: GameState, enemy: Enemy): number {
+  return enemyDef(state, enemy.kind).dice
 }
 
-/** Rolls the enemy dice: 1 per grunt, `eliteDice` per elite. Never rerolled. */
-function rollEnemyDice(
+/**
+ * The siege damage an enemy gives a structure, from its record (grunt 1, elite 3).
+ *
+ * @rule Spec v2 7.11, 9.6, Table 5
+ */
+export function siegeDamage(state: GameState, enemy: Enemy): number {
+  return enemyDef(state, enemy.kind).siege
+}
+
+/**
+ * The damage of 1 enemy die face: Hit `hitDamage`, Special `specialDamage`, Miss 0.
+ *
+ * @rule Spec v2 Table 4
+ */
+export function enemyDieDamage(state: GameState, face: EnemyDieRoll['face']): number {
+  const cfg = state.config.combat.engage
+  return face === 'hit' ? cfg.hitDamage : face === 'special' ? cfg.specialDamage : 0
+}
+
+/**
+ * Rolls the enemy dice of each listed enemy, the count from its record. Never rerolled.
+ *
+ * @rule Spec v2 7.8 step 2, 9.6, Table 4
+ */
+export function rollEnemyDice(
   state: GameState,
   rng: number,
   enemies: readonly Enemy[],
@@ -50,7 +77,7 @@ function rollEnemyDice(
   const out: EnemyDieRoll[] = []
   let current = rng
   for (const enemy of enemies) {
-    const count = isElite(state, enemy) ? state.config.combat.engage.eliteDice : 1
+    const count = enemyDiceCount(state, enemy)
     for (let i = 0; i < count; i++) {
       const [index, next] = nextInt(current, faces.length)
       current = next
@@ -62,13 +89,18 @@ function rollEnemyDice(
 
 /**
  * Plays a card's Engage option, from anywhere: the card goes on the table, every enemy next to
- * the player rolls its enemy dice (an enemy further away rolls nothing), and the player rolls
- * their action dice (roll 1). The exchange machinery runs the rest: keep and reroll, add cards,
- * put dice on Skills; each fired Skill then picks its target in its own range.
+ * the player rolls its enemy dice (an enemy further away rolls nothing, 7.9), and the player
+ * rolls their action dice (roll 1). The exchange machinery runs the rest: keep and reroll, add
+ * cards, put dice on Skills; each fired Skill then picks its target in its own range. An Engage
+ * on a top half (`half: "top"`) runs the same engagement in the Prepare phase (6.7).
  *
- * @rule Combat v3 (engagement steps 1-2)
+ * @rule Spec v2 6.7 (Engage), 7.8 steps 1-2, 7.9
  */
-export function startEngagement(state: GameState, card: string): Step {
+export function startEngagement(
+  state: GameState,
+  card: string,
+  half: 'top' | 'bottom' = 'bottom',
+): Step {
   const player = currentPlayer(state)
   const near = byAge(state.enemies).filter((e) => adjacent(e.hex, player.hex))
   const [enemyDice, afterEnemy] = rollEnemyDice(state, state.rng, near)
@@ -88,14 +120,13 @@ export function startEngagement(state: GameState, card: string): Step {
         ignoreHits: 0,
         assignments: [],
         queue: [],
-        skirmish: null,
         engage: { enemyDice },
       },
     },
     [
-      { type: 'cardPlayed', rule: 'Combat v3', player: player.id, card, half: 'bottom' },
-      { type: 'engaged', rule: 'Combat v3', player: player.id, card, enemyDice },
-      { type: 'diceRolled', rule: 'Combat v3', player: player.id, faces, roll: 1 },
+      { type: 'cardPlayed', rule: half === 'top' ? '6.7' : '7.7', player: player.id, card, half },
+      { type: 'engaged', rule: '7.8', player: player.id, card, enemyDice },
+      { type: 'diceRolled', rule: '7.8', player: player.id, faces, roll: 1 },
     ],
   ]
 }
@@ -174,10 +205,10 @@ export function playOption(state: GameState, card: string, option: CombatOption)
 }
 
 /**
- * Repair: on the Base tile the base gets `amount` health back (up to its maximum); elsewhere
+ * Repair N: on the Base tile the base gets `amount` health back (up to its maximum); elsewhere
  * the most damaged defense on or next to the player's hex does. Nothing to repair: no effect.
  *
- * @rule Combat v3 (Build card Combat side)
+ * @rule Spec v2 12.5, 7.7 (Repair option)
  */
 export function repair(state: GameState, amount: number): Step {
   const player = currentPlayer(state)
@@ -248,15 +279,13 @@ export function cancelledEnemyDice(state: GameState): number[] {
 export function finishEngagement(state: GameState): Step {
   const engage = state.exchange?.engage
   if (!engage) throw new Error('No engagement in progress')
-  const cfg = state.config.combat.engage
   const playerId = currentPlayer(state).id
   const events: GameEvent[] = []
   let current = state
   let ignore = state.exchange?.ignoreHits ?? 0
   const cancelled = new Set(cancelledEnemyDice(state))
   for (const [i, roll] of engage.enemyDice.entries()) {
-    const damage =
-      roll.face === 'hit' ? cfg.hitDamage : roll.face === 'special' ? cfg.specialDamage : 0
+    const damage = enemyDieDamage(state, roll.face)
     if (damage === 0) continue
     if (cancelled.has(i)) {
       events.push({
@@ -305,14 +334,13 @@ export function finishEngagement(state: GameState): Step {
 }
 
 /**
- * Siege, at the end of Combat (Combat v3 replaces the enemy attack phase): each enemy next to a
- * structure, oldest first, deals `siegeDamage` to it (an elite: `eliteSiegeDamage`) — a
- * Barricade first, then a Tower, then the base. The base at 0 ends the run.
+ * Siege, at the end of Combat (both Combat models): each enemy next to a structure, oldest
+ * first, gives its record's siege damage to it — a Barricade first, then a Tower, then the
+ * base. An enemy next to a player also does the siege. The base at 0 ends the run.
  *
- * @rule Combat v3 (siege), 7.12, 14.1
+ * @rule Spec v2 7.10-7.12, 9.5, 14.1
  */
 export function siege(state: GameState): Step {
-  const cfg = state.config.combat.engage
   let current = state
   const events: GameEvent[] = []
   for (const { id } of byAge(state.enemies)) {
@@ -321,11 +349,11 @@ export function siege(state: GameState): Step {
     if (!enemy) continue
     const structure = adjacentStructures(current, enemy.hex)[0]
     if (!structure) continue
-    const damage = isElite(current, enemy) ? cfg.eliteSiegeDamage : cfg.siegeDamage
+    const damage = siegeDamage(current, enemy)
     if (damage <= 0) continue
     events.push({
       type: 'structureAttacked',
-      rule: 'Combat v3 (siege)',
+      rule: '7.11',
       enemy: enemy.id,
       structure: structure.id,
       damage,
@@ -351,17 +379,16 @@ export function engagementMoves(state: GameState): boolean {
   if (!exchange) return false
   const player = currentPlayer(state)
   const skills = player.skills.map((id) => skillDef(state, id))
-  const unlimited = state.config.options.skillUses === 'unlimited'
-  if (legalPlacements(exchange.dice, skills, exchange.assignments, unlimited).length > 0) {
-    return true
-  }
+  if (legalPlacements(exchange.dice, skills, exchange.assignments).length > 0) return true
+  // A Prepare engagement takes no card adds: the hand shows top halves (phase 41 decision).
+  if (state.phase !== 'combat') return false
   const free = exchange.dice.some((_, i) => !exchange.assignments.some((a) => a.die === i))
   return (
     free && player.hand.some((c) => combatOptions(state, c.def).some((o) => o.kind === 'reroll'))
   )
 }
 
-/** Ends the "add cards" step of an engagement: on to putting dice on Skills. */
+/** Ends the "add cards" step of an engagement: on to putting dice on Skills. @rule 7.8 step 4 */
 export function endCards(state: GameState): Step {
   return [updateExchange(state, (e) => ({ ...e, step: 'assign' })), []]
 }

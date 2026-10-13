@@ -19,31 +19,33 @@ describe('DecisionsPage', () => {
     // Exactly the open rows; the count falls as the designer settles readings.
     expect(readings.length).toBe(openQuestions(parseQuestions(questionsMd)).length)
     expect(readings.length).toBeGreaterThan(0)
-    // Row 1 is decided, so it is not listed; pending-spec rows come first, and row 7 is one.
+    // Row 1 is decided, so it is not listed; pending-spec rows come first.
     expect(container.querySelector('[data-question="1"]')).toBeNull()
     expect(readings[0]?.textContent).toContain('Waiting for the designer to write the rule')
     // Statuses are plain words: no build terms or phase numbers.
     expect(container.querySelector('[data-testid="readings"]')?.textContent).not.toMatch(
       /Status: [^.]*(pending-spec|structural|phase \d)/,
     )
-    expect(container.querySelector('[data-question="7"]')).not.toBeNull()
-    const link = container.querySelector('a[href="/config#cfg-rulings-structureDamage"]')
-    expect(link?.textContent).toBe('rulings.structureDamage')
+    // Row 7 was settled by Spec v2 (ruling 17), so it is not listed; row 63 is open.
+    expect(container.querySelector('[data-question="7"]')).toBeNull()
+    expect(container.querySelector('[data-question="63"]')).not.toBeNull()
+    const link = container.querySelector('a[href="/config#cfg-clock-forcedRevealEvery"]')
+    expect(link?.textContent).toBe('clock.forcedRevealEvery')
     // The config label stands before the path.
-    expect(link?.parentElement?.textContent).toContain('Structure damage (rulings.structureDamage)')
+    expect(link?.parentElement?.textContent).toContain(
+      'Forced reveal every (clock.forcedRevealEvery)',
+    )
     expect(container.querySelectorAll('[data-testid="checks"] > li').length).toBeGreaterThan(3)
     expect(container.textContent).not.toMatch(/undefined|\*\*/)
   })
 
-  it('says the default Combat model and marks the readings for the other one', () => {
+  it('says the default Combat model; no open reading is for one model only (Spec v2)', () => {
     const { container } = render(<DecisionsPage />)
     expect(container.textContent).toContain('Combat uses engagements by default.')
-    const tag = (n: number) =>
-      container.querySelector(`[data-question="${n}"] [data-testid="combat-model"]`)?.textContent
-    expect(tag(65)).toBe('Exchanges only')
-    expect(tag(69)).toBe('Exchanges only')
-    // Row 66's tile delay applies under both models.
-    expect(tag(66)).toBeUndefined()
+    // Spec v2 (ruling 18) removed the exchange-only options of rows 65 and 69.
+    expect(container.querySelector('[data-question="65"]')).toBeNull()
+    expect(container.querySelector('[data-question="69"]')).toBeNull()
+    expect(container.querySelector('[data-testid="combat-model"]')).toBeNull()
   })
 
   it('shows each proposal with its measured effect and a Try button (phase 39)', () => {
@@ -53,33 +55,32 @@ describe('DecisionsPage', () => {
     expect(row63?.textContent).toContain('Measured under engagements')
     expect(row63?.textContent).toContain('Recommendation from the bot batches')
     expect(row63?.querySelector('button')?.textContent).toBe('Try this on /play')
-    const row65 = container.querySelector('[data-question="65"] [data-proposal]')
-    expect(row65?.textContent).toContain('Not measured under engagements')
-    expect(row65?.querySelector('button')).toBeNull()
-    expect(container.querySelectorAll('[data-proposal]').length).toBe(8)
+    expect(container.querySelectorAll('[data-proposal]').length).toBe(6)
   })
 
   it('lists the readings decided recently, newest first (phase 37)', () => {
     const { container } = render(<DecisionsPage />)
     const recent = [...container.querySelectorAll('[data-testid="recent"] > li')]
     const numbers = recent.map((li) => Number(li.getAttribute('data-decided')))
-    // The three designer changes of 2026-10-09 and row 72 lead the list.
-    expect(numbers.slice(0, 4).sort((a, b) => a - b)).toEqual([72, 75, 76, 77])
+    // The Spec v2 rulings of 2026-10-11 lead the list, then the changes of 2026-10-09.
+    const v2 = [7, 30, 49, 50, 55, 59, 60, 65, 69, 73, 74]
+    expect(numbers.slice(0, v2.length).sort((a, b) => a - b)).toEqual(v2)
+    expect(numbers.slice(v2.length).sort((a, b) => a - b)).toEqual([72, 75, 76, 77])
     expect(container.querySelector('[data-decided="76"]')?.textContent).toContain(
       'decided 2026-10-09',
     )
     // Open readings are not listed as decided.
-    expect(numbers).not.toContain(73)
+    expect(numbers).not.toContain(63)
     expect(container.querySelector('nav a[href="#recent"]')).not.toBeNull()
   })
 
   it('links each row it names: to the listed reading, or to the full table for a settled row', () => {
     const { container } = render(<DecisionsPage />)
     const row = (n: number) => container.querySelector(`[data-question="${n}"]`)
-    // Row 30 points at row 49, which is open and listed on the page.
-    const listed = [...row(30)!.querySelectorAll('a')].find((a) => a.textContent === 'row 49')
-    expect(listed?.getAttribute('href')).toBe('#q-49')
-    expect(container.querySelector('#q-49')).toBe(row(49))
+    // Row 46 points at row 9, which is open and listed on the page.
+    const listed = [...row(46)!.querySelectorAll('a')].find((a) => a.textContent === 'row 9')
+    expect(listed?.getAttribute('href')).toBe('#q-9')
+    expect(container.querySelector('#q-9')).toBe(row(9))
     // Row 63 points at row 62, which is settled and not listed.
     expect(row(62)).toBeNull()
     const hidden = [...row(63)!.querySelectorAll('a')].find((a) => a.textContent === 'row 62')

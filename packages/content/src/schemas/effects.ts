@@ -7,9 +7,11 @@ import { NonNegativeInt, PositiveInt } from './primitives.ts'
  * - `move`: move up to `hexes`. `ignoreEnemyCost` skips the 6.9 surcharge (Blink).
  * - `gather`: take `amount` materials from the gathering node, which is then spent (core loop
  *   v2; Haul "Gather +2" = amount 2, OPEN-QUESTIONS row 20).
- * - `build`: 1 upgrade on the base or 1 defense elsewhere; `costReduction` lowers the material
- *   cost, `times` builds more than once (Architect).
+ * - `build`: 1 upgrade on the base or 1 defense elsewhere, up to the card's `level` (Build I = 1;
+ *   Spec v2 11.4, 12.1); `costReduction` lowers the material cost, `times` builds more than once
+ *   (Architect).
  * - `rest`: heal `amount`.
+ * - `engage`: 1 engagement (7.8) in the Prepare phase (Spec v2 6.7; no card shows it yet).
  *
  * @rule 6.7, Table 2, Table 8
  */
@@ -22,10 +24,12 @@ export const PrepareEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('gather'), amount: PositiveInt }),
   z.object({
     kind: z.literal('build'),
+    level: PositiveInt.default(1),
     costReduction: NonNegativeInt.default(0),
     times: PositiveInt.default(1),
   }),
   z.object({ kind: z.literal('rest'), amount: PositiveInt }),
+  z.object({ kind: z.literal('engage') }),
 ])
 export type PrepareEffect = z.infer<typeof PrepareEffectSchema>
 
@@ -53,7 +57,7 @@ export type CombatEffect = z.infer<typeof CombatEffectSchema>
  * Combat v3 card options (`combat.model: "engage"`, docs/design/combat-v3.md). A card's Combat
  * side offers 1 or more; playing the card uses exactly 1.
  *
- * - `engage`: start an engagement with 1 enemy (the attack).
+ * - `engage`: start an engagement from the player's hex; each adjacent enemy rolls its dice (7.8).
  * - `move`: move up to `hexes`, as in Prepare.
  * - `reroll`: reroll `dice` of your dice in the current engagement.
  * - `heal`: heal `amount`.

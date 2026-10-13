@@ -63,7 +63,7 @@ describe('nextStep', () => {
     const placed = applyAction(s, legalActions(s)[0]!).state
     const building = {
       ...placed,
-      active: { kind: 'build', buildsLeft: 1, costReduction: 0 },
+      active: { kind: 'build', buildsLeft: 1, costReduction: 0, level: 1 },
       players: placed.players.map((p) => ({ ...p, materials: 50 })),
     } as const
     const legal = legalActions(building)

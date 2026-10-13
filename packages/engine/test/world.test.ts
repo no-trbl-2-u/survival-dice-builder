@@ -48,7 +48,6 @@ const grunt = (id: string, q: number, r: number) => ({
   kind: 'grunt',
   health: 2,
   hex: { q, r },
-  attackedThisCombat: false,
 })
 
 const moves = (s: GameState) =>
@@ -154,72 +153,30 @@ describe('Move (6.7-6.9)', () => {
   })
 })
 
-describe('skirmish (6.10-6.15)', () => {
-  const atSkirmish = () => {
+describe('no skirmish (Spec v2 6.9, 6.10, ruling 12)', () => {
+  const moves = (ignoreEnemyCost: boolean) =>
+    legalActions(
+      world({
+        enemies: [grunt('e1', 1, 0)],
+        active: { kind: 'move', hexesLeft: 2, ignoreEnemyCost },
+      }),
+    ).flatMap((a) => (a.type === 'moveTo' ? [`${a.q},${a.r}`] : []))
+
+  it('6.9 a figure cannot move into a hex that has an enemy', () => {
+    expect(moves(false)).not.toContain('1,0')
+    expect(moves(false).length).toBeGreaterThan(0)
+  })
+
+  it('6.10 a card that ignores the move surcharge (Blink) cannot enter an enemy hex either', () => {
+    expect(moves(true)).not.toContain('1,0')
+  })
+
+  it('6.10 moving into an enemy hex is an illegal action', () => {
     const s = world({
       enemies: [grunt('e1', 1, 0)],
       active: { kind: 'move', hexesLeft: 2, ignoreEnemyCost: false },
     })
-    return applyAction(s, { type: 'moveTo', q: 1, r: 0 })
-  }
-
-  it('6.10-6.11, row 26 entering an enemy hex pays 1, rolls the dice once, and goes to Skill placement', () => {
-    const { state, events } = atSkirmish()
-    expect(events.map((e) => e.type)).toEqual(['skirmishStarted', 'diceRolled'])
-    expect(state.exchange).toMatchObject({ step: 'assign', skirmish: { hex: { q: 1, r: 0 } } })
-    expect(state.active).toMatchObject({ hexesLeft: 1 })
-    expect(state.players[0]!.hex).toEqual({ q: 0, r: 0 })
-    expect(legalActions(state).some((a) => a.type === 'playCard')).toBe(false)
-  })
-
-  it('6.13 a won skirmish moves the figure in and keeps the rest of the Move', () => {
-    let { state: s } = atSkirmish()
-    s = { ...s, exchange: { ...s.exchange!, dice: [{ face: 'Sword', kept: false }] } }
-    s = applyAction(s, {
-      type: 'assignDie',
-      die: 0,
-      skill: 'strike',
-      use: 0,
-      slot: 0,
-      asFace: 'Sword',
-    }).state
-    const { state, events } = applyAction(s, { type: 'confirmAssignment' })
-    expect(events.map((e) => e.type)).toContain('enemyDefeated')
-    expect(events).toContainEqual(expect.objectContaining({ type: 'skirmishEnded', won: true }))
-    expect(state.players[0]!.hex).toEqual({ q: 1, r: 0 })
-    expect(state.active).toMatchObject({ kind: 'move', hexesLeft: 1 })
-    expect(state.exchange).toBeNull()
-  })
-
-  it('6.12, 6.14 [006] a lost skirmish: the enemy attacks once, the figure stays, the Move ends', () => {
-    const { state: s } = atSkirmish()
-    const { state, events } = applyAction(s, { type: 'confirmAssignment' })
-    expect(events.filter((e) => e.type === 'enemyAttacked')).toHaveLength(1)
-    expect(events).toContainEqual(expect.objectContaining({ type: 'skirmishEnded', won: false }))
-    expect(state.players[0]!.hex).toEqual({ q: 0, r: 0 })
-    expect(state.active).toBeNull()
-  })
-
-  it('6.11 only the enemy in the entered hex can be hit', () => {
-    const s = world({
-      enemies: [grunt('e1', 1, 0), grunt('e2', 1, -1)],
-      active: { kind: 'move', hexesLeft: 2, ignoreEnemyCost: false },
-    })
-    let { state } = applyAction(s, { type: 'moveTo', q: 1, r: 0 })
-    state = {
-      ...state,
-      exchange: { ...state.exchange!, dice: [{ face: 'Sword', kept: false }] },
-    }
-    state = applyAction(state, {
-      type: 'assignDie',
-      die: 0,
-      skill: 'strike',
-      use: 0,
-      slot: 0,
-      asFace: 'Sword',
-    }).state
-    const after = applyAction(state, { type: 'confirmAssignment' }).state
-    expect(after.enemies.map((e) => e.id)).toEqual(['e2'])
+    expect(() => applyAction(s, { type: 'moveTo', q: 1, r: 0 })).toThrow()
   })
 })
 
@@ -326,16 +283,16 @@ describe('Gather (6.7, Table 1, core loop v2)', () => {
     expect(state.players[0]!.materials).toBe(0)
   })
 
-  it('row 20 Haul gathers 2 in total', () => {
+  it('Spec v2 Table 8 (ruling 13) Haul gathers 3 in total', () => {
     const { state } = applyAction(gathering('haul'), { type: 'playCard', card: 'x1' })
-    expect(state.players[0]!.materials).toBe(2)
+    expect(state.players[0]!.materials).toBe(3)
   })
 
   it('row 59 with gatherNeedsNode off, Gather works off a node and spends nothing', () => {
     const loose = { ...config, rulings: { ...config.rulings, gatherNeedsNode: false } }
     const s = { ...gathering('haul', 0, 1), config: loose }
     const { state } = applyAction(s, { type: 'playCard', card: 'x1' })
-    expect(state.players[0]!.materials).toBe(2)
+    expect(state.players[0]!.materials).toBe(3)
     expect(state.spentNodes).toEqual([])
   })
 
@@ -353,7 +310,7 @@ describe('Gather (6.7, Table 1, core loop v2)', () => {
 describe('Build (12.1-12.4)', () => {
   // (1,1) is the Stony Fields hills hex next to the Base tile.
   const building = (materials: number) =>
-    withPlayer(world({ active: { kind: 'build', buildsLeft: 1, costReduction: 0 } }), {
+    withPlayer(world({ active: { kind: 'build', buildsLeft: 1, costReduction: 0, level: 1 } }), {
       hex: { q: 1, r: 1 },
       materials,
     })
@@ -394,18 +351,24 @@ describe('Build (12.1-12.4)', () => {
   })
 
   it('12.2 [row 14] a defense may be built on a gathering node', () => {
-    const s = withPlayer(world({ active: { kind: 'build', buildsLeft: 1, costReduction: 0 } }), {
-      hex: { q: 1, r: 2 },
-      materials: 2,
-    })
+    const s = withPlayer(
+      world({ active: { kind: 'build', buildsLeft: 1, costReduction: 0, level: 1 } }),
+      {
+        hex: { q: 1, r: 2 },
+        materials: 2,
+      },
+    )
     expect(legalActions(s)).toContainEqual({ type: 'build', defense: 'barricade', q: 1, r: 2 })
   })
 
   it('Table 8 a cost reduction lowers the price (Mason: Barricade costs 1)', () => {
-    const s = withPlayer(world({ active: { kind: 'build', buildsLeft: 1, costReduction: 1 } }), {
-      hex: { q: 1, r: 1 },
-      materials: 1,
-    })
+    const s = withPlayer(
+      world({ active: { kind: 'build', buildsLeft: 1, costReduction: 1, level: 1 } }),
+      {
+        hex: { q: 1, r: 1 },
+        materials: 1,
+      },
+    )
     const { state } = applyAction(s, { type: 'build', defense: 'barricade', q: 1, r: 1 })
     expect(state.players[0]!.materials).toBe(0)
   })

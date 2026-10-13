@@ -33,7 +33,6 @@ export type GameEvent = Readonly<
         enemy: string
         player: string
         damage: number
-        faces?: readonly Face[]
       }
     | { type: 'hitIgnored'; enemy: string; player: string }
     | { type: 'enemyDieCancelled'; enemy: string; player: string }
@@ -50,8 +49,6 @@ export type GameEvent = Readonly<
     | { type: 'tilePlaced'; tile: string; center: Axial }
     | { type: 'enemySpawned'; enemy: string; kind: string; hex: Axial; spilled: boolean }
     | { type: 'moved'; player: string; from: Axial; to: Axial; cost: number; hexesLeft: number }
-    | { type: 'skirmishStarted'; player: string; hex: Axial; enemy: string }
-    | { type: 'skirmishEnded'; player: string; won: boolean }
     | { type: 'gathered'; player: string; amount: number; materials: number; spent: boolean }
     | { type: 'figurePlaced'; player: string; hex: Axial }
     | { type: 'revealStepBlocked'; player: string; hex: Axial; hexesLeft: number }
@@ -73,7 +70,6 @@ export type GameEvent = Readonly<
         enemy: string
         structure: string
         damage: number
-        faces?: readonly Face[]
       }
     | { type: 'baseDamaged'; amount: number; health: number }
     | { type: 'eliteReplaced'; grunt: string; elite: string; hex: Axial }
@@ -93,7 +89,7 @@ export type GameEvent = Readonly<
     | { type: 'skillPooled'; skill: string; player: string }
     | { type: 'skillReplaced'; player: string; skill: string }
     | { type: 'milestoneReached'; milestone: string; round: number }
-    | { type: 'playerKnockedOut'; player: string; materialsLost: number }
+    | { type: 'playerKnockedOut'; player: string; materialsLost: number; currencyLost: number }
     | { type: 'playerReturned'; player: string; health: number }
     | { type: 'returnDelayed'; player: string }
     | { type: 'runEnded'; because: 'base'; round: number }

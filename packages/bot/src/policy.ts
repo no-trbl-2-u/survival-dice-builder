@@ -98,8 +98,8 @@ function building(state: GameState, actions: readonly Action[]): Action | undefi
 
 /**
  * An active Move: step closer to the goal (off the map edge to reveal a tile when the goal is
- * there), never into a skirmish; stop when no step helps. The turtle never steps off the Base
- * tile.
+ * there), never into an enemy's hex (6.9); stop when no step helps. The turtle never steps off
+ * the Base tile.
  */
 function moving(
   state: GameState,
@@ -117,7 +117,7 @@ function moving(
   return step ?? ofType(actions, 'stopMoving')[0]
 }
 
-/** Combat and skirmish decisions: keep, roll, play, reroll, place dice, target. */
+/** Combat and engagement decisions: keep, roll, play, reroll, place dice, target. */
 function combat(state: GameState, actions: readonly Action[]): Action | undefined {
   const exchange = state.exchange
   if (!exchange) return undefined
@@ -182,7 +182,7 @@ function prepareCard(
     switch (top.kind) {
       case 'build': {
         const reduction = top.costReduction ?? 0
-        const upgrade = cheapestUpgrade(state)
+        const upgrade = cheapestUpgrade(state, top.level)
         if (onBase) return player.materials + reduction >= upgrade ? 4 : -1
         // The defender builds a defense near the base while an enemy comes for it.
         const post = hexDistance(player.hex, BASE) <= POST_RANGE + 1
@@ -197,6 +197,9 @@ function prepareCard(
         return player.health <= player.maxHealth - 3 ? 2 : -1
       case 'move':
         return atGoal(state, policy) ? -1 : 2
+      case 'engage':
+        // Spec v2 6.7: a Prepare engagement is worth it only with an enemy next to the figure.
+        return state.enemies.some((e) => hexDistance(e.hex, player.hex) === 1) ? 3 : -1
     }
   }
   const best = [...plays].sort((a, b) => useful(b) - useful(a))[0]

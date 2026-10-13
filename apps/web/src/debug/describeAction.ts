@@ -98,9 +98,7 @@ function label(action: Action, state: GameState): string {
       if (!state.map.hexes[hexKey(action)]) {
         return `Step off the map edge, ${stepsAway(here(state), action)}: reveal a tile; its spawn nodes add enemies at every Combat`
       }
-      const enemy = state.enemies.find((e) => e.hex.q === action.q && e.hex.r === action.r)
-      const where = `${hexName(state, action)}, ${stepsAway(here(state), action)}`
-      return `Move to ${where}${enemy ? `: skirmish ${enemyName(state, enemy.id)}` : ''}`
+      return `Move to ${hexName(state, action)}, ${stepsAway(here(state), action)}`
     }
     case 'stopMoving':
       return 'Stop moving'

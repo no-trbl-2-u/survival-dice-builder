@@ -8,6 +8,9 @@ import {
 } from '@survival/content'
 import styles from './Play.module.css'
 
+/** The Roman numeral of a Build level (Build I, Build II, Build III). */
+const LEVEL_NAMES: Readonly<Record<number, string>> = { 1: 'I', 2: 'II', 3: 'III' }
+
 /** Plain text for a top-half (Prepare) effect; Gather reads the config's node rules. */
 export function topText(e: PrepareEffect, config: GameConfig): string {
   switch (e.kind) {
@@ -16,9 +19,11 @@ export function topText(e: PrepareEffect, config: GameConfig): string {
     case 'gather':
       return gatherText(e.amount, config)
     case 'build':
-      return `Build${e.costReduction > 0 ? `, cost -${e.costReduction}` : ''}${e.times > 1 ? ` ${e.times} times` : ''}`
+      return `Build ${LEVEL_NAMES[e.level] ?? e.level}${e.costReduction > 0 ? `, cost -${e.costReduction}` : ''}${e.times > 1 ? ` ${e.times} times` : ''}`
     case 'rest':
       return `Rest: heal ${e.amount}`
+    case 'engage':
+      return 'Engage'
   }
 }
 

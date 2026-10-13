@@ -51,20 +51,13 @@ const tagged = Object.entries(defaultConfigMeta).flatMap(([path, entry]) =>
 )
 
 describe('Combat model tags in config metadata (phase 37)', () => {
-  it('tags the exchange-only rulings and every engagement setting', () => {
-    const paths = tagged.map((t) => `${t.path}:${t.model}`)
-    expect(paths).toEqual(
-      expect.arrayContaining([
-        'combat.enemyAttacks:exchange',
-        'combat.adjacentAttack:exchange',
-        'rulings.structureDamage:exchange',
-        'combat.engage.siegeDamage:engage',
-        'combat.engage.defeatedDice:engage',
-      ]),
-    )
-    const engageLeaves = Object.keys(base.combat.engage).map((k) => `combat.engage.${k}`)
-    for (const path of engageLeaves) {
-      expect(tagged.find((t) => t.path === path)?.model, path).toBe('engage')
+  it('tags the engagement-only setting; the enemy die is read under both models (Spec v2)', () => {
+    expect(tagged.map((t) => `${t.path}:${t.model}`)).toEqual(['combat.engage.defeatedDice:engage'])
+    for (const path of ['enemyDie', 'hitDamage', 'specialDamage']) {
+      expect(
+        tagged.find((t) => t.path === `combat.engage.${path}`),
+        path,
+      ).toBeUndefined()
     }
   })
 
@@ -86,14 +79,11 @@ describe('Combat model tags in config metadata (phase 37)', () => {
 
   it('the same check sees a change under the model a field is tagged with', () => {
     // Without this, a bot run that never reached Combat would pass the test above.
-    const siege = withValue(base, 'combat.engage.siegeDamage', 3)
-    const damage = withValue(
-      withValue(base, 'combat.model', 'exchange'),
-      'rulings.structureDamage',
-      'grunt-die',
-    )
-    expect(SEEDS.some((seed) => play(siege, seed) !== play(base, seed))).toBe(true)
+    const cancelled = withValue(base, 'combat.engage.defeatedDice', 'cancelled')
+    expect(SEEDS.some((seed) => play(cancelled, seed) !== play(base, seed))).toBe(true)
+    // The enemy die is read under exchanges too (Spec v2 9.5): a change shows there.
     const exchange = withValue(base, 'combat.model', 'exchange')
-    expect(SEEDS.some((seed) => play(damage, seed) !== play(exchange, seed))).toBe(true)
+    const hits = withValue(exchange, 'combat.engage.hitDamage', 3)
+    expect(SEEDS.some((seed) => play(hits, seed) !== play(exchange, seed))).toBe(true)
   })
 })

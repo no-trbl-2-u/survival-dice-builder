@@ -36,7 +36,7 @@ src/
   events/     the GameEvent union
   progression/ XP and levels, supplies, Shop, base upgrades, Skill draft, milestones (8, 11, 17)
   map/        tile placement and slots, the Base tile, passability, spawning with spill-over (3.x, 9.8)
-  movement/   step-by-step Move and skirmishes (6.7-6.15)
+  movement/   step-by-step Move (6.7-6.9; no skirmish in Spec v2)
   build/      defense placement, cost, damage (12.1-12.4)
   gather/     Gather on an unspent gathering node, which is then spent (6.7)
   enemies/    targets, pathing, movement, refill and waves, Towers and structure attacks (7.3-7.12, 9)
@@ -44,7 +44,7 @@ src/
 test/
   api.test.ts         rule-tagged scenario tests
   coop.test.ts        2-4 players: start hexes, turn order, drafts, a 3-player run
-  world.test.ts       map, start hexes, Move, exploring, skirmish, Gather, Build, Combat range
+  world.test.ts       map, start hexes, Move, exploring, Gather, Build, Combat range
   enemies.test.ts     enemy targets and movement, spawns, waves, Towers, structures, round end
   progression.test.ts XP, Shop, upgrades, draft, milestones, end of run (phase 8)
   properties.test.ts  fast-check invariants over random legal walks
@@ -61,7 +61,8 @@ player puts their figure on a free Base tile hex (`placeFigure`). The whole Base
 base (`map/base.ts`). A Move step off the map edge reveals the next tile under the hex entered
 (core loop v2, phase 20); its enemies come at the next Combat start. Move and Build are decided one
 step at a time (`moveTo` / `stopMoving`, `build` / `stopBuilding`) through `state.active`;
-entering an enemy's hex starts a skirmish, which reuses `state.exchange` with `skirmish` set.
+a figure never enters an enemy's hex (Spec v2 6.9); a top-half Engage runs an engagement in
+Prepare (6.7) through `state.exchange`.
 Combat is range-aware: Skills hit only within their range, and only adjacent enemies that
 target the player attack. Every exchange is played, even with no enemy near (heal, guard, and
 reroll still work).

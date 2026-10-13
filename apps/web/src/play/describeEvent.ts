@@ -118,7 +118,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'enemyDefeated':
       return `${upper(enemyLabel(names, event.enemy, event.kind))} is defeated.`
     case 'enemyAttacked':
-      return `${upper(enemyLabel(names, event.enemy))} attacks ${whom(event.player)} for ${event.damage}${event.faces ? ` (${event.faces.join(', ')})` : ''}.`
+      return `${upper(enemyLabel(names, event.enemy))} attacks ${whom(event.player)} for ${event.damage}.`
     case 'engaged':
       return `${who(event.player)} ${s('engage')}. ${event.enemyDice.length === 0 ? 'No enemy is next to you: no enemy dice.' : `Enemy dice: ${event.enemyDice.map((d) => `${enemyLabel(names, d.enemy)} ${d.face}`).join(', ')}.`}`
     case 'repaired':
@@ -140,12 +140,6 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `${upper(article(event.kind))} appears on ${place(names, event.hex)}${event.spilled ? ' (node taken: nearest empty hex)' : ''}.`
     case 'moved':
       return `${who(event.player)} moved to ${place(names, event.to)} (cost ${event.cost}, ${event.hexesLeft} left).`
-    case 'skirmishStarted':
-      return `Skirmish with ${enemyLabel(names, event.enemy)} on ${place(names, event.hex)}.`
-    case 'skirmishEnded':
-      return event.won
-        ? `Skirmish won: ${whom(event.player)} ${s('move')} into the hex.`
-        : `Skirmish lost: ${whom(event.player)} ${s('stay')}; the Move ends.`
     case 'gathered':
       return event.amount === 0
         ? `${who(event.player)} gathered nothing: gather on an unspent gathering node with no enemy on it.`

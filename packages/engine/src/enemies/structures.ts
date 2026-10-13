@@ -1,13 +1,10 @@
-import { damageDefense } from '../build/defenses.ts'
-import { damageEnemy, rollEnemyDamage } from '../combat/resolve.ts'
+import { damageEnemy } from '../combat/resolve.ts'
 import type { GameEvent } from '../events/events.ts'
 import { hexDistance } from '../hex.ts'
 import { canAttackBase } from '../map/base.ts'
 import { adjacent } from '../map/tiles.ts'
-import { placedPlayers } from '../movement/move.ts'
 import type { Step } from '../state/helpers.ts'
 import type { Enemy, GameState } from '../state/types.ts'
-import { byAge } from './movement.ts'
 
 /**
  * Damages the base. At 0 health the run ends (14.1).
@@ -117,42 +114,4 @@ export function adjacentStructures(
     (a, b) =>
       STRUCTURE_ORDER.indexOf(a.kind) - STRUCTURE_ORDER.indexOf(b.kind) || a.id.localeCompare(b.id),
   )
-}
-
-/**
- * Structure attack step: each enemy (oldest first) that is not next to a player's figure attacks 1
- * adjacent structure — a Barricade first, then a Tower, then the base (next to any Base tile
- * hex, row 16). Damage follows
- * `rulings.structureDamage` (row 7). The base at 0 ends the run (14.1). An enemy tipped over
- * by `combat.enemyAttacks: "once-per-combat"` has already attacked and does not (row 65).
- *
- * @rule 7.10, 7.11, 7.12, 12.4, 14.1, OPEN-QUESTIONS rows 16, 65
- */
-export function structureAttacks(state: GameState): Step {
-  let current = state
-  const events: GameEvent[] = []
-  for (const { id } of byAge(state.enemies)) {
-    if (current.phase === 'ended') break
-    const enemy = current.enemies.find((e) => e.id === id)
-    if (!enemy || enemy.attackedThisCombat) continue
-    if (placedPlayers(current).some((p) => adjacent(p.hex, enemy.hex))) continue
-    const structure = adjacentStructures(current, enemy.hex)[0]
-    if (!structure) continue
-    const [rolled, damage, faces] = rollEnemyDamage(current, enemy.kind, true)
-    events.push({
-      type: 'structureAttacked',
-      rule: '7.11',
-      enemy: enemy.id,
-      structure: structure.id,
-      damage,
-      ...(faces ? { faces } : {}),
-    })
-    const [next, more] =
-      structure.kind === 'base'
-        ? damageBase(rolled, damage)
-        : damageDefense(rolled, structure.id, damage)
-    current = next
-    events.push(...more)
-  }
-  return [current, events]
 }

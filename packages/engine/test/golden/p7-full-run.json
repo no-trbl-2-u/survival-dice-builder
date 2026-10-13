@@ -13,77 +13,11 @@
       "draftSlots": 6
     },
     "deck": {
-      "preset": "deck-10-hand-3",
+      "preset": "deck-10-hand-5",
       "presets": [
-        {
-          "id": "deck-6-hand-3",
-          "handSize": 3,
-          "cards": [
-            {
-              "card": "starter-move",
-              "quantity": 2
-            },
-            {
-              "card": "starter-gather",
-              "quantity": 2
-            },
-            {
-              "card": "starter-build",
-              "quantity": 1
-            },
-            {
-              "card": "starter-rest",
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "deck-8-hand-4",
-          "handSize": 4,
-          "cards": [
-            {
-              "card": "starter-move",
-              "quantity": 3
-            },
-            {
-              "card": "starter-gather",
-              "quantity": 3
-            },
-            {
-              "card": "starter-build",
-              "quantity": 1
-            },
-            {
-              "card": "starter-rest",
-              "quantity": 1
-            }
-          ]
-        },
         {
           "id": "deck-10-hand-5",
           "handSize": 5,
-          "cards": [
-            {
-              "card": "starter-move",
-              "quantity": 4
-            },
-            {
-              "card": "starter-gather",
-              "quantity": 4
-            },
-            {
-              "card": "starter-build",
-              "quantity": 1
-            },
-            {
-              "card": "starter-rest",
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "deck-10-hand-3",
-          "handSize": 3,
           "cards": [
             {
               "card": "starter-move",
@@ -114,14 +48,18 @@
       "maxRolls": 3,
       "exchangeRange": 2,
       "enemyMoveHexes": 2,
-      "moveCostNextToEnemy": 2,
-      "enemyAttacks": "every-exchange",
-      "adjacentAttack": "target-only",
-      "model": "exchange"
+      "moveCostNextToEnemy": 1,
+      "model": "exchange",
+      "engage": {
+        "enemyDie": ["hit", "hit", "miss", "miss", "miss", "special"],
+        "hitDamage": 1,
+        "specialDamage": 2,
+        "defeatedDice": "hit"
+      }
     },
     "experience": {
-      "firstStep": 5,
-      "stepIncrease": 5,
+      "firstStep": 3,
+      "stepIncrease": 3,
       "eliteBonus": 0,
       "levelPerEliteSpawn": false
     },
@@ -140,7 +78,8 @@
     },
     "knockout": {
       "returnHealthDivisor": 2,
-      "loseMaterials": true
+      "loseMaterials": true,
+      "loseCurrency": true
     },
     "shop": {
       "offers": 3
@@ -148,7 +87,8 @@
     "draft": {
       "reveal": 2,
       "keep": 1,
-      "everyNRounds": 2
+      "everyNRounds": 2,
+      "unpicked": "pool"
     },
     "supplies": {
       "copiesPerCard": 2,
@@ -168,8 +108,7 @@
     },
     "options": {
       "boughtCards": "add",
-      "maxLevel": null,
-      "skillUses": "once-per-exchange"
+      "maxLevel": null
     },
     "rulings": {
       "enemiesPerHex": 1,
@@ -177,8 +116,6 @@
       "blockedPathRule": "next-target",
       "tileRotation": false,
       "coopPrepareOrder": "alternate-hands",
-      "structureDamage": "v1",
-      "skirmishFail": "stay-lose-move",
       "fullBoardDraft": "swap",
       "mandatoryPlays": false,
       "shopTiming": "any-time-on-base",
@@ -188,7 +125,8 @@
       "buildOnNode": true,
       "gatherNeedsNode": true,
       "targetTieBreak": ["player", "tower", "barricade", "base"],
-      "playerPullDistance": 2
+      "playerPullDistance": 2,
+      "buildLevels": "levelled"
     }
   },
   "actions": [
@@ -302,6 +240,17 @@
       "type": "endReroll"
     },
     {
+      "type": "playCard",
+      "card": "c8"
+    },
+    {
+      "type": "playCard",
+      "card": "c1"
+    },
+    {
+      "type": "endReroll"
+    },
+    {
       "type": "assignDie",
       "die": 0,
       "skill": "strike",
@@ -317,24 +266,7 @@
     },
     {
       "type": "playCard",
-      "card": "c8"
-    },
-    {
-      "type": "playCard",
-      "card": "c1"
-    },
-    {
-      "type": "endReroll"
-    },
-    {
-      "type": "playCard",
       "card": "c9"
-    },
-    {
-      "type": "confirmAssignment"
-    },
-    {
-      "type": "stopRolling"
     },
     {
       "type": "playCard",
@@ -350,20 +282,6 @@
     {
       "type": "playCard",
       "card": "c10"
-    },
-    {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "strike",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Sword"
-    },
-    {
-      "type": "confirmAssignment"
-    },
-    {
-      "type": "stopRolling"
     },
     {
       "type": "playCard",
@@ -468,7 +386,17 @@
     },
     {
       "type": "playCard",
-      "card": "c7"
+      "card": "c2"
+    },
+    {
+      "type": "endReroll"
+    },
+    {
+      "type": "playCard",
+      "card": "c4"
+    },
+    {
+      "type": "endReroll"
     },
     {
       "type": "playCard",
@@ -479,7 +407,14 @@
     },
     {
       "type": "playCard",
-      "card": "c10"
+      "card": "c1"
+    },
+    {
+      "type": "endReroll"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
     },
     {
       "type": "assignDie",
@@ -501,7 +436,138 @@
     },
     {
       "type": "playCard",
+      "card": "c7"
+    },
+    {
+      "type": "playCard",
+      "card": "c6"
+    },
+    {
+      "type": "playCard",
+      "card": "c9"
+    },
+    {
+      "type": "playCard",
+      "card": "c10"
+    },
+    {
+      "type": "assignDie",
+      "die": 0,
+      "skill": "guard",
+      "use": 0,
+      "slot": 0,
+      "asFace": "Shield"
+    },
+    {
+      "type": "confirmAssignment"
+    },
+    {
+      "type": "playCard",
+      "card": "c10"
+    },
+    {
+      "type": "playCard",
+      "card": "c9"
+    },
+    {
+      "type": "stopBuilding"
+    },
+    {
+      "type": "playCard",
+      "card": "c6"
+    },
+    {
+      "type": "playCard",
+      "card": "c7"
+    },
+    {
+      "type": "playCard",
+      "card": "c8"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
+      "type": "playCard",
+      "card": "c1"
+    },
+    {
+      "type": "moveTo",
+      "q": 15,
+      "r": -2
+    },
+    {
+      "type": "moveTo",
+      "q": 16,
+      "r": -2
+    },
+    {
+      "type": "playCard",
+      "card": "c3"
+    },
+    {
+      "type": "moveTo",
+      "q": 17,
+      "r": -2
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -2
+    },
+    {
+      "type": "playCard",
+      "card": "c4"
+    },
+    {
+      "type": "moveTo",
+      "q": 19,
+      "r": -2
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
+    },
+    {
+      "type": "playCard",
       "card": "c2"
+    },
+    {
+      "type": "moveTo",
+      "q": 17,
+      "r": -3
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
+    },
+    {
+      "type": "stopRolling"
+    },
+    {
+      "type": "playCard",
+      "card": "c4"
+    },
+    {
+      "type": "endReroll"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
+      "type": "playCard",
+      "card": "c2"
+    },
+    {
+      "type": "endReroll"
+    },
+    {
+      "type": "playCard",
+      "card": "c3"
     },
     {
       "type": "endReroll"
@@ -522,10 +588,6 @@
       "type": "confirmAssignment"
     },
     {
-      "type": "chooseTarget",
-      "enemy": "e10"
-    },
-    {
       "type": "stopRolling"
     },
     {
@@ -541,39 +603,30 @@
     },
     {
       "type": "playCard",
-      "card": "c4"
+      "card": "c7"
     },
     {
-      "type": "endReroll"
+      "type": "playCard",
+      "card": "c8"
     },
     {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "guard",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Shield"
+      "type": "playCard",
+      "card": "c10"
     },
     {
       "type": "confirmAssignment"
     },
     {
-      "type": "placeFigure",
-      "q": 0,
-      "r": 0
+      "type": "playCard",
+      "card": "c10"
     },
     {
       "type": "playCard",
-      "card": "c5"
+      "card": "c8"
     },
     {
       "type": "playCard",
-      "card": "c4"
-    },
-    {
-      "type": "moveTo",
-      "q": 1,
-      "r": 0
+      "card": "c7"
     },
     {
       "type": "playCard",
@@ -581,19 +634,13 @@
     },
     {
       "type": "moveTo",
-      "q": 2,
-      "r": 0
+      "q": 17,
+      "r": -3
     },
     {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "guard",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Shield"
-    },
-    {
-      "type": "confirmAssignment"
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
     },
     {
       "type": "playCard",
@@ -608,12 +655,78 @@
     },
     {
       "type": "playCard",
+      "card": "c3"
+    },
+    {
+      "type": "moveTo",
+      "q": 17,
+      "r": -3
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
+    },
+    {
+      "type": "playCard",
       "card": "c2"
     },
     {
       "type": "moveTo",
-      "q": 2,
-      "r": 0
+      "q": 17,
+      "r": -3
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
+      "type": "playCard",
+      "card": "c4"
+    },
+    {
+      "type": "moveTo",
+      "q": 17,
+      "r": -3
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
+    },
+    {
+      "type": "stopRolling"
+    },
+    {
+      "type": "playCard",
+      "card": "c2"
+    },
+    {
+      "type": "endReroll"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
+      "type": "playCard",
+      "card": "c7"
+    },
+    {
+      "type": "playCard",
+      "card": "c1"
+    },
+    {
+      "type": "endReroll"
+    },
+    {
+      "type": "playCard",
+      "card": "c10"
     },
     {
       "type": "assignDie",
@@ -627,54 +740,6 @@
       "type": "confirmAssignment"
     },
     {
-      "type": "moveTo",
-      "q": 3,
-      "r": 0
-    },
-    {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "guard",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Shield"
-    },
-    {
-      "type": "confirmAssignment"
-    },
-    {
-      "type": "playCard",
-      "card": "c8"
-    },
-    {
-      "type": "playCard",
-      "card": "c10"
-    },
-    {
-      "type": "playCard",
-      "card": "c3"
-    },
-    {
-      "type": "moveTo",
-      "q": 3,
-      "r": 0
-    },
-    {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "guard",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Shield"
-    },
-    {
-      "type": "confirmAssignment"
-    },
-    {
-      "type": "playCard",
-      "card": "c7"
-    },
-    {
       "type": "stopRolling"
     },
     {
@@ -683,137 +748,17 @@
     },
     {
       "type": "endReroll"
-    },
-    {
-      "type": "playCard",
-      "card": "c7"
     },
     {
       "type": "playCard",
       "card": "c9"
     },
     {
-      "type": "confirmAssignment"
-    },
-    {
-      "type": "stopRolling"
-    },
-    {
-      "type": "playCard",
-      "card": "c5"
-    },
-    {
-      "type": "playCard",
-      "card": "c2"
-    },
-    {
-      "type": "endReroll"
-    },
-    {
-      "type": "playCard",
-      "card": "c8"
-    },
-    {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "guard",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Shield"
-    },
-    {
-      "type": "confirmAssignment"
-    },
-    {
-      "type": "stopRolling"
-    },
-    {
-      "type": "playCard",
-      "card": "c6"
-    },
-    {
-      "type": "playCard",
-      "card": "c10"
-    },
-    {
       "type": "playCard",
       "card": "c4"
     },
     {
       "type": "endReroll"
-    },
-    {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "strike",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Sword"
-    },
-    {
-      "type": "confirmAssignment"
-    },
-    {
-      "type": "chooseTarget",
-      "enemy": "e2"
-    },
-    {
-      "type": "stopRolling"
-    },
-    {
-      "type": "playCard",
-      "card": "c1"
-    },
-    {
-      "type": "endReroll"
-    },
-    {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "shot",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Bow"
-    },
-    {
-      "type": "confirmAssignment"
-    },
-    {
-      "type": "chooseTarget",
-      "enemy": "e4"
-    },
-    {
-      "type": "playCard",
-      "card": "c1"
-    },
-    {
-      "type": "moveTo",
-      "q": 3,
-      "r": 0
-    },
-    {
-      "type": "playCard",
-      "card": "c4"
-    },
-    {
-      "type": "moveTo",
-      "q": 4,
-      "r": -1
-    },
-    {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "mend",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Wand"
-    },
-    {
-      "type": "confirmAssignment"
-    },
-    {
-      "type": "playCard",
-      "card": "c10"
     },
     {
       "type": "playCard",
@@ -824,15 +769,6 @@
       "card": "c8"
     },
     {
-      "type": "playCard",
-      "card": "c2"
-    },
-    {
-      "type": "moveTo",
-      "q": 4,
-      "r": -1
-    },
-    {
       "type": "assignDie",
       "die": 0,
       "skill": "strike",
@@ -844,24 +780,26 @@
       "type": "confirmAssignment"
     },
     {
-      "type": "moveTo",
-      "q": 5,
-      "r": -2
-    },
-    {
-      "type": "assignDie",
-      "die": 1,
-      "skill": "strike",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Sword"
-    },
-    {
-      "type": "confirmAssignment"
+      "type": "playCard",
+      "card": "c8"
     },
     {
       "type": "playCard",
-      "card": "c5"
+      "card": "c6"
+    },
+    {
+      "type": "playCard",
+      "card": "c4"
+    },
+    {
+      "type": "moveTo",
+      "q": 17,
+      "r": -3
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
     },
     {
       "type": "playCard",
@@ -872,23 +810,17 @@
     },
     {
       "type": "playCard",
-      "card": "c7"
-    },
-    {
-      "type": "playCard",
       "card": "c3"
     },
     {
       "type": "moveTo",
-      "q": 6,
-      "r": -2
+      "q": 17,
+      "r": -3
     },
     {
-      "type": "stopRolling"
-    },
-    {
-      "type": "playCard",
-      "card": "c5"
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
     },
     {
       "type": "playCard",
@@ -896,77 +828,42 @@
     },
     {
       "type": "playCard",
-      "card": "c7"
-    },
-    {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "guard",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Shield"
-    },
-    {
-      "type": "assignDie",
-      "die": 1,
-      "skill": "shot",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Bow"
-    },
-    {
-      "type": "confirmAssignment"
-    },
-    {
-      "type": "chooseTarget",
-      "enemy": "e30"
-    },
-    {
-      "type": "stopRolling"
-    },
-    {
-      "type": "playCard",
-      "card": "c3"
-    },
-    {
-      "type": "endReroll"
-    },
-    {
-      "type": "playCard",
-      "card": "c9"
-    },
-    {
-      "type": "playCard",
       "card": "c1"
     },
     {
-      "type": "endReroll"
+      "type": "moveTo",
+      "q": 17,
+      "r": -3
     },
     {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "guard",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Shield"
-    },
-    {
-      "type": "assignDie",
-      "die": 1,
-      "skill": "mend",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Wand"
-    },
-    {
-      "type": "confirmAssignment"
-    },
-    {
-      "type": "stopRolling"
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
     },
     {
       "type": "playCard",
-      "card": "c8"
+      "card": "c7"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
+      "type": "playCard",
+      "card": "c2"
+    },
+    {
+      "type": "moveTo",
+      "q": 17,
+      "r": -3
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
+    },
+    {
+      "type": "stopRolling"
     },
     {
       "type": "playCard",
@@ -983,32 +880,34 @@
       "type": "endReroll"
     },
     {
-      "type": "assignDie",
-      "die": 0,
-      "skill": "mend",
-      "use": 0,
-      "slot": 0,
-      "asFace": "Wand"
+      "type": "playCard",
+      "card": "c9"
+    },
+    {
+      "type": "playCard",
+      "card": "c7"
+    },
+    {
+      "type": "playCard",
+      "card": "c8"
     },
     {
       "type": "assignDie",
-      "die": 1,
-      "skill": "shot",
+      "die": 0,
+      "skill": "guard",
       "use": 0,
       "slot": 0,
-      "asFace": "Bow"
+      "asFace": "Shield"
     },
     {
       "type": "confirmAssignment"
     },
     {
-      "type": "chooseTarget",
-      "enemy": "e30"
+      "type": "stopRolling"
     },
     {
-      "type": "placeFigure",
-      "q": 0,
-      "r": 0
+      "type": "playCard",
+      "card": "c10"
     },
     {
       "type": "playCard",
@@ -1016,12 +915,21 @@
     },
     {
       "type": "playCard",
-      "card": "c4"
+      "card": "c1"
     },
     {
-      "type": "moveTo",
-      "q": 1,
-      "r": 0
+      "type": "endReroll"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
+      "type": "playCard",
+      "card": "c3"
+    },
+    {
+      "type": "endReroll"
     },
     {
       "type": "assignDie",
@@ -1032,17 +940,195 @@
       "asFace": "Sword"
     },
     {
+      "type": "confirmAssignment"
+    },
+    {
+      "type": "chooseTarget",
+      "enemy": "e11"
+    },
+    {
+      "type": "playCard",
+      "card": "c3"
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -2
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
+      "type": "playCard",
+      "card": "c1"
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -2
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
+    },
+    {
+      "type": "playCard",
+      "card": "c6"
+    },
+    {
+      "type": "playCard",
+      "card": "c10"
+    },
+    {
+      "type": "playCard",
+      "card": "c8"
+    },
+    {
+      "type": "playCard",
+      "card": "c7"
+    },
+    {
+      "type": "playCard",
+      "card": "c9"
+    },
+    {
+      "type": "stopBuilding"
+    },
+    {
+      "type": "playCard",
+      "card": "c4"
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -2
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
+    },
+    {
+      "type": "playCard",
+      "card": "c2"
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -2
+    },
+    {
+      "type": "moveTo",
+      "q": 18,
+      "r": -3
+    },
+    {
+      "type": "stopRolling"
+    },
+    {
+      "type": "playCard",
+      "card": "c5"
+    },
+    {
+      "type": "playCard",
+      "card": "c3"
+    },
+    {
+      "type": "endReroll"
+    },
+    {
+      "type": "playCard",
+      "card": "c6"
+    },
+    {
+      "type": "playCard",
+      "card": "c8"
+    },
+    {
+      "type": "playCard",
+      "card": "c2"
+    },
+    {
+      "type": "endReroll"
+    },
+    {
       "type": "assignDie",
-      "die": 1,
+      "die": 0,
+      "skill": "strike",
+      "use": 0,
+      "slot": 0,
+      "asFace": "Sword"
+    },
+    {
+      "type": "confirmAssignment"
+    },
+    {
+      "type": "chooseTarget",
+      "enemy": "e11"
+    },
+    {
+      "type": "stopRolling"
+    },
+    {
+      "type": "playCard",
+      "card": "c1"
+    },
+    {
+      "type": "endReroll"
+    },
+    {
+      "type": "playCard",
+      "card": "c7"
+    },
+    {
+      "type": "playCard",
+      "card": "c9"
+    },
+    {
+      "type": "playCard",
+      "card": "c4"
+    },
+    {
+      "type": "endReroll"
+    },
+    {
+      "type": "playCard",
+      "card": "c10"
+    },
+    {
+      "type": "assignDie",
+      "die": 0,
       "skill": "shot",
       "use": 0,
       "slot": 0,
       "asFace": "Bow"
     },
     {
+      "type": "assignDie",
+      "die": 1,
+      "skill": "shot",
+      "use": 1,
+      "slot": 0,
+      "asFace": "Bow"
+    },
+    {
       "type": "confirmAssignment"
+    },
+    {
+      "type": "chooseTarget",
+      "enemy": "e34"
+    },
+    {
+      "type": "chooseTarget",
+      "enemy": "e34"
     }
   ],
-  "expectedHash": "a585df36aff4d10ae8ff9abbd8e5197f6e57120650a1b7159dec4b5ca85b0ac6",
-  "phase21Hash": "9520e3b499bf67a6b1bed5ba2b9006d4297c5d33d041322fc3a1fe350b4ab815"
+  "expectedHash": "f318b3d38a74bca2a36577e559900ad4eda2bd2cc69976a4f7724af311dfc2e1"
 }

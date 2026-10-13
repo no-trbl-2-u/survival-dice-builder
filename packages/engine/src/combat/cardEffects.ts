@@ -23,9 +23,10 @@ export function healCurrent(state: GameState, amount: number, rule: string): Ste
 /**
  * Applies a card's top half (Prepare). Move and Build open a step-by-step decision (`active`);
  * Gather and Rest resolve at once. A Build on the base hex buys base upgrades (11.2);
- * elsewhere it builds defenses (12.1).
+ * elsewhere it builds defenses (12.1), up to the card's level (11.4). Engage is started by
+ * `applyAction` (6.7).
  *
- * @rule 6.2, 6.7, 11.2, 12.1
+ * @rule 6.2, 6.7, 11.2, 11.4, 12.1
  */
 export function applyTopEffect(state: GameState, effect: PrepareEffect): Step {
   switch (effect.kind) {
@@ -45,18 +46,26 @@ export function applyTopEffect(state: GameState, effect: PrepareEffect): Step {
         },
         [],
       ]
+    case 'engage':
+      // Played by `applyAction` as an engagement (6.7); nothing to apply as an effect.
+      return [state, []]
     case 'build':
       return [
         {
           ...state,
-          active: { kind: 'build', buildsLeft: effect.times, costReduction: effect.costReduction },
+          active: {
+            kind: 'build',
+            buildsLeft: effect.times,
+            costReduction: effect.costReduction,
+            level: effect.level,
+          },
         },
         [],
       ]
   }
 }
 
-/** Returns the state with the exchange replaced by `fn(exchange)`. */
+/** Returns the state with the exchange replaced by `fn(exchange)`. @rule 7.8 */
 export function updateExchange(state: GameState, fn: (e: Exchange) => Exchange): GameState {
   if (!state.exchange) throw new Error('No exchange in progress')
   return { ...state, exchange: fn(state.exchange) }

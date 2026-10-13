@@ -29,7 +29,8 @@ export function goalText(): string {
 export function knockoutText(config: GameConfig): string {
   const k = config.knockout
   const health = `${share(k.returnHealthDivisor)} of their maximum health, rounded up`
-  const lost = k.loseMaterials ? ' The materials they carry are lost.' : ''
+  const items = [k.loseMaterials && 'materials', k.loseCurrency && 'currency'].filter(Boolean)
+  const lost = items.length > 0 ? ` They lose all their ${items.join(' and ')}.` : ''
   return `A player at 0 health is knocked out and comes back next round with ${health}.${lost}`
 }
 
@@ -74,19 +75,14 @@ export function gatherText(amount: number, config: GameConfig): string {
 /**
  * How a Combat plays under a Combat model, and when it ends.
  *
- * @rule 7, 9.3, Combat v3 (engagements), OPEN-QUESTIONS rows 69, 72
+ * @rule 7, 7.8, 9.5, 9.6 (Spec v2)
  */
 export function combatText(config: GameConfig, model: GameConfig['combat']['model']): string {
   if (model === 'exchange') {
-    const attackers =
-      config.combat.adjacentAttack === 'target-only'
-        ? 'each enemy next to you that targets you attacks'
-        : 'every enemy next to you attacks'
-    return `In each exchange you roll, play cards, and fire Skills; then ${attackers}.`
+    return 'In each exchange you roll, play cards, and fire Skills; then each enemy next to you that targets you rolls its enemy dice at you.'
   }
-  const elite = plural(config.combat.engage.eliteDice, 'die', 'dice')
   return (
-    `Play Engage to roll your dice from where you stand, plus 1 enemy die for each grunt and ${elite} for each elite next to you. ` +
+    'Play Engage to roll your dice from where you stand, plus the enemy dice of each enemy next to you (each enemy record gives its dice). ' +
     'Put your dice on your Skills one at a time; the enemy dice hit last, after your guard. ' +
     combatEndText(config)
   )
@@ -284,9 +280,7 @@ export function ruleLineFor(
     return `${gatherText(2, config)}.`
   if (path === 'player.draftSlots') return `${draftFullText(config, 'the new Skill')}.`
   if (path === 'draft.unpicked') return draftPoolText(config)
-  if (path === 'combat.engage.eliteDice') return combatText(config, 'engage')
   if (path === 'combat.model') return combatText(config, config.combat.model)
-  if (path === 'combat.adjacentAttack') return combatText(config, 'exchange')
   if (path === 'rulings.mandatoryPlays') return combatEndText(config)
   if (path === 'rulings.targetTieBreak' || path === 'rulings.playerPullDistance')
     return targetOrderText(config)

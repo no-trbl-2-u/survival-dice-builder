@@ -55,7 +55,7 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
     return step('Engagement', ENGAGE[state.exchange?.step ?? 'roll'])
   }
   if (state.exchange) {
-    const name = state.exchange.skirmish ? 'Skirmish' : 'Combat'
+    const name = 'Combat'
     const far = state.exchange.step === 'assign' && !attackInReach(state)
     const text =
       state.exchange.step === 'cards'

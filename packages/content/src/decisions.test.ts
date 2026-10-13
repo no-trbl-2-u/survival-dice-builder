@@ -102,48 +102,26 @@ describe('decisions', () => {
     expect(md).not.toMatch(/undefined|null/)
   })
 
-  it('marks the readings that apply only under the other Combat model', () => {
+  it('Spec v2: the rows whose exchange-only options were removed carry no Combat model tag', () => {
     const rows = parseQuestions(questionsMd)
     const model = (n: number) => {
       const row = rows.find((r) => r.number === n)!
       return settingsCombatModel(flagSettings(row.flag, config), defaultConfigMeta)
     }
-    // Rows 65 and 69 set exchange-only options; row 69's second setting applies under both.
-    expect(model(65)).toBe('exchange')
-    expect(model(69)).toBe('exchange')
-    // Row 66's tile delay applies under both models; row 1 names a ruling.
-    expect(model(66)).toBeNull()
-    expect(model(1)).toBeNull()
+    for (const n of [1, 7, 65, 66, 69, 73, 74]) expect(model(n), `row ${n}`).toBeNull()
     expect(combatModelLine(config)).toMatch(
       /^Combat uses engagements by default\. .*"Exchanges only"/,
     )
     const md = decisionsMarkdown(rows, [], config, defaultConfigMeta)
-    expect(md).toMatch(/^### 65\. .* \[Exchanges only\]$/m)
-    expect(md).not.toMatch(/^### 66\. .*\[Exchanges only\]$/m)
+    expect(md).not.toMatch(/\[Exchanges only\]$/m)
   })
 
-  it('tags siege, structure damage and rows 73-74 with the Combat model they apply under (phase 37)', () => {
-    const rows = parseQuestions(questionsMd)
-    const model = (n: number) => {
-      const row = rows.find((r) => r.number === n)!
-      return settingsCombatModel(flagSettings(row.flag, config), defaultConfigMeta)
-    }
-    // Row 7 names rulings.structureDamage, which only the exchange structure step reads.
-    expect(model(7)).toBe('exchange')
-    expect(model(73)).toBe('engage')
-    expect(model(74)).toBe('exchange')
-    const md = decisionsMarkdown(rows, [], config, defaultConfigMeta)
-    expect(md).toMatch(/^### 7\. .* \[Exchanges only\]$/m)
-    expect(md).toMatch(/^### 73\. .* \[Engagements only\]$/m)
-  })
-
-  it('records the 2026-10-09 designer changes as decided rows (phase 37)', () => {
+  it('records the Spec v2 rulings as decided rows (phase 41)', () => {
     const rows = parseQuestions(questionsMd)
     const row = (n: number) => rows.find((r) => r.number === n)!
-    expect(row(73).status).toMatch(/^proposed/)
-    expect(row(74).status).toMatch(/^proposed/)
+    for (const n of [7, 30, 49, 50, 55, 59, 60, 65, 69, 73, 74])
+      expect(row(n).status, `row ${n}`).toMatch(/^decided 2026-10-11 \(Spec v2, ruling/)
     for (const [n, flag] of [
-      [75, 'options.skillUses'],
       [76, 'combat.moveCostNextToEnemy'],
       [77, 'draft.unpicked'],
     ] as const) {

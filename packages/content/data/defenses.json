@@ -3,6 +3,7 @@
     {
       "id": "barricade",
       "name": "Barricade",
+      "level": 1,
       "cost": 2,
       "health": 4,
       "blocksEnemies": true,
@@ -11,6 +12,7 @@
     {
       "id": "tower",
       "name": "Tower",
+      "level": 1,
       "cost": 4,
       "health": 3,
       "blocksEnemies": false,

@@ -21,16 +21,16 @@ describe('defaultsAt', () => {
   it('rebuilds the old defaults step by step', () => {
     expect(phase21.deck.preset).toBe('deck-10-hand-3')
     expect(phase21.combat.model).toBe('exchange')
-    expect(phase21.options.skillUses).toBe('once-per-exchange')
     expect(phase21.combat.moveCostNextToEnemy).toBe(2)
     expect(phase23.deck.preset).toBe('deck-10-hand-5')
     expect(phase23.combat.model).toBe('engage')
-    expect(phase23.options.skillUses).toBe('once-per-exchange')
+    expect(phase23.experience.firstStep).toBe(5)
+    expect(phase23.deck.presets.map((p) => p.id)).toContain('deck-10-hand-3')
     expect(phase25).toEqual(current)
   })
 
   it('names every changed path once per step, with a version above 1', () => {
-    expect(CONFIG_VERSION).toBe(4)
+    expect(CONFIG_VERSION).toBe(5)
     for (const step of CONFIG_HISTORY) expect(step.version).toBeGreaterThan(1)
   })
 })
@@ -44,7 +44,9 @@ describe('changedFields', () => {
       'combat.model',
       'combat.moveCostNextToEnemy',
       'deck.preset',
-      'options.skillUses',
+      'deck.presets',
+      'experience.firstStep',
+      'experience.stepIncrease',
     ])
   })
 })
@@ -53,7 +55,8 @@ describe('migrateConfig', () => {
   it.each([
     ['phase 21', phase21, 1],
     ['phase 23', phase23, 3],
-    ['phase 25', phase25, 4],
+    ['phase 25', defaultsAt(4, current), 4],
+    ['phase 41', phase25, 5],
   ] as const)('an untouched %s save moves to the current defaults', (_, saved, version) => {
     const { values, updated } = migrateConfig<GameConfig>(saved, version, null, current)
     expect(values).toEqual(current)
@@ -70,24 +73,31 @@ describe('migrateConfig', () => {
     expect(values.miniatureLimit).toBe(12)
     expect(values.combat.moveCostNextToEnemy).toBe(3)
     expect(values.combat.model).toBe('engage')
-    expect(updated).toEqual(['combat.model', 'deck.preset', 'options.skillUses'])
+    expect(updated).toEqual([
+      'combat.model',
+      'deck.preset',
+      'deck.presets',
+      'experience.firstStep',
+      'experience.stepIncrease',
+    ])
   })
 
   it('a versioned save keeps exactly the fields it lists as changed', () => {
     const saved = {
       ...phase23,
-      options: { ...phase23.options, skillUses: 'once-per-exchange' as const },
+      experience: { ...phase23.experience, firstStep: 4 },
     }
-    const kept = migrateConfig<GameConfig>(saved, 3, ['options.skillUses'], current)
-    expect(kept.values.options.skillUses).toBe('once-per-exchange')
-    const moved = migrateConfig<GameConfig>(saved, 3, [], current)
-    expect(moved.values.options.skillUses).toBe('unlimited')
+    const kept = migrateConfig<GameConfig>(saved, 4, ['experience.firstStep'], current)
+    expect(kept.values.experience.firstStep).toBe(4)
+    const moved = migrateConfig<GameConfig>(saved, 4, [], current)
+    expect(moved.values.experience.firstStep).toBe(3)
+    expect(moved.values.deck.presets.map((p) => p.id)).toEqual(['deck-10-hand-5'])
   })
 
   it('a save missing new keys still parses after the defaults fill them', () => {
     const old: Partial<GameConfig> = { ...current }
     delete old.draft
     const filled = withConfigDefaults(old) as GameConfig
-    expect(migrateConfig(filled, 4, null, current).values).toEqual(current)
+    expect(migrateConfig(filled, 5, null, current).values).toEqual(current)
   })
 })

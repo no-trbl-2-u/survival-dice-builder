@@ -44,19 +44,18 @@ describe('the default batch (engagements, designer 2026-10-09)', () => {
   it('matches the engagement summary on seeds 1-200', () => {
     expect(config.combat.model).toBe('engage')
     const s = summarize(runBatch(config, 200, 1))
-    // The hand stays across engagements; no move surcharge next to enemies (designer 2026-10-09).
+    // Spec v2 (phase 41): Build I buys tier I only, so no run buys 3 upgrades.
     expect([s.medianEndRound, s.middleHalf, s.minEndRound, s.maxEndRound]).toEqual([
       6,
-      [6, 7],
+      [5, 7],
       5,
-      11,
+      13,
     ])
     expect(s.causes).toEqual({ base: 200 })
     expect(s.milestones).toEqual({
       'survive-round-5': 200,
-      'buy-upgrades': 118,
-      'defeat-elite': 21,
-      'survive-round-10': 3,
+      'defeat-elite': 39,
+      'survive-round-10': 4,
     })
   }, 30_000) // 200 full runs: past the 5 s default when the gate runs every suite at once
 })
@@ -65,9 +64,9 @@ describe('the defender batch (phase 36)', () => {
   it('defends the base: longer runs, more defeats and defenses than the default bot', () => {
     const d = summarize(runBatch(config, 200, 1, { policy: 'defender' }))
     const a = summarize(runBatch(config, 200, 1))
-    expect([d.medianEndRound, d.middleHalf, d.minEndRound]).toEqual([10, [9, 14], 6])
+    expect([d.medianEndRound, d.middleHalf, d.minEndRound]).toEqual([12, [9, 22], 7])
     expect(d.errors).toBe(0)
-    expect(d.stalled).toBe(26) // turtle-like: no new tiles, no new spawns (row 63)
+    expect(d.stalled).toBe(53) // turtle-like: no new tiles, no new spawns (row 63)
     expect(d.medianEndRound).toBeGreaterThan(a.medianEndRound)
     expect(d.totals.enemiesDefeated).toBeGreaterThan(a.totals.enemiesDefeated)
     expect(d.totals.defensesBuilt).toBeGreaterThan(a.totals.defensesBuilt)
@@ -80,18 +79,16 @@ describe('the exchange batch (hand of 5, OPEN-QUESTIONS row 71)', () => {
     const s = summarize(runBatch(exchange, 200, 1))
     expect([s.medianEndRound, s.middleHalf, s.minEndRound, s.maxEndRound]).toEqual([
       6,
-      [5, 7],
+      [6, 7],
       5,
-      15,
+      11,
     ])
     expect(s.causes).toEqual({ base: 200 })
-    // Skills fire as often as the dice fill them; no move surcharge (designer 2026-10-09).
+    // Spec v2: enemies roll their record's enemy dice; the siege ends Combat.
     expect(s.milestones).toEqual({
       'survive-round-5': 200,
-      'buy-upgrades': 96,
-      'defeat-elite': 12,
-      'survive-round-10': 8,
-      'survive-round-15': 1,
+      'defeat-elite': 66,
+      'survive-round-10': 4,
     })
   }, 30_000)
 })
@@ -144,7 +141,7 @@ describe('summary maths', () => {
       },
       { type: 'enemyDieCancelled', rule: 'Combat v3', enemy: 'e2', player: 'p1' },
       { type: 'enemyDefeated', rule: '9.1', enemy: 'e2', kind: 'grunt', by: 'p1' },
-      { type: 'playerKnockedOut', rule: '14.2', player: 'p1', materialsLost: 0 },
+      { type: 'playerKnockedOut', rule: '14.2', player: 'p1', materialsLost: 0, currencyLost: 0 },
       {
         type: 'defenseBuilt',
         rule: '12.1',

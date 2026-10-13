@@ -20,7 +20,7 @@ import type { Action } from './actions.ts'
  * Buying a card (6.8) is offered at every decision while the figure is on the base; it never
  * comes first. A pending starter return (18.1) or Skill draft (10.8) must be resolved first.
  *
- * @rule 4.6, 6.2, 6.7-6.15, 6.8, 7.6, 7.8, 10.1, 10.8, 11.2, 11.6-11.9, 12.3, 18.1
+ * @rule 4.6, 6.2, 6.7-6.9, 6.8, 7.6, 7.8, 10.1, 10.8, 11.2, 11.6-11.9, 12.3, 18.1
  */
 export function legalActions(state: GameState): Action[] {
   if (state.phase === 'ended') return []
@@ -75,13 +75,15 @@ function coreActions(state: GameState): Action[] {
   const active = state.active
   const engage = engageMode(state)
   if (engage && state.phase === 'combat' && !exchange) {
-    // Combat v3: a Move option in Combat (never into an enemy: that is an engagement).
+    // Combat v3: a Move option in Combat (never into an enemy's hex, 6.9).
     if (active?.kind === 'move') {
       return [
         { type: 'stopMoving' },
-        ...legalMoves(state, active.hexesLeft, active.ignoreEnemyCost)
-          .filter((m) => !m.skirmish)
-          .map((m): Action => ({ type: 'moveTo', q: m.to.q, r: m.to.r })),
+        ...legalMoves(state, active.hexesLeft, active.ignoreEnemyCost).map((m): Action => ({
+          type: 'moveTo',
+          q: m.to.q,
+          r: m.to.r,
+        })),
       ]
     }
     return engageCardChoices(state)
@@ -100,7 +102,7 @@ function coreActions(state: GameState): Action[] {
     if (active?.kind === 'build' && onBase(state)) {
       return [
         { type: 'stopBuilding' },
-        ...legalUpgrades(state, active.costReduction).map((u): Action => ({
+        ...legalUpgrades(state, active.costReduction, active.level).map((u): Action => ({
           type: 'buyUpgrade',
           upgrade: u.upgrade,
         })),
@@ -109,7 +111,7 @@ function coreActions(state: GameState): Action[] {
     if (active?.kind === 'build') {
       return [
         { type: 'stopBuilding' },
-        ...legalBuilds(state, active.costReduction).map((b): Action => ({
+        ...legalBuilds(state, active.costReduction, active.level).map((b): Action => ({
           type: 'build',
           defense: b.defense,
           q: b.hex.q,
@@ -140,17 +142,19 @@ function coreActions(state: GameState): Action[] {
       ]
     case 'assign': {
       const skills = player.skills.map((id) => skillDef(state, id))
-      const unlimited = state.config.options.skillUses === 'unlimited'
       if (exchange.engage) {
         // Combat v3: use the dice 1 at a time (a full Skill fires at once), add cards, or stop.
         const fired = (a: { skill: string; use: number }) =>
           isFull(skillDef(state, a.skill), exchange.assignments, a.use)
         return [
           { type: 'confirmAssignment' },
-          ...legalPlacements(exchange.dice, skills, exchange.assignments, unlimited).map(
-            (a): Action => ({ type: 'assignDie', ...a }),
-          ),
-          ...engagementCardChoices(state).filter((a) => a.type === 'playOption'),
+          ...legalPlacements(exchange.dice, skills, exchange.assignments).map((a): Action => ({
+            type: 'assignDie',
+            ...a,
+          })),
+          ...(state.phase === 'combat'
+            ? engagementCardChoices(state).filter((a) => a.type === 'playOption')
+            : []),
           ...exchange.assignments
             .filter((a) => !fired(a))
             .map((a): Action => ({ type: 'unassignDie', die: a.die })),
@@ -158,9 +162,10 @@ function coreActions(state: GameState): Action[] {
       }
       return [
         { type: 'confirmAssignment' },
-        ...legalPlacements(exchange.dice, skills, exchange.assignments, unlimited).map(
-          (a): Action => ({ type: 'assignDie', ...a }),
-        ),
+        ...legalPlacements(exchange.dice, skills, exchange.assignments).map((a): Action => ({
+          type: 'assignDie',
+          ...a,
+        })),
         ...exchange.assignments.map((a): Action => ({ type: 'unassignDie', die: a.die })),
       ]
     }

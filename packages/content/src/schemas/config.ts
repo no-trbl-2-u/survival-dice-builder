@@ -6,7 +6,7 @@ import { IdSchema, NonNegativeInt, PositiveInt } from './primitives.ts'
  * Every number in the rules, every section 18 option, and every designer-ruling flag from
  * `OPEN-QUESTIONS.md`. The engine reads rule values only from here.
  *
- * @rule 2, 4, 7, 8, 9, 10, 11, 12, 15, 16, 18, OPEN-QUESTIONS rows 1-15, 17, 63-70
+ * @rule 2, 4, 7, 8, 9, 10, 11, 12, 14, 16, 18 (Spec v2), OPEN-QUESTIONS rows 1-17, 63-70
  */
 export const GameConfigSchema = z.object({
   players: z.object({ min: PositiveInt, max: PositiveInt }),
@@ -33,18 +33,17 @@ export const GameConfigSchema = z.object({
     exchangeRange: PositiveInt,
     enemyMoveHexes: PositiveInt,
     moveCostNextToEnemy: PositiveInt,
-    /** Row 65: an enemy attacks every exchange, or once per Combat (then it is tipped over). */
-    enemyAttacks: z.enum(['every-exchange', 'once-per-combat']),
-    /** Row 69: only enemies that target the player attack it, or every adjacent enemy does. */
-    adjacentAttack: z.enum(['target-only', 'any-adjacent']),
     /**
-     * Combat v3 (docs/design/combat-v3.md): "exchange" is Spec v1 7.8; "engage" plays Combat as
-     * engagements, each opened by an Engage card option, with enemy dice rolled back at you and
-     * a siege step instead of enemy attacks. Engagements are the default (designer 2026-10-09);
-     * a stored config without the key gets them.
+     * "engage" (Spec v2 7.8, the default) plays Combat as engagements, each opened by an Engage
+     * card option, with enemy dice rolled back at you; "exchange" is the older exchange Combat,
+     * kept for playtests. Both end Combat with the siege step (7.10-7.11). A stored config
+     * without the key gets engagements.
      */
     model: z.enum(['exchange', 'engage']).default('engage'),
-    /** Combat v3 numbers (used only when `model` is "engage"). */
+    /**
+     * The enemy die (Table 4) and its damage. Each enemy's dice and siege damage come from its
+     * record in `enemies.json` (Spec v2 9.6, Table 5).
+     */
     engage: z
       .object({
         /** The 6 faces of an enemy die. */
@@ -53,12 +52,6 @@ export const GameConfigSchema = z.object({
         hitDamage: NonNegativeInt,
         /** Damage of a Special face (placeholder until each grunt type has its own). */
         specialDamage: NonNegativeInt,
-        /** Enemy dice an elite rolls when it is engaged or adjacent. */
-        eliteDice: PositiveInt,
-        /** Siege: damage each enemy next to a structure deals at the end of Combat. */
-        siegeDamage: NonNegativeInt,
-        /** Siege damage of an elite (placeholder for its special siege rule). */
-        eliteSiegeDamage: NonNegativeInt,
         /**
          * Designer 2026-10-09: "hit" (the rule) — every enemy die rolled hits at the end of the
          * engagement, even the dice of an enemy defeated during it; "cancelled" (experiment) —
@@ -70,9 +63,6 @@ export const GameConfigSchema = z.object({
         enemyDie: ['hit', 'hit', 'miss', 'miss', 'miss', 'special'],
         hitDamage: 1,
         specialDamage: 2,
-        eliteDice: 2,
-        siegeDamage: 1,
-        eliteSiegeDamage: 3,
         defeatedDice: 'hit',
       }),
   }),
@@ -100,8 +90,13 @@ export const GameConfigSchema = z.object({
   }),
   /** Row 67: materials a Gather gives on a spent node or off any node. */
   gather: z.object({ offNodeAmount: NonNegativeInt }),
-  /** A player at 0 health is knocked out and returns at the next round start (core loop v2, row 55). */
-  knockout: z.object({ returnHealthDivisor: PositiveInt, loseMaterials: z.boolean() }),
+  /** A player at 0 health is knocked out and returns at the next round start (Spec v2 14.2, 14.4). */
+  knockout: z.object({
+    returnHealthDivisor: PositiveInt,
+    loseMaterials: z.boolean(),
+    /** Spec v2 14.2 (ruling 30): the knocked-out player loses all currency too. */
+    loseCurrency: z.boolean().default(true),
+  }),
   shop: z.object({ offers: PositiveInt }),
   draft: z.object({
     reveal: PositiveInt,
@@ -132,7 +127,6 @@ export const GameConfigSchema = z.object({
   options: z.object({
     boughtCards: z.enum(['add', 'replace-starter']),
     maxLevel: PositiveInt.nullable(),
-    skillUses: z.enum(['once-per-exchange', 'unlimited']),
   }),
   /** Designer rulings and proposed readings (OPEN-QUESTIONS.md). Defaults = the decided reading. */
   rulings: z.object({
@@ -141,8 +135,6 @@ export const GameConfigSchema = z.object({
     blockedPathRule: z.enum(['next-target', 'wait']),
     tileRotation: z.boolean(),
     coopPrepareOrder: z.enum(['alternate-hands', 'full-turn']),
-    structureDamage: z.enum(['v1', 'grunt-die']),
-    skirmishFail: z.enum(['stay-lose-move', 'stay-keep-move']),
     fullBoardDraft: z.enum(['swap', 'skip']),
     mandatoryPlays: z.boolean(),
     shopTiming: z.enum(['any-time-on-base', 'prepare-only']),
@@ -154,6 +146,11 @@ export const GameConfigSchema = z.object({
     targetTieBreak: z.array(z.enum(['player', 'tower', 'barricade', 'base'])).length(4),
     /** Hexes nearer a player must be than the nearest structure to draw an enemy (row 56). */
     playerPullDistance: NonNegativeInt,
+    /**
+     * Spec v2 11.4, 12.1 (ruling 25): "levelled" — a Build card buys an upgrade or builds a
+     * defense only up to its own level; "any" — every Build buys any next tier (the v1 rule).
+     */
+    buildLevels: z.enum(['levelled', 'any']).default('levelled'),
   }),
 })
 export type GameConfig = z.infer<typeof GameConfigSchema>

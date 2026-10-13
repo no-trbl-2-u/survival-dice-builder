@@ -56,7 +56,7 @@ export type Defense = Readonly<{
  */
 export type ActiveEffect = Readonly<
   | { kind: 'move'; hexesLeft: number; ignoreEnemyCost: boolean }
-  | { kind: 'build'; buildsLeft: number; costReduction: number }
+  | { kind: 'build'; buildsLeft: number; costReduction: number; level: number }
 >
 
 /** Which card half is up. Prepare reads the top half; Combat reads the bottom half. @rule 2.6, 2.7, 7.2, 10.6 */
@@ -84,18 +84,15 @@ export type Assignment = Readonly<{
 }>
 
 /**
- * An enemy on the board. `attackedThisCombat` is set only with `combat.enemyAttacks:
- * "once-per-combat"`: the enemy has attacked (it is tipped over) and does not attack again until
- * the next Combat start (row 65).
+ * An enemy on the board.
  *
- * @rule 9, 3.7, core loop v2 row 65
+ * @rule 9, 3.7
  */
 export type Enemy = Readonly<{
   id: string
   kind: string
   health: number
   hex: Axial
-  attackedThisCombat: boolean
 }>
 
 /** A player's board, deck, and tracks. @rule 2.1, 4.6-4.10 */
@@ -154,8 +151,6 @@ export type Exchange = Readonly<{
   ignoreHits: number
   assignments: readonly Assignment[]
   queue: readonly QueuedEffect[]
-  /** Set when this is a skirmish (6.10-6.14): the enemy hex entered and the hex left. */
-  skirmish: Readonly<{ hex: Axial; from: Axial }> | null
   /** Set when this exchange is a Combat v3 engagement. */
   engage?: Engagement
 }>

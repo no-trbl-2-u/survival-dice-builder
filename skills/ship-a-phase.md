@@ -345,7 +345,7 @@ next in 2–3 lines.
    files over 1 dense file.
 8. **Every rule number lives in `packages/content/`** (JSON +
    Zod), never in code. No hardcoded copy or records in components.
-9. **The rules win.** `spec/01-spec-v1-rules.md` beats every
+9. **The rules win.** `spec/01-spec-v2-rules.md` beats every
    other file. Never change a rule; an unclear rule goes to
    `OPEN-QUESTIONS.md` with a proposed reading behind a config flag.
    Engine stays pure (no classes, no mutation, no I/O, no

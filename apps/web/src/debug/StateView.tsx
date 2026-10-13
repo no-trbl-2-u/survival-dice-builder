@@ -18,7 +18,7 @@ export function StateView({ state }: Props) {
         <dt>Round / phase</dt>
         <dd>
           {state.round} / {state.phase}
-          {ex ? ` / ${ex.skirmish ? 'skirmish' : 'exchange'}: ${ex.step}` : ''}
+          {ex ? ` / ${ex.engage ? 'engagement' : 'exchange'}: ${ex.step}` : ''}
           {state.endedBecause ? ` (ended: ${state.endedBecause})` : ''}
         </dd>
         <dt>Base</dt>

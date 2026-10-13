@@ -214,7 +214,7 @@ if (command === 'decisions') {
 
 if (command === 'rules') {
   const md = rulesAsPlayedMarkdown(
-    fs.readFileSync(path.join(REPO, 'spec', '01-spec-v1-rules.md'), 'utf-8'),
+    fs.readFileSync(path.join(REPO, 'spec', '01-spec-v2-rules.md'), 'utf-8'),
     parseQuestions(fs.readFileSync(path.join(REPO, 'OPEN-QUESTIONS.md'), 'utf-8')),
     defaultContent.config,
   )

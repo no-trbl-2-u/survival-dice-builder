@@ -49,8 +49,8 @@ describe('botChoice', () => {
       defenses: [{ id: 'd1', kind: 'tower', hex: { q: 3, r: 0 }, health: 3, builder: 'p1' }],
       towerQueue: ['d1'],
       enemies: [
-        { id: 'e1', kind: 'elite', health: 14, hex: { q: 2, r: 0 }, attackedThisCombat: false },
-        { id: 'e2', kind: 'grunt', health: 2, hex: { q: 4, r: 0 }, attackedThisCombat: false },
+        { id: 'e1', kind: 'elite', health: 14, hex: { q: 2, r: 0 } },
+        { id: 'e2', kind: 'grunt', health: 2, hex: { q: 4, r: 0 } },
       ],
     })
     expect(botChoice(tie)).toEqual({ type: 'chooseTowerTarget', tower: 'd1', enemy: 'e2' })
@@ -102,9 +102,12 @@ describe('botChoice', () => {
   })
 
   it('buys the cheapest upgrade during a Build on the base', () => {
-    const s = withPlayer(started({ active: { kind: 'build', buildsLeft: 1, costReduction: 0 } }), {
-      materials: 4,
-    })
+    const s = withPlayer(
+      started({ active: { kind: 'build', buildsLeft: 1, costReduction: 0, level: 1 } }),
+      {
+        materials: 4,
+      },
+    )
     expect(botChoice(s)).toEqual({ type: 'buyUpgrade', upgrade: 'training-1' })
   })
 
@@ -113,18 +116,18 @@ describe('botChoice', () => {
     expect(botChoice(s)).toEqual({ type: 'discardCard', card: 'x1' })
   })
 
-  it('steps toward its goal and never into a skirmish', () => {
+  it('steps toward its goal and never into an enemy hex (6.9)', () => {
     const s = started({
       enemies: [],
       active: { kind: 'move', hexesLeft: 2, ignoreEnemyCost: false },
     })
     const choice = botChoice(s)
     expect(choice?.type).toBe('moveTo')
-    // An enemy on the step it just chose: that step is now a skirmish, so the bot avoids it.
+    // An enemy on the step it just chose: that hex is no longer a legal step (6.9).
     const step = choice as { q: number; r: number }
     const blocked = {
       ...s,
-      enemies: [{ id: 'e9', kind: 'grunt', health: 2, hex: step, attackedThisCombat: false }],
+      enemies: [{ id: 'e9', kind: 'grunt', health: 2, hex: step }],
     }
     const next = botChoice(blocked) as { type: string; q?: number; r?: number }
     expect(next.type === 'moveTo' && next.q === step.q && next.r === step.r).toBe(false)
@@ -145,7 +148,6 @@ describe('botChoice', () => {
       ignoreHits: 0,
       assignments: [],
       queue: [],
-      skirmish: null,
     }
     const s: GameState = { ...base, phase: 'combat', exchange }
     expect(botChoice(s)).toEqual({ type: 'toggleKeep', die: 0 })

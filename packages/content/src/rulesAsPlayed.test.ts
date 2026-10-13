@@ -1,20 +1,26 @@
 import { describe, expect, it } from 'vitest'
 import { defaultContent } from './content.ts'
 import type { QuestionRow } from './decisions.ts'
-import { parseSpec, rowsFor, rulesAsPlayed, rulesAsPlayedMarkdown } from './rulesAsPlayed.ts'
+import {
+  parseSpec,
+  plainRuleText,
+  rowsFor,
+  rulesAsPlayed,
+  rulesAsPlayedMarkdown,
+} from './rulesAsPlayed.ts'
 
 const config = defaultContent.config
 
 const spec = [
   '# Rules',
-  '## 5 Round sequence',
-  '5.1 Each round has 3 phases in this sequence: Prepare, Combat, Explore.',
-  '5.4 Your deck can grow.',
+  '## 6 Prepare phase',
+  '6.1 Draw 5 cards from your deck.',
+  '6.10 Deleted in Spec v2: the skirmish. **[v2]**',
+  '## 8 Experience and levels',
+  '8.5 Level 2 needs 3 experience. **[v2]** **[v2 open: the step stays a configuration option.]**',
   '## 9 Enemies',
-  '9.3 An enemy moves toward the nearest target.',
-  '9.6 Something proposed.',
-  '## 14 End of the run',
-  '14.2 The run stops if the health of a player is 0.',
+  '9.3 An enemy moves toward the nearest structure.',
+  '9.7 An enemy can only enter an empty hex.',
 ].join('\n')
 
 const row = (
@@ -34,14 +40,20 @@ const row = (
 describe('parseSpec', () => {
   it('reads section headings and numbered rule lines', () => {
     const { sections, rules } = parseSpec(spec)
-    expect(sections.map((s) => s.number)).toEqual(['5', '9', '14'])
+    expect(sections.map((s) => s.number)).toEqual(['6', '8', '9'])
     expect(rules.map((r) => `${r.section}:${r.id}`)).toEqual([
-      '5:5.1',
-      '5:5.4',
+      '6:6.1',
+      '6:6.10',
+      '8:8.5',
       '9:9.3',
-      '9:9.6',
-      '14:14.2',
+      '9:9.7',
     ])
+  })
+
+  it('plainRuleText drops the review markers', () => {
+    expect(plainRuleText('Level 2 needs 3. **[v2]** **[v2 open: later.]**')).toBe(
+      'Level 2 needs 3.',
+    )
   })
 })
 
@@ -59,39 +71,42 @@ describe('rowsFor', () => {
   })
 })
 
-describe('rulesAsPlayed', () => {
+describe('rulesAsPlayed (Spec v2)', () => {
   const { rules } = parseSpec(spec)
-  const rows = [row(10, '9.3', 'decided 2026-10-04'), row(11, '9.6', 'proposed 2026-10-05')]
-  const played = rulesAsPlayed(rules, rows, config)
-  const by = (id: string) => played.find((p) => p.rule.id === id)
+  const rows = [
+    row(10, '9.3', 'proposed 2026-10-04'),
+    row(11, '9.7', 'proposed 2026-10-13'),
+    row(12, '6.1', 'decided 2026-10-13'),
+  ]
+  const by = (played: ReturnType<typeof rulesAsPlayed>, id: string) =>
+    played.find((p) => p.rule.id === id)
 
-  it('marks the core loop v2 changes from config, not from rows', () => {
-    expect(by('5.1')?.status).toBe('changed')
-    expect(by('5.1')?.asPlayed).toContain('There is no Explore phase')
-    expect(by('14.2')?.status).toBe('superseded')
-    expect(by('14.2')?.asPlayed).toContain('knocked out')
+  it('with the default config: deleted, open notes, rows since sign-off, and same', () => {
+    const played = rulesAsPlayed(rules, rows, config, config)
+    expect(by(played, '6.10')?.status).toBe('deleted')
+    expect(by(played, '8.5')).toMatchObject({ status: 'open', source: 'Spec v2' })
+    expect(by(played, '8.5')?.asPlayed).toContain('the step stays a configuration option')
+    expect(by(played, '9.7')).toMatchObject({ status: 'open', source: 'row 11' })
+    expect(by(played, '9.3')?.status).toBe('same')
+    expect(by(played, '6.1')?.status).toBe('same')
   })
 
-  it('uses a decided row as changed, a proposed row as open, and no row as same', () => {
-    expect(by('9.3')).toMatchObject({ status: 'changed', asPlayed: 'reading 10', source: 'row 10' })
-    expect(by('9.6')).toMatchObject({ status: 'open', source: 'row 11' })
-    expect(by('5.4')).toMatchObject({ status: 'same', asPlayed: '' })
-  })
-
-  it('builds numbers from the config it is given', () => {
-    const knockout = { ...config.knockout, returnHealthDivisor: 3 }
-    const other = rulesAsPlayed(rules, rows, { ...config, knockout })
-    expect(other.find((p) => p.rule.id === '14.2')?.asPlayed).toContain(
-      '1/3 of their maximum health',
-    )
+  it('a config field that differs from the default marks the rules it sets as changed', () => {
+    const steps = { ...config, experience: { ...config.experience, firstStep: 5 } }
+    const played = rulesAsPlayed(rules, rows, steps, config)
+    expect(by(played, '8.5')).toMatchObject({
+      status: 'changed',
+      source: '`experience.firstStep`',
+    })
+    expect(by(played, '8.5')?.asPlayed).toContain('5 (Spec v2: 3)')
   })
 })
 
 describe('rulesAsPlayedMarkdown', () => {
   it('writes a counted summary and one table per section', () => {
     const md = rulesAsPlayedMarkdown(spec, [], config)
-    expect(md).toContain('- 5 rules: 3 same, 1 changed, 1 superseded, 0 open.')
+    expect(md).toContain('- 5 rules: 3 same, 0 changed, 1 deleted, 1 open.')
     expect(md).toContain('## 9 Enemies')
-    expect(md).toContain('| 5.4 | Your deck can grow. | same | as written |  |')
+    expect(md).toContain('| 6.1 | Draw 5 cards from your deck. | same | as written |  |')
   })
 })

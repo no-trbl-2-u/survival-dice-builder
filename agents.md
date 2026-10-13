@@ -93,9 +93,8 @@ including this one. If a rule is unclear, add it to
 implement the proposed reading behind a config flag, and
 continue. Every rule maps to at least one test, tracked in
 `RULES-COVERAGE.md` (rule id -> function -> test).
-Until phase 41 ships, the engine still plays the Spec v1
-readings in `docs/RULES-AS-PLAYED.md`; the 10 known gaps are
-listed in `docs/spec-v2-draft/RULINGS.md`.
+Since phase 41 the engine plays Spec v2;
+`docs/RULES-AS-PLAYED.md` lists the rules Spec v2 leaves open.
 
 The engine is a functional core: pure functions over plain
 data. No classes, no mutation of inputs, no I/O, no `Date` or

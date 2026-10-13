@@ -27,7 +27,6 @@ const nearGrunt = (id = 'e1') => ({
   kind: 'grunt',
   health: 2,
   hex: { q: 1, r: 0 },
-  attackedThisCombat: false,
 })
 
 /** A started run whose only enemy is a grunt next to the player. */
@@ -145,7 +144,6 @@ describe('Combat exchange (7.8)', () => {
     kind: 'elite',
     health: 14,
     hex: { q: 4, r: 0 },
-    attackedThisCombat: false,
   }
 
   it('7.8 steps 1-2 draw a hand and roll all action dice', () => {
@@ -209,9 +207,7 @@ describe('Combat exchange (7.8)', () => {
     let s = inCombat()
     s = {
       ...s,
-      enemies: [
-        { id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 }, attackedThisCombat: false },
-      ],
+      enemies: [{ id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 } }],
       exchange: {
         ...s.exchange!,
         step: 'assign',
@@ -237,8 +233,8 @@ describe('Combat exchange (7.8)', () => {
     s = {
       ...s,
       enemies: [
-        { id: 'e1', kind: 'grunt', health: 2, hex: { q: 1, r: 0 }, attackedThisCombat: false },
-        { id: 'e2', kind: 'grunt', health: 2, hex: { q: 0, r: 1 }, attackedThisCombat: false },
+        { id: 'e1', kind: 'grunt', health: 2, hex: { q: 1, r: 0 } },
+        { id: 'e2', kind: 'grunt', health: 2, hex: { q: 0, r: 1 } },
       ],
       exchange: { ...s.exchange!, step: 'assign', dice: [{ face: 'Sword', kept: false }] },
       players: [{ ...s.players[0]!, hand: [], inPlay: s.players[0]!.hand }],
@@ -260,7 +256,7 @@ describe('Combat exchange (7.8)', () => {
     expect(state.enemies.map((e) => e.id)).toEqual(['e1'])
   })
 
-  it('9.6 an elite rolls 6 dice and deals Table 4 damage', () => {
+  it('Spec v2 9.5, 9.6 an elite in an exchange rolls its 2 enemy dice (Table 4)', () => {
     let s = exposed(inCombat(), elite)
     s = applyAction(s, { type: 'stopRolling' }).state
     while (s.exchange?.step === 'cards')
@@ -268,9 +264,8 @@ describe('Combat exchange (7.8)', () => {
     const { events } = applyAction(s, { type: 'confirmAssignment' })
     const attack = events.find((e) => e.type === 'enemyAttacked')
     if (attack?.type !== 'enemyAttacked') throw new Error('expected an attack')
-    const table = defaultContent.enemies.enemyDieDamage
-    expect(attack.faces).toHaveLength(6)
-    expect(attack.damage).toBe(attack.faces!.reduce((n, f) => n + table[f], 0))
+    const max = 2 * Math.max(s.config.combat.engage.hitDamage, s.config.combat.engage.specialDamage)
+    expect(attack.damage).toBeLessThanOrEqual(max)
   })
 
   it('core loop v2 with no enemy near, the exchange is still played (no 7.9 skip)', () => {
@@ -367,9 +362,7 @@ describe('Combat card effects (7.8 step 5)', () => {
     const hand = defs.map((def, i) => ({ id: `x${i}`, def }))
     return {
       ...s,
-      enemies: [
-        { id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 }, attackedThisCombat: false },
-      ],
+      enemies: [{ id: 'e9', kind: 'elite', health: 14, hex: { q: 1, r: 0 } }],
       players: [{ ...p, hand, discard: [...p.discard, ...p.hand] }],
       exchange: {
         ...s.exchange!,

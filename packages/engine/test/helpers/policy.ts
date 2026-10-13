@@ -16,7 +16,7 @@ export function scriptedChoice(state: GameState): Action | undefined {
 
 /**
  * Like `scriptedChoice`, but uses the map: places tiles, walks toward the first offered step,
- * and builds when it can, so goldens cover Move, Build, and skirmishes.
+ * and builds when it can, so goldens cover Move and Build.
  */
 export function explorerChoice(state: GameState): Action | undefined {
   const actions = legalActions(state)

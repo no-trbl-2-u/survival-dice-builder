@@ -16,8 +16,8 @@ function engagedState(): GameState {
   if (!run?.state.exchange) throw new Error('no engagement came up')
   const { state } = run
   const enemies = [
-    { id: 'g1', kind: 'grunt', health: 3, hex: { q: 9, r: 9 }, attackedThisCombat: false },
-    { id: 'x1', kind: 'elite', health: 6, hex: { q: 9, r: 8 }, attackedThisCombat: false },
+    { id: 'g1', kind: 'grunt', health: 3, hex: { q: 9, r: 9 } },
+    { id: 'x1', kind: 'elite', health: 6, hex: { q: 9, r: 8 } },
   ]
   const enemyDice = [
     { enemy: 'g1', face: 'hit' as const },

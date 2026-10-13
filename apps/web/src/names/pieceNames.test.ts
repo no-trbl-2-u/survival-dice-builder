@@ -27,9 +27,9 @@ function twoGrunts(): GameState {
     ...s,
     players: s.players.map((p) => ({ ...p, hex: base })),
     enemies: [
-      { id: 'e7', kind: 'grunt', health: 2, hex: at(2, -1), attackedThisCombat: false },
-      { id: 'e3', kind: 'grunt', health: 2, hex: at(2, -1), attackedThisCombat: false },
-      { id: 'e9', kind: 'grunt', health: 2, hex: at(-1, 0), attackedThisCombat: false },
+      { id: 'e7', kind: 'grunt', health: 2, hex: at(2, -1) },
+      { id: 'e3', kind: 'grunt', health: 2, hex: at(2, -1) },
+      { id: 'e9', kind: 'grunt', health: 2, hex: at(-1, 0) },
     ],
     defenses: [{ id: 'd1', kind: 'tower', hex: at(0, -1), health: 3, builder: 'p1' }],
   }

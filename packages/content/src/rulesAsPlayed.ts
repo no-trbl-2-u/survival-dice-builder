@@ -1,45 +1,38 @@
+import { metaFor } from './configMeta.ts'
+import { changedFields } from './configVersions.ts'
 import type { QuestionRow } from './decisions.ts'
-import {
-  combatEndText,
-  combatText,
-  draftPoolText,
-  gatherText,
-  goalText,
-  knockoutText,
-  miniatureLimitText,
-  revealText,
-  spawnText,
-} from './ruleText.ts'
 import type { GameConfig } from './schemas/config.ts'
 
 /**
- * Rules as played: each Spec v1 rule as written, beside the game the engine runs today, for the
- * designer's Spec v2 fold-in. Pure: the caller passes the spec text, the open-questions rows,
- * and a config. It states readings; it decides none.
+ * Rules as played: each Spec v2 rule as written, beside the game the engine runs with a config.
+ * The default config is Spec v2 (18.1), so with it every rule is "same" except the rules the
+ * designer left open and the rules Spec v2 deleted. A config that differs from the defaults
+ * marks the rules its changed fields set. Pure: the caller passes the spec text, the
+ * open-questions rows, and the configs. It states readings; it decides none.
  */
 
-/** One numbered rule line of Spec v1 ("6.7 ..."). */
+/** One numbered rule line of the spec ("6.7 ..."). */
 export type SpecRule = Readonly<{ id: string; section: string; text: string }>
 
-/** A section heading of Spec v1 ("6 Prepare phase"). */
+/** A section heading of the spec ("6 Prepare phase"). */
 export type SpecSection = Readonly<{ number: string; title: string }>
 
 /** How a rule stands in play. */
-export type PlayStatus = 'same' | 'changed' | 'superseded' | 'open'
+export type PlayStatus = 'same' | 'changed' | 'deleted' | 'open'
 
 export type RuleAsPlayed = Readonly<{
   rule: SpecRule
   status: PlayStatus
-  /** What the engine does, when it differs from the text. */
+  /** What the engine does, when it differs from the text, or what is open. */
   asPlayed: string
-  /** Where the change comes from: rows and design notes. */
+  /** Where the difference comes from: config fields, rows, the spec's open note. */
   source: string
 }>
 
-const V2 = '`docs/design/core-loop-v2.md`'
-const V3 = '`docs/design/combat-v3.md` (row 72)'
+/** Spec v2 was signed off on this date; question rows dated before it are folded in. */
+export const SPEC_V2_SIGNED = '2026-10-12'
 
-/** Reads the numbered rule lines and section headings of Spec v1. */
+/** Reads the numbered rule lines and section headings of the spec. */
 export function parseSpec(md: string): { sections: SpecSection[]; rules: SpecRule[] } {
   const sections: SpecSection[] = []
   const rules: SpecRule[] = []
@@ -70,186 +63,130 @@ function covers(token: string, id: string): boolean {
   return !!single && Number(single[1]) === sec && Number(single[2]) === num
 }
 
+/** True when a rule reference ("7.8 step 5, 9.3-9.4 (row 2)") names this rule id. */
+function refCovers(ref: string, id: string): boolean {
+  return ref
+    .split(/[,;]/)
+    .map((t) => t.replace(/\[[^\]]*\]|step \d+|\(.*?\)/g, '').trim())
+    .some((t) => covers(t, id))
+}
+
 /** The question rows whose Rule column names this rule id (or a range holding it). */
 export function rowsFor(id: string, rows: readonly QuestionRow[]): QuestionRow[] {
-  return rows.filter((row) =>
-    row.rule
-      .split(/[,;]/)
-      .map((t) => t.replace(/\[[^\]]*\]|step \d+|\(.*?\)/g, '').trim())
-      .some((t) => covers(t, id)),
-  )
+  return rows.filter((row) => refCovers(row.rule, id))
 }
 
-const statusWord = (row: QuestionRow) => (row.status.match(/^[a-z-]+/)?.[0] ?? '').toLowerCase()
+/** A row the engine plays a proposed reading for, filed after Spec v2 was signed off. */
+function openSinceSignOff(row: QuestionRow): boolean {
+  const m = row.status.match(/^(proposed|pending-spec)\b.*?(\d{4}-\d{2}-\d{2})/)
+  return !!m && (m[2] ?? '') >= SPEC_V2_SIGNED
+}
+
+/** The spec's own open note on a rule ("[v2 open: ...]"), without the brackets. */
+function openNote(text: string): string | null {
+  return text.match(/\[v2 open: ([^\]]*)\]/)?.[1]?.trim() ?? null
+}
+
+/** The rule text without the review markers (**[v2]**, open notes, notes). */
+export function plainRuleText(text: string): string {
+  return text
+    .replace(/\*\*\[(v2|v2 open|Note)[^\]]*\]\*\*/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+const show = (v: unknown) =>
+  Array.isArray(v) || typeof v === 'object' ? JSON.stringify(v) : String(v)
+
+function valueAt(tree: unknown, path: string): unknown {
+  return path
+    .split('.')
+    .reduce<unknown>(
+      (t, k) => (t && typeof t === 'object' ? (t as Record<string, unknown>)[k] : undefined),
+      tree,
+    )
+}
 
 /**
- * The changes core loop v2 and Combat v3 made, by rule id: the engine's text, built from config
- * so the numbers follow it. Rules not listed fall back to the question rows.
+ * Each spec rule with its status in play.
+ *
+ * @param config - the config the engine runs.
+ * @param defaults - the Spec v2 defaults (`config.default.json`); fields where `config` differs
+ *   mark the rules their `config.meta.json` rule reference names as changed.
  */
-function knownChanges(
-  config: GameConfig,
-): Record<string, { status: PlayStatus; asPlayed: string; source: string }> {
-  const c = config
-  const engage = c.combat.model === 'engage'
-  const combat = combatText(c, c.combat.model)
-  const superseded = (asPlayed: string, source = V2) => ({
-    status: 'superseded' as const,
-    asPlayed,
-    source,
-  })
-  const changed = (asPlayed: string, source = V2) => ({
-    status: 'changed' as const,
-    asPlayed,
-    source,
-  })
-  const noWave = 'There is no wave track.'
-  return {
-    '4.2': superseded(
-      `The Base tile starts alone. The countryside tiles, shuffled, go on top of the shuffled core tiles: that is the tile deck. ${revealText(c)}`,
-    ),
-    '4.4': superseded('No enemy is on the map at setup. Spawning starts at the first Combat.'),
-    '4.5': changed(`Base health ${c.base.startingHealth}. ${noWave}`),
-    '5.1': changed('Each round has 2 phases: Prepare, then Combat. There is no Explore phase.'),
-    '6.9': changed(
-      `A step onto a hex next to an enemy costs ${c.combat.moveCostNextToEnemy}${c.combat.moveCostNextToEnemy === 1 ? ', like any step' : ''}.`,
-      'designer 2026-10-09 (`combat.moveCostNextToEnemy`)',
-    ),
-    '6.7': changed(
-      `${gatherText(2, c)}. Each node can be used once. Haul gathers 2 in total.`,
-      `${V2}; rows 20, 59`,
-    ),
-    '7.3': superseded(spawnText(c)),
-    '7.4': superseded(noWave),
-    '7.7': engage ? changed(combat, V3) : changed(combat),
-    '7.8': engage ? changed(combat, V3) : changed(combat),
-    '7.9': superseded(
-      engage
-        ? 'Engage can be played anywhere; with no enemy next to you, no enemy die rolls.'
-        : 'Exchanges happen at any range.',
-      engage ? V3 : V2,
-    ),
-    ...(engage ? engageEnd(c) : {}),
-    '9.2': superseded(spawnText(c)),
-    '10.1': changed(revealText(c)),
-    '10.2': superseded(spawnText(c)),
-    '10.3': superseded(`When the tile deck is empty, no tile is revealed. ${noWave}`),
-    '10.4': superseded(noWave),
-    '10.5': changed(miniatureLimitText(c), `${V2}; row 32`),
-    '11.7': changed(
-      `Keep 1 Skill. It is free. ${draftPoolText(c)}`,
-      'designer 2026-10-09 (`draft.unpicked`)',
-    ),
-    '14.1': changed(goalText(), V2),
-    '14.2': superseded(knockoutText(c), `${V2}; row 55`),
-    '15.1': superseded(noWave),
-    '15.2': superseded(noWave),
-    '15.3': superseded(noWave),
-    '16.6': superseded(`There is no Explore phase. ${revealText(c)}`),
-    '16.7': superseded(knockoutText(c), `${V2}; row 55`),
-  }
-}
-
-/** How Combat ends under engagements: siege replaces the structure attack step (7.10-7.13). */
-function engageEnd(
-  c: GameConfig,
-): Record<string, { status: PlayStatus; asPlayed: string; source: string }> {
-  const e = c.combat.engage
-  const siege = `Siege, once at the end of Combat: each enemy next to a structure deals ${e.siegeDamage} damage to it (an elite: ${e.eliteSiegeDamage}).`
-  return {
-    '7.10': { status: 'changed', asPlayed: `${combatEndText(c)} Then the siege step.`, source: V3 },
-    '7.11': {
-      status: 'open',
-      asPlayed: `${siege} An enemy next to a player also sieges; \`rulings.structureDamage\` (row 7) is not read under engagements. Both readings are open.`,
-      source: `${V3}; row 7`,
-    },
-    '7.12': {
-      status: 'same',
-      asPlayed: '',
-      source: '',
-    },
-    '7.13': { status: 'same', asPlayed: '', source: '' },
-    '16.5': {
-      status: 'changed',
-      asPlayed:
-        "There is no enemy attack step. An enemy next to a player rolls its enemy dice in that player's engagement.",
-      source: V3,
-    },
-  }
-}
-
-/** Removes table-breaking characters from a cell. */
-const cell = (s: string) => s.replace(/\|/g, '\\|').replace(/\s+/g, ' ').trim()
-
-/** Each Spec v1 rule with its status in play. */
 export function rulesAsPlayed(
   rules: readonly SpecRule[],
   rows: readonly QuestionRow[],
   config: GameConfig,
+  defaults: GameConfig = config,
 ): RuleAsPlayed[] {
-  const changes = knownChanges(config)
+  const changed = changedFields(config, defaults).flatMap((path) => {
+    const entry = metaFor(path)?.entry
+    return entry?.rule ? [{ path, label: entry.label, rule: entry.rule }] : []
+  })
   return rules.map((rule) => {
-    const known = changes[rule.id]
-    if (known) return { rule, ...known }
-    const matched = rowsFor(rule.id, rows)
-    const decided = matched.filter((r) => statusWord(r) === 'decided')
-    const open = matched.filter((r) => /^(proposed|pending-spec)$/.test(statusWord(r)))
-    const gone = matched.filter((r) => statusWord(r) === 'superseded')
-    const list = (rs: QuestionRow[]) => rs.map((r) => `row ${r.number}`).join(', ')
-    if (gone.length > 0 && decided.length === 0)
+    if (/^Deleted in Spec v2/.test(rule.text))
+      return { rule, status: 'deleted', asPlayed: '', source: 'Spec v2' }
+    const fields = changed.filter((f) => refCovers(f.rule, rule.id))
+    if (fields.length > 0)
       return {
         rule,
-        status: 'superseded',
-        asPlayed: gone.map((r) => r.reading).join(' '),
-        source: list(gone),
+        status: 'changed',
+        asPlayed: fields
+          .map(
+            (f) =>
+              `${f.label}: ${show(valueAt(config, f.path))} (Spec v2: ${show(valueAt(defaults, f.path))}).`,
+          )
+          .join(' '),
+        source: fields.map((f) => `\`${f.path}\``).join(', '),
       }
+    const open = rowsFor(rule.id, rows).filter(openSinceSignOff)
     if (open.length > 0)
       return {
         rule,
         status: 'open',
         asPlayed: open.map((r) => `Row ${r.number} reading: ${r.reading}`).join(' '),
-        source: list(open),
+        source: open.map((r) => `row ${r.number}`).join(', '),
       }
-    if (decided.length > 0)
+    const note = openNote(rule.text)
+    if (note)
       return {
         rule,
-        status: 'changed',
-        asPlayed: decided.map((r) => r.reading).join(' '),
-        source: list(decided),
+        status: 'open',
+        asPlayed: `The engine plays the rule as written. Open: ${note}`,
+        source: 'Spec v2',
       }
     return { rule, status: 'same', asPlayed: '', source: '' }
   })
 }
 
-const STATUS_LABEL: Record<PlayStatus, string> = {
-  same: 'same',
-  changed: 'changed',
-  superseded: 'superseded',
-  open: 'open',
-}
+/** Removes table-breaking characters from a cell. */
+const cell = (s: string) => s.replace(/\|/g, '\\|').replace(/\s+/g, ' ').trim()
 
 /** The generated `docs/RULES-AS-PLAYED.md`. */
 export function rulesAsPlayedMarkdown(
   specMd: string,
   rows: readonly QuestionRow[],
   config: GameConfig,
+  defaults: GameConfig = config,
 ): string {
   const { sections, rules } = parseSpec(specMd)
-  const played = rulesAsPlayed(rules, rows, config)
+  const played = rulesAsPlayed(rules, rows, config, defaults)
   const count = (s: PlayStatus) => played.filter((p) => p.status === s).length
   const out: string[] = [
     '# Rules as played',
     '',
     '> Generated by `pnpm sim -- rules --out docs/RULES-AS-PLAYED.md` from',
-    '> `spec/01-spec-v1-rules.md`, `OPEN-QUESTIONS.md`, and `config.default.json`.',
+    '> `spec/01-spec-v2-rules.md`, `OPEN-QUESTIONS.md`, and `config.default.json`.',
     '> Do not edit by hand. A test fails when this file is out of date.',
     '',
-    'Each Spec v1 rule as written, and what the engine does today. This page states readings;',
-    "it decides none. Folding it into `spec/` is the designer's call (an `/oversight` act).",
+    'Each Spec v2 rule as written, and what the engine does with the default config. This page',
+    "states readings; it decides none. Changing the spec is the designer's call (an `/oversight` act).",
     '',
-    `- ${played.length} rules: ${count('same')} same, ${count('changed')} changed, ${count('superseded')} superseded, ${count('open')} open.`,
-    '- **changed**: the engine runs a decided reading or a settled design change.',
-    '- **superseded**: core loop v2 or Combat v3 removed or replaced the rule.',
-    '- **open**: a proposed or pending-spec row; the engine runs the reading shown.',
+    `- ${played.length} rules: ${count('same')} same, ${count('changed')} changed, ${count('deleted')} deleted, ${count('open')} open.`,
+    '- **changed**: a config field differs from the Spec v2 default.',
+    '- **deleted**: Spec v2 deleted the rule; its id stays.',
+    `- **open**: the spec marks the rule open, or a row filed since ${SPEC_V2_SIGNED} proposes a reading; the engine plays the reading shown.`,
     '',
   ]
   for (const section of sections) {
@@ -260,7 +197,7 @@ export function rulesAsPlayedMarkdown(
     for (const p of inSection) {
       const asPlayed = p.status === 'same' ? 'as written' : cell(p.asPlayed)
       out.push(
-        `| ${p.rule.id} | ${cell(p.rule.text)} | ${STATUS_LABEL[p.status]} | ${asPlayed} | ${cell(p.source)} |`,
+        `| ${p.rule.id} | ${cell(plainRuleText(p.rule.text))} | ${p.status} | ${asPlayed} | ${cell(p.source)} |`,
       )
     }
     out.push('')

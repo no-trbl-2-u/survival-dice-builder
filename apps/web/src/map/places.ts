@@ -101,8 +101,7 @@ export function hexContents(state: GameState, hex: Axial): string[] {
   return [
     ...enemies.map((e) => {
       const max = state.content.enemies.enemies.find((x) => x.id === e.kind)?.health ?? e.health
-      const tipped = e.attackedThisCombat ? ', attacked' : ''
-      return `${e.kind} (${e.health} of ${max} health${tipped})`
+      return `${e.kind} (${e.health} of ${max} health)`
     }),
     ...defenses.map((d) => {
       const name = state.content.defenses.find((x) => x.id === d.kind)?.name ?? d.kind

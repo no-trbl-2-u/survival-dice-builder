@@ -7,8 +7,8 @@ test('/config: each field has a label, help with its rules section, and plain op
   const cost = page.getByLabel('Move cost next to an enemy', { exact: true })
   await expect(cost).toHaveAttribute('min', '1')
   await expect(cost).toHaveAccessibleDescription(/Hexes a Move pays .* Rules 6\.9\./)
-  const skirmish = page.getByLabel('Lost skirmish', { exact: true })
-  await expect(skirmish.locator('option:checked')).toHaveText('Stay; the rest of the Move is lost')
+  const blocked = page.getByLabel('Blocked enemy', { exact: true })
+  await expect(blocked.locator('option:checked')).toHaveText('Move toward the next nearest target')
   await expect(page.getByRole('group', { name: 'Designer rulings' })).toBeVisible()
 })
 
@@ -17,7 +17,7 @@ test('/config: a ruling the engine does not read yet says so', async ({ page }) 
   await expect(page.getByLabel('Heal targets', { exact: true })).toHaveAccessibleDescription(
     /Not used by the engine yet: changing it changes nothing\./,
   )
-  await expect(page.getByLabel('Lost skirmish', { exact: true })).not.toHaveAccessibleDescription(
+  await expect(page.getByLabel('Blocked enemy', { exact: true })).not.toHaveAccessibleDescription(
     /Not used by the engine yet/,
   )
 })
@@ -26,16 +26,11 @@ test('/config: a field one Combat model ignores is tagged, and says so under the
   page,
 }) => {
   await page.goto('/config')
-  const damage = page.getByLabel('Structure damage', { exact: true })
-  const siege = page.getByLabel('Siege damage', { exact: true })
-  await expect(damage).toHaveAccessibleDescription(
-    /Exchanges only\. Combat is set to engagements, so changing it changes nothing\./,
-  )
-  await expect(siege).toHaveAccessibleDescription(/Engagements only\./)
-  await expect(siege).not.toHaveAccessibleDescription(/changes nothing/)
+  const defeated = page.getByLabel("Defeated enemies' dice", { exact: true })
+  await expect(defeated).toHaveAccessibleDescription(/Engagements only\./)
+  await expect(defeated).not.toHaveAccessibleDescription(/changes nothing/)
   await page.getByLabel('Combat model', { exact: true }).selectOption('exchange')
-  await expect(damage).not.toHaveAccessibleDescription(/changes nothing/)
-  await expect(siege).toHaveAccessibleDescription(
+  await expect(defeated).toHaveAccessibleDescription(
     /Engagements only\. Combat is set to exchanges, so changing it changes nothing\./,
   )
 })
@@ -62,8 +57,6 @@ test('/config: the experiment options default off; the rules note names the open
   await expect(reveal).toHaveAccessibleDescription(
     /^At round end, .* Rules 10\.1 \(open question 63\)\./,
   )
-  const attacks = page.getByLabel('Enemy attacks per Combat', { exact: true })
-  await expect(attacks.locator('option:checked')).toHaveText('Every exchange (off)')
 })
 
 test('/config: a bad value is named at its field; Save stays in reach', async ({ page }) => {
@@ -105,7 +98,7 @@ test('/config: leaving with unsaved edits warns; Reset asks first', async ({ pag
 test('/decisions: a setting shows its config label beside the path', async ({ page }) => {
   await page.goto('/decisions')
   await expect(page.getByTestId('readings')).toContainText(
-    'Structure damage (rulings.structureDamage)',
+    'Forced reveal every (clock.forcedRevealEvery)',
   )
 })
 
@@ -128,9 +121,9 @@ test('/config: sliders, toggles, and pick lists; a name can only come from the c
   // Starter Skills are toggles; a starter deck card is a pick from the card list.
   const skills = page.locator('#cfg-player-starterSkills')
   await skills.getByLabel('Cleave', { exact: true }).check()
-  await page.getByLabel('Preset 3: card 1', { exact: true }).selectOption('sprint')
+  await page.getByLabel('Preset 1: card 1', { exact: true }).selectOption('sprint')
   // Renaming the preset in use is caught on save, at the field that names it.
-  await page.getByRole('region', { name: 'Preset 3' }).getByLabel('Id').fill('mine')
+  await page.getByRole('region', { name: 'Preset 1' }).getByLabel('Id').fill('mine')
   await page.getByRole('button', { name: 'Save config' }).click()
   await expect(
     page.getByRole('alert').getByRole('link', { name: 'Deck and hand preset' }),

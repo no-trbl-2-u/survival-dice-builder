@@ -46,7 +46,7 @@ describe('engageView', () => {
       { type: 'playerDamaged', rule: r, player: 'p1', toGuard: 1, toHealth: 0, health: 5 },
       { type: 'hitIgnored', rule: r, enemy: 'e2', player: 'p1' },
       { type: 'exchangeEnded', rule: r, player: 'p1' },
-      { type: 'playerKnockedOut', rule: r, player: 'p1', materialsLost: 0 },
+      { type: 'playerKnockedOut', rule: r, player: 'p1', materialsLost: 0, currencyLost: 0 },
       { type: 'enemyDamaged', rule: r, enemy: 'e3', amount: 5, health: 0 },
     ]
     const s = lastEngagement(log)

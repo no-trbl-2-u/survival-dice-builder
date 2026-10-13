@@ -79,10 +79,7 @@ function withElite(state: GameState): GameState | null {
   if (!hex) return null
   return {
     ...state,
-    enemies: [
-      ...state.enemies,
-      { id: DEV_ELITE, kind: 'elite', health: def.health, hex, attackedThisCombat: false },
-    ],
+    enemies: [...state.enemies, { id: DEV_ELITE, kind: 'elite', health: def.health, hex }],
   }
 }
 

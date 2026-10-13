@@ -5,7 +5,7 @@ import { returnKnockedOut } from '../combat/knockout.ts'
 import { engageMode, engagementMoves, finishEngagement, siege } from '../combat/engage.ts'
 import { spawnAtNodes } from '../enemies/spawning.ts'
 import { forcedReveal } from '../explore/explore.ts'
-import { structureAttacks, towerAttacks } from '../enemies/structures.ts'
+import { towerAttacks } from '../enemies/structures.ts'
 import type { GameEvent } from '../events/events.ts'
 import { draftDue, startDraft } from '../progression/draft.ts'
 import { checkMilestones } from '../progression/milestones.ts'
@@ -126,10 +126,10 @@ function hasTurns(player: Player): boolean {
  * Prepare: draw a hand, play each card, draw again when the hand is empty; stop when every deck and
  * hand is empty, then start Combat. With 2-4 players each plays 1 hand in seat order, then the
  * next player with cards (16.8, `coopPrepareOrder`). A Move or Build in progress (and a
- * skirmish) is decided step by step before the next card. A returning knocked-out player first
+ * Prepare engagement, 6.7) is decided step by step before the next card. A returning knocked-out player first
  * puts the figure on a free Base tile hex; a knocked-out player takes no turns.
  *
- * @rule 6.1, 6.4, 6.5, 6.6, 6.7-6.15, 16.8, core loop v2 (knockout)
+ * @rule 6.1, 6.4, 6.5, 6.6, 6.7-6.9, 16.8, 14.2
  */
 function prepareStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   if (state.exchange) return exchangeStep(state)
@@ -154,25 +154,15 @@ function prepareStep(state: GameState): readonly [GameState, readonly GameEvent[
 }
 
 /**
- * Combat start, row 65: every tipped-over enemy stands up again (it may attack in this Combat).
+ * Combat setup: every player shuffles the discard pile and turns it bottom-up, the enemies
+ * move, every spawn node spawns, and each Tower attacks (a tie waits for its builder's choice).
+ * There is no wave track.
  *
- * @rule core loop v2 row 65 (proposed: each enemy attacks once per Combat)
- */
-export function standEnemiesUp(state: GameState): GameState {
-  if (!state.enemies.some((e) => e.attackedThisCombat)) return state
-  return { ...state, enemies: state.enemies.map((e) => ({ ...e, attackedThisCombat: false })) }
-}
-
-/**
- * Combat setup (core loop v2): every player shuffles the discard pile and turns it bottom-up,
- * tipped enemies stand up (row 65), the enemies move, every spawn node spawns, and each Tower
- * attacks (a tie waits for its builder's choice). There is no wave track.
- *
- * @rule 7.1, 7.2, 7.5, 7.6, core loop v2 (Combat steps 1-4), row 65
+ * @rule 7.1, 7.2, 7.5, 7.3, 7.6
  */
 function startCombat(state: GameState): Step {
   const [turned, turnEvents] = turnAllDecks(
-    standEnemiesUp({ ...state, phase: 'combat', current: 0, turnFresh: true }),
+    { ...state, phase: 'combat', current: 0, turnFresh: true },
     'bottom',
   )
   const [next, events] = chain(turned, [
@@ -198,12 +188,12 @@ function towerIds(state: GameState): string[] {
 }
 
 /**
- * Combat: run exchanges until every deck and hand is empty, then the structure attack step,
- * then the end of the round. With 2-4 players the exchanges go in seat order (16.4); a
+ * Combat (exchange model): run exchanges until every deck and hand is empty, then the siege
+ * step (7.10-7.11), then the end of the round. With 2-4 players the exchanges go in seat order (16.4); a
  * knocked-out player has none. An exchange is played even with no enemy near (core loop v2:
  * heal, guard, and reroll halves work anywhere; damage needs a target in range).
  *
- * @rule 7.7, 7.8, 7.10-7.13, 16.4, 16.5, core loop v2 (Combat step 5)
+ * @rule 7.7, 7.8, 7.10-7.13, 16.4, 16.5
  */
 function combatStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   const player = currentPlayer(state)
@@ -215,9 +205,9 @@ function combatStep(state: GameState): readonly [GameState, readonly GameEvent[]
     if (!state.turnFresh || !hasTurns(player)) {
       const seat = nextSeat(state, hasTurns)
       if (seat >= 0) return [{ ...state, current: seat, turnFresh: true }, [], false]
-      const [attacked, events] = structureAttacks(state)
-      if (attacked.phase === 'ended') return [attacked, events, false]
-      return [{ ...attacked, current: 0, roundEnding: true }, events, false]
+      const [besieged, events] = siege(state)
+      if (besieged.phase === 'ended') return [besieged, events, false]
+      return [{ ...besieged, current: 0, roundEnding: true }, events, false]
     }
     const [drawnState, drawEvents] = draw(state, '7.8')
     const drawn: GameState = { ...drawnState, turnFresh: false }
@@ -235,7 +225,6 @@ function combatStep(state: GameState): readonly [GameState, readonly GameEvent[]
         ignoreHits: 0,
         assignments: [],
         queue: [],
-        skirmish: null,
       },
     }
     return [
@@ -275,7 +264,7 @@ function engageCombatStep(state: GameState): readonly [GameState, readonly GameE
   return [{ ...besieged, current: 0, roundEnding: true }, events, false]
 }
 
-/** The automatic steps inside an exchange (or skirmish); the rest are decisions. @rule 7.8 */
+/** The automatic steps inside an exchange or engagement; the rest are decisions. @rule 7.8 */
 function exchangeStep(state: GameState): readonly [GameState, readonly GameEvent[], boolean] {
   const exchange = state.exchange
   if (!exchange) return [state, [], true]
@@ -330,7 +319,7 @@ export function rollAgain(state: GameState): Step {
 }
 
 /**
- * The end of the round, after the Combat structure attack (core loop v2: there is no Explore
+ * The end of the round, after the siege step (Spec v2: there is no Explore
  * phase): turn every discard pile without a shuffle (10.6-10.7), do each player's Skill draft
  * when it is due (10.8), reveal a tile when the forced reveal is due (row 63, off by default),
  * add 1 to the round counter (10.9), and record new milestones (10.10). Then the next round

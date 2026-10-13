@@ -23,7 +23,6 @@ const enemy = (id: string, kind: string, q: number, rr: number, health = 2): Ene
   kind,
   health,
   hex: { q, r: rr },
-  attackedThisCombat: false,
 })
 
 /** A solo state with the figure on (0,0) and the given enemies, in an engagement step. */
@@ -43,7 +42,6 @@ function withEnemies(enemies: Enemy[], step: 'roll' | 'assign' | 'resolve' = 'as
       ignoreHits: 0,
       assignments: [],
       queue: [{ skill: 'strike', use: 0 }],
-      skirmish: null,
       engage: { enemyDice: enemies.map((e) => ({ enemy: e.id, face: 'hit' as const })) },
     },
   } as unknown as GameState
@@ -132,14 +130,6 @@ describe('instructions in two lengths (phase 24)', () => {
     )
     expect(engageInstructionShort(assign)).toBe('Pick dice, then a Skill.')
     expect(engageInstructionShort(withEnemies([], 'resolve'))).toBe('Strike: pick its target.')
-    const once = {
-      ...assign,
-      config: {
-        ...assign.config,
-        options: { ...assign.config.options, skillUses: 'once-per-exchange' as const },
-      },
-    }
-    expect(engageInstruction(once)).toMatch(/ Each Skill fires once per engagement\.$/)
   })
 })
 

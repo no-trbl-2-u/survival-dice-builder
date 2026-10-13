@@ -7,23 +7,26 @@ import type { Step } from '../state/helpers.ts'
 import type { GameState, Player } from '../state/types.ts'
 
 /**
- * Knocks out a player at 0 health (core loop v2): the figure leaves the map, guard is removed,
- * every card (hand, in play, deck) goes on the discard pile so the player takes no more turns
- * this round, and the materials carried are lost (`knockout.loseMaterials`, row 55). A Move or
- * Build in progress ends. The run goes on: it ends only when the base falls (14.1).
+ * Knocks out a player at 0 health: the figure leaves the map, guard is removed, every card
+ * (hand, in play, deck) goes on the discard pile so the player takes no more turns this round,
+ * and all materials and all currency are lost (`knockout.loseMaterials`,
+ * `knockout.loseCurrency`). A Move or Build in progress ends. The run goes on: it ends only
+ * when the base falls (14.1).
  *
- * @rule 14.2, core loop v2 (knockout), OPEN-QUESTIONS row 55
+ * @rule Spec v2 14.2 (ruling 30), 14.1
  */
 export function knockOut(state: GameState, playerId: string): Step {
   const player = state.players.find((p) => p.id === playerId)
   if (!player || player.knockedOut) return [state, []]
   const lost = state.config.knockout.loseMaterials ? player.materials : 0
+  const currencyLost = state.config.knockout.loseCurrency ? player.currency : 0
   const out: Player = {
     ...player,
     health: 0,
     guard: 0,
     knockedOut: true,
     materials: player.materials - lost,
+    currency: player.currency - currencyLost,
     discard: [...player.inPlay, ...player.hand, ...player.deck, ...player.discard],
     hand: [],
     inPlay: [],
@@ -35,7 +38,15 @@ export function knockOut(state: GameState, playerId: string): Step {
       players: state.players.map((p) => (p.id === playerId ? out : p)),
       active: null,
     },
-    [{ type: 'playerKnockedOut', rule: '14.2', player: playerId, materialsLost: lost }],
+    [
+      {
+        type: 'playerKnockedOut',
+        rule: '14.2',
+        player: playerId,
+        materialsLost: lost,
+        currencyLost,
+      },
+    ],
   ]
 }
 

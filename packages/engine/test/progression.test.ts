@@ -27,7 +27,7 @@ const withPlayer = (s: GameState, patch: Partial<GameState['players'][number]>):
   players: [{ ...s.players[0]!, ...patch }],
 })
 
-const grunt = { id: 'e1', kind: 'grunt', health: 2, hex: { q: 1, r: 0 }, attackedThisCombat: false }
+const grunt = { id: 'e1', kind: 'grunt', health: 2, hex: { q: 1, r: 0 } }
 const types = (s: GameState) => new Set(legalActions(s).map((a) => a.type))
 
 describe('experience and levels (8.1-8.5)', () => {
@@ -88,7 +88,9 @@ describe('supplies (4.12)', () => {
 
 describe('base upgrades (11.1-11.4)', () => {
   const building = (materials: number, costReduction = 0, buildsLeft = 1) =>
-    withPlayer(home({ active: { kind: 'build', buildsLeft, costReduction } }), { materials })
+    withPlayer(home({ active: { kind: 'build', buildsLeft, costReduction, level: 1 } }), {
+      materials,
+    })
 
   it('11.2, 11.4 a Build on the base offers tier I of each track that the player can pay', () => {
     expect(legalActions(building(3))).toEqual([
@@ -106,10 +108,23 @@ describe('base upgrades (11.1-11.4)', () => {
     expect(events.filter((e) => e.type === 'offerAdded').every((e) => e.level === '1')).toBe(true)
   })
 
-  it('11.4 tier II is offered only after tier I', () => {
-    const s = { ...building(10), upgrades: ['shop-1'] }
+  it('11.4 tier II is offered only after tier I (buildLevels "any")', () => {
+    const any = { ...config, rulings: { ...config.rulings, buildLevels: 'any' as const } }
+    const s = { ...building(10), upgrades: ['shop-1'], config: any }
     const offered = legalActions(s).flatMap((a) => (a.type === 'buyUpgrade' ? [a.upgrade] : []))
     expect(offered).toEqual(['shop-2', 'training-1'])
+  })
+
+  it('Spec v2 11.4 a Build I card buys tier I upgrades only; a Build II card buys tier II', () => {
+    const s = { ...building(10), upgrades: ['shop-1'] }
+    const offered = (x: GameState) =>
+      legalActions(x).flatMap((a) => (a.type === 'buyUpgrade' ? [a.upgrade] : []))
+    expect(offered(s)).toEqual(['training-1'])
+    const level2 = {
+      ...s,
+      active: { kind: 'build' as const, buildsLeft: 1, costReduction: 0, level: 2 },
+    }
+    expect(offered(level2)).toEqual(['shop-2', 'training-1'])
   })
 
   it('Table 8 row 42 Mason lowers an upgrade cost by 1', () => {

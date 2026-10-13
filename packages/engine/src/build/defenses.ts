@@ -3,6 +3,7 @@ import type { GameEvent } from '../events/events.ts'
 import { hexNeighbors, type Axial } from '../hex.ts'
 import { isPassable, mapHex, sameHex } from '../map/tiles.ts'
 import { enemyAt } from '../movement/move.ts'
+import { buildReaches } from '../progression/upgrades.ts'
 import { currentPlayer, updateCurrentPlayer, type Step } from '../state/helpers.ts'
 import type { GameState } from '../state/types.ts'
 
@@ -32,14 +33,16 @@ export function canBuildOn(state: GameState, hex: Axial): boolean {
 
 /**
  * Every defense the current player can build now: on their hex or an adjacent hex (12.1),
- * on an allowed hex (12.2), and affordable with their materials.
+ * on an allowed hex (12.2), no higher in level than the Build (12.1), and affordable with
+ * their materials.
  *
  * @rule 12.1, 12.2
  */
-export function legalBuilds(state: GameState, costReduction: number): BuildOption[] {
+export function legalBuilds(state: GameState, costReduction: number, level: number): BuildOption[] {
   const player = currentPlayer(state)
   const hexes = [player.hex, ...hexNeighbors(player.hex)].filter((h) => canBuildOn(state, h))
   return state.content.defenses.flatMap((def) => {
+    if (!buildReaches(state, level, def.level)) return []
     const cost = buildCost(def, costReduction)
     if (cost > player.materials) return []
     return hexes.map((hex) => ({ defense: def.id, hex, cost }))

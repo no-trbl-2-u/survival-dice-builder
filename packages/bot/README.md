@@ -11,7 +11,7 @@ defends the base, builds near it, picks targets it can defeat, keeps heal cards,
 
 **Priorities:** required choices (starter return, draft), Shop purchases, tile placement,
 active Build (cheapest upgrade, else a Tower or Barricade near an enemy), active Move (toward
-the goal, never into a skirmish), Combat (keep non-Blank dice, play every bottom half, damage
+the goal, never into an enemy's hex), Combat (keep non-Blank dice, play every bottom half, damage
 Skills first, weakest target), then Prepare cards by use. See `plan/phases/phase_9_bot.md`.
 
 **Tests:** `src/policy.test.ts` (20 seeds to the end with only legal actions, plus each

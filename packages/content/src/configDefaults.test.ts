@@ -9,13 +9,12 @@ describe('withConfigDefaults', () => {
     delete raw.clock
     delete raw.spawn
     delete raw.gather
-    delete raw.combat.enemyAttacks
-    delete raw.combat.adjacentAttack
+    delete raw.knockout.loseCurrency
     raw.combat.maxRolls = 2
     expect(GameConfigSchema.safeParse(raw).success).toBe(false)
     const filled = GameConfigSchema.parse(withConfigDefaults(raw))
     expect(filled.combat.maxRolls).toBe(2)
-    expect(filled.combat.enemyAttacks).toBe('every-exchange')
+    expect(filled.knockout.loseCurrency).toBe(true)
     expect(filled.clock.forcedRevealEvery).toBeNull()
   })
 

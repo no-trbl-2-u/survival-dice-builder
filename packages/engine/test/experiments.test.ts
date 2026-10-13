@@ -8,7 +8,6 @@ import {
   spawnCount,
   spawnNodes,
 } from '../src/enemies/spawning.ts'
-import { structureAttacks } from '../src/enemies/structures.ts'
 import { forcedReveal, forcedRevealDue } from '../src/explore/explore.ts'
 import { gather } from '../src/gather/gather.ts'
 import { hexDistance, type Axial } from '../src/hex.ts'
@@ -16,7 +15,6 @@ import { createGame, deserialize, legalActions, serialize, type GameState } from
 import { scriptedChoice, walk } from './helpers/policy.ts'
 import { spawnEnemy } from '../src/map/spawn.ts'
 import { BASE_HEX, EMPTY_MAP, emptySlots, placeTile } from '../src/map/tiles.ts'
-import { standEnemiesUp } from '../src/phases/advance.ts'
 import type { Enemy, Exchange, GameMap } from '../src/state/types.ts'
 
 /**
@@ -65,12 +63,11 @@ function board(
   }
 }
 
-const grunt = (id: string, q: number, r: number, attackedThisCombat = false): Enemy => ({
+const grunt = (id: string, q: number, r: number): Enemy => ({
   id,
   kind: 'grunt',
   health: 2,
   hex: { q, r },
-  attackedThisCombat,
 })
 
 /** Base tile at (0,0) and Stony Fields (1 spawn node) east of it, revealed in `round`. */
@@ -93,7 +90,6 @@ const ended: Exchange = {
   ignoreHits: 0,
   assignments: [],
   queue: [],
-  skirmish: null,
 }
 
 describe('row 63 forced reveal (clock.forcedRevealEvery)', () => {
@@ -233,54 +229,25 @@ describe('row 70 spawn range (spawn.nodeRange)', () => {
   })
 })
 
-describe('row 65 each enemy attacks once per Combat (combat.enemyAttacks)', () => {
+describe('Spec v2 9.5 exchange enemies (rows 65 and 69 closed, ruling 18)', () => {
   // e1 on (3,0) targets the player on (2,0) (the base is 3 away, row 56).
-  const exchange = (cfg: GameConfig) => ({
+  const exchange = () => ({
     ...board(corridor(-6, 6), { q: 2, r: 0 }, [grunt('e1', 3, 0)]),
-    config: cfg,
     phase: 'combat' as const,
     exchange: ended,
   })
   const attacks = (s: GameState) => finishExchange(s)[1].filter((e) => e.type === 'enemyAttacked')
 
-  it('off: the enemy attacks at the end of every exchange and is never tipped', () => {
-    const s = exchange(config)
-    const [after] = finishExchange(s)
-    expect(after.enemies[0]!.attackedThisCombat).toBe(false)
+  it('an enemy that targets the player rolls its enemy dice at the end of every exchange', () => {
+    const [after] = finishExchange(exchange())
+    expect(attacks(exchange())).toHaveLength(1)
     expect(attacks({ ...after, exchange: ended })).toHaveLength(1)
   })
 
-  it('once per Combat: the enemy attacks once, is tipped over, and stands up at Combat start', () => {
-    const s = exchange(withConfig({ combat: { enemyAttacks: 'once-per-combat' } }))
-    expect(attacks(s)).toHaveLength(1)
-    const [after] = finishExchange(s)
-    expect(after.enemies[0]!.attackedThisCombat).toBe(true)
-    expect(exchangeAttackers({ ...after, exchange: ended })).toEqual([])
-    expect(attacks({ ...after, exchange: ended })).toEqual([])
-    expect(standEnemiesUp(after).enemies[0]!.attackedThisCombat).toBe(false)
-  })
-
-  it('a tipped enemy skips the structure attack step', () => {
-    const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 1, 0, true), grunt('e2', -1, 0)])
-    const [, events] = structureAttacks(s)
-    expect(events.filter((e) => e.type === 'structureAttacked').map((e) => e.enemy)).toEqual(['e2'])
-  })
-})
-
-describe('row 69 adjacent enemies attack (combat.adjacentAttack)', () => {
-  // e1 on (1,0) is next to the base and to the player on (2,0): its target is the base.
-  const guarding = (cfg: GameConfig) => ({
-    ...board(corridor(-6, 6), { q: 2, r: 0 }, [grunt('e1', 1, 0)]),
-    config: cfg,
-  })
-
-  it('off: an enemy attacks only its target', () => {
-    expect(exchangeAttackers(guarding(config))).toEqual([])
-  })
-
-  it('any adjacent: every enemy next to the player attacks it, whatever its target', () => {
-    const s = guarding(withConfig({ combat: { adjacentAttack: 'any-adjacent' } }))
-    expect(exchangeAttackers(s).map((e) => e.id)).toEqual(['e1'])
+  it('an enemy next to the player that targets the base does not attack the player', () => {
+    // e1 on (1,0) is next to the base and to the player on (2,0): its target is the base.
+    const s = board(corridor(-6, 6), { q: 2, r: 0 }, [grunt('e1', 1, 0)])
+    expect(exchangeAttackers(s)).toEqual([])
   })
 })
 

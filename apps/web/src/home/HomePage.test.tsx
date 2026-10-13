@@ -27,6 +27,6 @@ describe('HomePage', () => {
     render(<HomePage />)
     const link = screen.getAllByRole('link', { name: 'written rules' })[0]
     expect(link?.getAttribute('href')).toBe(rulesUrl)
-    expect(rulesUrl).toMatch(/\/blob\/main\/spec\/01-spec-v1-rules\.md$/)
+    expect(rulesUrl).toMatch(/\/blob\/main\/spec\/01-spec-v2-rules\.md$/)
   })
 })

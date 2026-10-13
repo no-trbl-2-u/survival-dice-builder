@@ -104,78 +104,34 @@
     "rule": "6.9",
     "range": [1, 6]
   },
-  "combat.enemyAttacks": {
-    "label": "Enemy attacks per Combat",
-    "help": "How often an enemy attacks in one Combat. Off: the current rule (every exchange). Once per Combat: an enemy that has attacked is tipped over and does not attack again until the next Combat starts.",
-    "rule": "7.8 step 8 (open question 65)",
-    "combatModel": "exchange",
-    "options": {
-      "every-exchange": "Every exchange (off)",
-      "once-per-combat": "Once per Combat"
-    }
-  },
-  "combat.adjacentAttack": {
-    "label": "Which adjacent enemies attack",
-    "help": "At the end of a player's exchange, which enemies next to the figure attack it. Off: the current rule.",
-    "rule": "9.3, 7.8 step 8 (open question 69)",
-    "combatModel": "exchange",
-    "options": {
-      "target-only": "Only enemies that target the player (off)",
-      "any-adjacent": "Every adjacent enemy"
-    }
-  },
   "combat.model": {
     "label": "Combat model",
-    "help": "How a Combat plays. Engagements (default): play Engage to roll from where you stand, and enemies hit structures at the end of Combat. Exchanges: the Combat in the written rules.",
+    "help": "How a Combat plays. Engagements (default): play Engage to roll from where you stand; enemies hit structures in the siege step at the end of Combat. Exchanges: the older Combat, kept for playtests.",
     "rule": "7.8, Combat v3",
     "options": {
       "engage": "Engagements (default)",
-      "exchange": "Exchanges (written rules)"
+      "exchange": "Exchanges (older rules)"
     }
   },
   "combat.engage": {
-    "label": "Engagement numbers"
+    "label": "Enemy die"
   },
   "combat.engage.enemyDie": {
     "label": "Enemy die faces",
     "help": "The 6 faces of an enemy die: hit, miss, or special.",
-    "rule": "Combat v3",
-    "combatModel": "engage"
+    "rule": "Table 4"
   },
   "combat.engage.hitDamage": {
     "label": "Hit damage",
     "help": "Damage a Hit face deals to you (guard first).",
-    "rule": "Combat v3",
-    "combatModel": "engage",
+    "rule": "Table 4",
     "range": [0, 6]
   },
   "combat.engage.specialDamage": {
     "label": "Special damage",
     "help": "Damage a Special face deals, until each grunt type has its own Special.",
-    "rule": "Combat v3",
-    "combatModel": "engage",
+    "rule": "Table 4",
     "range": [0, 6]
-  },
-  "combat.engage.eliteDice": {
-    "label": "Elite enemy dice",
-    "help": "Enemy dice an elite rolls when you engage it or stand next to it.",
-    "rule": "Combat v3",
-    "combatModel": "engage",
-    "range": [1, 4]
-  },
-  "combat.engage.siegeDamage": {
-    "label": "Siege damage",
-    "help": "At the end of Combat, each grunt next to a structure deals this much to it.",
-    "rule": "Combat v3 (siege)",
-    "combatModel": "engage",
-    "range": [0, 6]
-  },
-  "combat.engage.eliteSiegeDamage": {
-    "label": "Elite siege damage",
-    "help": "Siege damage of an elite, until elites have their own siege rule.",
-    "rule": "Combat v3 (siege)",
-    "combatModel": "engage",
-    "range": [0, 10]
   },
   "combat.engage.defeatedDice": {
     "label": "Defeated enemies' dice",
@@ -199,7 +155,7 @@
   "experience.stepIncrease": {
     "label": "Step increase",
     "help": "Each next level needs this much more experience than the step before it.",
-    "rule": "8.5 (open question 17)",
+    "rule": "8.5",
     "range": [0, 20]
   },
   "experience.eliteBonus": {
@@ -272,13 +228,18 @@
   "knockout.returnHealthDivisor": {
     "label": "Return health divisor",
     "help": "A knocked-out player returns at the next round start with maximum health divided by this, rounded up.",
-    "rule": "Core loop v2 (open question 55)",
+    "rule": "14.4",
     "range": [1, 4]
   },
   "knockout.loseMaterials": {
     "label": "Knockout loses materials",
-    "help": "When on, a knocked-out player loses the materials they carried.",
-    "rule": "Core loop v2 (open question 55)"
+    "help": "When on, a knocked-out player loses all the materials they carried.",
+    "rule": "14.2"
+  },
+  "knockout.loseCurrency": {
+    "label": "Knockout loses currency",
+    "help": "When on (default), a knocked-out player loses all their currency too.",
+    "rule": "14.2"
   },
   "shop": {
     "label": "Shop"
@@ -406,15 +367,6 @@
     "rule": "18.1, 8.4",
     "range": [1, 20]
   },
-  "options.skillUses": {
-    "label": "Skill uses",
-    "help": "How often each Skill can fire in one exchange or engagement. Default: unlimited, as long as the dice fill it again.",
-    "rule": "18.1, 7.8 step 6",
-    "options": {
-      "once-per-exchange": "Once per exchange",
-      "unlimited": "Unlimited"
-    }
-  },
   "rulings": {
     "label": "Designer rulings"
   },
@@ -453,25 +405,6 @@
     "options": {
       "alternate-hands": "Players alternate hands of cards",
       "full-turn": "Each player plays a whole deck in turn"
-    }
-  },
-  "rulings.structureDamage": {
-    "label": "Structure damage",
-    "help": "How enemies damage Barricades, Towers, and the base in the structure attack step.",
-    "rule": "7.11, 9.5 (open question 7)",
-    "combatModel": "exchange",
-    "options": {
-      "v1": "As an attack on a player (each enemy rolls its attack dice)",
-      "grunt-die": "Each grunt rolls 1 die"
-    }
-  },
-  "rulings.skirmishFail": {
-    "label": "Lost skirmish",
-    "help": "What happens to the Move when a skirmish does not clear the hex.",
-    "rule": "6.14 (open question 8)",
-    "options": {
-      "stay-lose-move": "Stay; the rest of the Move is lost",
-      "stay-keep-move": "Stay; keep the rest of the Move"
     }
   },
   "rulings.fullBoardDraft": {
@@ -547,5 +480,14 @@
     "help": "How many hexes nearer a player must be before an enemy turns from the nearest structure to the player. 0 ranks players by distance alone.",
     "rule": "9.3, core loop v2 (open question 56)",
     "range": [0, 6]
+  },
+  "rulings.buildLevels": {
+    "label": "Build levels",
+    "help": "Levelled (default): a Build card buys upgrades and builds defenses only up to its own level, so Build I buys tier I upgrades only. Any tier: every Build buys the next tier of a track.",
+    "rule": "11.4, 12.1",
+    "options": {
+      "levelled": "Levelled (default)",
+      "any": "Any tier"
+    }
   }
 }

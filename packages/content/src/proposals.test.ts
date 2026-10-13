@@ -98,13 +98,9 @@ describe('proposals (rule 18.1)', () => {
     expect(reveal).toContain('Defender bot: median end round 10 with the standard rules, 10')
     expect(reveal).toContain('runs that reach the sim cap 26 and 1')
     expect(measuredText(byId('seat-scaling'))).toContain('4 seats')
-    expect(measuredText(byId('once-per-combat'))).toBe(
-      'Not measured under engagements: this option changes nothing until Combat uses exchanges.',
-    )
     expect(adviceText(byId('forced-reveal'))).toBe(
       'Recommendation from the bot batches: turn it on.',
     )
-    expect(adviceText(byId('any-adjacent'))).toContain('under exchanges')
     for (const p of defaultProposals)
       for (const text of [p.label, p.about, measuredText(p), adviceText(p)])
         expect(text, p.id).not.toMatch(BUILD_WORD)

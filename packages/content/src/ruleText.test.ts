@@ -27,11 +27,14 @@ const m = base.milestones
 const With = (patch: (c: GameConfig) => GameConfig) => patch(structuredClone(base))
 
 describe('rule text from config', () => {
-  it('knockout: the return share and lost materials follow config (row 55)', () => {
+  it('knockout: the return share and the losses follow config (Spec v2 14.2, 14.4)', () => {
     expect(knockoutText(base)).toBe(
-      'A player at 0 health is knocked out and comes back next round with half of their maximum health, rounded up. The materials they carry are lost.',
+      'A player at 0 health is knocked out and comes back next round with half of their maximum health, rounded up. They lose all their materials and currency.',
     )
-    const kept = With((c) => ({ ...c, knockout: { returnHealthDivisor: 3, loseMaterials: false } }))
+    const kept = With((c) => ({
+      ...c,
+      knockout: { returnHealthDivisor: 3, loseMaterials: false, loseCurrency: false },
+    }))
     expect(knockoutText(kept)).toBe(
       'A player at 0 health is knocked out and comes back next round with 1/3 of their maximum health, rounded up.',
     )
@@ -57,24 +60,12 @@ describe('rule text from config', () => {
     expect(gatherText(2, free)).toMatch(/^Gather 2 anywhere/)
   })
 
-  it('Combat: each model has its own text; elite dice follow config', () => {
-    expect(combatText(base, 'engage')).toMatch(/2 dice for each elite/)
+  it('Combat: each model has its own text; enemy dice come from each record (Spec v2 9.6)', () => {
+    expect(combatText(base, 'engage')).toMatch(/the enemy dice of each enemy next to you/)
     expect(combatText(base, 'engage')).toMatch(/Combat ends when every hand and deck is empty/)
-    const one = With((c) => ({
-      ...c,
-      combat: { ...c.combat, engage: { ...c.combat.engage, eliteDice: 1 } },
-    }))
-    expect(combatText(one, 'engage')).toMatch(/1 die for each elite/)
-    expect(combatText(base, 'exchange')).toMatch(/^In each exchange/)
-  })
-
-  it('Exchanges: who attacks follows combat.adjacentAttack (row 69)', () => {
-    expect(base.combat.adjacentAttack).toBe('target-only')
     expect(combatText(base, 'exchange')).toBe(
-      'In each exchange you roll, play cards, and fire Skills; then each enemy next to you that targets you attacks.',
+      'In each exchange you roll, play cards, and fire Skills; then each enemy next to you that targets you rolls its enemy dice at you.',
     )
-    const any = With((c) => ({ ...c, combat: { ...c.combat, adjacentAttack: 'any-adjacent' } }))
-    expect(combatText(any, 'exchange')).toMatch(/; then every enemy next to you attacks\.$/)
   })
 
   it('Combat end: discarding is named unless every card must be played (row 10)', () => {
@@ -172,7 +163,6 @@ describe('rule text from config', () => {
       'Survive to round 5; Survive to round 10; Survive to round 15.',
     )
     expect(line('combat.model')).toBe(combatText(base, 'engage'))
-    expect(line('combat.adjacentAttack')).toBe(combatText(base, 'exchange'))
     expect(line('rulings.mandatoryPlays')).toBe(combatEndText(base))
     expect(line('rulings.targetTieBreak')).toBe(targetOrderText(base))
     expect(line('rulings.playerPullDistance')).toBe(targetOrderText(base))

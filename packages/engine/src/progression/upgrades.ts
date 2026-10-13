@@ -15,16 +15,31 @@ function nextTier(state: GameState, track: UpgradeDef['track']): UpgradeDef | un
 }
 
 /**
- * The upgrades a Build on the base can buy: the next tier of each track (11.4), paid in
- * materials, less the card's cost reduction (Mason, Engineer; row 42), never below 0.
+ * True when a Build of `level` may buy or build something of `required` level: always with
+ * `rulings.buildLevels: "any"` (Spec v1), else only up to the Build's own level (Spec v2).
+ *
+ * @rule Spec v2 11.4, 12.1 (ruling 25)
+ */
+export function buildReaches(state: GameState, level: number, required: number): boolean {
+  return state.config.rulings.buildLevels === 'any' || required <= level
+}
+
+/**
+ * The upgrades a Build on the base can buy: the next tier of each track (11.4) whose tier is
+ * at most the Build's level (Build I buys tier I), paid in materials, less the card's cost
+ * reduction (Mason, Engineer; row 42), never below 0.
  *
  * @rule 6.7, 11.2, 11.4, Table 6
  */
-export function legalUpgrades(state: GameState, costReduction: number): UpgradeOption[] {
+export function legalUpgrades(
+  state: GameState,
+  costReduction: number,
+  level: number,
+): UpgradeOption[] {
   const materials = currentPlayer(state).materials
   return (['shop', 'training'] as const).flatMap((track): UpgradeOption[] => {
     const def = nextTier(state, track)
-    if (!def) return []
+    if (!def || !buildReaches(state, level, def.tier)) return []
     const cost = Math.max(0, def.cost - costReduction)
     return cost <= materials ? [{ upgrade: def.id, cost }] : []
   })

@@ -39,7 +39,7 @@ describe('docs/playtests kit', () => {
 describe('docs/RULES-AS-PLAYED.md', () => {
   it('matches its sources (regenerate with: pnpm sim -- rules --out docs/RULES-AS-PLAYED.md)', () => {
     const expected = rulesAsPlayedMarkdown(
-      read('spec/01-spec-v1-rules.md'),
+      read('spec/01-spec-v2-rules.md'),
       parseQuestions(read('OPEN-QUESTIONS.md')),
       defaultContent.config,
     )
