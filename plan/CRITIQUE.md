@@ -90,15 +90,6 @@
 - suggested fix: Add each terrain's effect after its name in the legend ("no effect" or its move cost), taken from config.
 - source: browser
 
-### [MED] /decisions — the public page lists repo housekeeping
-- pass: discovery 1 (2026-10-10, bee25b5)
-- viewport: 1280x800
-- category: content
-- observation: The checks list shows operations notes to every visitor: "Replace GH_TOKEN and add GH_REPO to the main checkout's .env", "GitHub rejects the current token (401 Bad credentials)", and the `.env` keys DEPLOY_PROVIDER, CF_PAGES_PROJECT, NOTIFY_NTFY_TOPIC. No secret values appear.
-- evidence: `packages/content/src/decisions.ts:194` reads every `- [needs-user-call]` line of `plan/AUDIT.md`, including the operations rows at `plan/AUDIT.md:1191,1195`.
-- suggested fix: Skip needs-user-call rows that name `.env`, a token, or a local checkout (or tag them `ops` in AUDIT and filter the tag); regenerate `docs/DECISIONS.md`.
-- source: discovery
-
 ### [LOW] all pages — the main script is 650 kB, over the build's own 600 kB warning
 - pass: discovery 1 (2026-10-10, bee25b5)
 - viewport: n/a
@@ -262,6 +253,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — the public page lists repo housekeeping
+- pass: discovery 1 (2026-10-10, bee25b5)
+- viewport: 1280x800
+- category: content
+- observation: The checks list shows operations notes to every visitor: "Replace GH_TOKEN and add GH_REPO to the main checkout's .env", "GitHub rejects the current token (401 Bad credentials)", and the `.env` keys DEPLOY_PROVIDER, CF_PAGES_PROJECT, NOTIFY_NTFY_TOPIC. No secret values appear.
+- evidence: `packages/content/src/decisions.ts:194` reads every `- [needs-user-call]` line of `plan/AUDIT.md`, including the operations rows at `plan/AUDIT.md:1191,1195`.
+- suggested fix: Skip needs-user-call rows that name `.env`, a token, or a local checkout (or tag them `ops` in AUDIT and filter the tag); regenerate `docs/DECISIONS.md`.
+- source: discovery
+- issue: #94
+- fixed: (this commit). `parseUserCalls` skips a needs-user-call line that names `.env`, a token, or the local checkout, so /decisions and `docs/DECISIONS.md` drop the two operations rows (16 checks become 14). The rows stay in `plan/AUDIT.md` for the operator.
 
 ### [x] [MED] / — the home page never says how the base takes damage under engagements
 - pass: 13 (commit 23315d6)

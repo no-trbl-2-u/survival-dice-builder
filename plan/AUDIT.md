@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-14 (pass 41, cloud tick)
+
+Pass 40's top row shipped. Three MED rows tie at 4.5 under the MED bias; the oldest goes first: /decisions shows every visitor the repo's `.env` and token notes.
+
+## Top 5 findings (scored)
+
+### [x] [4.5] /decisions: the public page lists repo housekeeping (critique MED, discovery 1)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 6
+- next: `parseUserCalls` skips needs-user-call lines naming `.env`, a token, or the local checkout; regenerate `docs/DECISIONS.md`
+- issue: #94
+- fixed: (this commit)
+
+### [ ] [4.5] / and /config: the enemy target rule is stated two ways (critique MED, pass 13)
+- category: external-critique (voice)
+- impact: 5
+- ease: 6
+- next: drop the targeting clause from `spawnText`; show a short `targetOrderText` on /
+
+### [ ] [4.5] /decisions: each "Setting:" line shows raw config keys and code values (critique MED, pass 14)
+- category: external-critique (voice)
+- impact: 6
+- ease: 5
+- next: lead with the plain label and value from `config.meta.json`
+
+### [ ] [3.6] /decisions: rows 74 and 75 describe options phase 41 removed (critique LOW, pass 15)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 9
+- next: mark both "Option removed in Spec v2"
+
+### [ ] [3.2] /play: the start panel Combat hint repeats its label (critique LOW, pass 14)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: drop the "Combat:" prefix in `StartPanel.tsx`
+
 # Site audit — 2026-10-13 (pass 40, cloud tick)
 
 Pass 39's top row shipped. The siege row is next: / says the run ends when the base falls but never says how the base takes damage, and the start panel's "Enemies hit structures at the end of Combat" was typed by hand with no numbers.

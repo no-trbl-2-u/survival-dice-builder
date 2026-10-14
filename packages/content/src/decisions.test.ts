@@ -89,6 +89,20 @@ describe('decisions', () => {
     expect(calls).toEqual([{ title: 'Run the playtests (phase 16).', body: 'The kit is ready.' }])
   })
 
+  it('leaves repo housekeeping off the public checks', () => {
+    const calls = parseUserCalls(
+      [
+        '- [needs-user-call] **Replace `GH_TOKEN` in `.env`.** GitHub rejects the current token.',
+        "- [needs-user-call] **Local keys.** Add them to the main checkout's settings.",
+        '- [needs-user-call] **Review the tiles.** Open /tiles.',
+      ].join('\n'),
+    )
+    expect(calls.map((c) => c.title)).toEqual(['Review the tiles.'])
+    expect(
+      parseUserCalls(fs.readFileSync(new URL('plan/AUDIT.md', root), 'utf-8')),
+    ).not.toContainEqual(expect.objectContaining({ body: expect.stringMatching(/\.env|token/i) }))
+  })
+
   it('writes both sections', () => {
     const md = decisionsMarkdown(
       parseQuestions(questionsMd),
