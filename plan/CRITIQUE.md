@@ -1,13 +1,49 @@
 # Critique log
 
-> Last pass: 2026-10-13 at commit 255362f
-> Pass count: 15
+> Last pass: 2026-10-14 at commit 0b2ae6a
+> Pass count: 16
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /decisions — decided rows 7, 55, 65, 69 and 72 still give pre-Spec-v2 readings that contradict /
+- pass: 16 (commit 0b2ae6a)
+- viewport: desktop
+- category: comprehension
+- observation: The home page states the shipped rules; the decided rows on /decisions still carry their old text, so a visitor gets two answers. Row 7 says the engine uses "grunt 2 fixed, elite 6 dice" for structure damage; / says a grunt deals 1 and an elite 3. Row 55 says a knocked-out player loses "the materials they carried"; / (and config `knockout.loseCurrency: true`) says materials and currency. Row 72 calls engagements a "Playtest build" with open points; / calls them the Combat in the written rules. Rows 65 and 69 sit under "Decided recently" but still read "Proposed: ... option, default off".
+- evidence: `docs/DECISIONS.md:115`, `:119`, `:122`, `:123`, `:126` (generated from `OPEN-QUESTIONS.md` rows 7, 55, 65, 69, 72); `packages/content/src/ruleText.ts` siege and knockout text on /.
+- suggested fix: Show a "Spec v2:" line on each decided row superseded by a ruling (siege from each enemy record; materials and currency lost; engagements are the written Combat; rows 65/69 options removed), and regenerate `docs/DECISIONS.md`. Same family as the rows 74/75 finding below; one fix can close both.
+- source: web-fetch
+
+### [LOW] / — the Combat step says "Play Engage" and "each enemy record gives its dice"
+- pass: 16 (commit 0b2ae6a)
+- viewport: desktop
+- category: voice
+- observation: "Enemy record" is a data word a player never sees, and "Play Engage" does not say Engage is a card.
+- evidence: `packages/content/src/ruleText.ts:143`: "Play Engage to roll your dice from where you stand, plus the enemy dice of each enemy next to you (each enemy record gives its dice)."
+- suggested fix: "Play an Engage card to roll your dice plus the enemy dice of each enemy next to you (a grunt rolls N, an elite M)", with N and M read from the enemy content.
+- source: web-fetch
+
+### [LOW] / — the Levels line says "3 more than the step before" with no step defined
+- pass: 16 (commit 0b2ae6a)
+- viewport: desktop
+- category: comprehension
+- observation: A reader cannot work out what level 3 needs from "each next level needs 3 more than the step before"; /decisions row 17 words the same rule differently ("than the last step").
+- evidence: `packages/content/src/ruleText.ts:71`; / "Level 2 needs 3 experience, and each next level needs 3 more than the step before."
+- suggested fix: Give the first three thresholds from config ("Level 2 needs 3 experience, level 3 needs 6 more, level 4 needs 9 more.").
+- source: web-fetch
+
+### [LOW] / — the Training line omits the Build card and when the draft happens
+- pass: 16 (commit 0b2ae6a)
+- viewport: desktop
+- category: comprehension
+- observation: The Shop line says where to buy and that it needs a Build card; the Training line in the same list says neither, and "every 2nd round" does not say which rounds.
+- evidence: `packages/content/src/ruleText.ts:94` vs `:111-116`; / "Training I (3 materials) opens the Training Ground: every 2nd round, each player looks at 2 Skills and keeps 1 for free."
+- suggested fix: Build `trainingText` like `shopText` ("Buy Training I on the base (a Build card and 3 materials) to open the Training Ground") and name the draft rounds ("rounds 2, 4, 6 ...").
+- source: web-fetch
 
 ### [LOW] /decisions — decided rows 74 and 75 describe options phase 41 removed
 - pass: 15 (commit 255362f)
