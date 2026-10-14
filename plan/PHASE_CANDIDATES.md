@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-13 at commit 164890c
-> Pass count: 10
+> Last pass: 2026-10-14 at commit fa01c43
+> Pass count: 11
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -10,7 +10,24 @@
 
 ## Pending
 
-### [ ] [score 6.5] Player text on Spec v2: the site stops calling Spec v1 options "the written rules"
+### [ ] [score 4.5] The engagement modal reads on its own: who took the damage, what "in range" counts, when cards play
+- proposed: 2026-10-14, expand pass 11
+- source signals:
+  - Blind round 4 (phase 24, 2026-10-09), six rows still pending in `plan/CRITIQUE.md` after five days: the result says "You dealt 2 damage" with no enemy name or health after (`apps/web/src/play/EngagementModal.tsx:469-471`); the title says "vs 1 elite" while Shot says "3 enemies in range"; cards greyed at Roll with nothing on when they play, and the Special and Star meanings shown only later; "Roll again (2 left)" stays on when every die is kept (`EngagementModal.tsx:316-319`, confirmed at HEAD); at 375px a fifth Skill and the hand need scrolling; the mini-map target label covers tokens.
+  - Session residue (designer, 2026-10-09): a hex next to an enemy that costs too much is not offered, with no reason.
+  - Commit pattern since pass 10: 19 `fix:` commits went to /, /config and /decisions copy; none touched the modal. The modal is the default Combat (phase 23) and the place a tester spends most of a run, but its rows lose every single-row ranking to page copy.
+- rationale: seven rows from two human sessions, one surface. Each is small; together they are the difference between a modal a tester can read cold and one they ask about. A phase lets the result text, the range line and the Roll step change together, with one e2e that pins them.
+- proposed scope: 1 phase.
+  - Result: name each damaged enemy and its health left; mark a defeated enemy's dice (from the engine's events; no rule change).
+  - Range line: "3 in range, 1 engaged" from one helper; the title and the Skill line agree.
+  - Roll step: a one-time note on when cards can be added, the Special and Star faces at Roll, Roll again disabled when no die is unkept.
+  - Fit: 5+ Skills and the hand strip at 375x812; the mini-map label placed off other tokens.
+  - Move: a hex left out for move cost says so when `combat.moveCostNextToEnemy` is above 1.
+- estimated phases: 1
+- conflicts: overlaps "The first 60 seconds on a phone" on the 375px fit; this takes the modal, that one keeps the map layout.
+- ruling audit: Spec v2 7.8 (engagement steps), 6.9 (move cost next to enemies); decided rows on skill uses and move cost read. Copy and layout only; no rule changes. Loop scope: in for rule-text sync; the layout half is web (minor).
+
+### [ ] [score 4.0] Player text on Spec v2: the site stops calling Spec v1 options "the written rules"
 - proposed: 2026-10-13, expand pass 10
 - source signals:
   - Spec v2 signed off 2026-10-12 (`1aec080`, `spec/01-spec-v2-rules.md`); phase 41 (`6f26cd6`) moved the engine but not the copy around it.
@@ -25,6 +42,8 @@
 - estimated phases: 1
 - conflicts: none for the copy. Re-labelling decided OPEN-QUESTIONS rows records what `spec/` already says; it decides nothing, but the designer may want to see the list at `/oversight`.
 - ruling audit: Spec v2 6.9, 6.10, 8.5, 11.7, 18.1, Table 8; OPEN-QUESTIONS 17, 60, 74, 75. No rule changes. Loop scope: in (rule-text sync).
+- progress (expand pass 11): `/iterate` shipped most of the copy half one row at a time: f0ad808, 7dfe010, 091c25e, 3f400ae, 28b4d0b, 61c8ce0, 158a70f, 92101d6, a4e131f (pass 15 rows 1-5 and the pass 13 timing and target rows are done). What is left is the guard: "written rule" is still typed by hand in 6 places (`HomePage.tsx:45`, `ConfigPage.tsx:711`, `DebugPage.tsx:84`, `config.meta.json:280`, `decisions.ts:100`, and a stale "(Spec v1)" comment at `decisions/Inline.tsx:7`), and the pass 13 /config rows (baseline named three ways, "Rules engagements." notes) are still pending. Score lowered from 6.5: the visible harm is mostly gone; the reason to promote is the next rules change.
+- last re-evidenced: 2026-10-14
 
 ### [ ] [score 6.0] The table sheets on Spec v2: one-pager facts rewritten, and a test that ties them to config
 - proposed: 2026-10-13, expand pass 10
@@ -209,8 +228,10 @@
 
 ## Considered (below threshold)
 
-- [score 3.0] **/decisions readability** (pass 14 MED raw config keys, discovery MED housekeeping). The housekeeping half lives in "The public site and the designer's workbench"; the key-to-label half is one formatter, so it fits `/iterate`.
-- [score 2.5] **Home page "how a round goes"** (pass 14 MED "level up ... no when or how", pass 8 LOW long Combat sentence, pass 13 MED base damage). One surface; wait for the Spec v2 copy phase above, which rewrites the same text.
+- [score 2.0] **Site shell: per-route meta, a 404, a smaller first script** (pass 11). Phase 40 (d1b99ff) shipped per-route description, og:url, canonical and a real 404, so the critique pass 9 [LOW] meta row and the Considered "Unknown paths served with HTTP 200" and "not found page" rows below look stale; `/iterate` or the next critique pass should verify and close them. The 650 kB bundle row (discovery) stands alone and fits `/iterate` (lazy-load the design-tool routes).
+- [score 1.5] **Bot that measures designer changes** (session residue 2026-10-09, still pending in CRITIQUE). Phase 36 (5890e54) shipped the defender policy this row asks for; the row looks stale.
+- [shipped] **/decisions readability** (score 3.0 at pass 10): `/iterate` shipped the key-to-label half in 20ffda3 and the housekeeping half in 0b2ae6a.
+- [score 2.0] **Home page "how a round goes"** (pass 10 at 2.5): 58464ba, 158a70f, 92101d6 and fa01c43 rewrote the same text; the pass 16 Levels and Training rows are single strings for `/iterate`.
 - [score 2.5] **Design tools apart from the game in the nav** (critique pass 9 LOW, navigation; pass 8). One signal, one surface (`apps/web/src/App.tsx` NAV). A labelled "Design tools" group for Tile sheet, Decisions, and Engine console fits `/iterate`. Re-evaluate if a second pass flags the nav again.
 - [score 2.5] **Unknown paths served with HTTP 200** (critique pass 7 LOW, seo). One surface, one fix (a noindex meta on the not-found route, or a 404 page in `_redirects`). Fits `/iterate`.
 
