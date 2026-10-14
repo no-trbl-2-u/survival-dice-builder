@@ -36,15 +36,6 @@
 - suggested fix: Build `trainingText` like `shopText` ("Buy Training I on the base (a Build card and 3 materials) to open the Training Ground") and name the draft rounds ("rounds 2, 4, 6 ...").
 - source: web-fetch
 
-### [LOW] /play — the phase bar arrow is read aloud and the enemy cap is unexplained
-- pass: 14 (commit f95875e)
-- viewport: desktop
-- category: a11y
-- observation: The current phase starts with a text "▶ " that screen readers read, although `aria-current="step"` already marks it. The counter "Enemies 3/20" does not say that 20 is the miniature limit.
-- evidence: `apps/web/src/play/PhaseBar.tsx:33,40-41`.
-- suggested fix: Wrap the arrow in `<span aria-hidden="true">`; label the counter "Enemies 3 of 20 (limit)" or add a title/visually-hidden "miniature limit".
-- source: web-fetch
-
 ### [LOW] /config — the rules note prints "Rules engagements." and "Rules core loop (open question 55)."
 - pass: 13 (commit 23315d6)
 - viewport: n/a
@@ -235,6 +226,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the phase bar arrow is read aloud and the enemy cap is unexplained
+- pass: 14 (commit f95875e)
+- viewport: desktop
+- category: a11y
+- observation: The current phase starts with a text "▶ " that screen readers read, although `aria-current="step"` already marks it. The counter "Enemies 3/20" does not say that 20 is the miniature limit.
+- evidence: `apps/web/src/play/PhaseBar.tsx:33,40-41`.
+- suggested fix: Wrap the arrow in `<span aria-hidden="true">`; label the counter "Enemies 3 of 20 (limit)" or add a title/visually-hidden "miniature limit".
+- source: web-fetch
+- issue: #100
+- fixed: (this commit). The arrow on the current phase sits in an `aria-hidden` span, so screen readers hear only the phase name and its `aria-current` step. The counter reads "Enemies 3 of 20 (map limit)" with the miniature-limit rule from `ruleText` as its title; a PhaseBar test pins both.
 
 ### [x] [LOW] /tiles — "Proposed layouts for review" does not say if /play uses them
 - pass: 14 (commit f95875e)

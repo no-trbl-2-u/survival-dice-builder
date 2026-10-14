@@ -1,3 +1,4 @@
+import { miniatureLimitText } from '@survival/content'
 import type { GameState } from '@survival/engine'
 import styles from './Play.module.css'
 
@@ -10,7 +11,8 @@ type Props = Readonly<{ state: GameState }>
 
 /**
  * Round, the 2 phases (the current one filled and marked), and the board counters: tiles
- * left and enemy miniatures on the map.
+ * left and enemy miniatures on the map against the miniature limit (rule 10.5). The arrow
+ * on the current phase is decoration; `aria-current` already tells screen readers.
  */
 export function PhaseBar({ state }: Props) {
   return (
@@ -30,15 +32,17 @@ export function PhaseBar({ state }: Props) {
               className={`${styles.phase} ${styles[p.id]} ${current ? styles.current : ''}`}
               aria-current={current ? 'step' : undefined}
             >
-              {current ? '▶ ' : ''}
+              {current ? <span aria-hidden="true">▶ </span> : null}
               {p.label}
             </li>
           )
         })}
       </ol>
       <span className={styles.counters}>
-        Tiles left {state.tileDeck.length} · Enemies {state.enemies.length}/
-        {state.config.miniatureLimit}
+        Tiles left {state.tileDeck.length} ·{' '}
+        <span data-testid="enemy-count" title={miniatureLimitText(state.config)}>
+          Enemies {state.enemies.length} of {state.config.miniatureLimit} (map limit)
+        </span>
       </span>
     </header>
   )
