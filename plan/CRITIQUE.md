@@ -207,15 +207,6 @@
 - suggested fix: Cut the sentence, or replace it with where to report a missing credit.
 - source: web-fetch
 
-### [LOW] / — the home page does not link the Decisions page
-- pass: 8 (commit c9bd27d)
-- viewport: n/a (web-fetch)
-- category: navigation
-- observation: The "Also:" line links the tiles, the config, and credits, but not Decisions, the page that lists what waits on the designer.
-- evidence: `apps/web/src/home/HomePage.tsx:37-38`.
-- suggested fix: Add "the rules questions that wait on you" linked to /decisions to the "Also:" line.
-- source: web-fetch
-
 ### [LOW] / — the Combat step is one long sentence chain
 - pass: 8 (commit c9bd27d)
 - viewport: n/a (web-fetch)
@@ -226,6 +217,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the home page does not link the Decisions page
+- pass: 8 (commit c9bd27d)
+- viewport: n/a (web-fetch)
+- category: navigation
+- observation: The "Also:" line links the tiles, the config, and credits, but not Decisions, the page that lists what waits on the designer.
+- evidence: `apps/web/src/home/HomePage.tsx:37-38`.
+- suggested fix: Add "the rules questions that wait on you" linked to /decisions to the "Also:" line.
+- source: web-fetch
+- issue: #101
+- fixed: (this commit). The "Also:" line now links "the rules questions that wait on you" to /decisions between the rules config and credits; a HomePage test pins the link.
 
 ### [x] [LOW] /play — the phase bar arrow is read aloud and the enemy cap is unexplained
 - pass: 14 (commit f95875e)

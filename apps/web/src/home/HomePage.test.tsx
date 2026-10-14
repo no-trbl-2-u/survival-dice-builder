@@ -45,6 +45,12 @@ describe('HomePage', () => {
     expect(screen.queryByText(/Level up, buy cards in the Shop, and draft Skills/)).toBeNull()
   })
 
+  it('links the Decisions page from the Also line', () => {
+    render(<HomePage />)
+    const link = screen.getAllByRole('link', { name: 'the rules questions that wait on you' })[0]
+    expect(link?.getAttribute('href')).toBe('/decisions')
+  })
+
   it('links the written rules it cites', () => {
     render(<HomePage />)
     const link = screen.getAllByRole('link', { name: 'written rules' })[0]
