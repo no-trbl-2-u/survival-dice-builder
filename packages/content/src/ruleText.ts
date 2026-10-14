@@ -130,17 +130,29 @@ export function gatherText(amount: number, config: GameConfig): string {
   return `Gather ${amount} on an unspent gathering node (the node is spent)${elsewhere}`
 }
 
+/** "a grunt rolls 1, an elite 2": each enemy's enemy dice, from the enemy content. */
+const enemyDiceText = (content: Enemies) =>
+  content.enemies.enemies
+    .filter((e) => e.dice > 0)
+    .map((e, i) => `${withArticle(e.name.toLowerCase())}${i === 0 ? ' rolls' : ''} ${e.dice}`)
+    .join(', ')
+
 /**
- * How a Combat plays under a Combat model, and when it ends.
+ * How a Combat plays under a Combat model, and when it ends, with each enemy's enemy dice.
  *
- * @rule 7, 7.8, 9.5, 9.6 (Spec v2)
+ * @rule 7, 7.8, 9.5, 9.6, Table 5 (Spec v2)
  */
-export function combatText(config: GameConfig, model: GameConfig['combat']['model']): string {
+export function combatText(
+  config: GameConfig,
+  model: GameConfig['combat']['model'],
+  content: Enemies,
+): string {
   if (model === 'exchange') {
     return 'In each exchange you roll, play cards, and fire Skills; then each enemy next to you that targets you rolls its enemy dice at you.'
   }
+  const dice = enemyDiceText(content)
   return (
-    'Play Engage to roll your dice from where you stand, plus the enemy dice of each enemy next to you (each enemy record gives its dice). ' +
+    `Play an Engage card to roll your dice from where you stand, plus the enemy dice of each enemy next to you${dice ? ` (${dice})` : ''}. ` +
     'Put your dice on your Skills one at a time. ' +
     `${enemyHitText(config)} ` +
     combatEndText(config)
@@ -383,7 +395,7 @@ export function ruleLineFor(
   if (path === 'player.draftSlots') return `${draftFullText(config, 'the new Skill')}.`
   if (path === 'draft.unpicked') return draftPoolText(config)
   if (path === 'combat.model')
-    return `${combatText(config, config.combat.model)} ${siegeText(content)}`
+    return `${combatText(config, config.combat.model, content)} ${siegeText(content)}`
   if (path === 'combat.engage.hitDamage' || path === 'combat.engage.defeatedDice')
     return enemyHitText(config)
   if (path === 'rulings.mandatoryPlays') return combatEndText(config)

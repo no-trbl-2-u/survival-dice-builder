@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-14 (pass 49, cloud tick)
+
+Pass 48's top row shipped; no MED rows remain, so the bias does not apply. Four LOW rows tie at 3.2; the Combat-step row is the cheapest of the pass 16 ties and fixes the line a new player reads first on /, on the /play start panel, and in the playtest kit.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /: the Combat step says "Play Engage" and "each enemy record gives its dice" (critique LOW, pass 16)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: "Play an Engage card"; name grunt and elite dice from the enemy content
+- issue: #102
+- fixed: (this commit)
+
+### [ ] [3.2] /: the Training line omits the Build card and when the draft happens (critique LOW, pass 16)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: build `trainingText` like `shopText`; name the draft rounds
+
+### [ ] [3.2] /: the Levels line says "3 more than the step before" with no step defined (critique LOW, pass 16)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: give the first thresholds from config in `ruleText`
+
+### [ ] [3.2] /config: the save message names a URL path, not the page (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: "Saved. New runs on the Play page use this config."
+
+### [ ] [3.0] /config: the rules note prints "Rules engagements." and "Rules core loop (open question 55)." (critique LOW, pass 16)
+- category: external-critique (voice)
+- impact: 4
+- ease: 7.5
+- next: read the rule ids into plain words, or drop them from the note
+
 # Site audit — 2026-10-14 (pass 48, cloud tick)
 
 Pass 47's top row shipped; no MED rows remain, so the bias does not apply. Re-scoring the older LOW rows, the pass 8 home-page row is still live and the cheapest navigation fix in the queue (impact 4, ease 9); it outranks the 3.2 ties.

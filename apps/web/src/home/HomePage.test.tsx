@@ -14,7 +14,7 @@ describe('HomePage', () => {
 
   it('names both Combat models the start panel offers', () => {
     render(<HomePage />)
-    const combat = screen.getAllByText(/Play Engage to roll/)[0]
+    const combat = screen.getAllByText(/Play an Engage card to roll/)[0]
     expect(combat?.textContent).toMatch(/This is the Combat in the written rules\./)
     expect(combat?.textContent).toMatch(/Or choose Exchanges, the older Combat kept for playtests/)
     expect(combat?.textContent).not.toMatch(/Exchanges, the Combat in the written rules/)
@@ -22,7 +22,7 @@ describe('HomePage', () => {
 
   it('says how the base and its defenses take damage when Combat ends', () => {
     render(<HomePage />)
-    const combat = screen.getAllByText(/Play Engage to roll/)[0]
+    const combat = screen.getAllByText(/Play an Engage card to roll/)[0]
     expect(combat?.textContent).toMatch(
       /Either way, when Combat ends, each enemy next to a Barricade/,
     )

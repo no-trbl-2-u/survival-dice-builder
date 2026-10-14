@@ -99,9 +99,15 @@ describe('rule text from config', () => {
   })
 
   it('Combat: each model has its own text; enemy dice come from each record (Spec v2 9.6)', () => {
-    expect(combatText(base, 'engage')).toMatch(/the enemy dice of each enemy next to you/)
-    expect(combatText(base, 'engage')).toMatch(/Combat ends when every hand and deck is empty/)
-    expect(combatText(base, 'exchange')).toBe(
+    expect(combatText(base, 'engage', defaultContent)).toMatch(
+      /^Play an Engage card to roll your dice from where you stand, plus the enemy dice of each enemy next to you \(a grunt rolls 1, an elite 2\)\. /,
+    )
+    const elite = { enemies: { enemies: [{ ...defaultContent.enemies.enemies[1]!, dice: 3 }] } }
+    expect(combatText(base, 'engage', elite)).toMatch(/next to you \(an elite rolls 3\)\. /)
+    expect(combatText(base, 'engage', defaultContent)).toMatch(
+      /Combat ends when every hand and deck is empty/,
+    )
+    expect(combatText(base, 'exchange', defaultContent)).toBe(
       'In each exchange you roll, play cards, and fire Skills; then each enemy next to you that targets you rolls its enemy dice at you.',
     )
   })
@@ -115,7 +121,7 @@ describe('rule text from config', () => {
       combat: { ...c.combat, engage: { ...c.combat.engage, defeatedDice: 'cancelled' } },
     }))
     expect(enemyHitText(cancelled)).toMatch(/except the dice of an enemy you defeated/)
-    expect(combatText(base, 'engage')).toContain(enemyHitText(base))
+    expect(combatText(base, 'engage', defaultContent)).toContain(enemyHitText(base))
     expect(ruleLineFor('combat.engage.hitDamage', base, defaultContent)).toBe(enemyHitText(base))
     expect(ruleLineFor('combat.engage.defeatedDice', cancelled, defaultContent)).toBe(
       enemyHitText(cancelled),
@@ -136,7 +142,7 @@ describe('rule text from config', () => {
     )
     const must = With((c) => ({ ...c, rulings: { ...c.rulings, mandatoryPlays: true } }))
     expect(combatEndText(must)).toMatch(/^Play each card\. /)
-    expect(combatText(must, 'engage')).toContain(combatEndText(must))
+    expect(combatText(must, 'engage', defaultContent)).toContain(combatEndText(must))
   })
 
   it('card step: the discard choice follows rulings.mandatoryPlays under both models', () => {
@@ -231,7 +237,9 @@ describe('rule text from config', () => {
     expect(line('milestones.surviveRounds')).toBe(
       'Survive to round 5; Survive to round 10; Survive to round 15.',
     )
-    expect(line('combat.model')).toBe(`${combatText(base, 'engage')} ${siegeText(defaultContent)}`)
+    expect(line('combat.model')).toBe(
+      `${combatText(base, 'engage', defaultContent)} ${siegeText(defaultContent)}`,
+    )
     expect(line('rulings.mandatoryPlays')).toBe(combatEndText(base))
     expect(line('rulings.targetTieBreak')).toBe(targetOrderText(base))
     expect(line('rulings.playerPullDistance')).toBe(targetOrderText(base))

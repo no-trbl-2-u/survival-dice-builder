@@ -22,8 +22,8 @@ const COMBAT_LABEL = defaultConfigMeta['combat.model']?.options ?? {}
 
 /** One line per Combat choice: how a Combat plays under it, from `ruleText`. */
 const COMBAT_HINT: Record<CombatModel, string> = {
-  engage: `Engagements: ${combatText(defaultContent.config, 'engage')} ${siegeText(defaultContent)}`,
-  exchange: `The older Combat, kept for playtests. ${combatText(defaultContent.config, 'exchange')} ${siegeText(defaultContent)}`,
+  engage: `Engagements: ${combatText(defaultContent.config, 'engage', defaultContent)} ${siegeText(defaultContent)}`,
+  exchange: `The older Combat, kept for playtests. ${combatText(defaultContent.config, 'exchange', defaultContent)} ${siegeText(defaultContent)}`,
 }
 
 type Props = Readonly<{

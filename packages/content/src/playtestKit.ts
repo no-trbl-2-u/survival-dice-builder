@@ -135,7 +135,7 @@ function teach(content: Content): string[] {
     `- Your ${cards}-card deck is played twice each round: top halves in Prepare, then bottom halves in Combat. Draw ${hand} at a time.`,
     `- ${revealText(config)} ${spawnText(config)} ${targetText(config)}`,
     `- ${gatherText(starterGather(content), config)}. Each node gives materials once.`,
-    `- Combat: ${combatText(config, config.combat.model)}`,
+    `- Combat: ${combatText(config, config.combat.model, content)}`,
     `- ${knockoutText(config)}`,
     `- Every ${config.draft.everyNRounds} rounds, once the Training Ground is open, each player drafts a Skill. ${draftPoolText(config)}`,
   ]

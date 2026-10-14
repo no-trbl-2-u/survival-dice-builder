@@ -83,7 +83,7 @@ test('/play: the start panel says what a run is and what the seed does', async (
   )
   const combat = panel.getByRole('combobox', { name: /Combat/ })
   await expect(combat).toHaveAccessibleDescription(
-    /Engagements: Play Engage to roll your dice from where you stand/,
+    /Engagements: Play an Engage card to roll your dice from where you stand/,
   )
   await combat.selectOption('exchange')
   await expect(combat).toHaveAccessibleDescription(/In each exchange you roll, play cards/)

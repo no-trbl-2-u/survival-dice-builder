@@ -41,9 +41,10 @@ export function HomePage() {
             {targetText(config)}
           </li>
           <li>
-            <strong>Combat:</strong> {combatText(config, 'engage')} This is the Combat in the{' '}
-            <a href={rulesUrl}>written rules</a>. Or choose Exchanges, the older Combat kept for
-            playtests, on the start panel: {lower(combatText(config, 'exchange'))} Either way,{' '}
+            <strong>Combat:</strong> {combatText(config, 'engage', defaultContent)} This is the
+            Combat in the <a href={rulesUrl}>written rules</a>. Or choose Exchanges, the older
+            Combat kept for playtests, on the start panel:{' '}
+            {lower(combatText(config, 'exchange', defaultContent))} Either way,{' '}
             {lower(siegeText(defaultContent))}
           </li>
         </ol>

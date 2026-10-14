@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Combat step says "Play Engage" and "each enemy record gives its dice"
-- pass: 16 (commit 0b2ae6a)
-- viewport: desktop
-- category: voice
-- observation: "Enemy record" is a data word a player never sees, and "Play Engage" does not say Engage is a card.
-- evidence: `packages/content/src/ruleText.ts:143`: "Play Engage to roll your dice from where you stand, plus the enemy dice of each enemy next to you (each enemy record gives its dice)."
-- suggested fix: "Play an Engage card to roll your dice plus the enemy dice of each enemy next to you (a grunt rolls N, an elite M)", with N and M read from the enemy content.
-- source: web-fetch
-
 ### [LOW] / — the Levels line says "3 more than the step before" with no step defined
 - pass: 16 (commit 0b2ae6a)
 - viewport: desktop
@@ -217,6 +208,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Combat step says "Play Engage" and "each enemy record gives its dice"
+- pass: 16 (commit 0b2ae6a)
+- viewport: desktop
+- category: voice
+- observation: "Enemy record" is a data word a player never sees, and "Play Engage" does not say Engage is a card.
+- evidence: `packages/content/src/ruleText.ts:143`: "Play Engage to roll your dice from where you stand, plus the enemy dice of each enemy next to you (each enemy record gives its dice)."
+- suggested fix: "Play an Engage card to roll your dice plus the enemy dice of each enemy next to you (a grunt rolls N, an elite M)", with N and M read from the enemy content.
+- source: web-fetch
+- issue: #102
+- fixed: (this commit). `combatText` now takes the enemy content and reads "Play an Engage card to roll your dice from where you stand, plus the enemy dice of each enemy next to you (a grunt rolls 1, an elite 2)", the counts read from each enemy's dice; ruleText tests pin both.
 
 ### [x] [LOW] / — the home page does not link the Decisions page
 - pass: 8 (commit c9bd27d)
