@@ -30,10 +30,11 @@ describe('DecisionsPage', () => {
     expect(container.querySelector('[data-question="7"]')).toBeNull()
     expect(container.querySelector('[data-question="63"]')).not.toBeNull()
     const link = container.querySelector('a[href="/config#cfg-clock-forcedRevealEvery"]')
-    expect(link?.textContent).toBe('clock.forcedRevealEvery')
-    // The config label stands before the path.
-    expect(link?.parentElement?.textContent).toContain(
-      'Forced reveal every (clock.forcedRevealEvery)',
+    // The setting reads in plain words: the /config label, linked, and its value.
+    expect(link?.textContent).toBe('Forced reveal every')
+    expect(link?.parentElement?.textContent).toContain('Forced reveal every: off')
+    expect(container.querySelector('[data-testid="readings"]')?.textContent).not.toMatch(
+      /Setting: [^.]*(clock\.forcedRevealEvery|a list or table|differs\))/,
     )
     expect(container.querySelectorAll('[data-testid="checks"] > li').length).toBeGreaterThan(3)
     expect(container.textContent).not.toMatch(/undefined|\*\*/)

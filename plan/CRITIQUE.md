@@ -36,15 +36,6 @@
 - suggested fix: Build `trainingText` like `shopText` ("Buy Training I on the base (a Build card and 3 materials) to open the Training Ground") and name the draft rounds ("rounds 2, 4, 6 ...").
 - source: web-fetch
 
-### [MED] /decisions — each "Setting:" line shows raw config keys and code values
-- pass: 14 (commit f95875e)
-- viewport: desktop
-- category: voice
-- observation: Each reading's setting line prints the dotted config path and the raw value in code type; long values become "a list or table" and a mismatch reads "(the row says X: differs)". A visitor cannot read the current rule in plain words.
-- evidence: `apps/web/src/decisions/DecisionsPage.tsx:41-43` ("= a list or table", "(the row says {s.named}: differs)").
-- suggested fix: Lead with the field's plain label and a plain value from `config.meta.json` (e.g. "Enemies per hex: 1"); keep the path only as the /config link target; reword the mismatch note ("This row names X; the game uses Y.").
-- source: web-fetch
-
 ### [LOW] /play — the start panel Combat hint repeats its label
 - pass: 14 (commit f95875e)
 - viewport: desktop
@@ -262,6 +253,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — each "Setting:" line shows raw config keys and code values
+- pass: 14 (commit f95875e)
+- viewport: desktop
+- category: voice
+- observation: Each reading's setting line prints the dotted config path and the raw value in code type; long values become "a list or table" and a mismatch reads "(the row says X: differs)". A visitor cannot read the current rule in plain words.
+- evidence: `apps/web/src/decisions/DecisionsPage.tsx:41-43` ("= a list or table", "(the row says {s.named}: differs)").
+- suggested fix: Lead with the field's plain label and a plain value from `config.meta.json` (e.g. "Enemies per hex: 1"); keep the path only as the /config link target; reword the mismatch note ("This row names X; the game uses Y.").
+- source: web-fetch
+- issue: #97
+- fixed: (this commit). Each setting reads "<label>: <value>": the /config label is the link (the path stays only as the link target), and the value is in plain words from `config.meta.json` via a new `settingValueText` (select phrases without the "(default)" note, the empty placeholder, on/off, numbers, "a list on the Config page"). A mismatch reads "(This row names X; the game uses Y.)".
 
 ### [x] [MED] / and /config — the enemy target rule is stated two ways
 - pass: 13 (commit 23315d6)

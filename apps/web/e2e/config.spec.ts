@@ -95,11 +95,9 @@ test('/config: leaving with unsaved edits warns; Reset asks first', async ({ pag
   await expect(page.getByRole('status')).toHaveText('Reset to the defaults.')
 })
 
-test('/decisions: a setting shows its config label beside the path', async ({ page }) => {
+test('/decisions: a setting shows its config label and a plain value', async ({ page }) => {
   await page.goto('/decisions')
-  await expect(page.getByTestId('readings')).toContainText(
-    'Forced reveal every (clock.forcedRevealEvery)',
-  )
+  await expect(page.getByTestId('readings')).toContainText('Forced reveal every: off')
 })
 
 test('/config: sliders, toggles, and pick lists; a name can only come from the content', async ({

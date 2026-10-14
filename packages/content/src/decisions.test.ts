@@ -13,6 +13,7 @@ import {
   parseUserCalls,
   recentDecisions,
   settingsCombatModel,
+  settingValueText,
   splitReading,
   statusLabel,
 } from './decisions.ts'
@@ -39,6 +40,16 @@ describe('decisions', () => {
     expect(open.some((r) => r.status === 'decided 2026-10-02')).toBe(false)
     // A decided row with a proposed detail stays open.
     expect(open.some((r) => r.number === 9)).toBe(true)
+  })
+
+  it('words a setting value as /config does: phrases, placeholders, on/off, numbers', () => {
+    const v = (path: string, json: string) => settingValueText(path, json, defaultConfigMeta)
+    expect(v('rulings.buildLevels', '"levelled"')).toBe('Levelled')
+    expect(v('rulings.buildLevels', '"any"')).toBe('Any tier')
+    expect(v('clock.forcedRevealEvery', 'empty')).toBe('off')
+    expect(v('rulings.enemiesPerHex', '1')).toBe('1')
+    expect(v('rulings.enemiesPerHex', 'true')).toBe('on')
+    expect(v('player.starterSkills', '["a","b"]')).toBe('a list on the Config page')
   })
 
   it('resolves flag keys by exact path or unique suffix, and marks a differing value', () => {

@@ -55,6 +55,7 @@ export {
   RECENT_NOTE,
   recentDecisions,
   settingsCombatModel,
+  settingValueText,
   SPEC_V2_LINE,
   splitReading,
   statusLabel,

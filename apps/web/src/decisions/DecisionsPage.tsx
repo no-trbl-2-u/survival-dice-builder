@@ -13,6 +13,7 @@ import {
   RECENT_NOTE,
   recentDecisions,
   settingsCombatModel,
+  settingValueText,
   SPEC_V2_LINE,
   splitReading,
   statusLabel,
@@ -44,7 +45,7 @@ function Reading({ text, rows }: Readonly<{ text: string; rows: ReadonlySet<numb
 /** The config field id on /config for a dotted path (`rulings.enemiesPerHex`). */
 const fieldId = (path: string) => `cfg-${path.split('.').join('-')}`
 
-/** The settings line of a reading: each setting links to its /config field. */
+/** The settings line of a reading: each setting's label links to its /config field. */
 function Settings({ row }: Readonly<{ row: QuestionRow }>) {
   if (row.flag.startsWith('(engine')) return <>engine code, not a setting</>
   const settings = flagSettings(row.flag, defaultContent.config)
@@ -56,13 +57,16 @@ function Settings({ row }: Readonly<{ row: QuestionRow }>) {
           {i > 0 ? '; ' : null}
           {s.path ? (
             <>
-              {defaultConfigMeta[s.path]?.label ?? null} (
               <a href={`/config#${fieldId(s.path)}`}>
-                <code>{s.path}</code>
+                {defaultConfigMeta[s.path]?.label ?? s.path}
               </a>
-              ) = {(s.current ?? '').length > 40 ? 'a list or table' : <code>{s.current}</code>}
-              {s.differs ? (
-                <strong className={styles.differs}> (the row says {s.named}: differs)</strong>
+              : {settingValueText(s.path, s.current ?? '', defaultConfigMeta)}
+              {s.differs && s.named ? (
+                <strong className={styles.differs}>
+                  {' '}
+                  (This row names {settingValueText(s.path, s.named, defaultConfigMeta)}; the game
+                  uses {settingValueText(s.path, s.current ?? '', defaultConfigMeta)}.)
+                </strong>
               ) : null}
             </>
           ) : (

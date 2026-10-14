@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-14 (pass 44, cloud tick)
+
+Pass 43's top row shipped. The one MED row left leads under the MED bias: the /decisions setting lines in config keys and code values (pass 14).
+
+## Top 5 findings (scored)
+
+### [x] [4.5] /decisions: each "Setting:" line shows raw config keys and code values (critique MED, pass 14)
+- category: external-critique (voice)
+- impact: 6
+- ease: 5
+- next: lead with the plain label and value from `config.meta.json`
+- issue: #97
+- fixed: (this commit)
+
+### [ ] [3.2] /play: the start panel Combat hint repeats its label (critique LOW, pass 14)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: drop the "Combat:" prefix in `StartPanel.tsx`
+
+### [ ] [3.2] /: the Combat step says "Play Engage" and "each enemy record gives its dice" (critique LOW, pass 16)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: "Play an Engage card"; name grunt and elite dice from the enemy content
+
+### [ ] [3.2] /: the Training line omits the Build card and when the draft happens (critique LOW, pass 16)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: build `trainingText` like `shopText`; name the draft rounds
+
+### [ ] [3.2] /: the Levels line says "3 more than the step before" with no step defined (critique LOW, pass 16)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: give the first thresholds from config in `ruleText`
+
 # Site audit — 2026-10-14 (pass 43, cloud tick)
 
 Pass 42's top row shipped. Two MED rows lead under the MED bias; the older one, the enemy target rule stated two ways (pass 13), goes first.

@@ -214,6 +214,33 @@ export function flagSettings(flag: string, config: GameConfig): FlagSetting[] {
 }
 
 /**
+ * A setting's value in plain words, as /decisions shows it: a select value by its /config
+ * phrase without the "(default)" note, an empty optional by its /config placeholder, on/off,
+ * numbers as they are, and a list or table as "a list on the Config page".
+ *
+ * @param path - the config path (`rulings.buildLevels`).
+ * @param json - the value as `flagSettings` gives it: JSON text, or `empty` for an empty optional.
+ * @param meta - the config metadata.
+ */
+export function settingValueText(path: string, json: string, meta: ConfigMeta): string {
+  const entry = meta[path]
+  if (json === 'empty') return entry?.empty ?? 'off'
+  let value: unknown
+  try {
+    value = JSON.parse(json)
+  } catch {
+    return json
+  }
+  if (typeof value === 'boolean') return value ? 'on' : 'off'
+  if (typeof value === 'number') return String(value)
+  if (typeof value === 'string') {
+    const phrase = entry?.options?.[value]
+    return phrase ? phrase.replace(/\s*\([^)]*\)$/, '') : value
+  }
+  return 'a list on the Config page'
+}
+
+/**
  * The one Combat model a row applies under, or null when it applies under both. The row's first
  * setting is the option its reading proposes, so its `combatModel` (config metadata) decides.
  *
