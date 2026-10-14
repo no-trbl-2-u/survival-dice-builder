@@ -94,6 +94,7 @@ export {
   siegeText,
   spawnText,
   targetOrderText,
+  targetText,
   trainingText,
 } from './ruleText.ts'
 export {

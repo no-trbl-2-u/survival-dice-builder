@@ -23,6 +23,7 @@ import {
   siegeText,
   spawnText,
   targetOrderText,
+  targetText,
   trainingText,
 } from './ruleText.ts'
 import type { GameConfig } from './schemas/config.ts'
@@ -84,7 +85,7 @@ describe('rule text from config', () => {
   })
 
   it('spawning: a new tile delay is named (row 66)', () => {
-    expect(spawnText(base)).toMatch(/add enemies at every Combat,/)
+    expect(spawnText(base)).toBe("Each new tile's spawn nodes add enemies at every Combat.")
     const late = With((c) => ({ ...c, spawn: { ...c.spawn, newTileDelay: 2 } }))
     expect(spawnText(late)).toMatch(/from 2 rounds after it is revealed/)
   })
@@ -163,6 +164,13 @@ describe('rule text from config', () => {
     expect(targetOrderText(plain)).toBe(
       'Enemies head for the nearest structure or player. Between equally near targets they pick the base, then a Tower, then a Barricade, then a player.',
     )
+  })
+
+  it('target: the short form / prints names the player pull (9.3, row 56)', () => {
+    expect(targetText(base)).toBe(
+      'Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer.',
+    )
+    expect(targetOrderText(base).startsWith(targetText(base))).toBe(true)
   })
 
   it('starter return: one fixed line, read by the dialog', () => {

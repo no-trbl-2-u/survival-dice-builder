@@ -72,15 +72,6 @@
 - suggested fix: Wrap the arrow in `<span aria-hidden="true">`; label the counter "Enemies 3 of 20 (limit)" or add a title/visually-hidden "miniature limit".
 - source: web-fetch
 
-### [MED] / and /config — the enemy target rule is stated two ways
-- pass: 13 (commit 23315d6)
-- viewport: n/a
-- category: voice
-- observation: / says "enemies go for the nearest structure first" and stops; /config says they turn to a player who is at least 2 hexes nearer, with a tie order. A visitor reading / learns enemies ignore players.
-- evidence: `packages/content/src/ruleText.ts:57` (spawnText) vs `packages/content/src/ruleText.ts:134-138` (targetOrderText).
-- suggested fix: Drop the targeting clause from `spawnText` and show `targetOrderText` (or a short form built from the same config) on /.
-- source: web-fetch
-
 ### [LOW] /config — the rules note prints "Rules engagements." and "Rules core loop (open question 55)."
 - pass: 13 (commit 23315d6)
 - viewport: n/a
@@ -271,6 +262,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / and /config — the enemy target rule is stated two ways
+- pass: 13 (commit 23315d6)
+- viewport: n/a
+- category: voice
+- observation: / says "enemies go for the nearest structure first" and stops; /config says they turn to a player who is at least 2 hexes nearer, with a tie order. A visitor reading / learns enemies ignore players.
+- evidence: `packages/content/src/ruleText.ts:57` (spawnText) vs `packages/content/src/ruleText.ts:134-138` (targetOrderText).
+- suggested fix: Drop the targeting clause from `spawnText` and show `targetOrderText` (or a short form built from the same config) on /.
+- source: web-fetch
+- issue: #96
+- fixed: (this commit). `spawnText` ends at when spawn nodes add enemies; a new `targetText` (the head of `targetOrderText`, from `rulings.playerPullDistance`) follows it on / and in the PROTOCOL teach list, so / names the 2-hex player pull that /config gives. A test pins the short form as the start of the full order line.
 
 ### [x] [MED] /decisions — decided rows 7, 55, 65, 69 and 72 still give pre-Spec-v2 readings that contradict /
 - pass: 16 (commit 0b2ae6a)

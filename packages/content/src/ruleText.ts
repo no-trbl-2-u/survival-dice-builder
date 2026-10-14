@@ -55,7 +55,7 @@ export function spawnText(config: GameConfig): string {
     delay === 0
       ? 'at every Combat'
       : `at every Combat from ${plural(delay, 'round', 'rounds')} after it is revealed`
-  return `Each new tile's spawn nodes add enemies ${when}, and enemies go for the nearest structure first.`
+  return `Each new tile's spawn nodes add enemies ${when}.`
 }
 
 /**
@@ -213,19 +213,27 @@ const TARGET_NAME: Record<GameConfig['rulings']['targetTieBreak'][number], strin
 }
 
 /**
+ * Which target an enemy heads for: the nearest structure, or a player only when much nearer.
+ * The short form / prints; {@link targetOrderText} adds the tie-break order.
+ *
+ * @rule 9.3, OPEN-QUESTIONS row 56
+ */
+export function targetText(config: GameConfig): string {
+  const pull = config.rulings.playerPullDistance
+  return pull === 0
+    ? 'Enemies head for the nearest structure or player.'
+    : `Enemies head for the nearest structure, and turn to a player only when the player is at least ${plural(pull, 'hex', 'hexes')} nearer.`
+}
+
+/**
  * Which target an enemy heads for: the nearest structure, a player only when much nearer, and
  * the tie-break order only between equally near targets.
  *
  * @rule 9.3, OPEN-QUESTIONS rows 15, 56
  */
 export function targetOrderText(config: GameConfig): string {
-  const { playerPullDistance: pull, targetTieBreak } = config.rulings
-  const head =
-    pull === 0
-      ? 'Enemies head for the nearest structure or player.'
-      : `Enemies head for the nearest structure, and turn to a player only when the player is at least ${plural(pull, 'hex', 'hexes')} nearer.`
-  const order = targetTieBreak.map((t) => TARGET_NAME[t]).join(', then ')
-  return `${head} Between equally near targets they pick ${order}.`
+  const order = config.rulings.targetTieBreak.map((t) => TARGET_NAME[t]).join(', then ')
+  return `${targetText(config)} Between equally near targets they pick ${order}.`
 }
 
 /**

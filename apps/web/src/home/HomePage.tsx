@@ -9,6 +9,7 @@ import {
   shopText,
   siegeText,
   spawnText,
+  targetText,
   trainingText,
 } from '@survival/content'
 import { rulesUrl } from '../decisions/Inline.tsx'
@@ -36,7 +37,8 @@ export function HomePage() {
         <ol className={styles.steps}>
           <li>
             <strong>Prepare:</strong> play the top halves of your cards to move, gather materials,
-            and build Barricades and Towers. {revealText(config)} {spawnText(config)}
+            and build Barricades and Towers. {revealText(config)} {spawnText(config)}{' '}
+            {targetText(config)}
           </li>
           <li>
             <strong>Combat:</strong> {combatText(config, 'engage')} This is the Combat in the{' '}

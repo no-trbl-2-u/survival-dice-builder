@@ -6,6 +6,7 @@ import {
   knockoutText,
   revealText,
   spawnText,
+  targetText,
 } from './ruleText.ts'
 import type { Content } from './load.ts'
 import type { GameConfig } from './schemas/config.ts'
@@ -132,7 +133,7 @@ function teach(content: Content): string[] {
   return [
     `- ${goalText()}`,
     `- Your ${cards}-card deck is played twice each round: top halves in Prepare, then bottom halves in Combat. Draw ${hand} at a time.`,
-    `- ${revealText(config)} ${spawnText(config)}`,
+    `- ${revealText(config)} ${spawnText(config)} ${targetText(config)}`,
     `- ${gatherText(starterGather(content), config)}. Each node gives materials once.`,
     `- Combat: ${combatText(config, config.combat.model)}`,
     `- ${knockoutText(config)}`,
