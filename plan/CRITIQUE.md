@@ -36,15 +36,6 @@
 - suggested fix: Build `trainingText` like `shopText` ("Buy Training I on the base (a Build card and 3 materials) to open the Training Ground") and name the draft rounds ("rounds 2, 4, 6 ...").
 - source: web-fetch
 
-### [LOW] /tiles — "Proposed layouts for review" does not say if /play uses them
-- pass: 14 (commit f95875e)
-- viewport: desktop
-- category: comprehension
-- observation: The intro says the layouts are proposed "for review" but not by whom, or whether the game plays these tiles now. It also writes "countryside tiles" and "core tiles" in lowercase next to "Base tile", while the headings capitalise all three.
-- evidence: `apps/web/src/tiles/TileSheet.tsx:31`.
-- suggested fix: One sentence: "The game on the Play page uses these tiles." (or what is true); match the capitals of the headings.
-- source: web-fetch
-
 ### [LOW] /play — the phase bar arrow is read aloud and the enemy cap is unexplained
 - pass: 14 (commit f95875e)
 - viewport: desktop
@@ -244,6 +235,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /tiles — "Proposed layouts for review" does not say if /play uses them
+- pass: 14 (commit f95875e)
+- viewport: desktop
+- category: comprehension
+- observation: The intro says the layouts are proposed "for review" but not by whom, or whether the game plays these tiles now. It also writes "countryside tiles" and "core tiles" in lowercase next to "Base tile", while the headings capitalise all three.
+- evidence: `apps/web/src/tiles/TileSheet.tsx:31`.
+- suggested fix: One sentence: "The game on the Play page uses these tiles." (or what is true); match the capitals of the headings.
+- source: web-fetch
+- issue: #99
+- fixed: (this commit). The intro and the page description now say the game on the Play page builds its map from these tiles, counts them per kind from the content with the headings' capitals ("1 Base tile, 3 Countryside tiles, and 5 Core tiles"), and says the Base tile starts in the center and the Countryside tiles are drawn before the Core tiles; a TileSheet test pins the sentence.
 
 ### [x] [LOW] /play — the start panel Combat hint repeats its label
 - pass: 14 (commit f95875e)

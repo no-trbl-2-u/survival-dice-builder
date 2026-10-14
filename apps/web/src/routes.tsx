@@ -54,7 +54,7 @@ export const routes: readonly Route[] = [
     path: '/tiles',
     title: 'Tile sheet',
     description:
-      'The proposed map tiles for review, each hex listed by position with its terrain and site.',
+      'The map tiles the game is built from, each hex listed by position with its terrain and site.',
     served: 'page',
     render: () => <TileSheet />,
   },

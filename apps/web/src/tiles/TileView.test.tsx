@@ -30,6 +30,13 @@ describe('TileSheet', () => {
     expect(container.querySelectorAll('[data-tile]')).toHaveLength(9)
   })
 
+  it('says /play builds its map from these tiles, counted per kind with the heading capitals', () => {
+    const { container } = render(<TileSheet />)
+    expect(container.querySelector('#tiles-intro')!.textContent).toMatch(
+      /^The game on the Play page builds its map from these 9 tiles: 1 Base tile, 3 Countryside tiles, and 5 Core tiles\. The Base tile starts in the center; the Countryside tiles are drawn before the Core tiles\./,
+    )
+  })
+
   it('groups the tiles under an H2 per kind, each tile name an H3', () => {
     const { container } = render(<TileSheet />)
     const h2s = [...container.querySelectorAll('h2')].map((h) => h.textContent)

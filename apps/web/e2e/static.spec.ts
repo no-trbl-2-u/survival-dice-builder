@@ -5,7 +5,11 @@ const SITE = 'https://survival-dice-builder.pages.dev'
 /** Every route as served (phase 40): its tab title, a line of its copy, or null for a shell. */
 const ROUTES: readonly (readonly [path: string, title: string, copy: string | null])[] = [
   ['/', 'Survival Dice-Builder', 'Defend the base, build your dice'],
-  ['/tiles', 'Tile sheet - Survival Dice-Builder', 'Proposed layouts for review'],
+  [
+    '/tiles',
+    'Tile sheet - Survival Dice-Builder',
+    'The game on the Play page builds its map from these',
+  ],
   ['/decisions', 'Decisions - Survival Dice-Builder', 'wait on the designer'],
   ['/credits', 'Credits - Survival Dice-Builder', 'Every asset in the game, with its license.'],
   ['/config', 'Config - Survival Dice-Builder', 'Playing with the standard rules.'],

@@ -11,6 +11,15 @@ const KINDS: readonly (readonly [TileDef['kind'], string])[] = [
   ['core', 'Core tiles'],
 ]
 
+/** "1 Base tile, 3 Countryside tiles, and 5 Core tiles", counted from the content. */
+function kindSummary(tiles: readonly TileDef[]): string {
+  const parts = KINDS.map(([kind, heading]) => {
+    const n = tiles.filter((t) => t.kind === kind).length
+    return `${n} ${n === 1 ? heading.replace(/s$/, '') : heading.replace(/(tile)$/, '$1s')}`
+  })
+  return `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`
+}
+
 /** Counts each site printed on a tile, for the caption. */
 function siteSummary(sites: readonly (Site | null)[]): string {
   return SITES.map((s) => [s, sites.filter((x) => x === s).length] as const)
@@ -20,16 +29,18 @@ function siteSummary(sites: readonly (Site | null)[]): string {
 }
 
 /**
- * The proposed tile layouts (spec phase 1) for designer review: every tile in
- * `tiles.json`, grouped by kind, with a terrain and site legend.
+ * The tile layouts (spec phase 1) the game on the Play page builds its map from: every tile
+ * in `tiles.json`, grouped by kind, with a terrain and site legend.
  */
 export function TileSheet() {
   const { tiles } = defaultContent
   return (
     <section aria-labelledby="tiles-intro">
       <p id="tiles-intro">
-        Proposed layouts for review: 1 Base tile, 3 countryside tiles, and 5 core tiles. Under each
-        tile, its 7 hexes are listed by position with their terrain and site.
+        The game on the Play page builds its map from these {tiles.length} tiles:{' '}
+        {kindSummary(tiles)}. The Base tile starts in the center; the Countryside tiles are drawn
+        before the Core tiles. Under each tile, its 7 hexes are listed by position with their
+        terrain and site.
       </p>
       <ul className={styles.legend} aria-label="Terrain legend">
         {TERRAINS.map((t) => (
