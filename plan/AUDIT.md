@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-14 (pass 45, cloud tick)
+
+Pass 44's top row shipped; no MED rows remain, so the bias does not apply. Four LOW rows tie at 3.2; the oldest (pass 14) wins the tie-break: the /play start panel Combat hint.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play: the start panel Combat hint repeats its label (critique LOW, pass 14)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: drop the "Combat:" prefix in `StartPanel.tsx`
+- issue: #98
+- fixed: (this commit)
+
+### [ ] [3.2] /: the Combat step says "Play Engage" and "each enemy record gives its dice" (critique LOW, pass 16)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: "Play an Engage card"; name grunt and elite dice from the enemy content
+
+### [ ] [3.2] /: the Training line omits the Build card and when the draft happens (critique LOW, pass 16)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: build `trainingText` like `shopText`; name the draft rounds
+
+### [ ] [3.2] /: the Levels line says "3 more than the step before" with no step defined (critique LOW, pass 16)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: give the first thresholds from config in `ruleText`
+
+### [ ] [3.2] /tiles: "Proposed layouts for review" does not say if /play uses them (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: say on /tiles which layout /play uses
+
 # Site audit — 2026-10-14 (pass 44, cloud tick)
 
 Pass 43's top row shipped. The one MED row left leads under the MED bias: the /decisions setting lines in config keys and code values (pass 14).

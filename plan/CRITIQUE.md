@@ -36,15 +36,6 @@
 - suggested fix: Build `trainingText` like `shopText` ("Buy Training I on the base (a Build card and 3 materials) to open the Training Ground") and name the draft rounds ("rounds 2, 4, 6 ...").
 - source: web-fetch
 
-### [LOW] /play — the start panel Combat hint repeats its label
-- pass: 14 (commit f95875e)
-- viewport: desktop
-- category: voice
-- observation: The hint is prefixed "Combat:" and the text itself starts with "Engagements:" or "The Combat in the written rules", so it reads "Combat: Engagements: ..." and "Combat: The Combat in the written rules."
-- evidence: `apps/web/src/play/StartPanel.tsx:23-25,115`.
-- suggested fix: Drop the "Combat:" prefix at line 115, or drop the label from each hint so the text starts with the rule.
-- source: web-fetch
-
 ### [LOW] /tiles — "Proposed layouts for review" does not say if /play uses them
 - pass: 14 (commit f95875e)
 - viewport: desktop
@@ -253,6 +244,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the start panel Combat hint repeats its label
+- pass: 14 (commit f95875e)
+- viewport: desktop
+- category: voice
+- observation: The hint is prefixed "Combat:" and the text itself starts with "Engagements:" or "The Combat in the written rules", so it reads "Combat: Engagements: ..." and "Combat: The Combat in the written rules."
+- evidence: `apps/web/src/play/StartPanel.tsx:23-25,115`.
+- suggested fix: Drop the "Combat:" prefix at line 115, or drop the label from each hint so the text starts with the rule.
+- source: web-fetch
+- issue: #98
+- fixed: (this commit). The hint under the Combat select drops its "Combat:" prefix, so it starts with the rule ("Engagements: ..." or "The older Combat, kept for playtests. ..."); the StartPanel test pins both starts.
 
 ### [x] [MED] /decisions — each "Setting:" line shows raw config keys and code values
 - pass: 14 (commit f95875e)

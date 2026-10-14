@@ -113,7 +113,7 @@ export function StartPanel({
         The same seed and the same choices give the same game.
       </p>
       <p id="combat-hint" className={styles.muted}>
-        Combat: {COMBAT_HINT[combat]}
+        {COMBAT_HINT[combat]}
       </p>
       <div className={styles.muted}>
         <ConfigChanges config={config} changes={changes} updated={updated} reviewHref="/config" />
