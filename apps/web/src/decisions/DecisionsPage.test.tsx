@@ -74,6 +74,20 @@ describe('DecisionsPage', () => {
     expect(container.querySelector('nav a[href="#recent"]')).not.toBeNull()
   })
 
+  it('shows what Spec v2 changed under a decided reading, on its own line (critique pass 16)', () => {
+    const { container } = render(<DecisionsPage />)
+    const note = (n: number) =>
+      container.querySelector(`[data-decided="${n}"] [data-testid="spec-v2"]`)?.textContent
+    expect(note(7)).toMatch(/^Now in the written rules: .*siege damage/)
+    expect(note(55)).toContain('currency')
+    expect(note(72)).toContain('Combat is engagements')
+    expect(note(76)).toBeUndefined()
+    expect(container.querySelector('[data-decided="75"]')?.textContent).not.toContain(
+      'stays an option',
+    )
+    expect(container.textContent).not.toContain('The game plays each of them now.')
+  })
+
   it('links each row it names: to the listed reading, or to the full table for a settled row', () => {
     const { container } = render(<DecisionsPage />)
     const row = (n: number) => container.querySelector(`[data-question="${n}"]`)

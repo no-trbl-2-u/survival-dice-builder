@@ -10,8 +10,11 @@ import {
   parseUserCalls,
   proposalForRow,
   RECENT_DATES,
+  RECENT_NOTE,
   recentDecisions,
   settingsCombatModel,
+  SPEC_V2_LINE,
+  splitReading,
   statusLabel,
   type QuestionRow,
 } from '@survival/content'
@@ -20,6 +23,23 @@ import auditMd from '../../../../plan/AUDIT.md?raw'
 import styles from './DecisionsPage.module.css'
 import { Inline, RepoFile, rowId } from './Inline.tsx'
 import { ProposalTry } from './ProposalTry.tsx'
+
+/** A reading, and on its own line the note on what the written rules changed, when the row has one. */
+function Reading({ text, rows }: Readonly<{ text: string; rows: ReadonlySet<number> }>) {
+  const { reading, specV2 } = splitReading(text)
+  return (
+    <>
+      <p>
+        <Inline text={reading} rows={rows} />
+      </p>
+      {specV2 ? (
+        <p data-testid="spec-v2">
+          <strong>{SPEC_V2_LINE}:</strong> <Inline text={specV2} rows={rows} />
+        </p>
+      ) : null}
+    </>
+  )
+}
 
 /** The config field id on /config for a dotted path (`rulings.enemiesPerHex`). */
 const fieldId = (path: string) => `cfg-${path.split('.').join('-')}`
@@ -108,9 +128,7 @@ export function DecisionsPage() {
                 ) : null}
               </h3>
               <p className={styles.muted}>Status: {statusLabel(q.status)}</p>
-              <p>
-                <Inline text={q.reading} rows={shown} />
-              </p>
+              <Reading text={q.reading} rows={shown} />
               <p>
                 Setting: <Settings row={q} />
               </p>
@@ -122,8 +140,8 @@ export function DecisionsPage() {
 
       <h2 id="recent">Decided recently</h2>
       <p>
-        Readings the designer decided on the last {RECENT_DATES} decision dates, newest first. The
-        game plays each of them now.
+        Readings the designer decided on the last {RECENT_DATES} decision dates, newest first.{' '}
+        {RECENT_NOTE}
       </p>
       <ol className={styles.list} data-testid="recent">
         {recent.map((q) => (
@@ -134,9 +152,7 @@ export function DecisionsPage() {
                 (rule {q.rule}, decided {decidedDate(q.status)})
               </span>
             </h3>
-            <p>
-              <Inline text={q.reading} rows={shown} />
-            </p>
+            <Reading text={q.reading} rows={shown} />
           </li>
         ))}
       </ol>

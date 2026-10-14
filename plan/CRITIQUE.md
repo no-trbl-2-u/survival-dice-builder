@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — decided rows 7, 55, 65, 69 and 72 still give pre-Spec-v2 readings that contradict /
-- pass: 16 (commit 0b2ae6a)
-- viewport: desktop
-- category: comprehension
-- observation: The home page states the shipped rules; the decided rows on /decisions still carry their old text, so a visitor gets two answers. Row 7 says the engine uses "grunt 2 fixed, elite 6 dice" for structure damage; / says a grunt deals 1 and an elite 3. Row 55 says a knocked-out player loses "the materials they carried"; / (and config `knockout.loseCurrency: true`) says materials and currency. Row 72 calls engagements a "Playtest build" with open points; / calls them the Combat in the written rules. Rows 65 and 69 sit under "Decided recently" but still read "Proposed: ... option, default off".
-- evidence: `docs/DECISIONS.md:115`, `:119`, `:122`, `:123`, `:126` (generated from `OPEN-QUESTIONS.md` rows 7, 55, 65, 69, 72); `packages/content/src/ruleText.ts` siege and knockout text on /.
-- suggested fix: Show a "Spec v2:" line on each decided row superseded by a ruling (siege from each enemy record; materials and currency lost; engagements are the written Combat; rows 65/69 options removed), and regenerate `docs/DECISIONS.md`. Same family as the rows 74/75 finding below; one fix can close both.
-- source: web-fetch
-
 ### [LOW] / — the Combat step says "Play Engage" and "each enemy record gives its dice"
 - pass: 16 (commit 0b2ae6a)
 - viewport: desktop
@@ -43,15 +34,6 @@
 - observation: The Shop line says where to buy and that it needs a Build card; the Training line in the same list says neither, and "every 2nd round" does not say which rounds.
 - evidence: `packages/content/src/ruleText.ts:94` vs `:111-116`; / "Training I (3 materials) opens the Training Ground: every 2nd round, each player looks at 2 Skills and keeps 1 for free."
 - suggested fix: Build `trainingText` like `shopText` ("Buy Training I on the base (a Build card and 3 materials) to open the Training Ground") and name the draft rounds ("rounds 2, 4, 6 ...").
-- source: web-fetch
-
-### [LOW] /decisions — decided rows 74 and 75 describe options phase 41 removed
-- pass: 15 (commit 255362f)
-- viewport: desktop
-- category: comprehension
-- observation: Row 75 says "Once per exchange stays an option" and row 74 discusses the exchange-only enemy options; phase 41 dropped both, and the config has no such keys.
-- evidence: `docs/DECISIONS.md:125`, `:127`; `packages/content/data/config.default.json` (no Skill-fire limit key).
-- suggested fix: Add "Option removed in Spec v2" to rows 74 and 75 and delete "stays an option".
 - source: web-fetch
 
 ### [MED] /decisions — each "Setting:" line shows raw config keys and code values
@@ -289,6 +271,28 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — decided rows 7, 55, 65, 69 and 72 still give pre-Spec-v2 readings that contradict /
+- pass: 16 (commit 0b2ae6a)
+- viewport: desktop
+- category: comprehension
+- observation: The home page states the shipped rules; the decided rows on /decisions still carry their old text, so a visitor gets two answers. Row 7 says the engine uses "grunt 2 fixed, elite 6 dice" for structure damage; / says a grunt deals 1 and an elite 3. Row 55 says a knocked-out player loses "the materials they carried"; / (and config `knockout.loseCurrency: true`) says materials and currency. Row 72 calls engagements a "Playtest build" with open points; / calls them the Combat in the written rules. Rows 65 and 69 sit under "Decided recently" but still read "Proposed: ... option, default off".
+- evidence: `docs/DECISIONS.md:115`, `:119`, `:122`, `:123`, `:126` (generated from `OPEN-QUESTIONS.md` rows 7, 55, 65, 69, 72); `packages/content/src/ruleText.ts` siege and knockout text on /.
+- suggested fix: Show a "Spec v2:" line on each decided row superseded by a ruling (siege from each enemy record; materials and currency lost; engagements are the written Combat; rows 65/69 options removed), and regenerate `docs/DECISIONS.md`. Same family as the rows 74/75 finding below; one fix can close both.
+- source: web-fetch
+- issue: #95
+- fixed: (this commit). A Reading cell in `OPEN-QUESTIONS.md` may end with a `**Spec v2:**` note; `splitReading` splits it off, and /decisions and `docs/DECISIONS.md` show it on its own "Now in the written rules:" line (player words; the scan bans "Spec v2" in components). Rows 7 (siege from each enemy record), 55 (materials and currency), 65, 69, 74, 75 (options removed) and 72 (engagements are the written Combat) carry a note; row 75 drops "Once per exchange stays an option". The "Decided recently" intro says a reading plays now unless its Spec v2 line says what replaced it. A test fails when a decided row whose setting Spec v2 removed has no note.
+
+### [x] [LOW] /decisions — decided rows 74 and 75 describe options phase 41 removed
+- pass: 15 (commit 255362f)
+- viewport: desktop
+- category: comprehension
+- observation: Row 75 says "Once per exchange stays an option" and row 74 discusses the exchange-only enemy options; phase 41 dropped both, and the config has no such keys.
+- evidence: `docs/DECISIONS.md:125`, `:127`; `packages/content/data/config.default.json` (no Skill-fire limit key).
+- suggested fix: Add "Option removed in Spec v2" to rows 74 and 75 and delete "stays an option".
+- source: web-fetch
+- issue: #95
+- fixed: (this commit), with the pass 16 MED above: rows 74 and 75 carry a Spec v2 note that the options are removed.
 
 ### [x] [MED] /decisions — the public page lists repo housekeeping
 - pass: discovery 1 (2026-10-10, bee25b5)

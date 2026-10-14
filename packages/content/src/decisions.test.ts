@@ -13,6 +13,7 @@ import {
   parseUserCalls,
   recentDecisions,
   settingsCombatModel,
+  splitReading,
   statusLabel,
 } from './decisions.ts'
 
@@ -182,6 +183,37 @@ describe('decisions', () => {
     expect(md).toContain('## Decided recently')
     expect(md).toContain('- **4. Q4** (rule 1, 2026-10-09) R4')
     expect(md.indexOf('## Decided recently')).toBeLessThan(md.indexOf('## Checks'))
+  })
+
+  it('splits off the note on what Spec v2 changed and prints it on its own line', () => {
+    expect(splitReading('**Yes.** Old text. **Spec v2:** new text (7.8).')).toEqual({
+      reading: '**Yes.** Old text.',
+      specV2: 'new text (7.8).',
+    })
+    expect(splitReading('**Yes.** No note.')).toEqual({
+      reading: '**Yes.** No note.',
+      specV2: null,
+    })
+    const rows = parseQuestions(
+      '| 1 | 7.11 | Q1 | Old reading. **Spec v2:** new reading. | (removed in Spec v2) | decided 2026-10-11 |',
+    )
+    const md = decisionsMarkdown(rows, [], config, defaultConfigMeta)
+    expect(md).toContain(
+      '- **1. Q1** (rule 7.11, 2026-10-11) Old reading.\n  - Now in the written rules: new reading.',
+    )
+  })
+
+  it('gives each decided row Spec v2 changed a Spec v2 note (critique pass 15 and 16)', () => {
+    const rows = parseQuestions(questionsMd)
+    const note = (n: number) => splitReading(rows.find((r) => r.number === n)?.reading ?? '').specV2
+    for (const n of [7, 55, 65, 69, 72, 74, 75]) expect(note(n), `row ${n}`).not.toBeNull()
+    // Each row whose setting Spec v2 removed says so in its note.
+    for (const r of rows.filter(
+      (q) => q.flag.startsWith('(removed in Spec v2') && q.status.startsWith('decided'),
+    ))
+      expect(splitReading(r.reading).specV2, `row ${r.number}`).not.toBeNull()
+    expect(note(55)).toContain('currency')
+    expect(rows.find((r) => r.number === 75)?.reading).not.toContain('stays an option')
   })
 
   it('notes a field the engine reads under one Combat model', () => {

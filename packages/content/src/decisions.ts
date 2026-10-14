@@ -61,6 +61,23 @@ export function parseQuestions(md: string): QuestionRow[] {
   })
 }
 
+/** The marker in a Reading cell that starts the note on what Spec v2 changed. */
+const SPEC_V2 = /\s*\*\*Spec v2:\*\*\s*/
+
+/**
+ * A Reading cell split into the reading as it was decided and the note on what Spec v2 changed
+ * since (the text after `**Spec v2:**`), or null when the cell has no such note.
+ *
+ * @param reading - the Reading cell.
+ * @rule Spec v2
+ */
+export function splitReading(
+  reading: string,
+): Readonly<{ reading: string; specV2: string | null }> {
+  const [before = '', ...after] = reading.split(SPEC_V2)
+  return after.length > 0 ? { reading: before, specV2: after.join(' ') } : { reading, specV2: null }
+}
+
 /** Status words that mean the designer has not settled the row (in part or in full). */
 const OPEN = /proposed|pending-spec/
 
@@ -78,6 +95,12 @@ export function openQuestions(rows: readonly QuestionRow[]): QuestionRow[] {
 
 /** How many decision dates "Decided recently" covers, newest first. */
 export const RECENT_DATES = 2
+
+/** The label of the line under a reading that says what Spec v2 changed. */
+export const SPEC_V2_LINE = 'Now in the written rules'
+
+/** What "Decided recently" says about the game: a reading Spec v2 changed carries its note. */
+export const RECENT_NOTE = `The game plays each reading now, except where a "${SPEC_V2_LINE}" line says what replaced it.`
 
 /**
  * The date a `decided` status carries (`decided 2026-10-09 (default)` gives `2026-10-09`), or
@@ -304,6 +327,7 @@ export function decisionsMarkdown(
     '',
   ]
   for (const q of open) {
+    const { reading, specV2 } = splitReading(q.reading)
     const settings = flagSettings(q.flag, config)
     const model = settingsCombatModel(settings, meta)
     const tag = model ? ` [${combatModelTag(model)}]` : ''
@@ -311,7 +335,8 @@ export function decisionsMarkdown(
       `### ${q.number}. ${q.question.replace(/\.$/, '')} (rule ${q.rule})${tag}`,
       '',
       `- Status: ${q.status}`,
-      `- Reading: ${q.reading}`,
+      `- Reading: ${reading}`,
+      ...(specV2 ? [`- ${SPEC_V2_LINE}: ${specV2}`] : []),
       `- Setting: ${settingsLine(settings, q.flag)}`,
       '',
     )
@@ -320,12 +345,14 @@ export function decisionsMarkdown(
   lines.push(
     '## Decided recently',
     '',
-    `Readings the designer decided on the last ${RECENT_DATES} decision dates, newest first.`,
+    `Readings the designer decided on the last ${RECENT_DATES} decision dates, newest first. ${RECENT_NOTE}`,
     '',
   )
   for (const q of recent) {
+    const { reading, specV2 } = splitReading(q.reading)
     lines.push(
-      `- **${q.number}. ${q.question.replace(/\.$/, '')}** (rule ${q.rule}, ${decidedDate(q.status)}) ${q.reading}`,
+      `- **${q.number}. ${q.question.replace(/\.$/, '')}** (rule ${q.rule}, ${decidedDate(q.status)}) ${reading}`,
+      ...(specV2 ? [`  - ${SPEC_V2_LINE}: ${specV2}`] : []),
     )
   }
   lines.push('')

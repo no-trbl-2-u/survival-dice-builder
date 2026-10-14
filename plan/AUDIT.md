@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-14 (pass 42, cloud tick)
+
+Pass 41's top row shipped. Critique pass 16 filed a MED on /decisions: decided rows 7, 55, 65, 69 and 72 still give pre-Spec-v2 readings that contradict /. One fix also closes the pass 15 LOW on rows 74 and 75, so it scores highest under the MED bias.
+
+## Top 5 findings (scored)
+
+### [x] [5.4] /decisions: decided rows give pre-Spec-v2 readings that contradict / (critique MED, pass 16; closes pass 15 LOW rows 74/75)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 6
+- next: a `**Spec v2:**` note in each superseded Reading cell, split off by `splitReading` onto its own line; regenerate `docs/DECISIONS.md`
+- issue: #95
+- fixed: (this commit)
+
+### [ ] [4.5] / and /config: the enemy target rule is stated two ways (critique MED, pass 13)
+- category: external-critique (voice)
+- impact: 5
+- ease: 6
+- next: drop the targeting clause from `spawnText`; show a short `targetOrderText` on /
+
+### [ ] [4.5] /decisions: each "Setting:" line shows raw config keys and code values (critique MED, pass 14)
+- category: external-critique (voice)
+- impact: 6
+- ease: 5
+- next: lead with the plain label and value from `config.meta.json`
+
+### [ ] [3.2] /play: the start panel Combat hint repeats its label (critique LOW, pass 14)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: drop the "Combat:" prefix in `StartPanel.tsx`
+
+### [ ] [3.2] /: the Combat step says "Play Engage" and "each enemy record gives its dice" (critique LOW, pass 16)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: "Play an Engage card"; name grunt and elite dice from the enemy content
+
 # Site audit — 2026-10-14 (pass 41, cloud tick)
 
 Pass 40's top row shipped. Three MED rows tie at 4.5 under the MED bias; the oldest goes first: /decisions shows every visitor the repo's `.env` and token notes.
