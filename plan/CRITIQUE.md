@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — decided row 7 still states the v1 siege reading before the Spec v2 one
-- pass: 17 (commit 2e92a76)
-- viewport: desktop
-- category: comprehension
-- observation: Row 7 still says "Until the spec carries that text the engine uses the v1 reading: grunt 2 fixed, elite 6 dice" right before the Spec v2 sentence (grunt 1, elite 3). The Done fix for rows 7, 55, 65, 69, 72 missed this sentence.
-- evidence: `OPEN-QUESTIONS.md:22`; /decisions "Decided recently" row 7.
-- suggested fix: Drop the "Designer intends ... elite 6 dice." sentences so the row gives only the Spec v2 reading.
-- source: web-fetch
-
 ### [LOW] /decisions — row 17 says "steps of 3", recommends turning on the default, and prints `eliteBonus: 5`
 - pass: 17 (commit 2e92a76)
 - viewport: desktop
@@ -226,6 +217,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /decisions — decided row 7 still states the v1 siege reading before the Spec v2 one
+- pass: 17 (commit 2e92a76)
+- viewport: desktop
+- category: comprehension
+- observation: Row 7 still says "Until the spec carries that text the engine uses the v1 reading: grunt 2 fixed, elite 6 dice" right before the Spec v2 sentence (grunt 1, elite 3). The Done fix for rows 7, 55, 65, 69, 72 missed this sentence.
+- evidence: `OPEN-QUESTIONS.md:22`; /decisions "Decided recently" row 7.
+- suggested fix: Drop the "Designer intends ... elite 6 dice." sentences so the row gives only the Spec v2 reading.
+- source: web-fetch
+- issue: #107
+- fixed: (this commit)
 
 ### [x] [LOW] / — the Training line omits the Build card and when the draft happens
 - pass: 16 (commit 0b2ae6a)

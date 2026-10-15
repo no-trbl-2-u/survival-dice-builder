@@ -378,7 +378,7 @@ export function decisionsMarkdown(
   for (const q of recent) {
     const { reading, specV2 } = splitReading(q.reading)
     lines.push(
-      `- **${q.number}. ${q.question.replace(/\.$/, '')}** (rule ${q.rule}, ${decidedDate(q.status)}) ${reading}`,
+      `- **${q.number}. ${q.question.replace(/\.$/, '')}** (rule ${q.rule}, ${decidedDate(q.status)})${reading ? ` ${reading}` : ''}`,
       ...(specV2 ? [`  - ${SPEC_V2_LINE}: ${specV2}`] : []),
     )
   }

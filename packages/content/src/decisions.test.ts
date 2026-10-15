@@ -212,6 +212,13 @@ describe('decisions', () => {
     expect(md).toContain(
       '- **1. Q1** (rule 7.11, 2026-10-11) Old reading.\n  - Now in the written rules: new reading.',
     )
+    // A cell with only the Spec v2 note prints no empty reading (critique pass 17).
+    const onlyV2 = parseQuestions(
+      '| 2 | 7.11 | Q2 | **Spec v2:** new reading. | (removed in Spec v2) | decided 2026-10-11 |',
+    )
+    expect(decisionsMarkdown(onlyV2, [], config, defaultConfigMeta)).toContain(
+      '- **2. Q2** (rule 7.11, 2026-10-11)\n  - Now in the written rules: new reading.',
+    )
   })
 
   it('gives each decided row Spec v2 changed a Spec v2 note (critique pass 15 and 16)', () => {
@@ -224,6 +231,8 @@ describe('decisions', () => {
     ))
       expect(splitReading(r.reading).specV2, `row ${r.number}`).not.toBeNull()
     expect(note(55)).toContain('currency')
+    // Row 7 gives only the Spec v2 siege reading, not the v1 one (critique pass 17).
+    expect(rows.find((r) => r.number === 7)?.reading).not.toMatch(/v1 reading|elite 6 dice/)
     expect(rows.find((r) => r.number === 75)?.reading).not.toContain('stays an option')
   })
 

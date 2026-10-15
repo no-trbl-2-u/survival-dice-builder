@@ -30,9 +30,11 @@ function Reading({ text, rows }: Readonly<{ text: string; rows: ReadonlySet<numb
   const { reading, specV2 } = splitReading(text)
   return (
     <>
-      <p>
-        <Inline text={reading} rows={rows} />
-      </p>
+      {reading ? (
+        <p>
+          <Inline text={reading} rows={rows} />
+        </p>
+      ) : null}
       {specV2 ? (
         <p data-testid="spec-v2">
           <strong>{SPEC_V2_LINE}:</strong> <Inline text={specV2} rows={rows} />

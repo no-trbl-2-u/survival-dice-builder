@@ -7,7 +7,7 @@
 
 # Site audit — 2026-10-15 (pass 53, cloud tick)
 
-Pass 52's Levels row shipped; no MED rows remain, so the bias does not apply. Two LOW rows tie at 3.2; the pass-16 Training line is the older one.
+Pass 52's Levels row shipped; no MED rows remain, so the bias does not apply. Two LOW rows tie at 3.2; the pass-16 Training line shipped first, then the pass-17 row 7 siege reading.
 
 ## Top 5 findings (scored)
 
@@ -19,11 +19,13 @@ Pass 52's Levels row shipped; no MED rows remain, so the bias does not apply. Tw
 - issue: #106
 - fixed: (this commit)
 
-### [ ] [3.2] /decisions: decided row 7 still states the v1 siege reading before the Spec v2 one (critique LOW, pass 17)
+### [x] [3.2] /decisions: decided row 7 still states the v1 siege reading before the Spec v2 one (critique LOW, pass 17)
 - category: external-critique (comprehension)
 - impact: 4
 - ease: 8
 - next: drop the "Designer intends ... elite 6 dice." sentences from row 7
+- issue: #107
+- fixed: (this commit)
 
 ### [ ] [3.0] /config: the rules note prints "Rules engagements." and "Rules core loop (open question 55)." (critique LOW, pass 16)
 - category: external-critique (voice)
