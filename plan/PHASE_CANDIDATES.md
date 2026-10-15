@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-14 at commit fa01c43
-> Pass count: 11
+> Last pass: 2026-10-15 at commit cfda2ba
+> Pass count: 12
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -26,6 +26,8 @@
 - estimated phases: 1
 - conflicts: overlaps "The first 60 seconds on a phone" on the 375px fit; this takes the modal, that one keeps the map layout.
 - ruling audit: Spec v2 7.8 (engagement steps), 6.9 (move cost next to enemies); decided rows on skill uses and move cost read. Copy and layout only; no rule changes. Loop scope: in for rule-text sync; the layout half is web (minor).
+- re-evidence (expand pass 12): since pass 11 (fa01c43) 9 more `fix:` commits went to /, /config, /decisions and /tiles copy; none touched `EngagementModal.tsx`. `/iterate` pass 57's top row now scores 2.6, under its own 3.0 bar, so the queue it drains is single LOW strings; the seven modal rows only ship if this is promoted.
+- last re-evidenced: 2026-10-15
 
 ### [ ] [score 4.0] Player text on Spec v2: the site stops calling Spec v1 options "the written rules"
 - proposed: 2026-10-13, expand pass 10
@@ -43,7 +45,8 @@
 - conflicts: none for the copy. Re-labelling decided OPEN-QUESTIONS rows records what `spec/` already says; it decides nothing, but the designer may want to see the list at `/oversight`.
 - ruling audit: Spec v2 6.9, 6.10, 8.5, 11.7, 18.1, Table 8; OPEN-QUESTIONS 17, 60, 74, 75. No rule changes. Loop scope: in (rule-text sync).
 - progress (expand pass 11): `/iterate` shipped most of the copy half one row at a time: f0ad808, 7dfe010, 091c25e, 3f400ae, 28b4d0b, 61c8ce0, 158a70f, 92101d6, a4e131f (pass 15 rows 1-5 and the pass 13 timing and target rows are done). What is left is the guard: "written rule" is still typed by hand in 6 places (`HomePage.tsx:45`, `ConfigPage.tsx:711`, `DebugPage.tsx:84`, `config.meta.json:280`, `decisions.ts:100`, and a stale "(Spec v1)" comment at `decisions/Inline.tsx:7`), and the pass 13 /config rows (baseline named three ways, "Rules engagements." notes) are still pending. Score lowered from 6.5: the visible harm is mostly gone; the reason to promote is the next rules change.
-- last re-evidenced: 2026-10-14
+- progress (expand pass 12): three more rows of the copy half shipped one at a time: 44df05f (/config rules note names only written-rules sections), 30ef913 (/decisions row 7 gives only the Spec v2 siege reading), b77dc49 (/decisions row 17 says steps of 3). The guard is still missing: "written rule" is typed by hand in `HomePage.tsx:45`, `ConfigPage.tsx:711`, `DebugPage.tsx:84`, `config.meta.json:103,280` and `decisions.ts:100`, and `decisions/Inline.tsx:7` still says "(Spec v1)". Critique pass 17 adds a /config row of the same kind: help texts cite "(open question N)" as plain text, and several of those numbers are not on /decisions; the pass 13 "baseline named three ways" row is still pending. Score held at 4.0.
+- last re-evidenced: 2026-10-15
 
 ### [ ] [score 6.0] The table sheets on Spec v2: one-pager facts rewritten, and a test that ties them to config
 - proposed: 2026-10-13, expand pass 10
@@ -228,6 +231,7 @@
 
 ## Considered (below threshold)
 
+- [score 2.0] **/config help as one template** (pass 12). Critique pass 17 and pass 13 leave three /config copy rows pending (plain-text "(open question N)" citations, the baseline named three ways, a deck preset's "Hand size" next to the deck total), after 3 /config fixes shipped this window (2e92a76, 44df05f, d916c91). The citation and baseline rows share a cause with "Player text on Spec v2" and belong in that phase if promoted; the preset label is one line for `/iterate`. Not filed separately.
 - [score 2.0] **Site shell: per-route meta, a 404, a smaller first script** (pass 11). Phase 40 (d1b99ff) shipped per-route description, og:url, canonical and a real 404, so the critique pass 9 [LOW] meta row and the Considered "Unknown paths served with HTTP 200" and "not found page" rows below look stale; `/iterate` or the next critique pass should verify and close them. The 650 kB bundle row (discovery) stands alone and fits `/iterate` (lazy-load the design-tool routes).
 - [score 1.5] **Bot that measures designer changes** (session residue 2026-10-09, still pending in CRITIQUE). Phase 36 (5890e54) shipped the defender policy this row asks for; the row looks stale.
 - [shipped] **/decisions readability** (score 3.0 at pass 10): `/iterate` shipped the key-to-label half in 20ffda3 and the housekeeping half in 0b2ae6a.
