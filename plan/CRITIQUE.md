@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — rule reading 4 gives three tile counts and calls itself "Superseded" while still pending
-- pass: 17 (commit 2e92a76)
-- viewport: desktop
-- category: comprehension
-- observation: Row 4's question says 8 non-base tiles, its reading offers "Reveal 7 (the whole tile deck)", then "Superseded: Reveal 7 is under review", and the Setting line says the game uses 10. /tiles lists 9 tiles (8 non-base), so 7 is not the whole deck. A visitor cannot tell the current reading. Same root as the Pending row "/play — the reveal 10 tiles milestone may be unreachable"; this row is the public copy.
-- evidence: `OPEN-QUESTIONS.md:19`; /decisions "Reveal 7 (the whole tile deck)", "Setting: Tiles revealed: 10 (This row names 7; the game uses 10.)"; /tiles "builds its map from these 9 tiles".
-- suggested fix: Rewrite row 4's reading cell to one count from the content ("8 tiles can be revealed; the milestone asks for 10. Proposal: reveal 8, every tile.") and drop the "Superseded" sentence; leave the config value to the open question.
-- source: web-fetch
-
 ### [LOW] /decisions — decided row 7 still states the v1 siege reading before the Spec v2 one
 - pass: 17 (commit 2e92a76)
 - viewport: desktop
@@ -253,6 +244,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — rule reading 4 gives three tile counts and calls itself "Superseded" while still pending
+- pass: 17 (commit 2e92a76)
+- viewport: desktop
+- category: comprehension
+- observation: Row 4's question says 8 non-base tiles, its reading offers "Reveal 7 (the whole tile deck)", then "Superseded: Reveal 7 is under review", and the Setting line says the game uses 10. /tiles lists 9 tiles (8 non-base), so 7 is not the whole deck. A visitor cannot tell the current reading. Same root as the Pending row "/play — the reveal 10 tiles milestone may be unreachable"; this row is the public copy.
+- evidence: `OPEN-QUESTIONS.md:19`; /decisions "Reveal 7 (the whole tile deck)", "Setting: Tiles revealed: 10 (This row names 7; the game uses 10.)"; /tiles "builds its map from these 9 tiles".
+- suggested fix: Rewrite row 4's reading cell to one count from the content ("8 tiles can be revealed; the milestone asks for 10. Proposal: reveal 8, every tile.") and drop the "Superseded" sentence; leave the config value to the open question.
+- source: web-fetch
+- issue: #104
+- fixed: (this commit)
 
 ### [x] [LOW] /config — the save message names a URL path, not the page
 - pass: 9 (commit e859de5)

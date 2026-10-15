@@ -15,8 +15,8 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 ### 4. "Reveal 10 tiles" is unreachable with 8 non-base tiles (rule 17)
 
 - Status: pending-spec 2026-10-04 (review with the new tile set)
-- Reading: **Reveal 7** (the whole tile deck): the milestone fires when exploration empties the deck. **Superseded:** "Reveal 7 tiles" is under review until the new tile set is known.
-- Setting: `milestones.tilesRevealed` = `10` (row says `7`: differs)
+- Reading: **Reveal 8**, every tile that can be revealed: the milestone fires when exploration has placed the whole tile deck. To review with the new tile set.
+- Setting: `milestones.tilesRevealed` = `10` (row says `8`: differs)
 
 ### 9. Skill capacity (rule 2.1)
 
