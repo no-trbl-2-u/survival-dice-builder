@@ -234,6 +234,11 @@ describe('decisions', () => {
     // Row 7 gives only the Spec v2 siege reading, not the v1 one (critique pass 17).
     expect(rows.find((r) => r.number === 7)?.reading).not.toMatch(/v1 reading|elite 6 dice/)
     expect(rows.find((r) => r.number === 75)?.reading).not.toContain('stays an option')
+    // Row 17 says how the steps grow and prints no config key (critique pass 17).
+    const row17 = rows.find((r) => r.number === 17)?.reading ?? ''
+    expect(row17).toContain('each step grows by 3 (level 2 at 3, 3 at 9, 4 at 18, 5 at 30)')
+    expect(row17).toContain('now the default')
+    expect(row17).not.toMatch(/steps of \d|eliteBonus/)
   })
 
   it('notes a field the engine reads under one Combat model', () => {

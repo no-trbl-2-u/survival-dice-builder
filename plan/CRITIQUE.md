@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — row 17 says "steps of 3", recommends turning on the default, and prints `eliteBonus: 5`
-- pass: 17 (commit 2e92a76)
-- viewport: desktop
-- category: comprehension
-- observation: The thresholds 3, 9, 18, 30 grow by 3 each level; the step is not 3. The phase 22 note "(recommend: turn on)" reads as advice for a setting that is already the default. The row prints a raw config key where /config says "Extra experience for an elite".
-- evidence: /decisions "The engine plays Spec v2 8.5: steps of 3 (level 2 at 3, 3 at 9, 4 at 18, 5 at 30)."; "steps of 3 give 1 more level by round 9 (recommend: turn on)"; "(`eliteBonus: 5`)".
-- suggested fix: Say "each step grows by 3 (3, 9, 18, 30)", mark the phase 22 advice "now the default", and write "5 extra experience for an elite".
-- source: web-fetch
-
 ### [LOW] /config — "(open question N)" citations are plain text and name a list /decisions does not show
 - pass: 17 (commit 2e92a76)
 - viewport: desktop
@@ -208,6 +199,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /decisions — row 17 says "steps of 3", recommends turning on the default, and prints `eliteBonus: 5`
+- pass: 17 (commit 2e92a76)
+- viewport: desktop
+- category: comprehension
+- observation: The thresholds 3, 9, 18, 30 grow by 3 each level; the step is not 3. The phase 22 note "(recommend: turn on)" reads as advice for a setting that is already the default. The row prints a raw config key where /config says "Extra experience for an elite".
+- evidence: /decisions "The engine plays Spec v2 8.5: steps of 3 (level 2 at 3, 3 at 9, 4 at 18, 5 at 30)."; "steps of 3 give 1 more level by round 9 (recommend: turn on)"; "(`eliteBonus: 5`)".
+- suggested fix: Say "each step grows by 3 (3, 9, 18, 30)", mark the phase 22 advice "now the default", and write "5 extra experience for an elite".
+- source: web-fetch
+- issue: #109
+- fixed: (this commit)
 
 ### [x] [LOW] /config — the rules note prints "Rules engagements." and "Rules core loop (open question 55)."
 - pass: 13 (commit 23315d6)
