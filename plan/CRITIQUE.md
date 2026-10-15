@@ -45,15 +45,6 @@
 - suggested fix: Render legend terrains through the capitalising helper hexLabel() uses, and capitalise the kind in the SVG label.
 - source: web-fetch
 
-### [LOW] /config — the rules note prints "Rules engagements." and "Rules core loop (open question 55)."
-- pass: 13 (commit 23315d6)
-- viewport: n/a
-- category: comprehension
-- observation: `ruleCitation` maps design-document tags to player words, so fields with no written-rules section end with a citation that is not a section anyone can look up.
-- evidence: `apps/web/src/config/ConfigPage.tsx:248`; tags "Combat v3", "Combat v3 (siege)", "Core loop v2 (open question 55)" in `config.meta.json`; mapping at `packages/content/src/ruleText.ts:151-154`.
-- suggested fix: For a field with no written-rules section, print "Not in the written rules (open question N)" or nothing.
-- source: web-fetch
-
 ### [LOW] /config — help texts name the baseline three ways and carry roadmap wording
 - pass: 13 (commit 23315d6)
 - viewport: n/a
@@ -217,6 +208,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the rules note prints "Rules engagements." and "Rules core loop (open question 55)."
+- pass: 13 (commit 23315d6)
+- viewport: n/a
+- category: comprehension
+- observation: `ruleCitation` maps design-document tags to player words, so fields with no written-rules section end with a citation that is not a section anyone can look up.
+- evidence: `apps/web/src/config/ConfigPage.tsx:248`; tags "Combat v3", "Combat v3 (siege)", "Core loop v2 (open question 55)" in `config.meta.json`; mapping at `packages/content/src/ruleText.ts:151-154`.
+- suggested fix: For a field with no written-rules section, print "Not in the written rules (open question N)" or nothing.
+- source: web-fetch
+- issue: #108
+- fixed: (this commit)
 
 ### [x] [LOW] /decisions — decided row 7 still states the v1 siege reading before the Spec v2 one
 - pass: 17 (commit 2e92a76)

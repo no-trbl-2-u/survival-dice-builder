@@ -89,6 +89,7 @@ export {
   playersText,
   returnStarterText,
   revealText,
+  configRuleNote,
   ruleCitation,
   ruleLineFor,
   shopText,

@@ -273,6 +273,22 @@ export function ruleCitation(rule: string): string {
   return CITATIONS.reduce((text, [from, to]) => text.replace(from, to), rule)
 }
 
+/** A design-document tag with the comma or parentheses that join it to the rest of a rule tag. */
+const DESIGN_TAG = /,?\s*\(?\b(?:Combat v3|core loop v2)\b\)?/gi
+
+/**
+ * A /config field's rules note: the written-rules sections it reads, without design-document
+ * tags; a field with no section left is "Not in the written rules", with any open question.
+ *
+ * @param rule - a config field's rules section ("7.8, Combat v3", "Combat v3").
+ * @rule 18.1
+ */
+export function configRuleNote(rule: string): string {
+  const sections = rule.replace(DESIGN_TAG, '').trim().replace(/^,\s*/, '')
+  if (/^(?:\d|Table)/.test(sections)) return `Rules ${sections}.`
+  return `Not in the written rules${sections ? ` ${sections}` : ''}.`
+}
+
 /**
  * The Skill draft dialog's title. The engine keeps one Skill per draft (`keepSkill`);
  * `draft.keep` is not read yet (marked unused on /config), so the title does not read it.

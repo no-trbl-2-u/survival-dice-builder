@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { defaultConfigMeta } from './configMeta.ts'
-import { ruleCitation } from './ruleText.ts'
+import { configRuleNote } from './ruleText.ts'
 import type { ConfigMeta } from './schemas/configMeta.ts'
 
 const RULE_WORD =
@@ -45,7 +45,7 @@ function ruleNumbersIn(meta: ConfigMeta): string[] {
 /** The build words a metadata table shows: in its text, and in its rules note as /config shows it. */
 function buildWordsIn(meta: ConfigMeta): string[] {
   return Object.entries(meta).flatMap(([path, entry]) =>
-    [...textsOf(entry), ruleCitation(entry.rule ?? '')]
+    [...textsOf(entry), configRuleNote(entry.rule ?? '')]
       .flatMap((text) => text.match(BUILD_WORD) ?? [])
       .map((found) => `${path}: "${found}"`),
   )

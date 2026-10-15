@@ -1,10 +1,10 @@
 import {
   changedFields,
   combatModelNote,
+  configRuleNote,
   defaultConfigMeta,
   defaultContent,
   GameConfigSchema,
-  ruleCitation,
   ruleLineFor,
   withProposal,
   type GameConfig,
@@ -263,7 +263,7 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
             {combatModelNote(meta.combatModel, draftCombatModel(draft))}
           </strong>
         ) : null}
-        {meta?.rule ? <span className={styles.rule}> Rules {ruleCitation(meta.rule)}.</span> : null}
+        {meta?.rule ? <span className={styles.rule}> {configRuleNote(meta.rule)}</span> : null}
         {live ? <span className={styles.live}> With these values: {live}</span> : null}
       </p>
       {errors.length > 0 ? (
