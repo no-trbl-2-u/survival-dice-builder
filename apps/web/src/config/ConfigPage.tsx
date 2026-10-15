@@ -676,7 +676,7 @@ function ConfigForm({ store }: Readonly<{ store: KeyValue | undefined }>) {
     if (errors.length === 0) setSaved(draft)
     setMessage(
       errors.length === 0
-        ? 'Saved. New runs on /play use this config.'
+        ? 'Saved. New runs on the Play page use this config.'
         : `Not saved: ${errors.length === 1 ? '1 field needs' : `${errors.length} fields need`} a fix.`,
     )
     return errors.length === 0

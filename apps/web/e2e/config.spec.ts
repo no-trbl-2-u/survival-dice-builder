@@ -128,7 +128,9 @@ test('/config: sliders, toggles, and pick lists; a name can only come from the c
   ).toBeVisible()
   await page.getByLabel('Deck and hand preset', { exact: true }).selectOption('mine')
   await page.getByRole('button', { name: 'Save config' }).click()
-  await expect(page.getByRole('status')).toContainText('Saved')
+  await expect(page.getByRole('status')).toHaveText(
+    'Saved. New runs on the Play page use this config.',
+  )
   // The saved config starts a run.
   await page.goto('/play')
   await page.getByRole('button', { name: 'Start run' }).click()

@@ -180,15 +180,6 @@
 - suggested fix: In the route effect, set a canonical link and og:url from the route path, and give each route its own description.
 - source: web-fetch
 
-### [LOW] /config — the save message names a URL path, not the page
-- pass: 9 (commit e859de5)
-- viewport: n/a (web-fetch)
-- category: voice
-- observation: After a save the page says "/play" where a visitor sees the nav label "Play".
-- evidence: `apps/web/src/config/ConfigPage.tsx:615` "Saved. New runs on /play use this config."
-- suggested fix: Change to "Saved. New runs on the Play page use this config."
-- source: web-fetch
-
 ### [LOW] /credits — the intro describes how the page is built
 - pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
@@ -208,6 +199,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the save message names a URL path, not the page
+- pass: 9 (commit e859de5)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: After a save the page says "/play" where a visitor sees the nav label "Play".
+- evidence: `apps/web/src/config/ConfigPage.tsx:615` "Saved. New runs on /play use this config."
+- suggested fix: Change to "Saved. New runs on the Play page use this config."
+- source: web-fetch
+- issue: #103
+- fixed: (this commit)
 
 ### [x] [LOW] / — the Combat step says "Play Engage" and "each enemy record gives its dice"
 - pass: 16 (commit 0b2ae6a)

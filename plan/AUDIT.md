@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-15 (pass 50, cloud tick)
+
+Pass 49's top row shipped; no MED rows remain, so the bias does not apply. Four LOW rows tie at 3.2; the oldest (pass 9) wins the tie-break: the /config save message.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /config: the save message names a URL path, not the page (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: "Saved. New runs on the Play page use this config."
+- issue: #103
+- fixed: (this commit)
+
+### [ ] [3.2] /: the Training line omits the Build card and when the draft happens (critique LOW, pass 16)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: build `trainingText` like `shopText`; name the draft rounds
+
+### [ ] [3.2] /: the Levels line says "3 more than the step before" with no step defined (critique LOW, pass 16)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: give the first thresholds from config in `ruleText`
+
+### [ ] [3.0] /config: the rules note prints "Rules engagements." and "Rules core loop (open question 55)." (critique LOW, pass 16)
+- category: external-critique (voice)
+- impact: 4
+- ease: 7.5
+- next: read the rule ids into plain words, or drop them from the note
+
+### [ ] [2.8] /decisions: the "Try this on /play" button names a URL path, not the page (iterate audit)
+- category: voice
+- impact: 4
+- ease: 7
+- next: "Try this on the Play page"; update the unit and e2e tests that pin the label
+
 # Site audit — 2026-10-14 (pass 49, cloud tick)
 
 Pass 48's top row shipped; no MED rows remain, so the bias does not apply. Four LOW rows tie at 3.2; the Combat-step row is the cheapest of the pass 16 ties and fixes the line a new player reads first on /, on the /play start panel, and in the playtest kit.
