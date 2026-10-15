@@ -18,15 +18,6 @@
 - suggested fix: Link each number to `/decisions#<rowId>` when the row is shown there, else drop it; use one name on both pages.
 - source: web-fetch
 
-### [LOW] /config — the draft help says "each round that this number divides"
-- pass: 17 (commit 2e92a76)
-- viewport: desktop
-- category: voice
-- observation: The "Draft every N rounds" help is a divisibility statement, not STE-plain; / says the same thing as "every 2nd round".
-- evidence: `packages/content/data/config.meta.json:271` "a draft happens in each round that this number divides."
-- suggested fix: "With the Training Ground open, a draft happens every N rounds (2: rounds 2, 4, 6)."
-- source: web-fetch
-
 ### [LOW] /tiles — terrain names are lower case in the legend and capitalised in the hex lists
 - pass: 17 (commit 2e92a76)
 - viewport: desktop
@@ -199,6 +190,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the draft help says "each round that this number divides"
+- pass: 17 (commit 2e92a76)
+- viewport: desktop
+- category: voice
+- observation: The "Draft every N rounds" help is a divisibility statement, not STE-plain; / says the same thing as "every 2nd round".
+- evidence: `packages/content/data/config.meta.json:271` "a draft happens in each round that this number divides."
+- suggested fix: "With the Training Ground open, a draft happens every N rounds (2: rounds 2, 4, 6)."
+- source: web-fetch
+- issue: #110
+- fixed: (this commit)
 
 ### [x] [LOW] /decisions — row 17 says "steps of 3", recommends turning on the default, and prints `eliteBonus: 5`
 - pass: 17 (commit 2e92a76)

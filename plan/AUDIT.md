@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-15 (pass 56, cloud tick)
+
+Pass 55's /decisions row 17 fix shipped; no MED rows remain, so the bias does not apply. Re-scored the pass-17 draft help row: the fix is one help string in `config.meta.json` plus a test, the same cost as row 17 (ease 8), so it leads at 3.2.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /config: the draft help says "each round that this number divides" (critique LOW, pass 17)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: "a draft happens every N rounds: at 2, in rounds 2, 4, and 6." in `config.meta.json`
+- issue: #110
+- fixed: (this commit)
+
+### [ ] [2.6] /config: "(open question N)" citations are plain text and name a list /decisions does not show (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 6.5
+- next: link the citations to /decisions, or show every row there
+
+### [ ] [2.6] /tiles: terrain names are lower case in the legend and capitalised in the hex lists (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8.5
+- next: one casing for terrain names
+
+### [ ] [2.4] /config: help texts name the baseline three ways and carry roadmap wording (critique LOW)
+- category: external-critique (voice)
+- impact: 4
+- ease: 6
+- next: one word for the baseline; drop roadmap wording from help
+
+### [ ] [2.4] /tiles: the legend says only which terrains are impassable, not what the others do (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 6
+- next: one line per terrain in the legend
+
 # Site audit — 2026-10-15 (pass 55, cloud tick)
 
 Pass 54's /config rules note shipped; no MED rows remain, so the bias does not apply. Re-scored the pass-17 row 17 finding: the fix is one reading cell in `OPEN-QUESTIONS.md` plus a regenerated digest, the same cost as row 7 (ease 8), so it leads at 3.2.

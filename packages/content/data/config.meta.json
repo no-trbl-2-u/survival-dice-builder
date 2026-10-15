@@ -268,7 +268,7 @@
   },
   "draft.everyNRounds": {
     "label": "Draft every N rounds",
-    "help": "With the Training Ground open, a draft happens in each round that this number divides.",
+    "help": "With the Training Ground open, a draft happens every N rounds: at 2, in rounds 2, 4, and 6.",
     "rule": "10.8",
     "range": [1, 6]
   },
