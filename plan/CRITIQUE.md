@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-14 at commit 0b2ae6a
-> Pass count: 16
+> Last pass: 2026-10-15 at commit 2e92a76
+> Pass count: 17
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /decisions — rule reading 4 gives three tile counts and calls itself "Superseded" while still pending
+- pass: 17 (commit 2e92a76)
+- viewport: desktop
+- category: comprehension
+- observation: Row 4's question says 8 non-base tiles, its reading offers "Reveal 7 (the whole tile deck)", then "Superseded: Reveal 7 is under review", and the Setting line says the game uses 10. /tiles lists 9 tiles (8 non-base), so 7 is not the whole deck. A visitor cannot tell the current reading. Same root as the Pending row "/play — the reveal 10 tiles milestone may be unreachable"; this row is the public copy.
+- evidence: `OPEN-QUESTIONS.md:19`; /decisions "Reveal 7 (the whole tile deck)", "Setting: Tiles revealed: 10 (This row names 7; the game uses 10.)"; /tiles "builds its map from these 9 tiles".
+- suggested fix: Rewrite row 4's reading cell to one count from the content ("8 tiles can be revealed; the milestone asks for 10. Proposal: reveal 8, every tile.") and drop the "Superseded" sentence; leave the config value to the open question.
+- source: web-fetch
+
+### [LOW] /decisions — decided row 7 still states the v1 siege reading before the Spec v2 one
+- pass: 17 (commit 2e92a76)
+- viewport: desktop
+- category: comprehension
+- observation: Row 7 still says "Until the spec carries that text the engine uses the v1 reading: grunt 2 fixed, elite 6 dice" right before the Spec v2 sentence (grunt 1, elite 3). The Done fix for rows 7, 55, 65, 69, 72 missed this sentence.
+- evidence: `OPEN-QUESTIONS.md:22`; /decisions "Decided recently" row 7.
+- suggested fix: Drop the "Designer intends ... elite 6 dice." sentences so the row gives only the Spec v2 reading.
+- source: web-fetch
+
+### [LOW] /decisions — row 17 says "steps of 3", recommends turning on the default, and prints `eliteBonus: 5`
+- pass: 17 (commit 2e92a76)
+- viewport: desktop
+- category: comprehension
+- observation: The thresholds 3, 9, 18, 30 grow by 3 each level; the step is not 3. The phase 22 note "(recommend: turn on)" reads as advice for a setting that is already the default. The row prints a raw config key where /config says "Extra experience for an elite".
+- evidence: /decisions "The engine plays Spec v2 8.5: steps of 3 (level 2 at 3, 3 at 9, 4 at 18, 5 at 30)."; "steps of 3 give 1 more level by round 9 (recommend: turn on)"; "(`eliteBonus: 5`)".
+- suggested fix: Say "each step grows by 3 (3, 9, 18, 30)", mark the phase 22 advice "now the default", and write "5 extra experience for an elite".
+- source: web-fetch
+
+### [LOW] /config — "(open question N)" citations are plain text and name a list /decisions does not show
+- pass: 17 (commit 2e92a76)
+- viewport: desktop
+- category: navigation
+- observation: Help texts end "(open question N)" with no link, and /decisions never uses the words "open question"; several cited numbers (1, 2, 5, 6, 13, 14, 39) are not on that page, so the citation leads nowhere. /decisions already links its rows to /config fields, but not back.
+- evidence: /config "Rules 9.7 (open questions 2, 39).", "Rules 10.1 (open question 5)."; `apps/web/src/config/ConfigPage.tsx:266`; link pattern in `ProposalList.tsx:31`.
+- suggested fix: Link each number to `/decisions#<rowId>` when the row is shown there, else drop it; use one name on both pages.
+- source: web-fetch
+
+### [LOW] /config — the draft help says "each round that this number divides"
+- pass: 17 (commit 2e92a76)
+- viewport: desktop
+- category: voice
+- observation: The "Draft every N rounds" help is a divisibility statement, not STE-plain; / says the same thing as "every 2nd round".
+- evidence: `packages/content/data/config.meta.json:271` "a draft happens in each round that this number divides."
+- suggested fix: "With the Training Ground open, a draft happens every N rounds (2: rounds 2, 4, 6)."
+- source: web-fetch
+
+### [LOW] /tiles — terrain names are lower case in the legend and capitalised in the hex lists
+- pass: 17 (commit 2e92a76)
+- viewport: desktop
+- category: voice
+- observation: The terrain legend prints raw ids ("plains", "lake (impassable)") next to a site legend and hex lists in capitals ("Plains, Gathering node"); tile SVG labels say "countryside tile" under a "Countryside tiles" heading.
+- evidence: `apps/web/src/tiles/TileSheet.tsx:49` renders `{t}` raw; `TileView.tsx:62` aria-label `${tile.name}, ${tile.kind} tile`.
+- suggested fix: Render legend terrains through the capitalising helper hexLabel() uses, and capitalise the kind in the SVG label.
+- source: web-fetch
 
 ### [LOW] / — the Levels line says "3 more than the step before" with no step defined
 - pass: 16 (commit 0b2ae6a)
