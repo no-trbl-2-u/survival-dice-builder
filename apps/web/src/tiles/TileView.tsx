@@ -37,9 +37,14 @@ export const HEX_POSITION: readonly string[] = [
   'Bottom',
 ]
 
+/** "plains" -> "Plains": a terrain or tile-kind id as a name, as the hex lists print it. */
+export function capitalize(id: string): string {
+  return id.charAt(0).toUpperCase() + id.slice(1)
+}
+
 /** "Plains", "Plains, Base": a hex's terrain and site in words. */
 export function hexLabel(hex: Readonly<{ terrain: string; site: Site | null }>): string {
-  const terrain = hex.terrain.charAt(0).toUpperCase() + hex.terrain.slice(1)
+  const terrain = capitalize(hex.terrain)
   return hex.site ? `${terrain}, ${SITE_LABEL[hex.site]}` : terrain
 }
 
@@ -59,7 +64,7 @@ export function TileView({ tile }: Props) {
       className={styles.tile}
       viewBox={`${-half} ${-half} ${half * 2} ${half * 2}`}
       role="img"
-      aria-label={`${tile.name}, ${tile.kind} tile`}
+      aria-label={`${tile.name}, ${capitalize(tile.kind)} tile`}
     >
       {tile.hexes.map((hex, i) => {
         const pos = positions[i]

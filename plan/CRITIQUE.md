@@ -18,15 +18,6 @@
 - suggested fix: Link each number to `/decisions#<rowId>` when the row is shown there, else drop it; use one name on both pages.
 - source: web-fetch
 
-### [LOW] /tiles — terrain names are lower case in the legend and capitalised in the hex lists
-- pass: 17 (commit 2e92a76)
-- viewport: desktop
-- category: voice
-- observation: The terrain legend prints raw ids ("plains", "lake (impassable)") next to a site legend and hex lists in capitals ("Plains, Gathering node"); tile SVG labels say "countryside tile" under a "Countryside tiles" heading.
-- evidence: `apps/web/src/tiles/TileSheet.tsx:49` renders `{t}` raw; `TileView.tsx:62` aria-label `${tile.name}, ${tile.kind} tile`.
-- suggested fix: Render legend terrains through the capitalising helper hexLabel() uses, and capitalise the kind in the SVG label.
-- source: web-fetch
-
 ### [LOW] /config — help texts name the baseline three ways and carry roadmap wording
 - pass: 13 (commit 23315d6)
 - viewport: n/a
@@ -190,6 +181,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /tiles — terrain names are lower case in the legend and capitalised in the hex lists
+- pass: 17 (commit 2e92a76)
+- viewport: desktop
+- category: voice
+- observation: The terrain legend prints raw ids ("plains", "lake (impassable)") next to a site legend and hex lists in capitals ("Plains, Gathering node"); tile SVG labels say "countryside tile" under a "Countryside tiles" heading.
+- evidence: `apps/web/src/tiles/TileSheet.tsx:49` renders `{t}` raw; `TileView.tsx:62` aria-label `${tile.name}, ${tile.kind} tile`.
+- suggested fix: Render legend terrains through the capitalising helper hexLabel() uses, and capitalise the kind in the SVG label.
+- source: web-fetch
+- issue: #111
+- fixed: (this commit)
 
 ### [x] [LOW] /config — the draft help says "each round that this number divides"
 - pass: 17 (commit 2e92a76)

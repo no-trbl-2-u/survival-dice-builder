@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-15 (pass 57, cloud tick)
+
+Pass 56's draft help fix shipped; no MED rows remain, so the bias does not apply. The two 2.6 rows tie; the /tiles casing row is the cheaper one (one shared helper, one CSS line, tests), so it leads.
+
+## Top 5 findings (scored)
+
+### [x] [2.6] /tiles: terrain names are lower case in the legend and capitalised in the hex lists (critique LOW, pass 17)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8.5
+- next: legend and tile drawing labels through the capitalising helper the hex lists use; drop the CSS text-transform
+- issue: #111
+- fixed: (this commit)
+
+### [ ] [2.6] /config: "(open question N)" citations are plain text and name a list /decisions does not show (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 6.5
+- next: link the citations to /decisions, or show every row there
+
+### [ ] [2.4] /config: help texts name the baseline three ways and carry roadmap wording (critique LOW)
+- category: external-critique (voice)
+- impact: 4
+- ease: 6
+- next: one word for the baseline; drop roadmap wording from help
+
+### [ ] [2.4] /tiles: the legend says only which terrains are impassable, not what the others do (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 6
+- next: one line per terrain in the legend
+
+### [ ] [2.0] all pages: the main script is 650 kB, over the build's own 600 kB warning (critique LOW)
+- category: external-critique (perf)
+- impact: 4
+- ease: 5
+- next: split the 3D dice and /debug out of the main chunk
+
 # Site audit — 2026-10-15 (pass 56, cloud tick)
 
 Pass 55's /decisions row 17 fix shipped; no MED rows remain, so the bias does not apply. Re-scored the pass-17 draft help row: the fix is one help string in `config.meta.json` plus a test, the same cost as row 17 (ease 8), so it leads at 3.2.

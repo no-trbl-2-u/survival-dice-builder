@@ -67,6 +67,31 @@ describe('TileSheet hex list', () => {
   })
 })
 
+describe('TileSheet terrain legend', () => {
+  it('names each terrain with the capitals the hex lists use', () => {
+    const { container } = render(<TileSheet />)
+    const legend = container.querySelector('[aria-label="Terrain legend"]')!
+    const names = [...legend.querySelectorAll('li')].map((li) => li.textContent)
+    expect(names).toEqual([
+      'Plains',
+      'Forest',
+      'Hills',
+      'Wasteland',
+      'Lake (impassable)',
+      'Mountain (impassable)',
+    ])
+  })
+
+  it('capitalises the tile kind in each tile drawing label', () => {
+    const { container } = render(<TileSheet />)
+    const labels = [...container.querySelectorAll('svg[role="img"]')].map((svg) =>
+      svg.getAttribute('aria-label'),
+    )
+    expect(labels.length).toBeGreaterThan(0)
+    for (const label of labels) expect(label).toMatch(/, (Base|Countryside|Core) tile$/)
+  })
+})
+
 describe('TileSheet site legend', () => {
   it('shows each of the 4 site icons with its name', () => {
     const { container } = render(<TileSheet />)
