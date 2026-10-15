@@ -65,13 +65,13 @@ export function spawnText(config: GameConfig): string {
  */
 export function levelText(config: GameConfig): string {
   const { firstStep, stepIncrease, levelPerEliteSpawn } = config.experience
-  const next =
+  const steps =
     stepIncrease === 0
-      ? `each next level needs ${firstStep} more`
-      : `each next level needs ${stepIncrease} more than the step before`
+      ? `Level 2 needs ${firstStep} experience, and each next level needs ${firstStep} more`
+      : `Level 2 needs ${firstStep} experience, level 3 needs ${firstStep + stepIncrease} more, level 4 needs ${firstStep + 2 * stepIncrease} more, and each next step grows by ${stepIncrease}`
   const raise = levelPerEliteSpawn
     ? 'The level rises by 1 each time an elite spawns.'
-    : `Each defeated enemy gives experience to all players. Level 2 needs ${firstStep} experience, and ${next}.`
+    : `Each defeated enemy gives experience to all players. ${steps}.`
   const max = config.options.maxLevel
   const cap = max === null ? '' : ` The level stops at ${max}.`
   return `${raise} At each new level, every player gets 1 more action die.${cap}`

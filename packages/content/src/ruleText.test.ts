@@ -35,7 +35,11 @@ const With = (patch: (c: GameConfig) => GameConfig) => patch(structuredClone(bas
 describe('rule text from config', () => {
   it('levels: the experience steps and the new die follow config (Spec v2 8.1-8.5)', () => {
     expect(levelText(base)).toBe(
-      'Each defeated enemy gives experience to all players. Level 2 needs 3 experience, and each next level needs 3 more than the step before. At each new level, every player gets 1 more action die.',
+      'Each defeated enemy gives experience to all players. Level 2 needs 3 experience, level 3 needs 6 more, level 4 needs 9 more, and each next step grows by 3. At each new level, every player gets 1 more action die.',
+    )
+    const flat = With((c) => ({ ...c, experience: { ...c.experience, stepIncrease: 0 } }))
+    expect(levelText(flat)).toMatch(
+      /Level 2 needs 3 experience, and each next level needs 3 more\./,
     )
     const elite = With((c) => ({
       ...c,

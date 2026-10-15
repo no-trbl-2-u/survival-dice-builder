@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-15 (pass 52, cloud tick)
+
+Pass 51's MED row shipped; no MED rows remain, so the bias does not apply. Three LOW rows tie at 3.2; the two pass-16 rows are older, and the Levels line is the cheaper of them.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /: the Levels line says "3 more than the step before" with no step defined (critique LOW, pass 16)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: give the first thresholds from config in `ruleText`
+- issue: #105
+- fixed: (this commit)
+
+### [ ] [3.2] /: the Training line omits the Build card and when the draft happens (critique LOW, pass 16)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: build `trainingText` like `shopText`; name the draft rounds
+
+### [ ] [3.2] /decisions: decided row 7 still states the v1 siege reading before the Spec v2 one (critique LOW, pass 17)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: drop the "Designer intends ... elite 6 dice." sentences from row 7
+
+### [ ] [3.0] /config: the rules note prints "Rules engagements." and "Rules core loop (open question 55)." (critique LOW, pass 16)
+- category: external-critique (voice)
+- impact: 4
+- ease: 7.5
+- next: read the rule ids into plain words, or drop them from the note
+
+### [ ] [2.8] /decisions: row 17 says "steps of 3" and prints `eliteBonus: 5` (critique LOW, pass 17)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 7
+- next: "each step grows by 3 (3, 9, 18, 30)"; "5 extra experience for an elite"
+
 # Site audit — 2026-10-15 (pass 51, cloud tick)
 
 Critique pass 17 filed one MED row; the oversight bias (external-critique MED, x1.5) lifts it to the top.

@@ -54,15 +54,6 @@
 - suggested fix: Render legend terrains through the capitalising helper hexLabel() uses, and capitalise the kind in the SVG label.
 - source: web-fetch
 
-### [LOW] / — the Levels line says "3 more than the step before" with no step defined
-- pass: 16 (commit 0b2ae6a)
-- viewport: desktop
-- category: comprehension
-- observation: A reader cannot work out what level 3 needs from "each next level needs 3 more than the step before"; /decisions row 17 words the same rule differently ("than the last step").
-- evidence: `packages/content/src/ruleText.ts:71`; / "Level 2 needs 3 experience, and each next level needs 3 more than the step before."
-- suggested fix: Give the first three thresholds from config ("Level 2 needs 3 experience, level 3 needs 6 more, level 4 needs 9 more.").
-- source: web-fetch
-
 ### [LOW] / — the Training line omits the Build card and when the draft happens
 - pass: 16 (commit 0b2ae6a)
 - viewport: desktop
@@ -244,6 +235,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Levels line says "3 more than the step before" with no step defined
+- pass: 16 (commit 0b2ae6a)
+- viewport: desktop
+- category: comprehension
+- observation: A reader cannot work out what level 3 needs from "each next level needs 3 more than the step before"; /decisions row 17 words the same rule differently ("than the last step").
+- evidence: `packages/content/src/ruleText.ts:71`; / "Level 2 needs 3 experience, and each next level needs 3 more than the step before."
+- suggested fix: Give the first three thresholds from config ("Level 2 needs 3 experience, level 3 needs 6 more, level 4 needs 9 more.").
+- source: web-fetch
+- issue: #105
+- fixed: (this commit)
 
 ### [x] [MED] /decisions — rule reading 4 gives three tile counts and calls itself "Superseded" while still pending
 - pass: 17 (commit 2e92a76)
