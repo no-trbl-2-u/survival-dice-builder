@@ -108,12 +108,11 @@ export function shopText(config: GameConfig, content: Upgrades): string {
 export function trainingText(config: GameConfig, content: Upgrades): string {
   const training = firstUpgrade('training', content)
   const open = training
-    ? `${training.name} (${plural(training.cost, 'material', 'materials')}) opens the Training Ground`
-    : 'The Training Ground opens a Skill draft'
+    ? `Buy ${training.name} on the base (a Build card and ${plural(training.cost, 'material', 'materials')}) to open the Training Ground`
+    : 'Open the Training Ground on the base'
   const n = config.draft.everyNRounds
-  const every =
-    n === 1 ? 'every round' : `every ${n}${n === 2 ? 'nd' : n === 3 ? 'rd' : 'th'} round`
-  return `${open}: ${every}, each player looks at ${plural(config.draft.reveal, 'Skill', 'Skills')} and keeps 1 for free.`
+  const when = n === 1 ? 'every round' : `in rounds ${n}, ${2 * n}, ${3 * n} and so on`
+  return `${open}: ${when}, each player looks at ${plural(config.draft.reveal, 'Skill', 'Skills')} and keeps 1 for free.`
 }
 
 /**

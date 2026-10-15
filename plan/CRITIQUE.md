@@ -54,15 +54,6 @@
 - suggested fix: Render legend terrains through the capitalising helper hexLabel() uses, and capitalise the kind in the SVG label.
 - source: web-fetch
 
-### [LOW] / — the Training line omits the Build card and when the draft happens
-- pass: 16 (commit 0b2ae6a)
-- viewport: desktop
-- category: comprehension
-- observation: The Shop line says where to buy and that it needs a Build card; the Training line in the same list says neither, and "every 2nd round" does not say which rounds.
-- evidence: `packages/content/src/ruleText.ts:94` vs `:111-116`; / "Training I (3 materials) opens the Training Ground: every 2nd round, each player looks at 2 Skills and keeps 1 for free."
-- suggested fix: Build `trainingText` like `shopText` ("Buy Training I on the base (a Build card and 3 materials) to open the Training Ground") and name the draft rounds ("rounds 2, 4, 6 ...").
-- source: web-fetch
-
 ### [LOW] /config — the rules note prints "Rules engagements." and "Rules core loop (open question 55)."
 - pass: 13 (commit 23315d6)
 - viewport: n/a
@@ -235,6 +226,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Training line omits the Build card and when the draft happens
+- pass: 16 (commit 0b2ae6a)
+- viewport: desktop
+- category: comprehension
+- observation: The Shop line says where to buy and that it needs a Build card; the Training line in the same list says neither, and "every 2nd round" does not say which rounds.
+- evidence: `packages/content/src/ruleText.ts:94` vs `:111-116`; / "Training I (3 materials) opens the Training Ground: every 2nd round, each player looks at 2 Skills and keeps 1 for free."
+- suggested fix: Build `trainingText` like `shopText` ("Buy Training I on the base (a Build card and 3 materials) to open the Training Ground") and name the draft rounds ("rounds 2, 4, 6 ...").
+- source: web-fetch
+- issue: #106
+- fixed: (this commit)
 
 ### [x] [LOW] / — the Levels line says "3 more than the step before" with no step defined
 - pass: 16 (commit 0b2ae6a)

@@ -61,12 +61,14 @@ describe('rule text from config', () => {
 
   it('training: the draft round and the Skills shown follow config (10.8, 11.6)', () => {
     expect(trainingText(base, defaultContent)).toBe(
-      'Training I (3 materials) opens the Training Ground: every 2nd round, each player looks at 2 Skills and keeps 1 for free.',
+      'Buy Training I on the base (a Build card and 3 materials) to open the Training Ground: in rounds 2, 4, 6 and so on, each player looks at 2 Skills and keeps 1 for free.',
     )
     const often = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 1, reveal: 3 } }))
     expect(trainingText(often, defaultContent)).toMatch(
       /every round, each player looks at 3 Skills/,
     )
+    const rarely = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 3 } }))
+    expect(trainingText(rarely, defaultContent)).toMatch(/in rounds 3, 6, 9 and so on,/)
   })
 
   it('knockout: the return share and the losses follow config (Spec v2 14.2, 14.4)', () => {

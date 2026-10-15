@@ -40,7 +40,7 @@ describe('HomePage', () => {
     expect(screen.getAllByText(/Level 2 needs 3 experience/)[0]).toBeTruthy()
     expect(screen.getAllByText(/Buy Shop I on the base .* 4 materials/)[0]).toBeTruthy()
     expect(
-      screen.getAllByText(/Training I \(3 materials\) opens the Training Ground/)[0],
+      screen.getAllByText(/Buy Training I on the base \(a Build card and 3 materials\)/)[0],
     ).toBeTruthy()
     expect(screen.queryByText(/Level up, buy cards in the Shop, and draft Skills/)).toBeNull()
   })
