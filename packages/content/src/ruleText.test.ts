@@ -208,14 +208,18 @@ describe('rule text from config', () => {
     expect(configRuleNote('6.9')).toBe('Rules 6.9.')
     expect(configRuleNote('7.8, Combat v3')).toBe('Rules 7.8.')
     expect(configRuleNote('10.1 (core loop v2)')).toBe('Rules 10.1.')
-    expect(configRuleNote('9.3, core loop v2 (open question 56)')).toBe(
-      'Rules 9.3 (open question 56).',
+    expect(configRuleNote('9.3, core loop v2 (open question 56)', new Set([56]))).toBe(
+      'Rules 9.3 (rule reading 56).',
+    )
+    expect(configRuleNote('9.7 (open questions 2, 39)', new Set([56]))).toBe('Rules 9.7.')
+    expect(configRuleNote('6.8 (open questions 11, 43)', new Set([11, 43]))).toBe(
+      'Rules 6.8 (rule readings 11, 43).',
+    )
+    expect(configRuleNote('Core loop v2 (open question 55)', new Set([55]))).toBe(
+      'Not in the written rules (rule reading 55).',
     )
     expect(configRuleNote('Table 4')).toBe('Rules Table 4.')
     expect(configRuleNote('Combat v3')).toBe('Not in the written rules.')
-    expect(configRuleNote('Core loop v2 (open question 55)')).toBe(
-      'Not in the written rules (open question 55).',
-    )
   })
 
   it('draft: slots and pool follow config (11.8)', () => {

@@ -90,6 +90,7 @@ export {
   returnStarterText,
   revealText,
   configRuleNote,
+  READING_REF,
   ruleCitation,
   ruleLineFor,
   shopText,

@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-16 (pass 63, cloud tick)
+
+Pass 62's knockout log row shipped (3378e0c). No MED rows remain, so the MED bias applies to nothing. The /config citations row is the top LOW at 2.6; every remaining row scores under 3.0, and the loop keeps draining LOW critique rows while the expand gate is closed.
+
+## Top 5 findings (scored)
+
+### [x] [2.6] /config: "(open question N)" citations are plain text and name a list /decisions does not show (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 6.5
+- next: name open rows "rule reading N" and link them to /decisions; leave decided rows out
+- issue: #117
+- fixed: (this commit)
+
+### [ ] [2.4] / and /config: the level steps are worded three ways, and no page gives each enemy's experience (critique LOW, pass 18)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: return levelText from ruleLineFor for experience fields; add per-enemy amounts to levelText
+
+### [ ] [2.4] / : the "Also" line calls the tiles "proposed" and says rules questions "wait on you" (critique LOW, pass 18)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: change the link texts in `HomePage.tsx` to "the map tiles" and "the open rules questions"
+
+### [ ] [2.4] /config: help texts name the baseline three ways and carry roadmap wording (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: one baseline pattern in `config.meta.json`; drop "(6.9)" and the "until ..." clauses
+
+### [ ] [2.4] /play: the run summary lists "Buy 3 base upgrades", which default rules cannot reach (critique LOW, pass 18)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: mark milestones the config cannot reach in the run summary and on /config
+
 # Site audit — 2026-10-16 (pass 62, cloud tick)
 
 Pass 61's GitHub link mark shipped (5fc7a03). No MED rows remain, so the MED bias applies to nothing. The knockout log row is now the top LOW at 2.7.

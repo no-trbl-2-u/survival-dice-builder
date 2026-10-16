@@ -294,17 +294,35 @@ export function ruleCitation(rule: string): string {
 /** A design-document tag with the comma or parentheses that join it to the rest of a rule tag. */
 const DESIGN_TAG = /,?\s*\(?\b(?:Combat v3|core loop v2)\b\)?/gi
 
+/** An open-questions citation in a config field's rules section: "(open questions 2, 39)". */
+const QUESTION_REF = /\s*\(open questions? ([\d, ]+)\)/
+
+/** A rule reading citation in a rules note, as `configRuleNote` writes it: "rule readings 63, 64". */
+export const READING_REF = /(rule readings? [\d, ]*\d)/
+
 /**
  * A /config field's rules note: the written-rules sections it reads, without design-document
- * tags; a field with no section left is "Not in the written rules", with any open question.
+ * tags; a field with no section left is "Not in the written rules". A cited open question is
+ * named as a rule reading only while /decisions lists it; a decided one is left out.
  *
- * @param rule - a config field's rules section ("7.8, Combat v3", "Combat v3").
+ * @param rule - a config field's rules section ("7.8, Combat v3", "9.7 (open questions 2, 39)").
+ * @param listed - the rule readings /decisions lists (the open rows).
  * @rule 18.1
  */
-export function configRuleNote(rule: string): string {
-  const sections = rule.replace(DESIGN_TAG, '').trim().replace(/^,\s*/, '')
-  if (/^(?:\d|Table)/.test(sections)) return `Rules ${sections}.`
-  return `Not in the written rules${sections ? ` ${sections}` : ''}.`
+export function configRuleNote(rule: string, listed: ReadonlySet<number> = new Set()): string {
+  const cited = QUESTION_REF.exec(rule)?.[1]?.split(',').map(Number) ?? []
+  const readings = cited.filter((n) => listed.has(n))
+  const ref =
+    readings.length > 0
+      ? ` (${readings.length === 1 ? 'rule reading' : 'rule readings'} ${readings.join(', ')})`
+      : ''
+  const sections = rule
+    .replace(QUESTION_REF, '')
+    .replace(DESIGN_TAG, '')
+    .trim()
+    .replace(/^,\s*/, '')
+  if (/^(?:\d|Table)/.test(sections)) return `Rules ${sections}${ref}.`
+  return `Not in the written rules${sections ? ` ${sections}` : ''}${ref}.`
 }
 
 /**

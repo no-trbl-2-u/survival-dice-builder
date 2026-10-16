@@ -47,7 +47,7 @@ test('/config: a field shows the rule phrase it sets, with the edited value', as
   )
 })
 
-test('/config: the experiment options default off; the rules note names the open question', async ({
+test('/config: the experiment options default off; the rules note links the rule reading', async ({
   page,
 }) => {
   await page.goto('/config')
@@ -55,7 +55,13 @@ test('/config: the experiment options default off; the rules note names the open
   await expect(reveal).toHaveValue('')
   await expect(reveal).toHaveAttribute('placeholder', 'off')
   await expect(reveal).toHaveAccessibleDescription(
-    /^At round end, .* Rules 10\.1 \(open question 63\)\./,
+    /^At round end, .* Rules 10\.1 \(rule reading 63\)\./,
+  )
+  const link = page.getByRole('link', { name: '63', exact: true })
+  await expect(link).toHaveAttribute('href', '/decisions#q-63')
+  // A decided question is not on /decisions, so the note leaves it out.
+  await expect(page.getByLabel('Blocked enemy', { exact: true })).toHaveAccessibleDescription(
+    /Rules 9\.7\.(?: |$)/,
   )
 })
 

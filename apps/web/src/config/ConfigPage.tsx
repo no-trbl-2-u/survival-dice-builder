@@ -5,13 +5,17 @@ import {
   defaultConfigMeta,
   defaultContent,
   GameConfigSchema,
+  openQuestions,
+  parseQuestions,
+  READING_REF,
   ruleLineFor,
   withProposal,
   type GameConfig,
   type Proposal,
 } from '@survival/content'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { rulesUrl } from '../decisions/Inline.tsx'
+import questionsMd from '../../../../OPEN-QUESTIONS.md?raw'
+import { rowId, rulesUrl } from '../decisions/Inline.tsx'
 import { readAutosave } from '../play/exportRun.ts'
 import { useClient } from '../useClient.ts'
 import { ConfigChanges } from './ConfigChanges.tsx'
@@ -184,6 +188,33 @@ function NumberControl(
 }
 
 /** One config field, chosen from its schema and metadata. */
+/** The rule readings /decisions lists: a rules note cites only these. */
+const listedReadings = new Set(openQuestions(parseQuestions(questionsMd)).map((q) => q.number))
+
+/** A field's rules note, each rule reading it cites linked to that reading on /decisions. */
+function RuleNote({ rule }: Readonly<{ rule: string }>) {
+  return configRuleNote(rule, listedReadings)
+    .split(READING_REF)
+    .map((part, i) =>
+      i % 2 === 0 ? (
+        part
+      ) : (
+        <span key={i}>
+          {part.replace(/[\d, ]+$/, ' ')}
+          {part
+            .replace(/^\D+/, '')
+            .split(', ')
+            .map((n, j) => (
+              <span key={n}>
+                {j > 0 ? ', ' : null}
+                <a href={`/decisions#${rowId(Number(n))}`}>{n}</a>
+              </span>
+            ))}
+        </span>
+      ),
+    )
+}
+
 function Field({ schema, value, path, draft, problems, onChange }: FieldProps): ReactNode {
   const id = fieldId(path)
   const meta = path.length > 0 ? defaultConfigMeta[path.join('.')] : undefined
@@ -263,7 +294,12 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
             {combatModelNote(meta.combatModel, draftCombatModel(draft))}
           </strong>
         ) : null}
-        {meta?.rule ? <span className={styles.rule}> {configRuleNote(meta.rule)}</span> : null}
+        {meta?.rule ? (
+          <span className={styles.rule}>
+            {' '}
+            <RuleNote rule={meta.rule} />
+          </span>
+        ) : null}
         {live ? <span className={styles.live}> With these values: {live}</span> : null}
       </p>
       {errors.length > 0 ? (

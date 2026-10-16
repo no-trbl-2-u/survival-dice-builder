@@ -36,15 +36,6 @@
 - suggested fix: Change the links to "the map tiles" and "the open rules questions".
 - source: web-fetch
 
-### [LOW] /config — "(open question N)" citations are plain text and name a list /decisions does not show
-- pass: 17 (commit 2e92a76)
-- viewport: desktop
-- category: navigation
-- observation: Help texts end "(open question N)" with no link, and /decisions never uses the words "open question"; several cited numbers (1, 2, 5, 6, 13, 14, 39) are not on that page, so the citation leads nowhere. /decisions already links its rows to /config fields, but not back.
-- evidence: /config "Rules 9.7 (open questions 2, 39).", "Rules 10.1 (open question 5)."; `apps/web/src/config/ConfigPage.tsx:266`; link pattern in `ProposalList.tsx:31`.
-- suggested fix: Link each number to `/decisions#<rowId>` when the row is shown there, else drop it; use one name on both pages.
-- source: web-fetch
-
 ### [LOW] /config — help texts name the baseline three ways and carry roadmap wording
 - pass: 13 (commit 23315d6)
 - viewport: n/a
@@ -190,6 +181,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — "(open question N)" citations are plain text and name a list /decisions does not show
+- pass: 17 (commit 2e92a76)
+- viewport: desktop
+- category: navigation
+- observation: Help texts end "(open question N)" with no link, and /decisions never uses the words "open question"; several cited numbers (1, 2, 5, 6, 13, 14, 39) are not on that page, so the citation leads nowhere. /decisions already links its rows to /config fields, but not back.
+- evidence: /config "Rules 9.7 (open questions 2, 39).", "Rules 10.1 (open question 5)."; `apps/web/src/config/ConfigPage.tsx:266`; link pattern in `ProposalList.tsx:31`.
+- suggested fix: Link each number to `/decisions#<rowId>` when the row is shown there, else drop it; use one name on both pages.
+- source: web-fetch
+- issue: #117
+- fixed: (this commit)
 
 ### [x] [LOW] /play — the knockout log names only lost materials, prints "1 materials", and omits the lost currency
 - pass: 18 (commit 8f7cdbb)
