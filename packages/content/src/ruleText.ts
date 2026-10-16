@@ -144,14 +144,15 @@ const enemyDiceText = (content: Enemies) =>
 export function combatText(
   config: GameConfig,
   model: GameConfig['combat']['model'],
-  content: Enemies,
+  content: Enemies & Pick<Content, 'cards'>,
 ): string {
   if (model === 'exchange') {
     return 'In each exchange you roll, play cards, and fire Skills; then each enemy next to you that targets you rolls its enemy dice at you.'
   }
   const dice = enemyDiceText(content)
+  const holders = engageCardNames(config, content)
   return (
-    `Play an Engage card to roll your dice from where you stand, plus the enemy dice of each enemy next to you${dice ? ` (${dice})` : ''}. ` +
+    `Play a card's Engage option${holders ? ` (on ${holders})` : ''} to roll your dice from where you stand, plus the enemy dice of each enemy next to you${dice ? ` (${dice})` : ''}. ` +
     'Put your dice on your Skills one at a time. ' +
     `${enemyHitText(config)} ` +
     combatEndText(config)
@@ -172,6 +173,23 @@ export function enemyHitText(config: GameConfig): string {
 }
 
 type Enemies = Pick<Content, 'enemies'>
+
+/**
+ * The starter deck's cards that carry an Engage Combat option, by name: "Move and Gather".
+ *
+ * @rule 6.7, 7.8 (Spec v2)
+ */
+function engageCardNames(config: GameConfig, content: Pick<Content, 'cards'>): string {
+  const preset = config.deck.presets.find((p) => p.id === config.deck.preset)
+  const names = (preset?.cards ?? []).flatMap((entry) => {
+    const card = content.cards.find((c) => c.id === entry.card)
+    return card?.combat?.some((option) => option.kind === 'engage') ? [card.name] : []
+  })
+  const unique = [...new Set(names)]
+  return unique.length > 1
+    ? `${unique.slice(0, -1).join(', ')} and ${unique[unique.length - 1]}`
+    : (unique[0] ?? '')
+}
 
 /** "a grunt" or "an elite". */
 const withArticle = (word: string) => `${/^[aeiou]/i.test(word) ? 'an' : 'a'} ${word}`
@@ -398,7 +416,7 @@ export function milestoneLabel(
 export function ruleLineFor(
   path: string,
   config: GameConfig,
-  content: Pick<Content, 'skills' | 'enemies'>,
+  content: Pick<Content, 'skills' | 'enemies' | 'cards'>,
 ): string | null {
   const [group, key] = path.split('.')
   if (path === 'miniatureLimit') return miniatureLimitText(config)

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — the Combat step says "Play an Engage card"; Engage is an option on Move and Gather, not a card
-- pass: 18 (commit 8f7cdbb)
-- viewport: desktop
-- category: comprehension
-- observation: A new player holding Move, Gather, Build and Rest looks for a card called Engage that does not exist. Engage is a Combat option on Move and Gather only; Build and Rest have none. The /play banner already treats it as an option ("Play each card: Engage (...), another option, or discard it").
-- evidence: / "Play an Engage card to roll your dice from where you stand"; `packages/content/src/ruleText.ts:154`; `packages/content/data/cards.json` engage options on starter Move and Gather only.
-- suggested fix: Word it as an option: "Play a card's Engage option (on Move and Gather) to roll your dice from where you stand".
-- source: web-fetch
-
 ### [MED] /play — the start panel shows rule text from the default config, not the saved one
 - pass: 18 (commit 8f7cdbb)
 - viewport: desktop
@@ -226,6 +217,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — the Combat step says "Play an Engage card"; Engage is an option on Move and Gather, not a card
+- pass: 18 (commit 8f7cdbb)
+- viewport: desktop
+- category: comprehension
+- observation: A new player holding Move, Gather, Build and Rest looks for a card called Engage that does not exist. Engage is a Combat option on Move and Gather only; Build and Rest have none. The /play banner already treats it as an option ("Play each card: Engage (...), another option, or discard it").
+- evidence: / "Play an Engage card to roll your dice from where you stand"; `packages/content/src/ruleText.ts:154`; `packages/content/data/cards.json` engage options on starter Move and Gather only.
+- suggested fix: Word it as an option: "Play a card's Engage option (on Move and Gather) to roll your dice from where you stand".
+- source: web-fetch
+- issue: #113
+- fixed: (this commit)
 
 ### [x] [LOW] /play — Roll again stays on when every die is kept
 - pass: blind-round-4 (phase 24)

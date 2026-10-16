@@ -107,10 +107,14 @@ describe('rule text from config', () => {
 
   it('Combat: each model has its own text; enemy dice come from each record (Spec v2 9.6)', () => {
     expect(combatText(base, 'engage', defaultContent)).toMatch(
-      /^Play an Engage card to roll your dice from where you stand, plus the enemy dice of each enemy next to you \(a grunt rolls 1, an elite 2\)\. /,
+      /^Play a card's Engage option \(on Move and Gather\) to roll your dice from where you stand, plus the enemy dice of each enemy next to you \(a grunt rolls 1, an elite 2\)\. /,
     )
-    const elite = { enemies: { enemies: [{ ...defaultContent.enemies.enemies[1]!, dice: 3 }] } }
+    const elite = {
+      cards: [],
+      enemies: { enemies: [{ ...defaultContent.enemies.enemies[1]!, dice: 3 }] },
+    }
     expect(combatText(base, 'engage', elite)).toMatch(/next to you \(an elite rolls 3\)\. /)
+    expect(combatText(base, 'engage', elite)).toMatch(/^Play a card's Engage option to roll/)
     expect(combatText(base, 'engage', defaultContent)).toMatch(
       /Combat ends when every hand and deck is empty/,
     )
