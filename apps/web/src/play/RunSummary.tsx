@@ -1,4 +1,4 @@
-import { milestoneIds, milestoneLabel } from '@survival/content'
+import { milestoneIds, milestoneLabel, milestoneOutOfReach } from '@survival/content'
 import { useEffect, useRef } from 'react'
 import { downloadRun } from './exportRun.ts'
 import styles from './Play.module.css'
@@ -33,9 +33,11 @@ export function RunSummary({ run, baseCurve, onNewRun }: Props) {
       <ul className={styles.milestones}>
         {all.map((id) => {
           const got = s.milestones.includes(id)
+          const out = got ? null : milestoneOutOfReach(id, s.config, s.content)
           return (
             <li key={id} className={got ? styles.got : styles.muted}>
               {got ? '✓' : '–'} {milestoneLabel(id, s.config.milestones, s.content)}
+              {out && ` (${out})`}
             </li>
           )
         })}

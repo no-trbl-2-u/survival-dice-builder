@@ -431,6 +431,39 @@ export function milestoneLabel(
 }
 
 /**
+ * The base upgrades a run can buy: every one with `rulings.buildLevels: "any"`, else only the
+ * tiers no higher than the highest Build card level in the content (Build I buys tier I).
+ *
+ * @rule Spec v2 11.4, 12.1 (ruling 25), 17, OPEN-QUESTIONS row 78
+ */
+export function upgradesReachable(
+  config: GameConfig,
+  content: Pick<Content, 'cards' | 'upgrades'>,
+): Content['upgrades'] {
+  if (config.rulings.buildLevels === 'any') return content.upgrades
+  const top = Math.max(0, ...content.cards.map((c) => (c.top.kind === 'build' ? c.top.level : 0)))
+  return content.upgrades.filter((u) => u.tier <= top)
+}
+
+/**
+ * Why a milestone cannot be met under this config and content, or null when it can be:
+ * "out of reach: Build cards can buy only Shop I and Training I".
+ *
+ * @rule 17, OPEN-QUESTIONS row 78
+ */
+export function milestoneOutOfReach(
+  id: string,
+  config: GameConfig,
+  content: Pick<Content, 'cards' | 'upgrades'>,
+): string | null {
+  if (id !== 'buy-upgrades') return null
+  const names = upgradesReachable(config, content).map((u) => u.name)
+  if (names.length >= config.milestones.upgradesBought) return null
+  const list = names.length === 0 ? 'nothing' : `only ${names.join(' and ')}`
+  return `out of reach: Build cards can buy ${list}`
+}
+
+/**
  * The rule phrase a /config field sets, with the draft's values, or null when no phrase reads
  * that field.
  *
@@ -440,7 +473,7 @@ export function milestoneLabel(
 export function ruleLineFor(
   path: string,
   config: GameConfig,
-  content: Pick<Content, 'skills' | 'enemies' | 'cards'>,
+  content: Pick<Content, 'skills' | 'enemies' | 'cards' | 'upgrades'>,
 ): string | null {
   const [group, key] = path.split('.')
   if (path === 'miniatureLimit') return miniatureLimitText(config)
@@ -469,7 +502,10 @@ export function ruleLineFor(
       level: ['reach-level'],
       skillFired: [`fire-${m.skillFired}`],
     }
-    const labels = (ids[key ?? ''] ?? []).map((id) => milestoneLabel(id, m, content))
+    const labels = (ids[key ?? ''] ?? []).map((id) => {
+      const out = milestoneOutOfReach(id, config, content)
+      return out ? `${milestoneLabel(id, m, content)} (${out})` : milestoneLabel(id, m, content)
+    })
     return labels.length > 0 ? `${labels.join('; ')}.` : null
   }
   return null

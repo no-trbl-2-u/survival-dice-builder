@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the run summary lists "Buy 3 base upgrades", which default rules cannot reach
-- pass: 18 (commit 8f7cdbb)
-- viewport: desktop
-- category: comprehension
-- observation: With only Build I cards, only Shop I and Training I can be bought, so the milestone is out of reach (open question 78). Nothing before the summary says milestones exist, so a stranger first meets them as goals they could not have met. Separate from the pending "reveal 10 tiles" row.
-- evidence: `apps/web/src/play/RunSummary.tsx:14,38`; `config.default.json` `upgradesBought: 3`; OPEN-QUESTIONS.md row 78 "(phase 41 bot batch: 0 of 200 runs)".
-- suggested fix: Mark milestones the current config cannot reach in the run summary and on /config, and name milestones in one start-panel line.
-- source: web-fetch
-
 ### [LOW] /tiles — the legend says only which terrains are impassable, not what the others do
 - pass: 12 (commit c34753b)
 - viewport: desktop
@@ -155,6 +146,18 @@
 
 ## Done
 
+### [x] [LOW] /play — the run summary lists "Buy 3 base upgrades", which default rules cannot reach
+- pass: 18 (commit 8f7cdbb)
+- viewport: desktop
+- category: comprehension
+- observation: With only Build I cards, only Shop I and Training I can be bought, so the milestone is out of reach (open question 78). Nothing before the summary says milestones exist, so a stranger first meets them as goals they could not have met. Separate from the pending "reveal 10 tiles" row.
+- evidence: `apps/web/src/play/RunSummary.tsx:14,38`; `config.default.json` `upgradesBought: 3`; OPEN-QUESTIONS.md row 78 "(phase 41 bot batch: 0 of 200 runs)".
+- suggested fix: Mark milestones the current config cannot reach in the run summary and on /config, and name milestones in one start-panel line.
+- source: web-fetch
+- issue: #121
+- fixed: (this commit)
+- note: run summary and /config mark the milestone; the start-panel milestone line is left for a later tick
+
 ### [x] [LOW] /config — help texts name the baseline three ways and carry roadmap wording
 - pass: 13 (commit 23315d6)
 - viewport: n/a
@@ -164,7 +167,7 @@
 - suggested fix: One pattern ("(default)" for the shipped value, "as in the written rules" for the printed rule), drop "(6.9)" and the "until ..." clauses, one casing for face names.
 - source: web-fetch
 - issue: #120
-- fixed: (this commit)
+- fixed: 90858d8
 
 ### [x] [LOW] /config and / — the level steps are worded three ways, and no page says how much experience an enemy gives
 - pass: 18 (commit 8f7cdbb)

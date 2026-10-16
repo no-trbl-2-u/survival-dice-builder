@@ -13,6 +13,7 @@ import {
   levelText,
   milestoneIds,
   milestoneLabel,
+  milestoneOutOfReach,
   miniatureLimitText,
   playersText,
   returnStarterText,
@@ -26,6 +27,7 @@ import {
   targetOrderText,
   targetText,
   trainingText,
+  upgradesReachable,
 } from './ruleText.ts'
 import type { GameConfig } from './schemas/config.ts'
 
@@ -257,6 +259,25 @@ describe('rule text from config', () => {
     expect(milestoneLabel(`fire-${m.skillFired}`, custom, defaultContent)).toBe(
       `Fire ${skill.name}`,
     )
+  })
+
+  it('milestones: "Buy 3 base upgrades" is marked out of reach while every Build is Build I (row 78)', () => {
+    expect(upgradesReachable(base, defaultContent).map((u) => u.id)).toEqual([
+      'shop-1',
+      'training-1',
+    ])
+    const out = 'out of reach: Build cards can buy only Shop I and Training I'
+    expect(milestoneOutOfReach('buy-upgrades', base, defaultContent)).toBe(out)
+    expect(ruleLineFor('milestones.upgradesBought', base, defaultContent)).toBe(
+      `Buy 3 base upgrades (${out}).`,
+    )
+    const any = With((c) => ({ ...c, rulings: { ...c.rulings, buildLevels: 'any' } }))
+    expect(upgradesReachable(any, defaultContent)).toHaveLength(defaultContent.upgrades.length)
+    expect(milestoneOutOfReach('buy-upgrades', any, defaultContent)).toBeNull()
+    const two = With((c) => ({ ...c, milestones: { ...c.milestones, upgradesBought: 2 } }))
+    expect(milestoneOutOfReach('buy-upgrades', two, defaultContent)).toBeNull()
+    for (const id of milestoneIds(m).filter((i) => i !== 'buy-upgrades'))
+      expect(milestoneOutOfReach(id, base, defaultContent)).toBeNull()
   })
 
   it('/config: the fields a phrase reads get that phrase; others get none', () => {

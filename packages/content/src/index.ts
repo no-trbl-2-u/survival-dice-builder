@@ -85,6 +85,7 @@ export {
   levelText,
   milestoneIds,
   milestoneLabel,
+  milestoneOutOfReach,
   miniatureLimitText,
   playersText,
   returnStarterText,
@@ -99,6 +100,7 @@ export {
   targetOrderText,
   targetText,
   trainingText,
+  upgradesReachable,
 } from './ruleText.ts'
 export {
   parseSpec,

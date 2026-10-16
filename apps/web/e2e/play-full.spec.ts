@@ -52,6 +52,9 @@ test('/play: a full seeded solo run to the summary, then a replayable export', a
   }
   await expect(summary).toBeVisible()
   await expect(summary).toContainText(/The base fell in round \d+/)
+  await expect(summary).toContainText(
+    'Buy 3 base upgrades (out of reach: Build cards can buy only Shop I and Training I)',
+  )
   await expect(page.getByTestId('play-log')).toContainText('The run ends.')
 
   const download = page.waitForEvent('download')
