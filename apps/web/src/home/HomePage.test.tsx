@@ -17,7 +17,7 @@ describe('HomePage', () => {
     const combat = screen.getAllByText(
       /Play a card's Engage option \(on Move and Gather\) to roll/,
     )[0]
-    expect(combat?.textContent).toMatch(/This is the Combat in the written rules\./)
+    expect(combat?.textContent).toMatch(/This is the Combat in the written rules \(on GitHub\)\./)
     expect(combat?.textContent).toMatch(/Or choose Exchanges, the older Combat kept for playtests/)
     expect(combat?.textContent).not.toMatch(/Exchanges, the Combat in the written rules/)
   })
@@ -55,10 +55,11 @@ describe('HomePage', () => {
     expect(link?.getAttribute('href')).toBe('/decisions')
   })
 
-  it('links the written rules it cites', () => {
+  it('links the written rules it cites, and says the link leaves the site for GitHub', () => {
     render(<HomePage />)
     const link = screen.getAllByRole('link', { name: 'written rules' })[0]
     expect(link?.getAttribute('href')).toBe(rulesUrl)
+    expect(link?.nextSibling?.textContent).toMatch(/^ \(on GitHub\)\./)
     expect(rulesUrl).toMatch(/\/blob\/main\/spec\/01-spec-v2-rules\.md$/)
   })
 })

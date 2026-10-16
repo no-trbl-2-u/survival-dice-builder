@@ -90,15 +90,6 @@
 - suggested fix: Put each value on its own labelled line ("Deck: 10 cards", "Hand: 3 cards").
 - source: discovery
 
-### [LOW] / — the "written rules" link leaves the site with no sign
-- pass: discovery 1 (2026-10-10, bee25b5)
-- viewport: 1280x800
-- category: navigation
-- observation: The home page's "written rules" link opens a GitHub markdown file with nothing to say it leaves the site.
-- evidence: `apps/web/src/home/HomePage.tsx` (link pinned by `HomePage.test.tsx:26-28`); reader pass (discovery 1).
-- suggested fix: Add "(on GitHub)" to the link text or an external-link mark with an accessible name.
-- source: discovery
-
 ### [LOW] /play — the "reveal 10 tiles" milestone may be unreachable
 - pass: oversight (2026-10-10)
 - viewport: n/a
@@ -208,6 +199,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the "written rules" link leaves the site with no sign
+- pass: discovery 1 (2026-10-10, bee25b5)
+- viewport: 1280x800
+- category: navigation
+- observation: The home page's "written rules" link opens a GitHub markdown file with nothing to say it leaves the site.
+- evidence: `apps/web/src/home/HomePage.tsx` (link pinned by `HomePage.test.tsx:26-28`); reader pass (discovery 1).
+- suggested fix: Add "(on GitHub)" to the link text or an external-link mark with an accessible name.
+- source: discovery
+- issue: #115
+- fixed: (this commit)
 
 ### [x] [MED] /play — the start panel shows rule text from the default config, not the saved one
 - pass: 18 (commit 8f7cdbb)
