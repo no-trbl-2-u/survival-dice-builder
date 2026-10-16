@@ -51,8 +51,16 @@ describe('HomePage', () => {
 
   it('links the Decisions page from the Also line', () => {
     render(<HomePage />)
-    const link = screen.getAllByRole('link', { name: 'the rules questions that wait on you' })[0]
+    const link = screen.getAllByRole('link', { name: 'the open rules questions' })[0]
     expect(link?.getAttribute('href')).toBe('/decisions')
+    expect(screen.queryByText(/wait on you/)).toBeNull()
+  })
+
+  it('names the tiles on the Also line as the map tiles, not proposed ones', () => {
+    render(<HomePage />)
+    const link = screen.getAllByRole('link', { name: 'the map tiles' })[0]
+    expect(link?.getAttribute('href')).toBe('/tiles')
+    expect(screen.queryByText(/proposed tiles/)).toBeNull()
   })
 
   it('links the written rules it cites, and says the link leaves the site for GitHub', () => {

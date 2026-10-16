@@ -27,15 +27,6 @@
 - suggested fix: Mark milestones the current config cannot reach in the run summary and on /config, and name milestones in one start-panel line.
 - source: web-fetch
 
-### [LOW] / — the "Also" line calls the tiles "proposed" and says rules questions "wait on you"
-- pass: 18 (commit 8f7cdbb)
-- viewport: desktop
-- category: voice
-- observation: /tiles says the Play page builds its map from these tiles, so "the proposed tiles" tells a stranger they are not in play. "the rules questions that wait on you" addresses a player as the designer; /decisions says they wait on the designer.
-- evidence: `apps/web/src/home/HomePage.tsx:67-68`; /tiles "The game on the Play page builds its map from these 9 tiles"; /decisions "16 rule readings and 14 checks wait on the designer."
-- suggested fix: Change the links to "the map tiles" and "the open rules questions".
-- source: web-fetch
-
 ### [LOW] /config — help texts name the baseline three ways and carry roadmap wording
 - pass: 13 (commit 23315d6)
 - viewport: n/a
@@ -181,6 +172,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the "Also" line calls the tiles "proposed" and says rules questions "wait on you"
+- pass: 18 (commit 8f7cdbb)
+- viewport: desktop
+- category: voice
+- observation: /tiles says the Play page builds its map from these tiles, so "the proposed tiles" tells a stranger they are not in play. "the rules questions that wait on you" addresses a player as the designer; /decisions says they wait on the designer.
+- evidence: `apps/web/src/home/HomePage.tsx:67-68`; /tiles "The game on the Play page builds its map from these 9 tiles"; /decisions "16 rule readings and 14 checks wait on the designer."
+- suggested fix: Change the links to "the map tiles" and "the open rules questions".
+- source: web-fetch
+- issue: #118
+- fixed: (this commit)
 
 ### [x] [LOW] /config — "(open question N)" citations are plain text and name a list /decisions does not show
 - pass: 17 (commit 2e92a76)
