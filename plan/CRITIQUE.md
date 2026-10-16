@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-15 at commit 2e92a76
-> Pass count: 17
+> Last pass: 2026-10-16 at commit 8f7cdbb
+> Pass count: 18
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — the Combat step says "Play an Engage card"; Engage is an option on Move and Gather, not a card
+- pass: 18 (commit 8f7cdbb)
+- viewport: desktop
+- category: comprehension
+- observation: A new player holding Move, Gather, Build and Rest looks for a card called Engage that does not exist. Engage is a Combat option on Move and Gather only; Build and Rest have none. The /play banner already treats it as an option ("Play each card: Engage (...), another option, or discard it").
+- evidence: / "Play an Engage card to roll your dice from where you stand"; `packages/content/src/ruleText.ts:154`; `packages/content/data/cards.json` engage options on starter Move and Gather only.
+- suggested fix: Word it as an option: "Play a card's Engage option (on Move and Gather) to roll your dice from where you stand".
+- source: web-fetch
+
+### [MED] /play — the start panel shows rule text from the default config, not the saved one
+- pass: 18 (commit 8f7cdbb)
+- viewport: desktop
+- category: comprehension
+- observation: The New run panel builds its knockout and Combat lines from the default config and hard-codes 1 to 4 players. A visitor who saved other knockout or player settings on /config sees the default text above "Start run".
+- evidence: `apps/web/src/play/StartPanel.tsx:25-26` COMBAT_HINT reads `defaultContent.config`; `:69` `knockoutText(defaultContent.config)`; `:81` `[1, 2, 3, 4].map(...)`; the `config` prop is used only for the changes list.
+- suggested fix: Pass the `config` prop to combatText, siegeText and knockoutText, and build the Players options from the config's player range.
+- source: web-fetch
+
+### [LOW] /config and / — the level steps are worded three ways, and no page says how much experience an enemy gives
+- pass: 18 (commit 8f7cdbb)
+- viewport: desktop
+- category: comprehension
+- observation: / gives step sizes ("level 3 needs 6 more"); /config "Step increase" still says "than the step before it"; /decisions row 17 gives "3 more than the last step (3, 9, 18, 30)". The Experience fields have no live rule line, and / says "Each defeated enemy gives experience" without the amounts.
+- evidence: `packages/content/src/ruleText.ts:71,74`; /config "Each next level needs this much more experience than the step before it. Rules 8.5."; `ruleLineFor` (`ruleText.ts:398-433`) has no experience branch; `packages/content/data/enemies.json` grunt 1, elite 4.
+- suggested fix: Return levelText from ruleLineFor for experience fields, reuse that phrase in the /config help, and add the per-enemy amounts to levelText.
+- source: web-fetch
+
+### [LOW] /play — the knockout log names only lost materials, prints "1 materials", and omits the lost currency
+- pass: 18 (commit 8f7cdbb)
+- viewport: desktop
+- category: voice
+- observation: / and the start panel say a knocked-out player loses materials and currency; the log line names materials only, without a singular form.
+- evidence: `apps/web/src/play/describeEvent.ts:204` "`loses ${event.materialsLost} materials`"; the engine event carries `currencyLost`; config `loseMaterials` and `loseCurrency` both true.
+- suggested fix: Name both losses with correct plurals ("loses 1 material and 3 currency").
+- source: web-fetch
+
+### [LOW] /play — the run summary lists "Buy 3 base upgrades", which default rules cannot reach
+- pass: 18 (commit 8f7cdbb)
+- viewport: desktop
+- category: comprehension
+- observation: With only Build I cards, only Shop I and Training I can be bought, so the milestone is out of reach (open question 78). Nothing before the summary says milestones exist, so a stranger first meets them as goals they could not have met. Separate from the pending "reveal 10 tiles" row.
+- evidence: `apps/web/src/play/RunSummary.tsx:14,38`; `config.default.json` `upgradesBought: 3`; OPEN-QUESTIONS.md row 78 "(phase 41 bot batch: 0 of 200 runs)".
+- suggested fix: Mark milestones the current config cannot reach in the run summary and on /config, and name milestones in one start-panel line.
+- source: web-fetch
+
+### [LOW] / — the "Also" line calls the tiles "proposed" and says rules questions "wait on you"
+- pass: 18 (commit 8f7cdbb)
+- viewport: desktop
+- category: voice
+- observation: /tiles says the Play page builds its map from these tiles, so "the proposed tiles" tells a stranger they are not in play. "the rules questions that wait on you" addresses a player as the designer; /decisions says they wait on the designer.
+- evidence: `apps/web/src/home/HomePage.tsx:67-68`; /tiles "The game on the Play page builds its map from these 9 tiles"; /decisions "16 rule readings and 14 checks wait on the designer."
+- suggested fix: Change the links to "the map tiles" and "the open rules questions".
+- source: web-fetch
 
 ### [LOW] /config — "(open question N)" citations are plain text and name a list /decisions does not show
 - pass: 17 (commit 2e92a76)
