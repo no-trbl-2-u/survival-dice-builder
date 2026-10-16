@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-16 (pass 66, cloud tick)
+
+Pass 65's level-step row shipped (431fb35). No MED rows remain, so the MED bias applies to nothing. Two LOW rows tie at 2.4; the tie-break picks the oldest-filed, the /config baseline wording (pass 13). The "(6.9)" and siege "until" clauses were already gone; nine help texts still said "Off: the current rule", one promised a later Special, and the face names were cased two ways. Every row scores under 3.0 and the expand gate is closed (10 commits, 24h since pass 12), so the loop keeps draining LOW critique rows.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /config: help texts name the baseline three ways and carry roadmap wording (critique LOW, pass 13)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: one baseline pattern in `config.meta.json`; drop the "until ..." clause; one casing for face names
+- issue: #120
+- fixed: (this commit)
+
+### [ ] [2.4] /play: the run summary lists "Buy 3 base upgrades", which default rules cannot reach (critique LOW, pass 18)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: mark milestones the config cannot reach in the run summary and on /config
+
+### [ ] [2.1] /tiles: the legend says only which terrains are impassable, not what the others do (critique LOW, pass 12)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 7
+- next: add each terrain's effect after its name in the legend, from config
+
+### [ ] [2.0] all pages: the main script is 650 kB, over the build's own 600 kB warning (critique LOW)
+- category: external-critique (perf)
+- impact: 4
+- ease: 5
+- next: split the /play and /config routes into lazy chunks
+
+### [ ] [1.8] /config: a deck preset's "Hand size" reads as the deck total (critique LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6
+- next: relabel the preset field and say what it counts
+
 # Site audit — 2026-10-16 (pass 65, cloud tick)
 
 Pass 64's "Also" line row shipped (4a1c111). No MED rows remain, so the MED bias applies to nothing. Three LOW rows tie at 2.4; the tie-break picks the oldest-filed, the level-step wording and per-enemy experience. Every row scores under 3.0 and the expand gate is closed (9 commits, 23h since pass 12), so the loop keeps draining LOW critique rows.
@@ -17,7 +55,7 @@ Pass 64's "Also" line row shipped (4a1c111). No MED rows remain, so the MED bias
 - ease: 8
 - next: return levelText from ruleLineFor for experience fields; add per-enemy amounts to levelText
 - issue: #119
-- fixed: (this commit)
+- fixed: 431fb35
 
 ### [ ] [2.4] /config: help texts name the baseline three ways and carry roadmap wording (critique LOW)
 - category: external-critique (voice)

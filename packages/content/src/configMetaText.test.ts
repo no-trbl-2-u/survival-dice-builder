@@ -87,6 +87,26 @@ describe('config.meta.json marks the Spec v2 rule as the written one', () => {
   })
 })
 
+describe('config.meta.json names the baseline one way', () => {
+  it('no help says "the current rule" or promises later content with "until ..."', () => {
+    const found = Object.entries(defaultConfigMeta).flatMap(([path, entry]) =>
+      (entry.help?.match(/\bthe current rule\b|\buntil each\b|\buntil elites?\b/gi) ?? []).map(
+        (word) => `${path}: "${word}"`,
+      ),
+    )
+    expect(found).toEqual([])
+  })
+
+  it('an experiment that is off by default says so, as in the written rules', () => {
+    expect(defaultConfigMeta['spawn.perSeat']?.help).toContain(
+      'Off (default): as in the written rules.',
+    )
+    expect(defaultConfigMeta['experience.eliteBonus']?.help).toContain(
+      'Off (default): 0, as in the written rules.',
+    )
+  })
+})
+
 describe('config.meta.json says when things happen in plain words', () => {
   it('10.8: the draft help names the rounds, not a divisor', () => {
     const help = defaultConfigMeta['draft.everyNRounds']?.help ?? ''

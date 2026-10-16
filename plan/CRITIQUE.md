@@ -18,15 +18,6 @@
 - suggested fix: Mark milestones the current config cannot reach in the run summary and on /config, and name milestones in one start-panel line.
 - source: web-fetch
 
-### [LOW] /config — help texts name the baseline three ways and carry roadmap wording
-- pass: 13 (commit 23315d6)
-- viewport: n/a
-- category: voice
-- observation: Help says "(default)", "Off: the current rule", and "the written rule" for baselines; one keeps a section number "(6.9)" next to the rules note. Two engagement help texts say "until each grunt type has its own Special" and "until elites have their own siege rule", which the build-word scan misses; die faces are "hit, miss, or special" in one line and "Hit face" in the next.
-- evidence: `packages/content/data/config.meta.json:103,109,141,146,152,170,200`.
-- suggested fix: One pattern ("(default)" for the shipped value, "as in the written rules" for the printed rule), drop "(6.9)" and the "until ..." clauses, one casing for face names.
-- source: web-fetch
-
 ### [LOW] /tiles — the legend says only which terrains are impassable, not what the others do
 - pass: 12 (commit c34753b)
 - viewport: desktop
@@ -164,6 +155,17 @@
 
 ## Done
 
+### [x] [LOW] /config — help texts name the baseline three ways and carry roadmap wording
+- pass: 13 (commit 23315d6)
+- viewport: n/a
+- category: voice
+- observation: Help says "(default)", "Off: the current rule", and "the written rule" for baselines; one keeps a section number "(6.9)" next to the rules note. Two engagement help texts say "until each grunt type has its own Special" and "until elites have their own siege rule", which the build-word scan misses; die faces are "hit, miss, or special" in one line and "Hit face" in the next.
+- evidence: `packages/content/data/config.meta.json:103,109,141,146,152,170,200`.
+- suggested fix: One pattern ("(default)" for the shipped value, "as in the written rules" for the printed rule), drop "(6.9)" and the "until ..." clauses, one casing for face names.
+- source: web-fetch
+- issue: #120
+- fixed: (this commit)
+
 ### [x] [LOW] /config and / — the level steps are worded three ways, and no page says how much experience an enemy gives
 - pass: 18 (commit 8f7cdbb)
 - viewport: desktop
@@ -173,7 +175,7 @@
 - suggested fix: Return levelText from ruleLineFor for experience fields, reuse that phrase in the /config help, and add the per-enemy amounts to levelText.
 - source: web-fetch
 - issue: #119
-- fixed: (this commit)
+- fixed: 431fb35
 
 ### [x] [LOW] / — the "Also" line calls the tiles "proposed" and says rules questions "wait on you"
 - pass: 18 (commit 8f7cdbb)

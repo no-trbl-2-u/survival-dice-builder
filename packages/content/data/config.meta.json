@@ -123,13 +123,13 @@
   },
   "combat.engage.hitDamage": {
     "label": "Hit damage",
-    "help": "Damage a Hit face deals to you.",
+    "help": "Damage a hit face deals to you.",
     "rule": "Table 4",
     "range": [0, 6]
   },
   "combat.engage.specialDamage": {
     "label": "Special damage",
-    "help": "Damage a Special face deals, until each grunt type has its own Special.",
+    "help": "Damage a special face deals.",
     "rule": "Table 4",
     "range": [0, 6]
   },
@@ -160,13 +160,13 @@
   },
   "experience.eliteBonus": {
     "label": "Extra experience for an elite",
-    "help": "Experience added when an elite is defeated, on top of its normal experience. Off: the current rule (0).",
+    "help": "Experience added when an elite is defeated, on top of its normal experience. Off (default): 0, as in the written rules.",
     "rule": "8.1 (open question 17)",
     "range": [0, 10]
   },
   "experience.levelPerEliteSpawn": {
     "label": "1 level for each elite that spawns",
-    "help": "When ticked, the level rises by 1 each time an elite spawns (also when the miniature limit turns a grunt into an elite), and experience no longer raises the level. Off: the current rule.",
+    "help": "When ticked, the level rises by 1 each time an elite spawns (also when the miniature limit turns a grunt into an elite), and experience no longer raises the level. Off (default): as in the written rules.",
     "rule": "8.3 (open question 17)"
   },
   "miniatureLimit": {
@@ -180,7 +180,7 @@
   },
   "clock.forcedRevealEvery": {
     "label": "Forced reveal every",
-    "help": "At round end, if no tile was revealed in this many rounds, the top tile of the tile deck is revealed in the open slot nearest the base. Off: the current rule.",
+    "help": "At round end, if no tile was revealed in this many rounds, the top tile of the tile deck is revealed in the open slot nearest the base. Off (default): as in the written rules.",
     "rule": "10.1 (open question 63)",
     "empty": "off",
     "range": [1, 10]
@@ -190,25 +190,25 @@
   },
   "spawn.rampEvery": {
     "label": "Spawn ramp every",
-    "help": "Each spawn node spawns 1 more enemy every this many rounds (1 + (round - 1) / N, rounded down). Off: the current rule.",
+    "help": "Each spawn node spawns 1 more enemy every this many rounds (1 + (round - 1) / N, rounded down). Off (default): as in the written rules.",
     "rule": "9.2 (open question 64)",
     "empty": "off",
     "range": [1, 10]
   },
   "spawn.newTileDelay": {
     "label": "New tile waits",
-    "help": "Rounds a newly revealed tile waits before its spawn nodes spawn. Off: the current rule (0).",
+    "help": "Rounds a newly revealed tile waits before its spawn nodes spawn. Off (default): 0, as in the written rules.",
     "rule": "9.2, 10.1 (open question 66)",
     "range": [0, 6]
   },
   "spawn.perSeat": {
     "label": "Spawns scale with seats",
-    "help": "When ticked, each spawn node spawns 1 enemy per 2 seats, rounded up (1 for 1-2 seats, 2 for 3-4). Off: the current rule.",
+    "help": "When ticked, each spawn node spawns 1 enemy per 2 seats, rounded up (1 for 1-2 seats, 2 for 3-4). Off (default): as in the written rules.",
     "rule": "9.2, 16 (open question 68)"
   },
   "spawn.nodeRange": {
     "label": "Spawn range",
-    "help": "Only spawn nodes within this many hexes of a player figure, a Barricade, a Tower, or the base spawn. Off: the current rule.",
+    "help": "Only spawn nodes within this many hexes of a player figure, a Barricade, a Tower, or the base spawn. Off (default): as in the written rules.",
     "rule": "9.2 (open question 70)",
     "empty": "off",
     "range": [1, 10]
@@ -218,7 +218,7 @@
   },
   "gather.offNodeAmount": {
     "label": "Gather off a node",
-    "help": "Materials a Gather gives on a spent node or off any node. Nodes stay single-use. Off: the current rule (0).",
+    "help": "Materials a Gather gives on a spent node or off any node. Nodes stay single-use. Off (default): 0, as in the written rules.",
     "rule": "6.7 (open question 67)",
     "range": [0, 5]
   },
