@@ -18,15 +18,6 @@
 - suggested fix: Return levelText from ruleLineFor for experience fields, reuse that phrase in the /config help, and add the per-enemy amounts to levelText.
 - source: web-fetch
 
-### [LOW] /play — the knockout log names only lost materials, prints "1 materials", and omits the lost currency
-- pass: 18 (commit 8f7cdbb)
-- viewport: desktop
-- category: voice
-- observation: / and the start panel say a knocked-out player loses materials and currency; the log line names materials only, without a singular form.
-- evidence: `apps/web/src/play/describeEvent.ts:204` "`loses ${event.materialsLost} materials`"; the engine event carries `currencyLost`; config `loseMaterials` and `loseCurrency` both true.
-- suggested fix: Name both losses with correct plurals ("loses 1 material and 3 currency").
-- source: web-fetch
-
 ### [LOW] /play — the run summary lists "Buy 3 base upgrades", which default rules cannot reach
 - pass: 18 (commit 8f7cdbb)
 - viewport: desktop
@@ -199,6 +190,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the knockout log names only lost materials, prints "1 materials", and omits the lost currency
+- pass: 18 (commit 8f7cdbb)
+- viewport: desktop
+- category: voice
+- observation: / and the start panel say a knocked-out player loses materials and currency; the log line names materials only, without a singular form.
+- evidence: `apps/web/src/play/describeEvent.ts:204` "`loses ${event.materialsLost} materials`"; the engine event carries `currencyLost`; config `loseMaterials` and `loseCurrency` both true.
+- suggested fix: Name both losses with correct plurals ("loses 1 material and 3 currency").
+- source: web-fetch
+- issue: #116
+- fixed: (this commit)
 
 ### [x] [LOW] / — the "written rules" link leaves the site with no sign
 - pass: discovery 1 (2026-10-10, bee25b5)

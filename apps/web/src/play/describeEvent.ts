@@ -200,8 +200,14 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `Milestone: ${names.config ? milestoneLabel(event.milestone, names.config.milestones, names.content) : event.milestone}.`
     case 'runEnded':
       return `The base has fallen in round ${event.round}. The run ends.`
-    case 'playerKnockedOut':
-      return `${who(event.player)} ${solo(names) ? 'are' : 'is'} knocked out${event.materialsLost > 0 ? ` and ${solo(names) ? 'lose' : 'loses'} ${event.materialsLost} materials` : ''}: back at the next round start.`
+    case 'playerKnockedOut': {
+      const lost = [
+        event.materialsLost > 0 &&
+          `${event.materialsLost} ${event.materialsLost === 1 ? 'material' : 'materials'}`,
+        event.currencyLost > 0 && `${event.currencyLost} currency`,
+      ].filter(Boolean)
+      return `${who(event.player)} ${solo(names) ? 'are' : 'is'} knocked out${lost.length > 0 ? ` and ${solo(names) ? 'lose' : 'loses'} ${lost.join(' and ')}` : ''}: back at the next round start.`
+    }
     case 'playerReturned':
       return `${who(event.player)} ${solo(names) ? 'are' : 'is'} back with ${event.health} health: choose a free base hex.`
     case 'returnDelayed':
