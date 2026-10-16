@@ -15,6 +15,7 @@ import {
   engageStage,
   enemyLabel,
   playerHex,
+  rollAgain,
   type EngageSummary,
 } from './engageView.ts'
 import styles from './Play.module.css'
@@ -143,7 +144,7 @@ function firstFocus(el: HTMLElement): HTMLElement | null {
   return (
     el.querySelector<HTMLElement>('[data-testid="engage-targets"] button') ??
     el.querySelector<HTMLElement>('section[aria-label="Dice"] button[aria-pressed]') ??
-    el.querySelector<HTMLElement>('[data-roll-again]') ??
+    el.querySelector<HTMLElement>('[data-roll-again]:not(:disabled)') ??
     el.querySelector<HTMLElement>('[data-primary]') ??
     el.querySelector<HTMLElement>('button')
   )
@@ -240,7 +241,7 @@ function LiveView({
   const endReroll = firstOf(legal, 'endReroll')
   const endCards = firstOf(legal, 'endCards')
   const finish = firstOf(legal, 'confirmAssignment')
-  const rollsLeft = state.config.combat.maxRolls - ex.rollsUsed
+  const again = rollAgain(ex.dice, state.config.combat.maxRolls - ex.rollsUsed)
   const primary = stop ?? endReroll ?? endCards ?? finish
   const primaryText = stop
     ? 'Stop rolling: use these dice'
@@ -314,8 +315,8 @@ function LiveView({
       <footer className={styles.engageFoot}>
         <span className={styles.engageFootActions}>
           {roll ? (
-            <button type="button" data-roll-again onClick={() => act(roll)}>
-              Roll again ({rollsLeft} left)
+            <button type="button" data-roll-again disabled={again.off} onClick={() => act(roll)}>
+              {again.text}
             </button>
           ) : null}
           {primary ? (

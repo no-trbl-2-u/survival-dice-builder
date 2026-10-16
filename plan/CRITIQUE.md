@@ -135,15 +135,6 @@
 - suggested fix: Place the label away from other tokens; frame the mini map on the map's hexes.
 - source: blind-round-4
 
-### [LOW] /play — Roll again stays on when every die is kept
-- pass: blind-round-4 (phase 24)
-- viewport: 1280x800 and 375x812
-- category: comprehension
-- observation: After keeping the only die, "Roll again (2 left)" is still enabled though nothing would roll.
-- evidence: blind round 4 (2026-10-09), the Roll step
-- suggested fix: Disable or hide Roll again when no die is unkept (the engine offers the roll; the UI can say it rolls nothing).
-- source: blind-round-4
-
 ### [LOW] all pages — design tools sit in the nav as equals of Play
 - pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
@@ -181,6 +172,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — Roll again stays on when every die is kept
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: After keeping the only die, "Roll again (2 left)" is still enabled though nothing would roll.
+- evidence: blind round 4 (2026-10-09), the Roll step
+- suggested fix: Disable or hide Roll again when no die is unkept (the engine offers the roll; the UI can say it rolls nothing).
+- source: blind-round-4
+- issue: #112
+- fixed: (this commit)
 
 ### [x] [LOW] /tiles — terrain names are lower case in the legend and capitalised in the hex lists
 - pass: 17 (commit 2e92a76)

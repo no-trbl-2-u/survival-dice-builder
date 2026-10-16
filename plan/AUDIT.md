@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-16 (pass 58, cloud tick)
+
+Pass 57's /tiles casing fix shipped, and expand pass 12 (c80efff) found nothing new. No MED rows remain, so the bias does not apply. Re-scored the whole Pending queue, not only the pass 17 rows: the blind-round-4 Roll again row hits every engagement on /play (the main surface), and the fix is a disabled button with its reason plus a helper test, so it scores 3.2 and leads.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play: Roll again stays on when every die is kept (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: disable Roll again when every die is kept and say so on the button ("Roll again: every die is kept")
+- issue: #112
+- fixed: (this commit)
+
+### [ ] [2.7] /: the "written rules" link leaves the site with no sign (critique LOW, discovery 1)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 9
+- next: "(on GitHub)" after the link text; update `HomePage.test.tsx`
+
+### [ ] [2.6] /config: "(open question N)" citations are plain text and name a list /decisions does not show (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 6.5
+- next: link the citations to /decisions, or show every row there
+
+### [ ] [2.4] /config: help texts name the baseline three ways and carry roadmap wording (critique LOW)
+- category: external-critique (voice)
+- impact: 4
+- ease: 6
+- next: one word for the baseline; drop roadmap wording from help
+
+### [ ] [2.4] /tiles: the legend says only which terrains are impassable, not what the others do (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 6
+- next: one line per terrain in the legend
+
 # Site audit — 2026-10-15 (pass 57, cloud tick)
 
 Pass 56's draft help fix shipped; no MED rows remain, so the bias does not apply. The two 2.6 rows tie; the /tiles casing row is the cheaper one (one shared helper, one CSS line, tests), so it leads.

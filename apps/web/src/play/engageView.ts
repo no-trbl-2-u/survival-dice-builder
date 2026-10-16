@@ -142,6 +142,22 @@ export function hitLine(before: GameState, events: readonly GameEvent[]): string
 }
 
 /**
+ * The "Roll again" button's text, and whether it is off: a roll rolls only the dice not kept, so
+ * with every die kept it would roll nothing. The engine still offers the roll; the UI says why
+ * the button does nothing.
+ *
+ * @param dice - the exchange's dice.
+ * @param rollsLeft - rolls left this engagement.
+ */
+export function rollAgain(
+  dice: readonly Readonly<{ kept: boolean }>[],
+  rollsLeft: number,
+): Readonly<{ text: string; off: boolean }> {
+  const off = dice.length > 0 && dice.every((d) => d.kept)
+  return { text: off ? 'Roll again: every die is kept' : `Roll again (${rollsLeft} left)`, off }
+}
+
+/**
  * What comes next, shown on the board while the modal steps aside after a target pick: the
  * result when the pick ended the engagement, else the engagement again.
  *

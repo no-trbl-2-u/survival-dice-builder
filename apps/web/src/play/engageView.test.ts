@@ -6,6 +6,7 @@ import {
   engageHeadline,
   engageStage,
   lastEngagement,
+  rollAgain,
 } from './engageView.ts'
 
 const r = 'Combat v3'
@@ -14,6 +15,19 @@ describe('engageView', () => {
   it('says what comes next while the modal steps aside', () => {
     expect(asideNote(true)).toBe('Engagement over. The result comes next.')
     expect(asideNote(false)).toBe('Back to the engagement in a moment.')
+  })
+
+  it('turns Roll again off, and says why, when every die is kept', () => {
+    expect(rollAgain([{ kept: true }, { kept: false }], 2)).toEqual({
+      text: 'Roll again (2 left)',
+      off: false,
+    })
+    expect(rollAgain([{ kept: true }], 2)).toEqual({
+      text: 'Roll again: every die is kept',
+      off: true,
+    })
+    expect(rollAgain([{ kept: true }, { kept: true }], 1).off).toBe(true)
+    expect(rollAgain([], 2).off).toBe(false)
   })
 
   it('maps each exchange step to its stage', () => {
