@@ -20,10 +20,21 @@ export type CombatModel = 'exchange' | 'engage'
 /** The Combat choice names, shared with /config. */
 const COMBAT_LABEL = defaultConfigMeta['combat.model']?.options ?? {}
 
-/** One line per Combat choice: how a Combat plays under it, from `ruleText`. */
-const COMBAT_HINT: Record<CombatModel, string> = {
-  engage: `Engagements: ${combatText(defaultContent.config, 'engage', defaultContent)} ${siegeText(defaultContent)}`,
-  exchange: `The older Combat, kept for playtests. ${combatText(defaultContent.config, 'exchange', defaultContent)} ${siegeText(defaultContent)}`,
+/** The lead of each Combat choice's line. */
+const COMBAT_LEAD: Record<CombatModel, string> = {
+  engage: 'Engagements:',
+  exchange: 'The older Combat, kept for playtests.',
+}
+
+/** One line per Combat choice: how a Combat plays under it in this config, from `ruleText`. */
+function combatHint(config: GameConfig, combat: CombatModel): string {
+  return `${COMBAT_LEAD[combat]} ${combatText(config, combat, defaultContent)} ${siegeText(defaultContent)}`
+}
+
+/** Every player count the config allows, fewest first. */
+function playerCounts(config: GameConfig): number[] {
+  const { min, max } = config.players
+  return Array.from({ length: Math.max(0, max - min + 1) }, (_, i) => min + i)
 }
 
 type Props = Readonly<{
@@ -48,7 +59,7 @@ export function StartPanel({
   onStart,
   onLoad,
 }: Props) {
-  const [players, setPlayers] = useState(1)
+  const [players, setPlayers] = useState(config.players.min)
   const [combat, setCombat] = useState<CombatModel>(configCombat)
   const [seed, setSeed] = useState(() => String(Date.now() % 100000))
   const [error, setError] = useState<string | null>(null)
@@ -66,7 +77,7 @@ export function StartPanel({
         New run
       </h2>
       <p>
-        {goalText()} {knockoutText(defaultContent.config)}
+        {goalText()} {knockoutText(config)}
       </p>
       <form
         className={styles.startForm}
@@ -78,7 +89,7 @@ export function StartPanel({
         <label>
           Players{' '}
           <select value={players} onChange={(e) => setPlayers(Number(e.target.value))}>
-            {[1, 2, 3, 4].map((n) => (
+            {playerCounts(config).map((n) => (
               <option key={n} value={n}>
                 {n}
               </option>
@@ -113,7 +124,7 @@ export function StartPanel({
         The same seed and the same choices give the same game.
       </p>
       <p id="combat-hint" className={styles.muted}>
-        {COMBAT_HINT[combat]}
+        {combatHint(config, combat)}
       </p>
       <div className={styles.muted}>
         <ConfigChanges config={config} changes={changes} updated={updated} reviewHref="/config" />

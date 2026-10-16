@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — the start panel shows rule text from the default config, not the saved one
-- pass: 18 (commit 8f7cdbb)
-- viewport: desktop
-- category: comprehension
-- observation: The New run panel builds its knockout and Combat lines from the default config and hard-codes 1 to 4 players. A visitor who saved other knockout or player settings on /config sees the default text above "Start run".
-- evidence: `apps/web/src/play/StartPanel.tsx:25-26` COMBAT_HINT reads `defaultContent.config`; `:69` `knockoutText(defaultContent.config)`; `:81` `[1, 2, 3, 4].map(...)`; the `config` prop is used only for the changes list.
-- suggested fix: Pass the `config` prop to combatText, siegeText and knockoutText, and build the Players options from the config's player range.
-- source: web-fetch
-
 ### [LOW] /config and / — the level steps are worded three ways, and no page says how much experience an enemy gives
 - pass: 18 (commit 8f7cdbb)
 - viewport: desktop
@@ -217,6 +208,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — the start panel shows rule text from the default config, not the saved one
+- pass: 18 (commit 8f7cdbb)
+- viewport: desktop
+- category: comprehension
+- observation: The New run panel builds its knockout and Combat lines from the default config and hard-codes 1 to 4 players. A visitor who saved other knockout or player settings on /config sees the default text above "Start run".
+- evidence: `apps/web/src/play/StartPanel.tsx:25-26` COMBAT_HINT reads `defaultContent.config`; `:69` `knockoutText(defaultContent.config)`; `:81` `[1, 2, 3, 4].map(...)`; the `config` prop is used only for the changes list.
+- suggested fix: Pass the `config` prop to combatText, siegeText and knockoutText, and build the Players options from the config's player range.
+- source: web-fetch
+- issue: #114
+- fixed: (this commit)
 
 ### [x] [MED] / — the Combat step says "Play an Engage card"; Engage is an option on Move and Gather, not a card
 - pass: 18 (commit 8f7cdbb)

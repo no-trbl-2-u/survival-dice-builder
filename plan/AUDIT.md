@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-16 (pass 60, cloud tick)
+
+Pass 59's / Engage wording fix shipped (9ed6514). The start panel row is the last MED in the queue, so the external-critique MED bias (x1.5) applies to it and it leads at 5.3. With it done no MED rows remain; the next tick's LOW leaders are the GitHub link mark and the knockout log plurals, both at 2.7.
+
+## Top 5 findings (scored)
+
+### [x] [5.3] /play: the start panel shows rule text from the default config, not the saved one (critique MED, pass 18)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 7
+- next: the Combat hint and knockout line read the saved config; the Players select lists the config's player range and starts at its fewest
+- issue: #114
+- fixed: (this commit)
+
+### [ ] [2.7] /: the "written rules" link leaves the site with no sign (critique LOW, discovery 1)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 9
+- next: "(on GitHub)" after the link text; update `HomePage.test.tsx`
+
+### [ ] [2.7] /play: the knockout log names only lost materials and prints "1 materials" (critique LOW, pass 18)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: name both losses with correct plurals in `describeEvent.ts`
+
+### [ ] [2.6] /config: "(open question N)" citations are plain text and name a list /decisions does not show (critique LOW)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 6.5
+- next: link the citations to /decisions, or show every row there
+
+### [ ] [2.4] / and /config: the level steps are worded three ways, and no page gives each enemy's experience (critique LOW, pass 18)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: return levelText from ruleLineFor for experience fields; add per-enemy amounts to levelText
+
 # Site audit — 2026-10-16 (pass 59, cloud tick)
 
 Pass 58's Roll again fix shipped, and critique pass 18 (9420b62) filed 2 MED rows, so the external-critique MED bias (x1.5) applies again. The / Engage wording row is a one-phrase change in the shared rule text (the card names come from the config's starter deck), so it leads at 8.1; the start panel row needs the saved config threaded through four helpers and the player range, so it follows.
