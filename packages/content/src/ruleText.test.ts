@@ -35,11 +35,13 @@ const With = (patch: (c: GameConfig) => GameConfig) => patch(structuredClone(bas
 
 describe('rule text from config', () => {
   it('levels: the experience steps and the new die follow config (Spec v2 8.1-8.5)', () => {
-    expect(levelText(base)).toBe(
-      'Each defeated enemy gives experience to all players. Level 2 needs 3 experience, level 3 needs 6 more, level 4 needs 9 more, and each next step grows by 3. At each new level, every player gets 1 more action die.',
+    expect(levelText(base, defaultContent)).toBe(
+      'Each defeated enemy gives experience to all players (a grunt 1, an elite 4). Level 2 needs 3 experience, level 3 needs 6 more, level 4 needs 9 more, and each next step grows by 3. At each new level, every player gets 1 more action die.',
     )
     const flat = With((c) => ({ ...c, experience: { ...c.experience, stepIncrease: 0 } }))
-    expect(levelText(flat)).toMatch(
+    const bonus = With((c) => ({ ...c, experience: { ...c.experience, eliteBonus: 2 } }))
+    expect(levelText(bonus, defaultContent)).toMatch(/\(a grunt 1, an elite 6\)/)
+    expect(levelText(flat, defaultContent)).toMatch(
       /Level 2 needs 3 experience, and each next level needs 3 more\./,
     )
     const elite = With((c) => ({
@@ -47,7 +49,7 @@ describe('rule text from config', () => {
       experience: { ...c.experience, levelPerEliteSpawn: true },
       options: { ...c.options, maxLevel: 4 },
     }))
-    expect(levelText(elite)).toBe(
+    expect(levelText(elite, defaultContent)).toBe(
       'The level rises by 1 each time an elite spawns. At each new level, every player gets 1 more action die. The level stops at 4.',
     )
   })
@@ -261,6 +263,8 @@ describe('rule text from config', () => {
     const line = (path: string) => ruleLineFor(path, base, defaultContent)
     expect(line('miniatureLimit')).toBe(miniatureLimitText(base))
     expect(line('knockout.loseMaterials')).toBe(knockoutText(base))
+    expect(line('experience.stepIncrease')).toBe(levelText(base, defaultContent))
+    expect(line('experience.eliteBonus')).toBe(levelText(base, defaultContent))
     expect(line('draft.unpicked')).toBe(draftPoolText(base))
     expect(line('milestones.tilesRevealed')).toBe('Reveal 10 tiles.')
     expect(line('milestones.surviveRounds')).toBe(

@@ -59,19 +59,25 @@ export function spawnText(config: GameConfig): string {
 }
 
 /**
- * What raises the shared level, and what a new level gives.
+ * What raises the shared level, and what a new level gives, with each enemy's experience.
  *
  * @rule 8.1, 8.3, 8.4, 8.5, 18.1, OPEN-QUESTIONS row 17
  */
-export function levelText(config: GameConfig): string {
-  const { firstStep, stepIncrease, levelPerEliteSpawn } = config.experience
+export function levelText(config: GameConfig, content: Enemies): string {
+  const { firstStep, stepIncrease, levelPerEliteSpawn, eliteBonus } = config.experience
+  const gains = content.enemies.enemies
+    .map(
+      (e) =>
+        `${withArticle(e.name.toLowerCase())} ${e.experience + (e.id === 'elite' ? eliteBonus : 0)}`,
+    )
+    .join(', ')
   const steps =
     stepIncrease === 0
       ? `Level 2 needs ${firstStep} experience, and each next level needs ${firstStep} more`
       : `Level 2 needs ${firstStep} experience, level 3 needs ${firstStep + stepIncrease} more, level 4 needs ${firstStep + 2 * stepIncrease} more, and each next step grows by ${stepIncrease}`
   const raise = levelPerEliteSpawn
     ? 'The level rises by 1 each time an elite spawns.'
-    : `Each defeated enemy gives experience to all players. ${steps}.`
+    : `Each defeated enemy gives experience to all players (${gains}). ${steps}.`
   const max = config.options.maxLevel
   const cap = max === null ? '' : ` The level stops at ${max}.`
   return `${raise} At each new level, every player gets 1 more action die.${cap}`
@@ -440,6 +446,7 @@ export function ruleLineFor(
   if (path === 'miniatureLimit') return miniatureLimitText(config)
   if (path === 'tiles.revealMoveCost') return revealText(config)
   if (path === 'spawn.newTileDelay') return spawnText(config)
+  if (group === 'experience') return levelText(config, content)
   if (group === 'knockout') return knockoutText(config)
   if (path === 'gather.offNodeAmount' || path === 'rulings.gatherNeedsNode')
     return `${gatherText(2, config)}.`

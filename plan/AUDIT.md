@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-16 (pass 65, cloud tick)
+
+Pass 64's "Also" line row shipped (4a1c111). No MED rows remain, so the MED bias applies to nothing. Three LOW rows tie at 2.4; the tie-break picks the oldest-filed, the level-step wording and per-enemy experience. Every row scores under 3.0 and the expand gate is closed (9 commits, 23h since pass 12), so the loop keeps draining LOW critique rows.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] / and /config: the level steps are worded three ways, and no page gives each enemy's experience (critique LOW, pass 18)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: return levelText from ruleLineFor for experience fields; add per-enemy amounts to levelText
+- issue: #119
+- fixed: (this commit)
+
+### [ ] [2.4] /config: help texts name the baseline three ways and carry roadmap wording (critique LOW)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: one baseline pattern in `config.meta.json`; drop "(6.9)" and the "until ..." clauses
+
+### [ ] [2.4] /play: the run summary lists "Buy 3 base upgrades", which default rules cannot reach (critique LOW, pass 18)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: mark milestones the config cannot reach in the run summary and on /config
+
+### [ ] [2.1] /tiles: the legend says only which terrains are impassable, not what the others do (critique LOW, pass 12)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 7
+- next: add each terrain's effect after its name in the legend, from config
+
+### [ ] [2.0] all pages: the main script is 650 kB, over the build's own 600 kB warning (critique LOW)
+- category: external-critique (perf)
+- impact: 4
+- ease: 5
+- next: split the /play and /config routes into lazy chunks
+
 # Site audit — 2026-10-16 (pass 64, cloud tick)
 
 Pass 63's /config citations row shipped (ed27a5c). No MED rows remain, so the MED bias applies to nothing. Three LOW rows tie at 2.4; the tie-break picks the cheapest, the "Also" line wording on /. Every row scores under 3.0 and the expand gate is closed (8 commits, 22h since pass 12), so the loop keeps draining LOW critique rows.
@@ -17,7 +55,7 @@ Pass 63's /config citations row shipped (ed27a5c). No MED rows remain, so the ME
 - ease: 8
 - next: change the link texts in `HomePage.tsx` to "the map tiles" and "the open rules questions"
 - issue: #118
-- fixed: (this commit)
+- fixed: 4a1c111
 
 ### [ ] [2.4] / and /config: the level steps are worded three ways, and no page gives each enemy's experience (critique LOW, pass 18)
 - category: external-critique (comprehension)

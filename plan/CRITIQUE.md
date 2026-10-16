@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config and / — the level steps are worded three ways, and no page says how much experience an enemy gives
-- pass: 18 (commit 8f7cdbb)
-- viewport: desktop
-- category: comprehension
-- observation: / gives step sizes ("level 3 needs 6 more"); /config "Step increase" still says "than the step before it"; /decisions row 17 gives "3 more than the last step (3, 9, 18, 30)". The Experience fields have no live rule line, and / says "Each defeated enemy gives experience" without the amounts.
-- evidence: `packages/content/src/ruleText.ts:71,74`; /config "Each next level needs this much more experience than the step before it. Rules 8.5."; `ruleLineFor` (`ruleText.ts:398-433`) has no experience branch; `packages/content/data/enemies.json` grunt 1, elite 4.
-- suggested fix: Return levelText from ruleLineFor for experience fields, reuse that phrase in the /config help, and add the per-enemy amounts to levelText.
-- source: web-fetch
-
 ### [LOW] /play — the run summary lists "Buy 3 base upgrades", which default rules cannot reach
 - pass: 18 (commit 8f7cdbb)
 - viewport: desktop
@@ -173,6 +164,17 @@
 
 ## Done
 
+### [x] [LOW] /config and / — the level steps are worded three ways, and no page says how much experience an enemy gives
+- pass: 18 (commit 8f7cdbb)
+- viewport: desktop
+- category: comprehension
+- observation: / gives step sizes ("level 3 needs 6 more"); /config "Step increase" still says "than the step before it"; /decisions row 17 gives "3 more than the last step (3, 9, 18, 30)". The Experience fields have no live rule line, and / says "Each defeated enemy gives experience" without the amounts.
+- evidence: `packages/content/src/ruleText.ts:71,74`; /config "Each next level needs this much more experience than the step before it. Rules 8.5."; `ruleLineFor` (`ruleText.ts:398-433`) has no experience branch; `packages/content/data/enemies.json` grunt 1, elite 4.
+- suggested fix: Return levelText from ruleLineFor for experience fields, reuse that phrase in the /config help, and add the per-enemy amounts to levelText.
+- source: web-fetch
+- issue: #119
+- fixed: (this commit)
+
 ### [x] [LOW] / — the "Also" line calls the tiles "proposed" and says rules questions "wait on you"
 - pass: 18 (commit 8f7cdbb)
 - viewport: desktop
@@ -182,7 +184,7 @@
 - suggested fix: Change the links to "the map tiles" and "the open rules questions".
 - source: web-fetch
 - issue: #118
-- fixed: (this commit)
+- fixed: 4a1c111
 
 ### [x] [LOW] /config — "(open question N)" citations are plain text and name a list /decisions does not show
 - pass: 17 (commit 2e92a76)

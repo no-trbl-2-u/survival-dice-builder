@@ -154,7 +154,7 @@
   },
   "experience.stepIncrease": {
     "label": "Step increase",
-    "help": "Each next level needs this much more experience than the step before it.",
+    "help": "How much each next step grows: level 3 needs the first step plus this much more, level 4 needs the first step plus twice this, and so on.",
     "rule": "8.5",
     "range": [0, 20]
   },

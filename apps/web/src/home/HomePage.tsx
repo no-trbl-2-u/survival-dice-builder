@@ -54,7 +54,7 @@ export function HomePage() {
         <h2 className={styles.heading}>How you grow</h2>
         <ul className={styles.steps}>
           <li>
-            <strong>Levels:</strong> {levelText(config)}
+            <strong>Levels:</strong> {levelText(config, defaultContent)}
           </li>
           <li>
             <strong>Shop:</strong> {shopText(config, defaultContent)}
