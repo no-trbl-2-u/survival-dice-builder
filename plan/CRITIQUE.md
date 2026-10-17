@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] all pages — the main script is 650 kB, over the build's own 600 kB warning
-- pass: discovery 1 (2026-10-10, bee25b5)
-- viewport: n/a
-- category: perf
-- observation: `pnpm --filter @survival/web build` warns "Some chunks are larger than 600 kB": `index-*.js` is 649.80 kB (198.36 kB gzip). The 3D dice are already a separate chunk (530 kB).
-- evidence: build output at bee25b5; every route is imported eagerly in `apps/web/src/App.tsx:25-43`.
-- suggested fix: Lazy-load the design-tool routes (/config, /decisions, /debug, /tiles) with `React.lazy`, so a player's first load carries / and /play only.
-- source: discovery
-
 ### [LOW] /config — a deck preset's "Hand size" reads as the deck total
 - pass: discovery 1 (2026-10-10, bee25b5)
 - viewport: 1280x800
@@ -172,6 +163,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] all pages — the main script is 650 kB, over the build's own 600 kB warning
+- pass: discovery 1 (2026-10-10, bee25b5)
+- viewport: n/a
+- category: perf
+- observation: `pnpm --filter @survival/web build` warns "Some chunks are larger than 600 kB": `index-*.js` is 649.80 kB (198.36 kB gzip). The 3D dice are already a separate chunk (530 kB).
+- evidence: build output at bee25b5; every route is imported eagerly in `apps/web/src/App.tsx:25-43`.
+- suggested fix: Lazy-load the design-tool routes (/config, /decisions, /debug, /tiles) with `React.lazy`, so a player's first load carries / and /play only.
+- source: discovery
+- issue: #125
+- fixed: (this commit); the main script is 277 kB, every page but home is its own chunk
 
 ### [x] [MED] / — a stranger cannot learn what they start with or how a round turns over
 - pass: 19 (commit ce4724a)

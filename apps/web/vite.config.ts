@@ -51,8 +51,10 @@ export default defineConfig({
   // Each page is its own HTML file; an unknown path is a 404, not the home page.
   appType: 'mpa',
   define: { __APP_COMMIT__: JSON.stringify(commit()), __APP_VERSION__: JSON.stringify(version) },
-  // The 3D dice chunk (three.js, ~530 kB) loads only when the 3D toggle is on.
-  build: { chunkSizeWarningLimit: 600 },
+  // The 3D dice chunk (three.js, ~530 kB) loads only when the 3D toggle is on, and each page
+  // but home is its own chunk (routes.tsx). The CSS stays one file in the head, so a
+  // prerendered page is styled before its chunk arrives.
+  build: { chunkSizeWarningLimit: 600, cssCodeSplit: false },
   test: {
     name: 'web',
     environment: 'jsdom',

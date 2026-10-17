@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-17 (pass 71, cloud tick)
+
+Pass 70's home page row shipped (5c2763d). No MED rows are left, so the bias does not apply; every pending row is LOW and the top two tie at 2.0. The older one wins the tie: the main script had grown to 727 kB, over the build's own 600 kB warning, because every page was imported eagerly. Each page but home and not-found is now its own chunk through a small `lazyPage` helper; the client loads the route's chunk before it hydrates, and the prerender loads every page before it renders, so the served HTML and the first render still match. The CSS stays one stylesheet in the head, so a prerendered page is styled before its chunk arrives. The main script is now 277 kB and the build has no size warning.
+
+## Top 5 findings (scored)
+
+### [x] [2.0] all pages: the main script is 727 kB, over the build's own 600 kB warning (critique LOW)
+- category: external-critique (perf)
+- impact: 4
+- ease: 5
+- next: each page but home its own chunk, loaded before the first render
+- issue: #125
+- fixed: (this commit)
+
+### [ ] [2.0] /decisions: decided row 7 says "enemy record" and points at an unexplained "row 73" (critique LOW, pass 19)
+- category: external-critique (voice)
+- impact: 2
+- ease: 10
+- next: reword row 7's reading in `OPEN-QUESTIONS.md`
+
+### [ ] [1.8] /config: a deck preset's "Hand size" reads as the deck total (critique LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6
+- next: relabel the preset field and say what it counts
+
+### [ ] [1.8] /tiles: the site legend names the sites but not what they do (critique LOW, pass 19)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6
+- next: a short effect after each site name, from ruleText
+
+### [ ] [1.8] /debug: the Engine console ignores the saved config and does not say so (critique LOW, pass 19)
+- category: external-critique (comprehension)
+- impact: 2
+- ease: 9
+- next: one intro sentence that the console plays the default rules
+
 # Site audit — 2026-10-17 (pass 70, cloud tick)
 
 Pass 69's Checks row shipped (b19439e). The MED bias still applies to the last pass 19 MED row, which tops the list: the home page used Skills, action dice and card halves without saying what a player starts with or how a round turns over. Two new ruleText phrases fill the gap from config and content: `startText` (health, action dice, the starter Skills by name, the starter deck by card, hand size, and what each card half is for) and `roundText` (Prepare then Combat, one pass through the deck each, and the co-op turn order from `rulings.coopPrepareOrder`). The home page shows them under a new "What you have" heading and at the top of "How a run goes".

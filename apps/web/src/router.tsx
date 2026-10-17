@@ -8,6 +8,8 @@ export type Route = Readonly<{
   description: string
   /** `page`: rendered to static HTML at build time; `shell`: served with an empty root. */
   served: 'page' | 'shell'
+  /** Fetches the page's chunk; `render` is ready once it resolves. Absent for eager pages. */
+  load?: () => Promise<unknown>
   /** The page for a pathname (only the not-found page reads it). */
   render: (pathname: string) => ReactNode
   /** Keep the page title for screen readers only (the nav already marks the page). */

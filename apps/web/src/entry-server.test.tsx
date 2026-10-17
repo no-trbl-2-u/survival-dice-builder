@@ -1,6 +1,8 @@
 // @vitest-environment node
-import { describe, expect, it } from 'vitest'
-import { FILES, renderPage } from './entry-server.tsx'
+import { beforeAll, describe, expect, it } from 'vitest'
+import { FILES, loadPages, renderPage } from './entry-server.tsx'
+
+beforeAll(loadPages)
 
 describe('renderPage', () => {
   it('renders each prerendered page with its heading and the nav, outside a browser', () => {

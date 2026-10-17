@@ -42,9 +42,14 @@ export const FILES: readonly ServedFile[] = [
   },
 ]
 
+/** Loads every lazy page's chunk; `renderPage` needs them loaded. */
+export async function loadPages(): Promise<void> {
+  await Promise.all(routes.map((r) => r.load?.()))
+}
+
 /**
  * The app rendered to HTML for a path, as the browser's first render will see it: storage is
- * not read (`useClient` is false), so /config shows the defaults.
+ * not read (`useClient` is false), so /config shows the defaults. Call `loadPages` first.
  *
  * @param path - the path to render (a path no route has renders the not-found page).
  */

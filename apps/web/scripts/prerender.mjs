@@ -21,7 +21,10 @@ await build({
   },
 })
 
-const { FILES, pageHtml, renderPage } = await import(new URL('entry-server.js', ssrDir).href)
+const { FILES, loadPages, pageHtml, renderPage } = await import(
+  new URL('entry-server.js', ssrDir).href
+)
+await loadPages()
 const template = readFileSync(new URL('index.html', dist), 'utf-8')
 for (const f of FILES) {
   const body = f.prerender ? renderPage(f.path) : null

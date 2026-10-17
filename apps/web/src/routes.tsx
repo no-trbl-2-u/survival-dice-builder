@@ -1,12 +1,18 @@
-import { ConfigPage } from './config/ConfigPage.tsx'
-import { CreditsPage } from './credits/CreditsPage.tsx'
-import { DebugPage } from './debug/DebugPage.tsx'
-import { DecisionsPage } from './decisions/DecisionsPage.tsx'
 import { HomePage } from './home/HomePage.tsx'
+import { lazyPage } from './lazyPage.tsx'
 import { NotFoundPage } from './notfound/NotFoundPage.tsx'
-import { PlayPage } from './play/PlayPage.tsx'
 import { matchRoute, SITE_NAME, type Route } from './router.tsx'
-import { TileSheet } from './tiles/TileSheet.tsx'
+
+// Every page but home and not-found is its own chunk, so the first load carries only the
+// home page; the client loads a route's chunk before it renders (see main.tsx).
+const play = lazyPage(() => import('./play/PlayPage.tsx').then((m) => m.PlayPage))
+const config = lazyPage(() => import('./config/ConfigPage.tsx').then((m) => m.ConfigPage))
+const tiles = lazyPage(() => import('./tiles/TileSheet.tsx').then((m) => m.TileSheet))
+const decisions = lazyPage(() =>
+  import('./decisions/DecisionsPage.tsx').then((m) => m.DecisionsPage),
+)
+const debug = lazyPage(() => import('./debug/DebugPage.tsx').then((m) => m.DebugPage))
+const credits = lazyPage(() => import('./credits/CreditsPage.tsx').then((m) => m.CreditsPage))
 
 /** The nav links, in order; each path is a route below, and each label is its page heading. */
 export const NAV: readonly (readonly [path: string, label: string])[] = [
@@ -39,7 +45,8 @@ export const routes: readonly Route[] = [
     description:
       'Start a run in the browser: defend the base together at one screen, build your dice, and last as many rounds as you can.',
     served: 'shell',
-    render: () => <PlayPage />,
+    load: play.load,
+    render: () => <play.Page />,
     quietTitle: true,
   },
   {
@@ -48,7 +55,8 @@ export const routes: readonly Route[] = [
     description:
       'Change any rule value or option for a playtest. Saved in this browser only; new runs use it.',
     served: 'page',
-    render: () => <ConfigPage />,
+    load: config.load,
+    render: () => <config.Page />,
   },
   {
     path: '/tiles',
@@ -56,7 +64,8 @@ export const routes: readonly Route[] = [
     description:
       'The map tiles the game is built from, each hex listed by position with its terrain and site.',
     served: 'page',
-    render: () => <TileSheet />,
+    load: tiles.load,
+    render: () => <tiles.Page />,
   },
   {
     path: '/decisions',
@@ -64,21 +73,24 @@ export const routes: readonly Route[] = [
     description:
       'The rule readings the game plays with while they wait on the designer, the setting each one uses, and the open checks.',
     served: 'page',
-    render: () => <DecisionsPage />,
+    load: decisions.load,
+    render: () => <decisions.Page />,
   },
   {
     path: '/debug',
     title: 'Engine console',
     description: 'Play the rules engine one action at a time and read its state.',
     served: 'shell',
-    render: () => <DebugPage />,
+    load: debug.load,
+    render: () => <debug.Page />,
   },
   {
     path: '/credits',
     title: 'Credits',
     description: 'Every asset in the game, with its license.',
     served: 'page',
-    render: () => <CreditsPage />,
+    load: credits.load,
+    render: () => <credits.Page />,
   },
 ]
 
