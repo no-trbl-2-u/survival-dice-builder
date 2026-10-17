@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-17 (pass 68, cloud tick)
+
+Pass 67's milestone row shipped (5658bb3). No MED rows remain, so the MED bias applies to nothing. The top row is the /tiles terrain legend (2.1). Terrain only matters for entering a hex (rule 3.4; nothing in the engine reads Forest, Hills or Wasteland), so each legend item now says "no effect on moves" or "impassable", read from the content's IMPASSABLE list. Every row scores under 3.0 and the expand gate is closed (12 commits, under 48h since pass 12), so the loop keeps draining LOW critique rows.
+
+## Top 5 findings (scored)
+
+### [x] [2.1] /tiles: the legend says only which terrains are impassable, not what the others do (critique LOW, pass 12)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 7
+- next: each legend item says "no effect on moves" or "impassable", from `IMPASSABLE`
+- issue: #122
+- fixed: (this commit)
+
+### [ ] [2.0] all pages: the main script is 727 kB, over the build's own 600 kB warning (critique LOW)
+- category: external-critique (perf)
+- impact: 4
+- ease: 5
+- next: split the /config, /decisions, /debug, /tiles routes into lazy chunks
+
+### [ ] [1.8] /config: a deck preset's "Hand size" reads as the deck total (critique LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6
+- next: relabel the preset field and say what it counts
+
+### [ ] [1.8] /play: a hex next to an enemy that costs too much just isn't offered, with no reason (critique LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6
+- next: name the reason in the move hint
+
+### [ ] [1.8] /play: the "reveal 10 tiles" milestone may be unreachable (critique LOW)
+- category: external-critique (rules)
+- impact: 3
+- ease: 6
+- next: trace the revealable count; mark the milestone out of reach as pass 67 did for upgrades
+
 # Site audit — 2026-10-16 (pass 67, cloud tick)
 
 Pass 66's /config baseline row shipped (90858d8). No MED rows remain, so the MED bias applies to nothing. The top row is the run summary's "Buy 3 base upgrades" milestone (2.4), which default rules cannot reach (row 78). A new content helper counts the upgrades the Build cards can buy, and the run summary and /config mark the milestone out of reach. Every row scores under 3.0 and the expand gate is closed (11 commits, under 48h since pass 12), so the loop keeps draining LOW critique rows.
@@ -17,7 +55,7 @@ Pass 66's /config baseline row shipped (90858d8). No MED rows remain, so the MED
 - ease: 8
 - next: `upgradesReachable` and `milestoneOutOfReach` in `ruleText.ts`; run summary and /config milestone line show the reason
 - issue: #121
-- fixed: (this commit)
+- fixed: 5658bb3
 
 ### [ ] [2.1] /tiles: the legend says only which terrains are impassable, not what the others do (critique LOW, pass 12)
 - category: external-critique (comprehension)

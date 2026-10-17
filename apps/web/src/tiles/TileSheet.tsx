@@ -1,4 +1,10 @@
-import { defaultContent, type Site, type Terrain, type TileDef } from '@survival/content'
+import {
+  defaultContent,
+  IMPASSABLE,
+  type Site,
+  type Terrain,
+  type TileDef,
+} from '@survival/content'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { capitalize, HEX_POSITION, hexLabel, SITE_ICON, SITE_LABEL, TileView } from './TileView.tsx'
 import styles from './TileSheet.module.css'
@@ -30,7 +36,8 @@ function siteSummary(sites: readonly (Site | null)[]): string {
 
 /**
  * The tile layouts (spec phase 1) the game on the Play page builds its map from: every tile
- * in `tiles.json`, grouped by kind, with a terrain and site legend.
+ * in `tiles.json`, grouped by kind, with a terrain and site legend. Terrain only matters for
+ * entering a hex (rule 3.4), so the legend says which terrains block moves and that the rest do not.
  */
 export function TileSheet() {
   const { tiles } = defaultContent
@@ -47,7 +54,7 @@ export function TileSheet() {
           <li key={t}>
             <span className={`${styles.swatch} ${styles[t] ?? ''}`} aria-hidden="true" />
             {capitalize(t)}
-            {t === 'lake' || t === 'mountain' ? ' (impassable)' : ''}
+            {IMPASSABLE.includes(t) ? ' (impassable)' : ' (no effect on moves)'}
           </li>
         ))}
       </ul>

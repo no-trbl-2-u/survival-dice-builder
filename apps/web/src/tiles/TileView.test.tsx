@@ -68,15 +68,15 @@ describe('TileSheet hex list', () => {
 })
 
 describe('TileSheet terrain legend', () => {
-  it('names each terrain with the capitals the hex lists use', () => {
+  it("3.4 names each terrain with the hex lists' capitals and says what it does to moves", () => {
     const { container } = render(<TileSheet />)
     const legend = container.querySelector('[aria-label="Terrain legend"]')!
     const names = [...legend.querySelectorAll('li')].map((li) => li.textContent)
     expect(names).toEqual([
-      'Plains',
-      'Forest',
-      'Hills',
-      'Wasteland',
+      'Plains (no effect on moves)',
+      'Forest (no effect on moves)',
+      'Hills (no effect on moves)',
+      'Wasteland (no effect on moves)',
       'Lake (impassable)',
       'Mountain (impassable)',
     ])

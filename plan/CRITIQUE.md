@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /tiles — the legend says only which terrains are impassable, not what the others do
-- pass: 12 (commit c34753b)
-- viewport: desktop
-- category: comprehension
-- observation: The legend lists Plains, Forest, Hills, Wasteland, Lake (Impassable), Mountain (Impassable). Nothing on /tiles or / says whether Forest, Hills or Wasteland change movement.
-- evidence: /tiles legend; / "How a run goes" does not mention terrain.
-- suggested fix: Add each terrain's effect after its name in the legend ("no effect" or its move cost), taken from config.
-- source: browser
-
 ### [LOW] all pages — the main script is 650 kB, over the build's own 600 kB warning
 - pass: discovery 1 (2026-10-10, bee25b5)
 - viewport: n/a
@@ -146,6 +137,18 @@
 
 ## Done
 
+### [x] [LOW] /tiles — the legend says only which terrains are impassable, not what the others do
+- pass: 12 (commit c34753b)
+- viewport: desktop
+- category: comprehension
+- observation: The legend lists Plains, Forest, Hills, Wasteland, Lake (Impassable), Mountain (Impassable). Nothing on /tiles or / says whether Forest, Hills or Wasteland change movement.
+- evidence: /tiles legend; / "How a run goes" does not mention terrain.
+- suggested fix: Add each terrain's effect after its name in the legend ("no effect" or its move cost), taken from config.
+- source: browser
+- issue: #122
+- fixed: (this commit)
+- note: Terrain only matters for entering a hex (rule 3.4); the legend now says "no effect on moves" or "impassable" from the content's IMPASSABLE list
+
 ### [x] [LOW] /play — the run summary lists "Buy 3 base upgrades", which default rules cannot reach
 - pass: 18 (commit 8f7cdbb)
 - viewport: desktop
@@ -155,7 +158,7 @@
 - suggested fix: Mark milestones the current config cannot reach in the run summary and on /config, and name milestones in one start-panel line.
 - source: web-fetch
 - issue: #121
-- fixed: (this commit)
+- fixed: 5658bb3
 - note: run summary and /config mark the milestone; the start-panel milestone line is left for a later tick
 
 ### [x] [LOW] /config — help texts name the baseline three ways and carry roadmap wording
