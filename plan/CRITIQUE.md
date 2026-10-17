@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — a deck preset's "Hand size" reads as the deck total
-- pass: discovery 1 (2026-10-10, bee25b5)
-- viewport: 1280x800
-- category: comprehension
-- observation: Under each deck preset the label "Hand size" sits right before "10 cards", so `deck-10-hand-3` reads as a hand of 10.
-- evidence: `apps/web/src/config/ConfigPage.tsx:506`; reader pass (discovery 1).
-- suggested fix: Put each value on its own labelled line ("Deck: 10 cards", "Hand: 3 cards").
-- source: discovery
-
 ### [LOW] /play — the "reveal 10 tiles" milestone may be unreachable
 - pass: oversight (2026-10-10)
 - viewport: n/a
@@ -154,6 +145,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — a deck preset's "Hand size" reads as the deck total
+- pass: discovery 1 (2026-10-10, bee25b5)
+- viewport: 1280x800
+- category: comprehension
+- observation: Under each deck preset the label "Hand size" sits right before "10 cards", so `deck-10-hand-3` reads as a hand of 10.
+- evidence: `apps/web/src/config/ConfigPage.tsx:506`; reader pass (discovery 1).
+- suggested fix: Put each value on its own labelled line ("Deck: 10 cards", "Hand: 3 cards").
+- source: discovery
+- issue: #127
+- fixed: (this commit)
 
 ### [x] [LOW] /decisions — decided row 7 says "enemy record" and points at an unexplained "row 73"
 - pass: 19 (commit ce4724a)

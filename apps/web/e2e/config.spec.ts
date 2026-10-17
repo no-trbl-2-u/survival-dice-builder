@@ -126,6 +126,10 @@ test('/config: sliders, toggles, and pick lists; a name can only come from the c
   const skills = page.locator('#cfg-player-starterSkills')
   await skills.getByLabel('Cleave', { exact: true }).check()
   await page.getByLabel('Preset 1: card 1', { exact: true }).selectOption('sprint')
+  // A preset names its deck total and its hand apart, so a 10-card deck is not read as the hand.
+  const preset = page.getByRole('region', { name: 'Preset 1' })
+  await expect(preset.getByText(/^Deck: \d+ cards$/)).toBeVisible()
+  await expect(preset.getByLabel('Cards in hand', { exact: true })).toBeVisible()
   // Renaming the preset in use is caught on save, at the field that names it.
   await page.getByRole('region', { name: 'Preset 1' }).getByLabel('Id').fill('mine')
   await page.getByRole('button', { name: 'Save config' }).click()

@@ -565,8 +565,9 @@ function PresetsEditor(
                   onChange={(e) => update(p, { id: e.target.value })}
                 />
               </label>
+              <span className={styles.presetSize}>Deck: {size} cards</span>
               <label>
-                Hand size
+                Cards in hand
                 <input
                   type="number"
                   min={1}
@@ -574,7 +575,6 @@ function PresetsEditor(
                   onChange={(e) => update(p, { handSize: asCount(e.target.value) })}
                 />
               </label>
-              <span className={styles.presetSize}>{size} cards</span>
               <button
                 type="button"
                 disabled={props.value.length === 1}

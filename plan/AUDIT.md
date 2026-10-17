@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-17 (pass 73, cloud tick)
+
+Pass 72's /decisions row 7 wording shipped (bbef6b5). No MED rows are left, so the bias does not apply; four LOW rows tie at 1.8 and the oldest wins: the /config deck preset label (discovery 1). Each preset put "Hand size" and its box right before "10 cards", so a 10-card deck read as a hand of 10. The deck total now comes first as "Deck: 10 cards", and the hand box is labelled "Cards in hand". The config e2e checks both labels.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /config: a deck preset's "Hand size" reads as the deck total (critique LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6
+- next: deck total first as "Deck: N cards", the hand box labelled "Cards in hand"
+- issue: #127
+- fixed: (this commit)
+
+### [ ] [1.8] /tiles: the site legend names the sites but not what they do (critique LOW, pass 19)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6
+- next: a short effect after each site name, from ruleText
+
+### [ ] [1.8] /debug: the Engine console ignores the saved config and does not say so (critique LOW, pass 19)
+- category: external-critique (comprehension)
+- impact: 2
+- ease: 9
+- next: one intro sentence that the console plays the default rules
+
+### [ ] [1.8] /credits: the ambientCG textures are listed under the "Icons" heading (critique LOW, pass 19)
+- category: external-critique (content)
+- impact: 2
+- ease: 9
+- next: move the texture rows under their own heading
+
+### [ ] [1.7] /play: a hex next to an enemy that costs too much is not offered, with no reason (critique LOW, user +0.5)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 4
+- next: when the move cost next to an enemy is above 1, say so in the Move banner
+
 # Site audit — 2026-10-17 (pass 72, cloud tick)
 
 Pass 71's bundle row shipped (fc1a82e). No MED rows are left, so the bias does not apply; the top pending row is the /decisions row 7 wording at 2.0. Its Spec v2 note used the data word "enemy record" and pointed at "row 73" without saying what that row is. The note now says what happens in play: when Combat ends, each enemy next to a structure hits one structure next to it, a grunt for 1 damage and an elite for 3. The reading itself does not change. `docs/DECISIONS.md` is regenerated from the table.
