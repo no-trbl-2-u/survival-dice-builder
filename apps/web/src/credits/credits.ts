@@ -48,6 +48,16 @@ export function assetCredits(text: string): Credit[] {
     )
 }
 
+/** The credits split by register section: icons under `assets/icons/`, textures under `assets/textures/`. */
+export function creditGroups(
+  credits: readonly Credit[],
+): Readonly<{ icons: Credit[]; textures: Credit[] }> {
+  return {
+    icons: credits.filter((c) => c.path.startsWith('assets/icons/')),
+    textures: credits.filter((c) => c.path.startsWith('assets/textures/')),
+  }
+}
+
 /** An attribution split into its parts: "Broadsword icon by Lorc, game-icons.net, CC BY 3.0". */
 export type Attribution = Readonly<{ work: string; author: string; site: string }>
 

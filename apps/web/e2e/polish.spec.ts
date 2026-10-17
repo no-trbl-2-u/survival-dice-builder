@@ -65,6 +65,10 @@ test('/credits lists every icon author and the fonts', async ({ page }) => {
   for (const author of ['Lorc', 'Delapouite', 'Sbed', 'Skoll', 'Faithtoken']) {
     await expect(list).toContainText(author)
   }
+  // The textures have their own heading, not the icon list.
+  await expect(list).not.toContainText('ambientCG')
+  await expect(page.getByRole('heading', { name: 'Textures' })).toBeVisible()
+  await expect(page.getByTestId('credits-textures')).toContainText('ambientCG')
   await expect(page.locator('main')).toContainText('Alfa Slab One')
   // Link names are unique: the work name links to its source (no row of "Source" links).
   await expect(page.getByRole('link', { name: 'Source', exact: true })).toHaveCount(0)

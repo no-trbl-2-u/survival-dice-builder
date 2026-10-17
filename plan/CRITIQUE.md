@@ -126,7 +126,9 @@
 - suggested fix: After each site name add a short effect from ruleText, as the terrain rows do (for example "Gathering node (Gather here for materials)").
 - source: web-fetch
 
-### [LOW] /credits — the ambientCG textures are listed under the "Icons" heading
+## Done
+
+### [x] [LOW] /credits — the ambientCG textures are listed under the "Icons" heading
 - pass: 19 (commit ce4724a)
 - viewport: n/a (web-fetch)
 - category: comprehension
@@ -134,8 +136,8 @@
 - evidence: `apps/web/src/credits/CreditsPage.tsx:61-78` renders every asset under one "Icons" list; `ASSETS.md:40-50` groups them under "## Textures".
 - suggested fix: Split the asset list by path (assets/icons vs assets/textures) and give the textures a "Textures" heading.
 - source: web-fetch
-
-## Done
+- issue: #129
+- fixed: (this commit)
 
 ### [x] [LOW] /debug — the Engine console ignores the saved config and does not say so
 - pass: 19 (commit ce4724a)

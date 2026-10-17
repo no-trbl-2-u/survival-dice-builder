@@ -5,6 +5,7 @@ import styles from './CreditsPage.module.css'
 import {
   assetCredits,
   commonLicense,
+  creditGroups,
   fontCredits,
   parseAttribution,
   SOFTWARE,
@@ -50,23 +51,26 @@ function CreditLine({ credit: a, shared }: Readonly<{ credit: Credit; shared: st
   )
 }
 
-/** `/credits`: every asset in use, generated from ASSETS.md at build time. */
-export function CreditsPage() {
-  const assets = assetCredits(register)
-  const fonts = fontCredits(register)
-  const shared = commonLicense(assets)
+/** One register section: the shared license stated once, then a line per asset. */
+function CreditList({
+  credits,
+  noun,
+  testId,
+}: Readonly<{ credits: readonly Credit[]; noun: string; testId: string }>) {
+  const shared = commonLicense(credits)
+  const all = shared !== null && credits.every((c) => c.license === shared.license)
   return (
-    <div className={styles.page}>
-      <p>Every asset in the game, with its license. Generated from the project's asset register.</p>
-      <h2>Icons</h2>
+    <>
       {shared ? (
         <p>
-          Unless a line says otherwise, every icon is under{' '}
+          {all
+            ? `Every ${noun} is under `
+            : `Unless a line says otherwise, every ${noun} is under `}
           <a href={shared.licenseUrl}>{shared.license}</a>. Each name links to its source.
         </p>
       ) : null}
-      <ul className={styles.list} data-testid="credits-assets">
-        {assets.map((a) => {
+      <ul className={styles.list} data-testid={testId}>
+        {credits.map((a) => {
           const icon = iconFor(a.path)
           return (
             <li key={a.path}>
@@ -76,6 +80,21 @@ export function CreditsPage() {
           )
         })}
       </ul>
+    </>
+  )
+}
+
+/** `/credits`: every asset in use, generated from ASSETS.md at build time. */
+export function CreditsPage() {
+  const { icons, textures } = creditGroups(assetCredits(register))
+  const fonts = fontCredits(register)
+  return (
+    <div className={styles.page}>
+      <p>Every asset in the game, with its license. Generated from the project's asset register.</p>
+      <h2>Icons</h2>
+      <CreditList credits={icons} noun="icon" testId="credits-assets" />
+      <h2>Textures</h2>
+      <CreditList credits={textures} noun="texture" testId="credits-textures" />
       <h2>Fonts</h2>
       <ul className={styles.list}>
         {fonts.map((f) => (

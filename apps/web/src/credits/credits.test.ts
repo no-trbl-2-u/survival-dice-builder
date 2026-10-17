@@ -1,6 +1,12 @@
 import register from '../../../../ASSETS.md?raw'
 import { describe, expect, it } from 'vitest'
-import { assetCredits, commonLicense, fontCredits, parseAttribution } from './credits.ts'
+import {
+  assetCredits,
+  commonLicense,
+  creditGroups,
+  fontCredits,
+  parseAttribution,
+} from './credits.ts'
 
 const iconFiles = Object.keys(import.meta.glob('../../../../assets/icons/*/*.svg')).map((p) =>
   p.replace(/^(\.\.\/)+/, ''),
@@ -37,6 +43,15 @@ describe('credits', () => {
   it('finds the license most icons share', () => {
     expect(commonLicense(assetCredits(register))?.license).toBe('CC BY 3.0')
     expect(commonLicense([])).toBeNull()
+  })
+
+  it('splits the assets into icons and textures, losing none', () => {
+    const credits = assetCredits(register)
+    const { icons, textures } = creditGroups(credits)
+    expect(icons.length + textures.length).toBe(credits.length)
+    expect(textures.map((c) => c.path)).toContain('assets/textures/ambientcg-wood049.webp')
+    expect(icons.some((c) => c.path.startsWith('assets/textures/'))).toBe(false)
+    expect(commonLicense(textures)?.license).toBe('CC0')
   })
 
   it('lists the fonts', () => {
