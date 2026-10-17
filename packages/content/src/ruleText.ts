@@ -371,6 +371,52 @@ export function miniatureLimitText(config: GameConfig): string {
   return `At most ${plural(config.miniatureLimit, 'enemy stands', 'enemies stand')} on the map. Past that, a new grunt or elite turns the grunt nearest the base into an elite instead.`
 }
 
+/** "Move, Gather and Build": a list joined with commas and a final "and". */
+const andList = (items: readonly string[]) =>
+  items.length > 1
+    ? `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`
+    : (items[0] ?? '')
+
+/**
+ * What each player starts a run with: health, action dice, starter Skills, and the starter
+ * deck with its hand size and what each card half is for.
+ *
+ * @rule 4.7-4.10, 6.1, 6.2, 7.7, Table 2, Table 3
+ */
+export function startText(config: GameConfig, content: Pick<Content, 'cards' | 'skills'>): string {
+  const { maxHealth, startingDice, starterSkills } = config.player
+  const skills = starterSkills.map((id) => content.skills.find((s) => s.id === id)?.name ?? id)
+  const preset = config.deck.presets.find((p) => p.id === config.deck.preset)
+  const entries = preset?.cards ?? []
+  const total = entries.reduce((sum, e) => sum + e.quantity, 0)
+  const cards = andList(
+    entries.map(
+      (e) => `${e.quantity} ${content.cards.find((c) => c.id === e.card)?.name ?? e.card}`,
+    ),
+  )
+  const hand = preset ? ` You draw ${preset.handSize} at a time.` : ''
+  return (
+    `Each player starts with ${maxHealth} health, ${plural(startingDice, 'action die', 'action dice')}, and ${plural(skills.length, 'Skill', 'Skills')} your dice can fire (${andList(skills)}). ` +
+    `Your deck holds ${plural(total, 'card', 'cards')}: ${cards}.${hand} ` +
+    'Each card has two halves: the top half is for Prepare, the bottom half for Combat.'
+  )
+}
+
+/**
+ * How a round turns over, and how players share one screen.
+ *
+ * @rule 5.1, 5.3, 16.4, 16.8
+ */
+export function roundText(config: GameConfig): string {
+  const round = 'Each round is Prepare, then Combat, and each phase goes once through your deck.'
+  if (config.players.max === 1) return round
+  const prepare =
+    config.rulings.coopPrepareOrder === 'full-turn'
+      ? 'each player plays a whole deck in turn'
+      : 'you take turns one hand at a time'
+  return `${round} When 2 or more play, you share one screen: in Prepare ${prepare}, and in Combat you take turns too.`
+}
+
 /**
  * How many can play: "1 to 4 players".
  *

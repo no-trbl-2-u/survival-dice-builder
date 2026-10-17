@@ -18,12 +18,14 @@ import {
   playersText,
   returnStarterText,
   revealText,
+  roundText,
   configRuleNote,
   ruleCitation,
   ruleLineFor,
   shopText,
   siegeText,
   spawnText,
+  startText,
   targetOrderText,
   targetText,
   trainingText,
@@ -87,6 +89,32 @@ describe('rule text from config', () => {
     expect(knockoutText(kept)).toBe(
       'A player at 0 health is knocked out and comes back next round with 1/3 of their maximum health, rounded up.',
     )
+  })
+
+  it('start: health, dice, starter Skills, deck and hand size follow config (4.7-4.10, 6.1)', () => {
+    expect(startText(base, defaultContent)).toBe(
+      'Each player starts with 15 health, 1 action die, and 4 Skills your dice can fire (Strike, Shot, Mend and Guard). ' +
+        'Your deck holds 10 cards: 4 Move, 4 Gather, 1 Build and 1 Rest. You draw 5 at a time. ' +
+        'Each card has two halves: the top half is for Prepare, the bottom half for Combat.',
+    )
+    const two = With((c) => ({
+      ...c,
+      player: { ...c.player, maxHealth: 12, startingDice: 2, starterSkills: ['strike'] },
+    }))
+    expect(startText(two, defaultContent)).toMatch(
+      /12 health, 2 action dice, and 1 Skill your dice can fire \(Strike\)/,
+    )
+  })
+
+  it('round: Prepare then Combat, and the co-op turn order follows rulings (5.1, 16.4, 16.8)', () => {
+    expect(roundText(base)).toMatch(/^Each round is Prepare, then Combat/)
+    expect(roundText(base)).toMatch(
+      /in Prepare you take turns one hand at a time, and in Combat you take turns too\./,
+    )
+    const full = With((c) => ({ ...c, rulings: { ...c.rulings, coopPrepareOrder: 'full-turn' } }))
+    expect(roundText(full)).toMatch(/each player plays a whole deck in turn/)
+    const solo = With((c) => ({ ...c, players: { min: 1, max: 1 } }))
+    expect(roundText(solo)).not.toMatch(/take turns/)
   })
 
   it('reveal: the step cost follows tiles.revealMoveCost', () => {

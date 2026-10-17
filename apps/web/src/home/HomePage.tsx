@@ -6,9 +6,11 @@ import {
   levelText,
   playersText,
   revealText,
+  roundText,
   shopText,
   siegeText,
   spawnText,
+  startText,
   targetText,
   trainingText,
 } from '@survival/content'
@@ -21,7 +23,7 @@ const config = defaultContent.config
 
 const lower = (text: string) => text.charAt(0).toLowerCase() + text.slice(1)
 
-/** `/`: what the game is, how a run goes, and the way in. */
+/** `/`: what the game is, what you start with, how a run goes, and the way in. */
 export function HomePage() {
   return (
     <div className={styles.home}>
@@ -33,7 +35,10 @@ export function HomePage() {
         <a className={styles.start} href="/play">
           Start a run
         </a>
+        <h2 className={styles.heading}>What you have</h2>
+        <p>{startText(config, defaultContent)}</p>
         <h2 className={styles.heading}>How a run goes</h2>
+        <p>{roundText(config)}</p>
         <ol className={styles.steps}>
           <li>
             <strong>Prepare:</strong> play the top halves of your cards to move, gather materials,

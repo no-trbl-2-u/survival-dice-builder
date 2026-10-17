@@ -135,15 +135,6 @@
 - suggested fix: Split into short sentences, and put Exchanges in its own sentence: "Before a run, you can choose Exchanges, the Combat in the written rules."
 - source: web-fetch
 
-### [MED] / — a stranger cannot learn what they start with or how a round turns over
-- pass: 19 (commit ce4724a)
-- viewport: n/a (web-fetch)
-- category: comprehension
-- observation: The home page uses Skills, guard, action die, materials and "the top halves of your cards" without saying what a player starts with (deck, hand size, starting Skills, dice), what the bottom halves do, that each round is Prepare then Combat, or how 1 to 4 players take turns on one screen.
-- evidence: / "play the top halves of your cards to move, gather materials, and build Barricades and Towers"; "Put your dice on your Skills one at a time."; "Your guard takes the damage first, then your health." (`apps/web/src/home/HomePage.tsx:36-65`).
-- suggested fix: Before "How a run goes", add a short "What you have" list from ruleText (starting deck and hand size, starting Skills, action dice, guard and health, what each card half does) and one line on round order and player turns.
-- source: web-fetch
-
 ### [LOW] /decisions — decided row 7 says "enemy record" and points at an unexplained "row 73"
 - pass: 19 (commit ce4724a)
 - viewport: n/a (web-fetch)
@@ -181,6 +172,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — a stranger cannot learn what they start with or how a round turns over
+- pass: 19 (commit ce4724a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The home page uses Skills, guard, action die, materials and "the top halves of your cards" without saying what a player starts with (deck, hand size, starting Skills, dice), what the bottom halves do, that each round is Prepare then Combat, or how 1 to 4 players take turns on one screen.
+- evidence: / "play the top halves of your cards to move, gather materials, and build Barricades and Towers"; "Put your dice on your Skills one at a time."; "Your guard takes the damage first, then your health." (`apps/web/src/home/HomePage.tsx:36-65`).
+- suggested fix: Before "How a run goes", add a short "What you have" list from ruleText (starting deck and hand size, starting Skills, action dice, guard and health, what each card half does) and one line on round order and player turns.
+- source: web-fetch
+- issue: #124
+- fixed: (this commit)
 
 ### [x] [MED] /decisions — the Checks list still shows developer to-do notes
 - pass: 19 (commit ce4724a)

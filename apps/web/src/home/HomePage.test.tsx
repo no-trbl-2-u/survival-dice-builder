@@ -12,6 +12,19 @@ describe('HomePage', () => {
     )
   })
 
+  it('says what a player starts with and how a round turns over, before how a run goes', () => {
+    render(<HomePage />)
+    expect(screen.getAllByRole('heading', { name: 'What you have' })[0]).toBeTruthy()
+    const start = screen.getAllByText(/^Each player starts with 15 health, 1 action die/)[0]
+    expect(start?.textContent).toMatch(
+      /Your deck holds 10 cards: 4 Move, 4 Gather, 1 Build and 1 Rest\./,
+    )
+    expect(start?.textContent).toMatch(/the top half is for Prepare, the bottom half for Combat\./)
+    expect(screen.getAllByText(/^Each round is Prepare, then Combat/)[0]?.textContent).toMatch(
+      /When 2 or more play, you share one screen/,
+    )
+  })
+
   it('names both Combat models the start panel offers', () => {
     render(<HomePage />)
     const combat = screen.getAllByText(
