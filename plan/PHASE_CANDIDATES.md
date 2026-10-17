@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-15 at commit cfda2ba
-> Pass count: 12
+> Last pass: 2026-10-17 at commit 8fc13ac
+> Pass count: 13
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -9,6 +9,23 @@
 > `/oversight`. See `skills/expand.md` for the contract.
 
 ## Pending
+
+### [ ] [score 3.5] Milestones a default run can reach: every milestone reachable, or marked out of reach with its reason
+- proposed: 2026-10-17, expand pass 13
+- source signals:
+  - `plan/CRITIQUE.md` pending [LOW] (oversight, 2026-10-10): "Reveal 10 tiles" may be unreachable. Confirmed at HEAD: `config.default.json` has `milestones.tilesRevealed: 10`, `packages/content/data/tiles.json` has 9 tiles, one of them the Base. OPEN-QUESTIONS row 4 proposes 8 and has been `pending-spec` since 2026-10-04.
+  - OPEN-QUESTIONS row 78: "Buy 3 base upgrades" cannot be met under `rulings.buildLevels: "levelled"` (phase 41 bot batch: 0 of 200 runs).
+  - 5658bb3 (audit pass 67) added `milestoneOutOfReach` in `packages/content/src/ruleText.ts:500`, but it answers only `buy-upgrades`; the tile milestone and the /play start-panel line were left for later.
+  - So 2 of the 5 milestones in a default run cannot fire, found one at a time by a stranger and an oversight read, not by a test.
+- rationale: milestones are the run's only goals besides rounds survived. A goal the default game cannot meet tells a tester they played badly when they did not. The fix is not to change the numbers (that is the designer's call on rows 4 and 78) but to make the gap visible and keep it from coming back silently.
+- proposed scope: 1 phase.
+  - `milestoneOutOfReach` covers every milestone kind (tiles from the tile deck less the Base; upgrades as today; level and skill from content), shown on the start panel, /config and the run summary.
+  - A content test: each milestone in `config.default.json` is reachable, or carries an out-of-reach reason; a new milestone with neither fails.
+  - The default sim report lists each milestone's hit rate across the batch, so a 0 of 200 shows up in every report.
+  - Rows 4 and 78 brought to `/oversight` as one question: which numbers the designer wants.
+- estimated phases: 1
+- conflicts: [needs-user-call] on the values only. The phase changes no rule number; rows 4 and 78 stay as they are until the designer decides.
+- ruling audit: Spec v2 17 (milestones), 11.4, 12.1; OPEN-QUESTIONS rows 4 (pending-spec), 45 (decided), 78 (proposed) read. Loop scope: in (rule-text sync, tests, sim report).
 
 ### [ ] [score 4.5] The engagement modal reads on its own: who took the damage, what "in range" counts, when cards play
 - proposed: 2026-10-14, expand pass 11
@@ -27,7 +44,8 @@
 - conflicts: overlaps "The first 60 seconds on a phone" on the 375px fit; this takes the modal, that one keeps the map layout.
 - ruling audit: Spec v2 7.8 (engagement steps), 6.9 (move cost next to enemies); decided rows on skill uses and move cost read. Copy and layout only; no rule changes. Loop scope: in for rule-text sync; the layout half is web (minor).
 - re-evidence (expand pass 12): since pass 11 (fa01c43) 9 more `fix:` commits went to /, /config, /decisions and /tiles copy; none touched `EngagementModal.tsx`. `/iterate` pass 57's top row now scores 2.6, under its own 3.0 bar, so the queue it drains is single LOW strings; the seven modal rows only ship if this is promoted.
-- last re-evidenced: 2026-10-15
+- re-evidence (expand pass 13): 8f7cdbb shipped the "Roll again" row (it turns off and says why when every die is kept), the one modal row to ship since pass 11. The other 17 commits this window went to /, /config, /decisions, /tiles and /debug copy and a bundle split; `EngagementModal.tsx` was not touched again. Audit pass 74's top row now scores 1.8. Still pending: the result text, the range count, card timing, the 375px fit, the mini-map label and the move-cost reason.
+- last re-evidenced: 2026-10-17
 
 ### [ ] [score 4.0] Player text on Spec v2: the site stops calling Spec v1 options "the written rules"
 - proposed: 2026-10-13, expand pass 10
@@ -46,7 +64,8 @@
 - ruling audit: Spec v2 6.9, 6.10, 8.5, 11.7, 18.1, Table 8; OPEN-QUESTIONS 17, 60, 74, 75. No rule changes. Loop scope: in (rule-text sync).
 - progress (expand pass 11): `/iterate` shipped most of the copy half one row at a time: f0ad808, 7dfe010, 091c25e, 3f400ae, 28b4d0b, 61c8ce0, 158a70f, 92101d6, a4e131f (pass 15 rows 1-5 and the pass 13 timing and target rows are done). What is left is the guard: "written rule" is still typed by hand in 6 places (`HomePage.tsx:45`, `ConfigPage.tsx:711`, `DebugPage.tsx:84`, `config.meta.json:280`, `decisions.ts:100`, and a stale "(Spec v1)" comment at `decisions/Inline.tsx:7`), and the pass 13 /config rows (baseline named three ways, "Rules engagements." notes) are still pending. Score lowered from 6.5: the visible harm is mostly gone; the reason to promote is the next rules change.
 - progress (expand pass 12): three more rows of the copy half shipped one at a time: 44df05f (/config rules note names only written-rules sections), 30ef913 (/decisions row 7 gives only the Spec v2 siege reading), b77dc49 (/decisions row 17 says steps of 3). The guard is still missing: "written rule" is typed by hand in `HomePage.tsx:45`, `ConfigPage.tsx:711`, `DebugPage.tsx:84`, `config.meta.json:103,280` and `decisions.ts:100`, and `decisions/Inline.tsx:7` still says "(Spec v1)". Critique pass 17 adds a /config row of the same kind: help texts cite "(open question N)" as plain text, and several of those numbers are not on /decisions; the pass 13 "baseline named three ways" row is still pending. Score held at 4.0.
-- last re-evidenced: 2026-10-15
+- progress (expand pass 13): four more rows of the copy half shipped: ed27a5c (/config links each open-question reading it cites to /decisions), 90858d8 (the baseline named one way), 431fb35 (level steps worded one way), a740b4e (the start panel reads its rule lines from the saved config). The pass 13 and pass 17 /config rows this candidate absorbed are now closed. The guard is still missing: nothing fails when help text calls a non-default value "the written rule". Score held at 4.0; the reason to promote remains the next rules change.
+- last re-evidenced: 2026-10-17
 
 ### [ ] [score 6.0] The table sheets on Spec v2: one-pager facts rewritten, and a test that ties them to config
 - proposed: 2026-10-13, expand pass 10
@@ -231,8 +250,10 @@
 
 ## Considered (below threshold)
 
-- [score 2.0] **/config help as one template** (pass 12). Critique pass 17 and pass 13 leave three /config copy rows pending (plain-text "(open question N)" citations, the baseline named three ways, a deck preset's "Hand size" next to the deck total), after 3 /config fixes shipped this window (2e92a76, 44df05f, d916c91). The citation and baseline rows share a cause with "Player text on Spec v2" and belong in that phase if promoted; the preset label is one line for `/iterate`. Not filed separately.
-- [score 2.0] **Site shell: per-route meta, a 404, a smaller first script** (pass 11). Phase 40 (d1b99ff) shipped per-route description, og:url, canonical and a real 404, so the critique pass 9 [LOW] meta row and the Considered "Unknown paths served with HTTP 200" and "not found page" rows below look stale; `/iterate` or the next critique pass should verify and close them. The 650 kB bundle row (discovery) stands alone and fits `/iterate` (lazy-load the design-tool routes).
+- [shipped] **/config help as one template** (score 2.0 at pass 12): the three rows shipped one at a time: ed27a5c (open-question citations link to /decisions), 90858d8 (baseline named one way), 0426919 (deck total and hand labelled apart). Pass 12 note follows.
+  - (pass 12) Critique pass 17 and pass 13 leave three /config copy rows pending (plain-text "(open question N)" citations, the baseline named three ways, a deck preset's "Hand size" next to the deck total), after 3 /config fixes shipped this window (2e92a76, 44df05f, d916c91). The citation and baseline rows share a cause with "Player text on Spec v2" and belong in that phase if promoted; the preset label is one line for `/iterate`. Not filed separately.
+- [shipped] **Site shell: per-route meta, a 404, a smaller first script** (score 2.0 at pass 11): fc1a82e split every route but home into its own chunk (main script 727 kB to 277 kB). Two critique rows still sit in Pending and look stale: "one meta description and og:url for every route" (pass 9; phase 40 shipped per-route meta) and "the bot cannot measure today's designer changes" (phase 36 shipped the defender policy). The next `/iterate` or critique pass should verify and close them. Pass 11 note follows.
+  - (pass 11) Phase 40 (d1b99ff) shipped per-route description, og:url, canonical and a real 404, so the critique pass 9 [LOW] meta row and the Considered "Unknown paths served with HTTP 200" and "not found page" rows below look stale; `/iterate` or the next critique pass should verify and close them. The 650 kB bundle row (discovery) stands alone and fits `/iterate` (lazy-load the design-tool routes).
 - [score 1.5] **Bot that measures designer changes** (session residue 2026-10-09, still pending in CRITIQUE). Phase 36 (5890e54) shipped the defender policy this row asks for; the row looks stale.
 - [shipped] **/decisions readability** (score 3.0 at pass 10): `/iterate` shipped the key-to-label half in 20ffda3 and the housekeeping half in 0b2ae6a.
 - [score 2.0] **Home page "how a round goes"** (pass 10 at 2.5): 58464ba, 158a70f, 92101d6 and fa01c43 rewrote the same text; the pass 16 Levels and Training rows are single strings for `/iterate`.
