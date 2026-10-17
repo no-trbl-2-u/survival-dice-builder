@@ -126,15 +126,6 @@
 - suggested fix: Split into short sentences, and put Exchanges in its own sentence: "Before a run, you can choose Exchanges, the Combat in the written rules."
 - source: web-fetch
 
-### [LOW] /decisions — decided row 7 says "enemy record" and points at an unexplained "row 73"
-- pass: 19 (commit ce4724a)
-- viewport: n/a (web-fetch)
-- category: voice
-- observation: "Enemy record" is a data word already removed from the home page; "(row 73)" names a row the reader is not told about.
-- evidence: `OPEN-QUESTIONS.md:22` "each enemy record gives its siege damage (7.11, Table 5): at the end of Combat a grunt deals 1 damage and an elite 3 (row 73)".
-- suggested fix: Reword to "At the end of Combat a grunt deals 1 damage and an elite 3 to a structure next to it (7.11, Table 5)."
-- source: web-fetch
-
 ### [LOW] /tiles — the site legend names the sites but not what they do
 - pass: 19 (commit ce4724a)
 - viewport: n/a (web-fetch)
@@ -163,6 +154,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /decisions — decided row 7 says "enemy record" and points at an unexplained "row 73"
+- pass: 19 (commit ce4724a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: "Enemy record" is a data word already removed from the home page; "(row 73)" names a row the reader is not told about.
+- evidence: `OPEN-QUESTIONS.md:22` "each enemy record gives its siege damage (7.11, Table 5): at the end of Combat a grunt deals 1 damage and an elite 3 (row 73)".
+- suggested fix: Reword to "At the end of Combat a grunt deals 1 damage and an elite 3 to a structure next to it (7.11, Table 5)."
+- source: web-fetch
+- issue: #126
+- fixed: (this commit); row 7 says when the siege happens and what each enemy deals
 
 ### [x] [LOW] all pages — the main script is 650 kB, over the build's own 600 kB warning
 - pass: discovery 1 (2026-10-10, bee25b5)

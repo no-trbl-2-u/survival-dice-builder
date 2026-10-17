@@ -113,7 +113,7 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 Readings the designer decided on the last 2 decision dates, newest first. The game plays each reading now, except where a "Now in the written rules" line says what replaced it.
 
 - **7. Enemy damage to structures** (rule 7.11, 9.5, 2026-10-11)
-  - Now in the written rules: each enemy record gives its siege damage (7.11, Table 5): at the end of Combat a grunt deals 1 damage and an elite 3 (row 73).
+  - Now in the written rules: when Combat ends, each enemy next to a structure hits one structure next to it (7.11, Table 5): a grunt deals 1 damage, an elite 3.
 - **30. On the base hex, Build is always a base upgrade (never a defense on an adjacent hex)?** (rule 6.7, 12.1, 2026-10-11) Current engine: on the base hex Build means a base upgrade. **Designer 2026-10-04:** separate Build from Repair; see row 49.
 - **49. May Architect ("Build 2 times") buy tier I and tier II of a track with one card?** (rule 11.4, Table 8, 2026-10-11) Current engine: yes, each Build is a separate purchase. **Designer 2026-10-04:** separate Build from Repair. Repair restores structures; Build is levelled: Build I builds level 1 structures you can afford, Build II builds level 1 or 2 structures, and so on. To write into Spec v2.
 - **50. Every open Skill supply is empty at a draft** (rule 11.8, 2026-10-11) Current engine: no draft that round. **Designer 2026-10-04:** the Skills are placeholders still to design; revisit with the Skill design.

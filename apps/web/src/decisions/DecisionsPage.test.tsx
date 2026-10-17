@@ -79,7 +79,9 @@ describe('DecisionsPage', () => {
     const { container } = render(<DecisionsPage />)
     const note = (n: number) =>
       container.querySelector(`[data-decided="${n}"] [data-testid="spec-v2"]`)?.textContent
-    expect(note(7)).toMatch(/^Now in the written rules: .*siege damage/)
+    expect(note(7)).toMatch(/^Now in the written rules: .*a grunt deals 1 damage, an elite 3\./)
+    // Row 7 reads for a visitor: no data words, no bare row number (critique pass 19).
+    expect(note(7)).not.toMatch(/enemy record|row \d/)
     expect(note(55)).toContain('currency')
     expect(note(72)).toContain('Combat is engagements')
     expect(note(76)).toBeUndefined()
