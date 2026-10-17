@@ -1,7 +1,7 @@
 # Critique log
 
-> Last pass: 2026-10-16 at commit 8f7cdbb
-> Pass count: 18
+> Last pass: 2026-10-17 at commit ce4724a
+> Pass count: 19
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
@@ -133,6 +133,60 @@
 - observation: The Combat step joins three clauses with semicolons and colons, and names the "start panel" and "Exchanges" before the visitor has seen either. This is not the short, plain style set in bearings.
 - evidence: `apps/web/src/home/HomePage.tsx:25-29` "Put your dice on your Skills one at a time; the enemy dice hit last, after your guard. Or choose Exchanges, the Combat in the written rules, on the start panel: in each exchange you roll, ..."
 - suggested fix: Split into short sentences, and put Exchanges in its own sentence: "Before a run, you can choose Exchanges, the Combat in the written rules."
+- source: web-fetch
+
+### [MED] / — a stranger cannot learn what they start with or how a round turns over
+- pass: 19 (commit ce4724a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The home page uses Skills, guard, action die, materials and "the top halves of your cards" without saying what a player starts with (deck, hand size, starting Skills, dice), what the bottom halves do, that each round is Prepare then Combat, or how 1 to 4 players take turns on one screen.
+- evidence: / "play the top halves of your cards to move, gather materials, and build Barricades and Towers"; "Put your dice on your Skills one at a time."; "Your guard takes the damage first, then your health." (`apps/web/src/home/HomePage.tsx:36-65`).
+- suggested fix: Before "How a run goes", add a short "What you have" list from ruleText (starting deck and hand size, starting Skills, action dice, guard and health, what each card half does) and one line on round order and player turns.
+- source: web-fetch
+
+### [MED] /decisions — the Checks list still shows developer to-do notes
+- pass: 19 (commit ce4724a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: The earlier fix dropped only the `.env` and token rows. Checks still name a slash command, a test file, phase numbers, a repo README and an internal design doc, none of which a visitor can act on. One check still calls the 9 tiles "proposed" with a "best before phase 7" deadline, though /tiles says the Play page builds its map from them.
+- evidence: `docs/DECISIONS.md:141` "`touch.spec.ts` covers this with emulated touch only. File anything odd with `/jot`."; `:144` "Review the 9 proposed tiles ... Best before phase 7"; `:146` "`spec/README.md` says the canonical spec is the Claude design doc"; `:149` "Interim balance after phase 20".
+- suggested fix: Show only checks a designer or playtester can do from the site, in player words; close the tiles and source-sync checks in AUDIT, and drop phase numbers, file names and slash commands from the rest.
+- source: web-fetch
+
+### [LOW] /decisions — decided row 7 says "enemy record" and points at an unexplained "row 73"
+- pass: 19 (commit ce4724a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: "Enemy record" is a data word already removed from the home page; "(row 73)" names a row the reader is not told about.
+- evidence: `OPEN-QUESTIONS.md:22` "each enemy record gives its siege damage (7.11, Table 5): at the end of Combat a grunt deals 1 damage and an elite 3 (row 73)".
+- suggested fix: Reword to "At the end of Combat a grunt deals 1 damage and an elite 3 to a structure next to it (7.11, Table 5)."
+- source: web-fetch
+
+### [LOW] /tiles — the site legend names the sites but not what they do
+- pass: 19 (commit ce4724a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The terrain legend now gives each terrain's effect on moves, but Base, Gathering node, Spawn node and Elite spawn node have no text after them. Neither /tiles nor / says how an elite spawn node differs from a spawn node.
+- evidence: `apps/web/src/tiles/TileSheet.tsx:62-65` renders only `SITE_LABEL[s]`.
+- suggested fix: After each site name add a short effect from ruleText, as the terrain rows do (for example "Gathering node (Gather here for materials)").
+- source: web-fetch
+
+### [LOW] /credits — the ambientCG textures are listed under the "Icons" heading
+- pass: 19 (commit ce4724a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: The five CC0 textures (wood, planks, felt, paper, brass) sit in the Icons list, right after "every icon is under CC BY 3.0". The register has its own Textures section; the page has no Textures heading.
+- evidence: `apps/web/src/credits/CreditsPage.tsx:61-78` renders every asset under one "Icons" list; `ASSETS.md:40-50` groups them under "## Textures".
+- suggested fix: Split the asset list by path (assets/icons vs assets/textures) and give the textures a "Textures" heading.
+- source: web-fetch
+
+### [LOW] /debug — the Engine console ignores the saved config and does not say so
+- pass: 19 (commit ce4724a)
+- viewport: n/a (web-fetch)
+- category: comprehension
+- observation: /play starts runs from the config saved on /config; /debug always plays the default rules. A playtester who changes a value and checks it here sees the old rule.
+- evidence: `apps/web/src/debug/DebugPage.tsx:28` `createGame(defaultContent.config, msg.seed)` vs `apps/web/src/play/PlayPage.tsx:100` `loadConfig(store)`.
+- suggested fix: Add "This console uses the default rules, not your saved config." to the intro (or start from the saved config as /play does).
 - source: web-fetch
 
 ## Done
