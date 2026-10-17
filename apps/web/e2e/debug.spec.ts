@@ -29,6 +29,7 @@ test('/debug: clicking the first legal action 30 times plays the engine with no 
 
 test('/debug: a new seed starts a new run', async ({ page }) => {
   await page.goto('/debug')
+  await expect(page.getByText('It always plays the standard rules')).toBeVisible()
   await page.getByLabel('Seed').fill('42')
   await page.getByRole('button', { name: 'New run' }).click()
   await expect(page.getByText('0 actions')).toBeVisible()

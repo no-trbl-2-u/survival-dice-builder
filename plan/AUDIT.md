@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-17 (pass 74, cloud tick)
+
+Pass 73's /config deck preset row shipped (0426919). No MED rows are left, so the bias does not apply; three pass-19 LOW rows tie at 1.8 and the cheapest wins: the /debug intro. /play starts a run from the config saved on /config, but the Engine console always plays the standard rules and did not say so. The intro now says it plays the standard rules, not a config saved on Config, and links there. The debug e2e checks the sentence. Every row scores under 3.0 and the expand gate is closed (19 commits, under 48h since pass 12), so the loop keeps draining LOW critique rows.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /debug: the Engine console ignores the saved config and does not say so (critique LOW, pass 19)
+- category: external-critique (comprehension)
+- impact: 2
+- ease: 9
+- next: one intro sentence that the console plays the standard rules
+- issue: #128
+- fixed: (this commit)
+
+### [ ] [1.8] /tiles: the site legend names the sites but not what they do (critique LOW, pass 19)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6
+- next: a short effect after each site name, from ruleText
+
+### [ ] [1.8] /credits: the ambientCG textures are listed under the "Icons" heading (critique LOW, pass 19)
+- category: external-critique (content)
+- impact: 2
+- ease: 9
+- next: move the texture rows under their own heading
+
+### [ ] [1.7] /play: a hex next to an enemy that costs too much is not offered, with no reason (critique LOW, user +0.5)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 4
+- next: when the move cost next to an enemy is above 1, say so in the Move banner
+
+### [ ] [1.5] /: the Combat step is one long sentence chain (critique LOW, pass 19)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: split the Combat step into short sentences
+
 # Site audit — 2026-10-17 (pass 73, cloud tick)
 
 Pass 72's /decisions row 7 wording shipped (bbef6b5). No MED rows are left, so the bias does not apply; four LOW rows tie at 1.8 and the oldest wins: the /config deck preset label (discovery 1). Each preset put "Hand size" and its box right before "10 cards", so a 10-card deck read as a hand of 10. The deck total now comes first as "Deck: 10 cards", and the hand box is labelled "Cards in hand". The config e2e checks both labels.

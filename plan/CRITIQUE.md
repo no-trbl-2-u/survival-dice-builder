@@ -135,7 +135,9 @@
 - suggested fix: Split the asset list by path (assets/icons vs assets/textures) and give the textures a "Textures" heading.
 - source: web-fetch
 
-### [LOW] /debug — the Engine console ignores the saved config and does not say so
+## Done
+
+### [x] [LOW] /debug — the Engine console ignores the saved config and does not say so
 - pass: 19 (commit ce4724a)
 - viewport: n/a (web-fetch)
 - category: comprehension
@@ -143,8 +145,8 @@
 - evidence: `apps/web/src/debug/DebugPage.tsx:28` `createGame(defaultContent.config, msg.seed)` vs `apps/web/src/play/PlayPage.tsx:100` `loadConfig(store)`.
 - suggested fix: Add "This console uses the default rules, not your saved config." to the intro (or start from the saved config as /play does).
 - source: web-fetch
-
-## Done
+- issue: #128
+- fixed: (this commit)
 
 ### [x] [LOW] /config — a deck preset's "Hand size" reads as the deck total
 - pass: discovery 1 (2026-10-10, bee25b5)

@@ -81,7 +81,8 @@ export function DebugPage() {
     <div className={styles.page}>
       <p>
         Play the rules engine one action at a time. Numbers in [brackets] are sections of the{' '}
-        <a href={rulesUrl}>written rules</a>.
+        <a href={rulesUrl}>written rules</a>. It always plays the standard rules, not a config saved
+        on <a href="/config">Config</a>.
       </p>
       <form
         className={styles.controls}
