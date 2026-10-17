@@ -24,6 +24,7 @@ import {
   ruleLineFor,
   shopText,
   siegeText,
+  siteText,
   spawnText,
   startText,
   targetOrderText,
@@ -127,6 +128,20 @@ describe('rule text from config', () => {
     expect(spawnText(base)).toBe("Each new tile's spawn nodes add enemies at every Combat.")
     const late = With((c) => ({ ...c, spawn: { ...c.spawn, newTileDelay: 2 } }))
     expect(spawnText(late)).toMatch(/from 2 rounds after it is revealed/)
+  })
+
+  it('sites: Table 1 functions, with spawn options named (rows 64, 66, 68, 70)', () => {
+    expect(siteText('base', base)).toBe('the players defend it; upgrades and cards are bought here')
+    expect(siteText('gathering-node', base)).toBe('a Gather card here gets its materials, once')
+    expect(siteText('spawn-node', base)).toBe('gets 1 grunt at each Combat')
+    expect(siteText('elite-spawn-node', base)).toBe('gets 1 elite at each Combat')
+    const varied = With((c) => ({
+      ...c,
+      spawn: { ...c.spawn, perSeat: true, newTileDelay: 1, nodeRange: 3 },
+    }))
+    expect(siteText('spawn-node', varied)).toBe(
+      'gets grunts at each Combat, from 1 round after its tile is revealed, if a figure or structure is within 3 hexes',
+    )
   })
 
   it('Gather: node rule and off-node amount follow config (rows 59, 67)', () => {

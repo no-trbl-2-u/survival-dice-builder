@@ -1,5 +1,6 @@
 import type { Content } from './load.ts'
 import type { GameConfig } from './schemas/config.ts'
+import type { Site } from './schemas/tiles.ts'
 
 /**
  * Rule text from one source: every rule phrase the site shows, built from a config. Components
@@ -56,6 +57,32 @@ export function spawnText(config: GameConfig): string {
       ? 'at every Combat'
       : `at every Combat from ${plural(delay, 'round', 'rounds')} after it is revealed`
   return `Each new tile's spawn nodes add enemies ${when}.`
+}
+
+/**
+ * What a printed site does, for the site legend: "gets 1 grunt at each Combat".
+ *
+ * @rule Table 1, 6.7, 7.3, OPEN-QUESTIONS rows 59, 64, 66, 68, 70
+ */
+export function siteText(site: Site, config: GameConfig): string {
+  if (site === 'base') return 'the players defend it; upgrades and cards are bought here'
+  if (site === 'gathering-node')
+    return config.rulings.gatherNeedsNode
+      ? 'a Gather card here gets its materials, once'
+      : 'the first Gather card here spends it'
+  const s = config.spawn
+  const one = s.rampEvery === null && !s.perSeat
+  const enemy = site === 'spawn-node' ? 'grunt' : 'elite'
+  const who = one ? `1 ${enemy}` : `${enemy}s`
+  const delay =
+    s.newTileDelay > 0
+      ? `, from ${plural(s.newTileDelay, 'round', 'rounds')} after its tile is revealed`
+      : ''
+  const range =
+    s.nodeRange === null
+      ? ''
+      : `, if a figure or structure is within ${plural(s.nodeRange, 'hex', 'hexes')}`
+  return `gets ${who} at each Combat${delay}${range}`
 }
 
 /**

@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-17 (pass 76, cloud tick)
+
+Pass 75's /credits textures row shipped (ad64856). No MED rows are left, so the bias does not apply; the top LOW row is the /tiles site legend at 1.8. The legend named Base, Gathering node, Spawn node and Elite spawn node with nothing after them, while each terrain row says what it does to moves. Each site now carries its Table 1 function in brackets, built by a new `siteText` in ruleText from config, so the spawn options (rows 64, 66, 68, 70) and the Gather node ruling change the wording with them. A ruleText test covers the default and a varied spawn config; the TileSheet unit test and the tiles e2e check the legend text. Every row scores under 3.0 and the expand gate is closed (pass 13 ran this morning), so the loop keeps draining LOW critique rows.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /tiles: the site legend names the sites but not what they do (critique LOW, pass 19)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6
+- next: a short effect after each site name, from ruleText
+- issue: #130
+- fixed: (this commit)
+
+### [ ] [1.7] /play: a hex next to an enemy that costs too much is not offered, with no reason (critique LOW, user +0.5)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 4
+- next: when the move cost next to an enemy is above 1, say so in the Move banner
+
+### [ ] [1.5] /: the Combat step is one long sentence chain (critique LOW, pass 8)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: split the Combat step into short sentences
+
+### [ ] [1.2] /credits: the intro describes how the page is built (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 2
+- ease: 6
+- next: drop "Generated from the project's asset register" from the intro
+
+### [ ] [1.2] /play: the result does not say who took the damage or their health after (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 4
+- next: name each damaged enemy with its health left; mark a defeated enemy's dice
+
 # Site audit — 2026-10-17 (pass 75, cloud tick)
 
 Pass 74's /debug intro row shipped (8fc13ac). No MED rows are left, so the bias does not apply; two pass-19 LOW rows tie at 1.8 and the cheapest wins: the /credits textures. The five CC0 ambientCG textures sat in the Icons list, right after "every icon is under CC BY 3.0". The page now splits the register by path: icons under Icons, textures under their own Textures heading, each list stating its shared license once. A unit test checks no asset is lost in the split; the credits e2e checks the textures are out of the icon list. Every row scores under 3.0 and the expand gate is closed (pass 13 ran this morning), so the loop keeps draining LOW critique rows.

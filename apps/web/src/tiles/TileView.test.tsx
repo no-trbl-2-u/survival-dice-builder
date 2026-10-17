@@ -93,11 +93,16 @@ describe('TileSheet terrain legend', () => {
 })
 
 describe('TileSheet site legend', () => {
-  it('shows each of the 4 site icons with its name', () => {
+  it('Table 1: shows each of the 4 site icons with its name and what it does', () => {
     const { container } = render(<TileSheet />)
     const legend = container.querySelector('[aria-label="Site legend"]')!
     expect(legend.querySelectorAll('li')).toHaveLength(4)
     expect(legend.querySelectorAll('svg[data-icon]')).toHaveLength(4)
-    expect(legend.textContent).toBe('BaseGathering nodeSpawn nodeElite spawn node')
+    expect([...legend.querySelectorAll('li')].map((li) => li.textContent)).toEqual([
+      'Base (the players defend it; upgrades and cards are bought here)',
+      'Gathering node (a Gather card here gets its materials, once)',
+      'Spawn node (gets 1 grunt at each Combat)',
+      'Elite spawn node (gets 1 elite at each Combat)',
+    ])
   })
 })

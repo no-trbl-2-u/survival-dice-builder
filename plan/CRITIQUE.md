@@ -117,7 +117,9 @@
 - suggested fix: Split into short sentences, and put Exchanges in its own sentence: "Before a run, you can choose Exchanges, the Combat in the written rules."
 - source: web-fetch
 
-### [LOW] /tiles — the site legend names the sites but not what they do
+## Done
+
+### [x] [LOW] /tiles — the site legend names the sites but not what they do
 - pass: 19 (commit ce4724a)
 - viewport: n/a (web-fetch)
 - category: comprehension
@@ -125,8 +127,8 @@
 - evidence: `apps/web/src/tiles/TileSheet.tsx:62-65` renders only `SITE_LABEL[s]`.
 - suggested fix: After each site name add a short effect from ruleText, as the terrain rows do (for example "Gathering node (Gather here for materials)").
 - source: web-fetch
-
-## Done
+- issue: #130
+- fixed: (this commit)
 
 ### [x] [LOW] /credits — the ambientCG textures are listed under the "Icons" heading
 - pass: 19 (commit ce4724a)

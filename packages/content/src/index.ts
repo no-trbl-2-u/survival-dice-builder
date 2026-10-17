@@ -97,6 +97,7 @@ export {
   ruleLineFor,
   shopText,
   siegeText,
+  siteText,
   spawnText,
   startText,
   targetOrderText,
