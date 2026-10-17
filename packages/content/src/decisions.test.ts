@@ -106,6 +106,7 @@ describe('decisions', () => {
       [
         '- [needs-user-call] **Replace `GH_TOKEN` in `.env`.** GitHub rejects the current token.',
         "- [needs-user-call] **Local keys.** Add them to the main checkout's settings.",
+        '- [needs-user-call] [ops] **Sync the spec.** Re-export `spec/`.',
         '- [needs-user-call] **Review the tiles.** Open /tiles.',
       ].join('\n'),
     )
@@ -113,6 +114,14 @@ describe('decisions', () => {
     expect(
       parseUserCalls(fs.readFileSync(new URL('plan/AUDIT.md', root), 'utf-8')),
     ).not.toContainEqual(expect.objectContaining({ body: expect.stringMatching(/\.env|token/i) }))
+  })
+
+  it('words the public checks for a visitor: no file names, phase numbers or slash commands', () => {
+    for (const c of parseUserCalls(fs.readFileSync(new URL('plan/AUDIT.md', root), 'utf-8'))) {
+      const text = `${c.title} ${c.body}`
+      expect(text).not.toMatch(/`|\.(md|ts|json|svg)\b|\bphase \d|\/(jot|oversight)\b|pnpm/i)
+      expect(text).not.toMatch(/proposed tiles|best before/i)
+    }
   })
 
   it('writes both sections', () => {

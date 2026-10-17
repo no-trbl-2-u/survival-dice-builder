@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-17 (pass 69, cloud tick)
+
+Critique pass 19 (396b79e) filed two MED rows, so the MED bias applies again. The top row is the /decisions Checks list (5.3): its needs-user-call rows still named test files, phase numbers, slash commands and the repo README. Each check row in this file is reworded in player words, keeping what the designer has to do; the tiles check drops "proposed" and the phase 7 deadline, and the source-of-truth sync is tagged `[ops]`, which keeps it here for the operator and off the public list (14 checks become 13). A new test keeps file names, phase numbers and slash commands off the public checks.
+
+## Top 5 findings (scored)
+
+### [x] [5.3] /decisions: the Checks list still shows developer to-do notes (critique MED, pass 19)
+- category: external-critique (voice)
+- impact: 5
+- ease: 7
+- next: reword the needs-user-call rows; `[ops]` tag keeps operator rows off the public list
+- issue: #123
+- fixed: (this commit)
+
+### [ ] [4.5] /: a stranger cannot learn what they start with or how a round turns over (critique MED, pass 19)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 5
+- next: a short "What you have" list from ruleText before "How a run goes"
+
+### [ ] [2.0] all pages: the main script is 727 kB, over the build's own 600 kB warning (critique LOW)
+- category: external-critique (perf)
+- impact: 4
+- ease: 5
+- next: split the /config, /decisions, /debug, /tiles routes into lazy chunks
+
+### [ ] [2.0] /decisions: decided row 7 says "enemy record" and points at an unexplained "row 73" (critique LOW, pass 19)
+- category: external-critique (voice)
+- impact: 2
+- ease: 10
+- next: reword row 7's reading in `OPEN-QUESTIONS.md`
+
+### [ ] [1.8] /config: a deck preset's "Hand size" reads as the deck total (critique LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6
+- next: relabel the preset field and say what it counts
+
 # Site audit — 2026-10-17 (pass 68, cloud tick)
 
 Pass 67's milestone row shipped (5658bb3). No MED rows remain, so the MED bias applies to nothing. The top row is the /tiles terrain legend (2.1). Terrain only matters for entering a hex (rule 3.4; nothing in the engine reads Forest, Hills or Wasteland), so each legend item now says "no effect on moves" or "impassable", read from the content's IMPASSABLE list. Every row scores under 3.0 and the expand gate is closed (12 commits, under 48h since pass 12), so the loop keeps draining LOW critique rows.
@@ -2490,20 +2528,20 @@ outside the top 5 and is the core of that candidate.
 
 ## Needs user call (from adoption, 2026-10-02)
 
-- [needs-user-call] **Write the Event Calendar experiment spec (2026-10-11).** The designer's planned experiment for more consistent runs; it may replace the spawn cadence (Spec v2 ruling 14) and the gathering-node rule (ruling 9). See `docs/spec-v2-draft/RULINGS.md`.
+- [needs-user-call] **Write the Event Calendar experiment (2026-10-11).** The designer's planned experiment for more consistent runs; it may replace the spawn cadence (Spec v2 ruling 14) and the gathering-node rule (ruling 9).
 - [needs-user-call] **Replace `GH_TOKEN` and add `GH_REPO` to the main checkout's `.env` (2026-10-09).** GitHub rejects the current token (401 Bad credentials), and `GH_REPO` is missing (`GH_REPO=no-trbl-2-u/survival-dice-builder`). Until then `/triage` and the phase mirror cannot run; the phase 23 and 24 mirror issues were never opened (ship commits f4ebbce and 09780d9). Worktrees now read the main checkout's `.env` (a9a44fe), so one fix covers every worktree.
-- [needs-user-call] **Try card drag on a real phone (phase 24 follow-up).** Open https://survival-dice-builder.pages.dev/play on a phone, start an engagement, and drag a card up onto the felt; also swipe the hand sideways. `touch.spec.ts` covers this with emulated touch only. File anything odd with `/jot`.
-- [needs-user-call] **Reset `/config` once (2026-10-09).** Saved configs are not migrated: a config saved before today keeps `combat.model: "exchange"` if it was set, and keeps `combat.moveCostNextToEnemy: 2`. Reset picks up engagements by default and no move surcharge. (The draft pool applies to old configs anyway: the key is new.)
+- [needs-user-call] **Try card drag on a real phone.** Open https://survival-dice-builder.pages.dev/play on a phone, start an engagement, and drag a card up onto the felt; also swipe the hand sideways. The automated tests only emulate touch, so note anything odd.
+- [needs-user-call] **Reset /config once (2026-10-09).** Saved configs are not updated: a config saved before 2026-10-09 can still set Combat to Exchanges and a move cost of 2 next to an enemy. Reset picks up engagements and a cost of 1. (The draft pool applies to old configs anyway.)
 - [resolved 2026-10-09, phase 23: (c)] **/play start panel Combat default (critique pass 6, 2026-10-07).** The start panel always starts on Engagements (673198c, the designer's playtest choice), while `combat.model` defaults to "exchange" and /config's setting only reaches `?seed=` runs. Following the saved config would make Exchanges the panel default; keeping Engagements means /config's choice is ignored there. Decide which: (a) keep Engagements as the panel default, (b) follow `combat.model`, or (c) make "engage" the config default and follow it. The hints and plain option names shipped (issue #41).
 - [needs-user-call] **Local `.env` keys.** Add `DEPLOY_PROVIDER=cloudflare-pages` and `CF_PAGES_PROJECT=survival-dice-builder` to `.env` (both are also defaulted in `scripts/deploy-check.mjs`, so this is optional). Optional: `NOTIFY_NTFY_TOPIC` for the pager before any unattended run.
-- [needs-user-call] **Designer reviews (async, never blocking):** tile layouts at `/tiles` (phase 4; best reviewed before phase 7), the bot batch distribution (phase 9), the "2 people identify at a glance" check (phase 10), and the playtest sessions themselves (phase 16). The loop ships around them; review via `/oversight`. Every open reading and check is listed at `/decisions` (also `docs/DECISIONS.md`).
-- [needs-user-call] **Review the 9 proposed tiles** at https://survival-dice-builder.pages.dev/tiles (phase 4, 2026-10-03). Layouts live in `packages/content/data/tiles.json`; record changes in `OPEN-QUESTIONS.md`. Best before phase 7, whose full-run golden replay locks the layouts in.
-- [needs-user-call] **Bot batch distribution (phase 9, 2026-10-03).** 200 default-config bot runs: median end round 14 (band 8-14, top edge), middle half 10-17, no run before round 9 (first wave), 0 runs reached level 5. Inside the band, so nothing is filed against the rules; review `docs/reports/phase-9-bot-batch.md` when convenient.
-- [needs-user-call] **Art direction glance check (phase 10, 2026-10-03).** Show `design/mockups/main-screen.svg` (or the live UI after phase 11) to 2 people: can each name card orientation, enemy type, and health at a glance? Record the answers; fixes go into `design/ART-GUIDE.md`. Not blocking.
-- [needs-user-call] **Source of truth sync.** `spec/README.md` says the canonical spec is the Claude design doc (tabs "Spec v1 — Rules", "Build brief", "Build plan"). The loop treats `spec/` in this repo as authoritative; re-export to `spec/` when the doc changes.
-- [needs-user-call] **Visual polish feel check (phase 15, 2026-10-03).** On a mid-range laptop, open `/play`, turn on "3D dice", and play a few exchanges. Check that the frame rate feels smooth (headless Chromium: about 17 ms per frame, the canvas's `data-frame-ms`). Check that the synthesized sounds are pleasant at their low volume. Recorded sounds (Kenney CC0 packs, still `candidate` in `ASSETS.md`) are a later swap if wanted. Not blocking.
-- [needs-user-call] **Spec v2 design work (2026-10-04).** The core loop is settled in `docs/design/core-loop-v2.md`; fold it into `spec/`. Still to design: the new tiles (row 57), knockout values (row 55), the elite structure-damage rule (row 7), per-card heal targets (row 12), the real Skills with upgraded tiers (rows 9, 46, 50), Build versus Repair levels (rows 30, 49), the milestone set (row 4), and later scenarios (row 58). The experience curve waits on the phase 22 report (row 17). Each is listed at `/decisions`.
-- [needs-user-call] **Interim balance after phase 20 (2026-10-04).** Under the phase 20 rules the 200-run bot batch ends at a median of round 5 (middle half 4-6), against round 14 before. 199 of 200 runs end when the player falls: the bot walks onto new tiles, and their enemies appear around it at the next Combat. Phase 21 replaces the run end at 0 health with knockout and changes spawning and targeting, so re-measure then. A run where nobody steps off the Base tile has no enemies and never ends until phase 21 (row 62). Not blocking.
-- [needs-user-call] **Balance after phase 21 (2026-10-04).** Under the core loop v2 rules (no wave track, every node spawns at every Combat, structure-first targeting, knockout) the 200-run bot batch ends at a median of round 6 (middle half 6-8, range 5-12), against the 8-14 band. All 200 runs end when the base falls (0 errors, 0 stalled); median level 2; 57 runs buy 3 upgrades, 35 defeat an elite, 22 survive to round 10. The bot is weak (it builds few defenses and never defends the base on purpose), so this is a floor, not a verdict. Phase 22 compares experience curves, Skill caps, and spawn pressure on top of these rules. Not blocking. **Phase 22 (2026-10-05):** the comparisons are in `docs/reports/phase-22-experiments.md`; the default batch is unchanged (median 6), Gather off a node for 1 (row 67) alone gives median 9, and the combined proposed set gives median 8 (middle half 8-9).
-- [needs-user-call] **Structural v2 questions (2026-10-05).** `OPEN-QUESTIONS.md` rows 63-70 record issues no card, Skill, elite, or structure can fix: no clock (63), map-state difficulty (64), exchange count coupled to deck size (65), the explorer pinned by same-round spawns (66), the fixed material budget (67), co-op pressure (68), the Base tile as a safe firing position (69), and table upkeep (70). Phase 22 (2026-10-05) built one proposed reading per row as a config option (all default off) and measured each: `docs/reports/phase-22-experiments.md` recommends turning on rows 63, 65, 66, and 67, keeping 68 off, and playtesting 64, 69, and 70. **The designer decides each row** (set the option on /config to try it, then mark the row decided). Not blocking the loop.
-- [needs-user-call] **Run the playtests (phase 16, 2026-10-03).** The kit is ready in `docs/playtests/`: `PROTOCOL.md` (one-page script), `SURVEY.md`, and the `REPORT.md` template. Target: 5 solo runs and 3 co-op sessions. Drop each run file into `docs/playtests/runs/`, then run `pnpm sim -- playtests`. The filled report feeds Spec v2 and the scenarios decision (rules section 19). The loop cannot playtest.
+- [needs-user-call] **Designer reviews (never blocking):** the tile layouts at /tiles, the bot batch results, the glance check, and the playtest sessions. The game keeps being built around them. Every open reading and check is listed at /decisions.
+- [needs-user-call] **Review the 9 tiles** at https://survival-dice-builder.pages.dev/tiles (2026-10-03). The Play page builds its map from them; a layout change goes in as a rule reading.
+- [needs-user-call] **Bot batch results (2026-10-03).** 200 bot runs on the default rules: median end round 14 (band 8-14, top edge), middle half 10-17, no run before round 9 (first wave), 0 runs reached level 5. Inside the band, so nothing is filed against the rules; read the bot batch report when convenient.
+- [needs-user-call] **Art direction glance check (2026-10-03).** Show the Play page to 2 people: can each name card orientation, enemy type, and health at a glance? Record the answers in the art guide. Not blocking.
+- [needs-user-call] [ops] **Source of truth sync.** `spec/README.md` says the canonical spec is the Claude design doc (tabs "Spec v1 — Rules", "Build brief", "Build plan"). The loop treats `spec/` in this repo as authoritative; re-export to `spec/` when the doc changes.
+- [needs-user-call] **Visual polish feel check (2026-10-03).** On a mid-range laptop, open /play, turn on "3D dice", and play a few engagements. Check that the frame rate feels smooth (about 17 ms per frame in automated tests) and that the sounds are pleasant at their low volume. Recorded sounds (free Kenney packs) can replace them later if wanted. Not blocking.
+- [needs-user-call] **Spec v2 design work (2026-10-04).** The core loop is settled and in the written rules. Still to design: the new tiles (row 57), knockout values (row 55), the elite structure-damage rule (row 7), per-card heal targets (row 12), the real Skills with upgraded tiers (rows 9, 46, 50), Build versus Repair levels (rows 30, 49), the milestone set (row 4), and later scenarios (row 58). The experience curve waits on the experiments report (row 17). Each is listed at /decisions.
+- [needs-user-call] **Interim balance (2026-10-04).** Under that day's first rule set the 200-run bot batch ended at a median of round 5 (middle half 4-6), against round 14 before. 199 of 200 runs ended when the player fell: the bot walked onto new tiles, and their enemies appeared around it at the next Combat. The next rule set replaced the run end at 0 health with knockout and changed spawning and targeting. Not blocking.
+- [needs-user-call] **Balance under core loop v2 (2026-10-04).** With no wave track, every node spawning at every Combat, structure-first targeting and knockout, the 200-run bot batch ends at a median of round 6 (middle half 6-8, range 5-12), against the 8-14 band. All 200 runs end when the base falls; median level 2; 57 runs buy 3 upgrades, 35 defeat an elite, 22 survive to round 10. The bot is weak (it builds few defenses and never defends the base on purpose), so this is a floor, not a verdict. **Experiments (2026-10-05):** the default batch is unchanged (median 6), Gather off a node for 1 (row 67) alone gives median 9, and the combined proposed set gives median 8 (middle half 8-9). Not blocking.
+- [needs-user-call] **Structural v2 questions (2026-10-05).** Rule readings 63-70 record issues no card, Skill, elite, or structure can fix: no clock (63), map-state difficulty (64), exchange count coupled to deck size (65), the explorer pinned by same-round spawns (66), the fixed material budget (67), co-op pressure (68), the Base tile as a safe firing position (69), and table upkeep (70). Each has a proposed reading as an option on /config (all off by default), measured by the bot: the experiments report recommends turning on 63, 65, 66, and 67, keeping 68 off, and playtesting 64, 69, and 70. **The designer decides each row** (set the option on /config to try it, then mark the row decided). Not blocking.
+- [needs-user-call] **Run the playtests (2026-10-03).** The kit is ready: a one-page script, a survey, and a report template. Target: 5 solo runs and 3 co-op sessions; the script says how to file each run. The filled report feeds the scenarios decision (rules section 19). Only people can playtest.

@@ -287,12 +287,15 @@ export function combatModelNote(
   return `${tag} Combat is set to ${playing}, so changing it changes nothing.`
 }
 
-/** Repo housekeeping (`.env` keys, tokens, the local checkout): a note for the operator, not a check for visitors. */
-const OPS_CALL = /\.env\b|\btoken\b|\bcheckout\b/i
+/**
+ * Repo housekeeping (`.env` keys, tokens, the local checkout, or a row tagged `[ops]`): a note
+ * for the operator, not a check for visitors.
+ */
+const OPS_CALL = /\.env\b|\btoken\b|\bcheckout\b|\[ops\]/i
 
 /**
  * Reads every `- [needs-user-call] **Title** body` line, except repo housekeeping (a line that
- * names `.env`, a token, or the local checkout).
+ * names `.env`, a token, or the local checkout, or is tagged `[ops]`).
  *
  * @param md - the text of `plan/AUDIT.md`.
  */

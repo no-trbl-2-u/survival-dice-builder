@@ -144,15 +144,6 @@
 - suggested fix: Before "How a run goes", add a short "What you have" list from ruleText (starting deck and hand size, starting Skills, action dice, guard and health, what each card half does) and one line on round order and player turns.
 - source: web-fetch
 
-### [MED] /decisions — the Checks list still shows developer to-do notes
-- pass: 19 (commit ce4724a)
-- viewport: n/a (web-fetch)
-- category: voice
-- observation: The earlier fix dropped only the `.env` and token rows. Checks still name a slash command, a test file, phase numbers, a repo README and an internal design doc, none of which a visitor can act on. One check still calls the 9 tiles "proposed" with a "best before phase 7" deadline, though /tiles says the Play page builds its map from them.
-- evidence: `docs/DECISIONS.md:141` "`touch.spec.ts` covers this with emulated touch only. File anything odd with `/jot`."; `:144` "Review the 9 proposed tiles ... Best before phase 7"; `:146` "`spec/README.md` says the canonical spec is the Claude design doc"; `:149` "Interim balance after phase 20".
-- suggested fix: Show only checks a designer or playtester can do from the site, in player words; close the tiles and source-sync checks in AUDIT, and drop phase numbers, file names and slash commands from the rest.
-- source: web-fetch
-
 ### [LOW] /decisions — decided row 7 says "enemy record" and points at an unexplained "row 73"
 - pass: 19 (commit ce4724a)
 - viewport: n/a (web-fetch)
@@ -190,6 +181,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — the Checks list still shows developer to-do notes
+- pass: 19 (commit ce4724a)
+- viewport: n/a (web-fetch)
+- category: voice
+- observation: The earlier fix dropped only the `.env` and token rows. Checks still name a slash command, a test file, phase numbers, a repo README and an internal design doc, none of which a visitor can act on. One check still calls the 9 tiles "proposed" with a "best before phase 7" deadline, though /tiles says the Play page builds its map from them.
+- evidence: `docs/DECISIONS.md:141` "`touch.spec.ts` covers this with emulated touch only. File anything odd with `/jot`."; `:144` "Review the 9 proposed tiles ... Best before phase 7"; `:146` "`spec/README.md` says the canonical spec is the Claude design doc"; `:149` "Interim balance after phase 20".
+- suggested fix: Show only checks a designer or playtester can do from the site, in player words; close the tiles and source-sync checks in AUDIT, and drop phase numbers, file names and slash commands from the rest.
+- source: web-fetch
+- issue: #123
+- fixed: (this commit)
 
 ### [x] [LOW] /tiles — the legend says only which terrains are impassable, not what the others do
 - pass: 12 (commit c34753b)
