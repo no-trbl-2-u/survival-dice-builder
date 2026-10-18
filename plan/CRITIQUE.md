@@ -81,7 +81,9 @@
 - suggested fix: Place the label away from other tokens; frame the mini map on the map's hexes.
 - source: blind-round-4
 
-### [LOW] all pages — design tools sit in the nav as equals of Play
+## Done
+
+### [x] [LOW] all pages — design tools sit in the nav as equals of Play (addressed at (this commit))
 - pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
 - category: navigation
@@ -89,8 +91,8 @@
 - evidence: `apps/web/src/App.tsx:13-21` NAV lists seven equal links.
 - suggested fix: Split the nav into the game links and a labelled "Design tools" group, or open each tool page with one sentence that says it is a design aid.
 - source: web-fetch
-
-## Done
+- issue: #140
+- fixed: (this commit). The nav lists Home, Play, Config and Credits, then a group labelled "Design tools" (Tile sheet, Decisions, Engine console) set apart at the rail's far end (`NAV` group field, `NAV_TOOLS_LABEL`).
 
 ### [x] [LOW] /play — the result does not say who took the damage or their health after (addressed at (this commit))
 - pass: blind-round-4 (phase 24)

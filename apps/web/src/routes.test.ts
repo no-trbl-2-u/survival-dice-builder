@@ -7,6 +7,14 @@ describe('routes', () => {
     expect(NAV.map(([path]) => path).sort()).toEqual(routes.map((r) => r.path).sort())
   })
 
+  it('groups the design aids apart from the game pages', () => {
+    expect(NAV.filter(([, , group]) => group === 'tool').map(([path]) => path)).toEqual([
+      '/tiles',
+      '/decisions',
+      '/debug',
+    ])
+  })
+
   it('gives every route a one-sentence description', () => {
     for (const r of [...routes, notFound]) expect(r.description).toMatch(/^[A-Z].*\.$/)
   })

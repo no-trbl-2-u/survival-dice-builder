@@ -136,6 +136,25 @@ a {
     box-shadow 150ms ease;
 }
 
+/* The design tools: set apart at the rail's far end behind a small engraved label. */
+.nav-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding-left: 10px;
+  border-left: 1px solid rgb(255 220 160 / 0.2);
+}
+
+.nav-tools-label {
+  color: var(--wood-rail-text);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-right: 4px;
+}
+
 .nav a:hover {
   background: rgb(255 220 160 / 0.1);
 }

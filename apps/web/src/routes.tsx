@@ -14,16 +14,22 @@ const decisions = lazyPage(() =>
 const debug = lazyPage(() => import('./debug/DebugPage.tsx').then((m) => m.DebugPage))
 const credits = lazyPage(() => import('./credits/CreditsPage.tsx').then((m) => m.CreditsPage))
 
-/** The nav links, in order; each path is a route below, and each label is its page heading. */
-export const NAV: readonly (readonly [path: string, label: string])[] = [
-  ['/', 'Home'],
-  ['/play', 'Play'],
-  ['/config', 'Config'],
-  ['/tiles', 'Tile sheet'],
-  ['/decisions', 'Decisions'],
-  ['/debug', 'Engine console'],
-  ['/credits', 'Credits'],
+/**
+ * The nav links, in order; each path is a route below, and each label is its page heading.
+ * A `tool` link is a design or playtest aid, shown apart from the game under `NAV_TOOLS_LABEL`.
+ */
+export const NAV: readonly (readonly [path: string, label: string, group: 'game' | 'tool'])[] = [
+  ['/', 'Home', 'game'],
+  ['/play', 'Play', 'game'],
+  ['/config', 'Config', 'game'],
+  ['/credits', 'Credits', 'game'],
+  ['/tiles', 'Tile sheet', 'tool'],
+  ['/decisions', 'Decisions', 'tool'],
+  ['/debug', 'Engine console', 'tool'],
 ]
+
+/** The label on the nav's group of design and playtest aids. */
+export const NAV_TOOLS_LABEL = 'Design tools'
 
 /**
  * Every page: the nav, the tab title, and the served HTML head all read this table. A `page`

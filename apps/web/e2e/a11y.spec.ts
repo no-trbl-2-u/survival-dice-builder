@@ -38,7 +38,12 @@ test('the first Tab stop skips the nav to the content, and the nav sits outside 
 }) => {
   await page.goto('/')
   await expect(page.locator('main nav')).toHaveCount(0)
-  await expect(page.locator('header').getByRole('navigation', { name: 'Main' })).toBeVisible()
+  const nav = page.locator('header').getByRole('navigation', { name: 'Main' })
+  await expect(nav).toBeVisible()
+  // The design aids sit in their own labelled group, apart from the game pages.
+  const tools = nav.getByRole('group', { name: 'Design tools' })
+  await expect(tools.getByRole('link')).toHaveText(['Tile sheet', 'Decisions', 'Engine console'])
+  await expect(tools.getByRole('link', { name: 'Play' })).toHaveCount(0)
   await page.keyboard.press('Tab')
   const skip = page.getByRole('link', { name: 'Skip to content' })
   await expect(skip).toBeFocused()
