@@ -4,6 +4,7 @@ import {
   cardStepText,
   combatEndText,
   combatText,
+  defenseText,
   enemyHitText,
   draftFullText,
   draftPoolText,
@@ -192,6 +193,17 @@ describe('rule text from config', () => {
     )
     const elite = { enemies: { enemies: [{ ...defaultContent.enemies.enemies[1]!, siege: 5 }] } }
     expect(siegeText(elite)).toMatch(/: an elite deals 5 damage\.$/)
+  })
+
+  it('defenses: each cost, health, and effect from defenses.json, and the base health (Table 7, 12.3)', () => {
+    expect(defenseText(base, defaultContent)).toBe(
+      'A Barricade costs 2 materials and has 4 health; enemies cannot enter its hex. A Tower costs 4 materials and has 3 health; at the start of each Combat it deals 2 damage to the nearest enemy within 2 hexes. The base starts with 20 health.',
+    )
+    const tower = defaultContent.defenses[1]!
+    const cheap = { defenses: [{ ...tower, cost: 1, attack: { damage: 3, range: 1 } }] }
+    expect(defenseText({ ...base, base: { ...base.base, startingHealth: 9 } }, cheap)).toBe(
+      'A Tower costs 1 material and has 3 health; at the start of each Combat it deals 3 damage to the nearest enemy within 1 hex. The base starts with 9 health.',
+    )
   })
 
   it('Combat end: discarding is named unless every card must be played (row 10)', () => {

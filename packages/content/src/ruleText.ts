@@ -245,6 +245,24 @@ export function siegeText(content: Enemies): string {
 }
 
 /**
+ * What each defense costs and does, and the base's starting health: the Prepare line on /.
+ *
+ * @rule 12.1, 12.3, Table 7, 11
+ */
+export function defenseText(config: GameConfig, content: Pick<Content, 'defenses'>): string {
+  const lines = content.defenses.map((d) => {
+    const effects = [
+      d.blocksEnemies && 'enemies cannot enter its hex',
+      d.attack &&
+        `at the start of each Combat it deals ${d.attack.damage} damage to the nearest enemy within ${plural(d.attack.range, 'hex', 'hexes')}`,
+    ].filter(Boolean)
+    const effect = effects.length > 0 ? `; ${effects.join(', and ')}` : ''
+    return `${/^[aeiou]/i.test(d.name) ? 'An' : 'A'} ${d.name} costs ${plural(d.cost, 'material', 'materials')} and has ${d.health} health${effect}.`
+  })
+  return `${lines.join(' ')} The base starts with ${config.base.startingHealth} health.`
+}
+
+/**
  * How a hand empties in an engagement Combat, and when the Combat ends.
  *
  * @rule 6.2, Combat v3 (engagements), OPEN-QUESTIONS row 10

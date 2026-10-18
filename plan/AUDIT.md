@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-18 (pass 80, cloud tick)
+
+Pass 79's /play start panel reset row shipped (b5e61e1). The external-critique MED bias (x1.5) still applies to the three pass 20 MED rows. The /decisions design-work row scores highest on paper but edits a `[needs-user-call]` row, so it waits for /oversight. Of the two 5.4 rows, the Prepare defenses row ships first (older in the queue, cheaper): / said to build Barricades and Towers with no cost, health, or effect, and no base health. A new `defenseText(config, content)` in `ruleText` reads each defense's cost, health, and effect from `defenses.json` and the base's starting health from config; the Prepare step on / shows it. A ruleText test pins the default sentence and one with changed numbers.
+
+## Top 5 findings (scored)
+
+### [x] [5.4] /: Prepare names Barricades and Towers without cost or effect (critique MED, pass 20, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 6
+- next: add `defenseText` to ruleText from defenses.json and show it in the Prepare step
+- issue: #134
+- fixed: (this commit)
+
+### [ ] [5.4] /: "What you have" names the four Skills without faces or effects (critique MED, pass 20, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 6
+- next: generate each Skill's face and effect from skills.json; say where guard comes from
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [ ] [1.2] /credits: the intro describes how the page is built (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 2
+- ease: 6
+- next: drop "Generated from the project's asset register" from the intro
+
+### [ ] [1.2] /play: the result does not say who took the damage or their health after (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 2
+- ease: 6
+- next: name the player and their health after in the engagement result line
+
 # Site audit — 2026-10-18 (pass 79, cloud tick)
 
 Pass 78's / Combat step row shipped (ed01c82). Critique pass 20 filed four MED rows, so the external-critique MED bias (x1.5) applies again. The top row is the /play start panel reset at 6.0: "Reset to the standard rules" cleared the saved config and reloaded in one click, while /config asks first and calls it "Reset to defaults". The start panel button is now "Reset to defaults" and asks "Reset every value to the default?" with "Yes, reset every value" and "Keep my values", the same words as /config. A StartPanel test checks the confirm and the cancel; the /decisions proposal e2e now cancels once, then confirms. The /decisions design-work row scores higher on paper, but its fix edits a `[needs-user-call]` row, which only /oversight changes, so it waits.
@@ -17,7 +55,7 @@ Pass 78's / Combat step row shipped (ed01c82). Critique pass 20 filed four MED r
 - ease: 8
 - next: give the start panel reset the /config confirm and label
 - issue: #133
-- fixed: (this commit)
+- fixed: b5e61e1
 
 ### [ ] [5.4] /: Prepare names Barricades and Towers without cost or effect (critique MED, pass 20, bias x1.5)
 - category: external-critique (comprehension)

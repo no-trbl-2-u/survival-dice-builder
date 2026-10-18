@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — Prepare says to build Barricades and Towers but never what they cost or do
-- pass: 20 (commit ed01c82)
-- viewport: desktop
-- category: comprehension
-- observation: The home page tells players to build Barricades and Towers and keep the base standing, but gives no cost, health, or effect for either, and not the base's health. Only /play shows these.
-- evidence: `apps/web/src/home/HomePage.tsx:44-45` "build Barricades and Towers."; `packages/content/data/defenses.json` (Barricade cost 2, health 4; Tower cost 4, health 3, 2 damage at range 2); `config.default.json` base.startingHealth 20
-- suggested fix: Add a `defenseText(content, config)` to `ruleText.ts` that reads the costs, health, and Tower damage from content, and show it in the Prepare step.
-- source: web-fetch
-
 ### [MED] / — "What you have" names the four Skills but not their faces or effects
 - pass: 20 (commit ed01c82)
 - viewport: desktop
@@ -137,7 +128,17 @@
 
 ## Done
 
-### [x] [MED] /play — "Reset to the standard rules" wipes the saved config in one click (addressed at (this commit))
+### [x] [MED] / — Prepare says to build Barricades and Towers but never what they cost or do (addressed at (this commit))
+- pass: 20 (commit ed01c82)
+- viewport: desktop
+- category: comprehension
+- observation: The home page tells players to build Barricades and Towers and keep the base standing, but gives no cost, health, or effect for either, and not the base's health. Only /play shows these.
+- evidence: `apps/web/src/home/HomePage.tsx:44-45` "build Barricades and Towers."; `packages/content/data/defenses.json` (Barricade cost 2, health 4; Tower cost 4, health 3, 2 damage at range 2); `config.default.json` base.startingHealth 20
+- suggested fix: Add a `defenseText(content, config)` to `ruleText.ts` that reads the costs, health, and Tower damage from content, and show it in the Prepare step.
+- source: web-fetch
+- issue: #134
+
+### [x] [MED] /play — "Reset to the standard rules" wipes the saved config in one click (addressed at b5e61e1)
 - pass: 20 (commit ed01c82)
 - viewport: desktop
 - category: comprehension
