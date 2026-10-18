@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-17 at commit ce4724a
-> Pass count: 19
+> Last pass: 2026-10-18 at commit ed01c82
+> Pass count: 20
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — Prepare says to build Barricades and Towers but never what they cost or do
+- pass: 20 (commit ed01c82)
+- viewport: desktop
+- category: comprehension
+- observation: The home page tells players to build Barricades and Towers and keep the base standing, but gives no cost, health, or effect for either, and not the base's health. Only /play shows these.
+- evidence: `apps/web/src/home/HomePage.tsx:44-45` "build Barricades and Towers."; `packages/content/data/defenses.json` (Barricade cost 2, health 4; Tower cost 4, health 3, 2 damage at range 2); `config.default.json` base.startingHealth 20
+- suggested fix: Add a `defenseText(content, config)` to `ruleText.ts` that reads the costs, health, and Tower damage from content, and show it in the Prepare step.
+- source: web-fetch
+
+### [MED] / — "What you have" names the four Skills but not their faces or effects
+- pass: 20 (commit ed01c82)
+- viewport: desktop
+- category: comprehension
+- observation: The starter line lists Strike, Shot, Mend, Guard with no die face or effect. Later "Your guard takes the damage first" uses guard with no source, so a visitor cannot tell where guard comes from.
+- evidence: `packages/content/src/ruleText.ts:426` "4 Skills your dice can fire (Strike, Shot, Mend, Guard)"; `ruleText.ts:205` "Your guard takes the damage first, then your health."; `packages/content/data/skills.json`
+- suggested fix: Generate each Skill's face and effect from `skills.json` ("Strike (Sword): 2 damage next to you"), and say guard comes from the Guard Skill and card bottom halves.
+- source: web-fetch
+
+### [MED] /decisions — the "Spec v2 design work" check lists rows already decided
+- pass: 20 (commit ed01c82)
+- viewport: desktop
+- category: comprehension
+- observation: The check says rows 7, 55, 30 and 49 are still to be designed, but the same page lists row 7 under "Decided recently" and / gives the elite's siege damage. Their row links go to GitHub because the rows are no longer open.
+- evidence: `plan/AUDIT.md` "[needs-user-call] **Spec v2 design work (2026-10-04).**" item (rendered via `apps/web/src/decisions/DecisionsPage.tsx:93`); `OPEN-QUESTIONS.md` rows 7, 30, 49, 55 "decided 2026-10-11"
+- suggested fix: Drop the decided rows from that `[needs-user-call]` item in `plan/AUDIT.md` so it names only open rows.
+- source: web-fetch
+
+### [MED] /play — "Reset to the standard rules" wipes the saved config in one click
+- pass: 20 (commit ed01c82)
+- viewport: desktop
+- category: comprehension
+- observation: The start panel button clears the saved config and reloads with no confirm, while /config asks first. The two buttons also name the action differently ("standard rules" and "defaults").
+- evidence: `apps/web/src/play/StartPanel.tsx:134-142` onClick `resetConfig(store)` then `window.location.assign('/play')`; `apps/web/src/config/ConfigPage.tsx` "Reset every value to the default?" confirm, "Reset to defaults"
+- suggested fix: Give the start panel button the same confirm step as /config and one label on both pages.
+- source: web-fetch
+
+### [LOW] /decisions — row 57 shows a raw rule tag and a data file name
+- pass: 20 (commit ed01c82)
+- viewport: desktop
+- category: voice
+- observation: Row 57's heading prints "(rule Core loop v2)" raw, its setting reads "tiles.json: no config field", and it writes "countryside" and "core" in lower case where /tiles capitalises them. Some rows still carry "designer 2026-10-04" stamps.
+- evidence: `apps/web/src/decisions/DecisionsPage.tsx:76` "<code>{s.key}</code>: no config field", `:126` "(rule {q.rule})"; `OPEN-QUESTIONS.md` row 57
+- suggested fix: Pass the rule through the same citation helper /config uses, print "Set in the map tiles, not on the Config page", and capitalise the tile kinds.
+- source: web-fetch
+
+### [LOW] /tiles — the Base legend says cards are bought there with no Shop I condition
+- pass: 20 (commit ed01c82)
+- viewport: desktop
+- category: comprehension
+- observation: The Base legend says upgrades and cards are bought on the base; / says the Shop opens only after Shop I. The home Shop line says currency comes from each defeated enemy without the amounts, though the Levels line gives the experience per enemy.
+- evidence: `packages/content/src/ruleText.ts:68` "upgrades and cards are bought here"; `ruleText.ts:127,133` Shop I and currency lines; `enemies.json` currency grunt 1, elite 4
+- suggested fix: Say cards are bought there once Shop I is built, and add the per-enemy currency to the Shop line from `enemies.json`.
+- source: web-fetch
 
 ### [LOW] /play — the "reveal 10 tiles" milestone may be unreachable
 - pass: oversight (2026-10-10)
@@ -81,15 +135,6 @@
 - suggested fix: Split the nav into the game links and a labelled "Design tools" group, or open each tool page with one sentence that says it is a design aid.
 - source: web-fetch
 
-### [LOW] all pages — one meta description and og:url for every route, no canonical
-- pass: 9 (commit e859de5)
-- viewport: n/a (web-fetch)
-- category: seo
-- observation: Every route has the home description and an og:url fixed to the home page, and there is no rel=canonical.
-- evidence: `apps/web/index.html:6,16`; `apps/web/src/App.tsx:53-61` sets only the title and noindex per route.
-- suggested fix: In the route effect, set a canonical link and og:url from the route path, and give each route its own description.
-- source: web-fetch
-
 ### [LOW] /credits — the intro describes how the page is built
 - pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
@@ -100,6 +145,15 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] all pages — one meta description and og:url for every route, no canonical (pass 9; addressed at d1b99ff, found stale at pass 20)
+- pass: 9 (commit e859de5)
+- viewport: n/a (web-fetch)
+- category: seo
+- observation: Every route has the home description and an og:url fixed to the home page, and there is no rel=canonical.
+- evidence: `apps/web/index.html:6,16`; `apps/web/src/App.tsx:53-61` sets only the title and noindex per route.
+- suggested fix: In the route effect, set a canonical link and og:url from the route path, and give each route its own description.
+- source: web-fetch
 
 ### [x] [LOW] / — the Combat step is one long sentence chain
 - pass: 8 (commit c9bd27d)
