@@ -64,6 +64,8 @@ export function StartPanel({
   const [seed, setSeed] = useState(() => String(Date.now() % 100000))
   const [error, setError] = useState<string | null>(null)
   const [saved] = useState(() => readAutosave(store))
+  // The reset asks first, as on /config.
+  const [confirming, setConfirming] = useState(false)
   const load = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -130,15 +132,25 @@ export function StartPanel({
         <ConfigChanges config={config} changes={changes} updated={updated} reviewHref="/config" />
         {changes.length === 0 ? (
           <a href="/config">Change the config</a>
+        ) : confirming ? (
+          <span role="group" aria-label="Reset to defaults?">
+            Reset every value to the default?{' '}
+            <button
+              type="button"
+              onClick={() => {
+                resetConfig(store)
+                window.location.assign('/play')
+              }}
+            >
+              Yes, reset every value
+            </button>{' '}
+            <button type="button" onClick={() => setConfirming(false)}>
+              Keep my values
+            </button>
+          </span>
         ) : (
-          <button
-            type="button"
-            onClick={() => {
-              resetConfig(store)
-              window.location.assign('/play')
-            }}
-          >
-            Reset to the standard rules
+          <button type="button" onClick={() => setConfirming(true)}>
+            Reset to defaults
           </button>
         )}
       </div>

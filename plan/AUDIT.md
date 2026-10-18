@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-18 (pass 79, cloud tick)
+
+Pass 78's / Combat step row shipped (ed01c82). Critique pass 20 filed four MED rows, so the external-critique MED bias (x1.5) applies again. The top row is the /play start panel reset at 6.0: "Reset to the standard rules" cleared the saved config and reloaded in one click, while /config asks first and calls it "Reset to defaults". The start panel button is now "Reset to defaults" and asks "Reset every value to the default?" with "Yes, reset every value" and "Keep my values", the same words as /config. A StartPanel test checks the confirm and the cancel; the /decisions proposal e2e now cancels once, then confirms. The /decisions design-work row scores higher on paper, but its fix edits a `[needs-user-call]` row, which only /oversight changes, so it waits.
+
+## Top 5 findings (scored)
+
+### [x] [6.0] /play: the start panel reset clears the config with no confirm (critique MED, pass 20, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 8
+- next: give the start panel reset the /config confirm and label
+- issue: #133
+- fixed: (this commit)
+
+### [ ] [5.4] /: Prepare names Barricades and Towers without cost or effect (critique MED, pass 20, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 6
+- next: add `defenseText` to ruleText from defenses.json and show it in the Prepare step
+
+### [ ] [5.4] /: "What you have" names the four Skills without faces or effects (critique MED, pass 20, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 6
+- next: generate each Skill's face and effect from skills.json; say where guard comes from
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [ ] [1.2] /credits: the intro describes how the page is built (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 2
+- ease: 6
+- next: drop "Generated from the project's asset register" from the intro
+
 # Site audit — 2026-10-18 (pass 78, cloud tick)
 
 Pass 77's /play move surcharge row shipped (4fdb8a5). No MED rows are left, so the bias does not apply; the top row is the / Combat step at 1.5. An earlier fix had already dropped "Exchanges, the Combat in the written rules", but the step still ran "Or choose Exchanges, the older Combat kept for playtests, on the start panel: in each exchange you roll, play cards, and fire Skills; then each enemy ...", naming the start panel before a visitor has seen it. The step now says "Before a run, you can choose Exchanges instead, the older Combat kept for playtests." in its own sentence, and the exchange rule text in ruleText splits at the semicolon into two sentences (the /play start panel reads it too). The HomePage test checks the new sentences and that no colon or semicolon joins them; the ruleText test pins the split text. Every row scores under 3.0 and the expand gate is closed (pass 13 ran yesterday), so the loop keeps draining LOW critique rows.

@@ -43,4 +43,28 @@ describe('StartPanel', () => {
     expect(intro).toMatch(/They lose all their materials\./)
     expect(intro).not.toMatch(/currency/)
   })
+
+  it('asks before the reset clears the saved config, with the /config labels', () => {
+    const view = within(
+      render(
+        <StartPanel
+          config={defaultContent.config}
+          changes={['players.max']}
+          updated={[]}
+          store={undefined}
+          combat="engage"
+          onStart={() => {}}
+          onLoad={() => {}}
+        />,
+      ).container,
+    )
+    fireEvent.click(view.getByRole('button', { name: 'Reset to defaults' }))
+    expect(view.getByRole('group', { name: 'Reset to defaults?' }).textContent).toContain(
+      'Reset every value to the default?',
+    )
+    expect(view.getByRole('button', { name: 'Yes, reset every value' })).toBeTruthy()
+    fireEvent.click(view.getByRole('button', { name: 'Keep my values' }))
+    expect(view.queryByRole('group', { name: 'Reset to defaults?' })).toBeNull()
+    expect(view.getByRole('button', { name: 'Reset to defaults' })).toBeTruthy()
+  })
 })

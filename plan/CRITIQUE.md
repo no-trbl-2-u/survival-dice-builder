@@ -36,15 +36,6 @@
 - suggested fix: Drop the decided rows from that `[needs-user-call]` item in `plan/AUDIT.md` so it names only open rows.
 - source: web-fetch
 
-### [MED] /play — "Reset to the standard rules" wipes the saved config in one click
-- pass: 20 (commit ed01c82)
-- viewport: desktop
-- category: comprehension
-- observation: The start panel button clears the saved config and reloads with no confirm, while /config asks first. The two buttons also name the action differently ("standard rules" and "defaults").
-- evidence: `apps/web/src/play/StartPanel.tsx:134-142` onClick `resetConfig(store)` then `window.location.assign('/play')`; `apps/web/src/config/ConfigPage.tsx` "Reset every value to the default?" confirm, "Reset to defaults"
-- suggested fix: Give the start panel button the same confirm step as /config and one label on both pages.
-- source: web-fetch
-
 ### [LOW] /decisions — row 57 shows a raw rule tag and a data file name
 - pass: 20 (commit ed01c82)
 - viewport: desktop
@@ -145,6 +136,16 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — "Reset to the standard rules" wipes the saved config in one click (addressed at (this commit))
+- pass: 20 (commit ed01c82)
+- viewport: desktop
+- category: comprehension
+- observation: The start panel button clears the saved config and reloads with no confirm, while /config asks first. The two buttons also name the action differently ("standard rules" and "defaults").
+- evidence: `apps/web/src/play/StartPanel.tsx:134-142` onClick `resetConfig(store)` then `window.location.assign('/play')`; `apps/web/src/config/ConfigPage.tsx` "Reset every value to the default?" confirm, "Reset to defaults"
+- suggested fix: Give the start panel button the same confirm step as /config and one label on both pages.
+- source: web-fetch
+- issue: #133
 
 ### [x] [LOW] all pages — one meta description and og:url for every route, no canonical (pass 9; addressed at d1b99ff, found stale at pass 20)
 - pass: 9 (commit e859de5)

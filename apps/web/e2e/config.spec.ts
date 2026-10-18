@@ -194,7 +194,11 @@ test('/decisions: Try this on /play plays a proposal, and the start panel resets
     'href',
     '/decisions#q-63',
   )
-  await page.getByRole('button', { name: 'Reset to the standard rules' }).click()
+  await page.getByRole('button', { name: 'Reset to defaults' }).click()
+  await page.getByRole('button', { name: 'Keep my values' }).click()
+  await expect(changes).toContainText('Playing with the proposal: Forced reveal.')
+  await page.getByRole('button', { name: 'Reset to defaults' }).click()
+  await page.getByRole('button', { name: 'Yes, reset every value' }).click()
   await expect(changes).toContainText('Playing with the standard rules.')
   await expect(page.getByTestId('config-proposals')).toHaveCount(0)
 })
