@@ -90,7 +90,9 @@
 - suggested fix: Split the nav into the game links and a labelled "Design tools" group, or open each tool page with one sentence that says it is a design aid.
 - source: web-fetch
 
-### [LOW] /credits — the intro describes how the page is built
+## Done
+
+### [x] [LOW] /credits — the intro describes how the page is built (addressed at (this commit))
 - pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
 - category: voice
@@ -98,10 +100,10 @@
 - evidence: `apps/web/src/credits/CreditsPage.tsx:60` "Generated from the project's asset register."
 - suggested fix: Cut the sentence, or replace it with where to report a missing credit.
 - source: web-fetch
+- issue: #138
+- fixed: (this commit). The intro now reads "If a credit is missing or wrong, open an issue", linking the repo's issues page; the polish e2e checks the link and that "asset register" is gone.
 
-## Done
-
-### [x] [LOW] /decisions — row 57 shows a raw rule tag and a data file name (addressed at (this commit))
+### [x] [LOW] /decisions — row 57 shows a raw rule tag and a data file name (addressed at 4936726)
 - pass: 20 (commit ed01c82)
 - viewport: desktop
 - category: voice
@@ -110,7 +112,7 @@
 - suggested fix: Pass the rule through the same citation helper /config uses, print "Set in the map tiles, not on the Config page", and capitalise the tile kinds.
 - source: web-fetch
 - issue: #137
-- fixed: (this commit). Reading headings go through `readingRuleText` (the play log's `ruleCitation`; a tag with no section reads "not in the written rules"), a content-file setting reads "Set in the map tiles, not on the Config page" (`unlistedSettingText`), and row 57 writes "Countryside" and "Core". The "designer 2026-10-04" stamps are left: they date the designer's rulings.
+- fixed: 4936726. Reading headings go through `readingRuleText` (the play log's `ruleCitation`; a tag with no section reads "not in the written rules"), a content-file setting reads "Set in the map tiles, not on the Config page" (`unlistedSettingText`), and row 57 writes "Countryside" and "Core". The "designer 2026-10-04" stamps are left: they date the designer's rulings.
 
 ### [x] [LOW] /tiles — the Base legend says cards are bought there with no Shop I condition (addressed at b1cd77c)
 - pass: 20 (commit ed01c82)

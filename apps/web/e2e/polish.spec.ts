@@ -70,6 +70,12 @@ test('/credits lists every icon author and the fonts', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Textures' })).toBeVisible()
   await expect(page.getByTestId('credits-textures')).toContainText('ambientCG')
   await expect(page.locator('main')).toContainText('Alfa Slab One')
+  // The intro says where to report a missing credit, not how the page is built.
+  await expect(page.locator('main')).not.toContainText('asset register')
+  await expect(page.getByRole('link', { name: 'open an issue' })).toHaveAttribute(
+    'href',
+    'https://github.com/no-trbl-2-u/survival-dice-builder/issues',
+  )
   // Link names are unique: the work name links to its source (no row of "Source" links).
   await expect(page.getByRole('link', { name: 'Source', exact: true })).toHaveCount(0)
   await expect(page.getByRole('link', { name: 'CC BY 3.0' })).toHaveCount(1)

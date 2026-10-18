@@ -84,13 +84,19 @@ function CreditList({
   )
 }
 
+/** Where a visitor reports a missing or wrong credit. */
+const ISSUES_URL = 'https://github.com/no-trbl-2-u/survival-dice-builder/issues'
+
 /** `/credits`: every asset in use, generated from ASSETS.md at build time. */
 export function CreditsPage() {
   const { icons, textures } = creditGroups(assetCredits(register))
   const fonts = fontCredits(register)
   return (
     <div className={styles.page}>
-      <p>Every asset in the game, with its license. Generated from the project's asset register.</p>
+      <p>
+        Every asset in the game, with its license. If a credit is missing or wrong,{' '}
+        <a href={ISSUES_URL}>open an issue</a>.
+      </p>
       <h2>Icons</h2>
       <CreditList credits={icons} noun="icon" testId="credits-assets" />
       <h2>Textures</h2>
