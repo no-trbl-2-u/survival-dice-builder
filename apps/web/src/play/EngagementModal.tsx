@@ -14,6 +14,7 @@ import {
   engageInstructionShort,
   engageStage,
   enemyLabel,
+  hitsLine,
   playerHex,
   rollAgain,
   type EngageSummary,
@@ -471,6 +472,8 @@ function SummaryView({
       ? `You dealt ${summary.dealt} damage${summary.defeated > 0 ? ` and defeated ${summary.defeated} ${summary.defeated === 1 ? 'enemy' : 'enemies'}` : ''}.`
       : 'You dealt no damage.',
   )
+  const hits = hitsLine(summary, (id) => enemyLabel(state, id, playerHex(state)))
+  if (hits) lines.push(hits)
   if (summary.healed > 0) lines.push(`You healed ${summary.healed}.`)
   const rewards = [
     summary.experience > 0 ? `${summary.experience} experience` : '',

@@ -5,6 +5,7 @@ import {
   cancelledLine,
   engageHeadline,
   engageStage,
+  hitsLine,
   lastEngagement,
   rollAgain,
 } from './engageView.ts'
@@ -98,6 +99,27 @@ describe('engageView', () => {
     expect(cancelledLine(s)).toBe('2 dice of defeated enemies did not hit.')
     expect(cancelledLine({ ...s, cancelled: 1 })).toBe('1 die of defeated enemies did not hit.')
     expect(cancelledLine({ ...s, cancelled: 0 })).toBeNull()
+  })
+
+  it('names each damaged enemy with its health after, or that it was defeated', () => {
+    const log: GameEvent[] = [
+      { type: 'engaged', rule: r, player: 'p1', card: 'c1', enemyDice: [] },
+      { type: 'enemyDamaged', rule: r, enemy: 'e1', amount: 2, health: 12 },
+      { type: 'enemyDamaged', rule: r, enemy: 'e2', amount: 2, health: 0 },
+      { type: 'enemyDefeated', rule: r, enemy: 'e2', kind: 'grunt', by: 'p1' },
+      { type: 'enemyDamaged', rule: r, enemy: 'e1', amount: 1, health: 11 },
+      { type: 'exchangeEnded', rule: r, player: 'p1' },
+    ]
+    const s = lastEngagement(log)!
+    expect(s.hits).toEqual([
+      { enemy: 'e1', amount: 3, health: 11, defeated: false },
+      { enemy: 'e2', amount: 2, health: 0, defeated: true },
+    ])
+    const names: Record<string, string> = { e1: 'elite, 1 hex north', e2: 'grunt' }
+    expect(hitsLine(s, (id) => names[id] ?? 'enemy')).toBe(
+      'Elite, 1 hex north took 3 damage: 11 health left. Grunt took 2 damage and was defeated.',
+    )
+    expect(hitsLine({ ...s, hits: [] }, () => 'enemy')).toBeNull()
   })
 
   it('is null with no engagement', () => {

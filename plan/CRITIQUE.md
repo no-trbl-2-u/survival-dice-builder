@@ -36,13 +36,13 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [LOW] /play — the result does not say who took the damage or their health after
-- pass: blind-round-4 (phase 24)
+### [LOW] /play — the result's enemy dice do not mark a defeated enemy
+- pass: blind-round-4 (phase 24), split from the "who took the damage" row
 - viewport: 1280x800 and 375x812
 - category: comprehension
-- observation: "You dealt 2 damage" does not name the elite or its health after (14 to 12); only the full event list does. The defeated grunt's die is labelled "grunt" with no mark that it was defeated.
-- evidence: blind round 4 (2026-10-09), the engagement result
-- suggested fix: Name each damaged enemy and its health left; mark a defeated enemy's dice.
+- observation: On the engagement result the defeated grunt's die is still labelled "grunt" with no mark that it was defeated. The result now names each damaged enemy and says it was defeated, but the dice row does not.
+- evidence: blind round 4 (2026-10-09); `apps/web/src/play/DiceTray.tsx` `EnemyDice` marks cancelled dice only during the exchange (`rolls` given: no marks)
+- suggested fix: Pass the defeated enemies to the result's `EnemyDice` and mark their dice (label and a visual cue).
 - source: blind-round-4
 
 ### [LOW] /play — "in range" counts differ from the engaged enemies
@@ -92,7 +92,18 @@
 
 ## Done
 
-### [x] [LOW] /credits — the intro describes how the page is built (addressed at (this commit))
+### [x] [LOW] /play — the result does not say who took the damage or their health after (addressed at (this commit))
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: "You dealt 2 damage" does not name the elite or its health after (14 to 12); only the full event list does. The defeated grunt's die is labelled "grunt" with no mark that it was defeated.
+- evidence: blind round 4 (2026-10-09), the engagement result
+- suggested fix: Name each damaged enemy and its health left; mark a defeated enemy's dice.
+- source: blind-round-4
+- issue: #139
+- fixed: (this commit). The result lists each damaged enemy: "Elite, 1 hex north took 2 damage: 12 health left." or "Grunt took 2 damage and was defeated." (`hitsLine` over the summary's new `hits`). The dice mark is split into its own Pending row.
+
+### [x] [LOW] /credits — the intro describes how the page is built (addressed at a409efe)
 - pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
 - category: voice
@@ -101,7 +112,7 @@
 - suggested fix: Cut the sentence, or replace it with where to report a missing credit.
 - source: web-fetch
 - issue: #138
-- fixed: (this commit). The intro now reads "If a credit is missing or wrong, open an issue", linking the repo's issues page; the polish e2e checks the link and that "asset register" is gone.
+- fixed: a409efe. The intro now reads "If a credit is missing or wrong, open an issue", linking the repo's issues page; the polish e2e checks the link and that "asset register" is gone.
 
 ### [x] [LOW] /decisions — row 57 shows a raw rule tag and a data file name (addressed at 4936726)
 - pass: 20 (commit ed01c82)

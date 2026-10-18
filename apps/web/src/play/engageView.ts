@@ -185,7 +185,17 @@ export type EngageSummary = Readonly<{
   fired: readonly string[]
   /** The enemy dice as rolled at the start. */
   enemyDice: readonly EnemyDieRoll[]
+  /** Each damaged enemy, in the order first hit: the damage it took and its health after. */
+  hits: readonly EnemyHit[]
   events: readonly GameEvent[]
+}>
+
+/** The damage 1 enemy took in an engagement, read from its events. */
+export type EnemyHit = Readonly<{
+  enemy: string
+  amount: number
+  health: number
+  defeated: boolean
 }>
 
 /**
@@ -219,11 +229,25 @@ export function lastEngagement(log: readonly GameEvent[]): EngageSummary | null 
   const knockedOut = end >= 0 && log[end + 1]?.type === 'playerKnockedOut'
   const fired: string[] = []
   let enemyDice: readonly EnemyDieRoll[] = []
+  const hits = new Map<string, EnemyHit>()
   for (const e of events) {
     if (e.type === 'engaged') enemyDice = e.enemyDice
     if (e.type === 'skillFired') fired.push(e.skill)
-    if (e.type === 'enemyDamaged') sum.dealt += e.amount
-    if (e.type === 'enemyDefeated') sum.defeated += 1
+    if (e.type === 'enemyDamaged') {
+      sum.dealt += e.amount
+      const was = hits.get(e.enemy)
+      hits.set(e.enemy, {
+        enemy: e.enemy,
+        amount: (was?.amount ?? 0) + e.amount,
+        health: e.health,
+        defeated: was?.defeated ?? false,
+      })
+    }
+    if (e.type === 'enemyDefeated') {
+      sum.defeated += 1
+      const was = hits.get(e.enemy)
+      if (was) hits.set(e.enemy, { ...was, defeated: true })
+    }
     if (e.type === 'enemyAttacked') sum.hitsTaken += 1
     if (e.type === 'playerDamaged') {
       sum.toGuard += e.toGuard
@@ -235,7 +259,26 @@ export function lastEngagement(log: readonly GameEvent[]): EngageSummary | null 
     if (e.type === 'experienceGained') sum.experience += e.amount
     if (e.type === 'currencyGained') sum.currency += e.amount
   }
-  return { ...sum, knockedOut, fired, enemyDice, events }
+  return { ...sum, knockedOut, fired, enemyDice, hits: [...hits.values()], events }
+}
+
+const upper = (text: string) => `${text[0]?.toUpperCase() ?? ''}${text.slice(1)}`
+
+/**
+ * Who took the damage, for the result: "elite, 1 hex north took 2 damage: 12 health left."
+ * or "grunt took 3 damage and was defeated." Null when no enemy took damage.
+ *
+ * @param s - the engagement's totals.
+ * @param name - an enemy's label (a defeated enemy is gone from the state; its kind is kept).
+ */
+export function hitsLine(s: EngageSummary, name: (enemy: string) => string): string | null {
+  if (s.hits.length === 0) return null
+  return s.hits
+    .map(
+      (h) =>
+        `${upper(name(h.enemy))} took ${h.amount} damage${h.defeated ? ' and was defeated' : `: ${h.health} health left`}.`,
+    )
+    .join(' ')
 }
 
 /** The result line for cancelled enemy dice, or null when none was cancelled. */

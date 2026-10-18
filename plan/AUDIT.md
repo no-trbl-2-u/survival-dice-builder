@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-18 (pass 85, cloud tick)
+
+Pass 84's /credits row shipped (a409efe). The /decisions design-work row (6.8 with the MED bias) still edits a `[needs-user-call]` row and waits for /oversight. The top shippable row is the /play result at 1.0: "You dealt 2 damage" named no enemy. The engagement summary now keeps each damaged enemy's damage and health after (`hits`), and the result adds "Elite, 1 hex north took 2 damage: 12 health left." or "Grunt took 2 damage and was defeated." (`hitsLine`); the engageView test pins both. The row's second half, marking a defeated enemy's dice on the result, is split into its own LOW row. Every shippable row scores under 3.0 and the expand gate is closed (pass 13 at 8fc13ac, 12 commits, under 48 hours), so the loop keeps draining LOW critique rows.
+
+## Top 5 findings (scored)
+
+### [x] [1.0] /play: the result does not say who took the damage (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 3
+- next: name each damaged enemy and its health left
+- issue: #139
+- fixed: (this commit)
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [ ] [0.9] all pages: design tools sit in the nav as equals of Play (critique LOW, pass 9)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 3
+- next: group Tiles, Decisions and Debug under a "Design tools" label
+
+### [ ] [0.8] /play: "in range" counts differ from the engaged enemies (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 3
+- next: say "3 in range, 1 engaged" on the Skill reach line
+
+### [ ] [0.8] /play: the result's enemy dice do not mark a defeated enemy (critique LOW, split from blind round 4)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 3
+- next: pass the defeated enemies to the result's EnemyDice and mark their dice
+
 # Site audit — 2026-10-18 (pass 84, cloud tick)
 
 Pass 83's /decisions row 57 shipped (4936726). The /decisions design-work row (6.8 with the MED bias) still edits a `[needs-user-call]` row and waits for /oversight. The "reveal 10 tiles" critique row is already `OPEN-QUESTIONS.md` row 4 (pending-spec, proposed "Reveal 8"); it changes a rule value, so it stays with the designer. The top shippable row is the /credits intro at 1.2: its second sentence, "Generated from the project's asset register", described the build. It now says "If a credit is missing or wrong, open an issue", linking the repo's issues page; the polish e2e checks the link and that the old sentence is gone. Every shippable row scores under 3.0 and the expand gate is closed (pass 13 at 8fc13ac, 11 commits), so the loop keeps draining LOW critique rows.
