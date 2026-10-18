@@ -99,7 +99,9 @@
 - suggested fix: Cut the sentence, or replace it with where to report a missing credit.
 - source: web-fetch
 
-### [LOW] / — the Combat step is one long sentence chain
+## Done
+
+### [x] [LOW] / — the Combat step is one long sentence chain
 - pass: 8 (commit c9bd27d)
 - viewport: n/a (web-fetch)
 - category: voice
@@ -107,8 +109,8 @@
 - evidence: `apps/web/src/home/HomePage.tsx:25-29` "Put your dice on your Skills one at a time; the enemy dice hit last, after your guard. Or choose Exchanges, the Combat in the written rules, on the start panel: in each exchange you roll, ..."
 - suggested fix: Split into short sentences, and put Exchanges in its own sentence: "Before a run, you can choose Exchanges, the Combat in the written rules."
 - source: web-fetch
-
-## Done
+- issue: #132
+- fixed: (this commit)
 
 ### [x] [LOW] /play — a hex next to an enemy that costs too much just isn't offered, with no reason
 - pass: session residue (2026-10-09)

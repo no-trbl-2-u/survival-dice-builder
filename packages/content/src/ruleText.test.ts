@@ -166,7 +166,7 @@ describe('rule text from config', () => {
       /Combat ends when every hand and deck is empty/,
     )
     expect(combatText(base, 'exchange', defaultContent)).toBe(
-      'In each exchange you roll, play cards, and fire Skills; then each enemy next to you that targets you rolls its enemy dice at you.',
+      'In each exchange you roll, play cards, and fire Skills. Then each enemy next to you that targets you rolls its enemy dice at you.',
     )
   })
 

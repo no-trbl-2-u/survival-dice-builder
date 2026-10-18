@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-18 (pass 78, cloud tick)
+
+Pass 77's /play move surcharge row shipped (4fdb8a5). No MED rows are left, so the bias does not apply; the top row is the / Combat step at 1.5. An earlier fix had already dropped "Exchanges, the Combat in the written rules", but the step still ran "Or choose Exchanges, the older Combat kept for playtests, on the start panel: in each exchange you roll, play cards, and fire Skills; then each enemy ...", naming the start panel before a visitor has seen it. The step now says "Before a run, you can choose Exchanges instead, the older Combat kept for playtests." in its own sentence, and the exchange rule text in ruleText splits at the semicolon into two sentences (the /play start panel reads it too). The HomePage test checks the new sentences and that no colon or semicolon joins them; the ruleText test pins the split text. Every row scores under 3.0 and the expand gate is closed (pass 13 ran yesterday), so the loop keeps draining LOW critique rows.
+
+## Top 5 findings (scored)
+
+### [x] [1.5] /: the Combat step is one long sentence chain (critique LOW, pass 8)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: split the Combat step into short sentences
+- issue: #132
+- fixed: (this commit)
+
+### [ ] [1.2] /credits: the intro describes how the page is built (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 2
+- ease: 6
+- next: drop "Generated from the project's asset register" from the intro
+
+### [ ] [1.2] /play: the result does not say who took the damage or their health after (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 4
+- next: name each damaged enemy with its health left; mark a defeated enemy's dice
+
+### [ ] [1.2] /play: "in range" counts differ from the engaged enemies (critique LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 4
+- next: count the same enemies in both places
+
+### [ ] [1.0] all pages: one meta description and og:url for every route, no canonical (critique LOW, pass 9)
+- category: external-critique (seo)
+- impact: 2
+- ease: 5
+- next: set canonical and og:url per route in the route effect
+
 # Site audit — 2026-10-18 (pass 77, cloud tick)
 
 Pass 76's /tiles site legend row shipped (692486b). No MED rows are left, so the bias does not apply; the top row is the user-jotted /play move surcharge at 1.7. With `combat.moveCostNextToEnemy` above 1, a hex next to an enemy that costs more than the movement left was just not highlighted. The engine now exports `stepsOutOfReach` (the map steps that are legal but unaffordable), and the Move banner adds "A hex next to an enemy costs N, more than you have left" when any exist. The default (1) never shows it. An engine test covers the surcharge, Blink, and the default; a nextStep test checks both banner lines. Every row scores under 3.0 and the expand gate is closed (pass 13 ran yesterday), so the loop keeps draining LOW critique rows.

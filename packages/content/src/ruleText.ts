@@ -180,7 +180,7 @@ export function combatText(
   content: Enemies & Pick<Content, 'cards'>,
 ): string {
   if (model === 'exchange') {
-    return 'In each exchange you roll, play cards, and fire Skills; then each enemy next to you that targets you rolls its enemy dice at you.'
+    return 'In each exchange you roll, play cards, and fire Skills. Then each enemy next to you that targets you rolls its enemy dice at you.'
   }
   const dice = enemyDiceText(content)
   const holders = engageCardNames(config, content)

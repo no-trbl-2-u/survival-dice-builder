@@ -31,7 +31,10 @@ describe('HomePage', () => {
       /Play a card's Engage option \(on Move and Gather\) to roll/,
     )[0]
     expect(combat?.textContent).toMatch(/This is the Combat in the written rules \(on GitHub\)\./)
-    expect(combat?.textContent).toMatch(/Or choose Exchanges, the older Combat kept for playtests/)
+    expect(combat?.textContent).toMatch(
+      /\(on GitHub\)\. Before a run, you can choose Exchanges instead, the older Combat kept for playtests\. In each exchange you roll, play cards, and fire Skills\. Then each enemy/,
+    )
+    expect(combat?.textContent).not.toMatch(/[;:] (in each exchange|then each enemy)/)
     expect(combat?.textContent).not.toMatch(/Exchanges, the Combat in the written rules/)
   })
 
