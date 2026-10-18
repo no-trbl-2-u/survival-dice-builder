@@ -98,6 +98,7 @@ export {
   ruleLineFor,
   shopText,
   siegeText,
+  skillEffectText,
   siteText,
   spawnText,
   startText,

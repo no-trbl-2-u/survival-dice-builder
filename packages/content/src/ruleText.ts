@@ -1,5 +1,6 @@
 import type { Content } from './load.ts'
 import type { GameConfig } from './schemas/config.ts'
+import type { SkillEffect } from './schemas/effects.ts'
 import type { Site } from './schemas/tiles.ts'
 
 /**
@@ -423,6 +424,31 @@ const andList = (items: readonly string[]) =>
     : (items[0] ?? '')
 
 /**
+ * What a Skill does when it fires, in one plain line: "2 damage to 1 enemy within 1 hex".
+ *
+ * @param e - the Skill's effect from content.
+ * @rule Table 3, Table 9
+ */
+export function skillEffectText(e: SkillEffect): string {
+  switch (e.kind) {
+    case 'damage':
+      return `${e.amount} damage to ${e.target === 'one' ? '1 enemy' : 'each enemy'} within ${plural(e.range, 'hex', 'hexes')}`
+    case 'guard':
+      return `Gain ${e.amount} guard`
+    case 'heal':
+      return `Heal ${e.amount}`
+    case 'ignoreHit':
+      return `Ignore ${plural(e.hits, 'enemy hit', 'enemy hits')} this exchange`
+  }
+}
+
+/** "Strike (Sword: 2 damage to 1 enemy within 1 hex)": a Skill's faces and effect. */
+const skillLine = (s: Content['skills'][number]) => {
+  const effect = skillEffectText(s.effect)
+  return `${s.name} (${andList(s.faces)}: ${effect.charAt(0).toLowerCase()}${effect.slice(1)})`
+}
+
+/**
  * What each player starts a run with: health, action dice, starter Skills, and the starter
  * deck with its hand size and what each card half is for.
  *
@@ -430,7 +456,14 @@ const andList = (items: readonly string[]) =>
  */
 export function startText(config: GameConfig, content: Pick<Content, 'cards' | 'skills'>): string {
   const { maxHealth, startingDice, starterSkills } = config.player
-  const skills = starterSkills.map((id) => content.skills.find((s) => s.id === id)?.name ?? id)
+  const defs = starterSkills.flatMap((id) => content.skills.filter((s) => s.id === id))
+  const skills = defs.map(skillLine)
+  const guards = defs.filter((s) => s.effect.kind === 'guard').map((s) => s.name)
+  const cardsGuard = config.combat.model === 'exchange' ? " and your cards' bottom halves" : ''
+  const guard =
+    guards.length > 0
+      ? ` Guard comes from the ${andList(guards)} ${guards.length === 1 ? 'Skill' : 'Skills'}${cardsGuard}; it takes enemy damage before your health.`
+      : ''
   const preset = config.deck.presets.find((p) => p.id === config.deck.preset)
   const entries = preset?.cards ?? []
   const total = entries.reduce((sum, e) => sum + e.quantity, 0)
@@ -441,7 +474,7 @@ export function startText(config: GameConfig, content: Pick<Content, 'cards' | '
   )
   const hand = preset ? ` You draw ${preset.handSize} at a time.` : ''
   return (
-    `Each player starts with ${maxHealth} health, ${plural(startingDice, 'action die', 'action dice')}, and ${plural(skills.length, 'Skill', 'Skills')} your dice can fire (${andList(skills)}). ` +
+    `Each player starts with ${maxHealth} health, ${plural(startingDice, 'action die', 'action dice')}, and ${plural(skills.length, 'Skill', 'Skills')} your dice can fire: ${andList(skills)}.${guard} ` +
     `Your deck holds ${plural(total, 'card', 'cards')}: ${cards}.${hand} ` +
     'Each card has two halves: the top half is for Prepare, the bottom half for Combat.'
   )

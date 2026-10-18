@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — "What you have" names the four Skills but not their faces or effects
-- pass: 20 (commit ed01c82)
-- viewport: desktop
-- category: comprehension
-- observation: The starter line lists Strike, Shot, Mend, Guard with no die face or effect. Later "Your guard takes the damage first" uses guard with no source, so a visitor cannot tell where guard comes from.
-- evidence: `packages/content/src/ruleText.ts:426` "4 Skills your dice can fire (Strike, Shot, Mend, Guard)"; `ruleText.ts:205` "Your guard takes the damage first, then your health."; `packages/content/data/skills.json`
-- suggested fix: Generate each Skill's face and effect from `skills.json` ("Strike (Sword): 2 damage next to you"), and say guard comes from the Guard Skill and card bottom halves.
-- source: web-fetch
-
 ### [MED] /decisions — the "Spec v2 design work" check lists rows already decided
 - pass: 20 (commit ed01c82)
 - viewport: desktop
@@ -128,7 +119,17 @@
 
 ## Done
 
-### [x] [MED] / — Prepare says to build Barricades and Towers but never what they cost or do (addressed at (this commit))
+### [x] [MED] / — "What you have" names the four Skills but not their faces or effects (addressed at (this commit))
+- pass: 20 (commit ed01c82)
+- viewport: desktop
+- category: comprehension
+- observation: The starter line lists Strike, Shot, Mend, Guard with no die face or effect. Later "Your guard takes the damage first" uses guard with no source, so a visitor cannot tell where guard comes from.
+- evidence: `packages/content/src/ruleText.ts:426` "4 Skills your dice can fire (Strike, Shot, Mend, Guard)"; `ruleText.ts:205` "Your guard takes the damage first, then your health."; `packages/content/data/skills.json`
+- suggested fix: Generate each Skill's face and effect from `skills.json` ("Strike (Sword): 2 damage next to you"), and say guard comes from the Guard Skill and card bottom halves.
+- source: web-fetch
+- issue: #135
+
+### [x] [MED] / — Prepare says to build Barricades and Towers but never what they cost or do (addressed at a4a370b)
 - pass: 20 (commit ed01c82)
 - viewport: desktop
 - category: comprehension

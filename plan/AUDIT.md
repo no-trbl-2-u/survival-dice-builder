@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-18 (pass 81, cloud tick)
+
+Pass 80's / Prepare defenses row shipped (a4a370b). The external-critique MED bias (x1.5) still applies to the two pass 20 MED rows left. The /decisions design-work row scores highest on paper but edits a `[needs-user-call]` row, so it waits for /oversight. The top shippable row is "What you have" on / at 5.4: it named Strike, Shot, Mend and Guard with no face or effect, and nothing said where guard comes from. `skillEffectText` moves from the /play app into `ruleText` (the Skill board and decision dialog keep the same words through it), and `startText` now gives each starter Skill its faces and effect from `skills.json` and says guard comes from the Guard Skill (and the card bottom halves under the exchange model). The ruleText start test pins the default sentence, a one-Skill config, and the exchange model.
+
+## Top 5 findings (scored)
+
+### [x] [5.4] /: "What you have" names the four Skills without faces or effects (critique MED, pass 20, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 6
+- next: generate each Skill's face and effect from skills.json; say where guard comes from
+- issue: #135
+- fixed: (this commit)
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [ ] [2.4] /tiles: the Base legend says cards are bought there with no Shop I condition (critique LOW, pass 20)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: say cards are bought there once Shop I is built; add per-enemy currency to the home Shop line
+
+### [ ] [2.1] /decisions: row 57 shows a raw rule tag and a data file name (critique LOW, pass 20)
+- category: external-critique (voice)
+- impact: 3
+- ease: 7
+- next: cite the rule through the /config helper; "Set in the map tiles, not on the Config page"
+
+### [ ] [1.2] /credits: the intro describes how the page is built (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 2
+- ease: 6
+- next: drop "Generated from the project's asset register" from the intro
+
 # Site audit — 2026-10-18 (pass 80, cloud tick)
 
 Pass 79's /play start panel reset row shipped (b5e61e1). The external-critique MED bias (x1.5) still applies to the three pass 20 MED rows. The /decisions design-work row scores highest on paper but edits a `[needs-user-call]` row, so it waits for /oversight. Of the two 5.4 rows, the Prepare defenses row ships first (older in the queue, cheaper): / said to build Barricades and Towers with no cost, health, or effect, and no base health. A new `defenseText(config, content)` in `ruleText` reads each defense's cost, health, and effect from `defenses.json` and the base's starting health from config; the Prepare step on / shows it. A ruleText test pins the default sentence and one with changed numbers.
@@ -17,7 +55,7 @@ Pass 79's /play start panel reset row shipped (b5e61e1). The external-critique M
 - ease: 6
 - next: add `defenseText` to ruleText from defenses.json and show it in the Prepare step
 - issue: #134
-- fixed: (this commit)
+- fixed: a4a370b
 
 ### [ ] [5.4] /: "What you have" names the four Skills without faces or effects (critique MED, pass 20, bias x1.5)
 - category: external-critique (comprehension)

@@ -95,7 +95,9 @@ describe('rule text from config', () => {
 
   it('start: health, dice, starter Skills, deck and hand size follow config (4.7-4.10, 6.1)', () => {
     expect(startText(base, defaultContent)).toBe(
-      'Each player starts with 15 health, 1 action die, and 4 Skills your dice can fire (Strike, Shot, Mend and Guard). ' +
+      'Each player starts with 15 health, 1 action die, and 4 Skills your dice can fire: ' +
+        'Strike (Sword: 2 damage to 1 enemy within 1 hex), Shot (Bow: 1 damage to 1 enemy within 2 hexes), Mend (Wand: heal 1) and Guard (Shield: gain 2 guard). ' +
+        'Guard comes from the Guard Skill; it takes enemy damage before your health. ' +
         'Your deck holds 10 cards: 4 Move, 4 Gather, 1 Build and 1 Rest. You draw 5 at a time. ' +
         'Each card has two halves: the top half is for Prepare, the bottom half for Combat.',
     )
@@ -104,7 +106,11 @@ describe('rule text from config', () => {
       player: { ...c.player, maxHealth: 12, startingDice: 2, starterSkills: ['strike'] },
     }))
     expect(startText(two, defaultContent)).toMatch(
-      /12 health, 2 action dice, and 1 Skill your dice can fire \(Strike\)/,
+      /12 health, 2 action dice, and 1 Skill your dice can fire: Strike \(Sword: 2 damage to 1 enemy within 1 hex\)\. Your deck/,
+    )
+    const exchange = With((c) => ({ ...c, combat: { ...c.combat, model: 'exchange' as const } }))
+    expect(startText(exchange, defaultContent)).toMatch(
+      /Guard comes from the Guard Skill and your cards' bottom halves; it takes enemy damage before your health\./,
     )
   })
 
