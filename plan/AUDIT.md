@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-18 (pass 83, cloud tick)
+
+Pass 82's /tiles Base legend row shipped (b1cd77c). The /decisions design-work row (6.8 with the MED bias) still edits a `[needs-user-call]` row and waits for /oversight. The top shippable row is /decisions row 57 at 2.1: its heading printed "(rule Core loop v2)", its setting "tiles.json: no config field", and the tile kinds were lower case. Reading headings (open and decided) now go through `readingRuleText`, which uses the play log's `ruleCitation` and words a tag with no section as "not in the written rules"; a content-file setting reads "Set in the map tiles, not on the Config page" (`unlistedSettingText`); row 57 writes "Countryside" and "Core". The decisions tests pin both helpers; the page test checks row 57. Every shippable row scores under 3.0 and the expand gate is closed (pass 13 at 8fc13ac, under 48 hours and 20 commits), so the loop keeps draining LOW critique rows.
+
+## Top 5 findings (scored)
+
+### [x] [2.1] /decisions: row 57 shows a raw rule tag and a data file name (critique LOW, pass 20)
+- category: external-critique (voice)
+- impact: 3
+- ease: 7
+- next: cite the rule through the play log helper; "Set in the map tiles, not on the Config page"
+- issue: #137
+- fixed: (this commit)
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [ ] [1.2] /credits: the intro describes how the page is built (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 2
+- ease: 6
+- next: drop "Generated from the project's asset register" from the intro
+
+### [ ] [1.0] /play: the result does not say who took the damage (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 3
+- next: name each damaged enemy and its health left; mark a defeated enemy's dice
+
+### [ ] [0.9] all pages: design tools sit in the nav as equals of Play (critique LOW, pass 9)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 3
+- next: group Tiles, Decisions and Debug under a "Design tools" label
+
 # Site audit — 2026-10-18 (pass 82, cloud tick)
 
 Pass 81's "What you have" row shipped (d1099a2). The external-critique MED bias (x1.5) now applies only to the /decisions design-work row, which edits a `[needs-user-call]` row and waits for /oversight. The top shippable row is the /tiles Base legend at 2.4: it said cards are bought on the base, while / says the Shop opens only with Shop I, and the home Shop line gave no currency per enemy. `siteText` now takes the upgrades content and says "upgrades are bought here, and cards once Shop I is built"; `shopText` lists each enemy's currency from `enemies.json` ("a grunt 1, an elite 4"). The ruleText tests pin both sentences and a changed-currency content; the TileSheet legend test checks the new Base text. Every shippable row scores under 3.0 and the expand gate is closed (pass 13 ran yesterday at 8fc13ac), so the loop keeps draining LOW critique rows.
@@ -17,7 +55,7 @@ Pass 81's "What you have" row shipped (d1099a2). The external-critique MED bias 
 - ease: 8
 - next: say cards are bought there once Shop I is built; add per-enemy currency to the home Shop line
 - issue: #136
-- fixed: (this commit)
+- fixed: b1cd77c
 
 ### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

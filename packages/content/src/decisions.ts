@@ -1,5 +1,6 @@
 import type { GameConfig } from './schemas/config.ts'
 import type { ConfigMeta } from './schemas/configMeta.ts'
+import { ruleCitation } from './ruleText.ts'
 
 /** One row of the `OPEN-QUESTIONS.md` table (cells keep their markdown). */
 export type QuestionRow = Readonly<{
@@ -238,6 +239,41 @@ export function settingValueText(path: string, json: string, meta: ConfigMeta): 
     return phrase ? phrase.replace(/\s*\([^)]*\)$/, '') : value
   }
   return 'a list on the Config page'
+}
+
+/**
+ * A reading's rule tag as /decisions shows it: written-rules sections through the play log's
+ * citation ("rule 6.7, Table 6, core loop"); a tag with no section is "not in the written rules",
+ * with any note left after the design-document name ("not in the written rules (physical
+ * edition)").
+ *
+ * @param rule - the row's Rule column ("Core loop v2", "10.3, core loop v2").
+ * @rule 18.1
+ */
+export function readingRuleText(rule: string): string {
+  const cited = ruleCitation(rule)
+  if (/^(?:\d|Table)/.test(cited)) return `rule ${cited}`
+  const note = cited.replace(/^core loop,?\s*/i, '')
+  return `not in the written rules${note ? ` (${note})` : ''}`
+}
+
+/** Content files a row's Flag column may name, as the place a visitor knows them by. */
+const CONTENT_FILES: Readonly<Record<string, string>> = {
+  'tiles.json': 'the map tiles',
+  'enemies.json': 'the enemy list',
+  'skills.json': 'the Skills',
+  'cards.json': 'the cards',
+}
+
+/**
+ * Where a setting with no config field lives, in plain words: a content file is "Set in the map
+ * tiles, not on the Config page"; any other key has no config field.
+ *
+ * @param key - the key as the row writes it (`tiles.json`, `miniatureLimit`).
+ */
+export function unlistedSettingText(key: string): string {
+  const place = CONTENT_FILES[key] ?? (key.endsWith('.json') ? 'the game content' : null)
+  return place ? `Set in ${place}, not on the Config page` : `${key}: no config field`
 }
 
 /**

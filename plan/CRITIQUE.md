@@ -18,15 +18,6 @@
 - suggested fix: Drop the decided rows from that `[needs-user-call]` item in `plan/AUDIT.md` so it names only open rows.
 - source: web-fetch
 
-### [LOW] /decisions — row 57 shows a raw rule tag and a data file name
-- pass: 20 (commit ed01c82)
-- viewport: desktop
-- category: voice
-- observation: Row 57's heading prints "(rule Core loop v2)" raw, its setting reads "tiles.json: no config field", and it writes "countryside" and "core" in lower case where /tiles capitalises them. Some rows still carry "designer 2026-10-04" stamps.
-- evidence: `apps/web/src/decisions/DecisionsPage.tsx:76` "<code>{s.key}</code>: no config field", `:126` "(rule {q.rule})"; `OPEN-QUESTIONS.md` row 57
-- suggested fix: Pass the rule through the same citation helper /config uses, print "Set in the map tiles, not on the Config page", and capitalise the tile kinds.
-- source: web-fetch
-
 ### [LOW] /play — the "reveal 10 tiles" milestone may be unreachable
 - pass: oversight (2026-10-10)
 - viewport: n/a
@@ -110,7 +101,18 @@
 
 ## Done
 
-### [x] [LOW] /tiles — the Base legend says cards are bought there with no Shop I condition (addressed at (this commit))
+### [x] [LOW] /decisions — row 57 shows a raw rule tag and a data file name (addressed at (this commit))
+- pass: 20 (commit ed01c82)
+- viewport: desktop
+- category: voice
+- observation: Row 57's heading prints "(rule Core loop v2)" raw, its setting reads "tiles.json: no config field", and it writes "countryside" and "core" in lower case where /tiles capitalises them. Some rows still carry "designer 2026-10-04" stamps.
+- evidence: `apps/web/src/decisions/DecisionsPage.tsx:76` "<code>{s.key}</code>: no config field", `:126` "(rule {q.rule})"; `OPEN-QUESTIONS.md` row 57
+- suggested fix: Pass the rule through the same citation helper /config uses, print "Set in the map tiles, not on the Config page", and capitalise the tile kinds.
+- source: web-fetch
+- issue: #137
+- fixed: (this commit). Reading headings go through `readingRuleText` (the play log's `ruleCitation`; a tag with no section reads "not in the written rules"), a content-file setting reads "Set in the map tiles, not on the Config page" (`unlistedSettingText`), and row 57 writes "Countryside" and "Core". The "designer 2026-10-04" stamps are left: they date the designer's rulings.
+
+### [x] [LOW] /tiles — the Base legend says cards are bought there with no Shop I condition (addressed at b1cd77c)
 - pass: 20 (commit ed01c82)
 - viewport: desktop
 - category: comprehension
@@ -119,7 +121,7 @@
 - suggested fix: Say cards are bought there once Shop I is built, and add the per-enemy currency to the Shop line from `enemies.json`.
 - source: web-fetch
 - issue: #136
-- fixed: (this commit). `siteText` takes the upgrades content: the Base legend reads "the players defend it; upgrades are bought here, and cards once Shop I is built". `shopText` lists each enemy's currency from `enemies.json` ("(a grunt 1, an elite 4)").
+- fixed: b1cd77c. `siteText` takes the upgrades content: the Base legend reads "the players defend it; upgrades are bought here, and cards once Shop I is built". `shopText` lists each enemy's currency from `enemies.json` ("(a grunt 1, an elite 4)").
 
 ### [x] [MED] / — "What you have" names the four Skills but not their faces or effects (addressed at d1099a2)
 - pass: 20 (commit ed01c82)

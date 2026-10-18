@@ -11,11 +11,13 @@ import {
   openQuestions,
   parseQuestions,
   parseUserCalls,
+  readingRuleText,
   recentDecisions,
   settingsCombatModel,
   settingValueText,
   splitReading,
   statusLabel,
+  unlistedSettingText,
 } from './decisions.ts'
 
 const root = new URL('../../../', import.meta.url)
@@ -258,5 +260,19 @@ describe('decisions', () => {
     expect(combatModelNote('engage', 'exchange')).toBe(
       'Engagements only. Combat is set to exchanges, so changing it changes nothing.',
     )
+  })
+
+  it('words a rule tag and a content-file setting for a visitor (critique pass 20)', () => {
+    expect(readingRuleText('Core loop v2')).toBe('not in the written rules')
+    expect(readingRuleText('Core loop v2, physical edition')).toBe(
+      'not in the written rules (physical edition)',
+    )
+    expect(readingRuleText('10.3, core loop v2')).toBe('rule 10.3, core loop')
+    expect(readingRuleText('Table 3, 6.7')).toBe('rule Table 3, 6.7')
+    expect(unlistedSettingText('tiles.json')).toBe('Set in the map tiles, not on the Config page')
+    expect(unlistedSettingText('other.json')).toBe(
+      'Set in the game content, not on the Config page',
+    )
+    expect(unlistedSettingText('miniatureLimit')).toBe('miniatureLimit: no config field')
   })
 })

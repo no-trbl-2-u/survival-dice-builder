@@ -45,7 +45,7 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 ### 57. The designer will add more tiles. How many, and what is on them? (rule Core loop v2)
 
 - Status: pending-spec 2026-10-04
-- Reading: The current 3 countryside and 5 core tiles until the new set exists.
+- Reading: The current 3 Countryside and 5 Core tiles until the new set exists.
 - Setting: `tiles.json`: no config field
 
 ### 58. Scenarios (rule 19)

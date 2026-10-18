@@ -9,6 +9,7 @@ import {
   parseQuestions,
   parseUserCalls,
   proposalForRow,
+  readingRuleText,
   RECENT_DATES,
   RECENT_NOTE,
   recentDecisions,
@@ -17,6 +18,7 @@ import {
   SPEC_V2_LINE,
   splitReading,
   statusLabel,
+  unlistedSettingText,
   type QuestionRow,
 } from '@survival/content'
 import questionsMd from '../../../../OPEN-QUESTIONS.md?raw'
@@ -72,9 +74,7 @@ function Settings({ row }: Readonly<{ row: QuestionRow }>) {
               ) : null}
             </>
           ) : (
-            <>
-              <code>{s.key}</code>: no config field
-            </>
+            unlistedSettingText(s.key)
           )}
         </span>
       ))}
@@ -123,7 +123,7 @@ export function DecisionsPage() {
             >
               <h3 className={styles.question}>
                 {q.number}. <Inline text={q.question} rows={shown} />{' '}
-                <span className={styles.muted}>(rule {q.rule})</span>
+                <span className={styles.muted}>({readingRuleText(q.rule)})</span>
                 {model ? (
                   <>
                     {' '}
@@ -155,7 +155,7 @@ export function DecisionsPage() {
             <h3 className={styles.question}>
               {q.number}. <Inline text={q.question} rows={shown} />{' '}
               <span className={styles.muted}>
-                (rule {q.rule}, decided {decidedDate(q.status)})
+                ({readingRuleText(q.rule)}, decided {decidedDate(q.status)})
               </span>
             </h3>
             <Reading text={q.reading} rows={shown} />

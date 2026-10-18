@@ -104,6 +104,17 @@ describe('DecisionsPage', () => {
     expect(hidden?.getAttribute('href')).toBe(repoFileUrl('OPEN-QUESTIONS.md'))
   })
 
+  it('words row 57 for a visitor: no raw rule tag or data file name (critique pass 20)', () => {
+    const { container } = render(<DecisionsPage />)
+    const row = container.querySelector('[data-question="57"]')?.textContent ?? ''
+    expect(row).toContain('(not in the written rules)')
+    expect(row).toContain('Setting: Set in the map tiles, not on the Config page')
+    expect(row).toContain('3 Countryside and 5 Core tiles')
+    expect(container.querySelector('[data-testid="readings"]')?.textContent).not.toMatch(
+      /rule Core loop v2|tiles\.json/,
+    )
+  })
+
   it('links every repository file it names to GitHub, and each file exists', () => {
     const { container } = render(<DecisionsPage />)
     const prefix = repoFileUrl('')
