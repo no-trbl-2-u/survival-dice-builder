@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-18 (pass 82, cloud tick)
+
+Pass 81's "What you have" row shipped (d1099a2). The external-critique MED bias (x1.5) now applies only to the /decisions design-work row, which edits a `[needs-user-call]` row and waits for /oversight. The top shippable row is the /tiles Base legend at 2.4: it said cards are bought on the base, while / says the Shop opens only with Shop I, and the home Shop line gave no currency per enemy. `siteText` now takes the upgrades content and says "upgrades are bought here, and cards once Shop I is built"; `shopText` lists each enemy's currency from `enemies.json` ("a grunt 1, an elite 4"). The ruleText tests pin both sentences and a changed-currency content; the TileSheet legend test checks the new Base text. Every shippable row scores under 3.0 and the expand gate is closed (pass 13 ran yesterday at 8fc13ac), so the loop keeps draining LOW critique rows.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /tiles: the Base legend says cards are bought there with no Shop I condition (critique LOW, pass 20)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: say cards are bought there once Shop I is built; add per-enemy currency to the home Shop line
+- issue: #136
+- fixed: (this commit)
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [ ] [2.1] /decisions: row 57 shows a raw rule tag and a data file name (critique LOW, pass 20)
+- category: external-critique (voice)
+- impact: 3
+- ease: 7
+- next: cite the rule through the /config helper; "Set in the map tiles, not on the Config page"
+
+### [ ] [1.2] /credits: the intro describes how the page is built (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 2
+- ease: 6
+- next: drop "Generated from the project's asset register" from the intro
+
+### [ ] [1.0] /play: the result does not say who took the damage (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 3
+- next: name each damaged enemy and its health left; mark a defeated enemy's dice
+
 # Site audit — 2026-10-18 (pass 81, cloud tick)
 
 Pass 80's / Prepare defenses row shipped (a4a370b). The external-critique MED bias (x1.5) still applies to the two pass 20 MED rows left. The /decisions design-work row scores highest on paper but edits a `[needs-user-call]` row, so it waits for /oversight. The top shippable row is "What you have" on / at 5.4: it named Strike, Shot, Mend and Guard with no face or effect, and nothing said where guard comes from. `skillEffectText` moves from the /play app into `ruleText` (the Skill board and decision dialog keep the same words through it), and `startText` now gives each starter Skill its faces and effect from `skills.json` and says guard comes from the Guard Skill (and the card bottom halves under the exchange model). The ruleText start test pins the default sentence, a one-Skill config, and the exchange model.
@@ -17,7 +55,7 @@ Pass 80's / Prepare defenses row shipped (a4a370b). The external-critique MED bi
 - ease: 6
 - next: generate each Skill's face and effect from skills.json; say where guard comes from
 - issue: #135
-- fixed: (this commit)
+- fixed: d1099a2
 
 ### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

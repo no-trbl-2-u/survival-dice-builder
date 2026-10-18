@@ -27,15 +27,6 @@
 - suggested fix: Pass the rule through the same citation helper /config uses, print "Set in the map tiles, not on the Config page", and capitalise the tile kinds.
 - source: web-fetch
 
-### [LOW] /tiles — the Base legend says cards are bought there with no Shop I condition
-- pass: 20 (commit ed01c82)
-- viewport: desktop
-- category: comprehension
-- observation: The Base legend says upgrades and cards are bought on the base; / says the Shop opens only after Shop I. The home Shop line says currency comes from each defeated enemy without the amounts, though the Levels line gives the experience per enemy.
-- evidence: `packages/content/src/ruleText.ts:68` "upgrades and cards are bought here"; `ruleText.ts:127,133` Shop I and currency lines; `enemies.json` currency grunt 1, elite 4
-- suggested fix: Say cards are bought there once Shop I is built, and add the per-enemy currency to the Shop line from `enemies.json`.
-- source: web-fetch
-
 ### [LOW] /play — the "reveal 10 tiles" milestone may be unreachable
 - pass: oversight (2026-10-10)
 - viewport: n/a
@@ -119,7 +110,18 @@
 
 ## Done
 
-### [x] [MED] / — "What you have" names the four Skills but not their faces or effects (addressed at (this commit))
+### [x] [LOW] /tiles — the Base legend says cards are bought there with no Shop I condition (addressed at (this commit))
+- pass: 20 (commit ed01c82)
+- viewport: desktop
+- category: comprehension
+- observation: The Base legend says upgrades and cards are bought on the base; / says the Shop opens only after Shop I. The home Shop line says currency comes from each defeated enemy without the amounts, though the Levels line gives the experience per enemy.
+- evidence: `packages/content/src/ruleText.ts:68` "upgrades and cards are bought here"; `ruleText.ts:127,133` Shop I and currency lines; `enemies.json` currency grunt 1, elite 4
+- suggested fix: Say cards are bought there once Shop I is built, and add the per-enemy currency to the Shop line from `enemies.json`.
+- source: web-fetch
+- issue: #136
+- fixed: (this commit). `siteText` takes the upgrades content: the Base legend reads "the players defend it; upgrades are bought here, and cards once Shop I is built". `shopText` lists each enemy's currency from `enemies.json` ("(a grunt 1, an elite 4)").
+
+### [x] [MED] / — "What you have" names the four Skills but not their faces or effects (addressed at d1099a2)
 - pass: 20 (commit ed01c82)
 - viewport: desktop
 - category: comprehension

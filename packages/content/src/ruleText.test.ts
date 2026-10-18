@@ -62,10 +62,18 @@ describe('rule text from config', () => {
 
   it('shop: the opening upgrade, offers and timing follow content and config (6.8, Table 6)', () => {
     expect(shopText(base, defaultContent)).toBe(
-      'Buy Shop I on the base (a Build card and 4 materials) to open the Shop with 3 card offers. Pay for cards with currency, which you get for each enemy you defeat; buy at any time you stand on the base.',
+      'Buy Shop I on the base (a Build card and 4 materials) to open the Shop with 3 card offers. Pay for cards with currency, which you get for each enemy you defeat (a grunt 1, an elite 4); buy at any time you stand on the base.',
     )
     const prepare = With((c) => ({ ...c, rulings: { ...c.rulings, shopTiming: 'prepare-only' } }))
     expect(shopText(prepare, defaultContent)).toMatch(/in the Prepare phase\.$/)
+    const rich = {
+      ...defaultContent,
+      enemies: {
+        ...defaultContent.enemies,
+        enemies: defaultContent.enemies.enemies.map((e) => ({ ...e, currency: e.currency + 1 })),
+      },
+    }
+    expect(shopText(base, rich)).toMatch(/\(a grunt 2, an elite 5\)/)
   })
 
   it('training: the draft round and the Skills shown follow config (10.8, 11.6)', () => {
@@ -138,15 +146,19 @@ describe('rule text from config', () => {
   })
 
   it('sites: Table 1 functions, with spawn options named (rows 64, 66, 68, 70)', () => {
-    expect(siteText('base', base)).toBe('the players defend it; upgrades and cards are bought here')
-    expect(siteText('gathering-node', base)).toBe('a Gather card here gets its materials, once')
-    expect(siteText('spawn-node', base)).toBe('gets 1 grunt at each Combat')
-    expect(siteText('elite-spawn-node', base)).toBe('gets 1 elite at each Combat')
+    expect(siteText('base', base, defaultContent)).toBe(
+      'the players defend it; upgrades are bought here, and cards once Shop I is built',
+    )
+    expect(siteText('gathering-node', base, defaultContent)).toBe(
+      'a Gather card here gets its materials, once',
+    )
+    expect(siteText('spawn-node', base, defaultContent)).toBe('gets 1 grunt at each Combat')
+    expect(siteText('elite-spawn-node', base, defaultContent)).toBe('gets 1 elite at each Combat')
     const varied = With((c) => ({
       ...c,
       spawn: { ...c.spawn, perSeat: true, newTileDelay: 1, nodeRange: 3 },
     }))
-    expect(siteText('spawn-node', varied)).toBe(
+    expect(siteText('spawn-node', varied, defaultContent)).toBe(
       'gets grunts at each Combat, from 1 round after its tile is revealed, if a figure or structure is within 3 hexes',
     )
   })

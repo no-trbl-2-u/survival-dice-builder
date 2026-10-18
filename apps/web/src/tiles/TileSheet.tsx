@@ -63,7 +63,7 @@ export function TileSheet() {
         {SITES.map((s) => (
           <li key={s} data-site-legend={s}>
             <GameIcon name={SITE_ICON[s]} className={styles.siteIcon} size="1.25rem" />
-            {SITE_LABEL[s]} ({siteText(s, defaultContent.config)})
+            {SITE_LABEL[s]} ({siteText(s, defaultContent.config, defaultContent)})
           </li>
         ))}
       </ul>

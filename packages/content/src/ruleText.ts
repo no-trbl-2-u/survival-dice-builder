@@ -60,13 +60,25 @@ export function spawnText(config: GameConfig): string {
   return `Each new tile's spawn nodes add enemies ${when}.`
 }
 
+type Upgrades = Pick<Content, 'upgrades'>
+
+/** The first upgrade of a base track: "Shop I" and its cost in materials. */
+const firstUpgrade = (track: string, content: Upgrades) =>
+  content.upgrades.find((u) => u.track === track && u.tier === 1)
+
 /**
  * What a printed site does, for the site legend: "gets 1 grunt at each Combat".
  *
- * @rule Table 1, 6.7, 7.3, OPEN-QUESTIONS rows 59, 64, 66, 68, 70
+ * @rule Table 1, 6.7, 7.3, 11.2, OPEN-QUESTIONS rows 59, 64, 66, 68, 70
  */
-export function siteText(site: Site, config: GameConfig): string {
-  if (site === 'base') return 'the players defend it; upgrades and cards are bought here'
+export function siteText(site: Site, config: GameConfig, content: Upgrades): string {
+  if (site === 'base') {
+    const shop = firstUpgrade('shop', content)
+    const cards = shop
+      ? `, and cards once ${shop.name} is built`
+      : ', and cards once the Shop opens'
+    return `the players defend it; upgrades are bought here${cards}`
+  }
   if (site === 'gathering-node')
     return config.rulings.gatherNeedsNode
       ? 'a Gather card here gets its materials, once'
@@ -111,18 +123,12 @@ export function levelText(config: GameConfig, content: Enemies): string {
   return `${raise} At each new level, every player gets 1 more action die.${cap}`
 }
 
-type Upgrades = Pick<Content, 'upgrades'>
-
-/** The first upgrade of a base track: "Shop I" and its cost in materials. */
-const firstUpgrade = (track: string, content: Upgrades) =>
-  content.upgrades.find((u) => u.track === track && u.tier === 1)
-
 /**
- * How the Shop opens, what pays for its cards, and when a player can buy.
+ * How the Shop opens, what pays for its cards (each enemy's currency), and when a player can buy.
  *
  * @rule 6.8, 8.2, 11.2, Table 6
  */
-export function shopText(config: GameConfig, content: Upgrades): string {
+export function shopText(config: GameConfig, content: Upgrades & Enemies): string {
   const shop = firstUpgrade('shop', content)
   const open = shop
     ? `Buy ${shop.name} on the base (a Build card and ${plural(shop.cost, 'material', 'materials')}) to open the Shop`
@@ -131,7 +137,10 @@ export function shopText(config: GameConfig, content: Upgrades): string {
     config.rulings.shopTiming === 'prepare-only'
       ? 'while you stand on the base in the Prepare phase'
       : 'at any time you stand on the base'
-  return `${open} with ${plural(config.shop.offers, 'card offer', 'card offers')}. Pay for cards with currency, which you get for each enemy you defeat; buy ${when}.`
+  const gains = content.enemies.enemies
+    .map((e) => `${withArticle(e.name.toLowerCase())} ${e.currency}`)
+    .join(', ')
+  return `${open} with ${plural(config.shop.offers, 'card offer', 'card offers')}. Pay for cards with currency, which you get for each enemy you defeat (${gains}); buy ${when}.`
 }
 
 /**
