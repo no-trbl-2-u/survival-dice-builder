@@ -84,3 +84,21 @@ export function legalMoves(
     return [{ to, cost, reveal: false }]
   })
 }
+
+/**
+ * The map hexes the current player could step into but cannot afford: a hex next to an enemy
+ * when `combat.moveCostNextToEnemy` is above the movement left. Off-map reveal steps are not
+ * counted. The UI reads this to say why such a hex is not offered.
+ *
+ * @rule Spec v2 6.9, OPEN-QUESTIONS row 76
+ */
+export function stepsOutOfReach(
+  state: GameState,
+  hexesLeft: number,
+  ignoreEnemyCost: boolean,
+): Axial[] {
+  const reachable = legalMoves(state, hexesLeft, ignoreEnemyCost)
+  return legalMoves(state, Number.POSITIVE_INFINITY, ignoreEnemyCost)
+    .filter((m) => !m.reveal && !reachable.some((r) => sameHex(r.to, m.to)))
+    .map((m) => m.to)
+}

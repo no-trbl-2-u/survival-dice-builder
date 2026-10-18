@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-18 (pass 77, cloud tick)
+
+Pass 76's /tiles site legend row shipped (692486b). No MED rows are left, so the bias does not apply; the top row is the user-jotted /play move surcharge at 1.7. With `combat.moveCostNextToEnemy` above 1, a hex next to an enemy that costs more than the movement left was just not highlighted. The engine now exports `stepsOutOfReach` (the map steps that are legal but unaffordable), and the Move banner adds "A hex next to an enemy costs N, more than you have left" when any exist. The default (1) never shows it. An engine test covers the surcharge, Blink, and the default; a nextStep test checks both banner lines. Every row scores under 3.0 and the expand gate is closed (pass 13 ran yesterday), so the loop keeps draining LOW critique rows.
+
+## Top 5 findings (scored)
+
+### [x] [1.7] /play: a hex next to an enemy that costs too much is not offered, with no reason (critique LOW, user +0.5)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 4
+- next: when the move cost next to an enemy is above 1, say so in the Move banner
+- issue: #131
+- fixed: (this commit)
+
+### [ ] [1.5] /: the Combat step is one long sentence chain (critique LOW, pass 8)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: split the Combat step into short sentences
+
+### [ ] [1.2] /credits: the intro describes how the page is built (critique LOW, pass 9)
+- category: external-critique (voice)
+- impact: 2
+- ease: 6
+- next: drop "Generated from the project's asset register" from the intro
+
+### [ ] [1.2] /play: the result does not say who took the damage or their health after (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 4
+- next: name each damaged enemy with its health left; mark a defeated enemy's dice
+
+### [ ] [1.2] /play: "in range" counts differ from the engaged enemies (critique LOW)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 4
+- next: count the same enemies in both places
+
 # Site audit — 2026-10-17 (pass 76, cloud tick)
 
 Pass 75's /credits textures row shipped (ad64856). No MED rows are left, so the bias does not apply; the top LOW row is the /tiles site legend at 1.8. The legend named Base, Gathering node, Spawn node and Elite spawn node with nothing after them, while each terrain row says what it does to moves. Each site now carries its Table 1 function in brackets, built by a new `siteText` in ruleText from config, so the spawn options (rows 64, 66, 68, 70) and the Gather node ruling change the wording with them. A ruleText test covers the default and a varied spawn config; the TileSheet unit test and the tiles e2e check the legend text. Every row scores under 3.0 and the expand gate is closed (pass 13 ran this morning), so the loop keeps draining LOW critique rows.

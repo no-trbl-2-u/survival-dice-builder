@@ -2,7 +2,13 @@ import { defaultContent } from '@survival/content'
 import { describe, expect, it } from 'vitest'
 import { exchangeConfig } from './helpers/exchangeConfig.ts'
 import { hexDistance, tileHexes } from '../src/hex.ts'
-import { applyAction, createGame, legalActions, type GameState } from '../src/index.ts'
+import {
+  applyAction,
+  createGame,
+  legalActions,
+  stepsOutOfReach,
+  type GameState,
+} from '../src/index.ts'
 import { canBuildOn } from '../src/build/defenses.ts'
 import { spawnEnemy } from '../src/map/spawn.ts'
 import { placeTile, slotCovering, TILE_SLOT_OFFSETS } from '../src/map/tiles.ts'
@@ -129,6 +135,24 @@ describe('Move (6.7-6.9)', () => {
     // (1,0) is next to (2,0): costs 2, more than the 1 point left.
     expect(moves(s)).not.toContain('1,0')
     expect(moves(s)).toContain('0,1')
+  })
+
+  it('6.9 (option, moveCostNextToEnemy 2) names the steps the surcharge puts out of reach', () => {
+    const base = world({
+      enemies: [grunt('e1', 2, 0)],
+      active: { kind: 'move', hexesLeft: 1, ignoreEnemyCost: false },
+    })
+    const s = {
+      ...base,
+      config: { ...base.config, combat: { ...base.config.combat, moveCostNextToEnemy: 2 } },
+    }
+    const keys = (hexesLeft: number, ignore: boolean) =>
+      stepsOutOfReach(s, hexesLeft, ignore).map((h) => `${h.q},${h.r}`)
+    expect(keys(1, false)).toContain('1,0')
+    expect(keys(1, false)).not.toContain('0,1')
+    expect(keys(2, false)).toEqual([])
+    expect(keys(1, true)).toEqual([])
+    expect(stepsOutOfReach(base, 1, false)).toEqual([])
   })
 
   it('6.9 (designer 2026-10-09, default 1) a hex next to an enemy costs 1, like any step', () => {

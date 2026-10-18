@@ -5,6 +5,7 @@ import {
   legalActions,
   type Action,
   type ActionType,
+  type GameState,
 } from '@survival/engine'
 import { describe, expect, it } from 'vitest'
 import { engageInstruction } from './engageView.ts'
@@ -70,6 +71,30 @@ describe('nextStep', () => {
     const legal = legalActions(building)
     expect(nextStep(building, legal).step).toBe('Build: buy a base upgrade, or stop building')
     expect(bannerActions(legal).map((a) => a.type)).toContain('buyUpgrade')
+  })
+
+  it('the Move banner says why a hex next to an enemy is not offered when the surcharge is on', () => {
+    const start = createGame(config, 1)
+    const placed = applyAction(start, { type: 'placeFigure', q: 0, r: 0 }).state
+    const p = placed.players[0]!
+    const moving = {
+      ...placed,
+      phase: 'prepare' as const,
+      active: { kind: 'move', hexesLeft: 1, ignoreEnemyCost: false } as const,
+      enemies: [{ id: 'e1', kind: 'grunt', hex: { q: 2, r: -1 }, health: 1 }],
+      players: [{ ...p, hand: [], deck: [] }],
+    } as GameState
+    const surcharge = {
+      ...moving,
+      config: { ...config, combat: { ...config.combat, moveCostNextToEnemy: 2 } },
+    }
+    expect(nextStep(surcharge, legalActions(surcharge)).step).toBe(
+      'Move: click a highlighted hex (1 left), or stop moving. ' +
+        'A hex next to an enemy costs 2, more than you have left',
+    )
+    expect(nextStep(moving, legalActions(moving)).step).toBe(
+      'Move: click a highlighted hex (1 left), or stop moving',
+    )
   })
 
   it('names the seat in a multi-player run', () => {

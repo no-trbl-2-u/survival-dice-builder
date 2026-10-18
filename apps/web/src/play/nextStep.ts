@@ -1,5 +1,5 @@
 import { cardStepText } from '@survival/content'
-import { enemiesInRange, type Action, type GameState } from '@survival/engine'
+import { enemiesInRange, stepsOutOfReach, type Action, type GameState } from '@survival/engine'
 import { defenseName } from '../map/places.ts'
 import { engageInstruction, enemyLabel } from './engageView.ts'
 import { ofType } from './targets.ts'
@@ -47,11 +47,17 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
         : EXCHANGE[state.exchange.step]
     return step(name, `${text}${far ? ' (no enemy is in range of your attack Skills)' : ''}`)
   }
-  if (state.active?.kind === 'move')
+  if (state.active?.kind === 'move') {
+    const { hexesLeft, ignoreEnemyCost } = state.active
+    const costly =
+      stepsOutOfReach(state, hexesLeft, ignoreEnemyCost).length > 0
+        ? `. A hex next to an enemy costs ${state.config.combat.moveCostNextToEnemy}, more than you have left`
+        : ''
     return step(
       state.phase === 'combat' ? 'Combat' : 'Prepare',
-      `Move: click a highlighted hex (${state.active.hexesLeft} left), or stop moving`,
+      `Move: click a highlighted hex (${hexesLeft} left), or stop moving${costly}`,
     )
+  }
   if (state.active?.kind === 'build') {
     if (has('buyUpgrade')) return step('Prepare', 'Build: buy a base upgrade, or stop building')
     if (!has('build'))

@@ -18,15 +18,6 @@
 - suggested fix: Verify the reachable count; if unreachable, file an `OPEN-QUESTIONS.md` reading (proposed: cap the milestone at the revealable count) rather than change the rule value silently.
 - source: oversight
 
-### [LOW] /play — a hex next to an enemy that costs too much just isn't offered, with no reason
-- pass: session residue (2026-10-09)
-- viewport: n/a
-- category: comprehension
-- observation: With `combat.moveCostNextToEnemy` above 1 (an option since 2026-10-09; the default is now 1), a step next to an enemy costs more, and with too few move points left the hex is simply not highlighted. The designer hit this before the default changed and could not tell why.
-- evidence: session 2026-10-09; `packages/engine/src/movement/move.ts:51`; `apps/web/src/play/PlayMap.tsx` offers only legal hexes
-- suggested fix: When the option is above 1, mark such hexes ("costs 2: next to an enemy") or say it in the Move banner.
-- source: user
-
 ### [LOW] sim — the bot cannot measure today's designer changes
 - pass: session residue (2026-10-09)
 - viewport: n/a
@@ -118,6 +109,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — a hex next to an enemy that costs too much just isn't offered, with no reason
+- pass: session residue (2026-10-09)
+- viewport: n/a
+- category: comprehension
+- observation: With `combat.moveCostNextToEnemy` above 1 (an option since 2026-10-09; the default is now 1), a step next to an enemy costs more, and with too few move points left the hex is simply not highlighted. The designer hit this before the default changed and could not tell why.
+- evidence: session 2026-10-09; `packages/engine/src/movement/move.ts:51`; `apps/web/src/play/PlayMap.tsx` offers only legal hexes
+- suggested fix: When the option is above 1, mark such hexes ("costs 2: next to an enemy") or say it in the Move banner.
+- source: user
+- issue: #131
+- fixed: (this commit)
 
 ### [x] [LOW] /tiles — the site legend names the sites but not what they do
 - pass: 19 (commit ce4724a)
