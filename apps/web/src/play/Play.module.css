@@ -2006,6 +2006,31 @@
     gap: 4px;
   }
 
+  /* 5 or more Skills: 3 columns of smaller tiles (slots stay 24px or more, a touch target), so
+     the last row stays above the footer. */
+  .engageBody .skills:has(> li:nth-child(5)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .engageBody .skills:has(> li:nth-child(5)) .skillHead {
+    gap: 2px 4px;
+  }
+
+  .engageBody .skills:has(> li:nth-child(5)) .skillName {
+    font-size: 0.85rem;
+  }
+
+  .engageBody .skills:has(> li:nth-child(5)) :is(.slot, .slotFit, .slotFilled) {
+    inline-size: 1.6rem;
+    block-size: 1.6rem;
+    font-size: var(--text-md);
+  }
+
+  .engageBody .skills:has(> li:nth-child(5)) .skill .muted {
+    font-size: 0.7rem;
+    line-height: 1.2;
+  }
+
   .engageBody .skill {
     padding: 4px 5px;
     gap: 3px;

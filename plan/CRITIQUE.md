@@ -54,16 +54,27 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [LOW] /play — at 375px a fifth Skill, the target pick, and the hand still need scrolling
+### [LOW] /play — at 375px the target pick and the hand still need scrolling
 - pass: blind-round-4 (phase 24)
 - viewport: 1280x800 and 375x812
 - category: comprehension
-- observation: With 5 Skills the fifth sits behind the footer; during Pick target the map and list push the Skills off screen; the hand strip clips its option text and shows about 4 cards. At 1280x800 a long effect text is cut by the footer.
+- observation: During Pick target the map and list push the Skills off screen; the hand strip clips its option text and shows about 4 cards. At 1280x800 a long effect text is cut by the footer. (The 5-Skill part shipped; see Done.)
 - evidence: blind round 4 (2026-10-09), the modal at 375x812 and 1280x800
-- suggested fix: Fit 5+ Skills (3 columns or a smaller tile), and keep strip text whole.
+- suggested fix: Keep strip text whole; keep the Skills in view during Pick target.
 - source: blind-round-4
 
 ## Done
+
+### [x] [LOW] /play — at 375px a fifth Skill sits behind the footer (addressed at (this commit))
+- pass: blind-round-4 (phase 24)
+- viewport: 375x812
+- category: comprehension
+- observation: With 5 Skills the fifth sits behind the footer.
+- evidence: blind round 4 (2026-10-09), the modal at 375x812
+- suggested fix: Fit 5+ Skills (3 columns or a smaller tile).
+- source: blind-round-4
+- issue: #149
+- resolution: at phone width 5 or more Skills take 3 columns of smaller tiles (slots 1.6rem, still a touch target; smaller name and effect text), so with 6 dice the fifth Skill ends above the footer. An e2e at 375x812 with 5 starter Skills pins the 3-column row and the fifth tile inside the modal body.
 
 ### [x] [LOW] /play — the mini-map target label can cover tokens (addressed at (this commit))
 - pass: blind-round-4 (phase 24)

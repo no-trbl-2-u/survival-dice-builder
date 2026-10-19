@@ -134,3 +134,29 @@ test('/play engagement II at 375x812: the felt and the Skills fit together, unde
   expect(last.y + last.height).toBeLessThanOrEqual(box.y + box.height + 1)
   expect(skills.y + skills.height).toBeLessThanOrEqual(box.y + box.height + 1)
 })
+
+test('/play engagement II at 375x812: 5 Skills fit in 3 columns, the fifth above the footer', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  // A config with 5 starter Skills and 6 dice, saved as /config would save it.
+  const config = JSON.parse(fs.readFileSync(DEFAULT_CONFIG, 'utf-8'))
+  config.player.startingDice = 6
+  config.player.starterSkills = ['strike', 'shot', 'mend', 'guard', 'cleave']
+  await page.addInitScript((raw) => {
+    localStorage.setItem('survival.config.v1', raw)
+  }, JSON.stringify(config))
+  const modal = await engage(page, 5)
+  await modal.getByRole('button', { name: 'Stop rolling: use these dice' }).click()
+  await expect(modal.getByRole('list', { name: 'Engagement steps' })).toContainText('Use dice')
+  const body = modal.locator('[data-testid="engage-instruction"] ~ div').first()
+  const box = await body.boundingBox()
+  const tiles = modal.getByLabel('Skills').locator('li')
+  await expect(tiles).toHaveCount(5)
+  const first = await tiles.first().boundingBox()
+  const third = await tiles.nth(2).boundingBox()
+  const fifth = await tiles.nth(4).boundingBox()
+  if (!box || !first || !third || !fifth) throw new Error('the modal body or a Skill is missing')
+  expect(Math.abs(third.y - first.y), 'the third Skill shares the first row').toBeLessThan(2)
+  expect(fifth.y + fifth.height).toBeLessThanOrEqual(box.y + box.height + 1)
+})
