@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-18 at commit ed01c82
-> Pass count: 20
+> Last pass: 2026-10-19 at commit a6dc51f
+> Pass count: 21
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /decisions — three balance checks give three different bot results
+- pass: 21 (commit a6dc51f)
+- viewport: desktop
+- category: comprehension
+- observation: "Bot batch results" gives a median end round of 14 and says nothing is filed; "Interim balance" gives round 5; "Balance under core loop v2" gives round 6 against the 8-14 band and says 57 runs buy 3 upgrades, while /play and /config mark "Buy 3 base upgrades" as out of reach under the default rules. None says which result is current.
+- evidence: `plan/AUDIT.md:3223`, `:3228`, `:3229` (rendered on /decisions as checks)
+- suggested fix: Close the 2026-10-03 and the first 2026-10-04 balance items in `plan/AUDIT.md` and keep one item with the latest batch under the current rules.
+- source: web-fetch
+
+### [MED] /decisions — the "Structural v2 questions" check names rows already decided
+- pass: 21 (commit a6dc51f)
+- viewport: desktop
+- category: comprehension
+- observation: The check says rule readings 63-70 each have an option on /config, all off by default, and asks the designer to try them. The same page lists rows 65 and 69 under "Decided recently", and their notes say those options were removed. Same problem as the pending "Spec v2 design work" row, in a different AUDIT item.
+- evidence: `plan/AUDIT.md:3230`; `OPEN-QUESTIONS.md` rows 65, 69 "decided 2026-10-11"
+- suggested fix: In that `plan/AUDIT.md` item, drop rows 65 and 69 and any advice to turn on options that no longer exist.
+- source: web-fetch
+
+### [LOW] /decisions — headings cite "row 20" and ruling numbers the visitor cannot look up
+- pass: 21 (commit a6dc51f)
+- viewport: desktop
+- category: comprehension
+- observation: Rows 59 and 60 start with "Row 20 says/reads ..." and their rule tag ends "row 20" (a row of rules Table 8, not a row on this page). Row 78 cites "ruling 25" and one check cites "Spec v2 ruling 14". The page shows neither table nor rulings.
+- evidence: `OPEN-QUESTIONS.md:75` "Row 20 reads \"Gather +2\" (Haul) as 2 in total"; /decisions heading "(rule Table 8, row 20, decided 2026-10-11)"
+- suggested fix: Name the card instead of the table row ("The Haul card says ..."), and drop the ruling numbers or link them to the written rules.
+- source: web-fetch
+
+### [LOW] /decisions — the "Reset /config once" check names a URL path and an unknowable date
+- pass: 21 (commit a6dc51f)
+- viewport: desktop
+- category: voice
+- observation: The heading names the page by its path, while both pages label the button "Reset to defaults". It asks every visitor to reset a config saved before 2026-10-09, a date they cannot check. The /config save message had the same path-naming problem and was fixed.
+- evidence: `plan/AUDIT.md:3218`; `apps/web/src/config/ConfigPage.tsx:795`, `apps/web/src/play/StartPanel.tsx:153` "Reset to defaults"
+- suggested fix: Reword to "If your config is from before 9 October, choose Reset to defaults on the Config page once", or close the item.
+- source: web-fetch
+
+### [LOW] /config — "standard rules" and "defaults" name the same baseline
+- pass: 21 (commit a6dc51f)
+- viewport: desktop
+- category: voice
+- observation: The status line says "Playing with the standard rules" or "N changes from the standard rules"; the button next to it says "Reset to defaults" and its confirm "Reset every value to the default?". Same on the /play start panel. A visitor cannot tell the two are the same thing.
+- evidence: `apps/web/src/config/ConfigChanges.tsx:62`; `apps/web/src/config/ConfigPage.tsx:781,795`; `apps/web/src/play/StartPanel.tsx:137,153`
+- suggested fix: Use one name on both pages, e.g. "Reset to the standard rules" and "Reset every value to the standard rules?".
+- source: web-fetch
+
+### [LOW] /tiles — tile captions write site names in lower case
+- pass: 21 (commit a6dc51f)
+- viewport: desktop
+- category: voice
+- observation: The caption under each tile name reads "1 base", "2 gathering nodes, 1 spawn node", "1 elite spawn node"; the site legend and every hex list on the same page write "Base", "Gathering node", "Elite spawn node".
+- evidence: `apps/web/src/tiles/TileSheet.tsx:34` (`SITE_LABEL[s].toLowerCase()`)
+- suggested fix: Drop the `.toLowerCase()` in the caption so it matches the legend ("1 Base, 2 Gathering nodes").
+- source: web-fetch
 
 ### [MED] /decisions — the "Spec v2 design work" check lists rows already decided
 - pass: 20 (commit ed01c82)
