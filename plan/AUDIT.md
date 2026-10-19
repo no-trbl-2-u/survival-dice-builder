@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-19 (pass 92, cloud tick)
+
+Pass 91's "Reveal 10 tiles" row shipped (f7dc176). The two MED rows from critique pass 21, the pass 20 design-work row, and the LOW reset-wording row still edit `[needs-user-call]` items, which only /oversight changes, so they wait. Every shippable row scores under 3.0, and the expand gate is closed (pass 14 at f7dc176, 0 commits since), so the loop keeps draining LOW critique rows. The top one is the /play "in range" row at 0.8, rescored to 1.4 now the fix is a prop on the reach line: in an engagement the title names the enemies that rolled dice ("vs 1 elite") while Shot said "3 enemies in range". `InReach` now takes the engaged count (in-range enemies in `exchange.engage.enemyDice`) and, when it is lower, reads "3 enemies in range, 1 of them engaged" (phones: "3 in range, 1 engaged"). Two SkillBoard tests pin both lines. The critique gate is closed (pass 21, 6 commits, under 24 hours).
+
+## Top 5 findings (scored)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [x] [1.4] /play: "in range" counts differ from the engaged enemies (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 2
+- ease: 7
+- next: say "3 in range, 1 engaged" on the Skill reach line in an engagement
+- issue: #146
+- fixed: (this commit)
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords or closes the `[needs-user-call]` reset item
+
 # Site audit — 2026-10-19 (pass 91, cloud tick)
 
 Pass 90's /decisions row-20 wording shipped (dda37ce). The two MED rows from critique pass 21, the pass 20 design-work row, and the LOW reset-wording row still edit `[needs-user-call]` items, which only /oversight changes, so they wait. The top shippable row is the oversight "reveal 10 tiles" row at 2.1: tracing `createGame` shows the tile deck is the countryside and core tiles only (the Base tile starts on the map), so with 8 tiles in the deck "Reveal 10 tiles" can never fire. OPEN-QUESTIONS row 4 already holds the reading (pending-spec), so the value is not changed from cloud. `milestoneOutOfReach` now covers `reveal-tiles` the way it covers `buy-upgrades`: the /play run summary and the /config milestone line read "Reveal 10 tiles (out of reach: the tile deck holds 8 tiles)". A ruleText test pins the helper and the rule line; the full-run e2e checks the summary. The critique gate is closed (pass 21, 5 commits, under 24 hours) and the expand gate is closed (pass 13 at 8fc13ac, 19 commits, under 48 hours).

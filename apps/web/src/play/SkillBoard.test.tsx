@@ -105,3 +105,40 @@ describe('SkillBoard: a Skill with more slots than the player has dice', () => {
     expect(screen.queryByText(/Needs \d dice/)).toBeNull()
   })
 })
+
+describe('SkillBoard: enemies in range against the engaged ones', () => {
+  /** Strike's engagement with 1 engaged enemy on the player's hex, plus `extra` that did not roll. */
+  function engagedWith(extra: number): GameState {
+    const s = strikeFiredOnce()
+    const hex = s.players[s.current]!.hex
+    const base = s.enemies[0]!
+    const foes = ['foe', ...Array.from({ length: extra }, (_, i) => `bystander-${i}`)]
+    return {
+      ...s,
+      enemies: foes.map((id) => ({ ...base, id, hex })),
+      exchange: { ...s.exchange!, engage: { enemyDice: [{ enemy: 'foe', face: 'hit' }] } },
+    } as GameState
+  }
+  const renderBoard = (state: GameState) =>
+    render(
+      <SkillBoard
+        state={state}
+        legal={legalActions(state)}
+        act={() => {}}
+        actAll={() => {}}
+        selected={[]}
+      />,
+    )
+
+  it('enemies in range that did not roll: the line says how many of them are engaged', () => {
+    renderBoard(engagedWith(2))
+    expect(strikeTile().textContent).toContain('3 enemies in range, 1 of them engaged')
+    expect(strikeTile().textContent).toContain('3 in range, 1 engaged')
+  })
+
+  it('every enemy in range is engaged: the line gives the count alone', () => {
+    renderBoard(engagedWith(0))
+    expect(strikeTile().textContent).toContain('1 enemy in range')
+    expect(strikeTile().textContent).not.toMatch(/engaged/)
+  })
+})

@@ -36,6 +36,8 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
   const placed = new Set(ex?.assignments.map((a) => a.die) ?? [])
   const freeFaces = ex ? ex.dice.filter((_, i) => !placed.has(i)).map((d) => d.face) : []
   const diceHeld = ex ? ex.dice.length : p.dice
+  // The enemies that rolled dice in this engagement (the "vs" in the modal title).
+  const engagedIds = ex?.engage ? new Set(ex.engage.enemyDice.map((d) => d.enemy)) : undefined
   return (
     <section className={styles.panel} aria-label="Skills">
       <h2 className={styles.panelTitle}>Skills</h2>
@@ -144,9 +146,15 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
               {skill.faces.length > diceHeld ? (
                 <NeedsDice needed={skill.faces.length} held={diceHeld} />
               ) : null}
-              {skill.effect.kind === 'damage' ? (
-                <InReach count={enemiesInRange(state, skill.effect.range).length} />
-              ) : null}
+              {skill.effect.kind === 'damage'
+                ? (() => {
+                    const inRange = enemiesInRange(state, skill.effect.range)
+                    const engaged = engagedIds
+                      ? inRange.filter((e) => engagedIds.has(e.id)).length
+                      : undefined
+                    return <InReach count={inRange.length} engaged={engaged} />
+                  })()
+                : null}
             </li>
           )
         })}
@@ -180,8 +188,11 @@ function NeedsDice({ needed, held }: Readonly<{ needed: number; held: number }>)
 /**
  * How many enemies an attack Skill can reach from the figure now; phones (760px and narrower)
  * show a short form ("2 in range", "none in range"), screen readers always hear the long one.
+ * In an engagement, when the range holds enemies that did not roll dice, it also says how many
+ * of them are engaged ("3 in range, 1 engaged"), so the count matches the modal title.
  */
-function InReach({ count }: Readonly<{ count: number }>) {
+function InReach({ count, engaged }: Readonly<{ count: number; engaged?: number | undefined }>) {
+  const others = engaged !== undefined && engaged < count
   return count === 0 ? (
     <span className={styles.outOfRange}>
       <span className={styles.reachLong}>No enemy in range: it would hit nothing</span>
@@ -193,9 +204,10 @@ function InReach({ count }: Readonly<{ count: number }>) {
     <span className={styles.inRange}>
       <span className={styles.reachLong}>
         {count} {count === 1 ? 'enemy' : 'enemies'} in range
+        {others ? `, ${engaged} of them engaged` : ''}
       </span>
       <span className={styles.reachShort} aria-hidden="true">
-        {count} in range
+        {count} in range{others ? `, ${engaged} engaged` : ''}
       </span>
     </span>
   )

@@ -54,15 +54,6 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [LOW] /play — "in range" counts differ from the engaged enemies
-- pass: blind-round-4 (phase 24)
-- viewport: 1280x800 and 375x812
-- category: comprehension
-- observation: The title says "vs 1 elite" while Shot says "3 enemies in range" (enemies within 2 hexes that did not roll). Testers read it as a contradiction.
-- evidence: blind round 4 (2026-10-09), the Skill reach line vs the title
-- suggested fix: Say what the count is ("3 in range, 1 engaged") or explain range against engaged.
-- source: blind-round-4
-
 ### [LOW] /play — card timing and the Special face are explained only later
 - pass: blind-round-4 (phase 24)
 - viewport: 1280x800 and 375x812
@@ -91,6 +82,17 @@
 - source: blind-round-4
 
 ## Done
+
+### [x] [LOW] /play — "in range" counts differ from the engaged enemies (addressed at (this commit))
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: The title says "vs 1 elite" while Shot says "3 enemies in range" (enemies within 2 hexes that did not roll). Testers read it as a contradiction.
+- evidence: blind round 4 (2026-10-09), the Skill reach line vs the title
+- suggested fix: Say what the count is ("3 in range, 1 engaged") or explain range against engaged.
+- source: blind-round-4
+- issue: #146
+- resolution: in an engagement, an attack Skill whose range holds enemies that did not roll now says how many of them are engaged: "3 enemies in range, 1 of them engaged" (phones: "3 in range, 1 engaged"). When every enemy in range is engaged the line gives the count alone.
 
 ### [x] [LOW] /play — the "reveal 10 tiles" milestone may be unreachable (addressed at (this commit))
 - pass: oversight (2026-10-10)
