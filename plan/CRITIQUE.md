@@ -45,15 +45,6 @@
 - suggested fix: Drop the decided rows from that `[needs-user-call]` item in `plan/AUDIT.md` so it names only open rows.
 - source: web-fetch
 
-### [LOW] /play — the "reveal 10 tiles" milestone may be unreachable
-- pass: oversight (2026-10-10)
-- viewport: n/a
-- category: rules
-- observation: `milestones.tilesRevealed` is 10, but `packages/content/data/tiles.json` holds 9 tiles. If the Base tile is one of them, at most 8 can be revealed and the milestone never fires. Unverified: oversight did not trace the engine.
-- evidence: `packages/content/data/config.default.json` `milestones.tilesRevealed=10`; `tiles.json` (9 ids); expand candidate "Rule text" pass 5 row ("Reveal 10 tiles", only 8 can be revealed)
-- suggested fix: Verify the reachable count; if unreachable, file an `OPEN-QUESTIONS.md` reading (proposed: cap the milestone at the revealable count) rather than change the rule value silently.
-- source: oversight
-
 ### [LOW] sim — the bot cannot measure today's designer changes
 - pass: session residue (2026-10-09)
 - viewport: n/a
@@ -100,6 +91,17 @@
 - source: blind-round-4
 
 ## Done
+
+### [x] [LOW] /play — the "reveal 10 tiles" milestone may be unreachable (addressed at (this commit))
+- pass: oversight (2026-10-10)
+- viewport: n/a
+- category: rules
+- observation: `milestones.tilesRevealed` is 10, but `packages/content/data/tiles.json` holds 9 tiles. If the Base tile is one of them, at most 8 can be revealed and the milestone never fires. Unverified: oversight did not trace the engine.
+- evidence: `packages/content/data/config.default.json` `milestones.tilesRevealed=10`; `tiles.json` (9 ids); expand candidate "Rule text" pass 5 row ("Reveal 10 tiles", only 8 can be revealed)
+- suggested fix: Verify the reachable count; if unreachable, file an `OPEN-QUESTIONS.md` reading (proposed: cap the milestone at the revealable count) rather than change the rule value silently.
+- source: oversight
+- issue: #145
+- resolution: verified unreachable: the Base tile starts on the map, so the tile deck holds 8 tiles. OPEN-QUESTIONS row 4 already carries the reading (pending-spec), so the value stays 10; the /play run summary and the /config milestone line now mark it "out of reach: the tile deck holds 8 tiles".
 
 ### [x] [LOW] /decisions — headings cite "row 20" and ruling numbers the visitor cannot look up (addressed at (this commit))
 - pass: 21 (commit a6dc51f)

@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-19 (pass 91, cloud tick)
+
+Pass 90's /decisions row-20 wording shipped (dda37ce). The two MED rows from critique pass 21, the pass 20 design-work row, and the LOW reset-wording row still edit `[needs-user-call]` items, which only /oversight changes, so they wait. The top shippable row is the oversight "reveal 10 tiles" row at 2.1: tracing `createGame` shows the tile deck is the countryside and core tiles only (the Base tile starts on the map), so with 8 tiles in the deck "Reveal 10 tiles" can never fire. OPEN-QUESTIONS row 4 already holds the reading (pending-spec), so the value is not changed from cloud. `milestoneOutOfReach` now covers `reveal-tiles` the way it covers `buy-upgrades`: the /play run summary and the /config milestone line read "Reveal 10 tiles (out of reach: the tile deck holds 8 tiles)". A ruleText test pins the helper and the rule line; the full-run e2e checks the summary. The critique gate is closed (pass 21, 5 commits, under 24 hours) and the expand gate is closed (pass 13 at 8fc13ac, 19 commits, under 48 hours).
+
+## Top 5 findings (scored)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [x] [2.1] /play and /config: "Reveal 10 tiles" cannot be met with 8 tiles in the tile deck (critique LOW, oversight 2026-10-10)
+- category: external-critique (rules)
+- impact: 3
+- ease: 7
+- next: mark the milestone out of reach on the run summary and /config; the value waits on OPEN-QUESTIONS row 4
+- issue: #145
+- fixed: (this commit)
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords or closes the `[needs-user-call]` reset item
+
 # Site audit — 2026-10-19 (pass 90, cloud tick)
 
 Pass 89's /tiles caption row shipped (ceada01). The two MED rows from critique pass 21 and the pass 20 design-work row still edit `[needs-user-call]` items, which only /oversight changes, so they wait. The top shippable row is the /decisions row-20 wording at 1.6: rows 59 and 60 opened with "Row 20 says/reads", their rule tag ended "row 20" (a row of rules Table 8 the page does not show), and row 78 cited "ruling 25". Rows 59 and 60 now name the Haul card, row 78 drops the ruling number, and `readingRuleText` drops a rules-table row from a rule tag ("rule 6.7, Table 8"); the decisions tests pin the helper and the page test checks rows 59, 60 and 78. The "Spec v2 ruling 14" citation sits in a `[needs-user-call]` check, so it waits for /oversight. The critique gate is closed (pass 21, 4 commits, under 24 hours) and the expand gate is closed (pass 13 at 8fc13ac, 18 commits, under 48 hours).

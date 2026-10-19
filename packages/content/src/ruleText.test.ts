@@ -349,8 +349,19 @@ describe('rule text from config', () => {
     expect(milestoneOutOfReach('buy-upgrades', any, defaultContent)).toBeNull()
     const two = With((c) => ({ ...c, milestones: { ...c.milestones, upgradesBought: 2 } }))
     expect(milestoneOutOfReach('buy-upgrades', two, defaultContent)).toBeNull()
-    for (const id of milestoneIds(m).filter((i) => i !== 'buy-upgrades'))
+    for (const id of milestoneIds(m).filter((i) => i !== 'buy-upgrades' && i !== 'reveal-tiles'))
       expect(milestoneOutOfReach(id, base, defaultContent)).toBeNull()
+  })
+
+  it('milestones: "Reveal 10 tiles" is marked out of reach with 8 tiles in the tile deck (row 4)', () => {
+    const out = 'out of reach: the tile deck holds 8 tiles'
+    expect(milestoneOutOfReach('reveal-tiles', base, defaultContent)).toBe(out)
+    expect(ruleLineFor('milestones.tilesRevealed', base, defaultContent)).toBe(
+      `Reveal 10 tiles (${out}).`,
+    )
+    const eight = With((c) => ({ ...c, milestones: { ...c.milestones, tilesRevealed: 8 } }))
+    expect(milestoneOutOfReach('reveal-tiles', eight, defaultContent)).toBeNull()
+    expect(ruleLineFor('milestones.tilesRevealed', eight, defaultContent)).toBe('Reveal 8 tiles.')
   })
 
   it('/config: the fields a phrase reads get that phrase; others get none', () => {
@@ -360,7 +371,9 @@ describe('rule text from config', () => {
     expect(line('experience.stepIncrease')).toBe(levelText(base, defaultContent))
     expect(line('experience.eliteBonus')).toBe(levelText(base, defaultContent))
     expect(line('draft.unpicked')).toBe(draftPoolText(base))
-    expect(line('milestones.tilesRevealed')).toBe('Reveal 10 tiles.')
+    expect(line('milestones.tilesRevealed')).toBe(
+      'Reveal 10 tiles (out of reach: the tile deck holds 8 tiles).',
+    )
     expect(line('milestones.surviveRounds')).toBe(
       'Survive to round 5; Survive to round 10; Survive to round 15.',
     )
