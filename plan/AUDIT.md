@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-19 (pass 93, cloud tick)
+
+Pass 92's /play "in range" row shipped (1d42ce4). The two MED rows from critique pass 21, the pass 20 design-work row, and the LOW reset-wording row still edit `[needs-user-call]` items, which only /oversight changes, so they wait. Every shippable row scores under 3.0, and the expand gate is closed (pass 14 at f7dc176, 1 commit since, under 48 hours), so the loop keeps draining LOW critique rows. The top one is the blind-round-4 Roll row at 1.4: the engine offers cards in an engagement only at Use dice, but the Roll instruction said nothing about cards, and a Star's meaning showed only at Use dice. The Roll instruction now adds "You can add cards from your hand when you use the dice." (exchanges without an engagement: "Then you can add cards from your hand.") and "A Star fits any Skill slot."; the phone line reads "Keep or roll dice. Cards come after." The Special face already reads "Special 2" under each enemy die, so that half of the row was stale. An engageView test pins both lines. The critique gate is closed (pass 21, 7 commits, under 24 hours).
+
+## Top 5 findings (scored)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [x] [1.4] /play: the Roll step does not say when cards come or what a Star fits (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 2
+- ease: 7
+- next: add the card timing and the Star meaning to the Roll instruction
+- issue: #147
+- fixed: (this commit)
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords or closes the `[needs-user-call]` reset item
+
 # Site audit — 2026-10-19 (pass 92, cloud tick)
 
 Pass 91's "Reveal 10 tiles" row shipped (f7dc176). The two MED rows from critique pass 21, the pass 20 design-work row, and the LOW reset-wording row still edit `[needs-user-call]` items, which only /oversight changes, so they wait. Every shippable row scores under 3.0, and the expand gate is closed (pass 14 at f7dc176, 0 commits since), so the loop keeps draining LOW critique rows. The top one is the /play "in range" row at 0.8, rescored to 1.4 now the fix is a prop on the reach line: in an engagement the title names the enemies that rolled dice ("vs 1 elite") while Shot said "3 enemies in range". `InReach` now takes the engaged count (in-range enemies in `exchange.engage.enemyDice`) and, when it is lower, reads "3 enemies in range, 1 of them engaged" (phones: "3 in range, 1 engaged"). Two SkillBoard tests pin both lines. The critique gate is closed (pass 21, 6 commits, under 24 hours).

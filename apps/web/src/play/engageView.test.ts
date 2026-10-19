@@ -1,9 +1,11 @@
-import type { GameEvent } from '@survival/engine'
+import type { GameEvent, GameState } from '@survival/engine'
 import { describe, expect, it } from 'vitest'
 import {
   asideNote,
   cancelledLine,
   engageHeadline,
+  engageInstruction,
+  engageInstructionShort,
   engageStage,
   hitsLine,
   lastEngagement,
@@ -13,6 +15,18 @@ import {
 const r = 'Combat v3'
 
 describe('engageView', () => {
+  it('says at Roll when cards come and what a Star fits', () => {
+    const rolling = (engage: object | undefined) =>
+      ({ exchange: { step: 'roll', engage } }) as unknown as GameState
+    expect(engageInstruction(rolling({ enemyDice: [] }))).toMatch(
+      /After the last roll, you use them\. You can add cards from your hand when you use the dice\. A Star fits any Skill slot\.$/,
+    )
+    expect(engageInstruction(rolling(undefined))).toMatch(
+      /Then you can add cards from your hand\. A Star fits any Skill slot\.$/,
+    )
+    expect(engageInstructionShort(rolling(undefined))).toBe('Keep or roll dice. Cards come after.')
+  })
+
   it('says what comes next while the modal steps aside', () => {
     expect(asideNote(true)).toBe('Engagement over. The result comes next.')
     expect(asideNote(false)).toBe('Back to the engagement in a moment.')

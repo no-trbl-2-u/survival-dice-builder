@@ -40,7 +40,11 @@ export function engageInstruction(state: GameState): string {
   if (!ex) return ''
   switch (ex.step) {
     case 'roll':
-      return 'Keep the dice you like. Roll the rest again, or stop and use them. After the last roll, you use them.'
+      return `Keep the dice you like. Roll the rest again, or stop and use them. After the last roll, you use them. ${
+        ex.engage
+          ? 'You can add cards from your hand when you use the dice.'
+          : 'Then you can add cards from your hand.'
+      } A Star fits any Skill slot.`
     case 'cards':
       return 'Add a card from your hand, or choose Done adding cards.'
     case 'reroll':
@@ -59,7 +63,7 @@ export function engageInstructionShort(state: GameState): string {
   if (!ex) return ''
   switch (ex.step) {
     case 'roll':
-      return 'Keep dice, roll the rest, or use them.'
+      return 'Keep or roll dice. Cards come after.'
     case 'cards':
       return 'Add a card, or Done.'
     case 'reroll':

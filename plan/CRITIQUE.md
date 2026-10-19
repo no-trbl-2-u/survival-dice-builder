@@ -54,15 +54,6 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [LOW] /play — card timing and the Special face are explained only later
-- pass: blind-round-4 (phase 24)
-- viewport: 1280x800 and 375x812
-- category: comprehension
-- observation: Cards are greyed while rolling with nothing saying when they become playable; the Special face (skull) means 2 damage only on the result; a Star's meaning shows only at Use dice.
-- evidence: blind round 4 (2026-10-09), the Roll step
-- suggested fix: A one-time note at Roll on when cards can be added; the Special and Star meanings at Roll.
-- source: blind-round-4
-
 ### [LOW] /play — at 375px a fifth Skill, the target pick, and the hand still need scrolling
 - pass: blind-round-4 (phase 24)
 - viewport: 1280x800 and 375x812
@@ -82,6 +73,17 @@
 - source: blind-round-4
 
 ## Done
+
+### [x] [LOW] /play — card timing and the Special face are explained only later (addressed at (this commit))
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: Cards are greyed while rolling with nothing saying when they become playable; the Special face (skull) means 2 damage only on the result; a Star's meaning shows only at Use dice.
+- evidence: blind round 4 (2026-10-09), the Roll step
+- suggested fix: A one-time note at Roll on when cards can be added; the Special and Star meanings at Roll.
+- source: blind-round-4
+- issue: #147
+- resolution: the Roll instruction now says when cards come (engagements: "You can add cards from your hand when you use the dice."; exchanges: "Then you can add cards from your hand.") and what a Star fits ("A Star fits any Skill slot."); phones read "Keep or roll dice. Cards come after." The Special face already reads "Special 2" under each enemy die from the Roll step on, so it needed no change.
 
 ### [x] [LOW] /play — "in range" counts differ from the engaged enemies (addressed at (this commit))
 - pass: blind-round-4 (phase 24)
