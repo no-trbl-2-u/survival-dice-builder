@@ -27,15 +27,6 @@
 - suggested fix: In that `plan/AUDIT.md` item, drop rows 65 and 69 and any advice to turn on options that no longer exist.
 - source: web-fetch
 
-### [LOW] /decisions — headings cite "row 20" and ruling numbers the visitor cannot look up
-- pass: 21 (commit a6dc51f)
-- viewport: desktop
-- category: comprehension
-- observation: Rows 59 and 60 start with "Row 20 says/reads ..." and their rule tag ends "row 20" (a row of rules Table 8, not a row on this page). Row 78 cites "ruling 25" and one check cites "Spec v2 ruling 14". The page shows neither table nor rulings.
-- evidence: `OPEN-QUESTIONS.md:75` "Row 20 reads \"Gather +2\" (Haul) as 2 in total"; /decisions heading "(rule Table 8, row 20, decided 2026-10-11)"
-- suggested fix: Name the card instead of the table row ("The Haul card says ..."), and drop the ruling numbers or link them to the written rules.
-- source: web-fetch
-
 ### [LOW] /decisions — the "Reset /config once" check names a URL path and an unknowable date
 - pass: 21 (commit a6dc51f)
 - viewport: desktop
@@ -109,6 +100,16 @@
 - source: blind-round-4
 
 ## Done
+
+### [x] [LOW] /decisions — headings cite "row 20" and ruling numbers the visitor cannot look up (addressed at (this commit))
+- pass: 21 (commit a6dc51f)
+- viewport: desktop
+- category: comprehension
+- observation: Rows 59 and 60 start with "Row 20 says/reads ..." and their rule tag ends "row 20" (a row of rules Table 8, not a row on this page). Row 78 cites "ruling 25" and one check cites "Spec v2 ruling 14". The page shows neither table nor rulings.
+- evidence: `OPEN-QUESTIONS.md:75` "Row 20 reads \"Gather +2\" (Haul) as 2 in total"; /decisions heading "(rule Table 8, row 20, decided 2026-10-11)"
+- suggested fix: Name the card instead of the table row ("The Haul card says ..."), and drop the ruling numbers or link them to the written rules.
+- source: web-fetch
+- issue: #144
 
 ### [x] [LOW] /tiles — tile captions write site names in lower case (addressed at (this commit))
 - pass: 21 (commit a6dc51f)

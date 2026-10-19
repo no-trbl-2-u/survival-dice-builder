@@ -75,6 +75,18 @@ describe('DecisionsPage', () => {
     expect(container.querySelector('nav a[href="#recent"]')).not.toBeNull()
   })
 
+  it('names the Haul card, not a rules table row or a ruling number (critique pass 21)', () => {
+    const { container } = render(<DecisionsPage />)
+    for (const n of [59, 60]) {
+      const text = container.querySelector(`[data-decided="${n}"]`)?.textContent ?? ''
+      expect(text, `row ${n}`).toContain('The Haul card')
+      expect(text, `row ${n}`).not.toMatch(/\brow 20\b/i)
+    }
+    const row78 = container.querySelector('[data-question="78"] h3')?.textContent ?? ''
+    expect(row78).toContain('Spec v2 levels the Build card, and')
+    expect(row78).not.toMatch(/ruling \d/)
+  })
+
   it('shows what Spec v2 changed under a decided reading, on its own line (critique pass 16)', () => {
     const { container } = render(<DecisionsPage />)
     const note = (n: number) =>

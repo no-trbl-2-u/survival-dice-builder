@@ -269,6 +269,8 @@ describe('decisions', () => {
     )
     expect(readingRuleText('10.3, core loop v2')).toBe('rule 10.3, core loop')
     expect(readingRuleText('Table 3, 6.7')).toBe('rule Table 3, 6.7')
+    expect(readingRuleText('6.7, Table 8, row 20')).toBe('rule 6.7, Table 8')
+    expect(readingRuleText('11.9, row 9')).toBe('rule 11.9')
     expect(unlistedSettingText('tiles.json')).toBe('Set in the map tiles, not on the Config page')
     expect(unlistedSettingText('other.json')).toBe(
       'Set in the game content, not on the Config page',
