@@ -58,13 +58,13 @@ describe('StartPanel', () => {
         />,
       ).container,
     )
-    fireEvent.click(view.getByRole('button', { name: 'Reset to defaults' }))
-    expect(view.getByRole('group', { name: 'Reset to defaults?' }).textContent).toContain(
-      'Reset every value to the default?',
+    fireEvent.click(view.getByRole('button', { name: 'Reset to the standard rules' }))
+    expect(view.getByRole('group', { name: 'Reset to the standard rules?' }).textContent).toContain(
+      'Reset every value to the standard rules?',
     )
     expect(view.getByRole('button', { name: 'Yes, reset every value' })).toBeTruthy()
     fireEvent.click(view.getByRole('button', { name: 'Keep my values' }))
-    expect(view.queryByRole('group', { name: 'Reset to defaults?' })).toBeNull()
-    expect(view.getByRole('button', { name: 'Reset to defaults' })).toBeTruthy()
+    expect(view.queryByRole('group', { name: 'Reset to the standard rules?' })).toBeNull()
+    expect(view.getByRole('button', { name: 'Reset to the standard rules' })).toBeTruthy()
   })
 })

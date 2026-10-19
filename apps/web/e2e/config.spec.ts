@@ -92,13 +92,13 @@ test('/config: leaving with unsaved edits warns; Reset asks first', async ({ pag
   await expect.poll(() => warned).toBe(true)
   await expect(page).toHaveURL(/\/config$/)
 
-  await page.getByRole('button', { name: 'Reset to defaults' }).click()
+  await page.getByRole('button', { name: 'Reset to the standard rules' }).click()
   await page.getByRole('button', { name: 'Keep my values' }).click()
   await expect(page.getByLabel('Shop offers', { exact: true })).toHaveValue('4')
-  await page.getByRole('button', { name: 'Reset to defaults' }).click()
+  await page.getByRole('button', { name: 'Reset to the standard rules' }).click()
   await page.getByRole('button', { name: 'Yes, reset every value' }).click()
   await expect(page.getByLabel('Shop offers', { exact: true })).toHaveValue('3')
-  await expect(page.getByRole('status')).toHaveText('Reset to the defaults.')
+  await expect(page.getByRole('status')).toHaveText('Reset to the standard rules.')
 })
 
 test('/decisions: a setting shows its config label and a plain value', async ({ page }) => {
@@ -194,10 +194,10 @@ test('/decisions: Try this on /play plays a proposal, and the start panel resets
     'href',
     '/decisions#q-63',
   )
-  await page.getByRole('button', { name: 'Reset to defaults' }).click()
+  await page.getByRole('button', { name: 'Reset to the standard rules' }).click()
   await page.getByRole('button', { name: 'Keep my values' }).click()
   await expect(changes).toContainText('Playing with the proposal: Forced reveal.')
-  await page.getByRole('button', { name: 'Reset to defaults' }).click()
+  await page.getByRole('button', { name: 'Reset to the standard rules' }).click()
   await page.getByRole('button', { name: 'Yes, reset every value' }).click()
   await expect(changes).toContainText('Playing with the standard rules.')
   await expect(page.getByTestId('config-proposals')).toHaveCount(0)

@@ -133,8 +133,8 @@ export function StartPanel({
         {changes.length === 0 ? (
           <a href="/config">Change the config</a>
         ) : confirming ? (
-          <span role="group" aria-label="Reset to defaults?">
-            Reset every value to the default?{' '}
+          <span role="group" aria-label="Reset to the standard rules?">
+            Reset every value to the standard rules?{' '}
             <button
               type="button"
               onClick={() => {
@@ -150,7 +150,7 @@ export function StartPanel({
           </span>
         ) : (
           <button type="button" onClick={() => setConfirming(true)}>
-            Reset to defaults
+            Reset to the standard rules
           </button>
         )}
       </div>

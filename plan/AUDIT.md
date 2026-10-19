@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-19 (pass 88, cloud tick)
+
+Pass 87's defeated-dice row shipped (a6dc51f). Critique pass 21 filed six rows. Its two MED rows (the /decisions balance checks at 8.1 and the "Structural v2 questions" check at 8.1, both with the MED bias) edit `[needs-user-call]` rows, which only /oversight changes, so they wait with the design-work row. The top shippable row is the /config reset wording at 2.4: the status line said "the standard rules" while the button said "Reset to defaults". /config and the /play start panel now say "Reset to the standard rules", confirm with "Reset every value to the standard rules?", and /config reports "Reset to the standard rules."; the StartPanel test and the config e2e pin the new words. The critique gate is closed (pass 21, 1 commit, under 24 hours) and the expand gate is closed (pass 13 at 8fc13ac, 16 commits, under 48 hours).
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /config: "standard rules" and "defaults" name the same baseline (critique LOW, pass 21)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: name the reset button and its confirm after the standard rules on /config and /play
+- issue: #142
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [ ] [1.8] /tiles: tile captions write site names in lower case (critique LOW, pass 21)
+- category: external-critique (voice)
+- impact: 2
+- ease: 9
+- next: drop the `.toLowerCase()` in the TileSheet caption
+
 # Site audit — 2026-10-19 (pass 87, cloud tick)
 
 Pass 86's nav row shipped (39fccdf). The /decisions design-work row (6.8 with the MED bias) still edits a `[needs-user-call]` row and waits for /oversight. The top shippable row is the result's enemy dice at 0.8: a defeated enemy's dice looked like any other. The result now passes its defeated enemies (from the summary's `hits`) to `EnemyDice`, which dims their dice (`data-defeated`), labels them "grunt, defeated" and names them "its enemy was defeated"; the DiceTray test pins the mark. Every shippable row scores under 3.0, the critique gate is closed (pass 20, 9 commits, under 24 hours) and the expand gate is closed (pass 13 at 8fc13ac, 14 commits, under 48 hours), so the loop keeps draining LOW critique rows.

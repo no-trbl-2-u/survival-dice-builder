@@ -46,7 +46,7 @@ test('/config: a changed value is used by the next run', async ({ page }) => {
   await expect(page.getByTestId('player-panel')).toContainText('21 / 21')
   // Reset for other tests in this browser context.
   await page.goto('/config')
-  await page.getByRole('button', { name: 'Reset to defaults' }).click()
+  await page.getByRole('button', { name: 'Reset to the standard rules' }).click()
   await page.getByRole('button', { name: 'Yes, reset every value' }).click()
 })
 

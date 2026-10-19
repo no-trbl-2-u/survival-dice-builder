@@ -731,7 +731,7 @@ function ConfigForm({ store }: Readonly<{ store: KeyValue | undefined }>) {
     setProblems([])
     setConfirming(false)
     setUpdatedNotice([])
-    setMessage('Reset to the defaults.')
+    setMessage('Reset to the standard rules.')
   }
   /** Sets a proposal's values in the draft; the player saves as usual. */
   const applyProposal = (proposal: Proposal) => {
@@ -777,8 +777,8 @@ function ConfigForm({ store }: Readonly<{ store: KeyValue | undefined }>) {
       </form>
       <div className={styles.bar} data-testid="config-bar">
         {confirming ? (
-          <div className={styles.actions} role="group" aria-label="Reset to defaults?">
-            <span>Reset every value to the default?</span>
+          <div className={styles.actions} role="group" aria-label="Reset to the standard rules?">
+            <span>Reset every value to the standard rules?</span>
             <button type="button" onClick={reset}>
               Yes, reset every value
             </button>
@@ -792,7 +792,7 @@ function ConfigForm({ store }: Readonly<{ store: KeyValue | undefined }>) {
               Save config
             </button>
             <button type="button" onClick={() => setConfirming(true)}>
-              Reset to defaults
+              Reset to the standard rules
             </button>
             <span className={styles.playActions} role="group" aria-label="Play">
               {resumable ? (

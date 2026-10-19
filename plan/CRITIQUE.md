@@ -45,15 +45,6 @@
 - suggested fix: Reword to "If your config is from before 9 October, choose Reset to defaults on the Config page once", or close the item.
 - source: web-fetch
 
-### [LOW] /config — "standard rules" and "defaults" name the same baseline
-- pass: 21 (commit a6dc51f)
-- viewport: desktop
-- category: voice
-- observation: The status line says "Playing with the standard rules" or "N changes from the standard rules"; the button next to it says "Reset to defaults" and its confirm "Reset every value to the default?". Same on the /play start panel. A visitor cannot tell the two are the same thing.
-- evidence: `apps/web/src/config/ConfigChanges.tsx:62`; `apps/web/src/config/ConfigPage.tsx:781,795`; `apps/web/src/play/StartPanel.tsx:137,153`
-- suggested fix: Use one name on both pages, e.g. "Reset to the standard rules" and "Reset every value to the standard rules?".
-- source: web-fetch
-
 ### [LOW] /tiles — tile captions write site names in lower case
 - pass: 21 (commit a6dc51f)
 - viewport: desktop
@@ -127,6 +118,16 @@
 - source: blind-round-4
 
 ## Done
+
+### [x] [LOW] /config — "standard rules" and "defaults" name the same baseline (addressed at (this commit))
+- pass: 21 (commit a6dc51f)
+- viewport: desktop
+- category: voice
+- observation: The status line says "Playing with the standard rules" or "N changes from the standard rules"; the button next to it says "Reset to defaults" and its confirm "Reset every value to the default?". Same on the /play start panel. A visitor cannot tell the two are the same thing.
+- evidence: `apps/web/src/config/ConfigChanges.tsx:62`; `apps/web/src/config/ConfigPage.tsx:781,795`; `apps/web/src/play/StartPanel.tsx:137,153`
+- suggested fix: Use one name on both pages, e.g. "Reset to the standard rules" and "Reset every value to the standard rules?".
+- source: web-fetch
+- issue: #142
 
 ### [x] [LOW] /play — the result's enemy dice do not mark a defeated enemy (addressed at (this commit))
 - pass: blind-round-4 (phase 24), split from the "who took the damage" row
