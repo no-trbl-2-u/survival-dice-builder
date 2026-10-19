@@ -36,15 +36,6 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [LOW] /play — the result's enemy dice do not mark a defeated enemy
-- pass: blind-round-4 (phase 24), split from the "who took the damage" row
-- viewport: 1280x800 and 375x812
-- category: comprehension
-- observation: On the engagement result the defeated grunt's die is still labelled "grunt" with no mark that it was defeated. The result now names each damaged enemy and says it was defeated, but the dice row does not.
-- evidence: blind round 4 (2026-10-09); `apps/web/src/play/DiceTray.tsx` `EnemyDice` marks cancelled dice only during the exchange (`rolls` given: no marks)
-- suggested fix: Pass the defeated enemies to the result's `EnemyDice` and mark their dice (label and a visual cue).
-- source: blind-round-4
-
 ### [LOW] /play — "in range" counts differ from the engaged enemies
 - pass: blind-round-4 (phase 24)
 - viewport: 1280x800 and 375x812
@@ -83,7 +74,18 @@
 
 ## Done
 
-### [x] [LOW] all pages — design tools sit in the nav as equals of Play (addressed at (this commit))
+### [x] [LOW] /play — the result's enemy dice do not mark a defeated enemy (addressed at (this commit))
+- pass: blind-round-4 (phase 24), split from the "who took the damage" row
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: On the engagement result the defeated grunt's die is still labelled "grunt" with no mark that it was defeated. The result now names each damaged enemy and says it was defeated, but the dice row does not.
+- evidence: blind round 4 (2026-10-09); `apps/web/src/play/DiceTray.tsx` `EnemyDice` marks cancelled dice only during the exchange (`rolls` given: no marks)
+- suggested fix: Pass the defeated enemies to the result's `EnemyDice` and mark their dice (label and a visual cue).
+- source: blind-round-4
+- issue: #141
+- fixed: (this commit). The result passes its defeated enemies to `EnemyDice`; each of their dice is dimmed (`data-defeated`), its label reads "grunt, defeated" and its name says "its enemy was defeated".
+
+### [x] [LOW] all pages — design tools sit in the nav as equals of Play (addressed at 39fccdf)
 - pass: 9 (commit e859de5)
 - viewport: n/a (web-fetch)
 - category: navigation
@@ -92,9 +94,9 @@
 - suggested fix: Split the nav into the game links and a labelled "Design tools" group, or open each tool page with one sentence that says it is a design aid.
 - source: web-fetch
 - issue: #140
-- fixed: (this commit). The nav lists Home, Play, Config and Credits, then a group labelled "Design tools" (Tile sheet, Decisions, Engine console) set apart at the rail's far end (`NAV` group field, `NAV_TOOLS_LABEL`).
+- fixed: 39fccdf. The nav lists Home, Play, Config and Credits, then a group labelled "Design tools" (Tile sheet, Decisions, Engine console) set apart at the rail's far end (`NAV` group field, `NAV_TOOLS_LABEL`).
 
-### [x] [LOW] /play — the result does not say who took the damage or their health after (addressed at (this commit))
+### [x] [LOW] /play — the result does not say who took the damage or their health after (addressed at eb40e28)
 - pass: blind-round-4 (phase 24)
 - viewport: 1280x800 and 375x812
 - category: comprehension
@@ -103,7 +105,7 @@
 - suggested fix: Name each damaged enemy and its health left; mark a defeated enemy's dice.
 - source: blind-round-4
 - issue: #139
-- fixed: (this commit). The result lists each damaged enemy: "Elite, 1 hex north took 2 damage: 12 health left." or "Grunt took 2 damage and was defeated." (`hitsLine` over the summary's new `hits`). The dice mark is split into its own Pending row.
+- fixed: eb40e28. The result lists each damaged enemy: "Elite, 1 hex north took 2 damage: 12 health left." or "Grunt took 2 damage and was defeated." (`hitsLine` over the summary's new `hits`). The dice mark is split into its own Pending row.
 
 ### [x] [LOW] /credits — the intro describes how the page is built (addressed at a409efe)
 - pass: 9 (commit e859de5)

@@ -502,7 +502,12 @@ function SummaryView({
         {summary.enemyDice.length > 0 ? (
           <>
             <h3 className={styles.subTitle}>The enemy dice</h3>
-            <EnemyDice state={state} heading={false} rolls={summary.enemyDice} />
+            <EnemyDice
+              state={state}
+              heading={false}
+              rolls={summary.enemyDice}
+              defeated={summary.hits.filter((h) => h.defeated).map((h) => h.enemy)}
+            />
           </>
         ) : null}
         <ul className={styles.engageTotals}>

@@ -1,8 +1,8 @@
 import { defaultContent } from '@survival/content'
 import { legalActions, type GameState } from '@survival/engine'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { DiceTray } from './DiceTray.tsx'
+import { DiceTray, EnemyDice } from './DiceTray.tsx'
 import { forceEngagement } from './devEngage.ts'
 import { newRun } from './run.ts'
 
@@ -102,5 +102,24 @@ describe('DiceTray enemy dice', () => {
   it('Combat v3 "hit" (default): nothing is marked', () => {
     const { container } = tray(withDefeated('hit'))
     expect(container.querySelectorAll('[data-cancelled]')).toHaveLength(0)
+  })
+
+  it('the result marks the dice of the enemies the engagement defeated', () => {
+    const state = withDefeated('hit')
+    const { hitDamage } = state.config.combat.engage
+    const rolls = engagedState().exchange!.engage!.enemyDice
+    const { container } = render(
+      <EnemyDice state={state} heading={false} rolls={rolls} defeated={['g1']} />,
+    )
+    expect(container.querySelectorAll('[data-defeated]')).toHaveLength(2)
+    const view = within(container)
+    expect(
+      view.getByLabelText(`Enemy die of enemy: Hit ${hitDamage}, its enemy was defeated`),
+    ).toBeTruthy()
+    expect(view.getAllByText('enemy, defeated')).toHaveLength(2)
+    expect(
+      view.getByLabelText(/^Enemy die of elite, \d+ hex(es)? [a-z-]+: Special \d+$/).dataset
+        .defeated,
+    ).toBeUndefined()
   })
 })

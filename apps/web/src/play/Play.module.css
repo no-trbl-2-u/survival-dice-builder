@@ -1835,6 +1835,11 @@
   opacity: 0.4;
 }
 
+/* On the result: a die whose enemy the engagement defeated. */
+.enemyDie[data-defeated] {
+  opacity: 0.4;
+}
+
 /* Phase 24: screen-reader-only text (heard, not seen). */
 .srOnly {
   position: absolute;

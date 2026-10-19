@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-19 (pass 87, cloud tick)
+
+Pass 86's nav row shipped (39fccdf). The /decisions design-work row (6.8 with the MED bias) still edits a `[needs-user-call]` row and waits for /oversight. The top shippable row is the result's enemy dice at 0.8: a defeated enemy's dice looked like any other. The result now passes its defeated enemies (from the summary's `hits`) to `EnemyDice`, which dims their dice (`data-defeated`), labels them "grunt, defeated" and names them "its enemy was defeated"; the DiceTray test pins the mark. Every shippable row scores under 3.0, the critique gate is closed (pass 20, 9 commits, under 24 hours) and the expand gate is closed (pass 13 at 8fc13ac, 14 commits, under 48 hours), so the loop keeps draining LOW critique rows.
+
+## Top 5 findings (scored)
+
+### [x] [0.8] /play: the result's enemy dice do not mark a defeated enemy (critique LOW, split from blind round 4)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 3
+- next: pass the defeated enemies to the result's EnemyDice and mark their dice
+- issue: #141
+- fixed: (this commit)
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [ ] [0.8] /play: "in range" counts differ from the engaged enemies (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 3
+- next: say "3 in range, 1 engaged" on the Skill reach line
+
+### [ ] [0.7] /play: card timing and the Special face are explained only later (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 2.5
+- next: a one-time note at Roll on when cards can be added; Special and Star meanings at Roll
+
+### [ ] [0.6] /play: at 375px a fifth Skill, the target pick, and the hand still need scrolling (critique LOW)
+- category: external-critique (mobile)
+- impact: 3
+- ease: 2
+- next: compact the engagement modal at 375px
+
 # Site audit — 2026-10-18 (pass 86, cloud tick)
 
 Pass 85's /play result row shipped (eb40e28). The /decisions design-work row (6.8 with the MED bias) still edits a `[needs-user-call]` row and waits for /oversight. The top shippable row is the nav at 0.9: Tile sheet, Decisions and Engine console sat beside Home and Play as equals. `NAV` now gives each link a group; the nav lists the game pages (Home, Play, Config, Credits) and then a group labelled "Design tools" at the rail's far end. The routes unit test pins the tool paths and the a11y e2e checks the labelled group holds the three tool links. Every shippable row scores under 3.0 and the expand gate is closed (pass 13 at 8fc13ac, 13 commits, under 48 hours), so the loop keeps draining LOW critique rows.
@@ -17,7 +55,7 @@ Pass 85's /play result row shipped (eb40e28). The /decisions design-work row (6.
 - ease: 3
 - next: group Tiles, Decisions and Debug under a "Design tools" label
 - issue: #140
-- fixed: (this commit)
+- fixed: 39fccdf
 
 ### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

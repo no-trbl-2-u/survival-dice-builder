@@ -162,11 +162,14 @@ export function EnemyDice({
   state,
   heading = true,
   rolls,
+  defeated = [],
   bare = false,
 }: Readonly<{
   state: GameState
   heading?: boolean
   rolls?: readonly EnemyDieRoll[]
+  /** The result's defeated enemies: their dice are marked "defeated". */
+  defeated?: readonly string[]
   /** Only the dice, no felt: the engagement modal puts them on its own felt. */
   bare?: boolean
 }>) {
@@ -174,6 +177,7 @@ export function EnemyDice({
   if (!dice) return null
   // Dice that will not hit (`combat.engage.defeatedDice: "cancelled"`): the engine decides.
   const cancelled = new Set(rolls ? [] : cancelledEnemyDice(state))
+  const gone = new Set(defeated)
   return (
     <div data-testid="enemy-dice" className={bare ? styles.engageDiceGroup : undefined}>
       {heading ? (
@@ -192,6 +196,7 @@ export function EnemyDice({
           const elite = kind === 'elite'
           const who = enemyLabel(state, d.enemy, playerHex(state))
           const text = enemyFaceText(d.face, state.config.combat.engage)
+          const isGone = gone.has(d.enemy)
           return (
             <li key={i} className={styles.dieItem}>
               <span
@@ -199,15 +204,16 @@ export function EnemyDice({
                 data-face={d.face}
                 data-kind={elite ? 'elite' : 'grunt'}
                 data-cancelled={cancelled.has(i) ? '' : undefined}
+                data-defeated={isGone ? '' : undefined}
                 aria-label={`Enemy die of ${who}: ${text.label}${
                   cancelled.has(i) ? ', cancelled: its enemy was defeated' : ''
-                }`}
+                }${isGone ? ', its enemy was defeated' : ''}`}
               >
                 <GameIcon name={`face-enemy-${d.face}`} size="2.4rem" />
               </span>
               <span className={styles.enemyDieLabel} aria-hidden="true">
                 <strong>{text.label}</strong>
-                <small>{who}</small>
+                <small>{isGone ? `${who}, defeated` : who}</small>
               </span>
             </li>
           )
