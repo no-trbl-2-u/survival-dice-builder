@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-17 at commit 8fc13ac
-> Pass count: 13
+> Last pass: 2026-10-19 at commit f7dc176
+> Pass count: 14
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -9,6 +9,21 @@
 > `/oversight`. See `skills/expand.md` for the contract.
 
 ## Pending
+
+### [ ] [score 3.5] /decisions checks that stay true: a test fails when a check names a decided row or a removed option
+- proposed: 2026-10-19, expand pass 14
+- source signals:
+  - Critique passes 20 and 21, four pending rows on one surface, one cause: [MED] the "Spec v2 design work" check lists rows 7, 30, 49 and 55, all decided 2026-10-11; [MED] the "Structural v2 questions" check asks the designer to try options for rows 65 and 69, decided and removed; [MED] three balance checks (2026-10-03, two of 2026-10-04) give median end rounds 14, 5 and 6 with nothing saying which is current; [LOW] "Reset /config once" names a URL path and a date a visitor cannot check.
+  - `/decisions` renders every `[needs-user-call]` line in `plan/AUDIT.md` verbatim (`packages/content/src/decisions.ts:338` `parseUserCalls`, imported raw by `apps/web/src/decisions/DecisionsPage.tsx:25`). Of the 13 checks it shows today, 5 name a decided row, a removed option or a superseded batch. Nothing checks a line against `OPEN-QUESTIONS.md` or the config schema.
+  - Commit pattern: 4 of the 18 `fix:` commits since pass 13 went to /decisions copy (dda37ce, 4936726, b19439e, bbef6b5); none touched the checks, because they live in a plan file, not in code.
+- rationale: /decisions is the designer's page for what to decide next. A check that asks them to decide a row they already decided, or to try an option that is gone, costs their trust in the page. `/iterate` can tidy the five lines in one tick, but the next decided row makes another one stale, and only a stranger's critique pass notices.
+- proposed scope: 1 phase.
+  - `parseUserCalls` reads the rows a check cites ("row 7", "rows 63-70") and any config path; a content test fails when a shown check cites a row marked `decided` or a config path the schema does not have.
+  - One balance check, built from the latest pinned sim batch under the default config, instead of hand-written dated batch lines.
+  - Today's five stale checks closed or reworded; checks older than 14 days show "as of <date>" from their own title.
+- estimated phases: 1
+- conflicts: none. Plan housekeeping, a parser and a test; no rule changes. Closing a check is not deciding it: a check that still needs the designer stays.
+- ruling audit: OPEN-QUESTIONS rows 7, 30, 49, 55, 65, 69 (decided 2026-10-11) read; Spec v2 untouched. Loop scope: in (tests, plan housekeeping).
 
 ### [ ] [score 3.5] Milestones a default run can reach: every milestone reachable, or marked out of reach with its reason
 - proposed: 2026-10-17, expand pass 13
@@ -26,8 +41,10 @@
 - estimated phases: 1
 - conflicts: [needs-user-call] on the values only. The phase changes no rule number; rows 4 and 78 stay as they are until the designer decides.
 - ruling audit: Spec v2 17 (milestones), 11.4, 12.1; OPEN-QUESTIONS rows 4 (pending-spec), 45 (decided), 78 (proposed) read. Loop scope: in (rule-text sync, tests, sim report).
+- progress (expand pass 14): f7dc176 extended `milestoneOutOfReach` (`packages/content/src/ruleText.ts:588`) to `reveal-tiles`, so both unreachable milestones are now marked on the run summary and /config. The visible half is done. Still missing: the content test that fails on a new milestone that is neither reachable nor marked, the per-milestone hit rate in the sim report, and the one `/oversight` question on rows 4 and 78. Score held at 3.5.
+- last re-evidenced: 2026-10-19
 
-### [ ] [score 4.5] The engagement modal reads on its own: who took the damage, what "in range" counts, when cards play
+### [ ] [score 4.0] The engagement modal reads on its own: who took the damage, what "in range" counts, when cards play
 - proposed: 2026-10-14, expand pass 11
 - source signals:
   - Blind round 4 (phase 24, 2026-10-09), six rows still pending in `plan/CRITIQUE.md` after five days: the result says "You dealt 2 damage" with no enemy name or health after (`apps/web/src/play/EngagementModal.tsx:469-471`); the title says "vs 1 elite" while Shot says "3 enemies in range"; cards greyed at Roll with nothing on when they play, and the Special and Star meanings shown only later; "Roll again (2 left)" stays on when every die is kept (`EngagementModal.tsx:316-319`, confirmed at HEAD); at 375px a fifth Skill and the hand need scrolling; the mini-map target label covers tokens.
@@ -45,7 +62,8 @@
 - ruling audit: Spec v2 7.8 (engagement steps), 6.9 (move cost next to enemies); decided rows on skill uses and move cost read. Copy and layout only; no rule changes. Loop scope: in for rule-text sync; the layout half is web (minor).
 - re-evidence (expand pass 12): since pass 11 (fa01c43) 9 more `fix:` commits went to /, /config, /decisions and /tiles copy; none touched `EngagementModal.tsx`. `/iterate` pass 57's top row now scores 2.6, under its own 3.0 bar, so the queue it drains is single LOW strings; the seven modal rows only ship if this is promoted.
 - re-evidence (expand pass 13): 8f7cdbb shipped the "Roll again" row (it turns off and says why when every die is kept), the one modal row to ship since pass 11. The other 17 commits this window went to /, /config, /decisions, /tiles and /debug copy and a bundle split; `EngagementModal.tsx` was not touched again. Audit pass 74's top row now scores 1.8. Still pending: the result text, the range count, card timing, the 375px fit, the mini-map label and the move-cost reason.
-- last re-evidenced: 2026-10-17
+- progress (expand pass 14): three modal rows shipped one at a time: eb40e28 (the result names each damaged enemy and its health left), a6dc51f (the dice of each defeated enemy are marked), 4fdb8a5 (the Move banner says when a hex next to an enemy costs too much). Still pending in `plan/CRITIQUE.md`: the "in range" count, card timing and the Special face at Roll, the 375px fit, and the mini-map label. Score lowered from 4.5 to 4.0: the result text, the largest gap, is closed.
+- last re-evidenced: 2026-10-19
 
 ### [ ] [score 4.0] Player text on Spec v2: the site stops calling Spec v1 options "the written rules"
 - proposed: 2026-10-13, expand pass 10
