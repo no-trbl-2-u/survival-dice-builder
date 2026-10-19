@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-19 (pass 94, cloud tick)
+
+Pass 93's Roll-step row shipped (ec0ca26). The two MED rows from critique pass 21, the pass 20 design-work row, and the LOW reset-wording row still edit `[needs-user-call]` items, which only /oversight changes, so they wait. Every shippable row scores under 3.0, and the expand gate is closed (pass 14 at f7dc176, 3 commits since, under 48 hours), so the loop keeps draining LOW critique rows. The top one is the blind-round-4 mini-map row at 1.4: the target tag always sat right of the token (left only at the frame edge), so it could cover the "You" figure or another enemy, and an enemy in range beyond the 3-hex frame was cut off. A new `placeTag` helper (`apps/web/src/play/mapTag.ts`) tries right, left, above, below and takes the first side that stays in the frame and covers no figure, defense or other enemy; the mini map now also frames every enemy it can target. Five unit tests pin the placement. The critique gate is closed (pass 21, 8 commits, under 24 hours).
+
+## Top 5 findings (scored)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [x] [1.4] /play: the mini-map target label can cover tokens (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 2
+- ease: 7
+- next: place the tag on a free side in the frame; frame every targetable enemy
+- issue: #148
+- fixed: (this commit)
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords or closes the `[needs-user-call]` reset item
+
 # Site audit — 2026-10-19 (pass 93, cloud tick)
 
 Pass 92's /play "in range" row shipped (1d42ce4). The two MED rows from critique pass 21, the pass 20 design-work row, and the LOW reset-wording row still edit `[needs-user-call]` items, which only /oversight changes, so they wait. Every shippable row scores under 3.0, and the expand gate is closed (pass 14 at f7dc176, 1 commit since, under 48 hours), so the loop keeps draining LOW critique rows. The top one is the blind-round-4 Roll row at 1.4: the engine offers cards in an engagement only at Use dice, but the Roll instruction said nothing about cards, and a Star's meaning showed only at Use dice. The Roll instruction now adds "You can add cards from your hand when you use the dice." (exchanges without an engagement: "Then you can add cards from your hand.") and "A Star fits any Skill slot."; the phone line reads "Keep or roll dice. Cards come after." The Special face already reads "Special 2" under each enemy die, so that half of the row was stale. An engageView test pins both lines. The critique gate is closed (pass 21, 7 commits, under 24 hours).

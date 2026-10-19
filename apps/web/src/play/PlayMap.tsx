@@ -12,6 +12,7 @@ import { hexPolygonPoints, hexToPixel } from '../map/geometry.ts'
 import { hexTitle } from '../map/places.ts'
 import type { DamageFloat } from './damageFloats.ts'
 import { enemyLabel, playerHex } from './engageView.ts'
+import { placeTag } from './mapTag.ts'
 import styles from './Play.module.css'
 import { hexTargets, ofType } from './targets.ts'
 
@@ -141,9 +142,12 @@ export function PlayMap({
         return hexDistance({ q, r }, around.hex) <= around.radius
       })
     : hexes
+  // The mini map also frames every enemy it can target, so none is cut off at the map edge.
   const all = [
     ...(framed.length > 0 ? framed : hexes).map((h) => h.center),
-    ...(around ? [] : ghosts.map((t) => hexToPixel(t, SIZE))),
+    ...(around
+      ? state.enemies.filter((e) => enemyTargets.has(e.id)).map((e) => hexToPixel(e.hex, SIZE))
+      : ghosts.map((t) => hexToPixel(t, SIZE))),
   ]
   const pad = around ? SIZE * 0.9 : SIZE * 2
   const minX = Math.min(...all.map((p) => p.x)) - pad
@@ -152,7 +156,23 @@ export function PlayMap({
   const h = Math.max(...all.map((p) => p.y)) - minY + pad
   const vw = w / view.zoom
   const vh = h / view.zoom
-  const viewBox = `${minX + (w - vw) / 2 - view.x} ${minY + (h - vh) / 2 - view.y} ${vw} ${vh}`
+  const frame = { x: minX + (w - vw) / 2 - view.x, y: minY + (h - vh) / 2 - view.y, w: vw, h: vh }
+  const viewBox = `${frame.x} ${frame.y} ${vw} ${vh}`
+  // Where each figure stands (seats share a hex side by side) and every token a tag must not hide.
+  const figureAt = (seat: number, hex: Axial) => {
+    const c = hexToPixel(hex, SIZE)
+    const n = state.players.length
+    return { x: c.x + (n === 1 ? 0 : (seat - (n - 1) / 2) * SIZE * 0.45), y: c.y + SIZE * 0.25 }
+  }
+  const tokens = [
+    ...state.players.flatMap((p, seat) =>
+      state.unplaced.includes(p.id) || p.knockedOut
+        ? []
+        : [{ id: p.id, ...figureAt(seat, p.hex), r: SIZE * 0.3 }],
+    ),
+    ...state.defenses.map((d) => ({ id: d.id, ...hexToPixel(d.hex, SIZE), r: SIZE * 0.45 })),
+    ...state.enemies.map((e) => ({ id: e.id, ...hexToPixel(e.hex, SIZE), r: SIZE * 0.55 })),
+  ]
 
   const onDown = (e: PointerEvent<SVGSVGElement>) => {
     if (fixed) return
@@ -236,15 +256,13 @@ export function PlayMap({
         {state.players.map((p, seat) => {
           // Not placed yet, or knocked out: the figure is off the map (core loop v2).
           if (state.unplaced.includes(p.id) || p.knockedOut) return null
-          const c = hexToPixel(p.hex, SIZE)
+          const c = figureAt(seat, p.hex)
           const label = state.players.length === 1 ? 'You' : `P${seat + 1}`
-          const offset =
-            state.players.length === 1 ? 0 : (seat - (state.players.length - 1) / 2) * SIZE * 0.45
           return (
             <g
               key={p.id}
               className={styles.mover}
-              style={place(c.x + offset, c.y + SIZE * 0.25)}
+              style={place(c.x, c.y)}
               aria-label={`${label === 'You' ? 'Your' : `${label}'s`} figure at ${p.hex.q},${p.hex.r}`}
             >
               <circle
@@ -267,12 +285,17 @@ export function PlayMap({
           const r = SIZE * 0.55
           const called = enemyLabel(state, e.id, from)
           const name = `${called}, ${e.health} of ${max} health`
-          // The mini map names the highlighted target beside its token (right, or left when it
-          // would leave the frame).
+          // The mini map names the highlighted target beside its token, on a side that stays in
+          // the frame and hides no other token.
           const tag = around && highlight === e.id && target ? called : null
-          const tagW = (tag?.length ?? 0) * 5.4 + 12
-          const viewRight = minX + (w + vw) / 2 - view.x
-          const tagLeft = c.x + r + 4 + tagW > viewRight
+          const tagAt = tag
+            ? placeTag(
+                { ...c, r },
+                { w: tag.length * 5.4 + 12, h: 30 },
+                frame,
+                tokens.filter((t) => t.id !== e.id),
+              )
+            : null
           return (
             <g
               key={e.id}
@@ -302,19 +325,18 @@ export function PlayMap({
               <text key={e.health} className={`${styles.hpText} ${styles.hit}`} x={0} y={r + 8}>
                 {e.health}/{max}
               </text>
-              {tag ? (
-                <g className={styles.mapTag} aria-hidden="true" data-testid="map-tag">
-                  <rect
-                    x={tagLeft ? -r - 4 - tagW : r + 4}
-                    y={-15}
-                    width={tagW}
-                    height={30}
-                    rx={4}
-                  />
-                  <text x={tagLeft ? -r - 4 - tagW + 6 : r + 10} y={-3}>
+              {tag && tagAt ? (
+                <g
+                  className={styles.mapTag}
+                  aria-hidden="true"
+                  data-testid="map-tag"
+                  data-side={tagAt.side}
+                >
+                  <rect x={tagAt.x} y={tagAt.y} width={tag.length * 5.4 + 12} height={30} rx={4} />
+                  <text x={tagAt.x + 6} y={tagAt.y + 12}>
                     {tag}
                   </text>
-                  <text x={tagLeft ? -r - 4 - tagW + 6 : r + 10} y={10}>
+                  <text x={tagAt.x + 6} y={tagAt.y + 25}>
                     {e.health}/{max}
                   </text>
                 </g>

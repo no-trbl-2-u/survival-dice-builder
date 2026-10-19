@@ -63,7 +63,9 @@
 - suggested fix: Fit 5+ Skills (3 columns or a smaller tile), and keep strip text whole.
 - source: blind-round-4
 
-### [LOW] /play — the mini-map target label can cover tokens
+## Done
+
+### [x] [LOW] /play — the mini-map target label can cover tokens (addressed at (this commit))
 - pass: blind-round-4 (phase 24)
 - viewport: 1280x800 and 375x812
 - category: comprehension
@@ -71,8 +73,8 @@
 - evidence: blind round 4 (2026-10-09), the target mini map
 - suggested fix: Place the label away from other tokens; frame the mini map on the map's hexes.
 - source: blind-round-4
-
-## Done
+- issue: #148
+- resolution: the target tag now takes the first side (right, left, above, below) that stays in the frame and covers no figure, defense or other enemy (`placeTag` in `apps/web/src/play/mapTag.ts`); the mini map also frames every enemy it can target, so none is cut off at the 3-hex edge.
 
 ### [x] [LOW] /play — card timing and the Special face are explained only later (addressed at (this commit))
 - pass: blind-round-4 (phase 24)
