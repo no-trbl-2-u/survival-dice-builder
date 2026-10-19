@@ -45,15 +45,6 @@
 - suggested fix: Reword to "If your config is from before 9 October, choose Reset to defaults on the Config page once", or close the item.
 - source: web-fetch
 
-### [LOW] /tiles — tile captions write site names in lower case
-- pass: 21 (commit a6dc51f)
-- viewport: desktop
-- category: voice
-- observation: The caption under each tile name reads "1 base", "2 gathering nodes, 1 spawn node", "1 elite spawn node"; the site legend and every hex list on the same page write "Base", "Gathering node", "Elite spawn node".
-- evidence: `apps/web/src/tiles/TileSheet.tsx:34` (`SITE_LABEL[s].toLowerCase()`)
-- suggested fix: Drop the `.toLowerCase()` in the caption so it matches the legend ("1 Base, 2 Gathering nodes").
-- source: web-fetch
-
 ### [MED] /decisions — the "Spec v2 design work" check lists rows already decided
 - pass: 20 (commit ed01c82)
 - viewport: desktop
@@ -118,6 +109,16 @@
 - source: blind-round-4
 
 ## Done
+
+### [x] [LOW] /tiles — tile captions write site names in lower case (addressed at (this commit))
+- pass: 21 (commit a6dc51f)
+- viewport: desktop
+- category: voice
+- observation: The caption under each tile name reads "1 base", "2 gathering nodes, 1 spawn node", "1 elite spawn node"; the site legend and every hex list on the same page write "Base", "Gathering node", "Elite spawn node".
+- evidence: `apps/web/src/tiles/TileSheet.tsx:34` (`SITE_LABEL[s].toLowerCase()`)
+- suggested fix: Drop the `.toLowerCase()` in the caption so it matches the legend ("1 Base, 2 Gathering nodes").
+- source: web-fetch
+- issue: #143
 
 ### [x] [LOW] /config — "standard rules" and "defaults" name the same baseline (addressed at (this commit))
 - pass: 21 (commit a6dc51f)

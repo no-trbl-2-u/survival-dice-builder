@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-19 (pass 89, cloud tick)
+
+Pass 88's reset-wording row shipped (3a23999). The two MED rows from critique pass 21 and the pass 20 design-work row still edit `[needs-user-call]` items, which only /oversight changes, so they wait. The top shippable row is the /tiles caption at 1.8: each tile's site count read "1 base", "2 gathering nodes" while the site legend and hex lists write "Base", "Gathering node". The caption now uses the legend's labels as written ("1 Base", "2 Gathering nodes, 1 Spawn node"); a TileSheet test pins it. The critique gate is closed (pass 21, 2 commits, under 24 hours) and the expand gate is closed (pass 13 at 8fc13ac, 17 commits, under 48 hours).
+
+## Top 5 findings (scored)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [x] [1.8] /tiles: tile captions write site names in lower case (critique LOW, pass 21)
+- category: external-critique (voice)
+- impact: 2
+- ease: 9
+- next: drop the `.toLowerCase()` in the TileSheet caption
+- issue: #143
+- fixed: (this commit)
+
+### [ ] [1.6] /decisions: headings cite "row 20" and ruling numbers a visitor cannot look up (critique LOW, pass 21)
+- category: external-critique (comprehension)
+- impact: 2
+- ease: 8
+- next: name the Haul card instead of the rules table row in rows 59 and 60; drop or link the ruling numbers
+
 # Site audit — 2026-10-19 (pass 88, cloud tick)
 
 Pass 87's defeated-dice row shipped (a6dc51f). Critique pass 21 filed six rows. Its two MED rows (the /decisions balance checks at 8.1 and the "Structural v2 questions" check at 8.1, both with the MED bias) edit `[needs-user-call]` rows, which only /oversight changes, so they wait with the design-work row. The top shippable row is the /config reset wording at 2.4: the status line said "the standard rules" while the button said "Reset to defaults". /config and the /play start panel now say "Reset to the standard rules", confirm with "Reset every value to the standard rules?", and /config reports "Reset to the standard rules."; the StartPanel test and the config e2e pin the new words. The critique gate is closed (pass 21, 1 commit, under 24 hours) and the expand gate is closed (pass 13 at 8fc13ac, 16 commits, under 48 hours).

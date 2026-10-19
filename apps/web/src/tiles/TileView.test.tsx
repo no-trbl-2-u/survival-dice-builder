@@ -48,6 +48,20 @@ describe('TileSheet', () => {
       expect(names).toEqual(defaultContent.tiles.filter((t) => t.kind === kind).map((t) => t.name))
     }
   })
+
+  it("counts each tile's sites under its name, written as the site legend writes them", () => {
+    const { container } = render(<TileSheet />)
+    const summaries = defaultContent.tiles.map((tile) => {
+      const name = container.querySelector(`[data-tile="${tile.id}"] h3`)!
+      return name.nextSibling?.textContent ?? ''
+    })
+    const base = defaultContent.tiles.findIndex((t) => t.kind === 'base')
+    expect(summaries[base]).toMatch(/^1 Base\b/)
+    expect(summaries.join(', ')).toMatch(/Gathering node/)
+    for (const summary of summaries) {
+      expect(summary).not.toMatch(/\d (base|gathering|spawn|elite)/)
+    }
+  })
 })
 
 describe('TileSheet hex list', () => {

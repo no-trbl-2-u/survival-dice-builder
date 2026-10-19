@@ -27,11 +27,11 @@ function kindSummary(tiles: readonly TileDef[]): string {
   return `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`
 }
 
-/** Counts each site printed on a tile, for the caption. */
+/** Counts each site printed on a tile, for the caption, named as the site legend names it. */
 function siteSummary(sites: readonly (Site | null)[]): string {
   return SITES.map((s) => [s, sites.filter((x) => x === s).length] as const)
     .filter(([, n]) => n > 0)
-    .map(([s, n]) => `${n} ${SITE_LABEL[s].toLowerCase()}${n > 1 ? 's' : ''}`)
+    .map(([s, n]) => `${n} ${SITE_LABEL[s]}${n > 1 ? 's' : ''}`)
     .join(', ')
 }
 
