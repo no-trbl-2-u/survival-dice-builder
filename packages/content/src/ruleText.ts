@@ -434,11 +434,13 @@ const andList = (items: readonly string[]) =>
 
 /**
  * What a Skill does when it fires, in one plain line: "2 damage to 1 enemy within 1 hex".
+ * An "ignore a hit" lasts for the current engagement, or the current exchange under Exchanges.
  *
  * @param e - the Skill's effect from content.
- * @rule Table 3, Table 9
+ * @param model - the run's Combat model.
+ * @rule Table 3, Table 9, Combat v3
  */
-export function skillEffectText(e: SkillEffect): string {
+export function skillEffectText(e: SkillEffect, model: GameConfig['combat']['model']): string {
   switch (e.kind) {
     case 'damage':
       return `${e.amount} damage to ${e.target === 'one' ? '1 enemy' : 'each enemy'} within ${plural(e.range, 'hex', 'hexes')}`
@@ -447,13 +449,13 @@ export function skillEffectText(e: SkillEffect): string {
     case 'heal':
       return `Heal ${e.amount}`
     case 'ignoreHit':
-      return `Ignore ${plural(e.hits, 'enemy hit', 'enemy hits')} this exchange`
+      return `Ignore ${plural(e.hits, 'enemy hit', 'enemy hits')} this ${model === 'exchange' ? 'exchange' : 'engagement'}`
   }
 }
 
 /** "Strike (Sword: 2 damage to 1 enemy within 1 hex)": a Skill's faces and effect. */
-const skillLine = (s: Content['skills'][number]) => {
-  const effect = skillEffectText(s.effect)
+const skillLine = (s: Content['skills'][number], model: GameConfig['combat']['model']) => {
+  const effect = skillEffectText(s.effect, model)
   return `${s.name} (${andList(s.faces)}: ${effect.charAt(0).toLowerCase()}${effect.slice(1)})`
 }
 
@@ -466,7 +468,7 @@ const skillLine = (s: Content['skills'][number]) => {
 export function startText(config: GameConfig, content: Pick<Content, 'cards' | 'skills'>): string {
   const { maxHealth, startingDice, starterSkills } = config.player
   const defs = starterSkills.flatMap((id) => content.skills.filter((s) => s.id === id))
-  const skills = defs.map(skillLine)
+  const skills = defs.map((s) => skillLine(s, config.combat.model))
   const guards = defs.filter((s) => s.effect.kind === 'guard').map((s) => s.name)
   const cardsGuard = config.combat.model === 'exchange' ? " and your cards' bottom halves" : ''
   const guard =

@@ -63,15 +63,6 @@
 - suggested fix: Keep a long effect text above the footer.
 - source: blind-round-4
 
-### [MED] /play — the Dodge effect says "this exchange" under the default Engagements Combat
-- pass: 22 (commit 5e9eef1)
-- viewport: desktop
-- category: voice
-- observation: The draft Skill Dodge reads "Ignore 1 enemy hit this exchange". The default Combat is Engagements, and / and /config call Exchanges "the older Combat kept for playtests". Under Engagements the effect lasts for the current engagement, so the word points at the wrong Combat model.
-- evidence: packages/content/src/ruleText.ts:450 `Ignore ${plural(e.hits, 'enemy hit', 'enemy hits')} this exchange`; /: "Before a run, you can choose Exchanges instead, the older Combat kept for playtests."
-- suggested fix: Word the effect by Combat model: "this engagement" under Engagements, "this exchange" under Exchanges.
-- source: web-fetch
-
 ### [LOW] / and /tiles — lists use the serial comma in some places and not others
 - pass: 22 (commit 5e9eef1)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — the Dodge effect says "this exchange" under the default Engagements Combat (addressed at (this commit))
+- pass: 22 (commit 5e9eef1)
+- viewport: desktop
+- category: voice
+- observation: The draft Skill Dodge reads "Ignore 1 enemy hit this exchange". The default Combat is Engagements, and / and /config call Exchanges "the older Combat kept for playtests". Under Engagements the effect lasts for the current engagement, so the word points at the wrong Combat model.
+- evidence: packages/content/src/ruleText.ts:450 `Ignore ${plural(e.hits, 'enemy hit', 'enemy hits')} this exchange`; /: "Before a run, you can choose Exchanges instead, the older Combat kept for playtests."
+- suggested fix: Word the effect by Combat model: "this engagement" under Engagements, "this exchange" under Exchanges.
+- source: web-fetch
+- issue: #154
+- resolution: skillEffectText (packages/content/src/ruleText.ts) now takes the run's Combat model, so Dodge reads "Ignore 1 enemy hit this engagement" under Engagements and "Ignore 1 enemy hit this exchange" under Exchanges, on the /play Skill board, the draft dialog and the / starter Skills line. The engine resets ignored hits at the start of each engagement, so the new word matches the rule. An effectText test pins both wordings.
 
 ### [x] [MED] /tiles — the Base legend says upgrades are bought "here", on the one Center hex (addressed at (this commit))
 - pass: 22 (commit 5e9eef1)

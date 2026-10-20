@@ -26,7 +26,7 @@ export function DecisionDialog({ state, legal, act }: Props) {
   /** ": 2 damage to 1 enemy within 1 hex", or nothing for an unknown Skill. */
   const effectOf = (id: string) => {
     const def = skill(id)
-    return def ? `: ${skillText(def.effect)}` : ''
+    return def ? `: ${skillText(def.effect, state.config.combat.model)}` : ''
   }
   const title = drafts.length
     ? draftTitle()

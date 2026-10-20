@@ -142,7 +142,9 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
                   </div>
                 )
               })()}
-              <span className={styles.muted}>{skillText(skill.effect)}</span>
+              <span className={styles.muted}>
+                {skillText(skill.effect, state.config.combat.model)}
+              </span>
               {skill.faces.length > diceHeld ? (
                 <NeedsDice needed={skill.faces.length} held={diceHeld} />
               ) : null}

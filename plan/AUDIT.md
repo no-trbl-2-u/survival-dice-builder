@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-20 (pass 100, cloud tick)
+
+Pass 99's /tiles Base-legend row shipped (4362104). With the oversight bias (external-critique MED x1.5), the top shippable row is the Dodge row at 6.3 (impact 5, ease 8.5): the draft Skill Dodge read "Ignore 1 enemy hit this exchange" while the default Combat is Engagements. The engine resets ignored hits at the start of each engagement, so `skillEffectText` now takes the run's Combat model and reads "this engagement" under Engagements and "this exchange" under Exchanges, on the /play Skill board, the draft dialog and the / starter Skills line. An effectText test pins both. The three `[needs-user-call]` MED rows from passes 20 and 21 still score 8.1 and wait for /oversight. Every other pending row is LOW and scores under 3.0. The critique gate is closed (pass 22, 4 commits, under 24 hours), and the expand gate is closed (pass 14 at f7dc176, 10 commits, under 48 hours).
+
+## Top 5 findings (scored)
+
+### [x] [6.3] /play: the Dodge effect says "this exchange" under Engagements (critique MED, pass 22, bias x1.5)
+- category: external-critique (voice)
+- impact: 5
+- ease: 8.5
+- next: word the Dodge effect in ruleText by Combat model
+- issue: #154
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [2.4] / and /tiles: lists mix the serial comma (critique LOW, pass 22)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: pick one list style in andList and the hand-written lists on / and /tiles
+
 # Site audit — 2026-10-20 (pass 99, cloud tick)
 
 Pass 98's home co-op row shipped (8c4708d). With the oversight bias (external-critique MED x1.5), the top shippable row is the /tiles Base-legend row at 7.6 (impact 6, ease 8.5): the legend said upgrades are "bought here" on the Base site, which /tiles marks on the Center hex only, and / said "on the base". The engine takes any hex of the Base tile (OPEN-QUESTIONS row 16). The legend now says "stand on the Base tile to buy upgrades", and the / Shop and Training lines say "Stand on the Base tile and buy ...", as the /play Base panel does. The three `[needs-user-call]` MED rows from passes 20 and 21 still score 8.1 and wait for /oversight. Next: the Dodge "this exchange" row (MED, pass 22). The critique gate is closed (pass 22, 2 commits, under 24 hours), and the expand gate is closed (pass 14 at f7dc176, 10 commits, under 48 hours).
