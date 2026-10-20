@@ -67,9 +67,13 @@ describe('HomePage', () => {
   it('says how levels, the Shop and the Skill draft work, with numbers from config', () => {
     render(<HomePage />)
     expect(screen.getAllByText(/Level 2 needs 3 experience/)[0]).toBeTruthy()
-    expect(screen.getAllByText(/Buy Shop I on the base .* 4 materials/)[0]).toBeTruthy()
     expect(
-      screen.getAllByText(/Buy Training I on the base \(a Build card and 3 materials\)/)[0],
+      screen.getAllByText(/Stand on the Base tile and buy Shop I .* 4 materials/)[0],
+    ).toBeTruthy()
+    expect(
+      screen.getAllByText(
+        /Stand on the Base tile and buy Training I \(a Build card and 3 materials\)/,
+      )[0],
     ).toBeTruthy()
     expect(screen.queryByText(/Level up, buy cards in the Shop, and draft Skills/)).toBeNull()
   })

@@ -77,7 +77,7 @@ export function siteText(site: Site, config: GameConfig, content: Upgrades): str
     const cards = shop
       ? `, and cards once ${shop.name} is built`
       : ', and cards once the Shop opens'
-    return `the players defend it; upgrades are bought here${cards}`
+    return `the players defend it; stand on the Base tile to buy upgrades${cards}`
   }
   if (site === 'gathering-node')
     return config.rulings.gatherNeedsNode
@@ -131,12 +131,12 @@ export function levelText(config: GameConfig, content: Enemies): string {
 export function shopText(config: GameConfig, content: Upgrades & Enemies): string {
   const shop = firstUpgrade('shop', content)
   const open = shop
-    ? `Buy ${shop.name} on the base (a Build card and ${plural(shop.cost, 'material', 'materials')}) to open the Shop`
-    : 'Open the Shop on the base'
+    ? `Stand on the Base tile and buy ${shop.name} (a Build card and ${plural(shop.cost, 'material', 'materials')}) to open the Shop`
+    : 'Open the Shop from the Base tile'
   const when =
     config.rulings.shopTiming === 'prepare-only'
-      ? 'while you stand on the base in the Prepare phase'
-      : 'at any time you stand on the base'
+      ? 'while you stand on the Base tile in the Prepare phase'
+      : 'at any time you stand on the Base tile'
   const gains = content.enemies.enemies
     .map((e) => `${withArticle(e.name.toLowerCase())} ${e.currency}`)
     .join(', ')
@@ -151,8 +151,8 @@ export function shopText(config: GameConfig, content: Upgrades & Enemies): strin
 export function trainingText(config: GameConfig, content: Upgrades): string {
   const training = firstUpgrade('training', content)
   const open = training
-    ? `Buy ${training.name} on the base (a Build card and ${plural(training.cost, 'material', 'materials')}) to open the Training Ground`
-    : 'Open the Training Ground on the base'
+    ? `Stand on the Base tile and buy ${training.name} (a Build card and ${plural(training.cost, 'material', 'materials')}) to open the Training Ground`
+    : 'Open the Training Ground from the Base tile'
   const n = config.draft.everyNRounds
   const when = n === 1 ? 'every round' : `in rounds ${n}, ${2 * n}, ${3 * n} and so on`
   return `${open}: ${when}, each player looks at ${plural(config.draft.reveal, 'Skill', 'Skills')} and keeps 1 for free.`

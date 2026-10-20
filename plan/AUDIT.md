@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-20 (pass 99, cloud tick)
+
+Pass 98's home co-op row shipped (8c4708d). With the oversight bias (external-critique MED x1.5), the top shippable row is the /tiles Base-legend row at 7.6 (impact 6, ease 8.5): the legend said upgrades are "bought here" on the Base site, which /tiles marks on the Center hex only, and / said "on the base". The engine takes any hex of the Base tile (OPEN-QUESTIONS row 16). The legend now says "stand on the Base tile to buy upgrades", and the / Shop and Training lines say "Stand on the Base tile and buy ...", as the /play Base panel does. The three `[needs-user-call]` MED rows from passes 20 and 21 still score 8.1 and wait for /oversight. Next: the Dodge "this exchange" row (MED, pass 22). The critique gate is closed (pass 22, 2 commits, under 24 hours), and the expand gate is closed (pass 14 at f7dc176, 10 commits, under 48 hours).
+
+## Top 5 findings (scored)
+
+### [x] [7.6] /tiles: the Base legend says upgrades are bought "here", on the one Center hex (critique MED, pass 22, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8.5
+- next: "stand on the Base tile" in the /tiles Base legend and the / Shop and Training lines
+- issue: #153
+- fixed: (this commit)
+
+### [ ] [6.3] /play: the Dodge effect says "this exchange" under Engagements (critique MED, pass 22, bias x1.5)
+- category: external-critique (voice)
+- impact: 5
+- ease: 8.5
+- next: word the Dodge effect in ruleText by Combat model
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
 # Site audit — 2026-10-20 (pass 98, cloud tick)
 
 Pass 97's target-pick row shipped (5e9eef1), and critique pass 22 (85d700f) filed 5 rows: 3 MED, 2 LOW. With the oversight bias (external-critique MED x1.5), the top shippable row is the home co-op row at 8.1 (impact 6, ease 9): the / pitch and meta description never said the players work together. The pitch now says "A co-op survival dice-builder for 1 to 4 players on one screen: all players defend one base.", and the meta description says "together" and "co-op". The three `[needs-user-call]` MED rows from passes 20 and 21 also score 8.1 and still wait for /oversight. Next: the /tiles Base-legend row and the Dodge "this exchange" row (both MED, pass 22). The critique gate is closed (pass 22, under 24 hours), and the expand gate is closed (pass 14 at f7dc176, 9 commits, under 48 hours).

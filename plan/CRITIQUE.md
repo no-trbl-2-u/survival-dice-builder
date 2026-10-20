@@ -63,15 +63,6 @@
 - suggested fix: Keep a long effect text above the footer.
 - source: blind-round-4
 
-### [MED] /tiles — the Base legend says upgrades are bought "here", on the one Center hex
-- pass: 22 (commit 5e9eef1)
-- viewport: desktop
-- category: comprehension
-- observation: /tiles puts "upgrades are bought here" on the Base site, which is only the Center hex of Broken Village. / says "on the base". The /play Base panel says any hex of the Base tile works, which is what the engine does. A /tiles reader will think they must stand on the center hex.
-- evidence: /tiles legend: "Base (the players defend it; upgrades are bought here, and cards once Shop I is built)"; /tiles: "Center: Plains, Base"; apps/web/src/play/BasePanel.tsx:55: "To buy an upgrade, stand on the Base tile and play a Build card".
-- suggested fix: Use the /play wording on every page: "stand on the Base tile" in the /tiles Base legend and in the / Shop and Training lines.
-- source: web-fetch
-
 ### [MED] /play — the Dodge effect says "this exchange" under the default Engagements Combat
 - pass: 22 (commit 5e9eef1)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /tiles — the Base legend says upgrades are bought "here", on the one Center hex (addressed at (this commit))
+- pass: 22 (commit 5e9eef1)
+- viewport: desktop
+- category: comprehension
+- observation: /tiles puts "upgrades are bought here" on the Base site, which is only the Center hex of Broken Village. / says "on the base". The /play Base panel says any hex of the Base tile works, which is what the engine does. A /tiles reader will think they must stand on the center hex.
+- evidence: /tiles legend: "Base (the players defend it; upgrades are bought here, and cards once Shop I is built)"; /tiles: "Center: Plains, Base"; apps/web/src/play/BasePanel.tsx:55: "To buy an upgrade, stand on the Base tile and play a Build card".
+- suggested fix: Use the /play wording on every page: "stand on the Base tile" in the /tiles Base legend and in the / Shop and Training lines.
+- source: web-fetch
+- issue: #153
+- resolution: the /tiles Base legend now reads "the players defend it; stand on the Base tile to buy upgrades, and cards once Shop I is built", and the / Shop and Training lines read "Stand on the Base tile and buy Shop I (...)" and "buy at any time you stand on the Base tile", matching the /play Base panel and the engine (any hex of the Base tile, OPEN-QUESTIONS row 16). The wording lives in ruleText (siteText, shopText, trainingText); unit tests pin it.
 
 ### [x] [MED] / — the home page never says the game is co-op (addressed at (this commit))
 - pass: 22 (commit 5e9eef1)

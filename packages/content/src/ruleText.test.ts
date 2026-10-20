@@ -62,7 +62,7 @@ describe('rule text from config', () => {
 
   it('shop: the opening upgrade, offers and timing follow content and config (6.8, Table 6)', () => {
     expect(shopText(base, defaultContent)).toBe(
-      'Buy Shop I on the base (a Build card and 4 materials) to open the Shop with 3 card offers. Pay for cards with currency, which you get for each enemy you defeat (a grunt 1, an elite 4); buy at any time you stand on the base.',
+      'Stand on the Base tile and buy Shop I (a Build card and 4 materials) to open the Shop with 3 card offers. Pay for cards with currency, which you get for each enemy you defeat (a grunt 1, an elite 4); buy at any time you stand on the Base tile.',
     )
     const prepare = With((c) => ({ ...c, rulings: { ...c.rulings, shopTiming: 'prepare-only' } }))
     expect(shopText(prepare, defaultContent)).toMatch(/in the Prepare phase\.$/)
@@ -78,7 +78,7 @@ describe('rule text from config', () => {
 
   it('training: the draft round and the Skills shown follow config (10.8, 11.6)', () => {
     expect(trainingText(base, defaultContent)).toBe(
-      'Buy Training I on the base (a Build card and 3 materials) to open the Training Ground: in rounds 2, 4, 6 and so on, each player looks at 2 Skills and keeps 1 for free.',
+      'Stand on the Base tile and buy Training I (a Build card and 3 materials) to open the Training Ground: in rounds 2, 4, 6 and so on, each player looks at 2 Skills and keeps 1 for free.',
     )
     const often = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 1, reveal: 3 } }))
     expect(trainingText(often, defaultContent)).toMatch(
@@ -147,7 +147,7 @@ describe('rule text from config', () => {
 
   it('sites: Table 1 functions, with spawn options named (rows 64, 66, 68, 70)', () => {
     expect(siteText('base', base, defaultContent)).toBe(
-      'the players defend it; upgrades are bought here, and cards once Shop I is built',
+      'the players defend it; stand on the Base tile to buy upgrades, and cards once Shop I is built',
     )
     expect(siteText('gathering-node', base, defaultContent)).toBe(
       'a Gather card here gets its materials, once',
