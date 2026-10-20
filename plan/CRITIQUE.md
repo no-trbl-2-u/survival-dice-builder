@@ -63,15 +63,6 @@
 - suggested fix: Keep a long effect text above the footer.
 - source: blind-round-4
 
-### [MED] / — the home page never says the game is co-op
-- pass: 22 (commit 5e9eef1)
-- viewport: desktop
-- category: comprehension
-- observation: The pitch says "for 1 to 4 players, on one screen" and the reader must infer from "Keep the base standing" that the players work together. The no-JS text says "co-op" and the /play description says "together", but the home copy and the home meta description do not.
-- evidence: / pitch: "Defend the base, build your dice, survive one more round. A survival dice-builder for 1 to 4 players, on one screen." / meta description: "Defend the base, build your dice, survive one more round."
-- suggested fix: Say "co-op" in the / pitch (for example "A co-op survival dice-builder for 1 to 4 players on one screen: all players defend one base.") and in the / meta description.
-- source: web-fetch
-
 ### [MED] /tiles — the Base legend says upgrades are bought "here", on the one Center hex
 - pass: 22 (commit 5e9eef1)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — the home page never says the game is co-op (addressed at (this commit))
+- pass: 22 (commit 5e9eef1)
+- viewport: desktop
+- category: comprehension
+- observation: The pitch says "for 1 to 4 players, on one screen" and the reader must infer from "Keep the base standing" that the players work together. The no-JS text says "co-op" and the /play description says "together", but the home copy and the home meta description do not.
+- evidence: / pitch: "Defend the base, build your dice, survive one more round. A survival dice-builder for 1 to 4 players, on one screen." / meta description: "Defend the base, build your dice, survive one more round."
+- suggested fix: Say "co-op" in the / pitch (for example "A co-op survival dice-builder for 1 to 4 players on one screen: all players defend one base.") and in the / meta description.
+- source: web-fetch
+- issue: #152
+- resolution: the / pitch now reads "A co-op survival dice-builder for 1 to 4 players on one screen: all players defend one base." (player count from config through playersText), and the / meta description reads "Defend the base together, build your dice, survive one more round: a co-op survival dice-builder." A unit test pins the pitch; the static e2e checks the served / copy for "A co-op survival dice-builder".
 
 ### [x] [LOW] /play — the target pick pushes the Skills off screen (addressed at (this commit))
 - pass: blind-round-4 (phase 24)

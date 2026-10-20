@@ -30,8 +30,8 @@ export function HomePage() {
     <div className={styles.home}>
       <div className={styles.text}>
         <p className={styles.pitch}>
-          Defend the base, build your dice, survive one more round. A survival dice-builder for{' '}
-          {playersText(config)}, on one screen.
+          Defend the base, build your dice, survive one more round. A co-op survival dice-builder
+          for {playersText(config)} on one screen: all players defend one base.
         </p>
         <a className={styles.start} href="/play">
           Start a run

@@ -4,7 +4,7 @@ const SITE = 'https://survival-dice-builder.pages.dev'
 
 /** Every route as served (phase 40): its tab title, a line of its copy, or null for a shell. */
 const ROUTES: readonly (readonly [path: string, title: string, copy: string | null])[] = [
-  ['/', 'Survival Dice-Builder', 'Defend the base, build your dice'],
+  ['/', 'Survival Dice-Builder', 'A co-op survival dice-builder'],
   [
     '/tiles',
     'Tile sheet - Survival Dice-Builder',

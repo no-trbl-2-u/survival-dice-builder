@@ -40,7 +40,8 @@ export const routes: readonly Route[] = [
   {
     path: '/',
     title: SITE_NAME,
-    description: 'Defend the base, build your dice, survive one more round.',
+    description:
+      'Defend the base together, build your dice, survive one more round: a co-op survival dice-builder.',
     served: 'page',
     render: () => <HomePage />,
   },

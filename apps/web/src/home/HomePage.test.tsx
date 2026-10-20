@@ -55,6 +55,15 @@ describe('HomePage', () => {
     expect(screen.getAllByText(/for 1 to 4 players/)[0]).toBeTruthy()
   })
 
+  it('says the game is co-op: every player defends one base', () => {
+    render(<HomePage />)
+    expect(
+      screen.getAllByText(
+        /A co-op survival dice-builder for 1 to 4 players on one screen: all players defend one base\./,
+      )[0],
+    ).toBeTruthy()
+  })
+
   it('says how levels, the Shop and the Skill draft work, with numbers from config', () => {
     render(<HomePage />)
     expect(screen.getAllByText(/Level 2 needs 3 experience/)[0]).toBeTruthy()

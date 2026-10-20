@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-20 (pass 98, cloud tick)
+
+Pass 97's target-pick row shipped (5e9eef1), and critique pass 22 (85d700f) filed 5 rows: 3 MED, 2 LOW. With the oversight bias (external-critique MED x1.5), the top shippable row is the home co-op row at 8.1 (impact 6, ease 9): the / pitch and meta description never said the players work together. The pitch now says "A co-op survival dice-builder for 1 to 4 players on one screen: all players defend one base.", and the meta description says "together" and "co-op". The three `[needs-user-call]` MED rows from passes 20 and 21 also score 8.1 and still wait for /oversight. Next: the /tiles Base-legend row and the Dodge "this exchange" row (both MED, pass 22). The critique gate is closed (pass 22, under 24 hours), and the expand gate is closed (pass 14 at f7dc176, 9 commits, under 48 hours).
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /: the home page never says the game is co-op (critique MED, pass 22, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: "co-op" in the / pitch and the / meta description
+- issue: #152
+- fixed: (this commit)
+
+### [ ] [7.6] /tiles: the Base legend says upgrades are bought "here", on the one Center hex (critique MED, pass 22, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8.5
+- next: "stand on the Base tile" in the /tiles Base legend and the / Shop and Training lines
+
+### [ ] [6.3] /play: the Dodge effect says "this exchange" under Engagements (critique MED, pass 22, bias x1.5)
+- category: external-critique (voice)
+- impact: 5
+- ease: 8.5
+- next: word the Dodge effect in ruleText by Combat model
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
 # Site audit — 2026-10-20 (pass 97, cloud tick)
 
 Pass 96's hand-strip row shipped (77ce2eb). The two MED rows from critique pass 21, the pass 20 design-work row, and the LOW reset-wording row still edit `[needs-user-call]` items, which only /oversight changes, so they wait. Every shippable row scores under 3.0, and the expand gate is closed (pass 14 at f7dc176, 6 commits since, under 48 hours), so the loop keeps draining LOW critique rows. The top one is the target-pick half of the blind-round-4 row at 1.4: with 4 targets in range the Skills started about 215px below the screen at 375x812 and below the footer at 1280x800. During a pick the Skills now come up under the targets and the felt (every die already placed) goes last; at phone width the mini map is 150px tall, the target buttons are compact, and the "Choose a target" heading is heard, not shown. The first Skills row and the fired Skill end above the footer at both sizes; a new e2e pins it. The 1280x800 effect-text part of the row stays pending. The critique gate is closed (pass 21, 11 commits, under 24 hours).
