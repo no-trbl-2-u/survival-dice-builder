@@ -2,7 +2,7 @@ import { defaultContent } from '@survival/content'
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { TileSheet } from './TileSheet.tsx'
-import { HEX_POSITION, hexLabel, TileView } from './TileView.tsx'
+import { HEX_LIST_ORDER, HEX_POSITION, hexLabel, TileView } from './TileView.tsx'
 
 describe('TileView', () => {
   it('3.1 draws 7 hexes with each terrain and site from the tile', () => {
@@ -70,9 +70,25 @@ describe('TileSheet hex list', () => {
     expect(container.querySelectorAll('[data-hex-row]')).toHaveLength(63)
     const tile = defaultContent.tiles[0]!
     const rows = container.querySelectorAll(`[data-tile="${tile.id}"] [data-hex-row]`)
-    rows.forEach((row, i) => {
+    rows.forEach((row, n) => {
+      const i = HEX_LIST_ORDER[n]!
       expect(row.textContent).toBe(`${HEX_POSITION[i]}: ${hexLabel(tile.hexes[i]!)}`)
     })
+  })
+
+  it('reads the center, then Top and clockwise', () => {
+    const { container } = render(<TileSheet />)
+    const tile = defaultContent.tiles[0]!
+    const rows = container.querySelectorAll(`[data-tile="${tile.id}"] [data-hex-row]`)
+    expect([...rows].map((row) => row.textContent?.split(':')[0])).toEqual([
+      'Center',
+      'Top',
+      'Upper right',
+      'Lower right',
+      'Bottom',
+      'Lower left',
+      'Upper left',
+    ])
   })
 
   it('capitalises terrain and names the site', () => {

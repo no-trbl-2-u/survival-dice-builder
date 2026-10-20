@@ -72,7 +72,9 @@
 - suggested fix: Pick one list style and use it in andList (packages/content/src/ruleText.ts) and the hand-written lists on / and /tiles.
 - source: web-fetch
 
-### [LOW] /tiles — each tile's hex list jumps from Center to Lower right, then runs counter-clockwise
+## Done
+
+### [x] [LOW] /tiles — each tile's hex list jumps from Center to Lower right, then runs counter-clockwise (addressed at (this commit))
 - pass: 22 (commit 5e9eef1)
 - viewport: desktop
 - category: comprehension
@@ -80,8 +82,8 @@
 - evidence: Meadowlands: "Center: Plains", "Lower right: Plains, Gathering node", "Upper right: Forest", "Top: Hills, Spawn node", "Upper left: Plains", "Lower left: Lake", "Bottom: Forest, Gathering node".
 - suggested fix: List Center, then Top, Upper right, Lower right, Bottom, Lower left, Upper left.
 - source: web-fetch
-
-## Done
+- issue: #155
+- resolution: Each /tiles hex list now reads the center, then Top and clockwise (Upper right, Lower right, Bottom, Lower left, Upper left), from a new `HEX_LIST_ORDER` in `apps/web/src/tiles/TileView.tsx`; the drawn tile and the hex indices are unchanged. A TileSheet test pins the order.
 
 ### [x] [MED] /play — the Dodge effect says "this exchange" under the default Engagements Combat (addressed at (this commit))
 - pass: 22 (commit 5e9eef1)

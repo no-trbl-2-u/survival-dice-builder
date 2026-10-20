@@ -7,7 +7,15 @@ import {
   type TileDef,
 } from '@survival/content'
 import { GameIcon } from '../icons/GameIcon.tsx'
-import { capitalize, HEX_POSITION, hexLabel, SITE_ICON, SITE_LABEL, TileView } from './TileView.tsx'
+import {
+  capitalize,
+  HEX_LIST_ORDER,
+  HEX_POSITION,
+  hexLabel,
+  SITE_ICON,
+  SITE_LABEL,
+  TileView,
+} from './TileView.tsx'
 import styles from './TileSheet.module.css'
 
 const TERRAINS: readonly Terrain[] = ['plains', 'forest', 'hills', 'wasteland', 'lake', 'mountain']
@@ -80,12 +88,15 @@ export function TileSheet() {
                     <h3 className={styles.name}>{tile.name}</h3>
                     {siteSummary(tile.hexes.map((h) => h.site))}
                     <ul className={styles.hexList} aria-label={`${tile.name} hexes`}>
-                      {tile.hexes.map((hex, i) => (
-                        <li key={i} data-hex-row={i}>
-                          <span className={styles.position}>{HEX_POSITION[i]}:</span>{' '}
-                          {hexLabel(hex)}
-                        </li>
-                      ))}
+                      {HEX_LIST_ORDER.map((i) => {
+                        const hex = tile.hexes[i]
+                        return hex ? (
+                          <li key={i} data-hex-row={i}>
+                            <span className={styles.position}>{HEX_POSITION[i]}:</span>{' '}
+                            {hexLabel(hex)}
+                          </li>
+                        ) : null
+                      })}
                     </ul>
                   </figcaption>
                 </figure>

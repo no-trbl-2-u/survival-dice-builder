@@ -37,6 +37,12 @@ export const HEX_POSITION: readonly string[] = [
   'Bottom',
 ]
 
+/**
+ * The order the hex lists read a tile in: the center, then Top and clockwise
+ * (Upper right, Lower right, Bottom, Lower left, Upper left). Values are hex indices.
+ */
+export const HEX_LIST_ORDER: readonly number[] = [0, 3, 2, 1, 6, 5, 4]
+
 /** "plains" -> "Plains": a terrain or tile-kind id as a name, as the hex lists print it. */
 export function capitalize(id: string): string {
   return id.charAt(0).toUpperCase() + id.slice(1)
