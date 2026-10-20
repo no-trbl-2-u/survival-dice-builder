@@ -1,7 +1,7 @@
 # Critique log
 
-> Last pass: 2026-10-19 at commit a6dc51f
-> Pass count: 21
+> Last pass: 2026-10-20 at commit 5e9eef1
+> Pass count: 22
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
@@ -62,6 +62,51 @@
 - evidence: blind round 4 (2026-10-09), the modal at 1280x800
 - suggested fix: Keep a long effect text above the footer.
 - source: blind-round-4
+
+### [MED] / — the home page never says the game is co-op
+- pass: 22 (commit 5e9eef1)
+- viewport: desktop
+- category: comprehension
+- observation: The pitch says "for 1 to 4 players, on one screen" and the reader must infer from "Keep the base standing" that the players work together. The no-JS text says "co-op" and the /play description says "together", but the home copy and the home meta description do not.
+- evidence: / pitch: "Defend the base, build your dice, survive one more round. A survival dice-builder for 1 to 4 players, on one screen." / meta description: "Defend the base, build your dice, survive one more round."
+- suggested fix: Say "co-op" in the / pitch (for example "A co-op survival dice-builder for 1 to 4 players on one screen: all players defend one base.") and in the / meta description.
+- source: web-fetch
+
+### [MED] /tiles — the Base legend says upgrades are bought "here", on the one Center hex
+- pass: 22 (commit 5e9eef1)
+- viewport: desktop
+- category: comprehension
+- observation: /tiles puts "upgrades are bought here" on the Base site, which is only the Center hex of Broken Village. / says "on the base". The /play Base panel says any hex of the Base tile works, which is what the engine does. A /tiles reader will think they must stand on the center hex.
+- evidence: /tiles legend: "Base (the players defend it; upgrades are bought here, and cards once Shop I is built)"; /tiles: "Center: Plains, Base"; apps/web/src/play/BasePanel.tsx:55: "To buy an upgrade, stand on the Base tile and play a Build card".
+- suggested fix: Use the /play wording on every page: "stand on the Base tile" in the /tiles Base legend and in the / Shop and Training lines.
+- source: web-fetch
+
+### [MED] /play — the Dodge effect says "this exchange" under the default Engagements Combat
+- pass: 22 (commit 5e9eef1)
+- viewport: desktop
+- category: voice
+- observation: The draft Skill Dodge reads "Ignore 1 enemy hit this exchange". The default Combat is Engagements, and / and /config call Exchanges "the older Combat kept for playtests". Under Engagements the effect lasts for the current engagement, so the word points at the wrong Combat model.
+- evidence: packages/content/src/ruleText.ts:450 `Ignore ${plural(e.hits, 'enemy hit', 'enemy hits')} this exchange`; /: "Before a run, you can choose Exchanges instead, the older Combat kept for playtests."
+- suggested fix: Word the effect by Combat model: "this engagement" under Engagements, "this exchange" under Exchanges.
+- source: web-fetch
+
+### [LOW] / and /tiles — lists use the serial comma in some places and not others
+- pass: 22 (commit 5e9eef1)
+- viewport: desktop
+- category: voice
+- observation: The same / paragraph uses the serial comma in one list and drops it in the next two; /tiles uses it.
+- evidence: / "What you have": "15 health, 1 action die, and 4 Skills", then "4 Move, 4 Gather, 1 Build and 1 Rest"; / Skills: "in rounds 2, 4, 6 and so on"; /tiles: "1 Base tile, 3 Countryside tiles, and 5 Core tiles".
+- suggested fix: Pick one list style and use it in andList (packages/content/src/ruleText.ts) and the hand-written lists on / and /tiles.
+- source: web-fetch
+
+### [LOW] /tiles — each tile's hex list jumps from Center to Lower right, then runs counter-clockwise
+- pass: 22 (commit 5e9eef1)
+- viewport: desktop
+- category: comprehension
+- observation: The hex list order is not one a visitor expects (such as Top, then clockwise), so matching the list to the drawn tile is hard.
+- evidence: Meadowlands: "Center: Plains", "Lower right: Plains, Gathering node", "Upper right: Forest", "Top: Hills, Spawn node", "Upper left: Plains", "Lower left: Lake", "Bottom: Forest, Gathering node".
+- suggested fix: List Center, then Top, Upper right, Lower right, Bottom, Lower left, Upper left.
+- source: web-fetch
 
 ## Done
 
