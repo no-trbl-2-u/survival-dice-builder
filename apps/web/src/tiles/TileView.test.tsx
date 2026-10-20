@@ -33,7 +33,7 @@ describe('TileSheet', () => {
   it('says /play builds its map from these tiles, counted per kind with the heading capitals', () => {
     const { container } = render(<TileSheet />)
     expect(container.querySelector('#tiles-intro')!.textContent).toMatch(
-      /^The game on the Play page builds its map from these 9 tiles: 1 Base tile, 3 Countryside tiles, and 5 Core tiles\. The Base tile starts in the center; the Countryside tiles are drawn before the Core tiles\./,
+      /^The game on the Play page builds its map from these 9 tiles: 1 Base tile, 3 Countryside tiles and 5 Core tiles\. The Base tile starts in the center; the Countryside tiles are drawn before the Core tiles\./,
     )
   })
 

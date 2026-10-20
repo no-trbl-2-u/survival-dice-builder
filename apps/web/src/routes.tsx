@@ -50,7 +50,7 @@ export const routes: readonly Route[] = [
     path: '/play',
     title: 'Play',
     description:
-      'Start a run in the browser: defend the base together at one screen, build your dice, and last as many rounds as you can.',
+      'Start a run in the browser: defend the base together at one screen, build your dice and last as many rounds as you can.',
     served: 'shell',
     load: play.load,
     render: () => <play.Page />,
@@ -78,7 +78,7 @@ export const routes: readonly Route[] = [
     path: '/decisions',
     title: 'Decisions',
     description:
-      'The rule readings the game plays with while they wait on the designer, the setting each one uses, and the open checks.',
+      'The rule readings the game plays with while they wait on the designer, the setting each one uses and the open checks.',
     served: 'page',
     load: decisions.load,
     render: () => <decisions.Page />,

@@ -190,7 +190,7 @@ export function combatText(
   content: Enemies & Pick<Content, 'cards'>,
 ): string {
   if (model === 'exchange') {
-    return 'In each exchange you roll, play cards, and fire Skills. Then each enemy next to you that targets you rolls its enemy dice at you.'
+    return 'In each exchange you roll, play cards and fire Skills. Then each enemy next to you that targets you rolls its enemy dice at you.'
   }
   const dice = enemyDiceText(content)
   const holders = engageCardNames(config, content)
@@ -485,7 +485,7 @@ export function startText(config: GameConfig, content: Pick<Content, 'cards' | '
   )
   const hand = preset ? ` You draw ${preset.handSize} at a time.` : ''
   return (
-    `Each player starts with ${maxHealth} health, ${plural(startingDice, 'action die', 'action dice')}, and ${plural(skills.length, 'Skill', 'Skills')} your dice can fire: ${andList(skills)}.${guard} ` +
+    `Each player starts with ${maxHealth} health, ${plural(startingDice, 'action die', 'action dice')} and ${plural(skills.length, 'Skill', 'Skills')} your dice can fire: ${andList(skills)}.${guard} ` +
     `Your deck holds ${plural(total, 'card', 'cards')}: ${cards}.${hand} ` +
     'Each card has two halves: the top half is for Prepare, the bottom half for Combat.'
   )

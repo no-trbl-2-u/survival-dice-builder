@@ -26,13 +26,13 @@ const KINDS: readonly (readonly [TileDef['kind'], string])[] = [
   ['core', 'Core tiles'],
 ]
 
-/** "1 Base tile, 3 Countryside tiles, and 5 Core tiles", counted from the content. */
+/** "1 Base tile, 3 Countryside tiles and 5 Core tiles", counted from the content. */
 function kindSummary(tiles: readonly TileDef[]): string {
   const parts = KINDS.map(([kind, heading]) => {
     const n = tiles.filter((t) => t.kind === kind).length
     return `${n} ${n === 1 ? heading.replace(/s$/, '') : heading.replace(/(tile)$/, '$1s')}`
   })
-  return `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`
+  return `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`
 }
 
 /** Counts each site printed on a tile, for the caption, named as the site legend names it. */

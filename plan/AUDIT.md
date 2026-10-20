@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-20 (pass 102, cloud tick)
+
+Pass 101's /tiles hex-list row shipped (52e9393). The three `[needs-user-call]` MED rows from passes 20 and 21 still score 8.1 and wait for /oversight. Every shippable row is LOW and scores under 3.0, and the expand gate is closed (pass 14 at f7dc176, 12 commits, under 48 hours), so the loop keeps draining LOW critique rows. The top one is the serial-comma row at 2.4 (impact 3, ease 8): / and /tiles mixed lists with and without the serial comma. Most lists, and `andList` in ruleText, drop it, so the site now drops it everywhere: the / start line ("15 health, 1 action die and 4 Skills"), the exchange line ("roll, play cards and fire Skills"), the / "Also:" links, the /tiles tile count ("3 Countryside tiles and 5 Core tiles"), and the /play and /decisions descriptions and the noscript line. The ruleText, HomePage and TileView tests pin the new text. The critique gate is closed (pass 22, 6 commits, under 24 hours).
+
+## Top 5 findings (scored)
+
+### [x] [2.4] / and /tiles: lists mix the serial comma (critique LOW, pass 22)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: drop the serial comma in the hand-written lists, as andList does
+- issue: #156
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.8] /play: at 1280x800 a long Skill effect text is cut by the footer (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6
+- next: keep a long effect text above the footer
+
 # Site audit — 2026-10-20 (pass 101, cloud tick)
 
 Pass 100's Dodge row shipped (bf619f8). The three `[needs-user-call]` MED rows from passes 20 and 21 still score 8.1 and wait for /oversight. Every shippable row is LOW and scores under 3.0, and the expand gate is closed (pass 14 at f7dc176, 11 commits, under 48 hours), so the loop keeps draining LOW critique rows. The top one is the /tiles hex-list order at 2.7 (impact 3, ease 9): each list ran Center, Lower right, Upper right, Top, then counter-clockwise, the engine's direction order. The lists now read Center, then Top and clockwise, from a new `HEX_LIST_ORDER`; the drawing is unchanged. A TileSheet test pins the order. The critique gate is closed (pass 22, 5 commits, under 24 hours).

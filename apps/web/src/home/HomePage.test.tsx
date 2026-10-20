@@ -32,7 +32,7 @@ describe('HomePage', () => {
     )[0]
     expect(combat?.textContent).toMatch(/This is the Combat in the written rules \(on GitHub\)\./)
     expect(combat?.textContent).toMatch(
-      /\(on GitHub\)\. Before a run, you can choose Exchanges instead, the older Combat kept for playtests\. In each exchange you roll, play cards, and fire Skills\. Then each enemy/,
+      /\(on GitHub\)\. Before a run, you can choose Exchanges instead, the older Combat kept for playtests\. In each exchange you roll, play cards and fire Skills\. Then each enemy/,
     )
     expect(combat?.textContent).not.toMatch(/[;:] (in each exchange|then each enemy)/)
     expect(combat?.textContent).not.toMatch(/Exchanges, the Combat in the written rules/)

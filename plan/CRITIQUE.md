@@ -63,7 +63,9 @@
 - suggested fix: Keep a long effect text above the footer.
 - source: blind-round-4
 
-### [LOW] / and /tiles — lists use the serial comma in some places and not others
+## Done
+
+### [x] [LOW] / and /tiles — lists use the serial comma in some places and not others (addressed at (this commit))
 - pass: 22 (commit 5e9eef1)
 - viewport: desktop
 - category: voice
@@ -71,8 +73,8 @@
 - evidence: / "What you have": "15 health, 1 action die, and 4 Skills", then "4 Move, 4 Gather, 1 Build and 1 Rest"; / Skills: "in rounds 2, 4, 6 and so on"; /tiles: "1 Base tile, 3 Countryside tiles, and 5 Core tiles".
 - suggested fix: Pick one list style and use it in andList (packages/content/src/ruleText.ts) and the hand-written lists on / and /tiles.
 - source: web-fetch
-
-## Done
+- issue: #156
+- resolution: The site drops the serial comma everywhere, as `andList` already did: the / start line and exchange line in ruleText, the / "Also:" links, the /tiles tile count, the /play and /decisions descriptions and the noscript line. The ruleText, HomePage and TileView tests pin the new text.
 
 ### [x] [LOW] /tiles — each tile's hex list jumps from Center to Lower right, then runs counter-clockwise (addressed at (this commit))
 - pass: 22 (commit 5e9eef1)
