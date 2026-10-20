@@ -161,6 +161,45 @@ test('/play engagement II at 375x812: 5 Skills fit in 3 columns, the fifth above
   expect(fifth.y + fifth.height).toBeLessThanOrEqual(box.y + box.height + 1)
 })
 
+test('/play engagement II at 1280x800: 6 Skills with long effect texts fit in 1 row above the footer', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  // 6 Skills with the longest effect texts and the most slots, and 6 dice, saved as /config would.
+  const config = JSON.parse(fs.readFileSync(DEFAULT_CONFIG, 'utf-8'))
+  config.player.startingDice = 6
+  config.player.starterSkills = [
+    'arcane-rain',
+    'phalanx',
+    'meteor',
+    'spark-burst',
+    'flurry',
+    'dodge',
+  ]
+  await page.addInitScript((raw) => {
+    localStorage.setItem('survival.config.v1', raw)
+  }, JSON.stringify(config))
+  const modal = await engage(page, 5)
+  await modal.getByRole('button', { name: 'Stop rolling: use these dice' }).click()
+  await expect(modal.getByRole('list', { name: 'Engagement steps' })).toContainText('Use dice')
+  const body = modal.locator('[data-testid="engage-instruction"] ~ div').first()
+  const box = await body.boundingBox()
+  const tiles = modal.getByLabel('Skills').locator('li')
+  await expect(tiles).toHaveCount(6)
+  const first = await tiles.first().boundingBox()
+  if (!box || !first) throw new Error('the modal body or a Skill is missing')
+  for (const tile of await tiles.all()) {
+    const t = await tile.boundingBox()
+    if (!t) throw new Error('a Skill is missing')
+    expect(Math.abs(t.y - first.y), 'every Skill in the first row').toBeLessThan(2)
+    expect(t.y + t.height, 'every Skill above the footer').toBeLessThanOrEqual(
+      box.y + box.height + 1,
+    )
+  }
+  const scrolls = await body.evaluate((el) => el.scrollHeight > el.clientHeight)
+  expect(scrolls, 'the body does not scroll').toBe(false)
+})
+
 test('/play engagement II at 375x812: the hand strip shows every option line whole', async ({
   page,
 }) => {

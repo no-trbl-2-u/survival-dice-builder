@@ -54,7 +54,9 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [LOW] /play — at 1280x800 a long Skill effect text is cut by the footer
+## Done
+
+### [x] [LOW] /play — at 1280x800 a long Skill effect text is cut by the footer (addressed at (this commit))
 - pass: blind-round-4 (phase 24)
 - viewport: 1280x800
 - category: comprehension
@@ -62,8 +64,8 @@
 - evidence: blind round 4 (2026-10-09), the modal at 1280x800
 - suggested fix: Keep a long effect text above the footer.
 - source: blind-round-4
-
-## Done
+- issue: #157
+- resolution: Reproduced with 5 or more Skills: the modal held 4 columns, so the fifth and sixth Skills sat under the footer. Above 760px, 5 or more Skills now take tiles of at least 160px with 28px slots, smaller effect text and the short reach line ("none in range"; screen readers still hear the long one), so 6 Skills with the longest effect texts share 1 row and the body does not scroll. A new e2e at 1280x800 pins it.
 
 ### [x] [LOW] / and /tiles — lists use the serial comma in some places and not others (addressed at (this commit))
 - pass: 22 (commit 5e9eef1)

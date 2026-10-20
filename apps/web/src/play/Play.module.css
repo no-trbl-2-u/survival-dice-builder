@@ -1296,6 +1296,48 @@
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
+/* 5 or more Skills (drafts add them): narrower tiles with smaller slots, so at 1280x800 up to 6
+   Skills share 1 row above the footer. */
+@media (min-width: 761px) {
+  .engageBody .skills:has(> li:nth-child(5)) {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  .engageBody .skills:has(> li:nth-child(5)) .skill {
+    gap: 4px;
+    padding: 6px 8px;
+  }
+
+  .engageBody .skills:has(> li:nth-child(5)) .skillHead {
+    gap: 4px 6px;
+  }
+
+  .engageBody .skills:has(> li:nth-child(5)) :is(.slot, .slotFit, .slotFilled) {
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+  }
+
+  .engageBody .skills:has(> li:nth-child(5)) .skill .muted {
+    font-size: var(--text-sm);
+    line-height: 1.25;
+  }
+
+  /* The short reach line, as on phones; screen readers still hear the long one. */
+  .engageBody .skills:has(> li:nth-child(5)) .reachLong {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .engageBody .skills:has(> li:nth-child(5)) .reachShort {
+    display: inline;
+  }
+}
+
 .engageTargets {
   padding: 10px 12px;
   border-radius: var(--radius);

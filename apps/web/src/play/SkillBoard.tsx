@@ -172,7 +172,8 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
 
 /**
  * A Skill with more slots than the player has dice: how many it needs, and how to get more.
- * Phones (760px and narrower) show the short form, screen readers always hear the long one.
+ * Phones (760px and narrower) and an engagement with 5 or more Skills show the short form,
+ * screen readers always hear the long one.
  */
 function NeedsDice({ needed, held }: Readonly<{ needed: number; held: number }>) {
   return (
@@ -189,7 +190,8 @@ function NeedsDice({ needed, held }: Readonly<{ needed: number; held: number }>)
 
 /**
  * How many enemies an attack Skill can reach from the figure now; phones (760px and narrower)
- * show a short form ("2 in range", "none in range"), screen readers always hear the long one.
+ * and an engagement with 5 or more Skills show a short form ("2 in range", "none in range"),
+ * screen readers always hear the long one.
  * In an engagement, when the range holds enemies that did not roll dice, it also says how many
  * of them are engaged ("3 in range, 1 engaged"), so the count matches the modal title.
  */

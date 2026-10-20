@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-20 (pass 103, cloud tick)
+
+Pass 102's serial-comma row shipped (448f6e6). The three `[needs-user-call]` MED rows from passes 20 and 21 still score 8.1 and wait for /oversight. Every shippable row is LOW and scores under 3.0, and the expand gate is closed (pass 14 at f7dc176, 13 commits, under 48 hours), so the loop keeps draining LOW critique rows. The top one is the last part of the blind-round-4 row at 1.8 (impact 3, ease 6): at 1280x800 the effect texts of the 4 starter Skills fit, but with 5 or more Skills the modal held 4 columns, so the fifth and sixth Skills sat under the footer. Above 760px, 5 or more Skills now take tiles of at least 160px with 28px slots, smaller effect text and the short reach line (screen readers still hear the long one), so 6 Skills with the longest effect texts share 1 row and the body does not scroll. A new e2e at 1280x800 pins it. The critique gate is closed (pass 22, 7 commits, under 24 hours).
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /play: at 1280x800 a long Skill effect text is cut by the footer (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6
+- next: 5 or more Skills share 1 row above the footer at desktop width
+- issue: #157
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords or closes the item
+
 # Site audit — 2026-10-20 (pass 102, cloud tick)
 
 Pass 101's /tiles hex-list row shipped (52e9393). The three `[needs-user-call]` MED rows from passes 20 and 21 still score 8.1 and wait for /oversight. Every shippable row is LOW and scores under 3.0, and the expand gate is closed (pass 14 at f7dc176, 12 commits, under 48 hours), so the loop keeps draining LOW critique rows. The top one is the serial-comma row at 2.4 (impact 3, ease 8): / and /tiles mixed lists with and without the serial comma. Most lists, and `andList` in ruleText, drop it, so the site now drops it everywhere: the / start line ("15 health, 1 action die and 4 Skills"), the exchange line ("roll, play cards and fire Skills"), the / "Also:" links, the /tiles tile count ("3 Countryside tiles and 5 Core tiles"), and the /play and /decisions descriptions and the noscript line. The ruleText, HomePage and TileView tests pin the new text. The critique gate is closed (pass 22, 6 commits, under 24 hours).
