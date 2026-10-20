@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-20 (pass 97, cloud tick)
+
+Pass 96's hand-strip row shipped (77ce2eb). The two MED rows from critique pass 21, the pass 20 design-work row, and the LOW reset-wording row still edit `[needs-user-call]` items, which only /oversight changes, so they wait. Every shippable row scores under 3.0, and the expand gate is closed (pass 14 at f7dc176, 6 commits since, under 48 hours), so the loop keeps draining LOW critique rows. The top one is the target-pick half of the blind-round-4 row at 1.4: with 4 targets in range the Skills started about 215px below the screen at 375x812 and below the footer at 1280x800. During a pick the Skills now come up under the targets and the felt (every die already placed) goes last; at phone width the mini map is 150px tall, the target buttons are compact, and the "Choose a target" heading is heard, not shown. The first Skills row and the fired Skill end above the footer at both sizes; a new e2e pins it. The 1280x800 effect-text part of the row stays pending. The critique gate is closed (pass 21, 11 commits, under 24 hours).
+
+## Top 5 findings (scored)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [6.8] /decisions: the Spec v2 design work item lists decided rows (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 55 (decided 2026-10-11) from the durable design-work item
+
+### [x] [1.4] /play: the target pick pushes the Skills off screen (critique LOW, blind round 4)
+- category: external-critique (comprehension)
+- impact: 2
+- ease: 7
+- next: Skills under the targets during a pick; smaller mini map and compact target buttons at phone width
+- issue: #151
+- fixed: (this commit)
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords or closes the `[needs-user-call]` reset item
+
 # Site audit — 2026-10-20 (pass 96, cloud tick)
 
 Pass 95's 5-Skill row shipped (a2cdf09). The two MED rows from critique pass 21, the pass 20 design-work row, and the LOW reset-wording row still edit `[needs-user-call]` items, which only /oversight changes, so they wait. Every shippable row scores under 3.0, and the expand gate is closed (pass 14 at f7dc176, 5 commits since, under 48 hours), so the loop keeps draining LOW critique rows. The top one is the hand-strip half of the blind-round-4 375px row at 1.4: at phone width each strip card was 70px wide, so a 2-word name (Field Medic) and "Reroll all dice" wrapped, and the last option line ended about 18px below the screen. At phone width the cards now share the strip (up to 84px each, at least 66px), the colour band is 6px and the name padding is smaller, so with a Field Medic / Sanctuary hand every option line ends above the bottom edge and all 4 cards show without scrolling. A new e2e at 375x812 with a deck of the wordiest cards pins it. The target-pick half and the 1280x800 effect-text part of the row stay pending. The critique gate is closed (pass 21, 10 commits, under 24 hours).

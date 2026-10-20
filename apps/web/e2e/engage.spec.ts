@@ -191,3 +191,42 @@ test('/play engagement II at 375x812: the hand strip shows every option line who
   const fits = await strip.evaluate((ul) => ul.scrollWidth <= ul.clientWidth)
   expect(fits, 'every card in view without scrolling').toBe(true)
 })
+
+for (const [width, height] of [
+  [375, 812],
+  [1280, 800],
+] as const) {
+  test(`/play engagement II at ${width}x${height}: the Skills stay in view during a target pick`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height })
+    await page.goto('/play')
+    // The engine plays the run up to a fired Skill waiting for its target (4 targets in range).
+    const run = forceEngagement(newRun(defaultContent.config, 5), atTarget)
+    if (!run) throw new Error('no target pick came up in the run')
+    await page.evaluate(
+      (raw) => localStorage.setItem('survival.autosave.v1', raw),
+      JSON.stringify(exportRun(run)),
+    )
+    await page.goto('/play?resume')
+    const modal = page.getByRole('dialog', { name: /^Engagement/ })
+    const targets = modal.getByTestId('engage-targets')
+    await expect(targets.getByRole('button', { name: / hits / })).toHaveCount(4)
+    const body = modal.locator('[data-testid="engage-instruction"] ~ div').first()
+    const box = await body.boundingBox()
+    const last = await targets
+      .getByRole('button', { name: / hits / })
+      .last()
+      .boundingBox()
+    const tiles = modal.getByLabel('Skills').locator('li')
+    const first = await tiles.first().boundingBox()
+    const fired = await tiles.filter({ hasText: 'Shot' }).boundingBox()
+    if (!box || !last || !first || !fired)
+      throw new Error('the body, a target or a Skill is missing')
+    const bottom = box.y + box.height + 1
+    expect(last.y + last.height, 'the last target in view').toBeLessThanOrEqual(bottom)
+    expect(first.y + first.height, 'the first Skills in view').toBeLessThanOrEqual(bottom)
+    expect(fired.y + fired.height, 'the fired Skill in view').toBeLessThanOrEqual(bottom)
+    expect(first.y, 'the Skills under the targets').toBeGreaterThan(last.y)
+  })
+}

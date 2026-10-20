@@ -1511,6 +1511,12 @@
   display: none;
 }
 
+/* A target pick: the Skills come up under the targets and the felt (every die already placed)
+   goes last, so the fired Skill and the ones still to fire stay in view. */
+.engageBody[data-picking] > .engageFelt {
+  order: 1;
+}
+
 .engageSteps li[aria-current='step'][data-final] {
   color: #20140a;
 }
@@ -1549,7 +1555,24 @@
   }
 
   .miniMap .map {
-    max-height: 220px;
+    max-height: 150px;
+  }
+
+  /* The target heading is heard, not shown: the instruction line above says to pick a target. */
+  .engageTargets .subTitle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Compact target buttons, so 4 targets and the map leave the first Skills in view. */
+  .engageTargetList .primary {
+    padding: 6px 10px;
+    font-size: var(--text-sm);
   }
 
   .engageFelt {

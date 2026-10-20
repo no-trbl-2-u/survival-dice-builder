@@ -54,16 +54,27 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [LOW] /play — at 375px the target pick still needs scrolling
+### [LOW] /play — at 1280x800 a long Skill effect text is cut by the footer
 - pass: blind-round-4 (phase 24)
-- viewport: 1280x800 and 375x812
+- viewport: 1280x800
 - category: comprehension
-- observation: During Pick target the map and list push the Skills off screen. At 1280x800 a long effect text is cut by the footer. (The 5-Skill and hand-strip parts shipped; see Done.)
-- evidence: blind round 4 (2026-10-09), the modal at 375x812 and 1280x800
-- suggested fix: Keep the Skills in view during Pick target.
+- observation: At 1280x800 a long effect text is cut by the footer. (The 5-Skill, hand-strip and target-pick parts shipped; see Done.)
+- evidence: blind round 4 (2026-10-09), the modal at 1280x800
+- suggested fix: Keep a long effect text above the footer.
 - source: blind-round-4
 
 ## Done
+
+### [x] [LOW] /play — the target pick pushes the Skills off screen (addressed at (this commit))
+- pass: blind-round-4 (phase 24)
+- viewport: 1280x800 and 375x812
+- category: comprehension
+- observation: During Pick target the map and list push the Skills off screen.
+- evidence: blind round 4 (2026-10-09), the modal at 375x812 and 1280x800
+- suggested fix: Keep the Skills in view during Pick target.
+- source: blind-round-4
+- issue: #151
+- resolution: during a target pick the Skills come up under the targets and the felt (every die already placed) goes last. At phone width the mini map is 150px tall, the target buttons are compact, and the "Choose a target" heading is heard, not shown (the instruction line says to pick a target). With 4 targets in range the first Skills row and the fired Skill end above the footer at 375x812 and 1280x800; an e2e at both sizes pins it.
 
 ### [x] [LOW] /play — at 375px the hand strip clips its option text (addressed at (this commit))
 - pass: blind-round-4 (phase 24)

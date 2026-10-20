@@ -260,7 +260,11 @@ function LiveView({
           {engageInstructionShort(state)}
         </span>
       </p>
-      <div className={styles.engageBody} data-drag={drag === 'none' ? undefined : drag}>
+      <div
+        className={styles.engageBody}
+        data-drag={drag === 'none' ? undefined : drag}
+        data-picking={picking || undefined}
+      >
         <div ref={targets} className={styles.engageTargetSlot}>
           <Targets state={state} legal={legal} act={act} />
         </div>
