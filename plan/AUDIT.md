@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-20 (pass 105, cloud tick)
+
+Expand pass 15 shipped (e8d495e) with no new candidates, so the expand gate is closed again (under 48 hours) and the critique gate is closed (pass 22, 8 commits, under 24 hours). The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. The top row the loop can ship is pass 104's solo level line at 1.8: in a solo run the level line now reads "You get 1 action die", as the other solo log lines do, and co-op still reads "Every player gets 1 action die". A new unit test pins both.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /play log: the solo level line says "Every player gets 1 action die" (iterate audit)
+- category: voice
+- impact: 2
+- ease: 9
+- next: say "You get 1 action die" in a solo run, as the other solo log lines do
+- issue: #158
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords or closes the item
+
 # Site audit — 2026-10-20 (pass 104, cloud tick)
 
 Pass 103's 1280x800 Skills row shipped (016c38a), the last blind round 4 row. No finding the loop can ship scores 3.0 or more: no actionable iterate work, handed to `/expand` (pass 15, bold posture). The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. The sim bot-policy row (critique LOW, user) is phase-sized and sits in the promoted bot candidate's follow-up. Checked this pass: `describeEvent` (60 event types) is pinned by `exportRun.test.ts`, `knockoutLog.test.ts`, `milestoneLog.test.ts` and `pieceNames.test.ts`; the solo level line "Every player gets 1 action die" reads oddly with one player, a 1.8 (impact 2, ease 9), left for a later pass. The critique gate is closed (pass 22, 7 commits, under 24 hours).

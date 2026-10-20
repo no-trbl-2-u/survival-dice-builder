@@ -171,7 +171,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'experienceGained':
       return `+${event.amount} experience (${event.experience}).`
     case 'levelReached':
-      return `Level ${event.level}! Every player gets 1 action die.`
+      return `Level ${event.level}! ${solo(names) ? 'You get' : 'Every player gets'} 1 action die.`
     case 'diceGained':
       return `${who(event.player)} now ${solo(names) ? 'have' : 'has'} ${event.dice} action dice.`
     case 'currencyGained':
