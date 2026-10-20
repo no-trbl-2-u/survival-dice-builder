@@ -160,3 +160,34 @@ test('/play engagement II at 375x812: 5 Skills fit in 3 columns, the fifth above
   expect(Math.abs(third.y - first.y), 'the third Skill shares the first row').toBeLessThan(2)
   expect(fifth.y + fifth.height).toBeLessThanOrEqual(box.y + box.height + 1)
 })
+
+test('/play engagement II at 375x812: the hand strip shows every option line whole', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  // A deck of the wordiest cards (2-word names, "Reroll all dice"), saved as /config would save it.
+  const config = JSON.parse(fs.readFileSync(DEFAULT_CONFIG, 'utf-8'))
+  config.deck.presets[0].cards = [
+    { card: 'field-medic', quantity: 3 },
+    { card: 'sanctuary', quantity: 2 },
+    { card: 'quarry', quantity: 3 },
+    { card: 'excavate', quantity: 2 },
+  ]
+  await page.addInitScript((raw) => {
+    localStorage.setItem('survival.config.v1', raw)
+  }, JSON.stringify(config))
+  await engage(page, 5)
+  const strip = page.getByLabel('Your hand')
+  const lines = strip.locator('button span span')
+  expect(await lines.count(), 'cards in the strip').toBeGreaterThan(4)
+  for (const line of await lines.all()) {
+    const box = await line.boundingBox()
+    if (!box) throw new Error('an option line is missing')
+    expect(
+      box.y + box.height,
+      `"${await line.textContent()}" above the bottom edge`,
+    ).toBeLessThanOrEqual(812)
+  }
+  const fits = await strip.evaluate((ul) => ul.scrollWidth <= ul.clientWidth)
+  expect(fits, 'every card in view without scrolling').toBe(true)
+})

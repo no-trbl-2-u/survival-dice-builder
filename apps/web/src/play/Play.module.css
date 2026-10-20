@@ -1816,11 +1816,20 @@
     padding: 0 8px;
   }
 
+  /* Cards share the width (up to 84px each), so names and options wrap less; the band and the
+     padding slim down, so every option line shows above the bottom edge. */
   .stripCard {
-    width: 70px;
+    flex: 0 1 84px;
+    width: auto;
+    min-width: 66px;
+  }
+
+  .stripBand {
+    height: 6px;
   }
 
   .stripName {
+    padding: 4px 4px 2px;
     font-size: 0.68rem;
   }
 

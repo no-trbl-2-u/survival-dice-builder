@@ -54,16 +54,27 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [LOW] /play — at 375px the target pick and the hand still need scrolling
+### [LOW] /play — at 375px the target pick still needs scrolling
 - pass: blind-round-4 (phase 24)
 - viewport: 1280x800 and 375x812
 - category: comprehension
-- observation: During Pick target the map and list push the Skills off screen; the hand strip clips its option text and shows about 4 cards. At 1280x800 a long effect text is cut by the footer. (The 5-Skill part shipped; see Done.)
+- observation: During Pick target the map and list push the Skills off screen. At 1280x800 a long effect text is cut by the footer. (The 5-Skill and hand-strip parts shipped; see Done.)
 - evidence: blind round 4 (2026-10-09), the modal at 375x812 and 1280x800
-- suggested fix: Keep strip text whole; keep the Skills in view during Pick target.
+- suggested fix: Keep the Skills in view during Pick target.
 - source: blind-round-4
 
 ## Done
+
+### [x] [LOW] /play — at 375px the hand strip clips its option text (addressed at (this commit))
+- pass: blind-round-4 (phase 24)
+- viewport: 375x812
+- category: comprehension
+- observation: The hand strip clips its option text and shows about 4 cards.
+- evidence: blind round 4 (2026-10-09), the modal at 375x812
+- suggested fix: Keep strip text whole.
+- source: blind-round-4
+- issue: #150
+- resolution: at phone width the strip cards share the width (up to 84px each, at least 66px), the colour band is 6px and the name padding smaller, so a 2-word name stays on 1 line and every option line ends above the bottom edge; the 4 cards left after Engage show without scrolling. An e2e at 375x812 with a deck of the wordiest cards (Field Medic, Sanctuary, Quarry, Excavate) pins both.
 
 ### [x] [LOW] /play — at 375px a fifth Skill sits behind the footer (addressed at (this commit))
 - pass: blind-round-4 (phase 24)
