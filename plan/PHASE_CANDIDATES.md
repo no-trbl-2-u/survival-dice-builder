@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-19 at commit f7dc176
-> Pass count: 14
+> Last pass: 2026-10-20 at commit 016c38a
+> Pass count: 15
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -10,7 +10,7 @@
 
 ## Pending
 
-### [ ] [score 3.5] /decisions checks that stay true: a test fails when a check names a decided row or a removed option
+### [ ] [score 4.5] /decisions checks that stay true: a test fails when a check names a decided row or a removed option
 - proposed: 2026-10-19, expand pass 14
 - source signals:
   - Critique passes 20 and 21, four pending rows on one surface, one cause: [MED] the "Spec v2 design work" check lists rows 7, 30, 49 and 55, all decided 2026-10-11; [MED] the "Structural v2 questions" check asks the designer to try options for rows 65 and 69, decided and removed; [MED] three balance checks (2026-10-03, two of 2026-10-04) give median end rounds 14, 5 and 6 with nothing saying which is current; [LOW] "Reset /config once" names a URL path and a date a visitor cannot check.
@@ -24,6 +24,8 @@
 - estimated phases: 1
 - conflicts: none. Plan housekeeping, a parser and a test; no rule changes. Closing a check is not deciding it: a check that still needs the designer stays.
 - ruling audit: OPEN-QUESTIONS rows 7, 30, 49, 55, 65, 69 (decided 2026-10-11) read; Spec v2 untouched. Loop scope: in (tests, plan housekeeping).
+- re-evidence (expand pass 15): the four /decisions rows are now the only Pending critique rows the site can act on, and the only rows above `/iterate`'s 3.0 bar (8.1 each with the MED bias). They live in `[needs-user-call]` items, which `/iterate` must keep verbatim, so audit passes 101 to 103 drained LOW rows around them, and pass 104 found nothing else at or above 3.0 and handed to `/expand`. The page still shows the five stale checks a day after critique pass 21. Score raised from 3.5 to 4.5: this is now what holds the queue, and only `/oversight` can clear the lines or promote the guard.
+- last re-evidenced: 2026-10-20
 
 ### [ ] [score 3.5] Milestones a default run can reach: every milestone reachable, or marked out of reach with its reason
 - proposed: 2026-10-17, expand pass 13
@@ -44,7 +46,7 @@
 - progress (expand pass 14): f7dc176 extended `milestoneOutOfReach` (`packages/content/src/ruleText.ts:588`) to `reveal-tiles`, so both unreachable milestones are now marked on the run summary and /config. The visible half is done. Still missing: the content test that fails on a new milestone that is neither reachable nor marked, the per-milestone hit rate in the sim report, and the one `/oversight` question on rows 4 and 78. Score held at 3.5.
 - last re-evidenced: 2026-10-19
 
-### [ ] [score 4.0] The engagement modal reads on its own: who took the damage, what "in range" counts, when cards play
+### [ ] [score 1.0] The engagement modal reads on its own: who took the damage, what "in range" counts, when cards play
 - proposed: 2026-10-14, expand pass 11
 - source signals:
   - Blind round 4 (phase 24, 2026-10-09), six rows still pending in `plan/CRITIQUE.md` after five days: the result says "You dealt 2 damage" with no enemy name or health after (`apps/web/src/play/EngagementModal.tsx:469-471`); the title says "vs 1 elite" while Shot says "3 enemies in range"; cards greyed at Roll with nothing on when they play, and the Special and Star meanings shown only later; "Roll again (2 left)" stays on when every die is kept (`EngagementModal.tsx:316-319`, confirmed at HEAD); at 375px a fifth Skill and the hand need scrolling; the mini-map target label covers tokens.
@@ -62,8 +64,9 @@
 - ruling audit: Spec v2 7.8 (engagement steps), 6.9 (move cost next to enemies); decided rows on skill uses and move cost read. Copy and layout only; no rule changes. Loop scope: in for rule-text sync; the layout half is web (minor).
 - re-evidence (expand pass 12): since pass 11 (fa01c43) 9 more `fix:` commits went to /, /config, /decisions and /tiles copy; none touched `EngagementModal.tsx`. `/iterate` pass 57's top row now scores 2.6, under its own 3.0 bar, so the queue it drains is single LOW strings; the seven modal rows only ship if this is promoted.
 - re-evidence (expand pass 13): 8f7cdbb shipped the "Roll again" row (it turns off and says why when every die is kept), the one modal row to ship since pass 11. The other 17 commits this window went to /, /config, /decisions, /tiles and /debug copy and a bundle split; `EngagementModal.tsx` was not touched again. Audit pass 74's top row now scores 1.8. Still pending: the result text, the range count, card timing, the 375px fit, the mini-map label and the move-cost reason.
+- progress (expand pass 15): `/iterate` shipped the rest one row at a time: 1d42ce4 (the reach line says how many enemies in range are engaged), ec0ca26 (the Roll step says when cards come and what a Star fits), b444fc3 (the mini-map target tag keeps clear of other tokens), a2cdf09 and 77ce2eb (5 Skills and the hand strip fit at 375px), 5e9eef1 (the target pick keeps the Skills in view), 016c38a (5 or more Skills fit in 1 row at 1280x800). No blind round 4 row is left in `plan/CRITIQUE.md`. Score lowered from 4.0 to 1.0: the scope is shipped; `/oversight` can close this row.
 - progress (expand pass 14): three modal rows shipped one at a time: eb40e28 (the result names each damaged enemy and its health left), a6dc51f (the dice of each defeated enemy are marked), 4fdb8a5 (the Move banner says when a hex next to an enemy costs too much). Still pending in `plan/CRITIQUE.md`: the "in range" count, card timing and the Special face at Roll, the 375px fit, and the mini-map label. Score lowered from 4.5 to 4.0: the result text, the largest gap, is closed.
-- last re-evidenced: 2026-10-19
+- last re-evidenced: 2026-10-20
 
 ### [ ] [score 4.0] Player text on Spec v2: the site stops calling Spec v1 options "the written rules"
 - proposed: 2026-10-13, expand pass 10
@@ -112,6 +115,8 @@
 - estimated phases: 1
 - conflicts: [needs-user-call] which branch. The designer kept exchanges as an option at phase 41; removal is theirs to approve.
 - ruling audit: Spec v2 6.10, 7.8; phase 41 upfront decision. Loop scope: outside until the designer picks a branch.
+- re-evidence (expand pass 15): critique pass 22 [MED] found the Dodge effect saying "this exchange" under the default Engagements Combat; bf619f8 fixed it by branching the card text on the Combat model, one more string that pays for both. The log still keeps two end lines for one event type (`apps/web/src/play/describeEvent.ts`, `exchangeEnded` tagged `Combat v3` or 7.8). Score held at 5.0; the branch is still the designer's call.
+- last re-evidenced: 2026-10-20
 
 > Discovery pass 1 (2026-10-10). Each row below adds a `ruling audit` field. "Loop scope" refers to the
 > owner ruling of 2026-10-06 (`docs/retrospective-2026-10-06.md:210,231,248`): the loop ships docs, bot
