@@ -127,8 +127,16 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `A die of ${enemyLabel(names, event.enemy)} is cancelled: ${enemyLabel(names, event.enemy)} was defeated.`
     case 'hitIgnored':
       return `${who(event.player)} ${s('ignore')} the hit from ${enemyLabel(names, event.enemy)}.`
-    case 'playerDamaged':
-      return `${who(event.player)} ${s('lose')} ${event.toGuard} guard and ${event.toHealth} health (health ${event.health}).`
+    case 'playerDamaged': {
+      // Name only what was lost: "You lose 3 health", not "You lose 0 guard and 3 health".
+      const lost = [
+        event.toGuard > 0 && `${event.toGuard} guard`,
+        event.toHealth > 0 && `${event.toHealth} health`,
+      ].filter(Boolean)
+      return lost.length === 0
+        ? `${who(event.player)} ${s('lose')} nothing (health ${event.health}).`
+        : `${who(event.player)} ${s('lose')} ${lost.join(' and ')} (health ${event.health}).`
+    }
     case 'exchangeEnded':
       // The engine tags an engagement's end with the engagement rule (Combat v3), an exchange's with 7.8.
       return event.rule === 'Combat v3' ? 'The engagement ends.' : 'The exchange ends.'
