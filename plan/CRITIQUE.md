@@ -56,7 +56,7 @@
 
 ## Done
 
-### [x] [LOW] /decisions — Rule readings are out of number order with no subheading (addressed at (this commit))
+### [x] [LOW] /decisions — Rule readings are out of number order with no subheading (addressed at 92706e6)
 - pass: 23 (commit 14de3ef)
 - viewport: desktop
 - category: comprehension

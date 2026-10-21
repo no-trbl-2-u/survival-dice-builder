@@ -353,7 +353,8 @@ describe('rule text from config', () => {
     expect(milestoneOutOfReach('buy-upgrades', any, defaultContent)).toBeNull()
     const two = With((c) => ({ ...c, milestones: { ...c.milestones, upgradesBought: 2 } }))
     expect(milestoneOutOfReach('buy-upgrades', two, defaultContent)).toBeNull()
-    for (const id of milestoneIds(m).filter((i) => i !== 'buy-upgrades' && i !== 'reveal-tiles'))
+    const marked = ['buy-upgrades', 'reveal-tiles']
+    for (const id of milestoneIds(m).filter((i) => !marked.includes(i)))
       expect(milestoneOutOfReach(id, base, defaultContent)).toBeNull()
   })
 
@@ -366,6 +367,16 @@ describe('rule text from config', () => {
     const eight = With((c) => ({ ...c, milestones: { ...c.milestones, tilesRevealed: 8 } }))
     expect(milestoneOutOfReach('reveal-tiles', eight, defaultContent)).toBeNull()
     expect(ruleLineFor('milestones.tilesRevealed', eight, defaultContent)).toBe('Reveal 8 tiles.')
+  })
+
+  it('milestones: "Reach level 5" is marked out of reach when the maximum level is lower (18.1)', () => {
+    const cap = (maxLevel: number | null) =>
+      With((c) => ({ ...c, options: { ...c.options, maxLevel } }))
+    const out = 'out of reach: the level stops at 4'
+    expect(milestoneOutOfReach('reach-level', cap(4), defaultContent)).toBe(out)
+    expect(ruleLineFor('milestones.level', cap(4), defaultContent)).toBe(`Reach level 5 (${out}).`)
+    expect(milestoneOutOfReach('reach-level', cap(5), defaultContent)).toBeNull()
+    expect(milestoneOutOfReach('reach-level', cap(null), defaultContent)).toBeNull()
   })
 
   it('/config: the fields a phrase reads get that phrase; others get none', () => {

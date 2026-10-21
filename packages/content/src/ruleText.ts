@@ -583,9 +583,10 @@ export function upgradesReachable(
 /**
  * Why a milestone cannot be met under this config and content, or null when it can be:
  * "out of reach: Build cards can buy only Shop I and Training I", or "out of reach: the tile
- * deck holds 8 tiles" (the Base tile starts on the map and is never revealed).
+ * deck holds 8 tiles" (the Base tile starts on the map and is never revealed), or "out of
+ * reach: the level stops at 4" (a maximum level below the milestone's).
  *
- * @rule 17, OPEN-QUESTIONS rows 4, 78
+ * @rule 17, 18.1, OPEN-QUESTIONS rows 4, 78
  */
 export function milestoneOutOfReach(
   id: string,
@@ -596,6 +597,11 @@ export function milestoneOutOfReach(
     const deck = content.tiles.filter((t) => t.kind !== 'base').length
     if (deck >= config.milestones.tilesRevealed) return null
     return `out of reach: the tile deck holds ${deck} ${deck === 1 ? 'tile' : 'tiles'}`
+  }
+  if (id === 'reach-level') {
+    const max = config.options.maxLevel
+    if (max === null || max >= config.milestones.level) return null
+    return `out of reach: the level stops at ${max}`
   }
   if (id !== 'buy-upgrades') return null
   const names = upgradesReachable(config, content).map((u) => u.name)
