@@ -218,7 +218,7 @@
     "id": "spawn-range",
     "row": 70,
     "label": "Spawn range",
-    "about": "Only nodes near a player figure, a Barricade, a Tower, or the Base tile spawn, so there are fewer miniatures to place.",
+    "about": "Only nodes near a player figure, a Barricade, a Tower or the Base tile spawn, so there are fewer miniatures to place.",
     "options": [
       {
         "path": "spawn.nodeRange",

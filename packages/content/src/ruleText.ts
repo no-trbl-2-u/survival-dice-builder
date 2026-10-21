@@ -251,7 +251,7 @@ export function siegeText(content: Enemies): string {
         `${withArticle(e.name.toLowerCase())}${i === 0 ? ` deals ${e.siege} damage` : ` ${e.siege}`}`,
     )
     .join(', ')
-  return `When Combat ends, each enemy next to a Barricade, a Tower, or the base hits one of them (a Barricade first, then a Tower, then the base), even when it is next to a player too: ${damage}.`
+  return `When Combat ends, each enemy next to a Barricade, a Tower or the base hits one of them (a Barricade first, then a Tower, then the base), even when it is next to a player too: ${damage}.`
 }
 
 /**
@@ -291,7 +291,7 @@ export function cardStepText(config: GameConfig, model: GameConfig['combat']['mo
   const discard = !config.rulings.mandatoryPlays
   if (model === 'exchange')
     return discard ? 'Play or discard each card in your hand' : 'Play each card in your hand'
-  return `Play each card: Engage (roll to attack from where you stand)${discard ? ', another option, or discard it' : ' or another option'}`
+  return `Play each card: Engage (roll to attack from where you stand)${discard ? ', another option or discard it' : ' or another option'}`
 }
 
 /** Each tie-break target as the order sentence names it: "a player, then a Tower, ...". */

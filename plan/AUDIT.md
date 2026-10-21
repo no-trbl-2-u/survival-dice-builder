@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-21 (pass 110, cloud tick)
+
+Pass 109's /config proposal-result row shipped (5db99a1). The critique gate is closed (pass 23, 1 commit ago, under 24 hours) and the expand gate is closed (pass 15, 7 commits ago, under 48 hours). The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Every shippable row is LOW and scores under 3.0, so the loop keeps draining LOW critique rows. The top one is pass 23's serial-comma row at 2.7 (impact 3, ease 9): the / siege sentence and the "Spawn range" proposal read "a Barricade, a Tower, or ...". Both now drop the comma, and so do the engagement card step and two /config help lines. A ruleText test scans ruleText, the proposals and the /config metadata for a list comma before "or".
+
+## Top 5 findings (scored)
+
+### [x] [2.7] / and /config: the siege sentence and a proposal still use the serial comma (critique LOW, pass 23)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: drop the comma before "or" in both lines; add a test for ", or " in rule text and proposals
+- issue: #163
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [2.7] /play and /config: one enemy cap has two names, and proposals talk about a table (critique LOW, pass 23)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: say "miniature limit" on the /play counter; reword the two proposals
+
 # Site audit — 2026-10-21 (pass 109, cloud tick)
 
 Pass 108's "base center" fix shipped (14de3ef) and critique pass 23 filed 6 findings (096c182). The critique gate is closed (pass 23, 1 commit ago) and the expand gate is closed (pass 15, 6 commits ago). The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. The top shippable row is pass 23's MED: on /config each proposal's measured bot result sat only in the Apply button's title tooltip, so touch users never saw it and screen readers might not hear it, a 6.8 (impact 5, ease 9, bias x1.5). The result is now visible text under each proposal, named by the button's aria-describedby.

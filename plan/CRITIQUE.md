@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / and /config — the siege sentence and a proposal still use the serial comma
-- pass: 23 (commit 14de3ef)
-- viewport: desktop
-- category: voice
-- observation: The Combat step's siege sentence and the "Spawn range" proposal use the serial comma, which the site dropped elsewhere.
-- evidence: / "each enemy next to a Barricade, a Tower, or the base hits one of them" (`packages/content/src/ruleText.ts:254`); `packages/content/data/proposals.json:221` "near a player figure, a Barricade, a Tower, or the Base tile spawn"
-- suggested fix: Drop the comma before "or" in both lines; add a test that no ruleText or proposal copy contains ", or ".
-- source: web-fetch
-
 ### [LOW] /play and /config — one enemy cap has two names, and proposals talk about a table
 - pass: 23 (commit 14de3ef)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] / and /config — the siege sentence and a proposal still use the serial comma (addressed at (this commit))
+- pass: 23 (commit 14de3ef)
+- viewport: desktop
+- category: voice
+- observation: The Combat step's siege sentence and the "Spawn range" proposal use the serial comma, which the site dropped elsewhere.
+- evidence: / "each enemy next to a Barricade, a Tower, or the base hits one of them" (`packages/content/src/ruleText.ts:254`); `packages/content/data/proposals.json:221` "near a player figure, a Barricade, a Tower, or the Base tile spawn"
+- suggested fix: Drop the comma before "or" in both lines; add a test that no ruleText or proposal copy contains ", or ".
+- source: web-fetch
+- issue: #163
+- resolution: The siege sentence and the "Spawn range" proposal drop the comma before "or", and so do the engagement card step ("another option or discard it") and two /config help lines (the enemy die faces, the spawn range). A new ruleText test scans the ruleText source, every proposal label and about line, and every /config label, help and option for a list comma before "or"; a planted case pins the scan.
 
 ### [x] [MED] /config — a proposal's measured bot result is only in the Apply button's tooltip (addressed at (this commit))
 - pass: 23 (commit 14de3ef)

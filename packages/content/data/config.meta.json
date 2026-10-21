@@ -118,7 +118,7 @@
   },
   "combat.engage.enemyDie": {
     "label": "Enemy die faces",
-    "help": "The 6 faces of an enemy die: hit, miss, or special.",
+    "help": "The 6 faces of an enemy die: hit, miss or special.",
     "rule": "Table 4"
   },
   "combat.engage.hitDamage": {
@@ -208,7 +208,7 @@
   },
   "spawn.nodeRange": {
     "label": "Spawn range",
-    "help": "Only spawn nodes within this many hexes of a player figure, a Barricade, a Tower, or the base spawn. Off (default): as in the written rules.",
+    "help": "Only spawn nodes within this many hexes of a player figure, a Barricade, a Tower or the base spawn. Off (default): as in the written rules.",
     "rule": "9.2 (open question 70)",
     "empty": "off",
     "range": [1, 10]

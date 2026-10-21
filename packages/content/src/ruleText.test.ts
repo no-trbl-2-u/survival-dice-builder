@@ -1,5 +1,8 @@
+import fs from 'node:fs'
 import { describe, expect, it } from 'vitest'
+import { defaultConfigMeta } from './configMeta.ts'
 import { defaultContent } from './content.ts'
+import { defaultProposals } from './proposals.ts'
 import {
   cardStepText,
   combatEndText,
@@ -207,7 +210,7 @@ describe('rule text from config', () => {
 
   it("siege: when Combat ends, structures take each enemy record's siege damage (7.10-7.12)", () => {
     expect(siegeText(defaultContent)).toBe(
-      'When Combat ends, each enemy next to a Barricade, a Tower, or the base hits one of them (a Barricade first, then a Tower, then the base), even when it is next to a player too: a grunt deals 1 damage, an elite 3.',
+      'When Combat ends, each enemy next to a Barricade, a Tower or the base hits one of them (a Barricade first, then a Tower, then the base), even when it is next to a player too: a grunt deals 1 damage, an elite 3.',
     )
     const elite = { enemies: { enemies: [{ ...defaultContent.enemies.enemies[1]!, siege: 5 }] } }
     expect(siegeText(elite)).toMatch(/: an elite deals 5 damage\.$/)
@@ -236,7 +239,7 @@ describe('rule text from config', () => {
   it('card step: the discard choice follows rulings.mandatoryPlays under both models', () => {
     expect(cardStepText(base, 'exchange')).toBe('Play or discard each card in your hand')
     expect(cardStepText(base, 'engage')).toBe(
-      'Play each card: Engage (roll to attack from where you stand), another option, or discard it',
+      'Play each card: Engage (roll to attack from where you stand), another option or discard it',
     )
     const must = With((c) => ({ ...c, rulings: { ...c.rulings, mandatoryPlays: true } }))
     expect(cardStepText(must, 'exchange')).toBe('Play each card in your hand')
@@ -384,5 +387,37 @@ describe('rule text from config', () => {
     expect(line('rulings.targetTieBreak')).toBe(targetOrderText(base))
     expect(line('rulings.playerPullDistance')).toBe(targetOrderText(base))
     expect(line('player.maxHealth')).toBeNull()
+  })
+})
+
+describe('player copy drops the serial comma', () => {
+  /** A comma before the "or" that ends a list: "a Barricade, a Tower, or the base". */
+  const SERIAL = /,[^,;:.()]*, or\b/
+
+  it('no ruleText phrase writes ", or"; code comments are not shown', () => {
+    const source = fs.readFileSync(new URL('./ruleText.ts', import.meta.url), 'utf-8')
+    const code = source
+      .split('\n')
+      .filter((line) => !/^\s*(?:\/\/|\/\*\*?|\*)/.test(line))
+      .filter((line) => SERIAL.test(line))
+    expect(code).toEqual([])
+    expect(siegeText(defaultContent)).not.toMatch(SERIAL)
+    expect(cardStepText(base, 'engage')).not.toMatch(SERIAL)
+  })
+
+  it('catches a planted serial comma, not a comma before an "or" clause', () => {
+    expect('a Barricade, a Tower, or the base').toMatch(SERIAL)
+    expect('Engage (roll), another option, or discard it').toMatch(SERIAL)
+    expect('Gather on a spent node, or off any node, still gives materials').not.toMatch(SERIAL)
+  })
+
+  it('no proposal label or about text, and no /config label, help or option, writes ", or"', () => {
+    const proposals = defaultProposals
+      .flatMap((p) => [p.label, p.about])
+      .filter((text) => SERIAL.test(text))
+    const meta = Object.values(defaultConfigMeta)
+      .flatMap((e) => [e.label, e.help ?? '', e.empty ?? '', ...Object.values(e.options ?? {})])
+      .filter((text) => SERIAL.test(text))
+    expect([...proposals, ...meta]).toEqual([])
   })
 })
