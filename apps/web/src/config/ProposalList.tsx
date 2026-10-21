@@ -9,9 +9,12 @@ type Props = Readonly<{
   onApply: (proposal: Proposal) => void
 }>
 
+/** The id of a proposal's measured line, which its Apply button names as its description. */
+const measuredId = (p: Proposal) => `proposal-measured-${p.id}`
+
 /**
  * The /config "Proposals" group: each open reading's option as one Apply button that sets its
- * values in the draft (save as usual). Options that act only under exchanges are left out.
+ * values in the draft (save as usual), under the bot runs' measured effect in visible text. Options that act only under exchanges are left out.
  */
 export function ProposalList({ draft, onApply }: Props) {
   const carried = new Set(proposalsIn(draft).map((p) => p.id))
@@ -20,9 +23,9 @@ export function ProposalList({ draft, onApply }: Props) {
     <details className={styles.proposals} data-testid="config-proposal-list">
       <summary>Proposals to try ({shown.length})</summary>
       <p>
-        Each proposal is an option the designer has not decided yet. Apply sets its values below;
-        save to play with it. The <a href="/decisions">Decisions page</a> has the measured effect of
-        each one.
+        Each proposal is an option the designer has not decided yet, with its measured effect from
+        the bot runs. Apply sets its values below; save to play with it. The{' '}
+        <a href="/decisions">Decisions page</a> has the recommendation for each one.
       </p>
       <ul>
         {shown.map((p) => (
@@ -30,7 +33,10 @@ export function ProposalList({ draft, onApply }: Props) {
             <strong>
               <a href={`/decisions#${rowId(p.row)}`}>{p.label}</a>
             </strong>
-            : {p.about}{' '}
+            : {p.about}
+            <p id={measuredId(p)} className={styles.proposalMeasured}>
+              {measuredText(p)}
+            </p>
             {carried.has(p.id) ? (
               <em>In this config.</em>
             ) : (
@@ -38,7 +44,7 @@ export function ProposalList({ draft, onApply }: Props) {
                 type="button"
                 onClick={() => onApply(p)}
                 aria-label={`Apply ${p.label}`}
-                title={measuredText(p)}
+                aria-describedby={measuredId(p)}
               >
                 Apply
               </button>

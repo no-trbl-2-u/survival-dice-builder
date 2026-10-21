@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-21 (pass 109, cloud tick)
+
+Pass 108's "base center" fix shipped (14de3ef) and critique pass 23 filed 6 findings (096c182). The critique gate is closed (pass 23, 1 commit ago) and the expand gate is closed (pass 15, 6 commits ago). The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. The top shippable row is pass 23's MED: on /config each proposal's measured bot result sat only in the Apply button's title tooltip, so touch users never saw it and screen readers might not hear it, a 6.8 (impact 5, ease 9, bias x1.5). The result is now visible text under each proposal, named by the button's aria-describedby.
+
+## Top 5 findings (scored)
+
+### [x] [6.8] /config: a proposal's measured bot result is only in the Apply button's tooltip (critique MED, pass 23, bias x1.5)
+- category: external-critique (a11y)
+- impact: 5
+- ease: 9
+- next: show measuredText as visible text; link it to the button with aria-describedby
+- issue: #162
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [2.7] / and /config: the siege sentence and a proposal still use the serial comma (critique LOW, pass 23)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: drop the comma before "or" in both lines; add a test for ", or " in rule text and proposals
+
 # Site audit — 2026-10-21 (pass 108, cloud tick)
 
 Pass 107's damage line shipped (cbffc78). The critique gate is closed (pass 22, 11 commits, under 24 hours by minutes) and the expand gate is closed (pass 15, 4 commits ago). The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Checked this pass: the spelling of the base in visible text. The /play log, piece names and action labels said "the base centre", while Spec v2 (1.3, 3.1, 4.1) and the /tiles legend say "center", a 2.4 (impact 3, ease 8). Every visible "base centre" now reads "base center"; the unit and e2e tests that pin the words follow.

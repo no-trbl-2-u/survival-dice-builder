@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — a proposal's measured bot result is only in the Apply button's tooltip
-- pass: 23 (commit 14de3ef)
-- viewport: mobile
-- category: a11y
-- observation: Under "Proposals to try", the bot's measured result for each proposal is only in the Apply button's title tooltip. Touch users never see it, and screen readers may not hear it because the button has its own aria-label.
-- evidence: `apps/web/src/config/ProposalList.tsx:40-41` aria-label={`Apply ${p.label}`} title={measuredText(p)}
-- suggested fix: Show measuredText(p) as visible text after the proposal's about line, and link it to the button with aria-describedby.
-- source: web-fetch
-
 ### [LOW] / and /config — the siege sentence and a proposal still use the serial comma
 - pass: 23 (commit 14de3ef)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: user
 
 ## Done
+
+### [x] [MED] /config — a proposal's measured bot result is only in the Apply button's tooltip (addressed at (this commit))
+- pass: 23 (commit 14de3ef)
+- viewport: mobile
+- category: a11y
+- observation: Under "Proposals to try", the bot's measured result for each proposal is only in the Apply button's title tooltip. Touch users never see it, and screen readers may not hear it because the button has its own aria-label.
+- evidence: `apps/web/src/config/ProposalList.tsx:40-41` aria-label={`Apply ${p.label}`} title={measuredText(p)}
+- suggested fix: Show measuredText(p) as visible text after the proposal's about line, and link it to the button with aria-describedby.
+- source: web-fetch
+- issue: #162
+- resolution: Each proposal under "Proposals to try" now shows its measured result as visible text under its about line, and the Apply button names that line with aria-describedby instead of a title tooltip. The intro says the effect is shown there and the Decisions page has the recommendation. A new unit test pins the link for every shown proposal; the /config e2e checks the text is visible.
 
 ### [x] [LOW] /play — at 1280x800 a long Skill effect text is cut by the footer (addressed at (this commit))
 - pass: blind-round-4 (phase 24)
