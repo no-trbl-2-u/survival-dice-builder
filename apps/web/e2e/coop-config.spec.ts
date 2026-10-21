@@ -52,7 +52,7 @@ test('/config: a changed value is used by the next run', async ({ page }) => {
 
 test('/play: the autosave offers to resume the run', async ({ page }) => {
   await page.goto('/play?seed=8')
-  await page.getByRole('button', { name: /^Place your figure on .*, the base centre$/ }).click()
+  await page.getByRole('button', { name: /^Place your figure on .*, the base center$/ }).click()
   await page.goto('/play')
   await expect(page.getByRole('button', { name: /^Resume saved run/ })).toBeVisible()
   await expect(page.getByText('Saved in this browser only.')).toBeVisible()

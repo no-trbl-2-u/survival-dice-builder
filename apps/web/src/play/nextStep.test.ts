@@ -32,7 +32,7 @@ describe('nextStep', () => {
     const { phase, step } = nextStep(state, legal)
     expect(phase).toBe('Combat')
     expect(step).toMatch(
-      /^Choose which enemy the Tower on .+, 1 hex north of the base centre shoots$/,
+      /^Choose which enemy the Tower on .+, 1 hex north of the base center shoots$/,
     )
     expect(step).not.toContain('d1')
   })

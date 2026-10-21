@@ -45,10 +45,10 @@ describe('piece names', () => {
     expect(enemyName(s, 'gone', from)).toBe('enemy')
   })
 
-  it('names log pieces from the base centre', () => {
+  it('names log pieces from the base center', () => {
     const s = twoGrunts()
-    expect(enemyNameFromBase(s, 'e9')).toBe('grunt 1 hex north-west of the base centre')
-    expect(defenseNameFromBase(s, 'd1')).toBe('Tower 1 hex north of the base centre')
+    expect(enemyNameFromBase(s, 'e9')).toBe('grunt 1 hex north-west of the base center')
+    expect(defenseNameFromBase(s, 'd1')).toBe('Tower 1 hex north of the base center')
     expect(defenseNameFromBase(s, 'gone')).toBe('a defense')
   })
 

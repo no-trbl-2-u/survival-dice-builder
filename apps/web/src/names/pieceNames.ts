@@ -37,7 +37,7 @@ function withOrdinal<T extends { id: string }>(
   return same.length > 1 ? `${own} (${same.indexOf(id) + 1})` : own
 }
 
-/** The base centre on a map, or the origin before there is one. */
+/** The base center on a map, or the origin before there is one. */
 export function baseCentre(map: GameState['map'] | undefined): Axial {
   for (const [key, hex] of Object.entries(map?.hexes ?? {})) {
     if (hex.site !== 'base') continue
@@ -74,14 +74,14 @@ export function enemyName(n: NameSource, id: string, from: Axial): string {
 }
 
 /**
- * An enemy for the log, placed from the base centre (the log outlives the player's position):
- * "grunt 2 hexes north of the base centre".
+ * An enemy for the log, placed from the base center (the log outlives the player's position):
+ * "grunt 2 hexes north of the base center".
  */
 export function enemyNameFromBase(n: NameSource, id: string): string {
   const base = baseCentre(n.map)
   const place = (e: Enemy) => {
     const away = stepsAway(base, e.hex)
-    return `${e.kind} ${away === 'here' ? 'at the base centre' : `${away} of the base centre`}`
+    return `${e.kind} ${away === 'here' ? 'at the base center' : `${away} of the base center`}`
   }
   return withOrdinal(n.enemies ?? [], id, place) ?? pastKind(n, id) ?? 'enemy'
 }
@@ -92,14 +92,14 @@ function defenseKind(n: NameSource, d: Defense): string {
 }
 
 /**
- * A defense for the log and short labels: "Tower 1 hex west of the base centre", with "(2)"
+ * A defense for the log and short labels: "Tower 1 hex west of the base center", with "(2)"
  * when two read the same; "a defense" once it is gone.
  */
 export function defenseNameFromBase(n: NameSource, id: string): string {
   const base = baseCentre(n.map)
   const place = (d: Defense) => {
     const away = stepsAway(base, d.hex)
-    return `${defenseKind(n, d)} ${away === 'here' ? 'at the base centre' : `${away} of the base centre`}`
+    return `${defenseKind(n, d)} ${away === 'here' ? 'at the base center' : `${away} of the base center`}`
   }
   return withOrdinal(n.defenses ?? [], id, place) ?? 'a defense'
 }

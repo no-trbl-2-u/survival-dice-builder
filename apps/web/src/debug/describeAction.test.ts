@@ -8,12 +8,12 @@ describe('describeAction', () => {
     const state = createGame(defaultContent.config, 1)
     const labels = legalActions(state).map((a) => describeAction(a, state))
     expect(labels).toHaveLength(7)
-    expect(labels[0]).toBe('Place your figure on Plains, Base, the base centre')
+    expect(labels[0]).toBe('Place your figure on Plains, Base, the base center')
     expect(
       labels
         .slice(1)
         .every((l) =>
-          /^Place your figure on Plains, 1 hex (north|south|east|west)(-east|-west)? of the base centre$/.test(
+          /^Place your figure on Plains, 1 hex (north|south|east|west)(-east|-west)? of the base center$/.test(
             l,
           ),
         ),
@@ -43,7 +43,7 @@ describe('describeAction', () => {
     }
     const label = describeAction({ type: 'chooseTowerTarget', tower: 'd1', enemy: 'e3' }, state)
     expect(label).toMatch(
-      /^Tower on .+, 1 hex north of the base centre shoots grunt, .+ on .+, 2 health$/,
+      /^Tower on .+, 1 hex north of the base center shoots grunt, .+ on .+, 2 health$/,
     )
     expect(label).not.toContain('d1')
   })

@@ -5,6 +5,40 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-21 (pass 108, cloud tick)
+
+Pass 107's damage line shipped (cbffc78). The critique gate is closed (pass 22, 11 commits, under 24 hours by minutes) and the expand gate is closed (pass 15, 4 commits ago). The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Checked this pass: the spelling of the base in visible text. The /play log, piece names and action labels said "the base centre", while Spec v2 (1.3, 3.1, 4.1) and the /tiles legend say "center", a 2.4 (impact 3, ease 8). Every visible "base centre" now reads "base center"; the unit and e2e tests that pin the words follow.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /play and /debug: "the base centre" where the rules and /tiles say "center" (iterate audit)
+- category: voice
+- impact: 3
+- ease: 8
+- next: say "base center" in piece names, the log and action labels; update the pinned tests
+- issue: #161
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+
 # Site audit — 2026-10-21 (pass 107, cloud tick)
 
 Pass 106's co-op engage line shipped (32a58ca). The critique gate is closed (pass 22, 10 commits, under 24 hours by minutes) and the expand gate is closed (pass 15, 3 commits ago). The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Checked this pass: the damage line in `describeEvent`. Every hit named both parts, so a player with no guard, the usual case, read "You lose 0 guard and 3 health", a 2.7 (impact 3, ease 9). It now names only what was lost and says "lose nothing" for a 0-damage hit. A new unit test pins all four cases.

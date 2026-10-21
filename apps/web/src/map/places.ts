@@ -128,7 +128,7 @@ export function hexTitle(state: GameState, hex: Axial): string {
 
 /**
  * A defense by its kind and place, for players who cannot see engine ids: "Tower on Forest,
- * 2 hexes north of the base centre". Falls back to the id when the defense is gone.
+ * 2 hexes north of the base center". Falls back to the id when the defense is gone.
  *
  * @param state - the game state.
  * @param id - the defense id.
@@ -138,6 +138,6 @@ export function defenseName(state: GameState, id: string): string {
   if (!defense) return id
   const name = state.content.defenses.find((x) => x.id === defense.kind)?.name ?? defense.kind
   const away = stepsAway(baseHex(state), defense.hex)
-  const where = away === 'here' ? 'the base centre' : `${away} of the base centre`
+  const where = away === 'here' ? 'the base center' : `${away} of the base center`
   return `${name} on ${hexName(state, defense.hex)}, ${where}`
 }

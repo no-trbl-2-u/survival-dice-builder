@@ -171,7 +171,7 @@ test('/config: Resume run shows only with an autosave, and carries on with it', 
   // Take 1 action so the run autosaves, then come back.
   await page.goto('/play?seed=3')
   await page
-    .getByRole('button', { name: 'Place your figure on Plains, Base, the base centre' })
+    .getByRole('button', { name: 'Place your figure on Plains, Base, the base center' })
     .click()
   await page.goto('/config')
   await page.getByRole('button', { name: /^Resume run \(round 1\)$/ }).click()

@@ -40,13 +40,13 @@ function cardLabel(n: Names, instance: string): string {
   return n.content.cards.some((c) => c.id === instance) ? cardName(n, instance) : 'a card'
 }
 
-/** An enemy by kind and place from the base centre ("grunt 2 hexes north of the base centre"). */
+/** An enemy by kind and place from the base center ("grunt 2 hexes north of the base center"). */
 function enemyLabel(n: Names, id: string, kind?: string): string {
   const name = enemyNameFromBase(n, id)
   return name === 'enemy' && kind ? kind : name
 }
 
-/** A defense by kind and place from the base centre ("Tower 1 hex west of the base centre"). */
+/** A defense by kind and place from the base center ("Tower 1 hex west of the base center"). */
 function defenseLabel(n: Names, id: string): string {
   return defenseNameFromBase(n, id)
 }

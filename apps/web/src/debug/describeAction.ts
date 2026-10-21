@@ -92,7 +92,7 @@ function label(action: Action, state: GameState): string {
     case 'placeFigure': {
       const away = stepsAway(baseHex(state), action)
       const whose = state.players.length === 1 ? 'your' : `Player ${state.current + 1}'s`
-      return `Place ${whose} figure on ${hexName(state, action)}, ${away === 'here' ? 'the base centre' : `${away} of the base centre`}`
+      return `Place ${whose} figure on ${hexName(state, action)}, ${away === 'here' ? 'the base center' : `${away} of the base center`}`
     }
     case 'moveTo': {
       if (!state.map.hexes[hexKey(action)]) {

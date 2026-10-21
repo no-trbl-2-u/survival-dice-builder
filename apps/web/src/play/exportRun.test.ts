@@ -160,7 +160,7 @@ describe('describeEvent', () => {
       health: 3,
     }
     expect(describeEvent(repaired as never, withTower as never)).toBe(
-      'You repair Tower 1 hex north of the base centre for 1 (health 3).',
+      'You repair Tower 1 hex north of the base center for 1 (health 3).',
     )
   })
 })

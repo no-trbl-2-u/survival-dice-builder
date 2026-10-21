@@ -24,7 +24,7 @@ test('/play: start hex, a reveal off the map edge, the Prepare hands, and 1 Comb
 
   // Setup: the base-centre hex on the map is a button.
   await page
-    .getByRole('button', { name: 'Place your figure on Plains, Base, the base centre' })
+    .getByRole('button', { name: 'Place your figure on Plains, Base, the base center' })
     .click()
   await expect(bar).toContainText('Round 1')
 
@@ -79,7 +79,7 @@ test('/play at 375px puts the controls for the current step above the map', asyn
   await page.setViewportSize({ width: 375, height: 812 })
   await page.goto('/play?seed=3')
   await page
-    .getByRole('button', { name: 'Place your figure on Plains, Base, the base centre' })
+    .getByRole('button', { name: 'Place your figure on Plains, Base, the base center' })
     .click()
   const play = page.getByRole('button', { name: /^Play / }).first()
   await expect(play).toBeVisible()
@@ -96,7 +96,7 @@ test('/play Combat v3: Combat cards offer their options, and Engage starts an en
   await page.goto('/play?seed=5&combat=engage')
   const banner = page.getByTestId('next-step')
   await page
-    .getByRole('button', { name: 'Place your figure on Plains, Base, the base centre' })
+    .getByRole('button', { name: 'Place your figure on Plains, Base, the base center' })
     .click()
   for (let i = 0; i < 40 && !(await banner.textContent())?.startsWith('Combat'); i++) {
     if (await clickFirst(page, /^Stop (moving|building)$/)) continue

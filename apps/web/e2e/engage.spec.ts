@@ -24,7 +24,7 @@ async function engage(page: Page, seed: number) {
   await page.goto(`/play?seed=${seed}`)
   const banner = page.getByTestId('next-step')
   await page
-    .getByRole('button', { name: 'Place your figure on Plains, Base, the base centre' })
+    .getByRole('button', { name: 'Place your figure on Plains, Base, the base center' })
     .click()
   for (let i = 0; i < 40 && !(await banner.textContent())?.startsWith('Combat'); i++) {
     if (await clickFirst(page, /^Stop (moving|building)$/)) continue

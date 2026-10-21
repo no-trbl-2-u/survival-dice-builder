@@ -68,9 +68,9 @@ test('/play: map targets name places, and the map names what stands on each hex'
 }) => {
   await page.goto('/play?seed=3')
   const choice = page.getByRole('button', {
-    name: 'Place your figure on Plains, Base, the base centre',
+    name: 'Place your figure on Plains, Base, the base center',
   })
-  await expect(choice).toHaveAccessibleName('Place your figure on Plains, Base, the base centre')
+  await expect(choice).toHaveAccessibleName('Place your figure on Plains, Base, the base center')
   await choice.click()
   await expect(
     page.getByTestId('play-map').locator('title', { hasText: 'your figure' }),
