@@ -80,8 +80,10 @@ describe('HomePage', () => {
 
   it('links the Decisions page from the Also line', () => {
     render(<HomePage />)
-    const link = screen.getAllByRole('link', { name: 'the open rules questions' })[0]
+    const link = screen.getAllByRole('link', { name: 'the Decisions page' })[0]
     expect(link?.getAttribute('href')).toBe('/decisions')
+    expect(screen.getAllByText(/rule readings that wait on the designer/)[0]).toBeTruthy()
+    expect(screen.queryByText(/open rules questions/)).toBeNull()
     expect(screen.queryByText(/wait on you/)).toBeNull()
   })
 

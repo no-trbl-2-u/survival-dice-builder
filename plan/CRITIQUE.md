@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the link to /decisions is named "the open rules questions"
-- pass: 23 (commit 14de3ef)
-- viewport: desktop
-- category: comprehension
-- observation: The home page link text, the nav label "Decisions", and the page's "rule readings and checks" give one page three names; a visitor cannot tell the link goes to Decisions.
-- evidence: `apps/web/src/home/HomePage.tsx:74` "<a href=\"/decisions\">the open rules questions</a>"; nav label "Decisions"
-- suggested fix: Name the link "the Decisions page" (with a short gloss: rule readings the designer has not decided).
-- source: web-fetch
-
 ### [LOW] /decisions — Rule readings are out of number order with no subheading
 - pass: 23 (commit 14de3ef)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] / — the link to /decisions is named "the open rules questions" (addressed at (this commit))
+- pass: 23 (commit 14de3ef)
+- viewport: desktop
+- category: comprehension
+- observation: The home page link text, the nav label "Decisions", and the page's "rule readings and checks" give one page three names; a visitor cannot tell the link goes to Decisions.
+- evidence: `apps/web/src/home/HomePage.tsx:74` "<a href=\"/decisions\">the open rules questions</a>"; nav label "Decisions"
+- suggested fix: Name the link "the Decisions page" (with a short gloss: rule readings the designer has not decided).
+- source: web-fetch
+- issue: #166
+- resolution: The home page's Also line now links /decisions as "the Decisions page", matching the nav label, with the gloss "(rule readings that wait on the designer)". The HomePage test pins the link name and gloss and bars "open rules questions".
 
 ### [x] [LOW] / and /play — the heal effect reads "Heal 1" with no unit (addressed at (this commit))
 - pass: 23 (commit 14de3ef)
