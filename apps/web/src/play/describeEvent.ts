@@ -120,7 +120,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'enemyAttacked':
       return `${upper(enemyLabel(names, event.enemy))} attacks ${whom(event.player)} for ${event.damage}.`
     case 'engaged':
-      return `${who(event.player)} ${s('engage')}. ${event.enemyDice.length === 0 ? 'No enemy is next to you: no enemy dice.' : `Enemy dice: ${event.enemyDice.map((d) => `${enemyLabel(names, d.enemy)} ${d.face}`).join(', ')}.`}`
+      return `${who(event.player)} ${s('engage')}. ${event.enemyDice.length === 0 ? `No enemy is next to ${whom(event.player)}: no enemy dice.` : `Enemy dice: ${event.enemyDice.map((d) => `${enemyLabel(names, d.enemy)} ${d.face}`).join(', ')}.`}`
     case 'repaired':
       return `${who(event.player)} ${s('repair')} ${event.structure === 'base' ? 'the base' : defenseLabel(names, event.structure)} for ${event.amount} (health ${event.health}).`
     case 'enemyDieCancelled':

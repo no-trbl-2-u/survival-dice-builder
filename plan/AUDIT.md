@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-21 (pass 106, cloud tick)
+
+Pass 105's solo level line shipped (bb008c0). The critique gate is closed (pass 22, 9 commits, under 24 hours) and the expand gate is closed (pass 15, 2 commits ago). The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Checked this pass: the rest of `describeEvent` for solo and co-op wording. In a co-op run the engage line with no enemy dice said "Player 2 engages. No enemy is next to you", a 1.8 (impact 2, ease 9): it now names the seat in co-op and keeps "you" in a solo run. A new unit test pins both. Gather, build and upgrade lines say "materials" for any amount, but no card, cost or default config gives 1, so that is left.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /play log: the co-op engage line says "No enemy is next to you" (iterate audit)
+- category: voice
+- impact: 2
+- ease: 9
+- next: name the engaging player in co-op, keep "you" in a solo run
+- issue: #159
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords or closes the item
+
 # Site audit — 2026-10-20 (pass 105, cloud tick)
 
 Expand pass 15 shipped (e8d495e) with no new candidates, so the expand gate is closed again (under 48 hours) and the critique gate is closed (pass 22, 8 commits, under 24 hours). The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. The top row the loop can ship is pass 104's solo level line at 1.8: in a solo run the level line now reads "You get 1 action die", as the other solo log lines do, and co-op still reads "Every player gets 1 action die". A new unit test pins both.
