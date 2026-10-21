@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — Rule readings are out of number order with no subheading
-- pass: 23 (commit 14de3ef)
-- viewport: desktop
-- category: comprehension
-- observation: Readings waiting for a new rule sort first, then the rest, so the list runs 4, 9, ... 57, 58, then 56, 61. With no subheading between the two groups, 56 looks misplaced.
-- evidence: `packages/content/src/decisions.ts:91-94` ranks 'pending-spec' rows first; live headings "58. Scenarios" then "56. Enemy pull distance"
-- suggested fix: Split the list under two subheadings ("Waiting for a rule", "Played as proposed"), or sort by number only.
-- source: web-fetch
-
 ### [MED] /decisions — three balance checks give three different bot results
 - pass: 21 (commit a6dc51f)
 - viewport: desktop
@@ -64,6 +55,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /decisions — Rule readings are out of number order with no subheading (addressed at (this commit))
+- pass: 23 (commit 14de3ef)
+- viewport: desktop
+- category: comprehension
+- observation: Readings waiting for a new rule sort first, then the rest, so the list runs 4, 9, ... 57, 58, then 56, 61. With no subheading between the two groups, 56 looks misplaced.
+- evidence: `packages/content/src/decisions.ts:91-94` ranks 'pending-spec' rows first; live headings "58. Scenarios" then "56. Enemy pull distance"
+- suggested fix: Split the list under two subheadings ("Waiting for a rule", "Played as proposed"), or sort by number only.
+- source: web-fetch
+- issue: #167
+- resolution: openQuestions now sorts the open rows by number only; each row's status line already says whether it waits for a new rule. docs/DECISIONS.md is regenerated, and the decisions test pins number order.
 
 ### [x] [LOW] / — the link to /decisions is named "the open rules questions" (addressed at (this commit))
 - pass: 23 (commit 14de3ef)

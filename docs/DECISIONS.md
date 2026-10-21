@@ -42,6 +42,12 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 - Reading: **Must** (11.9) in the current engine. **Designer 2026-10-04:** see row 9 (Skill caps experiment and upgraded Skill tiers).
 - Setting: `rulings.fullBoardDraft` = `"swap"`
 
+### 56. Enemies prefer structures; how much nearer must a player be to draw an enemy instead? (rule Core loop v2)
+
+- Status: proposed 2026-10-04 (engine: phase 21, shipped)
+- Reading: **2 or more hexes nearer** than the nearest structure: a player ranks at distance + 2, and ties go to the player (row 15). An enemy attacks only its target, so a figure on the Base tile is never pulled (the base is always nearer).
+- Setting: `rulings.playerPullDistance` = `2`
+
 ### 57. The designer will add more tiles. How many, and what is on them? (rule Core loop v2)
 
 - Status: pending-spec 2026-10-04
@@ -53,12 +59,6 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 - Status: pending-spec 2026-10-04 (later)
 - Reading: Not in scope until the base engine is ready; a later brainstorm.
 - Setting: not a config setting ((none))
-
-### 56. Enemies prefer structures; how much nearer must a player be to draw an enemy instead? (rule Core loop v2)
-
-- Status: proposed 2026-10-04 (engine: phase 21, shipped)
-- Reading: **2 or more hexes nearer** than the nearest structure: a player ranks at distance + 2, and ties go to the player (row 15). An enemy attacks only its target, so a figure on the Base tile is never pulled (the base is always nearer).
-- Setting: `rulings.playerPullDistance` = `2`
 
 ### 61. A step off the map edge reveals a tile whose hex under the step is lake or mountain (rule Core loop v2)
 

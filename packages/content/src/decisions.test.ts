@@ -36,9 +36,11 @@ describe('decisions', () => {
     })
   })
 
-  it('keeps only rows not yet settled, pending-spec first', () => {
+  it('keeps only rows not yet settled, in number order', () => {
     const open = openQuestions(parseQuestions(questionsMd))
-    expect(open[0]?.status).toContain('pending-spec')
+    const numbers = open.map((r) => r.number)
+    expect(numbers).toEqual([...numbers].sort((a, b) => a - b))
+    expect(open.some((r) => r.status.includes('pending-spec'))).toBe(true)
     expect(open.some((r) => r.status === 'decided 2026-10-02')).toBe(false)
     // A decided row with a proposed detail stays open.
     expect(open.some((r) => r.number === 9)).toBe(true)

@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-21 (pass 114, cloud tick)
+
+Pass 113's Decisions-link row shipped (458564e). The critique gate is closed (pass 23, 6 commits ago, under 24 hours) and the expand gate is closed (pass 15, 11 commits ago, under 48 hours). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Every shippable row is LOW and scores under 3.0, so the loop drains the last LOW critique row: pass 23's rule-reading order row at 2.5 (impact 3, ease 8). /decisions listed `pending-spec` readings first, so the numbers ran 4 ... 58, then 56, 61 with no subheading. openQuestions now sorts by number only (each row's status line already says what it waits on), docs/DECISIONS.md is regenerated, and the decisions test pins number order. With this row gone the critique queue holds only rows that wait for /oversight and the sim-bot row.
+
+## Top 5 findings (scored)
+
+### [x] [2.5] /decisions: Rule readings are out of number order with no subheading (critique LOW, pass 23)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: sort the open readings by number only
+- issue: #167
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords or closes the item
+
 # Site audit — 2026-10-21 (pass 113, cloud tick)
 
 Pass 112's heal-unit row shipped (d6ee0fd). The critique gate is closed (pass 23, 4 commits ago, under 24 hours) and the expand gate is closed (pass 15, 9 commits ago, under 48 hours). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Every shippable row is LOW and scores under 3.0, so the loop keeps draining LOW critique rows. The top one is pass 23's Decisions-link row at 2.6 (impact 3, ease 9): the home page's Also line linked /decisions as "the open rules questions", a third name for a page the nav calls "Decisions". The link now reads "the Decisions page" with the gloss "(rule readings that wait on the designer)", and the HomePage test pins the link name and gloss and bars the old wording.

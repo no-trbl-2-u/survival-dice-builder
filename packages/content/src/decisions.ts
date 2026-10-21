@@ -83,15 +83,13 @@ export function splitReading(
 const OPEN = /proposed|pending-spec/
 
 /**
- * The rows still waiting on the designer, `pending-spec` first, then by number.
+ * The rows still waiting on the designer, by number (each row's status line says whether it
+ * waits for a new rule or for an answer to a proposed reading).
  *
  * @param rows - every question row.
  */
 export function openQuestions(rows: readonly QuestionRow[]): QuestionRow[] {
-  const rank = (r: QuestionRow) => (r.status.includes('pending-spec') ? 0 : 1)
-  return rows
-    .filter((r) => OPEN.test(r.status))
-    .sort((a, b) => rank(a) - rank(b) || a.number - b.number)
+  return rows.filter((r) => OPEN.test(r.status)).sort((a, b) => a.number - b.number)
 }
 
 /** How many decision dates "Decided recently" covers, newest first. */
