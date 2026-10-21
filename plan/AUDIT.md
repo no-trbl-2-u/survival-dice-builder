@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-21 (pass 112, cloud tick)
+
+Pass 111's enemy-cap row shipped (2014593). The critique gate is closed (pass 23, 3 commits ago, under 24 hours) and the expand gate is closed (pass 15, 9 commits ago, under 48 hours). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Every shippable row is LOW and scores under 3.0, so the loop keeps draining LOW critique rows. The top one is pass 23's heal-unit row at 2.7 (impact 3, ease 9): the starter Skill line read "Mend (Wand: heal 1)" beside "gain 2 guard". skillEffectText now returns "Heal N health", the startText test pins the new line, and a skillEffectText test pins the heal and guard wording.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] / and /play: the heal effect reads "Heal 1" with no unit (critique LOW, pass 23)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: return "Heal N health" from skillEffectText; update the pinned tests
+- issue: #165
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [2.6] /: the link to /decisions is named "the open rules questions" (critique LOW, pass 23)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 9
+- next: name the link "the Decisions page" with a short gloss
+
 # Site audit — 2026-10-21 (pass 111, cloud tick)
 
 Pass 110's serial-comma row shipped (f5a5c17). The critique gate is closed (pass 23, 2 commits ago, under 24 hours) and the expand gate is closed (pass 15, 8 commits ago, under 48 hours). The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Every shippable row is LOW and scores under 3.0, so the loop keeps draining LOW critique rows. The top one is pass 23's enemy-cap row at 2.7 (impact 3, ease 9): the /play counter said "(map limit)" while /config and rule 10.5 say "miniature limit", and two proposals spoke of a table. The counter now says "(miniature limit)", the proposals say "when more players play" and "so fewer enemies are on the map", and a ruleText test scans proposals and /config metadata for tabletop phrasing.

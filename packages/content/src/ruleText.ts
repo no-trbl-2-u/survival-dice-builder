@@ -447,7 +447,7 @@ export function skillEffectText(e: SkillEffect, model: GameConfig['combat']['mod
     case 'guard':
       return `Gain ${e.amount} guard`
     case 'heal':
-      return `Heal ${e.amount}`
+      return `Heal ${e.amount} health`
     case 'ignoreHit':
       return `Ignore ${plural(e.hits, 'enemy hit', 'enemy hits')} this ${model === 'exchange' ? 'exchange' : 'engagement'}`
   }

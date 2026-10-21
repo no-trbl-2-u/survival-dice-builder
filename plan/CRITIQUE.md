@@ -27,15 +27,6 @@
 - suggested fix: Split the list under two subheadings ("Waiting for a rule", "Played as proposed"), or sort by number only.
 - source: web-fetch
 
-### [LOW] / and /play — the heal effect reads "Heal 1" with no unit
-- pass: 23 (commit 14de3ef)
-- viewport: desktop
-- category: voice
-- observation: The starter Skill line says "Mend (Wand: heal 1)" while Guard's effect is complete ("gain 2 guard").
-- evidence: `packages/content/src/ruleText.ts:449-450` returns `Heal ${e.amount}`
-- suggested fix: Return `Heal ${e.amount} health` from skillEffectText, and update the tests that pin it.
-- source: web-fetch
-
 ### [MED] /decisions — three balance checks give three different bot results
 - pass: 21 (commit a6dc51f)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] / and /play — the heal effect reads "Heal 1" with no unit (addressed at (this commit))
+- pass: 23 (commit 14de3ef)
+- viewport: desktop
+- category: voice
+- observation: The starter Skill line says "Mend (Wand: heal 1)" while Guard's effect is complete ("gain 2 guard").
+- evidence: `packages/content/src/ruleText.ts:449-450` returns `Heal ${e.amount}`
+- suggested fix: Return `Heal ${e.amount} health` from skillEffectText, and update the tests that pin it.
+- source: web-fetch
+- issue: #165
+- resolution: skillEffectText returns "Heal N health", so the starter Skill line on / and the Skill board on /play read "Mend (Wand: heal 1 health)", as complete as "gain 2 guard". The startText test pins the new line, and a new skillEffectText test pins the heal and guard wording. Card faces keep their short printed form ("Rest: heal 1").
 
 ### [x] [LOW] /play and /config — one enemy cap has two names, and proposals talk about a table (addressed at (this commit))
 - pass: 23 (commit 14de3ef)
