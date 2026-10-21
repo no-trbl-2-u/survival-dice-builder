@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-20 at commit 5e9eef1
-> Pass count: 22
+> Last pass: 2026-10-21 at commit 14de3ef
+> Pass count: 23
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /config — a proposal's measured bot result is only in the Apply button's tooltip
+- pass: 23 (commit 14de3ef)
+- viewport: mobile
+- category: a11y
+- observation: Under "Proposals to try", the bot's measured result for each proposal is only in the Apply button's title tooltip. Touch users never see it, and screen readers may not hear it because the button has its own aria-label.
+- evidence: `apps/web/src/config/ProposalList.tsx:40-41` aria-label={`Apply ${p.label}`} title={measuredText(p)}
+- suggested fix: Show measuredText(p) as visible text after the proposal's about line, and link it to the button with aria-describedby.
+- source: web-fetch
+
+### [LOW] / and /config — the siege sentence and a proposal still use the serial comma
+- pass: 23 (commit 14de3ef)
+- viewport: desktop
+- category: voice
+- observation: The Combat step's siege sentence and the "Spawn range" proposal use the serial comma, which the site dropped elsewhere.
+- evidence: / "each enemy next to a Barricade, a Tower, or the base hits one of them" (`packages/content/src/ruleText.ts:254`); `packages/content/data/proposals.json:221` "near a player figure, a Barricade, a Tower, or the Base tile spawn"
+- suggested fix: Drop the comma before "or" in both lines; add a test that no ruleText or proposal copy contains ", or ".
+- source: web-fetch
+
+### [LOW] /play and /config — one enemy cap has two names, and proposals talk about a table
+- pass: 23 (commit 14de3ef)
+- viewport: desktop
+- category: voice
+- observation: /config names the cap "Enemy miniature limit" (the rules term, 10.5) while the /play counter says "(map limit)". Two proposals speak of players who "sit at the table" and "miniatures to place", though the game runs on one screen.
+- evidence: `packages/content/data/config.meta.json:173`; `apps/web/src/play/PhaseBar.tsx:44` "Enemies N of 20 (map limit)"; `packages/content/data/proposals.json:178`, `:221`
+- suggested fix: Make the /play counter use the rules term ("miniature limit"); reword the proposals to "when more players play" and "so fewer enemies are on the map".
+- source: web-fetch
+
+### [LOW] / — the link to /decisions is named "the open rules questions"
+- pass: 23 (commit 14de3ef)
+- viewport: desktop
+- category: comprehension
+- observation: The home page link text, the nav label "Decisions", and the page's "rule readings and checks" give one page three names; a visitor cannot tell the link goes to Decisions.
+- evidence: `apps/web/src/home/HomePage.tsx:74` "<a href=\"/decisions\">the open rules questions</a>"; nav label "Decisions"
+- suggested fix: Name the link "the Decisions page" (with a short gloss: rule readings the designer has not decided).
+- source: web-fetch
+
+### [LOW] /decisions — Rule readings are out of number order with no subheading
+- pass: 23 (commit 14de3ef)
+- viewport: desktop
+- category: comprehension
+- observation: Readings waiting for a new rule sort first, then the rest, so the list runs 4, 9, ... 57, 58, then 56, 61. With no subheading between the two groups, 56 looks misplaced.
+- evidence: `packages/content/src/decisions.ts:91-94` ranks 'pending-spec' rows first; live headings "58. Scenarios" then "56. Enemy pull distance"
+- suggested fix: Split the list under two subheadings ("Waiting for a rule", "Played as proposed"), or sort by number only.
+- source: web-fetch
+
+### [LOW] / and /play — the heal effect reads "Heal 1" with no unit
+- pass: 23 (commit 14de3ef)
+- viewport: desktop
+- category: voice
+- observation: The starter Skill line says "Mend (Wand: heal 1)" while Guard's effect is complete ("gain 2 guard").
+- evidence: `packages/content/src/ruleText.ts:449-450` returns `Heal ${e.amount}`
+- suggested fix: Return `Heal ${e.amount} health` from skillEffectText, and update the tests that pin it.
+- source: web-fetch
 
 ### [MED] /decisions — three balance checks give three different bot results
 - pass: 21 (commit a6dc51f)
