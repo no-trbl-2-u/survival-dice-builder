@@ -175,7 +175,7 @@
     "id": "seat-scaling",
     "row": 68,
     "label": "Seat scaling",
-    "about": "Each node spawns more enemies when more players sit at the table.",
+    "about": "Each node spawns more enemies when more players play.",
     "options": [
       {
         "path": "spawn.perSeat",
@@ -218,7 +218,7 @@
     "id": "spawn-range",
     "row": 70,
     "label": "Spawn range",
-    "about": "Only nodes near a player figure, a Barricade, a Tower or the Base tile spawn, so there are fewer miniatures to place.",
+    "about": "Only nodes near a player figure, a Barricade, a Tower or the Base tile spawn, so fewer enemies are on the map.",
     "options": [
       {
         "path": "spawn.nodeRange",

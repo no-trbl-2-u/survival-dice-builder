@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play and /config — one enemy cap has two names, and proposals talk about a table
-- pass: 23 (commit 14de3ef)
-- viewport: desktop
-- category: voice
-- observation: /config names the cap "Enemy miniature limit" (the rules term, 10.5) while the /play counter says "(map limit)". Two proposals speak of players who "sit at the table" and "miniatures to place", though the game runs on one screen.
-- evidence: `packages/content/data/config.meta.json:173`; `apps/web/src/play/PhaseBar.tsx:44` "Enemies N of 20 (map limit)"; `packages/content/data/proposals.json:178`, `:221`
-- suggested fix: Make the /play counter use the rules term ("miniature limit"); reword the proposals to "when more players play" and "so fewer enemies are on the map".
-- source: web-fetch
-
 ### [LOW] / — the link to /decisions is named "the open rules questions"
 - pass: 23 (commit 14de3ef)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play and /config — one enemy cap has two names, and proposals talk about a table (addressed at (this commit))
+- pass: 23 (commit 14de3ef)
+- viewport: desktop
+- category: voice
+- observation: /config names the cap "Enemy miniature limit" (the rules term, 10.5) while the /play counter says "(map limit)". Two proposals speak of players who "sit at the table" and "miniatures to place", though the game runs on one screen.
+- evidence: `packages/content/data/config.meta.json:173`; `apps/web/src/play/PhaseBar.tsx:44` "Enemies N of 20 (map limit)"; `packages/content/data/proposals.json:178`, `:221`
+- suggested fix: Make the /play counter use the rules term ("miniature limit"); reword the proposals to "when more players play" and "so fewer enemies are on the map".
+- source: web-fetch
+- issue: #164
+- resolution: The /play counter reads "Enemies N of 20 (miniature limit)", the rules term (10.5) and the /config label. The "Seat scaling" proposal now says "when more players play" and "Spawn range" says "so fewer enemies are on the map". A ruleText test scans every proposal label and about line and every /config label, help and option for tabletop phrasing ("at the table", "miniatures to place"), with a planted case; the PhaseBar test pins the new counter.
 
 ### [x] [LOW] / and /config — the siege sentence and a proposal still use the serial comma (addressed at (this commit))
 - pass: 23 (commit 14de3ef)

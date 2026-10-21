@@ -14,7 +14,7 @@ describe('PhaseBar', () => {
     expect(arrow?.textContent).toBe('▶ ')
     const limit = defaultContent.config.miniatureLimit
     const count = screen.getByTestId('enemy-count')
-    expect(count.textContent).toBe(`Enemies 0 of ${limit} (map limit)`)
+    expect(count.textContent).toBe(`Enemies 0 of ${limit} (miniature limit)`)
     expect(count.getAttribute('title')).toBe(miniatureLimitText(defaultContent.config))
   })
 })

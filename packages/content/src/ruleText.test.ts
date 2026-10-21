@@ -421,3 +421,24 @@ describe('player copy drops the serial comma', () => {
     expect([...proposals, ...meta]).toEqual([])
   })
 })
+
+describe('player copy speaks of the screen, not a tabletop', () => {
+  /** Board-game phrasing that does not fit a game played on one screen. */
+  const TABLETOP = /\bat the table\b|\bminiatures to place\b/i
+
+  it('catches a planted tabletop phrase', () => {
+    expect('when more players sit at the table').toMatch(TABLETOP)
+    expect('so there are fewer miniatures to place').toMatch(TABLETOP)
+    expect('so fewer enemies are on the map').not.toMatch(TABLETOP)
+  })
+
+  it('no proposal label or about text, and no /config label or help, talks of a table', () => {
+    const proposals = defaultProposals
+      .flatMap((p) => [p.label, p.about])
+      .filter((text) => TABLETOP.test(text))
+    const meta = Object.values(defaultConfigMeta)
+      .flatMap((e) => [e.label, e.help ?? '', e.empty ?? '', ...Object.values(e.options ?? {})])
+      .filter((text) => TABLETOP.test(text))
+    expect([...proposals, ...meta]).toEqual([])
+  })
+})

@@ -41,7 +41,7 @@ export function PhaseBar({ state }: Props) {
       <span className={styles.counters}>
         Tiles left {state.tileDeck.length} ·{' '}
         <span data-testid="enemy-count" title={miniatureLimitText(state.config)}>
-          Enemies {state.enemies.length} of {state.config.miniatureLimit} (map limit)
+          Enemies {state.enemies.length} of {state.config.miniatureLimit} (miniature limit)
         </span>
       </span>
     </header>
