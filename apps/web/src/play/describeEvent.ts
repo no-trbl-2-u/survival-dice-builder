@@ -94,7 +94,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'effectDeferred':
       return `Not yet in the engine: ${event.effect}.`
     case 'healed':
-      return `${who(event.player)} healed ${event.amount} (health ${event.health}).`
+      return `${who(event.player)} healed ${event.amount} health (health ${event.health}).`
     case 'guardGained':
       return `${who(event.player)} gained ${event.amount} guard (guard ${event.guard}).`
     case 'damageBonus':

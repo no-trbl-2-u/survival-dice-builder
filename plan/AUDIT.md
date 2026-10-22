@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-22 (pass 124, cloud tick)
+
+Pass 123's /decisions serial comma row shipped (054341d). The critique gate is closed (pass 24, 8 commits ago, under 24 hours) and the expand gate is closed (pass 16, 3 commits ago). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. No pass 24 row is left, so this pass checked the /play log lines in `describeEvent` against the site's wording. The heal line read "You healed 2 (health 7)." with no unit, while the guard line reads "You gained 2 guard (guard 3)." and Skills and cards say "Heal 1 health" (d6ee0fd), a 1.8 (impact 2, ease 9). It now reads "You healed 2 health (health 7).", and the exportRun unit test pins the solo and co-op heal lines and the guard line. Next in line: the sim bot row (session residue), then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /play log: the heal line says "healed 2" with no unit (audit, pass 124)
+- category: voice
+- impact: 2
+- ease: 9
+- next: the heal line names "health", as the guard line names "guard"; unit test in exportRun.test.ts
+- issue: #178
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords the check or closes it
+
 # Site audit — 2026-10-22 (pass 123, cloud tick)
 
 Pass 122's rule reading 4 row shipped (142c4e6). The critique gate is closed (pass 24, 7 commits ago, under 24 hours) and the expand gate is closed (pass 16, 3 commits ago). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. The top row the loop can ship is the /decisions serial comma at 2.1 (impact 3, ease 7): the site dropped the serial comma, but the open readings in `OPEN-QUESTIONS.md` and the checks in this file still wrote "Training II, or Training III" and "enemy type, and health". Those rows now drop it, three clause lists are reworded around one comma, docs/DECISIONS.md is regenerated, and a decisions test fails on any list-ending ", and" or ", or" on the rendered page. Next in line: the sim bot row (session residue), then the rows that wait for /oversight.
@@ -17,7 +55,7 @@ Pass 122's rule reading 4 row shipped (142c4e6). The critique gate is closed (pa
 - ease: 7
 - next: drop the comma before "and"/"or" in the readings and checks; a decisions test scans the rendered page
 - issue: #177
-- fixed: (this commit)
+- fixed: 054341d
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

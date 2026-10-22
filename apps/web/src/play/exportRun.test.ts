@@ -143,7 +143,13 @@ describe('describeEvent', () => {
     )
     const coop = { ...state, players: [state.players[0]!, { ...state.players[0]!, id: 'p2' }] }
     const healed = { type: 'healed', rule: '6.4', player: 'p2', amount: 1, health: 5 }
-    expect(describeEvent(healed as never, coop)).toBe('Player 2 healed 1 (health 5).')
+    expect(describeEvent(healed as never, coop)).toBe('Player 2 healed 1 health (health 5).')
+    // As complete as the guard line: the amount names its unit.
+    const guard = { type: 'guardGained', rule: '6.4', player: 'p1', amount: 2, guard: 3 }
+    expect(describeEvent(guard as never, state)).toBe('You gained 2 guard (guard 3).')
+    expect(describeEvent({ ...healed, player: 'p1' } as never, state)).toBe(
+      'You healed 1 health (health 5).',
+    )
   })
 
   it('names a repaired defense by kind', () => {
