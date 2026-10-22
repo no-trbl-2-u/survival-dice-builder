@@ -2159,3 +2159,18 @@
 .reachShort {
   display: none;
 }
+
+/* The run's milestones, folded at the foot of the base panel (rule 1.4). */
+.milestoneProgress {
+  margin-block-start: 12px;
+}
+
+.milestoneProgress > summary {
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+}
+
+.milestoneProgress > ul {
+  margin-block-start: 6px;
+}

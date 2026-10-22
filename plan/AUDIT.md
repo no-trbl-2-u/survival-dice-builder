@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-22 (pass 118, cloud tick)
+
+Pass 117's sim milestone row shipped (e2f727e). The critique gate is closed (pass 23, 10 commits ago, 3 minutes under 24 hours) and the expand gate is closed (pass 15, 15 commits ago, under 48 hours). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Checked this pass: where /play shows the milestones. Spec v2 1.4 says milestones show the progress of a run, but /play lists them only on the run summary after the base falls; mid-run a milestone is one log line when it is met, and the out-of-reach reasons pass 113 to 116 added are seen only at the end. A 3.5 (impact 5, ease 7). The run summary's list is now a shared `MilestoneList`, and the base panel ends with a folded "Milestones: N of 8 met" section that shows the same list; a component test and the full-run e2e pin it.
+
+## Top 5 findings (scored)
+
+### [x] [3.5] /play: the milestones are listed only after the base falls (audit, pass 118)
+- category: tests
+- impact: 5
+- ease: 7
+- next: share the run summary's milestone list and fold it into the base panel with a met count
+- issue: #171
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords or closes the item
+
 # Site audit — 2026-10-22 (pass 117, cloud tick)
 
 Pass 116's "Fire Arcane Rain" row shipped (8c3b940), so `milestoneOutOfReach` now answers every milestone kind. The critique gate is closed (pass 23, 9 commits ago, under 24 hours) and the expand gate is closed (pass 15, 14 commits ago, under 48 hours). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Checked this pass: the third part of the "Milestones a default run can reach" candidate, the sim report. `summarize` counted only the milestones some run met, so the 5 milestones no default run meets (round 15, Arcane Rain, 3 upgrades, 10 tiles, level 5) were missing from the terminal line and the JSON report instead of reading 0, a 3.2 (impact 4, ease 8). The batch, compare and sweep commands now pass the config's `milestoneIds`, every milestone is listed from 0, and the default-batch pin lists all 8.
@@ -17,7 +55,7 @@ Pass 116's "Fire Arcane Rain" row shipped (8c3b940), so `milestoneOutOfReach` no
 - ease: 8
 - next: seed `summarize`'s milestone counts with the config's `milestoneIds` at 0
 - issue: #170
-- fixed: (this commit)
+- fixed: e2f727e
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

@@ -1,6 +1,8 @@
+import { milestoneIds } from '@survival/content'
 import type { Action, GameState } from '@survival/engine'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { cardText } from './effectText.ts'
+import { MilestoneList } from './MilestoneList.tsx'
 import styles from './Play.module.css'
 import { ofType } from './targets.ts'
 
@@ -9,7 +11,8 @@ type Props = Readonly<{ state: GameState; legal: readonly Action[]; act: (a: Act
 /**
  * The base board: health, the 2 upgrade tracks (bought, next, cost; Buy while a Build is active
  * on the base), and the Shop offers (Buy when the figure is on the base and the price is met).
- * When nothing can be bought it says how buying works, so materials never look stuck.
+ * When nothing can be bought it says how buying works, so materials never look stuck. The
+ * run's milestones close the panel, folded, with how many are met (rule 1.4).
  */
 export function BasePanel({ state, legal, act }: Props) {
   const upgrades = ofType(legal, 'buyUpgrade')
@@ -97,6 +100,13 @@ export function BasePanel({ state, legal, act }: Props) {
           </ul>
         </>
       )}
+      <details className={styles.milestoneProgress} data-testid="milestone-progress">
+        <summary>
+          Milestones: {state.milestones.length} of {milestoneIds(state.config.milestones).length}{' '}
+          met
+        </summary>
+        <MilestoneList state={state} />
+      </details>
     </section>
   )
 }

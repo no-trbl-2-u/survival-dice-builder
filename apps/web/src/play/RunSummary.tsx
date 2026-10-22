@@ -1,6 +1,6 @@
-import { milestoneIds, milestoneLabel, milestoneOutOfReach } from '@survival/content'
 import { useEffect, useRef } from 'react'
 import { downloadRun } from './exportRun.ts'
+import { MilestoneList } from './MilestoneList.tsx'
 import styles from './Play.module.css'
 import type { Run } from './run.ts'
 
@@ -11,7 +11,6 @@ export function RunSummary({ run, baseCurve, onNewRun }: Props) {
   const ref = useRef<HTMLElement>(null)
   useEffect(() => ref.current?.focus(), [])
   const s = run.state
-  const all = milestoneIds(s.config.milestones)
   const download = () => downloadRun(run, Date.now())
   const max = Math.max(1, ...baseCurve)
   return (
@@ -30,18 +29,7 @@ export function RunSummary({ run, baseCurve, onNewRun }: Props) {
         {s.upgrades.length === 1 ? 'upgrade' : 'upgrades'}
       </p>
       <h3 className={styles.subTitle}>Milestones</h3>
-      <ul className={styles.milestones}>
-        {all.map((id) => {
-          const got = s.milestones.includes(id)
-          const out = got ? null : milestoneOutOfReach(id, s.config, s.content)
-          return (
-            <li key={id} className={got ? styles.got : styles.muted}>
-              {got ? '✓' : '–'} {milestoneLabel(id, s.config.milestones, s.content)}
-              {out && ` (${out})`}
-            </li>
-          )
-        })}
-      </ul>
+      <MilestoneList state={s} />
       <h3 className={styles.subTitle}>Base health at the start of each round</h3>
       <ol className={styles.curve} aria-label="Base health by round">
         {baseCurve.map((h, i) => (
