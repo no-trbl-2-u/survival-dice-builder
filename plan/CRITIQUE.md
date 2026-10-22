@@ -18,15 +18,6 @@
 - suggested fix: Add the out-of-reach count to the summary line, e.g. "Milestones: 0 of 8 met (3 out of reach)".
 - source: web-fetch
 
-### [MED] /decisions — rule reading 78 does not name "Fire Arcane Rain" as a milestone it blocks
-- pass: 24 (commit 3baaf7b)
-- viewport: desktop
-- category: comprehension
-- observation: /play and /config mark "Fire Arcane Rain" out of reach because Build cards buy only Training I (since 8c3b940). Row 78 is the reading for that cause, but it names only "Buy 3 base upgrades". "Arcane Rain" is not on /decisions, so the designer is not told about the second blocked milestone.
-- evidence: `OPEN-QUESTIONS.md` has no "Arcane" match; /config "Fire Arcane Rain (out of reach: a level 3 Skill needs Training III, and Build cards can buy only Training I)."
-- suggested fix: Add to row 78's question in `OPEN-QUESTIONS.md`: "and "Fire Arcane Rain" cannot be met (a level 3 Skill needs Training III)".
-- source: web-fetch
-
 ### [MED] /config — each proposal's measured result is one long sentence with test-harness words
 - pass: 24 (commit 3baaf7b)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: user
 
 ## Done
+
+### [x] [MED] /decisions — rule reading 78 does not name "Fire Arcane Rain" as a milestone it blocks (addressed at (this commit))
+- pass: 24 (commit 3baaf7b)
+- viewport: desktop
+- category: comprehension
+- observation: /play and /config mark "Fire Arcane Rain" out of reach because Build cards buy only Training I (since 8c3b940). Row 78 is the reading for that cause, but it names only "Buy 3 base upgrades". "Arcane Rain" is not on /decisions, so the designer is not told about the second blocked milestone.
+- evidence: `OPEN-QUESTIONS.md` has no "Arcane" match; /config "Fire Arcane Rain (out of reach: a level 3 Skill needs Training III, and Build cards can buy only Training I)."
+- suggested fix: Add to row 78's question in `OPEN-QUESTIONS.md`: "and "Fire Arcane Rain" cannot be met (a level 3 Skill needs Training III)".
+- source: web-fetch
+- issue: #172
+- resolution: Row 78's question now says 2 milestones are out of reach: "Buy 3 base upgrades" and "Fire Arcane Rain" (a level 3 Skill needs Training III). docs/DECISIONS.md is regenerated, and a decisions test checks that every milestone the default rules put out of reach is named in an open reading.
 
 ### [x] [LOW] /decisions — Rule readings are out of number order with no subheading (addressed at 92706e6)
 - pass: 23 (commit 14de3ef)

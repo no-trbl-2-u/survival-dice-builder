@@ -19,6 +19,7 @@ import {
   statusLabel,
   unlistedSettingText,
 } from './decisions.ts'
+import { milestoneIds, milestoneLabel, milestoneOutOfReach } from './ruleText.ts'
 
 const root = new URL('../../../', import.meta.url)
 const questionsMd = fs.readFileSync(new URL('OPEN-QUESTIONS.md', root), 'utf-8')
@@ -278,5 +279,18 @@ describe('decisions', () => {
       'Set in the game content, not on the Config page',
     )
     expect(unlistedSettingText('miniatureLimit')).toBe('miniatureLimit: no config field')
+  })
+
+  it('names every milestone the default rules put out of reach in an open reading (critique pass 24)', () => {
+    const open = openQuestions(parseQuestions(questionsMd))
+    const blocked = milestoneIds(config.milestones)
+      .filter((id) => milestoneOutOfReach(id, config, defaultContent) !== null)
+      .map((id) => milestoneLabel(id, config.milestones, defaultContent))
+    expect(blocked).toEqual(['Fire Arcane Rain', 'Buy 3 base upgrades', 'Reveal 10 tiles'])
+    for (const label of blocked) {
+      expect(open.some((r) => r.question.includes(`"${label}"`))).toBe(true)
+    }
+    const row78 = open.find((r) => r.number === 78)?.question ?? ''
+    expect(row78).toContain('"Fire Arcane Rain"')
   })
 })

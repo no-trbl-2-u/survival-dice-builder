@@ -102,7 +102,7 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 - Reading: **Proposed: spawn range** (option, default off; measured in phase 22). Only nodes within N hexes of a player figure, a Barricade, a Tower, or a Base tile hex spawn. Bot report (N = 4): end round unchanged; the upkeep saving is a table question. Recommendation: needs a playtest. Report: `docs/reports/phase-22-experiments.md`.
 - Setting: `spawn.nodeRange` = `empty`; `miniatureLimit` = `20`
 
-### 78. Spec v2 levels the Build card, and every Build card is Build I (Build II and III are not designed yet). Then no card buys Shop II, Shop III, Training II, or Training III, and the milestone "Buy 3 base upgrades" cannot be reached (phase 41 bot batch: 0 of 200 runs) (rule 11.4, 12.1, 17)
+### 78. Spec v2 levels the Build card, and every Build card is Build I (Build II and III are not designed yet). Then no card buys Shop II, Shop III, Training II, or Training III, so 2 milestones are out of reach: "Buy 3 base upgrades" (phase 41 bot batch: 0 of 200 runs) and "Fire Arcane Rain" (a level 3 Skill needs Training III) (rule 11.4, 12.1, 17)
 
 - Status: proposed 2026-10-13 (engine: phase 41)
 - Reading: **As shipped:** the rule as written (`rulings.buildLevels: "levelled"`). `rulings.buildLevels: "any"` plays the Spec v1 rule (any Build buys the next tier) for playtests until the designer adds Build II and III cards or gives the existing cards higher levels.
