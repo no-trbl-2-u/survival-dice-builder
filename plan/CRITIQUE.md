@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — rule readings and checks still use the serial comma
-- pass: 24 (commit 3baaf7b)
-- viewport: desktop
-- category: voice
-- observation: The site dropped the serial comma (f5a5c17) and tests ban it in ruleText, proposals and /config copy, but /decisions text comes from `OPEN-QUESTIONS.md` and `plan/AUDIT.md`, which the tests do not scan.
-- evidence: /decisions row 78 "Shop II, Shop III, Training II, or Training III"; check "Art direction glance check" "card orientation, enemy type, and health"
-- suggested fix: Drop the comma before "and"/"or" in those rows and extend the serial-comma test to the /decisions sources.
-- source: web-fetch
-
 ### [MED] /decisions — three balance checks give three different bot results
 - pass: 21 (commit a6dc51f)
 - viewport: desktop
@@ -65,7 +56,18 @@
 
 ## Done
 
-### [x] [LOW] /decisions — rule reading 4 says "unreachable with 8 non-base tiles"; /play and /config say "out of reach" (addressed at (this commit))
+### [x] [LOW] /decisions — rule readings and checks still use the serial comma (addressed at (this commit))
+- pass: 24 (commit 3baaf7b)
+- viewport: desktop
+- category: voice
+- observation: The site dropped the serial comma (f5a5c17) and tests ban it in ruleText, proposals and /config copy, but /decisions text comes from `OPEN-QUESTIONS.md` and `plan/AUDIT.md`, which the tests do not scan.
+- evidence: /decisions row 78 "Shop II, Shop III, Training II, or Training III"; check "Art direction glance check" "card orientation, enemy type, and health"
+- suggested fix: Drop the comma before "and"/"or" in those rows and extend the serial-comma test to the /decisions sources.
+- source: web-fetch
+- issue: #177
+- resolution: The open rule readings and the designer checks on /decisions drop the serial comma: rows 9, 12, 46, 49, 68, 69, 70, 74 and 78 and the general note in `OPEN-QUESTIONS.md`, and the phone drag, designer reviews, glance check, visual polish, Structural v2 and playtest checks in `plan/AUDIT.md`. Three clause lists that the same pattern caught (rows 46, 69 and 74) are reworded around one comma. docs/DECISIONS.md is regenerated. A decisions test renders the page and fails on any comma before a list-ending "and" or "or".
+
+### [x] [LOW] /decisions — rule reading 4 says "unreachable with 8 non-base tiles"; /play and /config say "out of reach" (addressed at 142c4e6)
 - pass: 24 (commit 3baaf7b)
 - viewport: desktop
 - category: voice

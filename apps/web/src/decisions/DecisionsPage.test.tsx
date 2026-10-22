@@ -87,6 +87,17 @@ describe('DecisionsPage', () => {
     expect(row78).not.toMatch(/ruling \d/)
   })
 
+  it('drops the serial comma in the readings and checks, as the rest of the site does (critique pass 24)', () => {
+    /** A comma before the "and" or "or" that ends a list: "Shop III, Training II, or Training III". */
+    const SERIAL = /,[^,;:.()]*, (?:and|or)\b/
+    expect('Shop II, Shop III, Training II, or Training III').toMatch(SERIAL)
+    expect('card orientation, enemy type, and health').toMatch(SERIAL)
+    expect('Shop II, Shop III, Training II or Training III').not.toMatch(SERIAL)
+    const { container } = render(<DecisionsPage />)
+    const hits = (container.textContent ?? '').match(new RegExp(`[^.;:?]*${SERIAL.source}`, 'g'))
+    expect(hits ?? []).toEqual([])
+  })
+
   it('shows what Spec v2 changed under a decided reading, on its own line (critique pass 16)', () => {
     const { container } = render(<DecisionsPage />)
     const note = (n: number) =>
