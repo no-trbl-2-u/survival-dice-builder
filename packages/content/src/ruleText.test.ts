@@ -353,7 +353,7 @@ describe('rule text from config', () => {
     expect(milestoneOutOfReach('buy-upgrades', any, defaultContent)).toBeNull()
     const two = With((c) => ({ ...c, milestones: { ...c.milestones, upgradesBought: 2 } }))
     expect(milestoneOutOfReach('buy-upgrades', two, defaultContent)).toBeNull()
-    const marked = ['buy-upgrades', 'reveal-tiles']
+    const marked = ['buy-upgrades', 'reveal-tiles', `fire-${m.skillFired}`]
     for (const id of milestoneIds(m).filter((i) => !marked.includes(i)))
       expect(milestoneOutOfReach(id, base, defaultContent)).toBeNull()
   })
@@ -377,6 +377,19 @@ describe('rule text from config', () => {
     expect(ruleLineFor('milestones.level', cap(4), defaultContent)).toBe(`Reach level 5 (${out}).`)
     expect(milestoneOutOfReach('reach-level', cap(5), defaultContent)).toBeNull()
     expect(milestoneOutOfReach('reach-level', cap(null), defaultContent)).toBeNull()
+  })
+
+  it('milestones: "Fire Arcane Rain" is marked out of reach while Build cards buy only Training I (11.8, row 78)', () => {
+    const out =
+      'out of reach: a level 3 Skill needs Training III, and Build cards can buy only Training I'
+    expect(milestoneOutOfReach('fire-arcane-rain', base, defaultContent)).toBe(out)
+    expect(ruleLineFor('milestones.skillFired', base, defaultContent)).toBe(
+      `Fire Arcane Rain (${out}).`,
+    )
+    expect(milestoneOutOfReach('fire-cleave', base, defaultContent)).toBeNull()
+    expect(milestoneOutOfReach('fire-strike', base, defaultContent)).toBeNull()
+    const any = With((c) => ({ ...c, rulings: { ...c.rulings, buildLevels: 'any' } }))
+    expect(milestoneOutOfReach('fire-arcane-rain', any, defaultContent)).toBeNull()
   })
 
   it('/config: the fields a phrase reads get that phrase; others get none', () => {

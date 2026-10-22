@@ -56,6 +56,9 @@ test('/play: a full seeded solo run to the summary, then a replayable export', a
     'Buy 3 base upgrades (out of reach: Build cards can buy only Shop I and Training I)',
   )
   await expect(summary).toContainText('Reveal 10 tiles (out of reach: the tile deck holds 8 tiles)')
+  await expect(summary).toContainText(
+    'Fire Arcane Rain (out of reach: a level 3 Skill needs Training III, and Build cards can buy only Training I)',
+  )
   await expect(page.getByTestId('play-log')).toContainText('The run ends.')
 
   const download = page.waitForEvent('download')

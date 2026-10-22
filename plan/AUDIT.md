@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-22 (pass 116, cloud tick)
+
+Pass 115's "Reach level 5" row shipped (23f95a5). The critique gate is closed (pass 23, 8 commits ago, under 24 hours) and the expand gate is closed (pass 15, 13 commits ago, under 48 hours). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Checked this pass: the last milestone kind `milestoneOutOfReach` did not answer, `fire-<skill>`. The default "Fire Arcane Rain" cannot be met: Arcane Rain is a level 3 Skill, a draft offers Skills only up to the open Training level (11.8), and under `rulings.buildLevels: "levelled"` Build cards buy only Training I (row 78). The run summary showed it as a plain miss on every default run, a 2.8 (impact 4, ease 7). It now reads "out of reach: a level 3 Skill needs Training III, and Build cards can buy only Training I" on the run summary and the /config milestone line; a ruleText test and the full-run e2e pin it.
+
+## Top 5 findings (scored)
+
+### [x] [2.8] /play and /config: "Fire Arcane Rain" is not marked out of reach while Build cards buy only Training I (audit, pass 116)
+- category: tests
+- impact: 4
+- ease: 7
+- next: mark `fire-<skill>` in `milestoneOutOfReach` when no reachable Training upgrade opens the Skill's level
+- issue: #169
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords or closes the item
+
 # Site audit — 2026-10-21 (pass 115, cloud tick)
 
 Pass 114's rule-reading order row shipped (92706e6). The critique gate is closed (pass 23, 7 commits ago, under 24 hours) and the expand gate is closed (pass 15, 12 commits ago, under 48 hours). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. The critique queue has no other row the loop can ship but the phase-sized sim-bot row. Checked this pass: `milestoneOutOfReach` against every milestone kind, the part of the "Milestones a default run can reach" candidate still open. It marked upgrades and tiles but not "Reach level 5" when /config's Maximum level is below 5, so the run summary showed that milestone as missed with no reason, a 2.7 (impact 3, ease 9). It now reads "out of reach: the level stops at 4" on the run summary and the /config milestone line, and a ruleText test pins it.
@@ -17,7 +55,7 @@ Pass 114's rule-reading order row shipped (92706e6). The critique gate is closed
 - ease: 9
 - next: mark `reach-level` in `milestoneOutOfReach` when `options.maxLevel` is below `milestones.level`
 - issue: #168
-- fixed: (this commit)
+- fixed: 23f95a5
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

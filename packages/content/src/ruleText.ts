@@ -584,15 +584,33 @@ export function upgradesReachable(
  * Why a milestone cannot be met under this config and content, or null when it can be:
  * "out of reach: Build cards can buy only Shop I and Training I", or "out of reach: the tile
  * deck holds 8 tiles" (the Base tile starts on the map and is never revealed), or "out of
- * reach: the level stops at 4" (a maximum level below the milestone's).
+ * reach: the level stops at 4" (a maximum level below the milestone's), or "out of reach: a level 3
+ * Skill needs Training III, and Build cards can buy only Training I" (Skills are drafted from the
+ * open Training level; starter Skills are always held).
  *
- * @rule 17, 18.1, OPEN-QUESTIONS rows 4, 78
+ * @rule 11.4, 11.8, 17, 18.1, OPEN-QUESTIONS rows 4, 78
  */
 export function milestoneOutOfReach(
   id: string,
   config: GameConfig,
-  content: Pick<Content, 'cards' | 'upgrades' | 'tiles'>,
+  content: Pick<Content, 'cards' | 'upgrades' | 'tiles' | 'skills'>,
 ): string | null {
+  if (id.startsWith('fire-')) {
+    const skillId = id.slice('fire-'.length)
+    const skill = content.skills.find((s) => s.id === skillId)
+    if (!skill || config.player.starterSkills.includes(skillId)) return null
+    const training = upgradesReachable(config, content).filter((u) => u.track === 'training')
+    if (training.some((u) => u.opensLevel >= skill.level)) return null
+    const needs = content.upgrades.find(
+      (u) => u.track === 'training' && u.opensLevel >= skill.level,
+    )
+    const names = training.map((u) => u.name)
+    const list = names.length === 0 ? 'no Training upgrade' : `only ${names.join(' and ')}`
+    const what = `a level ${skill.level} Skill`
+    return needs
+      ? `out of reach: ${what} needs ${needs.name}, and Build cards can buy ${list}`
+      : `out of reach: no Training upgrade opens ${what}`
+  }
   if (id === 'reveal-tiles') {
     const deck = content.tiles.filter((t) => t.kind !== 'base').length
     if (deck >= config.milestones.tilesRevealed) return null
