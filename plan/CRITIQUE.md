@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-21 at commit 14de3ef
-> Pass count: 23
+> Last pass: 2026-10-22 at commit 3baaf7b
+> Pass count: 24
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /play — the folded milestone count includes milestones the list marks out of reach
+- pass: 24 (commit 3baaf7b)
+- viewport: desktop
+- category: comprehension
+- observation: The Base panel summary reads "Milestones: 0 of 8 met" under the default rules, but 3 of the 8 (Buy 3 base upgrades, Reveal 10 tiles, Fire Arcane Rain) are marked out of reach in the list below it. The folded line does not say that only 5 can be met.
+- evidence: `apps/web/src/play/BasePanel.tsx:105` counts `milestoneIds(state.config.milestones).length`, with no out-of-reach filter
+- suggested fix: Add the out-of-reach count to the summary line, e.g. "Milestones: 0 of 8 met (3 out of reach)".
+- source: web-fetch
+
+### [MED] /decisions — rule reading 78 does not name "Fire Arcane Rain" as a milestone it blocks
+- pass: 24 (commit 3baaf7b)
+- viewport: desktop
+- category: comprehension
+- observation: /play and /config mark "Fire Arcane Rain" out of reach because Build cards buy only Training I (since 8c3b940). Row 78 is the reading for that cause, but it names only "Buy 3 base upgrades". "Arcane Rain" is not on /decisions, so the designer is not told about the second blocked milestone.
+- evidence: `OPEN-QUESTIONS.md` has no "Arcane" match; /config "Fire Arcane Rain (out of reach: a level 3 Skill needs Training III, and Build cards can buy only Training I)."
+- suggested fix: Add to row 78's question in `OPEN-QUESTIONS.md`: "and "Fire Arcane Rain" cannot be met (a level 3 Skill needs Training III)".
+- source: web-fetch
+
+### [MED] /config — each proposal's measured result is one long sentence with test-harness words
+- pass: 24 (commit 3baaf7b)
+- viewport: desktop
+- category: voice
+- observation: The measured text chains clauses with a semicolon and uses "middle half" and "runs that reach the sim cap", which no page explains. Lines such as "median end round 10 with the standard rules, 10 with this on" read as no change without saying so. Not the short STE style in bearings.
+- evidence: `packages/content/src/proposals.ts:138` (`batchText`)
+- suggested fix: Split into short sentences per bot ("Defender bot: runs end in round 10 (no change). Runs that never end: 26, now 1.") and explain the sim cap once in the section intro.
+- source: web-fetch
+
+### [LOW] /config — the Milestones section does not name "Defeat an elite"
+- pass: 24 (commit 3baaf7b)
+- viewport: desktop
+- category: comprehension
+- observation: /config lists 7 milestone lines; the /play list and count have 8. "Defeat an elite" has no setting, so /config never names it and the two pages give different milestone counts.
+- evidence: `packages/content/src/ruleText.ts:529` always includes `defeat-elite`; no "Defeat an elite" text under `apps/web/src/config/`
+- suggested fix: Add a read-only line to the /config Milestones section: "Defeat an elite (always on; no setting)."
+- source: web-fetch
+
+### [LOW] /decisions — rule reading 4 says "unreachable with 8 non-base tiles"; /play and /config say "out of reach"
+- pass: 24 (commit 3baaf7b)
+- viewport: desktop
+- category: voice
+- observation: One state, two words, plus a data-style phrase ("non-base"). /play and /config say "out of reach: the tile deck holds 8 tiles".
+- evidence: `OPEN-QUESTIONS.md:19` ""Reveal 10 tiles" is unreachable with 8 non-base tiles."
+- suggested fix: Reword row 4's question to ""Reveal 10 tiles" is out of reach: the tile deck holds 8 tiles."
+- source: web-fetch
+
+### [LOW] /decisions — rule readings and checks still use the serial comma
+- pass: 24 (commit 3baaf7b)
+- viewport: desktop
+- category: voice
+- observation: The site dropped the serial comma (f5a5c17) and tests ban it in ruleText, proposals and /config copy, but /decisions text comes from `OPEN-QUESTIONS.md` and `plan/AUDIT.md`, which the tests do not scan.
+- evidence: /decisions row 78 "Shop II, Shop III, Training II, or Training III"; check "Art direction glance check" "card orientation, enemy type, and health"
+- suggested fix: Drop the comma before "and"/"or" in those rows and extend the serial-comma test to the /decisions sources.
+- source: web-fetch
 
 ### [MED] /decisions — three balance checks give three different bot results
 - pass: 21 (commit a6dc51f)
