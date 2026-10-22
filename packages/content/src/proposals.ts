@@ -134,8 +134,13 @@ export function adviceText(proposal: Proposal): string {
   return `Recommendation from ${source}: ${ADVICE[proposal.advice]}.`
 }
 
+/** A count before and after: "10 (no change)" or "26, now 1". */
+const change = (before: number, after: number) =>
+  before === after ? `${before} (no change)` : `${before}, now ${after}`
+
+/** One bot's two batches in short sentences; a stalled run is one the sim stopped mid-run. */
 const batchText = (bot: string, a: Batch, b: Batch) =>
-  `${bot}: median end round ${a.median} with the standard rules, ${b.median} with this on (middle half ${a.middle.join('-')} and ${b.middle.join('-')}); runs that reach the sim cap ${a.stalled} and ${b.stalled}.`
+  `${bot}: the median run ends in round ${change(a.median, b.median)}. Runs stopped with the base still standing: ${change(a.stalled, b.stalled)}.`
 
 /** The measured effect in plain words, or the reason there is none. */
 export function measuredText(

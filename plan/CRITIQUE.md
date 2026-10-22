@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — each proposal's measured result is one long sentence with test-harness words
-- pass: 24 (commit 3baaf7b)
-- viewport: desktop
-- category: voice
-- observation: The measured text chains clauses with a semicolon and uses "middle half" and "runs that reach the sim cap", which no page explains. Lines such as "median end round 10 with the standard rules, 10 with this on" read as no change without saying so. Not the short STE style in bearings.
-- evidence: `packages/content/src/proposals.ts:138` (`batchText`)
-- suggested fix: Split into short sentences per bot ("Defender bot: runs end in round 10 (no change). Runs that never end: 26, now 1.") and explain the sim cap once in the section intro.
-- source: web-fetch
-
 ### [LOW] /config — the Milestones section does not name "Defeat an elite"
 - pass: 24 (commit 3baaf7b)
 - viewport: desktop
@@ -92,7 +83,18 @@
 
 ## Done
 
-### [x] [MED] /play — the folded milestone count includes milestones the list marks out of reach (addressed at (this commit))
+### [x] [MED] /config — each proposal's measured result is one long sentence with test-harness words (addressed at (this commit))
+- pass: 24 (commit 3baaf7b)
+- viewport: desktop
+- category: voice
+- observation: The measured text chains clauses with a semicolon and uses "middle half" and "runs that reach the sim cap", which no page explains. Lines such as "median end round 10 with the standard rules, 10 with this on" read as no change without saying so. Not the short STE style in bearings.
+- evidence: `packages/content/src/proposals.ts:138` (`batchText`)
+- suggested fix: Split into short sentences per bot ("Defender bot: runs end in round 10 (no change). Runs that never end: 26, now 1.") and explain the sim cap once in the section intro.
+- source: web-fetch
+- issue: #174
+- resolution: Each bot's result is now two short sentences: "Defender bot: the median run ends in round 10 (no change). Runs stopped with the base still standing: 26, now 1." The middle half is left out of the page (it stays in the data), and the new wording says what a stalled run is, so no intro is needed. A proposals test bans the semicolon, "middle half" and "sim cap" in every measured line.
+
+### [x] [MED] /play — the folded milestone count includes milestones the list marks out of reach (addressed at 7fbb0b8)
 - pass: 24 (commit 3baaf7b)
 - viewport: desktop
 - category: comprehension

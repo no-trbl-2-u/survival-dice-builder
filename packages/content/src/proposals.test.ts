@@ -95,8 +95,10 @@ describe('proposals (rule 18.1)', () => {
   it('rule 18.1: the measured and advice lines are plain words', () => {
     const reveal = measuredText(byId('forced-reveal'))
     expect(reveal).toContain('Measured under engagements, 200 bot runs each, solo.')
-    expect(reveal).toContain('Defender bot: median end round 10 with the standard rules, 10')
-    expect(reveal).toContain('runs that reach the sim cap 26 and 1')
+    expect(reveal).toContain('Defender bot: the median run ends in round 10 (no change).')
+    expect(reveal).toContain('Runs stopped with the base still standing: 26, now 1.')
+    for (const p of defaultProposals)
+      expect(measuredText(p), p.id).not.toMatch(/middle half|sim cap|;/)
     expect(measuredText(byId('seat-scaling'))).toContain('4 seats')
     expect(adviceText(byId('forced-reveal'))).toBe(
       'Recommendation from the bot batches: turn it on.',
