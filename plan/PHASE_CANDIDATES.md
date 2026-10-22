@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-20 at commit 016c38a
-> Pass count: 15
+> Last pass: 2026-10-22 at commit d720367
+> Pass count: 16
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -10,7 +10,7 @@
 
 ## Pending
 
-### [ ] [score 4.5] /decisions checks that stay true: a test fails when a check names a decided row or a removed option
+### [ ] [score 5.0] /decisions checks that stay true: a test fails when a check names a decided row or a removed option
 - proposed: 2026-10-19, expand pass 14
 - source signals:
   - Critique passes 20 and 21, four pending rows on one surface, one cause: [MED] the "Spec v2 design work" check lists rows 7, 30, 49 and 55, all decided 2026-10-11; [MED] the "Structural v2 questions" check asks the designer to try options for rows 65 and 69, decided and removed; [MED] three balance checks (2026-10-03, two of 2026-10-04) give median end rounds 14, 5 and 6 with nothing saying which is current; [LOW] "Reset /config once" names a URL path and a date a visitor cannot check.
@@ -25,7 +25,8 @@
 - conflicts: none. Plan housekeeping, a parser and a test; no rule changes. Closing a check is not deciding it: a check that still needs the designer stays.
 - ruling audit: OPEN-QUESTIONS rows 7, 30, 49, 55, 65, 69 (decided 2026-10-11) read; Spec v2 untouched. Loop scope: in (tests, plan housekeeping).
 - re-evidence (expand pass 15): the four /decisions rows are now the only Pending critique rows the site can act on, and the only rows above `/iterate`'s 3.0 bar (8.1 each with the MED bias). They live in `[needs-user-call]` items, which `/iterate` must keep verbatim, so audit passes 101 to 103 drained LOW rows around them, and pass 104 found nothing else at or above 3.0 and handed to `/expand`. The page still shows the five stale checks a day after critique pass 21. Score raised from 3.5 to 4.5: this is now what holds the queue, and only `/oversight` can clear the lines or promote the guard.
-- last re-evidenced: 2026-10-20
+- re-evidence (expand pass 16): critique pass 24 (6116ce3) added two LOW rows with the same cause, text that reaches /decisions from `OPEN-QUESTIONS.md` and `plan/AUDIT.md` and that no test reads: rule reading 4 says "unreachable with 8 non-base tiles" where /play and /config say "out of reach: the tile deck holds 8 tiles"; and row 78 and the "Art direction glance check" keep the serial comma that f5a5c17 dropped from the site and that tests now ban in ruleText, proposals and /config copy. The four rows from passes 20 and 21 are still pending, so 6 of the 8 Pending critique rows sit on this one surface. Scope gains one line: the voice tests (serial comma, "out of reach") also scan the /decisions sources. Score raised from 4.5 to 5.0: two passes in a row found more of the same, and `/iterate` cannot reword `[needs-user-call]` items.
+- last re-evidenced: 2026-10-22
 
 ### [ ] [score 3.5] Milestones a default run can reach: every milestone reachable, or marked out of reach with its reason
 - proposed: 2026-10-17, expand pass 13
@@ -44,7 +45,8 @@
 - conflicts: [needs-user-call] on the values only. The phase changes no rule number; rows 4 and 78 stay as they are until the designer decides.
 - ruling audit: Spec v2 17 (milestones), 11.4, 12.1; OPEN-QUESTIONS rows 4 (pending-spec), 45 (decided), 78 (proposed) read. Loop scope: in (rule-text sync, tests, sim report).
 - progress (expand pass 14): f7dc176 extended `milestoneOutOfReach` (`packages/content/src/ruleText.ts:588`) to `reveal-tiles`, so both unreachable milestones are now marked on the run summary and /config. The visible half is done. Still missing: the content test that fails on a new milestone that is neither reachable nor marked, the per-milestone hit rate in the sim report, and the one `/oversight` question on rows 4 and 78. Score held at 3.5.
-- last re-evidenced: 2026-10-19
+- progress (expand pass 16): `/iterate` shipped most of the scope one row at a time. 23f95a5 (level) and 8c3b940 (Arcane Rain) give every milestone kind an out-of-reach answer; e2f727e makes the sim report list every milestone from 0, which is the hit-rate half; 3baaf7b and 7fbb0b8 show the list during the run with "(3 out of reach)". The default batch now reads, on seeds 1-200: round 5 in 200, an elite in 39, round 10 in 4, and 0 for the other 5. Three of the 5 are out of reach (Arcane Rain, 3 upgrades, 10 tiles); round 15 and level 5 are reachable but no bot run gets there (the longest run ends at round 13). Critique pass 24 [LOW]: /config names 7 milestones and /play 8, because "Defeat an elite" has no setting. Still missing: the content test that fails on a new milestone with neither a path nor a reason, and the `/oversight` question, which now covers 5 milestones rather than 2 (rows 4 and 78 plus the two the bot never reaches). Score held at 3.5: the scope is smaller and the designer question larger.
+- last re-evidenced: 2026-10-22
 
 ### [ ] [score 1.0] The engagement modal reads on its own: who took the damage, what "in range" counts, when cards play
 - proposed: 2026-10-14, expand pass 11
