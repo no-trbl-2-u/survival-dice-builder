@@ -1,4 +1,4 @@
-import { defaultContent } from '@survival/content'
+import { defaultContent, milestoneIds } from '@survival/content'
 import { describe, expect, it } from 'vitest'
 import { csvField, toCsv } from './format.ts'
 import {
@@ -43,7 +43,7 @@ describe('playRun', () => {
 describe('the default batch (engagements, designer 2026-10-09)', () => {
   it('matches the engagement summary on seeds 1-200', () => {
     expect(config.combat.model).toBe('engage')
-    const s = summarize(runBatch(config, 200, 1))
+    const s = summarize(runBatch(config, 200, 1), milestoneIds(config.milestones))
     // Spec v2 (phase 41): Build I buys tier I only, so no run buys 3 upgrades.
     expect([s.medianEndRound, s.middleHalf, s.minEndRound, s.maxEndRound]).toEqual([
       6,
@@ -52,10 +52,16 @@ describe('the default batch (engagements, designer 2026-10-09)', () => {
       13,
     ])
     expect(s.causes).toEqual({ base: 200 })
+    // Every milestone is listed, so the ones no run meets read 0 (rows 4, 78).
     expect(s.milestones).toEqual({
       'survive-round-5': 200,
-      'defeat-elite': 39,
       'survive-round-10': 4,
+      'survive-round-15': 0,
+      'defeat-elite': 39,
+      'fire-arcane-rain': 0,
+      'buy-upgrades': 0,
+      'reveal-tiles': 0,
+      'reach-level': 0,
     })
   }, 30_000) // 200 full runs: past the 5 s default when the gate runs every suite at once
 })
@@ -123,6 +129,10 @@ describe('summary maths', () => {
     expect(s.errors).toBe(1)
     expect(s.causes).toEqual({ base: 1, stalled: 1, error: 1 })
     expect(s.milestones).toEqual({ 'survive-round-5': 3 })
+    expect(summarize([run(9, 'base')], ['survive-round-5', 'reach-level']).milestones).toEqual({
+      'survive-round-5': 1,
+      'reach-level': 0,
+    })
     expect(levelAt([run(9, 'base')], 3)).toBe(2)
     expect(levelAt([run(9, 'base')], 6)).toBeNaN()
     expect(s.totals).toEqual({ ...EMPTY_TALLY, enemiesDefeated: 6 })

@@ -202,15 +202,21 @@ export function levelAt(results: readonly RunResult[], round: number): number {
   return quantile(at, 0.5)
 }
 
-/** Summarizes a batch. */
-export function summarize(results: readonly RunResult[]): Summary {
+/**
+ * Summarizes a batch. `milestones` (the config's `milestoneIds`) are counted from 0, so a
+ * milestone no run meets reads 0 instead of going missing.
+ */
+export function summarize(
+  results: readonly RunResult[],
+  milestones: readonly string[] = [],
+): Summary {
   const ends = results.map((r) => r.endRound).sort((a, b) => a - b)
   const levels = results.map((r) => r.level).sort((a, b) => a - b)
   const caps = results
     .flatMap((r) => (r.capReachedRound === null ? [] : [r.capReachedRound]))
     .sort((a, b) => a - b)
-  const count = (keys: readonly string[]) =>
-    keys.reduce<Record<string, number>>((acc, k) => ({ ...acc, [k]: (acc[k] ?? 0) + 1 }), {})
+  const count = (keys: readonly string[], seed: Record<string, number> = {}) =>
+    keys.reduce<Record<string, number>>((acc, k) => ({ ...acc, [k]: (acc[k] ?? 0) + 1 }), seed)
   return {
     runs: results.length,
     errors: results.filter((r) => r.cause === 'error').length,
@@ -220,7 +226,10 @@ export function summarize(results: readonly RunResult[]): Summary {
     minEndRound: ends[0] ?? Number.NaN,
     maxEndRound: ends.at(-1) ?? Number.NaN,
     causes: count(results.map((r) => r.cause)),
-    milestones: count(results.flatMap((r) => r.milestones)),
+    milestones: count(
+      results.flatMap((r) => r.milestones),
+      Object.fromEntries(milestones.map((id) => [id, 0])),
+    ),
     medianLevel: quantile(levels, 0.5),
     levelAt: { '3': levelAt(results, 3), '6': levelAt(results, 6), '9': levelAt(results, 9) },
     capReached: caps.length,

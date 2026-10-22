@@ -6,6 +6,7 @@ import {
   defaultConfigMeta,
   defaultContent,
   GameConfigSchema,
+  milestoneIds,
   parseQuestions,
   parseUserCalls,
   rulesAsPlayedMarkdown,
@@ -128,7 +129,11 @@ const seed = Number(args.get('seed') ?? 1)
 
 if (command === 'compare') {
   const side = (config: string, sideOptions: RunOptions) => {
-    const summary = summarize(runBatch(readConfig(config), runs, seed, sideOptions))
+    const read = readConfig(config)
+    const summary = summarize(
+      runBatch(read, runs, seed, sideOptions),
+      milestoneIds(read.milestones),
+    )
     const policy = sideOptions.policy === 'default' ? '' : ` (${sideOptions.policy} bot)`
     return { name: `${config}${policy}`, summary }
   }
@@ -156,6 +161,7 @@ if (command === 'sweep') {
     const config = cell.values.reduce((c, v) => setPath(c, v.path, v.value), base)
     const summary = summarize(
       runBatch(config, runs, seed, { seats: cell.seats, policy: cell.policy }),
+      milestoneIds(config.milestones),
     )
     return { cell, summary }
   })
@@ -242,7 +248,7 @@ const config = named
   : readConfig(args.get('config'))
 
 const results = runBatch(config, runs, seed, options)
-const summary = summarize(results)
+const summary = summarize(results, milestoneIds(config.milestones))
 console.log(describe(summary, BAND))
 
 const out = args.get('out')
