@@ -234,8 +234,13 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
   }
   if (type === 'object' && schema.shape) {
     return (
-      <fieldset className={styles.group}>
+      <fieldset className={styles.group} aria-describedby={meta?.help ? `${id}-help` : undefined}>
         <legend>{label}</legend>
+        {meta?.help ? (
+          <p id={`${id}-help`} className={styles.groupHelp}>
+            {meta.help}
+          </p>
+        ) : null}
         {Object.entries(schema.shape).map(([key, child]) => (
           <Field
             key={key}

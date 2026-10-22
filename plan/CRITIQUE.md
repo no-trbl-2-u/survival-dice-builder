@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Milestones section does not name "Defeat an elite"
-- pass: 24 (commit 3baaf7b)
-- viewport: desktop
-- category: comprehension
-- observation: /config lists 7 milestone lines; the /play list and count have 8. "Defeat an elite" has no setting, so /config never names it and the two pages give different milestone counts.
-- evidence: `packages/content/src/ruleText.ts:529` always includes `defeat-elite`; no "Defeat an elite" text under `apps/web/src/config/`
-- suggested fix: Add a read-only line to the /config Milestones section: "Defeat an elite (always on; no setting)."
-- source: web-fetch
-
 ### [LOW] /decisions — rule reading 4 says "unreachable with 8 non-base tiles"; /play and /config say "out of reach"
 - pass: 24 (commit 3baaf7b)
 - viewport: desktop
@@ -83,7 +74,18 @@
 
 ## Done
 
-### [x] [MED] /config — each proposal's measured result is one long sentence with test-harness words (addressed at (this commit))
+### [x] [LOW] /config — the Milestones section does not name "Defeat an elite" (addressed at (this commit))
+- pass: 24 (commit 3baaf7b)
+- viewport: desktop
+- category: comprehension
+- observation: /config lists 7 milestone lines; the /play list and count have 8. "Defeat an elite" has no setting, so /config never names it and the two pages give different milestone counts.
+- evidence: `packages/content/src/ruleText.ts:529` always includes `defeat-elite`; no "Defeat an elite" text under `apps/web/src/config/`
+- suggested fix: Add a read-only line to the /config Milestones section: "Defeat an elite (always on; no setting)."
+- source: web-fetch
+- issue: #175
+- resolution: The Milestones section on /config now opens with a note, "Defeat an elite is always a milestone and has no setting.", so the page names all 8 milestones, as /play does. A config group may now carry help in `config.meta.json`; /config shows it under the section name and links it as the section's description. A configMeta test checks that every milestone is named in a field line or in that note, and the config e2e checks the note.
+
+### [x] [MED] /config — each proposal's measured result is one long sentence with test-harness words (addressed at d720367)
 - pass: 24 (commit 3baaf7b)
 - viewport: desktop
 - category: voice

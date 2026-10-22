@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { defaultContent } from './content.ts'
 import { configMetaPaths, configMetaProblems, defaultConfigMeta, metaFor } from './configMeta.ts'
+import { milestoneIds, milestoneLabel, ruleLineFor } from './ruleText.ts'
 
 describe('config metadata (rule 18.1)', () => {
   it('every config path has an entry, every field has help and a rule, every option a phrase', () => {
@@ -61,6 +62,19 @@ describe('config metadata (rule 18.1)', () => {
       'rulings.healTargets',
       'rulings.eliteReplacement',
     ])
+  })
+
+  it('/config names every milestone: in a field line, or in the Milestones note (17)', () => {
+    const config = defaultContent.config
+    const shown = [
+      defaultConfigMeta.milestones?.help ?? '',
+      ...configMetaPaths(config)
+        .filter((p) => p.path.startsWith('milestones.'))
+        .map((p) => ruleLineFor(p.path, config, defaultContent) ?? ''),
+    ].join(' ')
+    for (const id of milestoneIds(config.milestones))
+      expect(shown).toContain(milestoneLabel(id, config.milestones, defaultContent))
+    expect(defaultConfigMeta.milestones?.help).toContain('Defeat an elite')
   })
 
   it('the miniature limit help states the phase 21 rule', () => {

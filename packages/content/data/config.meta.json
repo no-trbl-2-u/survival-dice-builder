@@ -318,7 +318,8 @@
     "range": [1, 4]
   },
   "milestones": {
-    "label": "Milestones"
+    "label": "Milestones",
+    "help": "Defeat an elite is always a milestone and has no setting."
   },
   "milestones.surviveRounds": {
     "label": "Survive to rounds",

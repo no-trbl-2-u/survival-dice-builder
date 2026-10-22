@@ -1,6 +1,9 @@
 import { z } from 'zod'
 
-/** Copy for one config path: a group has only a label; a field adds help and its rules section. */
+/**
+ * Copy for one config path: a group has a label and may add help; a field adds help and its
+ * rules section.
+ */
 export const ConfigMetaEntrySchema = z.strictObject({
   label: z.string().min(1),
   help: z.string().min(1).optional(),

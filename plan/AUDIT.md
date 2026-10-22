@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-22 (pass 121, cloud tick)
+
+Pass 120's /config measured line row shipped (d720367), and expand pass 16 ran at b4f5814 with no new candidates. The critique gate is closed (pass 24, 5 commits ago, under 24 hours) and the expand gate is closed (pass 16, 0 commits ago). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Of pass 24's rows the three left are LOW; the top one is the /config Milestones row at 3.2 (impact 4, ease 8): /config listed 7 milestone lines while /play lists 8, because "Defeat an elite" has no setting. A config group may now carry help in `config.meta.json`, and the Milestones section opens with "Defeat an elite is always a milestone and has no setting." A configMeta test checks that every milestone is named on /config, and the config e2e checks the note. Next in line: rule reading 4's wording (2.7) and the /decisions serial comma (2.1).
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /config: the Milestones section does not name "Defeat an elite" (critique LOW, pass 24)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: show group help on /config and give the Milestones group a note naming the milestone with no setting
+- issue: #175
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [2.7] /decisions: rule reading 4 says "unreachable with 8 non-base tiles" (critique LOW, pass 24)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: reword row 4's question to "out of reach: the tile deck holds 8 tiles"
+
 # Site audit — 2026-10-22 (pass 120, cloud tick)
 
 Pass 119's base panel row shipped (7fbb0b8). The critique gate is closed (pass 24, 3 commits ago, under 24 hours) and the expand gate is closed (pass 15, 19 commits ago, under 48 hours). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Of pass 24's rows the top one the loop can ship is the /config measured line at 5.3 (impact 5, ease 7, bias x1.5): each proposal's bot result was one long sentence with a semicolon, "middle half" and "runs that reach the sim cap", and an unchanged median read as two numbers. Each bot is now two short sentences: "the median run ends in round 10 (no change)" and "Runs stopped with the base still standing: 26, now 1." The new words explain the stalled runs, so no section intro is needed. A proposals test bans the semicolon and the two harness phrases in every measured line.
@@ -17,7 +55,7 @@ Pass 119's base panel row shipped (7fbb0b8). The critique gate is closed (pass 2
 - ease: 7
 - next: split `batchText` into short sentences per bot and say "no change" when a count is the same
 - issue: #174
-- fixed: (this commit)
+- fixed: d720367
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)
