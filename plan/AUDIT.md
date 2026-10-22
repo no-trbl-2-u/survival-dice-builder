@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-22 (pass 122, cloud tick)
+
+Pass 121's /config Milestones row shipped (9dacefa). The critique gate is closed (pass 24, 6 commits ago, under 24 hours) and the expand gate is closed (pass 16, 2 commits ago). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Of pass 24's rows the top one the loop can ship is rule reading 4's wording at 2.7 (impact 3, ease 9): /decisions said ""Reveal 10 tiles" is unreachable with 8 non-base tiles" while /play and /config say "out of reach: the tile deck holds 8 tiles". Row 4 now uses the /play words, docs/DECISIONS.md is regenerated, and a decisions test builds the expected question from the same label and reason /play shows. Next in line: the /decisions serial comma (2.1), then the sim bot row.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /decisions: rule reading 4 says "unreachable with 8 non-base tiles" (critique LOW, pass 24)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: reword row 4's question to "out of reach: the tile deck holds 8 tiles"
+- issue: #176
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [2.1] /decisions: rule readings and checks still use the serial comma (critique LOW, pass 24)
+- category: external-critique (voice)
+- impact: 3
+- ease: 7
+- next: drop the comma before "and"/"or" in the named rows and extend the serial-comma test to the /decisions sources
+
 # Site audit — 2026-10-22 (pass 121, cloud tick)
 
 Pass 120's /config measured line row shipped (d720367), and expand pass 16 ran at b4f5814 with no new candidates. The critique gate is closed (pass 24, 5 commits ago, under 24 hours) and the expand gate is closed (pass 16, 0 commits ago). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. Of pass 24's rows the three left are LOW; the top one is the /config Milestones row at 3.2 (impact 4, ease 8): /config listed 7 milestone lines while /play lists 8, because "Defeat an elite" has no setting. A config group may now carry help in `config.meta.json`, and the Milestones section opens with "Defeat an elite is always a milestone and has no setting." A configMeta test checks that every milestone is named on /config, and the config e2e checks the note. Next in line: rule reading 4's wording (2.7) and the /decisions serial comma (2.1).
@@ -17,7 +55,7 @@ Pass 120's /config measured line row shipped (d720367), and expand pass 16 ran a
 - ease: 8
 - next: show group help on /config and give the Milestones group a note naming the milestone with no setting
 - issue: #175
-- fixed: (this commit)
+- fixed: 9dacefa
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

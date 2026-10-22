@@ -293,4 +293,13 @@ describe('decisions', () => {
     const row78 = open.find((r) => r.number === 78)?.question ?? ''
     expect(row78).toContain('"Fire Arcane Rain"')
   })
+
+  it('words row 4 as /play and /config word its milestone: out of reach (critique pass 24)', () => {
+    const open = openQuestions(parseQuestions(questionsMd))
+    const label = milestoneLabel('reveal-tiles', config.milestones, defaultContent)
+    const reason = milestoneOutOfReach('reveal-tiles', config, defaultContent)
+    const row4 = open.find((r) => r.number === 4)?.question ?? ''
+    expect(row4).toBe(`"${label}" is ${reason}.`)
+    expect(row4).not.toMatch(/unreachable|non-base/)
+  })
 })

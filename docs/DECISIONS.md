@@ -12,7 +12,7 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 
 ## Rule readings
 
-### 4. "Reveal 10 tiles" is unreachable with 8 non-base tiles (rule 17)
+### 4. "Reveal 10 tiles" is out of reach: the tile deck holds 8 tiles (rule 17)
 
 - Status: pending-spec 2026-10-04 (review with the new tile set)
 - Reading: **Reveal 8**, every tile that can be revealed: the milestone fires when exploration has placed the whole tile deck. To review with the new tile set.

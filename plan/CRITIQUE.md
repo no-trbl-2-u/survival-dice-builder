@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — rule reading 4 says "unreachable with 8 non-base tiles"; /play and /config say "out of reach"
-- pass: 24 (commit 3baaf7b)
-- viewport: desktop
-- category: voice
-- observation: One state, two words, plus a data-style phrase ("non-base"). /play and /config say "out of reach: the tile deck holds 8 tiles".
-- evidence: `OPEN-QUESTIONS.md:19` ""Reveal 10 tiles" is unreachable with 8 non-base tiles."
-- suggested fix: Reword row 4's question to ""Reveal 10 tiles" is out of reach: the tile deck holds 8 tiles."
-- source: web-fetch
-
 ### [LOW] /decisions — rule readings and checks still use the serial comma
 - pass: 24 (commit 3baaf7b)
 - viewport: desktop
@@ -74,7 +65,18 @@
 
 ## Done
 
-### [x] [LOW] /config — the Milestones section does not name "Defeat an elite" (addressed at (this commit))
+### [x] [LOW] /decisions — rule reading 4 says "unreachable with 8 non-base tiles"; /play and /config say "out of reach" (addressed at (this commit))
+- pass: 24 (commit 3baaf7b)
+- viewport: desktop
+- category: voice
+- observation: One state, two words, plus a data-style phrase ("non-base"). /play and /config say "out of reach: the tile deck holds 8 tiles".
+- evidence: `OPEN-QUESTIONS.md:19` ""Reveal 10 tiles" is unreachable with 8 non-base tiles."
+- suggested fix: Reword row 4's question to ""Reveal 10 tiles" is out of reach: the tile deck holds 8 tiles."
+- source: web-fetch
+- issue: #176
+- resolution: Row 4's question now reads ""Reveal 10 tiles" is out of reach: the tile deck holds 8 tiles.", the words /play and /config use for that milestone. docs/DECISIONS.md is regenerated. A decisions test builds the expected question from the same milestone label and out-of-reach reason /play shows, and bans "unreachable" and "non-base" in it.
+
+### [x] [LOW] /config — the Milestones section does not name "Defeat an elite" (addressed at 9dacefa)
 - pass: 24 (commit 3baaf7b)
 - viewport: desktop
 - category: comprehension
