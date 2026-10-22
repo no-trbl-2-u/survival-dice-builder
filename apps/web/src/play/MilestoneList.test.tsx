@@ -1,4 +1,4 @@
-import { defaultContent, milestoneIds } from '@survival/content'
+import { defaultContent, milestoneIds, milestoneOutOfReach } from '@survival/content'
 import { createGame } from '@survival/engine'
 import { cleanup, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -13,13 +13,27 @@ describe('milestones during a run (rules 1.4, 17)', () => {
     const state = { ...createGame(config, 1), milestones: ['survive-round-5'] }
     render(<BasePanel state={state} legal={[]} act={() => {}} />)
     const box = screen.getByTestId('milestone-progress')
-    const total = milestoneIds(config.milestones).length
-    expect(within(box).getByText(`Milestones: 1 of ${total} met`)).toBeTruthy()
+    const ids = milestoneIds(config.milestones)
+    const total = ids.length
+    const out = ids.filter((id) => milestoneOutOfReach(id, config, state.content)).length
+    expect(out).toBe(3)
+    expect(box.querySelector('summary')?.textContent).toBe(
+      `Milestones: 1 of ${total} met (3 out of reach)`,
+    )
     const items = within(box).getAllByRole('listitem', { hidden: true })
     expect(items).toHaveLength(total)
     expect(items[0]?.textContent).toBe('✓ Survive to round 5')
     expect(box.textContent).toContain('– Survive to round 10')
     expect(box.textContent).toContain('Reveal 10 tiles (out of reach: the tile deck holds 8 tiles)')
     expect(box.hasAttribute('open')).toBe(false)
+  })
+
+  it('a met milestone never counts as out of reach, and the count drops at 0', () => {
+    const base = createGame(config, 1)
+    const ids = milestoneIds(config.milestones)
+    const out = ids.filter((id) => milestoneOutOfReach(id, config, base.content))
+    render(<BasePanel state={{ ...base, milestones: out }} legal={[]} act={() => {}} />)
+    const summary = screen.getByTestId('milestone-progress').querySelector('summary')
+    expect(summary?.textContent).toBe(`Milestones: ${out.length} of ${ids.length} met`)
   })
 })

@@ -1,4 +1,4 @@
-import { milestoneIds } from '@survival/content'
+import { milestoneIds, milestoneOutOfReach } from '@survival/content'
 import type { Action, GameState } from '@survival/engine'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { cardText } from './effectText.ts'
@@ -12,12 +12,17 @@ type Props = Readonly<{ state: GameState; legal: readonly Action[]; act: (a: Act
  * The base board: health, the 2 upgrade tracks (bought, next, cost; Buy while a Build is active
  * on the base), and the Shop offers (Buy when the figure is on the base and the price is met).
  * When nothing can be bought it says how buying works, so materials never look stuck. The
- * run's milestones close the panel, folded, with how many are met (rule 1.4).
+ * run's milestones close the panel, folded, with how many are met and how many the config and
+ * content put out of reach (rule 1.4).
  */
 export function BasePanel({ state, legal, act }: Props) {
   const upgrades = ofType(legal, 'buyUpgrade')
   const buys = ofType(legal, 'buyCard')
   const player = state.players[state.current]
+  const ids = milestoneIds(state.config.milestones)
+  const outOfReach = ids.filter(
+    (id) => !state.milestones.includes(id) && milestoneOutOfReach(id, state.config, state.content),
+  ).length
   return (
     <section className={styles.panel} aria-label="Base">
       <h2 className={styles.panelTitle}>
@@ -102,8 +107,8 @@ export function BasePanel({ state, legal, act }: Props) {
       )}
       <details className={styles.milestoneProgress} data-testid="milestone-progress">
         <summary>
-          Milestones: {state.milestones.length} of {milestoneIds(state.config.milestones).length}{' '}
-          met
+          Milestones: {state.milestones.length} of {ids.length} met
+          {outOfReach > 0 ? ` (${outOfReach} out of reach)` : ''}
         </summary>
         <MilestoneList state={state} />
       </details>

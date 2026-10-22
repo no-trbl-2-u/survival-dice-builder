@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — the folded milestone count includes milestones the list marks out of reach
-- pass: 24 (commit 3baaf7b)
-- viewport: desktop
-- category: comprehension
-- observation: The Base panel summary reads "Milestones: 0 of 8 met" under the default rules, but 3 of the 8 (Buy 3 base upgrades, Reveal 10 tiles, Fire Arcane Rain) are marked out of reach in the list below it. The folded line does not say that only 5 can be met.
-- evidence: `apps/web/src/play/BasePanel.tsx:105` counts `milestoneIds(state.config.milestones).length`, with no out-of-reach filter
-- suggested fix: Add the out-of-reach count to the summary line, e.g. "Milestones: 0 of 8 met (3 out of reach)".
-- source: web-fetch
-
 ### [MED] /config — each proposal's measured result is one long sentence with test-harness words
 - pass: 24 (commit 3baaf7b)
 - viewport: desktop
@@ -101,7 +92,18 @@
 
 ## Done
 
-### [x] [MED] /decisions — rule reading 78 does not name "Fire Arcane Rain" as a milestone it blocks (addressed at (this commit))
+### [x] [MED] /play — the folded milestone count includes milestones the list marks out of reach (addressed at (this commit))
+- pass: 24 (commit 3baaf7b)
+- viewport: desktop
+- category: comprehension
+- observation: The Base panel summary reads "Milestones: 0 of 8 met" under the default rules, but 3 of the 8 (Buy 3 base upgrades, Reveal 10 tiles, Fire Arcane Rain) are marked out of reach in the list below it. The folded line does not say that only 5 can be met.
+- evidence: `apps/web/src/play/BasePanel.tsx:105` counts `milestoneIds(state.config.milestones).length`, with no out-of-reach filter
+- suggested fix: Add the out-of-reach count to the summary line, e.g. "Milestones: 0 of 8 met (3 out of reach)".
+- source: web-fetch
+- issue: #173
+- resolution: The base panel summary now reads "Milestones: 0 of 8 met (3 out of reach)" under the default rules; a met milestone never counts as out of reach, and the bracket drops when none is. A unit test pins both cases and the full-run e2e checks the summary shape.
+
+### [x] [MED] /decisions — rule reading 78 does not name "Fire Arcane Rain" as a milestone it blocks (addressed at 289c846)
 - pass: 24 (commit 3baaf7b)
 - viewport: desktop
 - category: comprehension

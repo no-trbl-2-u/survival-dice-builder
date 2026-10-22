@@ -62,7 +62,7 @@ test('/play: a full seeded solo run to the summary, then a replayable export', a
   await expect(page.getByTestId('play-log')).toContainText('The run ends.')
   // The base panel keeps the same list, folded, through the run (rule 1.4).
   const progress = page.getByTestId('milestone-progress')
-  await expect(progress).toContainText(/Milestones: \d of 8 met/)
+  await expect(progress).toContainText(/Milestones: \d of 8 met \(\d out of reach\)/)
   await progress.locator('summary').click()
   await expect(progress).toContainText(
     'Reveal 10 tiles (out of reach: the tile deck holds 8 tiles)',

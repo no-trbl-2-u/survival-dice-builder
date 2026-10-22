@@ -17,13 +17,15 @@ Pass 118's milestone panel row shipped (3baaf7b), and critique pass 24 ran at th
 - ease: 9
 - next: name the milestone in row 78's question and pin it with a decisions test
 - issue: #172
-- fixed: (this commit)
+- fixed: 289c846
 
-### [ ] [7.2] /play: the folded milestone count includes milestones the list marks out of reach (critique MED, pass 24, bias x1.5)
+### [x] [7.2] /play: the folded milestone count includes milestones the list marks out of reach (critique MED, pass 24, bias x1.5)
 - category: external-critique (comprehension)
 - impact: 6
 - ease: 8
 - next: add the out-of-reach count to the base panel summary line
+- issue: #173
+- fixed: (this commit)
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)
