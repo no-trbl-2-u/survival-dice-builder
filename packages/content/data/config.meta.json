@@ -52,7 +52,7 @@
   },
   "deck.presets": {
     "label": "Deck and hand presets",
-    "help": "Each preset has an id, a hand size, and its starter cards with a quantity each. Cards are picked from the card list, so a preset can only name cards that exist.",
+    "help": "Each preset has an id, a hand size and its starter cards with a quantity each. Cards are picked from the card list, so a preset can only name cards that exist.",
     "rule": "18.1, Table 2 (open question 19)"
   },
   "deck.minimumSize": {
@@ -268,7 +268,7 @@
   },
   "draft.everyNRounds": {
     "label": "Draft every N rounds",
-    "help": "With the Training Ground open, a draft happens every N rounds: at 2, in rounds 2, 4, and 6.",
+    "help": "With the Training Ground open, a draft happens every N rounds: at 2, in rounds 2, 4 and 6.",
     "rule": "10.8",
     "range": [1, 6]
   },

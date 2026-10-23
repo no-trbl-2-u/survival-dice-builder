@@ -452,6 +452,17 @@ describe('player copy drops the serial comma', () => {
       .filter((text) => SERIAL.test(text))
     expect([...proposals, ...meta]).toEqual([])
   })
+
+  it('the /config deck preset and draft help end their "and" lists without a comma', () => {
+    expect(defaultConfigMeta['deck.presets']?.help).toContain(
+      'an id, a hand size and its starter cards',
+    )
+    expect(defaultConfigMeta['draft.everyNRounds']?.help).toContain('in rounds 2, 4 and 6.')
+    const lists = Object.values(defaultConfigMeta)
+      .map((e) => e.help ?? '')
+      .filter((text) => /\w+, \w+, and \w+\b/.test(text))
+    expect(lists).toEqual([])
+  })
 })
 
 describe('player copy speaks of the screen, not a tabletop', () => {

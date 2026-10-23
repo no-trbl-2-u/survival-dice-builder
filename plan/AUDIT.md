@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-23 (pass 134, cloud tick)
+
+Pass 133's /tiles row shipped (5ea4a9b). No issues are open for triage, the critique gate is closed (pass 25, 8 commits ago, under 24 hours), the expand gate is closed (pass 16, 15 commits ago, under 48 hours), and the only pending phase (35) is blocked on the designer's Skills session. Every critique row left waits for /oversight or is the phase-sized sim-bot row, so this pass read the prerendered pages for copy that breaks the site's own rules. Two /config help lines still ended an "and" list with a serial comma, which the rest of the site has dropped: "an id, a hand size, and its starter cards" (deck presets) and "in rounds 2, 4, and 6" (draft), a 1.8 (impact 2, ease 9). The serial-comma guard in ruleText.test.ts only caught ", or" lists. Both lines now drop the comma, and a new guard bars "x, y, and z" lists from every /config help line. Next in line: the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /config: deck preset and draft help keep the serial comma (audit, pass 134)
+- category: voice
+- impact: 2
+- ease: 9
+- next: config.meta.json drops both commas; ruleText test guards "and" lists in /config help
+- issue: #188
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [2.0] /decisions: the Event Calendar check cites ruling numbers (critique LOW, pass 25; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6.5
+- next: /oversight names the spawn cadence and gathering-node rules in words in that `[needs-user-call]` item
+
 # Site audit — 2026-10-23 (pass 133, cloud tick)
 
 Pass 132's /decisions row 17 shipped (26a870b). No issues are open for triage, the critique gate is closed (pass 25, 7 commits ago, under 24 hours), the expand gate is closed (pass 16, 14 commits ago, under 48 hours), and the only pending phase (35) is blocked on the designer's Skills session. Every critique row left waits for /oversight or is the phase-sized sim-bot row, so this pass checked the /tiles captions against the page's own wording. Under each tile name the site count joined its parts with commas only ("2 Gathering nodes, 1 Spawn node"), while the intro on the same page reads "1 Base tile, 3 Countryside tiles and 5 Core tiles", a 1.8 (impact 2, ease 9). The site count now ends with "and" ("2 Gathering nodes and 1 Spawn node"), both lists share one `andList` in TileSheet.tsx, and a TileSheet test pins it. Next in line: the rows that wait for /oversight.
