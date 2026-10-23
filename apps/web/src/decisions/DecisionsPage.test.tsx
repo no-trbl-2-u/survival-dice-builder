@@ -53,7 +53,7 @@ describe('DecisionsPage', () => {
     const { container } = render(<DecisionsPage />)
     const row63 = container.querySelector('[data-question="63"] [data-proposal]')
     expect(row63?.textContent).toContain('Proposal: Forced reveal.')
-    expect(row63?.textContent).toContain('Measured under engagements')
+    expect(row63?.textContent).toContain('Measured with Engagements Combat')
     expect(row63?.textContent).toContain('Recommendation from the bot batches')
     expect(row63?.querySelector('button')?.textContent).toBe('Try this on /play')
     expect(container.querySelectorAll('[data-proposal]').length).toBe(6)

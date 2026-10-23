@@ -95,7 +95,7 @@ describe('proposals (rule 18.1)', () => {
 
   it('rule 18.1: the measured and advice lines are plain words', () => {
     const reveal = measuredText(byId('forced-reveal'))
-    expect(reveal).toContain('Measured under engagements, 200 bot runs each, solo.')
+    expect(reveal).toContain('Measured with Engagements Combat, 200 bot runs each, solo.')
     expect(reveal).toContain('Defender bot: the median run ends in round 10 (no change).')
     expect(reveal).toContain('Runs stopped with the base still standing: 26, now 1.')
     for (const p of defaultProposals)
@@ -107,6 +107,21 @@ describe('proposals (rule 18.1)', () => {
     expect(adviceText(byId('forced-reveal'))).toBe(
       'Recommendation from the bot batches: turn it on.',
     )
+    const unmeasured: Proposal = { ...byId('forced-reveal'), measured: undefined }
+    expect(measuredText(unmeasured)).toBe(
+      'Not measured with Engagements Combat: this option changes nothing until Combat uses Exchanges.',
+    )
+    expect(adviceText(unmeasured)).toContain('an earlier bot batch with Exchanges Combat')
+    for (const p of defaultProposals)
+      for (const text of [
+        p.label,
+        p.about,
+        measuredText(p),
+        adviceText(p),
+        measuredText({ ...p, measured: undefined }),
+        adviceText({ ...p, measured: undefined }),
+      ])
+        expect(text, p.id).not.toMatch(/\b(?:engagements|exchanges)\b/)
     for (const p of defaultProposals)
       for (const text of [p.label, p.about, measuredText(p), adviceText(p)])
         expect(text, p.id).not.toMatch(BUILD_WORD)

@@ -36,15 +36,6 @@
 - suggested fix: Shorten the names to "Blank die face (empty)" and "Enemy die face: miss (empty)", and end in-house lines at "drawn for this game".
 - source: web-fetch
 
-### [LOW] /config — measured lines write the Combat model in lower case
-- pass: 25 (commit 690f48e)
-- viewport: desktop
-- category: voice
-- observation: Every proposal's measured line says "engagements" in lower case. The home page and the Combat select capitalise the model names.
-- evidence: /config "Measured under engagements, 200 bot runs each, solo." (`packages/content/src/proposals.ts:154`); / "you can choose Exchanges instead"
-- suggested fix: Write "Measured with Engagements Combat, 200 bot runs each, solo."
-- source: web-fetch
-
 ### [MED] /decisions — three balance checks give three different bot results
 - pass: 21 (commit a6dc51f)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /config — measured lines write the Combat model in lower case (addressed at (this commit))
+- pass: 25 (commit 690f48e)
+- viewport: desktop
+- category: voice
+- observation: Every proposal's measured line says "engagements" in lower case. The home page and the Combat select capitalise the model names.
+- evidence: /config "Measured under engagements, 200 bot runs each, solo." (`packages/content/src/proposals.ts:154`); / "you can choose Exchanges instead"
+- suggested fix: Write "Measured with Engagements Combat, 200 bot runs each, solo."
+- source: web-fetch
+- issue: #183
+- resolution: Each proposal's measured line on /config and /decisions now reads "Measured with Engagements Combat, 200 bot runs each, solo." The line for an option measured only under the other model says "Not measured with Engagements Combat: this option changes nothing until Combat uses Exchanges.", and its recommendation cites "an earlier bot batch with Exchanges Combat". A unit test keeps lower-case "engagements" and "exchanges" out of every proposal line.
 
 ### [x] [MED] /config — proposals name "Default bot" and "Defender bot" but never say what they are (addressed at (this commit))
 - pass: 25 (commit 690f48e)

@@ -130,7 +130,9 @@ const ADVICE: Readonly<Record<Proposal['advice'], string>> = {
 
 /** The recommendation in plain words: the loop's reading of the bot batches, not a ruling. */
 export function adviceText(proposal: Proposal): string {
-  const source = proposal.measured ? 'the bot batches' : 'an earlier bot batch under exchanges'
+  const source = proposal.measured
+    ? 'the bot batches'
+    : 'an earlier bot batch with Exchanges Combat'
   return `Recommendation from ${source}: ${ADVICE[proposal.advice]}.`
 }
 
@@ -155,10 +157,10 @@ export function measuredText(
   measured: Measured | undefined = proposal.measured,
 ): string {
   if (!measured)
-    return 'Not measured under engagements: this option changes nothing until Combat uses exchanges.'
+    return 'Not measured with Engagements Combat: this option changes nothing until Combat uses Exchanges.'
   const seats = measured.seats === 1 ? 'solo' : `${measured.seats} seats`
   return [
-    `Measured under engagements, ${measured.runs} bot runs each, ${seats}.`,
+    `Measured with Engagements Combat, ${measured.runs} bot runs each, ${seats}.`,
     batchText('Default bot', measured.bots.default.standard, measured.bots.default.proposal),
     batchText('Defender bot', measured.bots.defender.standard, measured.bots.defender.proposal),
   ].join(' ')

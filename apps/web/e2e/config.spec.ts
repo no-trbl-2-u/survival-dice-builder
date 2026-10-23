@@ -190,7 +190,7 @@ test('/decisions: Try this on /play plays a proposal, and the start panel resets
 }) => {
   await page.goto('/decisions')
   const row = page.locator('[data-question="63"]')
-  await expect(row).toContainText('Measured under engagements')
+  await expect(row).toContainText('Measured with Engagements Combat')
   await row.getByRole('button', { name: 'Try this on /play' }).click()
   await expect(page).toHaveURL(/\/play$/)
   const changes = page.getByTestId('config-changes')
@@ -213,7 +213,9 @@ test('/config: Apply sets a proposal in the draft, and Save marks it (phase 39)'
 }) => {
   await page.goto('/config')
   await page.getByText(/Proposals to try/).click()
-  await expect(page.getByTestId('config-proposal-list')).toContainText('Measured under engagements')
+  await expect(page.getByTestId('config-proposal-list')).toContainText(
+    'Measured with Engagements Combat',
+  )
   await expect(page.getByTestId('config-proposal-list')).toContainText(
     'The defender bot stays near the base',
   )
