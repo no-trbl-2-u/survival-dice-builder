@@ -38,8 +38,9 @@ function CreditLine({ credit: a, shared }: Readonly<{ credit: Credit; shared: st
   return (
     <span>
       <strong>{a.asset}</strong>:{' '}
+      {/* An in-house asset needs no license note: "drawn for this game" already says whose it is. */}
       {a.attribution === 'none required' ? (
-        <>drawn for this game{license}</>
+        <>drawn for this game</>
       ) : (
         <>
           {a.source.startsWith('http') ? <a href={a.source}>{work}</a> : work}

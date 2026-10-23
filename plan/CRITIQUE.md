@@ -18,15 +18,6 @@
 - suggested fix: Name the rules in words and drop the ruling numbers in both places.
 - source: web-fetch
 
-### [LOW] /credits — empty die faces gloss themselves twice, and "Project-owned" is capitalised mid-line
-- pass: 25 (commit 690f48e)
-- viewport: desktop
-- category: voice
-- observation: Two die-face names carry a bracketed gloss that repeats the name, and each in-house line ends with "(Project-owned)" after "drawn for this game", which says the same thing.
-- evidence: "Blank die face (empty: a blank face shows nothing): drawn for this game (Project-owned)"; "Enemy die face: miss (empty: a miss shows nothing): ..." (`ASSETS.md:23`, `:25`)
-- suggested fix: Shorten the names to "Blank die face (empty)" and "Enemy die face: miss (empty)", and end in-house lines at "drawn for this game".
-- source: web-fetch
-
 ### [MED] /decisions — three balance checks give three different bot results
 - pass: 21 (commit a6dc51f)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /credits — empty die faces gloss themselves twice, and "Project-owned" is capitalised mid-line (addressed at (this commit))
+- pass: 25 (commit 690f48e)
+- viewport: desktop
+- category: voice
+- observation: Two die-face names carry a bracketed gloss that repeats the name, and each in-house line ends with "(Project-owned)" after "drawn for this game", which says the same thing.
+- evidence: "Blank die face (empty: a blank face shows nothing): drawn for this game (Project-owned)"; "Enemy die face: miss (empty: a miss shows nothing): ..." (`ASSETS.md:23`, `:25`)
+- suggested fix: Shorten the names to "Blank die face (empty)" and "Enemy die face: miss (empty)", and end in-house lines at "drawn for this game".
+- source: web-fetch
+- issue: #185
+- resolution: ASSETS.md names the two faces "Blank die face (empty)" and "Enemy die face: miss (empty)". In-house lines on /credits end at "drawn for this game"; the register keeps "Project-owned" for the asset check, but the page no longer prints it. A CreditsPage unit test keeps the gloss and the license note off those lines.
 
 ### [x] [LOW] / — the Prepare step keeps the serial comma (addressed at (this commit))
 - pass: 25 (commit 690f48e)

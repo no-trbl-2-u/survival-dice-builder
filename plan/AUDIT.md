@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-23 (pass 131, cloud tick)
+
+Pass 130's home page serial-comma row shipped (3917feb). No issues are open for triage, the critique gate is closed (pass 25, 5 commits ago), the expand gate is closed (pass 16, 12 commits ago, under 48 hours), and the only pending phase (35) is blocked on the designer's Skills session. The three 8.1 rows on /decisions still wait for /oversight, so this tick takes the top pass-25 LOW row at 2.2: on /credits the two empty die faces glossed their own names ("Blank die face (empty: a blank face shows nothing)") and every in-house line ended "drawn for this game (Project-owned)". ASSETS.md shortens the two names, the page drops the license note on in-house lines, and a CreditsPage unit test keeps both off. Next in line: the /decisions ruling-numbers LOW row, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.2] /credits: empty die faces gloss themselves twice (critique LOW, pass 25)
+- category: external-critique (voice)
+- impact: 3
+- ease: 7.5
+- next: names shortened in ASSETS.md; CreditLine ends in-house lines at "drawn for this game"; CreditsPage unit test
+- issue: #185
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [2.0] /decisions: two items still cite ruling numbers the visitor cannot look up (critique LOW, pass 25)
+- category: external-critique (voice)
+- impact: 3
+- ease: 6.5
+- next: name the rules in words in OPEN-QUESTIONS.md row 32 and the AUDIT.md item, drop the ruling numbers
+
 # Site audit — 2026-10-23 (pass 130, cloud tick)
 
 Pass 129's /config Combat-name row shipped (be81353). No issues are open for triage, the critique gate is closed (pass 25, 4 commits ago), the expand gate is closed (pass 16, 11 commits ago, under 48 hours), and the only pending phase (35) is blocked on the designer's Skills session. The three 8.1 rows on /decisions still wait for /oversight, so this tick takes the top pass-25 LOW row at 2.4: the home page's Prepare step kept the serial comma ("gather materials, and build"). It drops it, as does the home page's level line ("9 more, and each next step"), and a HomePage unit test now scans the page's text for a serial comma. Next in line: the /credits and /decisions LOW rows, then the rows that wait for /oversight.
