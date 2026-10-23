@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-22 at commit 3baaf7b
-> Pass count: 24
+> Last pass: 2026-10-23 at commit 690f48e
+> Pass count: 25
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /config — the rules form's group is named "config", a raw key
+- pass: 25 (commit 690f48e)
+- viewport: desktop
+- category: a11y
+- observation: The fieldset around the whole rules form has the legend "config". It shows between the last proposal's Apply button and the "Players" group, and a screen reader announces it as the form's group name.
+- evidence: page text order "Apply" / "config" / "Players"; `apps/web/src/config/ConfigPage.tsx:221` falls back to `human(path.at(-1) ?? 'config')` for the root path, rendered as `<legend>` at :238
+- suggested fix: Give the root fieldset a real label ("Rules"), or render no fieldset and legend when the path is empty.
+- source: web-fetch
+
+### [MED] /config — proposals name "Default bot" and "Defender bot" but never say what they are
+- pass: 25 (commit 690f48e)
+- viewport: desktop
+- category: comprehension
+- observation: Each proposal's measured result gives one result per bot. The section intro and the rest of the page never say how either bot plays, so a stranger cannot tell why the results differ (round 6 against round 10).
+- evidence: "Default bot: the median run ends in round 6 (no change)." / "Defender bot: the median run ends in round 10 (no change)."; `packages/content/src/proposals.ts:156`
+- suggested fix: Add one sentence to the Proposals intro that says what each bot does, sourced from the bot package's policy names.
+- source: web-fetch
+
+### [LOW] / — the Prepare step keeps the serial comma
+- pass: 25 (commit 690f48e)
+- viewport: desktop
+- category: voice
+- observation: The site dropped the serial comma everywhere else. This line is hand-written in HomePage.tsx, outside the strings the serial-comma tests scan.
+- evidence: "Prepare: play the top halves of your cards to move, gather materials, and build Barricades and Towers." (`apps/web/src/home/HomePage.tsx`)
+- suggested fix: Drop the comma before "and build" and add the home page copy to the serial-comma test.
+- source: web-fetch
+
+### [LOW] /decisions — two items still cite ruling numbers the visitor cannot look up
+- pass: 25 (commit 690f48e)
+- viewport: desktop
+- category: comprehension
+- observation: The pass 21 fix dropped ruling numbers from the headings, but a reading status and a check still cite "Spec v2 ruling N".
+- evidence: "Waiting for the designer to write the rule (Spec v2 ruling 20: steps of 3 by default; open for playtest)." (`OPEN-QUESTIONS.md:32`); "it may replace the spawn cadence (Spec v2 ruling 14) and the gathering-node rule (ruling 9)." (`plan/AUDIT.md:4683`)
+- suggested fix: Name the rules in words and drop the ruling numbers in both places.
+- source: web-fetch
+
+### [LOW] /credits — empty die faces gloss themselves twice, and "Project-owned" is capitalised mid-line
+- pass: 25 (commit 690f48e)
+- viewport: desktop
+- category: voice
+- observation: Two die-face names carry a bracketed gloss that repeats the name, and each in-house line ends with "(Project-owned)" after "drawn for this game", which says the same thing.
+- evidence: "Blank die face (empty: a blank face shows nothing): drawn for this game (Project-owned)"; "Enemy die face: miss (empty: a miss shows nothing): ..." (`ASSETS.md:23`, `:25`)
+- suggested fix: Shorten the names to "Blank die face (empty)" and "Enemy die face: miss (empty)", and end in-house lines at "drawn for this game".
+- source: web-fetch
+
+### [LOW] /config — measured lines write the Combat model in lower case
+- pass: 25 (commit 690f48e)
+- viewport: desktop
+- category: voice
+- observation: Every proposal's measured line says "engagements" in lower case. The home page and the Combat select capitalise the model names.
+- evidence: /config "Measured under engagements, 200 bot runs each, solo." (`packages/content/src/proposals.ts:154`); / "you can choose Exchanges instead"
+- suggested fix: Write "Measured with Engagements Combat, 200 bot runs each, solo."
+- source: web-fetch
 
 ### [MED] /decisions — three balance checks give three different bot results
 - pass: 21 (commit a6dc51f)
