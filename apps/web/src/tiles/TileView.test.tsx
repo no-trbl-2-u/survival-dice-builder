@@ -62,6 +62,18 @@ describe('TileSheet', () => {
       expect(summary).not.toMatch(/\d (base|gathering|spawn|elite)/)
     }
   })
+
+  it('ends each tile\'s site count with "and", as the intro\'s tile count does', () => {
+    const { container } = render(<TileSheet />)
+    const meadow = defaultContent.tiles.find((t) => t.name === 'Meadowlands')!
+    const name = container.querySelector(`[data-tile="${meadow.id}"] h3`)!
+    expect(name.nextSibling?.textContent).toBe('2 Gathering nodes and 1 Spawn node')
+    for (const tile of defaultContent.tiles) {
+      const summary = container.querySelector(`[data-tile="${tile.id}"] h3`)!.nextSibling
+      const text = summary?.textContent ?? ''
+      if (/\d.*\d/.test(text)) expect(text).toMatch(/ and \d+ [^,]+$/)
+    }
+  })
 })
 
 describe('TileSheet hex list', () => {

@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-23 (pass 133, cloud tick)
+
+Pass 132's /decisions row 17 shipped (26a870b). No issues are open for triage, the critique gate is closed (pass 25, 7 commits ago, under 24 hours), the expand gate is closed (pass 16, 14 commits ago, under 48 hours), and the only pending phase (35) is blocked on the designer's Skills session. Every critique row left waits for /oversight or is the phase-sized sim-bot row, so this pass checked the /tiles captions against the page's own wording. Under each tile name the site count joined its parts with commas only ("2 Gathering nodes, 1 Spawn node"), while the intro on the same page reads "1 Base tile, 3 Countryside tiles and 5 Core tiles", a 1.8 (impact 2, ease 9). The site count now ends with "and" ("2 Gathering nodes and 1 Spawn node"), both lists share one `andList` in TileSheet.tsx, and a TileSheet test pins it. Next in line: the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /tiles: tile site counts end without "and", unlike the intro (audit, pass 133)
+- category: voice
+- impact: 2
+- ease: 9
+- next: siteSummary ends with "and" through a shared andList; TileSheet unit test
+- issue: #187
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [2.0] /decisions: the Event Calendar check cites ruling numbers (critique LOW, pass 25; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6.5
+- next: /oversight names the spawn cadence and gathering-node rules in words in that `[needs-user-call]` item
+
 # Site audit — 2026-10-23 (pass 132, cloud tick)
 
 Pass 131's /credits row shipped (4acb1eb). No issues are open for triage, the critique gate is closed (pass 25, 6 commits ago, under 24 hours), the expand gate is closed (pass 16, 13 commits ago, under 48 hours), and the only pending phase (35) is blocked on the designer's Skills session. The three 8.1 rows on /decisions still wait for /oversight, so this tick takes the last shippable pass-25 LOW row at 2.0: /decisions still cited ruling numbers the visitor cannot look up. Row 17's reading status read "Spec v2 ruling 20: steps of 3 by default"; it now reads "Spec v2 sets steps of 3 by default", docs/DECISIONS.md is regenerated, and the decisions test bars "ruling N" from every open reading's status label. The row's other half, the Event Calendar check ("Spec v2 ruling 14", "ruling 9"), edits a `[needs-user-call]` item, so it is split into its own LOW row that waits for /oversight. With this row gone the critique queue holds only rows that wait for /oversight and the sim-bot row.

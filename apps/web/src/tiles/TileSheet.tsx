@@ -26,21 +26,32 @@ const KINDS: readonly (readonly [TileDef['kind'], string])[] = [
   ['core', 'Core tiles'],
 ]
 
+/** "a, b and c": a list joined with commas and a final "and". */
+const andList = (items: readonly string[]) =>
+  items.length > 1
+    ? `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`
+    : (items[0] ?? '')
+
 /** "1 Base tile, 3 Countryside tiles and 5 Core tiles", counted from the content. */
 function kindSummary(tiles: readonly TileDef[]): string {
-  const parts = KINDS.map(([kind, heading]) => {
-    const n = tiles.filter((t) => t.kind === kind).length
-    return `${n} ${n === 1 ? heading.replace(/s$/, '') : heading.replace(/(tile)$/, '$1s')}`
-  })
-  return `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`
+  return andList(
+    KINDS.map(([kind, heading]) => {
+      const n = tiles.filter((t) => t.kind === kind).length
+      return `${n} ${n === 1 ? heading.replace(/s$/, '') : heading.replace(/(tile)$/, '$1s')}`
+    }),
+  )
 }
 
-/** Counts each site printed on a tile, for the caption, named as the site legend names it. */
+/**
+ * Counts each site printed on a tile, for the caption, named as the site legend names it:
+ * "2 Gathering nodes and 1 Spawn node".
+ */
 function siteSummary(sites: readonly (Site | null)[]): string {
-  return SITES.map((s) => [s, sites.filter((x) => x === s).length] as const)
-    .filter(([, n]) => n > 0)
-    .map(([s, n]) => `${n} ${SITE_LABEL[s]}${n > 1 ? 's' : ''}`)
-    .join(', ')
+  return andList(
+    SITES.map((s) => [s, sites.filter((x) => x === s).length] as const)
+      .filter(([, n]) => n > 0)
+      .map(([s, n]) => `${n} ${SITE_LABEL[s]}${n > 1 ? 's' : ''}`),
+  )
 }
 
 /**
