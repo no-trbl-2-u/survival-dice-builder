@@ -1,4 +1,10 @@
-import { defaultProposals, measuredText, proposalsIn, type Proposal } from '@survival/content'
+import {
+  BOTS_TEXT,
+  defaultProposals,
+  measuredText,
+  proposalsIn,
+  type Proposal,
+} from '@survival/content'
 import { rowId } from '../decisions/Inline.tsx'
 import styles from './ConfigPage.module.css'
 
@@ -27,6 +33,7 @@ export function ProposalList({ draft, onApply }: Props) {
         the bot runs. Apply sets its values below; save to play with it. The{' '}
         <a href="/decisions">Decisions page</a> has the recommendation for each one.
       </p>
+      <p>{BOTS_TEXT}</p>
       <ul>
         {shown.map((p) => (
           <li key={p.id}>

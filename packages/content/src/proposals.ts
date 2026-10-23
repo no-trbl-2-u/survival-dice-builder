@@ -134,6 +134,13 @@ export function adviceText(proposal: Proposal): string {
   return `Recommendation from ${source}: ${ADVICE[proposal.advice]}.`
 }
 
+/**
+ * The two bots a measured line names, in plain words: what each one plays like (from the bot
+ * package's `default` and `defender` policies).
+ */
+export const BOTS_TEXT =
+  'The default bot gathers, explores and builds across the map. The defender bot stays near the base, builds its defenses next to it and fights the enemies that come for it.'
+
 /** A count before and after: "10 (no change)" or "26, now 1". */
 const change = (before: number, after: number) =>
   before === after ? `${before} (no change)` : `${before}, now ${after}`

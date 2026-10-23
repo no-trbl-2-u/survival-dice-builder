@@ -6,6 +6,7 @@ import { openQuestions, parseQuestions } from './decisions.ts'
 import {
   adviceText,
   applyProposal,
+  BOTS_TEXT,
   defaultProposals,
   measuredText,
   proposalForRow,
@@ -100,6 +101,9 @@ describe('proposals (rule 18.1)', () => {
     for (const p of defaultProposals)
       expect(measuredText(p), p.id).not.toMatch(/middle half|sim cap|;/)
     expect(measuredText(byId('seat-scaling'))).toContain('4 seats')
+    expect(BOTS_TEXT).toContain('The default bot gathers')
+    expect(BOTS_TEXT).toContain('The defender bot stays near the base')
+    expect(BOTS_TEXT).not.toMatch(/, and /)
     expect(adviceText(byId('forced-reveal'))).toBe(
       'Recommendation from the bot batches: turn it on.',
     )

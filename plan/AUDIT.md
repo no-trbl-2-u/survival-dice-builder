@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-23 (pass 128, cloud tick)
+
+Pass 127's /config "Rules" group row shipped (362bf37). No issues are open for triage, the critique gate is closed (pass 25, 2 commits ago), the expand gate is closed (pass 16, 9 commits ago, under 48 hours), and the only pending phase (35) is blocked on the designer's Skills session. The three 8.1 rows on /decisions still wait for /oversight, so the top row this tick can ship is the pass-25 MED row on /config at 6.8: each measured line names "Default bot" and "Defender bot", but the page never said what either bot does. The Proposals intro now has one line per bot, from the bot package's policy descriptions. Next in line: the pass-25 LOW rows, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [6.8] /config: proposals name "Default bot" and "Defender bot" but never say what they are (critique MED, pass 25, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7.5
+- next: `BOTS_TEXT` in the Proposals intro; unit tests and config.spec.ts check it
+- issue: #182
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [2.4] /: the Prepare step keeps the serial comma (critique LOW, pass 25)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: drop the comma in HomePage.tsx and add the home page copy to the serial-comma test
+
 # Site audit — 2026-10-23 (pass 127, cloud tick)
 
 Pass 126's /play gather line row shipped (690f48e), and critique pass 25 (fe9d292) filed six rows. The critique gate is closed (pass 25, 0 commits ago) and the expand gate is closed (pass 16, 8 commits ago, under 48 hours). The only pending phase (35) is blocked on the designer's Skills session. The new pass-25 MED row on /config scores 8.1 with the bias (impact 6, ease 9, x1.5) and is the cheapest of the 8.1 rows that need no /oversight call: the whole rules form sat in a fieldset whose legend was the raw key "config", so a screen reader announced the form's group as "config". The root fieldset is now named "Rules", and the /config e2e spec pins it. Next in line: the other pass-25 MED row (what "Default bot" and "Defender bot" are), then the pass-25 LOW rows, then the rows that wait for /oversight.

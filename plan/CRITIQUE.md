@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — proposals name "Default bot" and "Defender bot" but never say what they are
-- pass: 25 (commit 690f48e)
-- viewport: desktop
-- category: comprehension
-- observation: Each proposal's measured result gives one result per bot. The section intro and the rest of the page never say how either bot plays, so a stranger cannot tell why the results differ (round 6 against round 10).
-- evidence: "Default bot: the median run ends in round 6 (no change)." / "Defender bot: the median run ends in round 10 (no change)."; `packages/content/src/proposals.ts:156`
-- suggested fix: Add one sentence to the Proposals intro that says what each bot does, sourced from the bot package's policy names.
-- source: web-fetch
-
 ### [LOW] / — the Prepare step keeps the serial comma
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: user
 
 ## Done
+
+### [x] [MED] /config — proposals name "Default bot" and "Defender bot" but never say what they are (addressed at (this commit))
+- pass: 25 (commit 690f48e)
+- viewport: desktop
+- category: comprehension
+- observation: Each proposal's measured result gives one result per bot. The section intro and the rest of the page never say how either bot plays, so a stranger cannot tell why the results differ (round 6 against round 10).
+- evidence: "Default bot: the median run ends in round 6 (no change)." / "Defender bot: the median run ends in round 10 (no change)."; `packages/content/src/proposals.ts:156`
+- suggested fix: Add one sentence to the Proposals intro that says what each bot does, sourced from the bot package's policy names.
+- source: web-fetch
+- issue: #182
+- resolution: The /config Proposals intro has a second line that says what each bot plays like: the default bot gathers, explores and builds across the map; the defender bot stays near the base, builds its defenses next to it and fights the enemies that come for it. The line is `BOTS_TEXT` in the content package. Unit tests and the /config e2e spec check it.
 
 ### [x] [MED] /config — the rules form's group is named "config", a raw key (addressed at (this commit))
 - pass: 25 (commit 690f48e)

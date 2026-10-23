@@ -132,6 +132,7 @@ export {
 } from './configVersions.ts'
 export {
   adviceText,
+  BOTS_TEXT,
   applyProposal,
   defaultProposals,
   measuredText,

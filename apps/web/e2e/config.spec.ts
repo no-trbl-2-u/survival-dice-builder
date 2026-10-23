@@ -214,6 +214,9 @@ test('/config: Apply sets a proposal in the draft, and Save marks it (phase 39)'
   await page.goto('/config')
   await page.getByText(/Proposals to try/).click()
   await expect(page.getByTestId('config-proposal-list')).toContainText('Measured under engagements')
+  await expect(page.getByTestId('config-proposal-list')).toContainText(
+    'The defender bot stays near the base',
+  )
   await page.getByRole('button', { name: 'Apply Spawn range' }).click()
   await expect(page.getByRole('status')).toContainText('Applied the proposal Spawn range.')
   await page.getByRole('button', { name: 'Save config' }).click()

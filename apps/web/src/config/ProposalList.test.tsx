@@ -1,4 +1,4 @@
-import { defaultProposals, measuredText } from '@survival/content'
+import { BOTS_TEXT, defaultProposals, measuredText } from '@survival/content'
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import { ProposalList } from './ProposalList.tsx'
@@ -18,5 +18,10 @@ describe('ProposalList', () => {
       const line = document.getElementById(id ?? '')
       expect(line?.textContent).toBe(measuredText(p))
     }
+  })
+
+  it('says what the default and defender bots play like, as each measured line names them', () => {
+    render(<ProposalList draft={{}} onApply={() => undefined} />)
+    expect(screen.getByText(BOTS_TEXT)).toBeTruthy()
   })
 })
