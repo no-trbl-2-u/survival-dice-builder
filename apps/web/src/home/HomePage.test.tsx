@@ -25,6 +25,17 @@ describe('HomePage', () => {
     )
   })
 
+  it('drops the serial comma, as the rest of the site does (critique pass 25)', () => {
+    /** A comma before the "and" or "or" that ends a list: "move, gather materials, and build". */
+    const SERIAL = /,[^,;:.()]*, (?:and|or)\b/
+    expect('move, gather materials, and build').toMatch(SERIAL)
+    expect('move, gather materials and build').not.toMatch(SERIAL)
+    const { container } = render(<HomePage />)
+    const hits = (container.textContent ?? '').match(new RegExp(`[^.;:?]*${SERIAL.source}`, 'g'))
+    // "Prepare, then Combat, and each phase": the commas set off "then Combat", not a list.
+    expect((hits ?? []).filter((hit) => !hit.endsWith('Prepare, then Combat, and'))).toEqual([])
+  })
+
   it('names both Combat models the start panel offers', () => {
     render(<HomePage />)
     const combat = screen.getAllByText(

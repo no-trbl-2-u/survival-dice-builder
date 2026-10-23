@@ -114,7 +114,7 @@ export function levelText(config: GameConfig, content: Enemies): string {
   const steps =
     stepIncrease === 0
       ? `Level 2 needs ${firstStep} experience, and each next level needs ${firstStep} more`
-      : `Level 2 needs ${firstStep} experience, level 3 needs ${firstStep + stepIncrease} more, level 4 needs ${firstStep + 2 * stepIncrease} more, and each next step grows by ${stepIncrease}`
+      : `Level 2 needs ${firstStep} experience, level 3 needs ${firstStep + stepIncrease} more, level 4 needs ${firstStep + 2 * stepIncrease} more and each next step grows by ${stepIncrease}`
   const raise = levelPerEliteSpawn
     ? 'The level rises by 1 each time an elite spawns.'
     : `Each defeated enemy gives experience to all players (${gains}). ${steps}.`

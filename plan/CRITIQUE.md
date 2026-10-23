@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Prepare step keeps the serial comma
-- pass: 25 (commit 690f48e)
-- viewport: desktop
-- category: voice
-- observation: The site dropped the serial comma everywhere else. This line is hand-written in HomePage.tsx, outside the strings the serial-comma tests scan.
-- evidence: "Prepare: play the top halves of your cards to move, gather materials, and build Barricades and Towers." (`apps/web/src/home/HomePage.tsx`)
-- suggested fix: Drop the comma before "and build" and add the home page copy to the serial-comma test.
-- source: web-fetch
-
 ### [LOW] /decisions — two items still cite ruling numbers the visitor cannot look up
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] / — the Prepare step keeps the serial comma (addressed at (this commit))
+- pass: 25 (commit 690f48e)
+- viewport: desktop
+- category: voice
+- observation: The site dropped the serial comma everywhere else. This line is hand-written in HomePage.tsx, outside the strings the serial-comma tests scan.
+- evidence: "Prepare: play the top halves of your cards to move, gather materials, and build Barricades and Towers." (`apps/web/src/home/HomePage.tsx`)
+- suggested fix: Drop the comma before "and build" and add the home page copy to the serial-comma test.
+- source: web-fetch
+- issue: #184
+- resolution: The Prepare step on / now reads "to move, gather materials and build Barricades and Towers." The home page's level line had the same comma ("level 4 needs 9 more, and each next step grows by 3"); it drops it too. A HomePage unit test scans the whole page's text for a serial comma before "and" or "or".
 
 ### [x] [LOW] /config — measured lines write the Combat model in lower case (addressed at (this commit))
 - pass: 25 (commit 690f48e)
