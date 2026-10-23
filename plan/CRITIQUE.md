@@ -9,13 +9,13 @@
 
 ## Pending
 
-### [LOW] /decisions — two items still cite ruling numbers the visitor cannot look up
+### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
 - category: comprehension
-- observation: The pass 21 fix dropped ruling numbers from the headings, but a reading status and a check still cite "Spec v2 ruling N".
-- evidence: "Waiting for the designer to write the rule (Spec v2 ruling 20: steps of 3 by default; open for playtest)." (`OPEN-QUESTIONS.md:32`); "it may replace the spawn cadence (Spec v2 ruling 14) and the gathering-node rule (ruling 9)." (`plan/AUDIT.md:4683`)
-- suggested fix: Name the rules in words and drop the ruling numbers in both places.
+- observation: The pass 21 fix dropped ruling numbers from the headings, but the Event Calendar check still cites "Spec v2 ruling N". The reading-status half of this row shipped for #186.
+- evidence: "it may replace the spawn cadence (Spec v2 ruling 14) and the gathering-node rule (ruling 9)." (`plan/AUDIT.md`, "[needs-user-call] **Write the Event Calendar experiment (2026-10-11).**")
+- suggested fix: Name the rules in words and drop the ruling numbers; the item is `[needs-user-call]`, so /oversight edits it.
 - source: web-fetch
 
 ### [MED] /decisions — three balance checks give three different bot results
@@ -64,6 +64,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /decisions — row 17's reading status cites a ruling number (addressed at (this commit))
+- pass: 25 (commit 690f48e)
+- viewport: desktop
+- category: comprehension
+- observation: The pass 21 fix dropped ruling numbers from the headings, but a reading status still cites "Spec v2 ruling N".
+- evidence: "Waiting for the designer to write the rule (Spec v2 ruling 20: steps of 3 by default; open for playtest)." (`OPEN-QUESTIONS.md:32`)
+- suggested fix: Name the rule in words and drop the ruling number.
+- source: web-fetch
+- issue: #186
+- resolution: Row 17's status now reads "Spec v2 sets steps of 3 by default; open for playtest", and docs/DECISIONS.md is regenerated. The decisions test now bars "ruling N" from every open reading's status label. The Event Calendar check half stays pending: it is a `[needs-user-call]` item, which only /oversight changes.
 
 ### [x] [LOW] /credits — empty die faces gloss themselves twice, and "Project-owned" is capitalised mid-line (addressed at (this commit))
 - pass: 25 (commit 690f48e)

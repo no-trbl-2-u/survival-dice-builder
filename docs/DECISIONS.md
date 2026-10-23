@@ -32,7 +32,7 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 
 ### 17. "Each next level needs 3 more than the last step (3, 9, 18, 30)." Does the step stay a playtest option? (rule 8.5)
 
-- Status: pending-spec 2026-10-11 (Spec v2 ruling 20: steps of 3 by default; open for playtest)
+- Status: pending-spec 2026-10-11 (Spec v2 sets steps of 3 by default; open for playtest)
 - Reading: The engine plays Spec v2 8.5: each step grows by 3 (level 2 at 3, 3 at 9, 4 at 18, 5 at 30). Still open: whether the step stays a configuration option for playtests. In Spec v1 each step grew by 5 (5, 15, 30, 50). **Designer 2026-10-04:** compare models before deciding: steps that grow by 3; steps that grow by 5 with more experience from elites; 1 level for each elite that spawns (phase 21 bot report). **Phase 22 (bot report):** steps that grow by 3 give 1 more level by round 9 (recommend: turn on; now the default); 5 extra experience for an elite changes almost nothing; 1 level per elite spawn levels far too fast (recommend: keep off). Report: `docs/reports/phase-22-experiments.md`.
 - Setting: `experience.firstStep` = `3`; `experience.stepIncrease` = `3`; `experience.eliteBonus` = `0`; `experience.levelPerEliteSpawn` = `false`
 

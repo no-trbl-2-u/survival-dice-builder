@@ -96,7 +96,9 @@ describe('decisions', () => {
       "Proposed, waiting for the designer's answer. It is an option, off by default.",
     )
     for (const q of openQuestions(parseQuestions(questionsMd)))
-      expect(statusLabel(q.status)).not.toMatch(/\d{4}-|phase|structural|engine|pending-spec/)
+      expect(statusLabel(q.status)).not.toMatch(
+        /\d{4}-|phase|structural|engine|pending-spec|ruling \d/,
+      )
   })
 
   it('reads needs-user-call checks', () => {

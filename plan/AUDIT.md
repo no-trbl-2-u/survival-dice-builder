@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-23 (pass 132, cloud tick)
+
+Pass 131's /credits row shipped (4acb1eb). No issues are open for triage, the critique gate is closed (pass 25, 6 commits ago, under 24 hours), the expand gate is closed (pass 16, 13 commits ago, under 48 hours), and the only pending phase (35) is blocked on the designer's Skills session. The three 8.1 rows on /decisions still wait for /oversight, so this tick takes the last shippable pass-25 LOW row at 2.0: /decisions still cited ruling numbers the visitor cannot look up. Row 17's reading status read "Spec v2 ruling 20: steps of 3 by default"; it now reads "Spec v2 sets steps of 3 by default", docs/DECISIONS.md is regenerated, and the decisions test bars "ruling N" from every open reading's status label. The row's other half, the Event Calendar check ("Spec v2 ruling 14", "ruling 9"), edits a `[needs-user-call]` item, so it is split into its own LOW row that waits for /oversight. With this row gone the critique queue holds only rows that wait for /oversight and the sim-bot row.
+
+## Top 5 findings (scored)
+
+### [x] [2.0] /decisions: row 17's reading status cites a ruling number (critique LOW, pass 25)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6.5
+- next: OPEN-QUESTIONS.md row 17 names the rule in words; docs/DECISIONS.md regenerated; decisions test bars "ruling N" in status labels
+- issue: #186
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [2.0] /decisions: the Event Calendar check cites ruling numbers (critique LOW, pass 25; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 6.5
+- next: /oversight names the spawn cadence and gathering-node rules in words in that `[needs-user-call]` item
+
 # Site audit — 2026-10-23 (pass 131, cloud tick)
 
 Pass 130's home page serial-comma row shipped (3917feb). No issues are open for triage, the critique gate is closed (pass 25, 5 commits ago), the expand gate is closed (pass 16, 12 commits ago, under 48 hours), and the only pending phase (35) is blocked on the designer's Skills session. The three 8.1 rows on /decisions still wait for /oversight, so this tick takes the top pass-25 LOW row at 2.2: on /credits the two empty die faces glossed their own names ("Blank die face (empty: a blank face shows nothing)") and every in-house line ended "drawn for this game (Project-owned)". ASSETS.md shortens the two names, the page drops the license note on in-house lines, and a CreditsPage unit test keeps both off. Next in line: the /decisions ruling-numbers LOW row, then the rows that wait for /oversight.
