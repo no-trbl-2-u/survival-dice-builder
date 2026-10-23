@@ -218,7 +218,7 @@ function RuleNote({ rule }: Readonly<{ rule: string }>) {
 function Field({ schema, value, path, draft, problems, onChange }: FieldProps): ReactNode {
   const id = fieldId(path)
   const meta = path.length > 0 ? defaultConfigMeta[path.join('.')] : undefined
-  const label = meta?.label ?? human(path.at(-1) ?? 'config')
+  const label = meta?.label ?? (path.length > 0 ? human(path.at(-1) ?? '') : 'Rules')
   const type = schema.def.type
   if (type === 'default' && schema.def.innerType) {
     return (

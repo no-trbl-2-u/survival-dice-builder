@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — the rules form's group is named "config", a raw key
-- pass: 25 (commit 690f48e)
-- viewport: desktop
-- category: a11y
-- observation: The fieldset around the whole rules form has the legend "config". It shows between the last proposal's Apply button and the "Players" group, and a screen reader announces it as the form's group name.
-- evidence: page text order "Apply" / "config" / "Players"; `apps/web/src/config/ConfigPage.tsx:221` falls back to `human(path.at(-1) ?? 'config')` for the root path, rendered as `<legend>` at :238
-- suggested fix: Give the root fieldset a real label ("Rules"), or render no fieldset and legend when the path is empty.
-- source: web-fetch
-
 ### [MED] /config — proposals name "Default bot" and "Defender bot" but never say what they are
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -110,7 +101,18 @@
 
 ## Done
 
-### [x] [LOW] /decisions — rule readings and checks still use the serial comma (addressed at (this commit))
+### [x] [MED] /config — the rules form's group is named "config", a raw key (addressed at (this commit))
+- pass: 25 (commit 690f48e)
+- viewport: desktop
+- category: a11y
+- observation: The fieldset around the whole rules form has the legend "config". It shows between the last proposal's Apply button and the "Players" group, and a screen reader announces it as the form's group name.
+- evidence: page text order "Apply" / "config" / "Players"; `apps/web/src/config/ConfigPage.tsx:221` falls back to `human(path.at(-1) ?? 'config')` for the root path, rendered as `<legend>` at :238
+- suggested fix: Give the root fieldset a real label ("Rules"), or render no fieldset and legend when the path is empty.
+- source: web-fetch
+- issue: #181
+- resolution: The root fieldset of the /config rules form is named "Rules" instead of the raw key "config". The legend stays visually hidden, as before. The /config e2e spec checks for a "Rules" group and no "config" group.
+
+### [x] [LOW] /decisions — rule readings and checks still use the serial comma (addressed at 054341d)
 - pass: 24 (commit 3baaf7b)
 - viewport: desktop
 - category: voice

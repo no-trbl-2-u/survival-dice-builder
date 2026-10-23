@@ -66,7 +66,7 @@ form > .group {
 }
 
 form > .group > legend {
-  /* "Config" repeats the page title. */
+  /* "Rules" names the form for a screen reader; the page title already shows. */
   position: absolute;
   width: 1px;
   height: 1px;

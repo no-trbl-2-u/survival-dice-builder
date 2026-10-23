@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-23 (pass 127, cloud tick)
+
+Pass 126's /play gather line row shipped (690f48e), and critique pass 25 (fe9d292) filed six rows. The critique gate is closed (pass 25, 0 commits ago) and the expand gate is closed (pass 16, 8 commits ago, under 48 hours). The only pending phase (35) is blocked on the designer's Skills session. The new pass-25 MED row on /config scores 8.1 with the bias (impact 6, ease 9, x1.5) and is the cheapest of the 8.1 rows that need no /oversight call: the whole rules form sat in a fieldset whose legend was the raw key "config", so a screen reader announced the form's group as "config". The root fieldset is now named "Rules", and the /config e2e spec pins it. Next in line: the other pass-25 MED row (what "Default bot" and "Defender bot" are), then the pass-25 LOW rows, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /config: the rules form's group is named "config", a raw key (critique MED, pass 25, bias x1.5)
+- category: external-critique (a11y)
+- impact: 6
+- ease: 9
+- next: the root fieldset's legend reads "Rules"; e2e check in config.spec.ts
+- issue: #181
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [6.8] /config: proposals name "Default bot" and "Defender bot" but never say what they are (critique MED, pass 25, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7.5
+- next: one line per bot in the proposals intro, from the bot's own description
+
 # Site audit — 2026-10-23 (pass 126, cloud tick)
 
 Pass 125's /play card-buy line row shipped (c2b3128). The critique gate is closed (pass 24, 10 commits ago, under 24 hours) and the expand gate is closed (pass 16, 6 commits ago). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. This pass checked the /play log amounts for singular and plural. The gather line always said "materials", so with "Gather off a node" set to 1 on /config a Gather off a node read "You gathered 1 materials (now 3).", while the knockout line already says "1 material", a 1.8 (impact 2, ease 9). It now reads "You gathered 1 material (now 3).", and an exportRun unit test pins it. Next in line: the sim bot row (session residue), then the rows that wait for /oversight.
@@ -17,7 +55,7 @@ Pass 125's /play card-buy line row shipped (c2b3128). The critique gate is close
 - ease: 9
 - next: the gather line uses the singular for 1, as the knockout line does; unit test in exportRun.test.ts
 - issue: #180
-- fixed: (this commit)
+- fixed: 690f48e
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)
