@@ -152,6 +152,13 @@ describe('describeEvent', () => {
     )
   })
 
+  it('names the currency a card costs, as an upgrade names its materials', () => {
+    const state = botRun(2).run.state
+    const card = state.content.cards.find((c) => c.level > 0)!
+    const bought = { type: 'cardBought', rule: '6.8, 13.1', player: 'p1', card: card.id, cost: 3 }
+    expect(describeEvent(bought as never, state)).toBe(`You bought ${card.name} for 3 currency.`)
+  })
+
   it('names a repaired defense by kind', () => {
     const state = botRun(2).run.state
     const base = baseCentre(state.map)

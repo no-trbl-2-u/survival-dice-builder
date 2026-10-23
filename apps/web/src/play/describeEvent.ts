@@ -189,7 +189,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'offerAdded':
       return `Shop offer: ${cardName(names, event.card)} (level ${event.level}).`
     case 'cardBought':
-      return `${who(event.player)} bought ${cardName(names, event.card)} for ${event.cost}.`
+      return `${who(event.player)} bought ${cardName(names, event.card)} for ${event.cost} currency.`
     case 'starterReturned':
       return `Starter card ${cardLabel(names, event.card)} leaves the game.`
     case 'draftStarted':
