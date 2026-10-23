@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-23 (pass 126, cloud tick)
+
+Pass 125's /play card-buy line row shipped (c2b3128). The critique gate is closed (pass 24, 10 commits ago, under 24 hours) and the expand gate is closed (pass 16, 6 commits ago). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. This pass checked the /play log amounts for singular and plural. The gather line always said "materials", so with "Gather off a node" set to 1 on /config a Gather off a node read "You gathered 1 materials (now 3).", while the knockout line already says "1 material", a 1.8 (impact 2, ease 9). It now reads "You gathered 1 material (now 3).", and an exportRun unit test pins it. Next in line: the sim bot row (session residue), then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /play log: a gather of 1 says "1 materials" (audit, pass 126)
+- category: voice
+- impact: 2
+- ease: 9
+- next: the gather line uses the singular for 1, as the knockout line does; unit test in exportRun.test.ts
+- issue: #180
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords the check or closes it
+
 # Site audit — 2026-10-23 (pass 125, cloud tick)
 
 Pass 124's /play heal line row shipped (b93855c). The critique gate is closed (pass 24, 9 commits ago, under 24 hours) and the expand gate is closed (pass 16, 5 commits ago). The only pending phase (35) is blocked on the designer's Skills session. The three `[needs-user-call]` MED rows still score 8.1 and the LOW "Reset /config once" row 1.4; all four wait for /oversight. This pass read the rest of the /play log lines in `describeEvent` for amounts with no unit. The card-buy line read "You bought Sprint for 3." while the upgrade line reads "bought for 4 materials." and the Base panel says the Shop's cards cost currency, a 1.8 (impact 2, ease 9). It now reads "You bought Sprint for 3 currency.", and an exportRun unit test pins it. Next in line: the sim bot row (session residue), then the rows that wait for /oversight.
@@ -17,7 +55,7 @@ Pass 124's /play heal line row shipped (b93855c). The critique gate is closed (p
 - ease: 9
 - next: the card-buy line names "currency", as the upgrade line names "materials"; unit test in exportRun.test.ts
 - issue: #179
-- fixed: (this commit)
+- fixed: c2b3128
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

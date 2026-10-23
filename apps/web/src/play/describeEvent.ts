@@ -151,7 +151,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'gathered':
       return event.amount === 0
         ? `${who(event.player)} gathered nothing: gather on an unspent gathering node with no enemy on it.`
-        : `${who(event.player)} gathered ${event.amount} materials (now ${event.materials})${event.spent ? '; the node is spent' : ''}.`
+        : `${who(event.player)} gathered ${event.amount} ${event.amount === 1 ? 'material' : 'materials'} (now ${event.materials})${event.spent ? '; the node is spent' : ''}.`
     case 'defenseBuilt':
       return `${event.kind[0]?.toUpperCase()}${event.kind.slice(1)} built on ${place(names, event.hex)} for ${event.cost} materials.`
     case 'defenseDamaged':

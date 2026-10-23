@@ -141,6 +141,9 @@ describe('describeEvent', () => {
     expect(describeEvent(spent as never, state)).toBe(
       'You gathered 2 materials (now 2); the node is spent.',
     )
+    // A Gather off a node can give 1 (gather.offNodeAmount): the singular, as the knockout line.
+    const one = { ...gathered, amount: 1, materials: 3 }
+    expect(describeEvent(one as never, state)).toBe('You gathered 1 material (now 3).')
     const coop = { ...state, players: [state.players[0]!, { ...state.players[0]!, id: 'p2' }] }
     const healed = { type: 'healed', rule: '6.4', player: 'p2', amount: 1, health: 5 }
     expect(describeEvent(healed as never, coop)).toBe('Player 2 healed 1 health (health 5).')
