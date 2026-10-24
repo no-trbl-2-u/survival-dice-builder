@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { defaultConfigMeta } from './configMeta.ts'
 import { defaultContent } from './content.ts'
 import {
+  citedRows,
   combatModelLine,
   combatModelNote,
   decidedDate,
@@ -128,6 +129,35 @@ describe('decisions', () => {
       const text = `${c.title} ${c.body}`
       expect(text).not.toMatch(/`|\.(md|ts|json|svg)\b|\bphase \d|\/(jot|oversight)\b|pnpm/i)
       expect(text).not.toMatch(/proposed tiles|best before/i)
+    }
+  })
+
+  it('reads the rule-reading rows a check cites', () => {
+    expect(
+      citedRows('the new tiles (row 57), Build levels (rows 30, 49), Skills (rows 9, 46 and 50)'),
+    ).toEqual([9, 30, 46, 49, 50, 57])
+    expect(citedRows('Rule readings 63-65 record issues; see reading 4.')).toEqual([4, 63, 64, 65])
+    expect(citedRows('Show the Play page to 2 people.')).toEqual([])
+  })
+
+  it('a public check cites only rows that exist, and no newly decided row', () => {
+    // Checks written before the 2026-10-11 decisions; only the designer edits these items, so
+    // they are pinned here. A check may drop a row from this list but never add one.
+    const knownStale: Record<string, number[]> = {
+      'Spec v2 design work (2026-10-04).': [7, 30, 49, 50, 55],
+      'Structural v2 questions (2026-10-05).': [65, 69],
+    }
+    const rows = parseQuestions(questionsMd)
+    const open = new Set(openQuestions(rows).map((r) => r.number))
+    for (const c of parseUserCalls(fs.readFileSync(new URL('plan/AUDIT.md', root), 'utf-8'))) {
+      const cited = citedRows(`${c.title} ${c.body}`)
+      for (const n of cited)
+        expect(
+          rows.map((r) => r.number),
+          `${c.title} row ${n}`,
+        ).toContain(n)
+      const decided = cited.filter((n) => !open.has(n))
+      expect(knownStale[c.title] ?? [], c.title).toEqual(expect.arrayContaining(decided))
     }
   })
 

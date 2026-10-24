@@ -342,6 +342,23 @@ export function parseUserCalls(md: string): UserCall[] {
   })
 }
 
+/**
+ * The rule-reading rows a check cites, ascending: every number or range after "row", "rows",
+ * "reading" or "readings" ("rows 30, 49", "rule readings 63-70" gives 63 to 70).
+ *
+ * @param text - a check's title and body.
+ */
+export function citedRows(text: string): number[] {
+  const found = new Set<number>()
+  const list = /\b(?:rows?|readings?) (\d+(?:-\d+)?(?:(?:,| and|, and) \d+(?:-\d+)?)*)/gi
+  for (const m of text.matchAll(list))
+    for (const part of (m[1] ?? '').split(/,| and/)) {
+      const [from, to = from] = part.trim().split('-').map(Number) as [number, number?]
+      for (let n = from; n <= to; n++) found.add(n)
+    }
+  return [...found].sort((a, b) => a - b)
+}
+
 /** One settings line for a row, in markdown. */
 function settingsLine(settings: readonly FlagSetting[], flag: string): string {
   if (flag.startsWith('(engine'))

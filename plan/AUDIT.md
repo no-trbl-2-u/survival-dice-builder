@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-24 (pass 142, cloud tick)
+
+Pass 141's milestone-kind test shipped (023653b), so the "Milestones a default run can reach" candidate has its last test and only the designer question is left. No issues are open for triage. The critique gate is closed (pass 26, 8 commits ago, under 24 hours) and so is the expand gate (pass 17, 9 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row the site can act on waits for /oversight. Checked this pass: the guard half of the "/decisions checks that stay true" candidate. /decisions shows every check word for word, and no test compares the rule-reading rows a check cites with their status. When the designer decides a row, a check that still asks about it goes stale and no test fails. A 3.2 (impact 4, ease 8). `citedRows` reads the rows a check cites ("row 57", "rows 30, 49", "rule readings 63-70"). A content test fails when a public check cites a row that does not exist, or a decided row outside the pinned list of today's stale citations. That list holds rows 7, 30, 49, 50 and 55 in "Spec v2 design work" and rows 65 and 69 in "Structural v2 questions". Row 50 is decided too, and no critique row named it. A check may drop rows from the list but not add any. The wording stays for /oversight. Next in line: the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] tests: a /decisions check can cite a decided rule reading and no test fails
+- category: tests
+- impact: 4
+- ease: 8
+- next: a content test that every row a public check cites exists and is open, apart from the pinned known-stale rows
+- issue: #196
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 50 and 55 from that item (row 50 found by this pass's test)
+
+### [ ] [1.2] sim: the bot cannot measure today's designer changes (critique LOW, session residue)
+- category: external-critique (sim)
+- impact: 3
+- ease: 4
+- next: a phase-sized bot policy change; belongs with /expand or /oversight
+
 # Site audit — 2026-10-24 (pass 141, cloud tick)
 
 Pass 140's milestone id guard shipped (e2a17fd). No issues are open for triage. The critique gate is closed (pass 26, 7 commits ago, under 24 hours) and so is the expand gate (pass 17, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row the site can act on waits for /oversight, and the sim-bot row is phase-sized. Checked this pass: the last test the "Milestones a default run can reach" candidate still lacks. `milestoneOutOfReach` answers null for any milestone it does not name, so a new milestone kind would show on /play, /config and the run summary as within reach even when the default game cannot meet it, and no test would fail. A 3.2 (impact 4, ease 8). A content test now sorts every milestone kind into "always within reach" (survive to a round, defeat an elite) or "has a config that puts it out of reach, with a reason" (fire a Skill, buy upgrades, reveal tiles, reach a level); a kind in neither list fails it. Next in line: the rows that wait for /oversight.
@@ -17,7 +55,7 @@ Pass 140's milestone id guard shipped (e2a17fd). No issues are open for triage. 
 - ease: 8
 - next: a content test that every milestone kind is always within reach or can be marked out of reach
 - issue: #195
-- fixed: (this commit)
+- fixed: 023653b
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)
