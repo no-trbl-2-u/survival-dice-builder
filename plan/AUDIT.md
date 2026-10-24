@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-24 (pass 143, cloud tick)
+
+Pass 142's /decisions citation guard shipped (ec2ebf6). No issues are open for triage. The critique gate is closed (pass 26, 9 commits ago, under 24 hours) and so is the expand gate (pass 17, 10 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row the site can act on waits for /oversight. Checked this pass: the prices the /play base panel shows against the prices the engine charges. With a Mason or Engineer Build active on the base, the Buy button for an upgrade showed the list price, while `legalUpgrades` charges it less the card's cut. An Engineer Build read "Buy Training I (3 materials)" and took 1 material. A 4.5 (impact 5, ease 9). The engine now exports `legalUpgrades`, the button shows the price it returns, "1 material" is singular, and a BasePanel unit test pins a plain Build and an Engineer Build. Next in line: the "Barricade built for 1 materials." log line a Mason Build gives, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [4.5] /play: the Buy upgrade button shows the list price, not the Mason or Engineer price
+- category: bugs
+- impact: 5
+- ease: 9
+- next: show the engine's `legalUpgrades` price on the button, singular "1 material", and a BasePanel unit test
+- issue: #197
+- fixed: (this commit)
+
+### [ ] [1.8] /play: a Mason Build logs "Barricade built for 1 materials."
+- category: content-gaps (voice)
+- impact: 2
+- ease: 9
+- next: singular "1 material" in the build and upgrade log lines, with an exportRun unit test
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 50 and 55 from that item
+
 # Site audit — 2026-10-24 (pass 142, cloud tick)
 
 Pass 141's milestone-kind test shipped (023653b), so the "Milestones a default run can reach" candidate has its last test and only the designer question is left. No issues are open for triage. The critique gate is closed (pass 26, 8 commits ago, under 24 hours) and so is the expand gate (pass 17, 9 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row the site can act on waits for /oversight. Checked this pass: the guard half of the "/decisions checks that stay true" candidate. /decisions shows every check word for word, and no test compares the rule-reading rows a check cites with their status. When the designer decides a row, a check that still asks about it goes stale and no test fails. A 3.2 (impact 4, ease 8). `citedRows` reads the rows a check cites ("row 57", "rows 30, 49", "rule readings 63-70"). A content test fails when a public check cites a row that does not exist, or a decided row outside the pinned list of today's stale citations. That list holds rows 7, 30, 49, 50 and 55 in "Spec v2 design work" and rows 65 and 69 in "Structural v2 questions". Row 50 is decided too, and no critique row named it. A check may drop rows from the list but not add any. The wording stays for /oversight. Next in line: the rows that wait for /oversight.
@@ -17,7 +55,7 @@ Pass 141's milestone-kind test shipped (023653b), so the "Milestones a default r
 - ease: 8
 - next: a content test that every row a public check cites exists and is open, apart from the pinned known-stale rows
 - issue: #196
-- fixed: (this commit)
+- fixed: ec2ebf6
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

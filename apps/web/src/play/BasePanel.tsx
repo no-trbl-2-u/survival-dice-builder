@@ -1,5 +1,5 @@
 import { milestoneIds, milestoneOutOfReach } from '@survival/content'
-import type { Action, GameState } from '@survival/engine'
+import { legalUpgrades, type Action, type GameState } from '@survival/engine'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { cardText } from './effectText.ts'
 import { MilestoneList } from './MilestoneList.tsx'
@@ -8,15 +8,23 @@ import { ofType } from './targets.ts'
 
 type Props = Readonly<{ state: GameState; legal: readonly Action[]; act: (a: Action) => void }>
 
+/** "1 material", "4 materials". */
+const materials = (n: number) => `${n} ${n === 1 ? 'material' : 'materials'}`
+
 /**
  * The base board: health, the 2 upgrade tracks (bought, next, cost; Buy while a Build is active
- * on the base), and the Shop offers (Buy when the figure is on the base and the price is met).
+ * on the base, at the price the engine charges after a Mason or Engineer cut), and the Shop
+ * offers (Buy when the figure is on the base and the price is met).
  * When nothing can be bought it says how buying works, so materials never look stuck. The
  * run's milestones close the panel, folded, with how many are met and how many the config and
  * content put out of reach (rule 1.4).
  */
 export function BasePanel({ state, legal, act }: Props) {
   const upgrades = ofType(legal, 'buyUpgrade')
+  const prices =
+    state.active?.kind === 'build'
+      ? legalUpgrades(state, state.active.costReduction, state.active.level)
+      : []
   const buys = ofType(legal, 'buyCard')
   const player = state.players[state.current]
   const ids = milestoneIds(state.config.milestones)
@@ -41,15 +49,16 @@ export function BasePanel({ state, legal, act }: Props) {
               .map((u) => {
                 const bought = state.upgrades.includes(u.id)
                 const buy = upgrades.find((a) => a.upgrade === u.id)
+                const price = prices.find((p) => p.upgrade === u.id)?.cost ?? u.cost
                 return (
                   <li key={u.id} className={`${styles.tier} ${bought ? styles.bought : ''}`}>
                     {buy ? (
                       <button type="button" onClick={() => act(buy)}>
-                        Buy {u.name} ({u.cost} materials)
+                        Buy {u.name} ({materials(price)})
                       </button>
                     ) : (
                       <span>
-                        {u.name}: {bought ? 'bought' : `${u.cost} materials`}
+                        {u.name}: {bought ? 'bought' : materials(u.cost)}
                       </span>
                     )}
                   </li>
