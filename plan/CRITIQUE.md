@@ -27,15 +27,6 @@
 - suggested fix: Write the open readings in player words ("1 more enemy per node every N rounds"). Cut the phase numbers and file paths. Name the /config option, not its key.
 - source: web-fetch
 
-### [LOW] /config — preset quantity inputs are named after the raw preset id
-- pass: 26 (commit fa7c02b)
-- viewport: desktop
-- category: a11y
-- observation: In the deck preset editor, each card select is named "Preset 1: card N", but each quantity input is named after the raw id, so a screen reader hears two names for one preset. The editable "Id" field shows the raw key.
-- evidence: `apps/web/src/config/ConfigPage.tsx:595` aria-label `Preset ${p + 1}: card ${i + 1}`; `:607` aria-label `${preset.id}: card ${i + 1} quantity` (reads "deck-10-hand-5: card 1 quantity"); `:566` label "Id"
-- suggested fix: Name the quantity input `Preset ${p + 1}: card ${i + 1} quantity`, and give the "Id" field help text that says what it is.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /config — preset quantity inputs are named after the raw preset id (addressed at (this commit))
+- pass: 26 (commit fa7c02b)
+- viewport: desktop
+- category: a11y
+- observation: In the deck preset editor, each card select is named "Preset 1: card N", but each quantity input is named after the raw id, so a screen reader hears two names for one preset. The editable "Id" field shows the raw key.
+- evidence: `apps/web/src/config/ConfigPage.tsx:595` aria-label `Preset ${p + 1}: card ${i + 1}`; `:607` aria-label `${preset.id}: card ${i + 1} quantity` (reads "deck-10-hand-5: card 1 quantity"); `:566` label "Id"
+- suggested fix: Name the quantity input `Preset ${p + 1}: card ${i + 1} quantity`, and give the "Id" field help text that says what it is.
+- source: web-fetch
+- issue: #191
+- resolution: Each quantity input is named "Preset N: card M quantity" and each remove button "Remove preset N: card M", by place as the card select is, never by the raw id. The Id field gets help text under the preset head ("Id: the name "Deck and hand preset" picks this preset by."), tied by aria-describedby. The /config e2e checks all three.
 
 ### [x] [MED] /decisions — row 67 says 4 players get too few materials for Shop I; its own numbers say they get enough (addressed at (this commit))
 - pass: 26 (commit fa7c02b)

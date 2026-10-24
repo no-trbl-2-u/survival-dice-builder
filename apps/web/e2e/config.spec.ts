@@ -135,6 +135,12 @@ test('/config: sliders, toggles, and pick lists; a name can only come from the c
   const preset = page.getByRole('region', { name: 'Preset 1' })
   await expect(preset.getByText(/^Deck: \d+ cards$/)).toBeVisible()
   await expect(preset.getByLabel('Cards in hand', { exact: true })).toBeVisible()
+  // Every input in a preset is named by its place, never by the raw preset id.
+  await expect(preset.getByLabel('Preset 1: card 1 quantity', { exact: true })).toBeVisible()
+  await expect(preset.getByRole('button', { name: 'Remove preset 1: card 1' })).toBeVisible()
+  await expect(preset.getByLabel('Id')).toHaveAccessibleDescription(
+    'Id: the name "Deck and hand preset" picks this preset by.',
+  )
   // Renaming the preset in use is caught on save, at the field that names it.
   await page.getByRole('region', { name: 'Preset 1' }).getByLabel('Id').fill('mine')
   await page.getByRole('button', { name: 'Save config' }).click()

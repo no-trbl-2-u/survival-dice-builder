@@ -566,6 +566,7 @@ function PresetsEditor(
                 Id
                 <input
                   type="text"
+                  aria-describedby={`preset-${p}-id-help`}
                   value={preset.id}
                   onChange={(e) => update(p, { id: e.target.value })}
                 />
@@ -588,6 +589,9 @@ function PresetsEditor(
                 Remove preset
               </button>
             </div>
+            <p id={`preset-${p}-id-help`} className={styles.presetHelp}>
+              Id: the name "Deck and hand preset" picks this preset by.
+            </p>
             <ul className={styles.presetCards}>
               {preset.cards.map((entry, i) => (
                 <li key={i}>
@@ -604,7 +608,7 @@ function PresetsEditor(
                   <input
                     type="number"
                     min={1}
-                    aria-label={`${preset.id}: card ${i + 1} quantity`}
+                    aria-label={`Preset ${p + 1}: card ${i + 1} quantity`}
                     value={String(entry.quantity)}
                     onChange={(e) =>
                       update(p, {
@@ -616,7 +620,7 @@ function PresetsEditor(
                   />
                   <button
                     type="button"
-                    aria-label={`Remove ${preset.id} card ${i + 1}`}
+                    aria-label={`Remove preset ${p + 1}: card ${i + 1}`}
                     disabled={preset.cards.length === 1}
                     onClick={() => update(p, { cards: preset.cards.filter((_, j) => j !== i) })}
                   >
