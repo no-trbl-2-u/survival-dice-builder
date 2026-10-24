@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-22 at commit d720367
-> Pass count: 16
+> Last pass: 2026-10-24 at commit 4af48ad
+> Pass count: 17
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -26,7 +26,8 @@
 - ruling audit: OPEN-QUESTIONS rows 7, 30, 49, 55, 65, 69 (decided 2026-10-11) read; Spec v2 untouched. Loop scope: in (tests, plan housekeeping).
 - re-evidence (expand pass 15): the four /decisions rows are now the only Pending critique rows the site can act on, and the only rows above `/iterate`'s 3.0 bar (8.1 each with the MED bias). They live in `[needs-user-call]` items, which `/iterate` must keep verbatim, so audit passes 101 to 103 drained LOW rows around them, and pass 104 found nothing else at or above 3.0 and handed to `/expand`. The page still shows the five stale checks a day after critique pass 21. Score raised from 3.5 to 4.5: this is now what holds the queue, and only `/oversight` can clear the lines or promote the guard.
 - re-evidence (expand pass 16): critique pass 24 (6116ce3) added two LOW rows with the same cause, text that reaches /decisions from `OPEN-QUESTIONS.md` and `plan/AUDIT.md` and that no test reads: rule reading 4 says "unreachable with 8 non-base tiles" where /play and /config say "out of reach: the tile deck holds 8 tiles"; and row 78 and the "Art direction glance check" keep the serial comma that f5a5c17 dropped from the site and that tests now ban in ruleText, proposals and /config copy. The four rows from passes 20 and 21 are still pending, so 6 of the 8 Pending critique rows sit on this one surface. Scope gains one line: the voice tests (serial comma, "out of reach") also scan the /decisions sources. Score raised from 4.5 to 5.0: two passes in a row found more of the same, and `/iterate` cannot reword `[needs-user-call]` items.
-- last re-evidenced: 2026-10-22
+- re-evidence (expand pass 17): critique pass 25 (fe9d292) filed one more row with this cause: the Event Calendar check cites "Spec v2 ruling 14" and "ruling 9". `/iterate` shipped the reading-status half (26a870b) and a test that bars "ruling N" from status labels, but the check half is a `[needs-user-call]` item, so it was split into its own LOW row that waits for /oversight. A scan of the 5 prerendered pages at 4af48ad (dist text, scripts and tags removed) finds that check is the only "ruling N" left on the served site. All 5 Pending critique rows the site can act on are on /decisions and wait for /oversight; the only other Pending row is the phase-sized sim-bot row. Audit passes 121 to 134 shipped 14 single-row fixes (9dacefa to 4af48ad) while the 8.1 rows stayed queued. Score held at 5.0: same evidence, one more row.
+- last re-evidenced: 2026-10-24
 
 ### [ ] [score 3.5] Milestones a default run can reach: every milestone reachable, or marked out of reach with its reason
 - proposed: 2026-10-17, expand pass 13
@@ -46,7 +47,8 @@
 - ruling audit: Spec v2 17 (milestones), 11.4, 12.1; OPEN-QUESTIONS rows 4 (pending-spec), 45 (decided), 78 (proposed) read. Loop scope: in (rule-text sync, tests, sim report).
 - progress (expand pass 14): f7dc176 extended `milestoneOutOfReach` (`packages/content/src/ruleText.ts:588`) to `reveal-tiles`, so both unreachable milestones are now marked on the run summary and /config. The visible half is done. Still missing: the content test that fails on a new milestone that is neither reachable nor marked, the per-milestone hit rate in the sim report, and the one `/oversight` question on rows 4 and 78. Score held at 3.5.
 - progress (expand pass 16): `/iterate` shipped most of the scope one row at a time. 23f95a5 (level) and 8c3b940 (Arcane Rain) give every milestone kind an out-of-reach answer; e2f727e makes the sim report list every milestone from 0, which is the hit-rate half; 3baaf7b and 7fbb0b8 show the list during the run with "(3 out of reach)". The default batch now reads, on seeds 1-200: round 5 in 200, an elite in 39, round 10 in 4, and 0 for the other 5. Three of the 5 are out of reach (Arcane Rain, 3 upgrades, 10 tiles); round 15 and level 5 are reachable but no bot run gets there (the longest run ends at round 13). Critique pass 24 [LOW]: /config names 7 milestones and /play 8, because "Defeat an elite" has no setting. Still missing: the content test that fails on a new milestone with neither a path nor a reason, and the `/oversight` question, which now covers 5 milestones rather than 2 (rows 4 and 78 plus the two the bot never reaches). Score held at 3.5: the scope is smaller and the designer question larger.
-- last re-evidenced: 2026-10-22
+- progress (expand pass 17): 9dacefa adds the /config Milestones note "Defeat an elite is always a milestone and has no setting.", and a configMeta test checks that /config names every milestone. 142c4e6 gives rule reading 4 the /play "out of reach" words. Still missing: the content test that fails on a new milestone with neither a path nor an out-of-reach reason, and the `/oversight` question on the 5 milestones no default run meets. Score held at 3.5.
+- last re-evidenced: 2026-10-24
 
 ### [ ] [score 1.0] The engagement modal reads on its own: who took the damage, what "in range" counts, when cards play
 - proposed: 2026-10-14, expand pass 11
@@ -275,6 +277,7 @@
 
 ## Considered (below threshold)
 
+- [score 2.0] **One voice check over every served page** (pass 17). Signals: 5 serial-comma fixes in 10 days (f5a5c17, 448f6e6, 054341d, 3917feb, 4af48ad), each on a surface the last guard did not scan, and each adding its own guard (ruleText, HomePage, DecisionsPage and /config tests). A scan of the 5 prerendered pages at 4af48ad finds no list that keeps the serial comma. The 4 hits the shared pattern finds are clause joins ("Each round is Prepare, then Combat, and each phase ...", "... a gathering node hex, and the node still works"), so a site-wide guard in `apps/web/e2e/static.spec.ts` needs a clause allowlist and would still miss /play and /debug, which are shells. Fits `/iterate` if a sixth surface regresses. Not filed.
 - [shipped] **/config help as one template** (score 2.0 at pass 12): the three rows shipped one at a time: ed27a5c (open-question citations link to /decisions), 90858d8 (baseline named one way), 0426919 (deck total and hand labelled apart). Pass 12 note follows.
   - (pass 12) Critique pass 17 and pass 13 leave three /config copy rows pending (plain-text "(open question N)" citations, the baseline named three ways, a deck preset's "Hand size" next to the deck total), after 3 /config fixes shipped this window (2e92a76, 44df05f, d916c91). The citation and baseline rows share a cause with "Player text on Spec v2" and belong in that phase if promoted; the preset label is one line for `/iterate`. Not filed separately.
 - [shipped] **Site shell: per-route meta, a 404, a smaller first script** (score 2.0 at pass 11): fc1a82e split every route but home into its own chunk (main script 727 kB to 277 kB). Two critique rows still sit in Pending and look stale: "one meta description and og:url for every route" (pass 9; phase 40 shipped per-route meta) and "the bot cannot measure today's designer changes" (phase 36 shipped the defender policy). The next `/iterate` or critique pass should verify and close them. Pass 11 note follows.
