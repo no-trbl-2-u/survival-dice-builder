@@ -150,6 +150,20 @@ describe('DecisionsPage', () => {
     )
   })
 
+  it('words the open readings for a visitor: no formulas, phase numbers, report paths or config keys (critique pass 26)', () => {
+    const { container } = render(<DecisionsPage />)
+    const readings = container.querySelector('[data-testid="readings"]')?.textContent ?? ''
+    expect(readings).not.toMatch(
+      /floor\(|measured in phase|phase \d+ bot|Report: |rulings\.|offNodeAmount/,
+    )
+    expect(container.querySelector('[data-question="64"]')?.textContent).toContain(
+      '1 more enemy per Combat every N rounds',
+    )
+    expect(container.querySelector('[data-question="78"]')?.textContent).toContain(
+      'Build levels: Any tier plays the Spec v1 rule',
+    )
+  })
+
   it('links every repository file it names to GitHub, and each file exists', () => {
     const { container } = render(<DecisionsPage />)
     const prefix = repoFileUrl('')
@@ -157,7 +171,6 @@ describe('DecisionsPage', () => {
     const paths = links.map((a) => a.getAttribute('href')!.slice(prefix.length))
     expect(paths).toContain('OPEN-QUESTIONS.md')
     expect(paths).toContain('docs/DECISIONS.md')
-    expect(paths).toContain('docs/reports/phase-22-experiments.md')
     for (const path of paths) expect(repoFiles.has(path), path).toBe(true)
     // No full file path is left as bare code text.
     const bare = [...container.querySelectorAll('code')].filter(

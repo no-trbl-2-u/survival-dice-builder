@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — open rule readings still print code formulas, phase numbers, report paths, and config keys
-- pass: 26 (commit fa7c02b)
-- viewport: desktop
-- category: voice
-- observation: Earlier fixes cleaned the Setting lines and the status lines. The body text of the open readings still has build-history and code tokens.
-- evidence: Row 64 "`1 + floor((round - 1) / N)` enemies per Combat"; rows 63-70 "Report: `docs/reports/phase-22-experiments.md`"; row 78 "(phase 41 bot batch: 0 of 200 runs)" and "`rulings.buildLevels: \"any\"` plays the Spec v1 rule" (`OPEN-QUESTIONS.md`)
-- suggested fix: Write the open readings in player words ("1 more enemy per node every N rounds"). Cut the phase numbers and file paths. Name the /config option, not its key.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -74,7 +65,18 @@
 
 ## Done
 
-### [x] [LOW] /decisions — row 70 uses tabletop words and a second name for the miniature limit (addressed at (this commit))
+### [x] [LOW] /decisions — open rule readings still print code formulas, phase numbers, report paths, and config keys
+- pass: 26 (commit fa7c02b)
+- viewport: desktop
+- category: voice
+- observation: Earlier fixes cleaned the Setting lines and the status lines. The body text of the open readings still has build-history and code tokens.
+- evidence: Row 64 "`1 + floor((round - 1) / N)` enemies per Combat"; rows 63-70 "Report: `docs/reports/phase-22-experiments.md`"; row 78 "(phase 41 bot batch: 0 of 200 runs)" and "`rulings.buildLevels: \"any\"` plays the Spec v1 rule" (`OPEN-QUESTIONS.md`)
+- suggested fix: Write the open readings in player words ("1 more enemy per node every N rounds"). Cut the phase numbers and file paths. Name the /config option, not its key.
+- source: web-fetch
+- issue: #193
+- addressed: (this commit)
+
+### [x] [LOW] /decisions — row 70 uses tabletop words and a second name for the miniature limit (addressed at 34fb231)
 - pass: 26 (commit fa7c02b)
 - viewport: desktop
 - category: voice

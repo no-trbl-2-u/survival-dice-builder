@@ -21,7 +21,7 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 ### 9. Skill capacity (rule 2.1)
 
 - Status: pending-spec 2026-10-04 (Skill design)
-- Reading: The 4 starter Skills are fixed; at most 6 drafted Skills; when full, the kept Skill replaces one (current engine). **Designer 2026-10-04:** experiment with Skill caps (phase 21), and add upgraded Skill tiers (for example Fireball III) so a late draft is never wasted. The Skills themselves are placeholders still to design. **Phase 22 (bot report):** caps of 4, 6 and 8 give identical batches; runs are too short for a cap to bind (keep 6, re-run with longer runs). Report: `docs/reports/phase-22-experiments.md`.
+- Reading: The 4 starter Skills are fixed; at most 6 drafted Skills; when full, the kept Skill replaces one (current engine). **Designer 2026-10-04:** experiment with Skill caps, and add upgraded Skill tiers (for example Fireball III) so a late draft is never wasted. The Skills themselves are placeholders still to design. **Bot report:** caps of 4, 6 and 8 give identical batches; runs are too short for a cap to bind (keep 6, re-run with longer runs).
 - Setting: `player.draftSlots` = `6`; `rulings.fullBoardDraft` = `"swap"`
 
 ### 12. Heal targets in co-op (Mend, Rest, Renewal, Purify) (rule Table 3, 6.7)
@@ -33,7 +33,7 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 ### 17. "Each next level needs 3 more than the last step (3, 9, 18, 30)." Does the step stay a playtest option? (rule 8.5)
 
 - Status: pending-spec 2026-10-11 (Spec v2 sets steps of 3 by default; open for playtest)
-- Reading: The engine plays Spec v2 8.5: each step grows by 3 (level 2 at 3, 3 at 9, 4 at 18, 5 at 30). Still open: whether the step stays a configuration option for playtests. In Spec v1 each step grew by 5 (5, 15, 30, 50). **Designer 2026-10-04:** compare models before deciding: steps that grow by 3; steps that grow by 5 with more experience from elites; 1 level for each elite that spawns (phase 21 bot report). **Phase 22 (bot report):** steps that grow by 3 give 1 more level by round 9 (recommend: turn on; now the default); 5 extra experience for an elite changes almost nothing; 1 level per elite spawn levels far too fast (recommend: keep off). Report: `docs/reports/phase-22-experiments.md`.
+- Reading: The engine plays Spec v2 8.5: each step grows by 3 (level 2 at 3, 3 at 9, 4 at 18, 5 at 30). Still open: whether the step stays a configuration option for playtests. In Spec v1 each step grew by 5 (5, 15, 30, 50). **Designer 2026-10-04:** compare models before deciding: steps that grow by 3; steps that grow by 5 with more experience from elites; 1 level for each elite that spawns. **Bot report:** steps that grow by 3 give 1 more level by round 9 (recommend: turn on; now the default); 5 extra experience for an elite changes almost nothing; 1 level per elite spawn levels far too fast (recommend: keep off).
 - Setting: `experience.firstStep` = `3`; `experience.stepIncrease` = `3`; `experience.eliteBonus` = `0`; `experience.levelPerEliteSpawn` = `false`
 
 ### 46. Must the kept Skill replace a drafted Skill when the draft slots are full, or may the player decline? (rule 11.9, row 9)
@@ -69,43 +69,43 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 ### 63. No clock: enemies spawn only on revealed tiles, and only players reveal tiles. The score is rounds survived. A run where nobody steps off the Base tile never ends (row 62). What replaces the wave track as the clock? (rule Core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: forced reveal** (option, default off; measured in phase 22). At round end, if no tile was revealed in the last N rounds and the tile deck is not empty, the top tile is revealed in the open slot nearest the base (ties: slot order). Bot report: without it a turtle run never ends; with N = 3 the turtle ends in rounds 8-14 (median 11). Recommendation: turn on. Report: `docs/reports/phase-22-experiments.md`.
+- Reading: **Proposed: forced reveal**. At round end, if no tile was revealed in the last N rounds and the tile deck is not empty, the top tile is revealed in the open slot nearest the base (ties: slot order). Bot report: without it a turtle run never ends; with N = 3 the turtle ends in rounds 8-14 (median 11). Recommendation: turn on.
 - Setting: `clock.forcedRevealEvery` = `empty`
 
 ### 64. Difficulty is a function of map state, not time: spawns per Combat equal revealed spawn nodes (0 to 13 with 8 tiles), chosen by the players. How does pressure ramp with the round? (rule Core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: spawn ramp** (option, default off; measured in phase 22). Each node spawns `1 + floor((round - 1) / N)` enemies per Combat, with the usual spill-over and cap. Bot report (N = 4): end round unchanged (runs end before the ramp builds), cap reached in 180 of 200 runs. Recommendation: needs a playtest with the combined set. Report: `docs/reports/phase-22-experiments.md`.
+- Reading: **Proposed: spawn ramp**. Each node spawns 1 more enemy per Combat every N rounds, with the usual spill-over and miniature limit. Bot report (N = 4): end round unchanged (runs end before the ramp builds), miniature limit reached in 180 of 200 runs. Recommendation: needs a playtest with the combined set.
 - Setting: `spawn.rampEvery` = `empty`
 
 ### 66. A tile revealed in Prepare spawns at that same round's Combat, and players do not move in Combat. The explorer ends Prepare on a fresh tile and is pinned next to new spawns for every exchange. Is that the intended cost of exploring? (rule Core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: new tiles wait one round** (option, default off; measured in phase 22). A tile's nodes first spawn at the Combat of the round after its reveal; /play names the node "spawns from round N". Bot report: median end round 6 to 7. Recommendation: turn on. Report: `docs/reports/phase-22-experiments.md`.
+- Reading: **Proposed: new tiles wait one round**. A tile's nodes first spawn at the Combat of the round after its reveal; /play names the node "spawns from round N". Bot report: median end round 6 to 7. Recommendation: turn on.
 - Setting: `spawn.newTileDelay` = `0`
 
 ### 67. Materials are a fixed budget: 10 single-use nodes give 20 materials per run with starter Gather, and the 6 upgrades cost 33. Spent nodes leave 4 of 10 starter cards dead in Prepare, and the 10-card minimum forbids thinning them (rule 6.7, Table 6, core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: Gather off a node gives 1** (option, default off; measured in phase 22). Gather on a spent node or off any node gives `gather.offNodeAmount` materials; nodes stay single-use. Report: `docs/reports/phase-22-experiments.md`.
+- Reading: **Proposed: Gather off a node gives 1**. A Gather on a spent node or off any node gives the materials set in "Gather off a node" on the Config page; nodes stay single-use.
 - Setting: `gather.offNodeAmount` = `0`
 
 ### 68. Co-op does not scale pressure: spawns per node are fixed per Combat regardless of seats, player damage scales with seats and materials per player fall with seats (row 67) (rule 16, core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: seat scaling** (option, default off; measured in phase 22). Each node spawns 1 enemy per 2 seats, rounded up. Bot report: same as the default at 2 seats (by construction); at 4 seats median 5 to 4. Co-op is already shorter than solo for the bot. Recommendation: keep off. Report: `docs/reports/phase-22-experiments.md`.
+- Reading: **Proposed: seat scaling**. Each node spawns 1 enemy per 2 seats, rounded up. Bot report: same as the default at 2 seats (by construction); at 4 seats median 5 to 4. Co-op is already shorter than solo for the bot. Recommendation: keep off.
 - Setting: `spawn.perSeat` = `false`
 
 ### 70. Up to 13 new enemies each Combat; each spills to the nearest empty hex, and the nearest grunt promotes at the miniature limit (20), every round (rule Core loop v2, physical edition)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: spawn range** (option, default off; measured in phase 22). Only nodes within N hexes of a player figure, a Barricade, a Tower or a Base tile hex spawn. Bot report (N = 4): end round unchanged; the upkeep saving is a table question. Recommendation: needs a playtest. Report: `docs/reports/phase-22-experiments.md`.
+- Reading: **Proposed: spawn range**. Only nodes within N hexes of a player figure, a Barricade, a Tower or a Base tile hex spawn. Bot report (N = 4): end round unchanged; the upkeep saving is a table question. Recommendation: needs a playtest.
 - Setting: `spawn.nodeRange` = `empty`; `miniatureLimit` = `20`
 
-### 78. Spec v2 levels the Build card, and every Build card is Build I (Build II and III are not designed yet). Then no card buys Shop II, Shop III, Training II or Training III, so 2 milestones are out of reach: "Buy 3 base upgrades" (phase 41 bot batch: 0 of 200 runs) and "Fire Arcane Rain" (a level 3 Skill needs Training III) (rule 11.4, 12.1, 17)
+### 78. Spec v2 levels the Build card, and every Build card is Build I (Build II and III are not designed yet). Then no card buys Shop II, Shop III, Training II or Training III, so 2 milestones are out of reach: "Buy 3 base upgrades" (0 of 200 bot runs) and "Fire Arcane Rain" (a level 3 Skill needs Training III) (rule 11.4, 12.1, 17)
 
 - Status: proposed 2026-10-13 (engine: phase 41)
-- Reading: **As shipped:** the rule as written (`rulings.buildLevels: "levelled"`). `rulings.buildLevels: "any"` plays the Spec v1 rule (any Build buys the next tier) for playtests until the designer adds Build II and III cards or gives the existing cards higher levels.
+- Reading: **As shipped:** the rule as written (Build levels: Levelled). Build levels: Any tier plays the Spec v1 rule (any Build buys the next tier) for playtests until the designer adds Build II and III cards or gives the existing cards higher levels.
 - Setting: `rulings.buildLevels` = `"levelled"`
 
 ## Decided recently
@@ -121,9 +121,9 @@ Readings the designer decided on the last 2 decision dates, newest first. The ga
   - Now in the written rules: a knocked-out player loses all their materials and all their currency (14.2).
 - **59. The Haul card was read as gathering 2 "on a node or off one"; the core loop v2 walkthrough says Gather takes N **on a gathering node** and spends it. Which wins?** (rule 6.7, Table 8, row 20, 2026-10-11) **The node is needed** for every Gather card, and a used node is spent (the walkthrough, which makes nodes scarce). The flag restores that reading of Haul: off a node Gather also gives its amount and spends nothing; a Gather on a node still spends that node.
 - **60. The Haul card's "Gather +2" was read as 2 in total. The other "Gather +N" cards?** (rule Table 8, row 20, 2026-10-11) **N in total for each card.** Replaced by Spec v2 Table 8: Haul 3, Forage 2, Excavate 4, Quarry 6 (starter Gather 2). Spec v1 gave Haul 2, Forage 1, Excavate 3, Quarry 5.
-- **65. Exchange count is coupled to deck size: deck 10 with hand 3 gives 4 exchanges per Combat (deck 6 gave 2), and enemies attack once per exchange. One adjacent grunt deals 8 per round against 15 health, and every bought card adds an exchange. Phase 20 batch: median end round 5, 199 of 200 runs end by player death; phase 21 batch: median round 6, all by base fall. Intended?** (rule 7.8 step 8, core loop v2, 2026-10-11) **Proposed: each enemy attacks once per Combat** (option, default off; measured in phase 22). An enemy that has attacked is tipped over and does not attack again until the next Combat start. Bot report: median end round 6 to 7. Recommendation: turn on. Report: `docs/reports/phase-22-experiments.md`.
+- **65. Exchange count is coupled to deck size: deck 10 with hand 3 gives 4 exchanges per Combat (deck 6 gave 2), and enemies attack once per exchange. One adjacent grunt deals 8 per round against 15 health, and every bought card adds an exchange. Phase 20 batch: median end round 5, 199 of 200 runs end by player death; phase 21 batch: median round 6, all by base fall. Intended?** (rule 7.8 step 8, core loop v2, 2026-10-11) **Proposed: each enemy attacks once per Combat**. An enemy that has attacked is tipped over and does not attack again until the next Combat start. Bot report: median end round 6 to 7. Recommendation: turn on.
   - Now in the written rules: the option is removed. Combat is engagements (row 72), and an enemy rolls its enemy dice only in an engagement (9.5).
-- **69. Structure-first targeting makes the Base tile a safe firing position: enemies next to the base target the base rather than the player beside them, and a player on the Base tile can never be 2 hexes nearer than a structure (row 56). The player hits them every exchange and is never attacked. Turtling plus row 63 is the dominant line** (rule 9.3, core loop v2, 2026-10-11) **Proposed: every adjacent enemy attacks** (option, default off; measured in phase 22). In a player's exchange every enemy next to the figure attacks it, whatever its target. Bot report: the turtle bot is now attacked, but the base falls in the same round and the turtle still outlasts the active bot (median 11 against 6, with the row 63 clock). Recommendation: needs a playtest. Report: `docs/reports/phase-22-experiments.md`.
+- **69. Structure-first targeting makes the Base tile a safe firing position: enemies next to the base target the base rather than the player beside them, and a player on the Base tile can never be 2 hexes nearer than a structure (row 56). The player hits them every exchange and is never attacked. Turtling plus row 63 is the dominant line** (rule 9.3, core loop v2, 2026-10-11) **Proposed: every adjacent enemy attacks**. In a player's exchange every enemy next to the figure attacks it, whatever its target. Bot report: the turtle bot is now attacked, but the base falls in the same round and the turtle still outlasts the active bot (median 11 against 6, with the row 63 clock). Recommendation: needs a playtest.
   - Now in the written rules: the option is removed. In an engagement every enemy next to the player rolls its enemy dice, whatever its target (7.8 step 2).
 - **73. Under engagements, does siege use the structure-damage ruling (row 7) and the 7.11 check that an enemy next to a player does not attack a structure?** (rule 7.11, 7.12, Combat v3 (siege), 2026-10-11) **No to both** (as shipped): at the end of Combat every enemy next to a structure, oldest first, deals the siege damage (1; an elite 3) to a Barricade first, then a Tower, then the base, whether or not a player stands next to it. `rulings.structureDamage` and the 7.11 check apply to the exchange structure step only.
 - **74. Do rows 65 (enemies attack once per Combat) and 69 (every adjacent enemy attacks) apply under engagements?** (rule 7.8 step 8, 9.3, Combat v3, 2026-10-11) **No, exchanges only** (as shipped): in an engagement every adjacent enemy rolls its enemy dice once per engagement whatever its target, and there is no enemy attack phase. Both options change nothing under engagements: the defender bot batches are identical run for run (`docs/reports/phase-36-defender.md`).

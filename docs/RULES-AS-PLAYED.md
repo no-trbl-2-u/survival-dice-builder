@@ -161,7 +161,7 @@ states readings; it decides none. Changing the spec is the designer's call (an `
 | 11.1 | The base has 20 health at the start. | same | as written |  |
 | 11.2 | To buy an upgrade, your figure must be on the base. Play a Build card and pay the materials. A Build card with a cost reduction lowers the cost of each upgrade it buys. The minimum cost is 0. | same | as written |  |
 | 11.3 | Each upgrade adds 5 to the maximum base health and 5 to the base health. | same | as written |  |
-| 11.4 | You must buy the upgrades of a track in sequence: I, then II, then III. A Build card has a level. Build I buys level I upgrades. Build II buys level I or II upgrades. Build III buys each upgrade. | open | Row 78 reading: **As shipped:** the rule as written (`rulings.buildLevels: "levelled"`). `rulings.buildLevels: "any"` plays the Spec v1 rule (any Build buys the next tier) for playtests until the designer adds Build II and III cards or gives the existing cards higher levels. | row 78 |
+| 11.4 | You must buy the upgrades of a track in sequence: I, then II, then III. A Build card has a level. Build I buys level I upgrades. Build II buys level I or II upgrades. Build III buys each upgrade. | open | Row 78 reading: **As shipped:** the rule as written (Build levels: Levelled). Build levels: Any tier plays the Spec v1 rule (any Build buys the next tier) for playtests until the designer adds Build II and III cards or gives the existing cards higher levels. | row 78 |
 | 11.5 | When you buy a card, replace the offer immediately with a card from the highest open level supply. If that supply is empty, use the next lower level supply. If all open supplies are empty, the Shop shows fewer than 3 offers. When Shop II or Shop III opens, the offers on the Shop do not change. | same | as written |  |
 | 11.6 | Skill draft: Each player looks at the top 2 Skills of the highest open level Skill supply. Each player also looks at the Skills in their draft pool. | same | as written |  |
 | 11.7 | Keep 1 Skill. It is free. Put the other Skills in your draft pool. | same | as written |  |
@@ -172,7 +172,7 @@ states readings; it decides none. Changing the spec is the designer's call (an `
 
 | Rule | As written | Status | As played | Source |
 |---|---|---|---|---|
-| 12.1 | Use a Build card to build 1 defense on your hex or on an adjacent hex. The level of the Build must be at least the level of the defense. | open | Row 78 reading: **As shipped:** the rule as written (`rulings.buildLevels: "levelled"`). `rulings.buildLevels: "any"` plays the Spec v1 rule (any Build buys the next tier) for playtests until the designer adds Build II and III cards or gives the existing cards higher levels. | row 78 |
+| 12.1 | Use a Build card to build 1 defense on your hex or on an adjacent hex. The level of the Build must be at least the level of the defense. | open | Row 78 reading: **As shipped:** the rule as written (Build levels: Levelled). Build levels: Any tier plays the Spec v1 rule (any Build buys the next tier) for playtests until the designer adds Build II and III cards or gives the existing cards higher levels. | row 78 |
 | 12.2 | You cannot build on the base, a lake, a mountain, or a hex with an enemy. A hex can hold 1 defense at most. | same | as written |  |
 | 12.3 | Tower attack: The Tower gives 2 damage to the nearest enemy within 2 hexes. If 2 enemies are equally near, the players choose. | same | as written |  |
 | 12.4 | A defense with 0 health is removed from the map. | same | as written |  |
