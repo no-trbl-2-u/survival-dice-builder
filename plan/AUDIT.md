@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-24 (pass 140, cloud tick)
+
+Pass 139's open-readings fix shipped (6eb1c7f). No issues are open for triage. The critique gate is closed (pass 26, 6 commits ago, under 24 hours) and so is the expand gate (pass 17, 7 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row the site can act on waits for /oversight, and the sim-bot row is phase-sized. Checked this pass: the guard the "Milestones a default run can reach" candidate still lacks. The engine records milestones from its own list (`reachedMilestones`), while /play's "Milestones: N of 8 met", the /config milestone lines and the sim report count from the content's `milestoneIds`; no test compared the two, so a milestone added to one list only would be recorded and never shown, or shown and never met. A 3.2 (impact 4, ease 8). An engine test now meets every milestone and checks that `checkMilestones` records exactly `milestoneIds`, under the default config and a custom one; dropping an id from either list fails it. Next in line: the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] tests: the engine's milestone ids and the list /play, /config and the sim show are never compared
+- category: tests
+- impact: 4
+- ease: 8
+- next: an engine test that every milestone met records exactly `milestoneIds`
+- issue: #194
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.2] sim: the bot cannot measure today's designer changes (critique LOW, session residue)
+- category: external-critique (sim)
+- impact: 3
+- ease: 4
+- next: a phase-sized bot policy change; belongs with /expand or /oversight
+
 # Site audit — 2026-10-24 (pass 139, cloud tick)
 
 Pass 138's row 70 fix shipped (34fb231). No issues are open for triage. The critique gate is closed (pass 26, 5 commits ago) and so is the expand gate (pass 17, today). Phase 35 is still blocked on the designer's Skills session. The three MEDs at 8.1 still wait for /oversight, so the top pick a cloud tick can act on is the last pass 26 LOW: the open readings on /decisions still printed a code formula (row 64), phase numbers (rows 9, 17, 63-70, 78), the report path in each proposal row, and config keys (rows 67, 78). That scores 1.8 (impact 3, ease 6). The readings now say "1 more enemy per Combat every N rounds", drop the "(option, default off; measured in phase 22)" note the status line already gives, drop the report path (the phase 22 notes under the OPEN-QUESTIONS.md table still name it), and name the Config options by their labels. A /decisions unit test pins it. Next in line: the rows that wait for /oversight.
@@ -17,7 +55,7 @@ Pass 138's row 70 fix shipped (34fb231). No issues are open for triage. The crit
 - ease: 6
 - next: write the open readings in player words, cut phase numbers and file paths, name /config options not keys
 - issue: #193
-- fixed: (this commit)
+- fixed: 6eb1c7f
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

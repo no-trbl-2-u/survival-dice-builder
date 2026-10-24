@@ -1,4 +1,4 @@
-import { defaultContent, type GameConfig } from '@survival/content'
+import { defaultContent, milestoneIds, type GameConfig } from '@survival/content'
 import { describe, expect, it } from 'vitest'
 import { damageEnemy } from '../src/combat/resolve.ts'
 import { applyAction, createGame, legalActions, type GameState } from '../src/index.ts'
@@ -374,6 +374,34 @@ describe('milestones and the end of the run (14, 17)', () => {
     ])
     expect(events).toHaveLength(7)
     expect(checkMilestones(after, '10.10')[1]).toEqual([])
+  })
+
+  it('17 the milestones a run can record are the ones /play, /config and the sim list', () => {
+    const met = (cfg: GameConfig) =>
+      home(
+        {
+          round: Math.max(...cfg.milestones.surviveRounds),
+          level: cfg.milestones.level,
+          upgrades: defaultContent.upgrades
+            .slice(0, cfg.milestones.upgradesBought)
+            .map((u) => u.id),
+          progress: {
+            elitesDefeated: 1,
+            firedSkills: [cfg.milestones.skillFired],
+            tilesRevealed: cfg.milestones.tilesRevealed,
+            cardsBought: 0,
+            lastRevealRound: 1,
+            capReachedRound: null,
+          },
+        },
+        cfg,
+      )
+    const custom: GameConfig = {
+      ...config,
+      milestones: { ...config.milestones, surviveRounds: [3, 8], skillFired: 'cleave' },
+    }
+    for (const cfg of [config, custom])
+      expect(checkMilestones(met(cfg), '10.10')[0].milestones).toEqual(milestoneIds(cfg.milestones))
   })
 
   it('14.3 the run end records the milestones reached', () => {
