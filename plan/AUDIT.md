@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-24 (pass 141, cloud tick)
+
+Pass 140's milestone id guard shipped (e2a17fd). No issues are open for triage. The critique gate is closed (pass 26, 7 commits ago, under 24 hours) and so is the expand gate (pass 17, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row the site can act on waits for /oversight, and the sim-bot row is phase-sized. Checked this pass: the last test the "Milestones a default run can reach" candidate still lacks. `milestoneOutOfReach` answers null for any milestone it does not name, so a new milestone kind would show on /play, /config and the run summary as within reach even when the default game cannot meet it, and no test would fail. A 3.2 (impact 4, ease 8). A content test now sorts every milestone kind into "always within reach" (survive to a round, defeat an elite) or "has a config that puts it out of reach, with a reason" (fire a Skill, buy upgrades, reveal tiles, reach a level); a kind in neither list fails it. Next in line: the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] tests: a new milestone kind is treated as within reach and no test fails
+- category: tests
+- impact: 4
+- ease: 8
+- next: a content test that every milestone kind is always within reach or can be marked out of reach
+- issue: #195
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.2] sim: the bot cannot measure today's designer changes (critique LOW, session residue)
+- category: external-critique (sim)
+- impact: 3
+- ease: 4
+- next: a phase-sized bot policy change; belongs with /expand or /oversight
+
 # Site audit — 2026-10-24 (pass 140, cloud tick)
 
 Pass 139's open-readings fix shipped (6eb1c7f). No issues are open for triage. The critique gate is closed (pass 26, 6 commits ago, under 24 hours) and so is the expand gate (pass 17, 7 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row the site can act on waits for /oversight, and the sim-bot row is phase-sized. Checked this pass: the guard the "Milestones a default run can reach" candidate still lacks. The engine records milestones from its own list (`reachedMilestones`), while /play's "Milestones: N of 8 met", the /config milestone lines and the sim report count from the content's `milestoneIds`; no test compared the two, so a milestone added to one list only would be recorded and never shown, or shown and never met. A 3.2 (impact 4, ease 8). An engine test now meets every milestone and checks that `checkMilestones` records exactly `milestoneIds`, under the default config and a custom one; dropping an id from either list fails it. Next in line: the rows that wait for /oversight.
@@ -17,7 +55,7 @@ Pass 139's open-readings fix shipped (6eb1c7f). No issues are open for triage. T
 - ease: 8
 - next: an engine test that every milestone met records exactly `milestoneIds`
 - issue: #194
-- fixed: (this commit)
+- fixed: e2a17fd
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

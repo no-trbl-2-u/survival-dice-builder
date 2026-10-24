@@ -392,6 +392,30 @@ describe('rule text from config', () => {
     expect(milestoneOutOfReach('fire-arcane-rain', any, defaultContent)).toBeNull()
   })
 
+  it('milestones: every kind is always within reach or has a config that puts it out of reach (17)', () => {
+    const kind = (id: string) =>
+      id.replace(/^survive-round-\d+$/, 'survive-round').replace(/^fire-.+$/, 'fire')
+    const always = ['survive-round', 'defeat-elite']
+    const out: Record<string, [string, GameConfig]> = {
+      fire: ['fire-arcane-rain', base],
+      'buy-upgrades': ['buy-upgrades', base],
+      'reveal-tiles': ['reveal-tiles', base],
+      'reach-level': [
+        'reach-level',
+        With((c) => ({ ...c, options: { ...c.options, maxLevel: 4 } })),
+      ],
+    }
+    expect([...new Set(milestoneIds(m).map(kind))].sort()).toEqual(
+      [...always, ...Object.keys(out)].sort(),
+    )
+    for (const [id, config] of Object.values(out))
+      expect(milestoneOutOfReach(id, config, defaultContent)).toMatch(/^out of reach: /)
+    const worst = With((c) => ({ ...c, options: { ...c.options, maxLevel: 1 } }))
+    for (const id of milestoneIds(m).filter((i) => always.includes(kind(i))))
+      for (const config of [base, worst, ...Object.values(out).map(([, c]) => c)])
+        expect(milestoneOutOfReach(id, config, defaultContent)).toBeNull()
+  })
+
   it('/config: the fields a phrase reads get that phrase; others get none', () => {
     const line = (path: string) => ruleLineFor(path, base, defaultContent)
     expect(line('miniatureLimit')).toBe(miniatureLimitText(base))
