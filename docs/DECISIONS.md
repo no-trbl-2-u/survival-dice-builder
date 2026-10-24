@@ -87,7 +87,7 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 ### 67. Materials are a fixed budget: 10 single-use nodes give 20 materials per run with starter Gather, and the 6 upgrades cost 33. In 4-player, 2.5 nodes each is below Shop I. Spent nodes leave 4 of 10 starter cards dead in Prepare, and the 10-card minimum forbids thinning them (rule 6.7, Table 6, core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: Gather off a node gives 1** (option, default off; measured in phase 22). Gather on a spent node or off any node gives `gather.offNodeAmount` materials; nodes stay single-use. Bot report: median end round 6 to 9, the largest single change. Recommendation: turn on. Report: `docs/reports/phase-22-experiments.md`.
+- Reading: **Proposed: Gather off a node gives 1** (option, default off; measured in phase 22). Gather on a spent node or off any node gives `gather.offNodeAmount` materials; nodes stay single-use. Report: `docs/reports/phase-22-experiments.md`.
 - Setting: `gather.offNodeAmount` = `0`
 
 ### 68. Co-op does not scale pressure: spawns per node are fixed per Combat regardless of seats, player damage scales with seats and materials per player fall with seats (row 67) (rule 16, core loop v2)

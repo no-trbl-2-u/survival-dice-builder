@@ -1,4 +1,4 @@
-import { openQuestions, parseQuestions } from '@survival/content'
+import { defaultProposals, openQuestions, parseQuestions } from '@survival/content'
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import questionsMd from '../../../../OPEN-QUESTIONS.md?raw'
@@ -57,6 +57,18 @@ describe('DecisionsPage', () => {
     expect(row63?.textContent).toContain('Recommendation from the bot batches')
     expect(row63?.querySelector('button')?.textContent).toBe('Try this on /play')
     expect(container.querySelectorAll('[data-proposal]').length).toBe(6)
+  })
+
+  it("gives one recommendation per reading: the reading's own never contradicts its proposal (critique pass 26)", () => {
+    const words = { 'turn-on': 'turn on', playtest: 'playtest', 'keep-off': 'keep off' } as const
+    const rows = parseQuestions(questionsMd)
+    for (const proposal of defaultProposals) {
+      const reading = rows.find((r) => r.number === proposal.row)?.reading ?? ''
+      const own = reading.match(/Recommendation: ([^.]*)\./)?.[1]
+      if (own !== undefined) expect(own, `row ${proposal.row}`).toContain(words[proposal.advice])
+    }
+    // Row 67's proposal says playtest, so its old "turn on" line is gone.
+    expect(rows.find((r) => r.number === 67)?.reading).not.toContain('Recommendation')
   })
 
   it('lists the readings decided recently, newest first (phase 37)', () => {

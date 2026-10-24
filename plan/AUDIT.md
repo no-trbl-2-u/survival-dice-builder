@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-24 (pass 135, cloud tick)
+
+Critique pass 26 filed five rows, and expand pass 17 found no new candidates. No issues are open for triage. The critique gate is closed (pass 26, 1 commit ago) and so is the expand gate (pass 17, today). Phase 35 is still blocked on the designer's Skills session. The top pick is the pass 26 MED on rule reading 67: the reading said "Recommendation: turn on" and gave a median of 6 to 9, but the proposal block under it says it needs a playtest and gives 6, now 8. That scores 8.1 (impact 6, ease 9, bias x1.5). The reading's own report sentences are cut, and a DecisionsPage test keeps each reading's own recommendation in line with its proposal's advice. Next in line: the second row-67 MED (the 4-player Shop I claim contradicts the row's own numbers).
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /decisions: rule reading 67 gives two recommendations and two bot results (critique MED, pass 26, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: cut row 67's old bot report sentences; DecisionsPage test guards reading-vs-proposal advice
+- issue: #189
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: row 67 says 4 players get too few materials for Shop I; its own numbers say enough (critique MED, pass 26, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: recompute the 4-player claim against Gather 2 and Shop I cost 4, or cut it
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
 # Site audit — 2026-10-23 (pass 134, cloud tick)
 
 Pass 133's /tiles row shipped (5ea4a9b). No issues are open for triage, the critique gate is closed (pass 25, 8 commits ago, under 24 hours), the expand gate is closed (pass 16, 15 commits ago, under 48 hours), and the only pending phase (35) is blocked on the designer's Skills session. Every critique row left waits for /oversight or is the phase-sized sim-bot row, so this pass read the prerendered pages for copy that breaks the site's own rules. Two /config help lines still ended an "and" list with a serial comma, which the rest of the site has dropped: "an id, a hand size, and its starter cards" (deck presets) and "in rounds 2, 4, and 6" (draft), a 1.8 (impact 2, ease 9). The serial-comma guard in ruleText.test.ts only caught ", or" lists. Both lines now drop the comma, and a new guard bars "x, y, and z" lists from every /config help line. Next in line: the rows that wait for /oversight.

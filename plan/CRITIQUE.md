@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — rule reading 67 gives two recommendations and two bot results
-- pass: 26 (commit fa7c02b)
-- viewport: desktop
-- category: comprehension
-- observation: The reading text of row 67 says turn the option on and gives a median end round of 6 to 9. The proposal block under it says the option needs a playtest and gives round 6, now 8. /config shows only the playtest advice. A reader cannot tell which result is current.
-- evidence: "Bot report: median end round 6 to 9, the largest single change. Recommendation: turn on." (`OPEN-QUESTIONS.md` row 67) and "Recommendation from the bot batches: it needs a playtest." (`packages/content/data/proposals.json` row 67, `"advice": "playtest"`)
-- suggested fix: Cut the old "Bot report ... Recommendation: turn on." sentences from row 67 in `OPEN-QUESTIONS.md`, so the measured proposal block is the only result shown.
-- source: web-fetch
-
 ### [MED] /decisions — row 67 says 4 players get too few materials for Shop I; its own numbers say they get enough
 - pass: 26 (commit fa7c02b)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: user
 
 ## Done
+
+### [x] [MED] /decisions — rule reading 67 gives two recommendations and two bot results (addressed at (this commit))
+- pass: 26 (commit fa7c02b)
+- viewport: desktop
+- category: comprehension
+- observation: The reading text of row 67 says turn the option on and gives a median end round of 6 to 9. The proposal block under it says the option needs a playtest and gives round 6, now 8. /config shows only the playtest advice. A reader cannot tell which result is current.
+- evidence: "Bot report: median end round 6 to 9, the largest single change. Recommendation: turn on." (`OPEN-QUESTIONS.md` row 67) and "Recommendation from the bot batches: it needs a playtest." (`packages/content/data/proposals.json` row 67, `"advice": "playtest"`)
+- suggested fix: Cut the old "Bot report ... Recommendation: turn on." sentences from row 67 in `OPEN-QUESTIONS.md`, so the measured proposal block is the only result shown.
+- source: web-fetch
+- issue: #189
+- resolution: Row 67's reading drops its old bot report and its "Recommendation: turn on.", so the measured proposal block (it needs a playtest; median round 6, now 8) is the only result on /decisions. docs/DECISIONS.md is regenerated. A DecisionsPage test fails when an open reading's own recommendation contradicts its proposal's advice.
 
 ### [x] [LOW] /decisions — row 17's reading status cites a ruling number (addressed at (this commit))
 - pass: 25 (commit 690f48e)
