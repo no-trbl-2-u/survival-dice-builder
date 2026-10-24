@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — row 67 says 4 players get too few materials for Shop I; its own numbers say they get enough
-- pass: 26 (commit fa7c02b)
-- viewport: desktop
-- category: comprehension
-- observation: Row 67 says 10 nodes give 20 materials, so each node gives 2 and 2.5 nodes give 5. Shop I costs 4. The claim "below Shop I" contradicts the row's own numbers and the home page.
-- evidence: "10 single-use nodes give 20 materials per run with starter Gather ... In 4-player, 2.5 nodes each is below Shop I." (`OPEN-QUESTIONS.md` row 67); / "buy Shop I (a Build card and 4 materials)"; `packages/content/data/upgrades.json` Shop I `"cost": 4`
-- suggested fix: Recompute the 4-player claim with the current Gather and Shop I values, or cut it from row 67.
-- source: web-fetch
-
 ### [LOW] /decisions — row 70 uses tabletop words and a second name for the miniature limit
 - pass: 26 (commit fa7c02b)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: user
 
 ## Done
+
+### [x] [MED] /decisions — row 67 says 4 players get too few materials for Shop I; its own numbers say they get enough (addressed at (this commit))
+- pass: 26 (commit fa7c02b)
+- viewport: desktop
+- category: comprehension
+- observation: Row 67 says 10 nodes give 20 materials, so each node gives 2 and 2.5 nodes give 5. Shop I costs 4. The claim "below Shop I" contradicts the row's own numbers and the home page.
+- evidence: "10 single-use nodes give 20 materials per run with starter Gather ... In 4-player, 2.5 nodes each is below Shop I." (`OPEN-QUESTIONS.md` row 67); / "buy Shop I (a Build card and 4 materials)"; `packages/content/data/upgrades.json` Shop I `"cost": 4`
+- suggested fix: Recompute the 4-player claim with the current Gather and Shop I values, or cut it from row 67.
+- source: web-fetch
+- issue: #190
+- resolution: Row 67's reading drops "In 4-player, 2.5 nodes each is below Shop I.": at Gather 2 that is 5 materials each, more than Shop I's 4. The rest of the row (20 materials per run, 33 for the 6 upgrades) stands. docs/DECISIONS.md is regenerated.
 
 ### [x] [MED] /decisions — rule reading 67 gives two recommendations and two bot results (addressed at (this commit))
 - pass: 26 (commit fa7c02b)
