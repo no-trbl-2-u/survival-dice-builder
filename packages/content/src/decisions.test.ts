@@ -270,7 +270,7 @@ describe('decisions', () => {
   it('words a rule tag and a content-file setting for a visitor (critique pass 20)', () => {
     expect(readingRuleText('Core loop v2')).toBe('not in the written rules')
     expect(readingRuleText('Core loop v2, physical edition')).toBe(
-      'not in the written rules (physical edition)',
+      'not in the written rules, physical edition',
     )
     expect(readingRuleText('10.3, core loop v2')).toBe('rule 10.3, core loop')
     expect(readingRuleText('Table 3, 6.7')).toBe('rule Table 3, 6.7')

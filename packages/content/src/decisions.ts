@@ -243,8 +243,8 @@ export function settingValueText(path: string, json: string, meta: ConfigMeta): 
  * A reading's rule tag as /decisions shows it: written-rules sections through the play log's
  * citation ("rule 6.7, Table 6, core loop"), without the row of a rules table the page does not
  * show ("Table 8, row 20" is "rule Table 8"); a tag with no section is "not in the written rules",
- * with any note left after the design-document name ("not in the written rules (physical
- * edition)").
+ * with any note left after the design-document name after a comma ("not in the written rules,
+ * physical edition"), so the page's brackets never hold a second pair.
  *
  * @param rule - the row's Rule column ("Core loop v2", "10.3, core loop v2").
  * @rule 18.1
@@ -253,7 +253,7 @@ export function readingRuleText(rule: string): string {
   const cited = ruleCitation(rule).replace(/,\s*row \d+/gi, '')
   if (/^(?:\d|Table)/.test(cited)) return `rule ${cited}`
   const note = cited.replace(/^core loop,?\s*/i, '')
-  return `not in the written rules${note ? ` (${note})` : ''}`
+  return `not in the written rules${note ? `, ${note}` : ''}`
 }
 
 /** Content files a row's Flag column may name, as the place a visitor knows them by. */

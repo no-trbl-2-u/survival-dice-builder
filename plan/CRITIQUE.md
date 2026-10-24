@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — row 70 uses tabletop words and a second name for the miniature limit
-- pass: 26 (commit fa7c02b)
-- viewport: desktop
-- category: voice
-- observation: /play and /config call the enemy cap the "miniature limit". Row 70 says "the 20 cap" and talks about "table upkeep" and "placements". Its rule tag also puts one pair of brackets inside another.
-- evidence: "70. Table upkeep per Combat: up to 13 placements, each with spill-over to the nearest empty hex and a nearest-grunt promotion at the 20 cap, every round. (not in the written rules (physical edition))"; /play "Enemies N of 20 (miniature limit)"
-- suggested fix: Reword to "Up to 13 new enemies each Combat; each spills to the nearest empty hex, and the nearest grunt promotes at the miniature limit (20)." Remove the nested brackets from the tag.
-- source: web-fetch
-
 ### [LOW] /decisions — open rule readings still print code formulas, phase numbers, report paths, and config keys
 - pass: 26 (commit fa7c02b)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /decisions — row 70 uses tabletop words and a second name for the miniature limit (addressed at (this commit))
+- pass: 26 (commit fa7c02b)
+- viewport: desktop
+- category: voice
+- observation: /play and /config call the enemy cap the "miniature limit". Row 70 says "the 20 cap" and talks about "table upkeep" and "placements". Its rule tag also puts one pair of brackets inside another.
+- evidence: "70. Table upkeep per Combat: up to 13 placements, each with spill-over to the nearest empty hex and a nearest-grunt promotion at the 20 cap, every round. (not in the written rules (physical edition))"; /play "Enemies N of 20 (miniature limit)"
+- suggested fix: Reword to "Up to 13 new enemies each Combat; each spills to the nearest empty hex, and the nearest grunt promotes at the miniature limit (20)." Remove the nested brackets from the tag.
+- source: web-fetch
+- issue: #192
+- resolution: Row 70 now reads "Up to 13 new enemies each Combat; each spills to the nearest empty hex, and the nearest grunt promotes at the miniature limit (20), every round." A rule tag with a note after the design-document name now joins it with a comma ("not in the written rules, physical edition"), so the page never nests brackets; the content unit test pins it.
 
 ### [x] [LOW] /config — preset quantity inputs are named after the raw preset id (addressed at (this commit))
 - pass: 26 (commit fa7c02b)

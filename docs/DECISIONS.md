@@ -96,7 +96,7 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 - Reading: **Proposed: seat scaling** (option, default off; measured in phase 22). Each node spawns 1 enemy per 2 seats, rounded up. Bot report: same as the default at 2 seats (by construction); at 4 seats median 5 to 4. Co-op is already shorter than solo for the bot. Recommendation: keep off. Report: `docs/reports/phase-22-experiments.md`.
 - Setting: `spawn.perSeat` = `false`
 
-### 70. Table upkeep per Combat: up to 13 placements, each with spill-over to the nearest empty hex and a nearest-grunt promotion at the 20 cap, every round (rule Core loop v2, physical edition)
+### 70. Up to 13 new enemies each Combat; each spills to the nearest empty hex, and the nearest grunt promotes at the miniature limit (20), every round (rule Core loop v2, physical edition)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
 - Reading: **Proposed: spawn range** (option, default off; measured in phase 22). Only nodes within N hexes of a player figure, a Barricade, a Tower or a Base tile hex spawn. Bot report (N = 4): end round unchanged; the upkeep saving is a table question. Recommendation: needs a playtest. Report: `docs/reports/phase-22-experiments.md`.

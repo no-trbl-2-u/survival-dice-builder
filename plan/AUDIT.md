@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-24 (pass 138, cloud tick)
+
+Pass 137's /config preset naming fix shipped (a4b5d3f). No issues are open for triage. The critique gate is closed (pass 26, 4 commits ago) and so is the expand gate (pass 17, today). Phase 35 is still blocked on the designer's Skills session. The three MEDs at 8.1 still wait for /oversight, so the top pick a cloud tick can act on is the pass 26 voice LOW: row 70 on /decisions said "table upkeep", "placements" and "the 20 cap" where /play and /config say "miniature limit", and its tag nested one pair of brackets in another. That scores 2.0 (impact 3, ease 7). The row now speaks in player words and names the miniature limit, and a rule tag's note joins with a comma. Next in line: the rows that wait for /oversight, then the pass 26 LOW on code tokens in open readings.
+
+## Top 5 findings (scored)
+
+### [x] [2.0] /decisions: row 70 uses tabletop words and a second name for the miniature limit (critique LOW, pass 26)
+- category: external-critique (voice)
+- impact: 3
+- ease: 7
+- next: reword row 70 to "miniature limit" and drop the nested brackets in its tag
+- issue: #192
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.8] /decisions: open rule readings still print code formulas, phase numbers, report paths, and config keys (critique LOW, pass 26)
+- category: external-critique (voice)
+- impact: 3
+- ease: 6
+- next: write the open readings in player words, cut phase numbers and file paths, name /config options not keys
+
 # Site audit — 2026-10-24 (pass 137, cloud tick)
 
 Pass 136's row 67 Shop I fix shipped (14daa93). No issues are open for triage. The critique gate is closed (pass 26, 3 commits ago) and so is the expand gate (pass 17, today). Phase 35 is still blocked on the designer's Skills session. The three MEDs at 8.1 still wait for /oversight, so the top pick a cloud tick can act on is the pass 26 a11y LOW: on /config each preset quantity input and remove button was named after the raw preset id ("deck-10-hand-5: card 1 quantity") while the card select beside it says "Preset 1: card 1". That scores 3.6 (impact 4, ease 9). Both now name the preset by its place, the Id field gets help text, and the /config e2e checks the names. Next in line: the rows that wait for /oversight, then the pass 26 LOWs (row 70 wording, code tokens in open readings).
@@ -17,7 +55,7 @@ Pass 136's row 67 Shop I fix shipped (14daa93). No issues are open for triage. T
 - ease: 9
 - next: name quantity inputs and remove buttons "Preset N: card M"; help text on the Id field
 - issue: #191
-- fixed: (this commit)
+- fixed: a4b5d3f
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)
