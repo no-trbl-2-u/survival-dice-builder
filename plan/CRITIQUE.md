@@ -1,13 +1,58 @@
 # Critique log
 
-> Last pass: 2026-10-23 at commit 690f48e
-> Pass count: 25
+> Last pass: 2026-10-24 at commit fa7c02b
+> Pass count: 26
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /decisions — rule reading 67 gives two recommendations and two bot results
+- pass: 26 (commit fa7c02b)
+- viewport: desktop
+- category: comprehension
+- observation: The reading text of row 67 says turn the option on and gives a median end round of 6 to 9. The proposal block under it says the option needs a playtest and gives round 6, now 8. /config shows only the playtest advice. A reader cannot tell which result is current.
+- evidence: "Bot report: median end round 6 to 9, the largest single change. Recommendation: turn on." (`OPEN-QUESTIONS.md` row 67) and "Recommendation from the bot batches: it needs a playtest." (`packages/content/data/proposals.json` row 67, `"advice": "playtest"`)
+- suggested fix: Cut the old "Bot report ... Recommendation: turn on." sentences from row 67 in `OPEN-QUESTIONS.md`, so the measured proposal block is the only result shown.
+- source: web-fetch
+
+### [MED] /decisions — row 67 says 4 players get too few materials for Shop I; its own numbers say they get enough
+- pass: 26 (commit fa7c02b)
+- viewport: desktop
+- category: comprehension
+- observation: Row 67 says 10 nodes give 20 materials, so each node gives 2 and 2.5 nodes give 5. Shop I costs 4. The claim "below Shop I" contradicts the row's own numbers and the home page.
+- evidence: "10 single-use nodes give 20 materials per run with starter Gather ... In 4-player, 2.5 nodes each is below Shop I." (`OPEN-QUESTIONS.md` row 67); / "buy Shop I (a Build card and 4 materials)"; `packages/content/data/upgrades.json` Shop I `"cost": 4`
+- suggested fix: Recompute the 4-player claim with the current Gather and Shop I values, or cut it from row 67.
+- source: web-fetch
+
+### [LOW] /decisions — row 70 uses tabletop words and a second name for the miniature limit
+- pass: 26 (commit fa7c02b)
+- viewport: desktop
+- category: voice
+- observation: /play and /config call the enemy cap the "miniature limit". Row 70 says "the 20 cap" and talks about "table upkeep" and "placements". Its rule tag also puts one pair of brackets inside another.
+- evidence: "70. Table upkeep per Combat: up to 13 placements, each with spill-over to the nearest empty hex and a nearest-grunt promotion at the 20 cap, every round. (not in the written rules (physical edition))"; /play "Enemies N of 20 (miniature limit)"
+- suggested fix: Reword to "Up to 13 new enemies each Combat; each spills to the nearest empty hex, and the nearest grunt promotes at the miniature limit (20)." Remove the nested brackets from the tag.
+- source: web-fetch
+
+### [LOW] /decisions — open rule readings still print code formulas, phase numbers, report paths, and config keys
+- pass: 26 (commit fa7c02b)
+- viewport: desktop
+- category: voice
+- observation: Earlier fixes cleaned the Setting lines and the status lines. The body text of the open readings still has build-history and code tokens.
+- evidence: Row 64 "`1 + floor((round - 1) / N)` enemies per Combat"; rows 63-70 "Report: `docs/reports/phase-22-experiments.md`"; row 78 "(phase 41 bot batch: 0 of 200 runs)" and "`rulings.buildLevels: \"any\"` plays the Spec v1 rule" (`OPEN-QUESTIONS.md`)
+- suggested fix: Write the open readings in player words ("1 more enemy per node every N rounds"). Cut the phase numbers and file paths. Name the /config option, not its key.
+- source: web-fetch
+
+### [LOW] /config — preset quantity inputs are named after the raw preset id
+- pass: 26 (commit fa7c02b)
+- viewport: desktop
+- category: a11y
+- observation: In the deck preset editor, each card select is named "Preset 1: card N", but each quantity input is named after the raw id, so a screen reader hears two names for one preset. The editable "Id" field shows the raw key.
+- evidence: `apps/web/src/config/ConfigPage.tsx:595` aria-label `Preset ${p + 1}: card ${i + 1}`; `:607` aria-label `${preset.id}: card ${i + 1} quantity` (reads "deck-10-hand-5: card 1 quantity"); `:566` label "Id"
+- suggested fix: Name the quantity input `Preset ${p + 1}: card ${i + 1} quantity`, and give the "Id" field help text that says what it is.
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
