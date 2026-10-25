@@ -18,15 +18,6 @@
 - suggested fix: Reword to "The defeated grunt's die is cancelled." with the article helper in `describeEvent.ts`.
 - source: web-fetch
 
-### [LOW] /play log — attack and repair lines end in a bare number; terrain is lower case
-- pass: 27 (commit a3ab1b5)
-- viewport: desktop
-- category: voice
-- observation: "attacks you for 2.", "hits grunt for 2.", "attacks the base for 2." and "repair the base for 2 (health N)." give no unit, while nearby lines say "takes 2 damage". The blocked-step line says "it is lake or mountain"; /tiles writes Lake and Mountain.
-- evidence: `apps/web/src/play/describeEvent.ts:123`, `:127`, `:168`, `:170`, `:180`
-- suggested fix: Say "for 2 damage", "repairs the base by 2 health", and "it is Lake or Mountain".
-- source: web-fetch
-
 ### [LOW] /config — preset editor: card remove button sounds like "Remove preset"; Id help text is unclear
 - pass: 27 (commit a3ab1b5)
 - viewport: desktop
@@ -91,6 +82,18 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play log — attack and repair lines end in a bare number; terrain is lower case
+- pass: 27 (commit a3ab1b5)
+- viewport: desktop
+- category: voice
+- observation: "attacks you for 2.", "hits grunt for 2.", "attacks the base for 2." and "repair the base for 2 (health N)." give no unit, while nearby lines say "takes 2 damage". The blocked-step line says "it is lake or mountain"; /tiles writes Lake and Mountain.
+- evidence: `apps/web/src/play/describeEvent.ts:123`, `:127`, `:168`, `:170`, `:180`
+- suggested fix: Say "for 2 damage", "repairs the base by 2 health", and "it is Lake or Mountain".
+- source: web-fetch
+- issue: #202
+- addressed: (this commit)
+- resolution: The attack, siege and tower lines now end "for 2 damage", the repair line reads "repairs the base by 2 health (health N)", and the blocked-step line says "it is Lake or Mountain", as /tiles writes them. An exportRun unit test pins all five.
 
 ### [x] [LOW] /play — the upgrade hint says "You have 1 materials"
 - pass: 27 (commit a3ab1b5)

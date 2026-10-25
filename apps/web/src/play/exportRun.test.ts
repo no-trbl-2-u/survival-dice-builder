@@ -203,8 +203,22 @@ describe('describeEvent', () => {
       health: 3,
     }
     expect(describeEvent(repaired as never, withTower as never)).toBe(
-      'You repair Tower 1 hex north of the base center for 1 (health 3).',
+      'You repair Tower 1 hex north of the base center by 1 health (health 3).',
     )
+  })
+
+  it('names the unit on attack lines and writes terrain as /tiles does', () => {
+    const state = botRun(2).run.state
+    const attacks = [
+      { type: 'enemyAttacked', rule: '7.8', enemy: 'e1', player: 'p1', damage: 2 },
+      { type: 'structureAttacked', rule: '8.3', enemy: 'e1', structure: 'base', damage: 2 },
+      { type: 'towerAttacked', rule: '8.2', tower: 'd1', enemy: 'e1', damage: 2 },
+    ]
+    for (const e of attacks) {
+      expect(describeEvent(e as never, state)).toMatch(/ for 2 damage\.$/)
+    }
+    const blocked = { type: 'revealStepBlocked', player: 'p1', hex: { q: 9, r: 9 }, hexesLeft: 1 }
+    expect(describeEvent(blocked as never, state)).toMatch(/it is Lake or Mountain \(1 left\)\.$/)
   })
 })
 

@@ -120,11 +120,11 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'enemyDefeated':
       return `${upper(enemyLabel(names, event.enemy, event.kind))} is defeated.`
     case 'enemyAttacked':
-      return `${upper(enemyLabel(names, event.enemy))} attacks ${whom(event.player)} for ${event.damage}.`
+      return `${upper(enemyLabel(names, event.enemy))} attacks ${whom(event.player)} for ${event.damage} damage.`
     case 'engaged':
       return `${who(event.player)} ${s('engage')}. ${event.enemyDice.length === 0 ? `No enemy is next to ${whom(event.player)}: no enemy dice.` : `Enemy dice: ${event.enemyDice.map((d) => `${enemyLabel(names, d.enemy)} ${d.face}`).join(', ')}.`}`
     case 'repaired':
-      return `${who(event.player)} ${s('repair')} ${event.structure === 'base' ? 'the base' : defenseLabel(names, event.structure)} for ${event.amount} (health ${event.health}).`
+      return `${who(event.player)} ${s('repair')} ${event.structure === 'base' ? 'the base' : defenseLabel(names, event.structure)} by ${event.amount} health (health ${event.health}).`
     case 'enemyDieCancelled':
       return `A die of ${enemyLabel(names, event.enemy)} is cancelled: ${enemyLabel(names, event.enemy)} was defeated.`
     case 'hitIgnored':
@@ -165,9 +165,9 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'enemyMoved':
       return `${upper(enemyLabel(names, event.enemy))} moves to ${place(names, event.to)}${event.target ? ` toward ${target(event.target)}` : ''}.`
     case 'towerAttacked':
-      return `${defenseLabel(names, event.tower)} hits ${enemyLabel(names, event.enemy)} for ${event.damage}.`
+      return `${defenseLabel(names, event.tower)} hits ${enemyLabel(names, event.enemy)} for ${event.damage} damage.`
     case 'structureAttacked':
-      return `${upper(enemyLabel(names, event.enemy))} attacks ${event.structure === 'base' ? 'the base' : defenseLabel(names, event.structure)} for ${event.damage}.`
+      return `${upper(enemyLabel(names, event.enemy))} attacks ${event.structure === 'base' ? 'the base' : defenseLabel(names, event.structure)} for ${event.damage} damage.`
     case 'baseDamaged':
       return `The base takes ${event.amount} damage (health ${event.health}).`
     case 'eliteReplaced':
@@ -177,7 +177,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'figurePlaced':
       return `${who(event.player)} ${solo(names) ? 'start' : 'starts'} on ${place(names, event.hex)}.`
     case 'revealStepBlocked':
-      return `${who(event.player)} cannot enter ${place(names, event.hex)}: it is lake or mountain (${event.hexesLeft} left).`
+      return `${who(event.player)} cannot enter ${place(names, event.hex)}: it is Lake or Mountain (${event.hexesLeft} left).`
     case 'experienceGained':
       return `+${event.amount} experience (${event.experience}).`
     case 'levelReached':
