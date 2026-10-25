@@ -586,11 +586,11 @@ function PresetsEditor(
                 disabled={props.value.length === 1}
                 onClick={() => props.onChange(props.value.filter((_, i) => i !== p))}
               >
-                Remove preset
+                Remove preset {p + 1}
               </button>
             </div>
             <p id={`preset-${p}-id-help`} className={styles.presetHelp}>
-              Id: the name "Deck and hand preset" picks this preset by.
+              Id: a short name for this preset. Saved configs use it to find the preset.
             </p>
             <ul className={styles.presetCards}>
               {preset.cards.map((entry, i) => (
@@ -620,7 +620,7 @@ function PresetsEditor(
                   />
                   <button
                     type="button"
-                    aria-label={`Remove preset ${p + 1}: card ${i + 1}`}
+                    aria-label={`Remove card ${i + 1} from preset ${p + 1}`}
                     disabled={preset.cards.length === 1}
                     onClick={() => update(p, { cards: preset.cards.filter((_, j) => j !== i) })}
                   >

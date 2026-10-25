@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — preset editor: card remove button sounds like "Remove preset"; Id help text is unclear
-- pass: 27 (commit a3ab1b5)
-- viewport: desktop
-- category: a11y
-- observation: The button that removes one card is named "Remove preset 1: card 1", which a screen reader starts the same way as the "Remove preset" button that removes the whole preset; that button has no preset number. The Id help reads "Id: the name "Deck and hand preset" picks this preset by.", which ends on a preposition and points at an Id the "Deck and hand preset" choices never show.
-- evidence: `apps/web/src/config/ConfigPage.tsx:623` aria-label; `:584-590` "Remove preset"; `:593` help text
-- suggested fix: Name the buttons "Remove card N from preset P" and "Remove preset P"; reword the help to "Id: a short name for this preset. Saved configs use it to find the preset."
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -73,6 +64,18 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /config — preset editor: card remove button sounds like "Remove preset"; Id help text is unclear
+- pass: 27 (commit a3ab1b5)
+- viewport: desktop
+- category: a11y
+- observation: The button that removes one card is named "Remove preset 1: card 1", which a screen reader starts the same way as the "Remove preset" button that removes the whole preset; that button has no preset number. The Id help reads "Id: the name "Deck and hand preset" picks this preset by.", which ends on a preposition and points at an Id the "Deck and hand preset" choices never show.
+- evidence: `apps/web/src/config/ConfigPage.tsx:623` aria-label; `:584-590` "Remove preset"; `:593` help text
+- suggested fix: Name the buttons "Remove card N from preset P" and "Remove preset P"; reword the help to "Id: a short name for this preset. Saved configs use it to find the preset."
+- source: web-fetch
+- issue: #204
+- addressed: (this commit)
+- resolution: The card button is now "Remove card 1 from preset 1" and the preset button reads "Remove preset 1". The Id help reads "Id: a short name for this preset. Saved configs use it to find the preset." The /config e2e pins all three.
 
 ### [x] [LOW] /play log — the cancelled-die line reads "A die of grunt is cancelled: grunt was defeated."
 - pass: 27 (commit a3ab1b5)

@@ -137,9 +137,13 @@ test('/config: sliders, toggles, and pick lists; a name can only come from the c
   await expect(preset.getByLabel('Cards in hand', { exact: true })).toBeVisible()
   // Every input in a preset is named by its place, never by the raw preset id.
   await expect(preset.getByLabel('Preset 1: card 1 quantity', { exact: true })).toBeVisible()
-  await expect(preset.getByRole('button', { name: 'Remove preset 1: card 1' })).toBeVisible()
+  // The card remove button never starts like the whole-preset remove button.
+  await expect(
+    preset.getByRole('button', { name: 'Remove card 1 from preset 1', exact: true }),
+  ).toBeVisible()
+  await expect(preset.getByRole('button', { name: 'Remove preset 1', exact: true })).toBeVisible()
   await expect(preset.getByLabel('Id')).toHaveAccessibleDescription(
-    'Id: the name "Deck and hand preset" picks this preset by.',
+    'Id: a short name for this preset. Saved configs use it to find the preset.',
   )
   // Renaming the preset in use is caught on save, at the field that names it.
   await page.getByRole('region', { name: 'Preset 1' }).getByLabel('Id').fill('mine')
