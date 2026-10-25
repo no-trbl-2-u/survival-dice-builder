@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-24 at commit fa7c02b
-> Pass count: 26
+> Last pass: 2026-10-25 at commit a3ab1b5
+> Pass count: 27
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /play — the Base panel prices upgrade tiers that Build cards can never buy
+- pass: 27 (commit a3ab1b5)
+- viewport: desktop
+- category: comprehension
+- observation: The upgrade tracks list Shop II, Shop III, Training II and Training III with a material price, the same way as the tiers a player can buy. Under the default rules Build cards buy only Shop I and Training I, so these four are out of reach, and /play does not say so. When both tier I upgrades are bought, the hint still tells the player to play a Build card and pay materials, but nothing is left to buy. /config and the milestone list already say "out of reach" for the same limit.
+- evidence: `apps/web/src/play/BasePanel.tsx:61` `{u.name}: {bought ? 'bought' : materials(u.cost)}`; `:70-74` hint shows whenever no Buy action is legal; `packages/content/src/ruleText.ts:574` `upgradesReachable`
+- suggested fix: Show tiers outside `upgradesReachable` as "Shop II: out of reach", using the same reason text as the milestone list, and hide the Build-card hint when no reachable tier is left to buy.
+- source: web-fetch
+
+### [LOW] /play — the upgrade hint says "You have 1 materials"
+- pass: 27 (commit a3ab1b5)
+- viewport: desktop
+- category: voice
+- observation: The hint under the upgrade tracks prints the count with a fixed plural. The Buy button in the same file and the log (a3ab1b5) already use the singular for 1.
+- evidence: `apps/web/src/play/BasePanel.tsx:74` `You have {player.materials} materials.`; `:12` `materials(n)` helper
+- suggested fix: Render `You have {materials(player.materials)}.`
+- source: web-fetch
+
+### [LOW] /play — the milestone list tells met from not met only by a glyph and a colour
+- pass: 27 (commit a3ab1b5)
+- viewport: desktop
+- category: a11y
+- observation: Each milestone item starts with a check mark or an en dash and a colour class. A screen reader hears "check mark" or nothing, never "met" or "not met".
+- evidence: `apps/web/src/play/MilestoneList.tsx:21` `{got ? '✓' : '–'} {milestoneLabel(...)}`
+- suggested fix: Mark the glyph `aria-hidden` and add visually hidden text "met" or "not met" to each item.
+- source: web-fetch
+
+### [LOW] /play log — the cancelled-die line reads "A die of grunt is cancelled: grunt was defeated."
+- pass: 27 (commit a3ab1b5)
+- viewport: desktop
+- category: voice
+- observation: The defeated enemy is off the map, so its name falls back to the bare kind with no article, and the line names it twice.
+- evidence: `apps/web/src/play/describeEvent.ts:129`; `apps/web/src/names/pieceNames.ts` past-kind fallback
+- suggested fix: Reword to "The defeated grunt's die is cancelled." with the article helper in `describeEvent.ts`.
+- source: web-fetch
+
+### [LOW] /play log — attack and repair lines end in a bare number; terrain is lower case
+- pass: 27 (commit a3ab1b5)
+- viewport: desktop
+- category: voice
+- observation: "attacks you for 2.", "hits grunt for 2.", "attacks the base for 2." and "repair the base for 2 (health N)." give no unit, while nearby lines say "takes 2 damage". The blocked-step line says "it is lake or mountain"; /tiles writes Lake and Mountain.
+- evidence: `apps/web/src/play/describeEvent.ts:123`, `:127`, `:168`, `:170`, `:180`
+- suggested fix: Say "for 2 damage", "repairs the base by 2 health", and "it is Lake or Mountain".
+- source: web-fetch
+
+### [LOW] /config — preset editor: card remove button sounds like "Remove preset"; Id help text is unclear
+- pass: 27 (commit a3ab1b5)
+- viewport: desktop
+- category: a11y
+- observation: The button that removes one card is named "Remove preset 1: card 1", which a screen reader starts the same way as the "Remove preset" button that removes the whole preset; that button has no preset number. The Id help reads "Id: the name "Deck and hand preset" picks this preset by.", which ends on a preposition and points at an Id the "Deck and hand preset" choices never show.
+- evidence: `apps/web/src/config/ConfigPage.tsx:623` aria-label; `:584-590` "Remove preset"; `:593` help text
+- suggested fix: Name the buttons "Remove card N from preset P" and "Remove preset P"; reword the help to "Id: a short name for this preset. Saved configs use it to find the preset."
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
