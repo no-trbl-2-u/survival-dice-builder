@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-25 (pass 151, cloud tick)
+
+Pass 150's /config preset button fix shipped (f021080). No issues are open for triage. The critique gate is closed (pass 27, 7 commits ago, under 24 hours) and so is the expand gate (pass 17, 19 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight, so this pass audited the shipped pages fresh. Shipped this pass: an a11y LOW. The run summary's base health chart labelled each bar "1: 10", so a screen reader heard a number, a colon and a number with no word for round or health. A 2.4 (impact 3, ease 8). The short label is now hidden from screen readers, which hear "Round 1: base health 10", pinned by a RunSummary unit test. Next in line: the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /play: the run summary health chart reads "1: 10" to screen readers (audit, pass 151)
+- category: a11y
+- impact: 3
+- ease: 8
+- next: hide the short label and add "Round N: base health H" as visually hidden text
+- issue: #205
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [2.0] /decisions: the Event Calendar check cites ruling numbers (critique LOW, pass 25; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 7
+- next: /oversight rewrites the [needs-user-call] Event Calendar item in words
+
+### [ ] [1.2] sim: the bot cannot measure today's designer changes (critique LOW, session residue)
+- category: external-critique (sim)
+- impact: 3
+- ease: 4
+- next: a phase-sized bot policy change; belongs with /expand or /oversight
+
 # Site audit — 2026-10-25 (pass 150, cloud tick)
 
 Pass 149's cancelled-die line fix shipped (84a8dfd). No issues are open for triage. The critique gate is closed (pass 27, 6 commits ago, under 24 hours) and so is the expand gate (pass 17, 18 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED rows above the LOWs all wait for /oversight. Shipped this pass: the pass 27 a11y LOW. The /config card remove button was named "Remove preset 1: card 1", so it started like the whole-preset "Remove preset" button, which had no number, and the Id help ended on a preposition. A 2.4 (impact 3, ease 8). The buttons now read "Remove card 1 from preset 1" and "Remove preset 1", and the help reads "Id: a short name for this preset. Saved configs use it to find the preset.", pinned by the /config e2e. Next in line: the rows that wait for /oversight.

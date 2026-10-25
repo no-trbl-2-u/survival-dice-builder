@@ -6,7 +6,11 @@ import type { Run } from './run.ts'
 
 type Props = Readonly<{ run: Run; baseCurve: readonly number[]; onNewRun: () => void }>
 
-/** The end of the run: cause, round, level, milestones, base health by round, and the export. */
+/**
+ * The end of the run: cause, round, level, milestones, base health by round, and the export.
+ * Each bar's short "1: 10" label is hidden from screen readers, which hear
+ * "Round 1: base health 10" instead.
+ */
 export function RunSummary({ run, baseCurve, onNewRun }: Props) {
   const ref = useRef<HTMLElement>(null)
   useEffect(() => ref.current?.focus(), [])
@@ -35,9 +39,12 @@ export function RunSummary({ run, baseCurve, onNewRun }: Props) {
         {baseCurve.map((h, i) => (
           <li key={i} title={`Round ${i + 1}: ${h}`}>
             <span className={styles.bar} style={{ blockSize: `${(h / max) * 100}%` }} />
-            <small>
+            <small aria-hidden="true">
               {i + 1}: {h}
             </small>
+            <span className="visually-hidden">
+              Round {i + 1}: base health {h}
+            </span>
           </li>
         ))}
       </ol>
