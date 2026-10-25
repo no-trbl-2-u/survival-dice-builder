@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-25 (pass 144, cloud tick)
+
+Pass 143's Buy upgrade price fix shipped (ec50ca8). No issues are open for triage. The critique gate is closed (pass 26, 10 commits ago, under 24 hours since the pass ran) and so is the expand gate (pass 17, 11 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row the site can act on waits for /oversight. Shipped this pass: the next-in-line log line. A Mason or Engineer Build can bring a build or an upgrade down to 1 material, and the /play log said "for 1 materials" in both lines. A 1.8 (impact 2, ease 9), shipped as pass 126's gather line was. One `materials` helper in describeEvent now names every materials amount (gather, build, upgrade, knockout), and an exportRun unit test pins a cost of 1 and of 2. Next in line: the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /play: a Mason or Engineer Build logs "for 1 materials"
+- category: content-gaps (voice)
+- impact: 2
+- ease: 9
+- next: one `materials` helper in describeEvent for the gather, build, upgrade and knockout lines, with an exportRun unit test
+- issue: #198
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49, 50 and 55 from that item
+
+### [ ] [2.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: /oversight rewords the item to name the "Reset to defaults" button and a readable date, or closes it
+
 # Site audit — 2026-10-24 (pass 143, cloud tick)
 
 Pass 142's /decisions citation guard shipped (ec2ebf6). No issues are open for triage. The critique gate is closed (pass 26, 9 commits ago, under 24 hours) and so is the expand gate (pass 17, 10 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row the site can act on waits for /oversight. Checked this pass: the prices the /play base panel shows against the prices the engine charges. With a Mason or Engineer Build active on the base, the Buy button for an upgrade showed the list price, while `legalUpgrades` charges it less the card's cut. An Engineer Build read "Buy Training I (3 materials)" and took 1 material. A 4.5 (impact 5, ease 9). The engine now exports `legalUpgrades`, the button shows the price it returns, "1 material" is singular, and a BasePanel unit test pins a plain Build and an Engineer Build. Next in line: the "Barricade built for 1 materials." log line a Mason Build gives, then the rows that wait for /oversight.
@@ -19,11 +57,12 @@ Pass 142's /decisions citation guard shipped (ec2ebf6). No issues are open for t
 - issue: #197
 - fixed: (this commit)
 
-### [ ] [1.8] /play: a Mason Build logs "Barricade built for 1 materials."
+### [x] [1.8] /play: a Mason Build logs "Barricade built for 1 materials."
 - category: content-gaps (voice)
 - impact: 2
 - ease: 9
 - next: singular "1 material" in the build and upgrade log lines, with an exportRun unit test
+- fixed: in pass 144 (issue #198)
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

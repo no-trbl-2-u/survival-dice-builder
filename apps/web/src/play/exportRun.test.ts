@@ -162,6 +162,33 @@ describe('describeEvent', () => {
     expect(describeEvent(bought as never, state)).toBe(`You bought ${card.name} for 3 currency.`)
   })
 
+  it('says "1 material" for a build or upgrade a Mason or Engineer Build brings down to 1', () => {
+    const state = botRun(2).run.state
+    const base = baseCentre(state.map)
+    const north = { q: base.q, r: base.r - 1 }
+    const built = {
+      type: 'defenseBuilt',
+      rule: '6.6',
+      player: 'p1',
+      kind: 'barricade',
+      hex: north,
+      cost: 1,
+    }
+    expect(describeEvent(built as never, state)).toMatch(/^Barricade built on .+ for 1 material\.$/)
+    expect(describeEvent({ ...built, cost: 2 } as never, state)).toMatch(/ for 2 materials\.$/)
+    const upgrade = state.content.upgrades[0]!
+    const bought = {
+      type: 'upgradeBought',
+      rule: '8.1',
+      upgrade: upgrade.id,
+      cost: 1,
+      baseHealth: 12,
+    }
+    expect(describeEvent(bought as never, state)).toBe(
+      `${upgrade.name} bought for 1 material (base health 12).`,
+    )
+  })
+
   it('names a repaired defense by kind', () => {
     const state = botRun(2).run.state
     const base = baseCentre(state.map)

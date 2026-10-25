@@ -18,6 +18,8 @@ type Names = Readonly<{
 }>
 
 const hex = (h: { q: number; r: number }) => `(${h.q},${h.r})`
+/** "1 material", "4 materials". */
+const materials = (n: number) => `${n} ${n === 1 ? 'material' : 'materials'}`
 /** "Plains, Spawn node (2,0)": a hex by name, with its coordinate; bare coordinates off the map. */
 function place(n: Names, h: { q: number; r: number }): string {
   const found = n.map?.hexes[hexKey(h)]
@@ -151,9 +153,9 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'gathered':
       return event.amount === 0
         ? `${who(event.player)} gathered nothing: gather on an unspent gathering node with no enemy on it.`
-        : `${who(event.player)} gathered ${event.amount} ${event.amount === 1 ? 'material' : 'materials'} (now ${event.materials})${event.spent ? '; the node is spent' : ''}.`
+        : `${who(event.player)} gathered ${materials(event.amount)} (now ${event.materials})${event.spent ? '; the node is spent' : ''}.`
     case 'defenseBuilt':
-      return `${event.kind[0]?.toUpperCase()}${event.kind.slice(1)} built on ${place(names, event.hex)} for ${event.cost} materials.`
+      return `${event.kind[0]?.toUpperCase()}${event.kind.slice(1)} built on ${place(names, event.hex)} for ${materials(event.cost)}.`
     case 'defenseDamaged':
       return `${defenseLabel(names, event.defense)} takes ${event.amount} damage (health ${event.health}).`
     case 'defenseRemoved':
@@ -185,7 +187,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'currencyGained':
       return `+${event.amount} currency (${event.currency}).`
     case 'upgradeBought':
-      return `${upgradeName(names, event.upgrade)} bought for ${event.cost} materials (base health ${event.baseHealth}).`
+      return `${upgradeName(names, event.upgrade)} bought for ${materials(event.cost)} (base health ${event.baseHealth}).`
     case 'offerAdded':
       return `Shop offer: ${cardName(names, event.card)} (level ${event.level}).`
     case 'cardBought':
@@ -210,8 +212,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `The base has fallen in round ${event.round}. The run ends.`
     case 'playerKnockedOut': {
       const lost = [
-        event.materialsLost > 0 &&
-          `${event.materialsLost} ${event.materialsLost === 1 ? 'material' : 'materials'}`,
+        event.materialsLost > 0 && materials(event.materialsLost),
         event.currencyLost > 0 && `${event.currencyLost} currency`,
       ].filter(Boolean)
       return `${who(event.player)} ${solo(names) ? 'are' : 'is'} knocked out${lost.length > 0 ? ` and ${solo(names) ? 'lose' : 'loses'} ${lost.join(' and ')}` : ''}: back at the next round start.`
