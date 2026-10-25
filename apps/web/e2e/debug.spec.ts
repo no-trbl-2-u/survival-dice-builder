@@ -49,3 +49,23 @@ test('/debug: Autoplay plays the bot to the end of a run with no errors', async 
   await expect(page.getByTestId('state')).toContainText('ended')
   expect(errors).toEqual([])
 })
+
+test('/debug: Copy replay copies the run and says so only until the next action', async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  await page.goto('/debug')
+  await page.getByRole('button', { name: 'Bot step' }).click()
+  await page.getByRole('button', { name: 'Copy replay' }).click()
+  await expect(page.getByRole('button', { name: 'Replay copied' })).toBeVisible()
+  const copied = JSON.parse(await page.evaluate(() => navigator.clipboard.readText())) as {
+    seed: number
+    actions: unknown[]
+  }
+  expect(copied.seed).toBe(1)
+  expect(copied.actions).toHaveLength(1)
+
+  await page.getByRole('button', { name: 'Bot step' }).click()
+  await expect(page.getByRole('button', { name: 'Copy replay' })).toBeVisible()
+})

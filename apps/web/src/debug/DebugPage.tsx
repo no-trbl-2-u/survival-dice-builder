@@ -55,7 +55,8 @@ export function DebugPage() {
   const [run, dispatch] = useReducer(reducer, undefined, () =>
     reducer({} as Run, { kind: 'new', seed: 1 }),
   )
-  const [copied, setCopied] = useState(false)
+  // What the last Copy replay did; any later step clears it, so it never names a stale replay.
+  const [copied, setCopied] = useState<'copied' | 'failed' | null>(null)
   const actions = legalActions(run.state)
   const heading = useRef<HTMLHeadingElement>(null)
   const refocus = useRef(false)
@@ -63,6 +64,7 @@ export function DebugPage() {
   /** Applies a step, then returns focus to the action list (its buttons are all replaced). */
   const step = (msg: Msg) => {
     refocus.current = true
+    setCopied(null)
     dispatch(msg)
   }
 
@@ -73,8 +75,12 @@ export function DebugPage() {
   }, [run])
 
   const copyReplay = async () => {
-    await navigator.clipboard.writeText(JSON.stringify({ seed: run.seed, actions: run.actions }))
-    setCopied(true)
+    try {
+      await navigator.clipboard.writeText(JSON.stringify({ seed: run.seed, actions: run.actions }))
+      setCopied('copied')
+    } catch {
+      setCopied('failed')
+    }
   }
 
   return (
@@ -88,7 +94,7 @@ export function DebugPage() {
         className={styles.controls}
         onSubmit={(e) => {
           e.preventDefault()
-          setCopied(false)
+          setCopied(null)
           dispatch({ kind: 'new', seed: Number.parseInt(seedText, 10) || 0 })
         }}
       >
@@ -109,7 +115,11 @@ export function DebugPage() {
           Autoplay
         </button>
         <button type="button" onClick={copyReplay}>
-          {copied ? 'Replay copied' : 'Copy replay'}
+          {copied === 'copied'
+            ? 'Replay copied'
+            : copied === 'failed'
+              ? 'Copy failed'
+              : 'Copy replay'}
         </button>
         <span>
           {run.actions.length} action{run.actions.length === 1 ? '' : 's'}
