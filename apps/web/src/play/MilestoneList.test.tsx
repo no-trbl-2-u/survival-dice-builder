@@ -22,10 +22,23 @@ describe('milestones during a run (rules 1.4, 17)', () => {
     )
     const items = within(box).getAllByRole('listitem', { hidden: true })
     expect(items).toHaveLength(total)
-    expect(items[0]?.textContent).toBe('✓ Survive to round 5')
-    expect(box.textContent).toContain('– Survive to round 10')
+    expect(items[0]?.textContent).toBe('✓ Met: Survive to round 5')
+    expect(box.textContent).toContain('– Not met: Survive to round 10')
     expect(box.textContent).toContain('Reveal 10 tiles (out of reach: the tile deck holds 8 tiles)')
     expect(box.hasAttribute('open')).toBe(false)
+  })
+
+  it('a screen reader hears met or not met, never the glyph (rule 17)', () => {
+    const state = { ...createGame(config, 1), milestones: ['survive-round-5'] }
+    render(<BasePanel state={state} legal={[]} act={() => {}} />)
+    const items = within(screen.getByTestId('milestone-progress')).getAllByRole('listitem', {
+      hidden: true,
+    })
+    const [met, notMet] = items
+    expect(met?.querySelector('[aria-hidden="true"]')?.textContent).toBe('✓')
+    expect(met?.querySelector('.visually-hidden')?.textContent).toBe('Met: ')
+    expect(notMet?.querySelector('[aria-hidden="true"]')?.textContent).toBe('–')
+    expect(notMet?.querySelector('.visually-hidden')?.textContent).toBe('Not met: ')
   })
 
   it('a met milestone never counts as out of reach, and the count drops at 0', () => {

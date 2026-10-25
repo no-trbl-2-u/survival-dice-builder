@@ -18,15 +18,6 @@
 - suggested fix: Render `You have {materials(player.materials)}.`
 - source: web-fetch
 
-### [LOW] /play — the milestone list tells met from not met only by a glyph and a colour
-- pass: 27 (commit a3ab1b5)
-- viewport: desktop
-- category: a11y
-- observation: Each milestone item starts with a check mark or an en dash and a colour class. A screen reader hears "check mark" or nothing, never "met" or "not met".
-- evidence: `apps/web/src/play/MilestoneList.tsx:21` `{got ? '✓' : '–'} {milestoneLabel(...)}`
-- suggested fix: Mark the glyph `aria-hidden` and add visually hidden text "met" or "not met" to each item.
-- source: web-fetch
-
 ### [LOW] /play log — the cancelled-die line reads "A die of grunt is cancelled: grunt was defeated."
 - pass: 27 (commit a3ab1b5)
 - viewport: desktop
@@ -109,6 +100,18 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play — the milestone list tells met from not met only by a glyph and a colour
+- pass: 27 (commit a3ab1b5)
+- viewport: desktop
+- category: a11y
+- observation: Each milestone item starts with a check mark or an en dash and a colour class. A screen reader hears "check mark" or nothing, never "met" or "not met".
+- evidence: `apps/web/src/play/MilestoneList.tsx:21` `{got ? '✓' : '–'} {milestoneLabel(...)}`
+- suggested fix: Mark the glyph `aria-hidden` and add visually hidden text "met" or "not met" to each item.
+- source: web-fetch
+- issue: #200
+- addressed: (this commit)
+- resolution: The glyph in each milestone item is now `aria-hidden`, and a visually hidden "Met:" or "Not met:" comes before the label, so a screen reader hears "Met: Survive to round 5". The base panel and the run summary share the list. A MilestoneList unit test pins both texts and the hidden glyph.
 
 ### [x] [MED] /play — the Base panel prices upgrade tiers that Build cards can never buy
 - pass: 27 (commit a3ab1b5)

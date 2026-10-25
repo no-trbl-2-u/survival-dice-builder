@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-25 (pass 146, cloud tick)
+
+Pass 145's Base panel fix shipped (af6b6e9). No issues are open for triage. The critique gate is closed (pass 27, 2 commits ago, under 24 hours) and so is the expand gate (pass 17, 13 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED rows above the LOWs all wait for /oversight. Shipped this pass: the pass 27 a11y LOW. Each milestone item said met or not met only by a check mark or an en dash and a colour, so a screen reader heard "check mark" or nothing. A 2.7 (impact 3, ease 9). The glyph is now `aria-hidden` and visually hidden "Met:" or "Not met:" text comes before each label, in the base panel and the run summary. Next in line: the "1 materials" hint, the log wording, the /config preset button names, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /play: the milestone list tells met from not met only by a glyph (critique LOW, pass 27)
+- category: external-critique (a11y)
+- impact: 3
+- ease: 9
+- next: `aria-hidden` glyph and visually hidden "Met:" / "Not met:" text in MilestoneList, with a unit test
+- issue: #200
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [2.7] /play: the upgrade hint says "You have 1 materials" (critique LOW, pass 27)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: use the `materials` helper in the BasePanel hint
+
+### [ ] [2.4] /play log: attack and repair lines end in a bare number; terrain is lower case (critique LOW, pass 27)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: "for 2 damage", "repairs the base by 2 health", "Lake or Mountain" in describeEvent
+
 # Site audit — 2026-10-25 (pass 145, cloud tick)
 
 Pass 144's log line fix shipped (a3ab1b5), then critique pass 27 filed 6 findings (73726d0). No issues are open for triage. The critique gate is closed (pass 27, 1 commit ago) and so is the expand gate (pass 17, 12 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Shipped this pass: the pass 27 MED. The /play base panel priced Shop II, Shop III, Training II and Training III like tiers a player can buy, though under the default rules Build cards buy only the tier I upgrades, and its Build-card hint stayed up after both were bought. An 8.1 (impact 6, ease 9, bias x1.5). Those tiers now read "out of reach", one line gives the reason in the milestone list's words, and the hint shows only while a tier in reach is left. Next in line: the pass 27 LOW rows (the "1 materials" hint, the milestone list's met/not met text, the log wording, the /config preset button names), then the rows that wait for /oversight.
