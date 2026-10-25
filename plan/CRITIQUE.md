@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the upgrade hint says "You have 1 materials"
-- pass: 27 (commit a3ab1b5)
-- viewport: desktop
-- category: voice
-- observation: The hint under the upgrade tracks prints the count with a fixed plural. The Buy button in the same file and the log (a3ab1b5) already use the singular for 1.
-- evidence: `apps/web/src/play/BasePanel.tsx:74` `You have {player.materials} materials.`; `:12` `materials(n)` helper
-- suggested fix: Render `You have {materials(player.materials)}.`
-- source: web-fetch
-
 ### [LOW] /play log — the cancelled-die line reads "A die of grunt is cancelled: grunt was defeated."
 - pass: 27 (commit a3ab1b5)
 - viewport: desktop
@@ -100,6 +91,18 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play — the upgrade hint says "You have 1 materials"
+- pass: 27 (commit a3ab1b5)
+- viewport: desktop
+- category: voice
+- observation: The hint under the upgrade tracks prints the count with a fixed plural. The Buy button in the same file and the log (a3ab1b5) already use the singular for 1.
+- evidence: `apps/web/src/play/BasePanel.tsx:74` `You have {player.materials} materials.`; `:12` `materials(n)` helper
+- suggested fix: Render `You have {materials(player.materials)}.`
+- source: web-fetch
+- issue: #201
+- addressed: (this commit)
+- resolution: The hint under the upgrade tracks now counts with the same `materials` helper as the Buy button, so 1 reads "You have 1 material." A BasePanel unit test pins 1 and 2.
 
 ### [x] [LOW] /play — the milestone list tells met from not met only by a glyph and a colour
 - pass: 27 (commit a3ab1b5)

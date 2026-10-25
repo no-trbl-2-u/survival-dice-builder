@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-25 (pass 147, cloud tick)
+
+Pass 146's milestone list fix shipped (149cdaa). No issues are open for triage. The critique gate is closed (pass 27, 3 commits ago, under 24 hours) and so is the expand gate (pass 17, 15 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED rows above the LOWs all wait for /oversight. Shipped this pass: the pass 27 voice LOW. The hint under the upgrade tracks read "You have 1 materials." while the Buy button in the same panel already says "1 material". A 2.7 (impact 3, ease 9). The hint now uses the panel's `materials` helper, and a BasePanel unit test pins 1 and 2. Next in line: the log wording, the cancelled-die line, the /config preset button names, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /play: the upgrade hint says "You have 1 materials" (critique LOW, pass 27)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: use the `materials` helper in the BasePanel hint, with a unit test
+- issue: #201
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [2.4] /play log: attack and repair lines end in a bare number; terrain is lower case (critique LOW, pass 27)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: "for 2 damage", "repairs the base by 2 health", "Lake or Mountain" in describeEvent
+
+### [ ] [2.4] /play log: the cancelled-die line names the defeated enemy twice with no article (critique LOW, pass 27)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: "The defeated grunt's die is cancelled." with the article helper in describeEvent
+
 # Site audit — 2026-10-25 (pass 146, cloud tick)
 
 Pass 145's Base panel fix shipped (af6b6e9). No issues are open for triage. The critique gate is closed (pass 27, 2 commits ago, under 24 hours) and so is the expand gate (pass 17, 13 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED rows above the LOWs all wait for /oversight. Shipped this pass: the pass 27 a11y LOW. Each milestone item said met or not met only by a check mark or an en dash and a colour, so a screen reader heard "check mark" or nothing. A 2.7 (impact 3, ease 9). The glyph is now `aria-hidden` and visually hidden "Met:" or "Not met:" text comes before each label, in the base panel and the run summary. Next in line: the "1 materials" hint, the log wording, the /config preset button names, then the rows that wait for /oversight.

@@ -48,6 +48,17 @@ describe('upgrade tiers no Build card can buy (rules 11.4, 17; row 78)', () => {
     expect(screen.getByTestId('upgrade-hint')).toBeTruthy()
   })
 
+  it('the Build-card hint counts materials with "1 material" singular', () => {
+    const game = createGame(defaultContent.config, 1)
+    const one = { ...game, players: game.players.map((p) => ({ ...p, materials: 1 })) }
+    render(<BasePanel state={one} legal={[]} act={() => {}} />)
+    expect(screen.getByTestId('upgrade-hint').textContent).toContain('You have 1 material.')
+    cleanup()
+    const two = { ...game, players: game.players.map((p) => ({ ...p, materials: 2 })) }
+    render(<BasePanel state={two} legal={[]} act={() => {}} />)
+    expect(screen.getByTestId('upgrade-hint').textContent).toContain('You have 2 materials.')
+  })
+
   it('drops the Build-card hint once every tier in reach is bought', () => {
     const game = createGame(defaultContent.config, 1)
     const state = { ...game, upgrades: ['shop-1', 'training-1'] }

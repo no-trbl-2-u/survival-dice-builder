@@ -90,7 +90,7 @@ export function BasePanel({ state, legal, act }: Props) {
       {upgrades.length === 0 && leftToBuy && player ? (
         <p className={styles.muted} data-testid="upgrade-hint">
           To buy an upgrade, stand on the Base tile and play a Build card, then pay its materials.
-          You have {player.materials} materials.
+          You have {materials(player.materials)}.
         </p>
       ) : null}
       <h3 className={styles.subTitle}>
