@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-25 (pass 145, cloud tick)
+
+Pass 144's log line fix shipped (a3ab1b5), then critique pass 27 filed 6 findings (73726d0). No issues are open for triage. The critique gate is closed (pass 27, 1 commit ago) and so is the expand gate (pass 17, 12 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Shipped this pass: the pass 27 MED. The /play base panel priced Shop II, Shop III, Training II and Training III like tiers a player can buy, though under the default rules Build cards buy only the tier I upgrades, and its Build-card hint stayed up after both were bought. An 8.1 (impact 6, ease 9, bias x1.5). Those tiers now read "out of reach", one line gives the reason in the milestone list's words, and the hint shows only while a tier in reach is left. Next in line: the pass 27 LOW rows (the "1 materials" hint, the milestone list's met/not met text, the log wording, the /config preset button names), then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /play: the Base panel prices upgrade tiers Build cards can never buy (critique MED, pass 27, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: "out of reach" on tiers outside `upgradesReachable`, the reason from `upgradesReachNote`, the Build-card hint only while a tier in reach is left; BasePanel and content unit tests
+- issue: #199
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [2.7] /play: the milestone list tells met from not met only by a glyph (critique LOW, pass 27)
+- category: external-critique (a11y)
+- impact: 3
+- ease: 9
+- next: `aria-hidden` glyph and visually hidden "met" / "not met" text in MilestoneList
+
+### [ ] [2.7] /play: the upgrade hint says "You have 1 materials" (critique LOW, pass 27)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: use the `materials` helper in the BasePanel hint
+
 # Site audit — 2026-10-25 (pass 144, cloud tick)
 
 Pass 143's Buy upgrade price fix shipped (ec50ca8). No issues are open for triage. The critique gate is closed (pass 26, 10 commits ago, under 24 hours since the pass ran) and so is the expand gate (pass 17, 11 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row the site can act on waits for /oversight. Shipped this pass: the next-in-line log line. A Mason or Engineer Build can bring a build or an upgrade down to 1 material, and the /play log said "for 1 materials" in both lines. A 1.8 (impact 2, ease 9), shipped as pass 126's gather line was. One `materials` helper in describeEvent now names every materials amount (gather, build, upgrade, knockout), and an exportRun unit test pins a cost of 1 and of 2. Next in line: the rows that wait for /oversight.

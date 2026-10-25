@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — the Base panel prices upgrade tiers that Build cards can never buy
-- pass: 27 (commit a3ab1b5)
-- viewport: desktop
-- category: comprehension
-- observation: The upgrade tracks list Shop II, Shop III, Training II and Training III with a material price, the same way as the tiers a player can buy. Under the default rules Build cards buy only Shop I and Training I, so these four are out of reach, and /play does not say so. When both tier I upgrades are bought, the hint still tells the player to play a Build card and pay materials, but nothing is left to buy. /config and the milestone list already say "out of reach" for the same limit.
-- evidence: `apps/web/src/play/BasePanel.tsx:61` `{u.name}: {bought ? 'bought' : materials(u.cost)}`; `:70-74` hint shows whenever no Buy action is legal; `packages/content/src/ruleText.ts:574` `upgradesReachable`
-- suggested fix: Show tiers outside `upgradesReachable` as "Shop II: out of reach", using the same reason text as the milestone list, and hide the Build-card hint when no reachable tier is left to buy.
-- source: web-fetch
-
 ### [LOW] /play — the upgrade hint says "You have 1 materials"
 - pass: 27 (commit a3ab1b5)
 - viewport: desktop
@@ -118,6 +109,18 @@
 - source: user
 
 ## Done
+
+### [x] [MED] /play — the Base panel prices upgrade tiers that Build cards can never buy
+- pass: 27 (commit a3ab1b5)
+- viewport: desktop
+- category: comprehension
+- observation: The upgrade tracks list Shop II, Shop III, Training II and Training III with a material price, the same way as the tiers a player can buy. Under the default rules Build cards buy only Shop I and Training I, so these four are out of reach, and /play does not say so. When both tier I upgrades are bought, the hint still tells the player to play a Build card and pay materials, but nothing is left to buy. /config and the milestone list already say "out of reach" for the same limit.
+- evidence: `apps/web/src/play/BasePanel.tsx:61` `{u.name}: {bought ? 'bought' : materials(u.cost)}`; `:70-74` hint shows whenever no Buy action is legal; `packages/content/src/ruleText.ts:574` `upgradesReachable`
+- suggested fix: Show tiers outside `upgradesReachable` as "Shop II: out of reach", using the same reason text as the milestone list, and hide the Build-card hint when no reachable tier is left to buy.
+- source: web-fetch
+- issue: #199
+- addressed: (this commit)
+- resolution: A tier outside `upgradesReachable` now reads "Shop II: out of reach", and one line under the tracks gives the reason ("Out of reach: Build cards can buy only Shop I and Training I.") from a new content helper, `upgradesReachNote`, in the milestone list's words. The Build-card hint shows only while a tier in reach is left to buy. BasePanel and content unit tests pin the default rules and `buildLevels: "any"`.
 
 ### [x] [LOW] /decisions — open rule readings still print code formulas, phase numbers, report paths, and config keys
 - pass: 26 (commit fa7c02b)

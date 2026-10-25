@@ -108,6 +108,7 @@ export {
   targetText,
   trainingText,
   upgradesReachable,
+  upgradesReachNote,
 } from './ruleText.ts'
 export {
   parseSpec,

@@ -1,4 +1,9 @@
-import { milestoneIds, milestoneOutOfReach } from '@survival/content'
+import {
+  milestoneIds,
+  milestoneOutOfReach,
+  upgradesReachable,
+  upgradesReachNote,
+} from '@survival/content'
 import { legalUpgrades, type Action, type GameState } from '@survival/engine'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { cardText } from './effectText.ts'
@@ -13,9 +18,11 @@ const materials = (n: number) => `${n} ${n === 1 ? 'material' : 'materials'}`
 
 /**
  * The base board: health, the 2 upgrade tracks (bought, next, cost; Buy while a Build is active
- * on the base, at the price the engine charges after a Mason or Engineer cut), and the Shop
- * offers (Buy when the figure is on the base and the price is met).
- * When nothing can be bought it says how buying works, so materials never look stuck. The
+ * on the base, at the price the engine charges after a Mason or Engineer cut; a tier no Build
+ * card can buy reads "out of reach", with the reason), and the Shop offers (Buy when the figure
+ * is on the base and the price is met).
+ * When nothing can be bought but a tier is left in reach, it says how buying works, so materials
+ * never look stuck. The
  * run's milestones close the panel, folded, with how many are met and how many the config and
  * content put out of reach (rule 1.4).
  */
@@ -27,6 +34,9 @@ export function BasePanel({ state, legal, act }: Props) {
       : []
   const buys = ofType(legal, 'buyCard')
   const player = state.players[state.current]
+  const reachable = upgradesReachable(state.config, state.content).map((u) => u.id)
+  const reachNote = upgradesReachNote(state.config, state.content)
+  const leftToBuy = reachable.some((id) => !state.upgrades.includes(id))
   const ids = milestoneIds(state.config.milestones)
   const outOfReach = ids.filter(
     (id) => !state.milestones.includes(id) && milestoneOutOfReach(id, state.config, state.content),
@@ -58,7 +68,12 @@ export function BasePanel({ state, legal, act }: Props) {
                       </button>
                     ) : (
                       <span>
-                        {u.name}: {bought ? 'bought' : materials(u.cost)}
+                        {u.name}:{' '}
+                        {bought
+                          ? 'bought'
+                          : reachable.includes(u.id)
+                            ? materials(u.cost)
+                            : 'out of reach'}
                       </span>
                     )}
                   </li>
@@ -67,7 +82,12 @@ export function BasePanel({ state, legal, act }: Props) {
           </ol>
         </div>
       ))}
-      {upgrades.length === 0 && player ? (
+      {reachNote ? (
+        <p className={styles.muted} data-testid="upgrade-reach">
+          Out of reach: {reachNote}.
+        </p>
+      ) : null}
+      {upgrades.length === 0 && leftToBuy && player ? (
         <p className={styles.muted} data-testid="upgrade-hint">
           To buy an upgrade, stand on the Base tile and play a Build card, then pay its materials.
           You have {player.materials} materials.

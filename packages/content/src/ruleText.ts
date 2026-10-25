@@ -581,6 +581,23 @@ export function upgradesReachable(
 }
 
 /**
+ * Which base upgrades the Build cards can buy, when some are out of reach: "Build cards can buy
+ * only Shop I and Training I", or "Build cards can buy nothing". Null when every upgrade is in
+ * reach. The /play base panel shows it; the "Buy N base upgrades" milestone uses the same words.
+ *
+ * @rule Spec v2 11.4, 12.1 (ruling 25), 17, OPEN-QUESTIONS row 78
+ */
+export function upgradesReachNote(
+  config: GameConfig,
+  content: Pick<Content, 'cards' | 'upgrades'>,
+): string | null {
+  const names = upgradesReachable(config, content).map((u) => u.name)
+  if (names.length === content.upgrades.length) return null
+  const list = names.length === 0 ? 'nothing' : `only ${names.join(' and ')}`
+  return `Build cards can buy ${list}`
+}
+
+/**
  * Why a milestone cannot be met under this config and content, or null when it can be:
  * "out of reach: Build cards can buy only Shop I and Training I", or "out of reach: the tile
  * deck holds 8 tiles" (the Base tile starts on the map and is never revealed), or "out of

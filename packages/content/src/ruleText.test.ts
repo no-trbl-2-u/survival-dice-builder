@@ -36,6 +36,7 @@ import {
   targetText,
   trainingText,
   upgradesReachable,
+  upgradesReachNote,
 } from './ruleText.ts'
 import type { GameConfig } from './schemas/config.ts'
 
@@ -350,6 +351,10 @@ describe('rule text from config', () => {
     )
     const any = With((c) => ({ ...c, rulings: { ...c.rulings, buildLevels: 'any' } }))
     expect(upgradesReachable(any, defaultContent)).toHaveLength(defaultContent.upgrades.length)
+    expect(upgradesReachNote(base, defaultContent)).toBe(
+      'Build cards can buy only Shop I and Training I',
+    )
+    expect(upgradesReachNote(any, defaultContent)).toBeNull()
     expect(milestoneOutOfReach('buy-upgrades', any, defaultContent)).toBeNull()
     const two = With((c) => ({ ...c, milestones: { ...c.milestones, upgradesBought: 2 } }))
     expect(milestoneOutOfReach('buy-upgrades', two, defaultContent)).toBeNull()
