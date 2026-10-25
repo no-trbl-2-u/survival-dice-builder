@@ -220,6 +220,15 @@ describe('describeEvent', () => {
     const blocked = { type: 'revealStepBlocked', player: 'p1', hex: { q: 9, r: 9 }, hexesLeft: 1 }
     expect(describeEvent(blocked as never, state)).toMatch(/it is Lake or Mountain \(1 left\)\.$/)
   })
+
+  it('names a defeated enemy once on the cancelled-die line', () => {
+    const cancelled = { type: 'enemyDieCancelled', rule: 'Combat v3', enemy: 'e9', player: 'p1' }
+    const log = [{ type: 'enemyDefeated', rule: '7.6', enemy: 'e9', kind: 'grunt', by: 'p1' }]
+    const names = { ...botRun(2).run.state, enemies: [], log }
+    expect(describeEvent(cancelled as never, names as never)).toBe(
+      "The defeated grunt's die is cancelled.",
+    )
+  })
 })
 
 describe('describeEvent voice', () => {

@@ -126,7 +126,8 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'repaired':
       return `${who(event.player)} ${s('repair')} ${event.structure === 'base' ? 'the base' : defenseLabel(names, event.structure)} by ${event.amount} health (health ${event.health}).`
     case 'enemyDieCancelled':
-      return `A die of ${enemyLabel(names, event.enemy)} is cancelled: ${enemyLabel(names, event.enemy)} was defeated.`
+      // The enemy is off the map by now, so its name is its kind: "The defeated grunt's die is cancelled."
+      return `The defeated ${enemyLabel(names, event.enemy)}'s die is cancelled.`
     case 'hitIgnored':
       return `${who(event.player)} ${s('ignore')} the hit from ${enemyLabel(names, event.enemy)}.`
     case 'playerDamaged': {

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play log — the cancelled-die line reads "A die of grunt is cancelled: grunt was defeated."
-- pass: 27 (commit a3ab1b5)
-- viewport: desktop
-- category: voice
-- observation: The defeated enemy is off the map, so its name falls back to the bare kind with no article, and the line names it twice.
-- evidence: `apps/web/src/play/describeEvent.ts:129`; `apps/web/src/names/pieceNames.ts` past-kind fallback
-- suggested fix: Reword to "The defeated grunt's die is cancelled." with the article helper in `describeEvent.ts`.
-- source: web-fetch
-
 ### [LOW] /config — preset editor: card remove button sounds like "Remove preset"; Id help text is unclear
 - pass: 27 (commit a3ab1b5)
 - viewport: desktop
@@ -82,6 +73,18 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play log — the cancelled-die line reads "A die of grunt is cancelled: grunt was defeated."
+- pass: 27 (commit a3ab1b5)
+- viewport: desktop
+- category: voice
+- observation: The defeated enemy is off the map, so its name falls back to the bare kind with no article, and the line names it twice.
+- evidence: `apps/web/src/play/describeEvent.ts:129`; `apps/web/src/names/pieceNames.ts` past-kind fallback
+- suggested fix: Reword to "The defeated grunt's die is cancelled." with the article helper in `describeEvent.ts`.
+- source: web-fetch
+- issue: #203
+- addressed: (this commit)
+- resolution: The line now reads "The defeated grunt's die is cancelled.", naming the enemy once. An exportRun unit test pins it.
 
 ### [x] [LOW] /play log — attack and repair lines end in a bare number; terrain is lower case
 - pass: 27 (commit a3ab1b5)
