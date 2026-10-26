@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-25 at commit a3ab1b5
-> Pass count: 27
+> Last pass: 2026-10-26 at commit 0203e31
+> Pass count: 28
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /debug — the intro says bracketed tags are rule sections, but most Combat events show "[Combat v3]"
+- pass: 28 (commit 0203e31)
+- viewport: desktop
+- category: comprehension
+- observation: The intro says "Numbers in [brackets] are sections of the written rules." Under the default Engagements Combat most Combat events are tagged "[Combat v3]", a name already removed from /play and /config, and draft events show "[Draft pool (designer 2026-10-09)]". Neither is a number or a rules section.
+- evidence: `apps/web/src/debug/DebugPage.tsx:88` intro; `apps/web/src/debug/EventLog.tsx:38` prints `[{event.rule}]`; `packages/engine/src/combat/engage.ts:150`, `:166`, `:222` `rule: 'Combat v3'`; `packages/engine/src/progression/draft.ts:107`
+- suggested fix: Show a non-numeric tag in words (for example "not in the written rules", with the helper /decisions uses for citations) and reword the intro to match.
+- source: web-fetch
+
+### [MED] /debug — Autoplay floods screen readers through the live event log
+- pass: 28 (commit 0203e31)
+- viewport: desktop
+- category: a11y
+- observation: The whole event log is a polite live region. One Autoplay click can apply up to 5000 bot actions and add hundreds of lines at once, and each is announced.
+- evidence: `apps/web/src/debug/EventLog.tsx:32-33` `role="log" aria-live="polite"`; `apps/web/src/debug/DebugPage.tsx:23` `AUTOPLAY_LIMIT = 5000`
+- suggested fix: Turn the live region off on the full log and announce one short status line per action or per Autoplay ("Autoplay: 312 actions, the run ended in round 7").
+- source: web-fetch
+
+### [LOW] /debug — the map shows terrain by colour only, and spawn marks differ only by case
+- pass: 28 (commit 0203e31)
+- viewport: desktop
+- category: a11y
+- observation: The map's comment says every mark is also in the state text, but terrain is a colour class only and the State panel gives tile counts, not Lake or Mountain hexes. A spawn node is "s" and an elite spawn node is "S"; a screen reader does not voice case.
+- evidence: `apps/web/src/debug/MapView.tsx:10-15` SITE_MARK, `:20-22` comment, `:48` aria-label; `apps/web/src/debug/StateView.tsx` Tiles row
+- suggested fix: Give the elite spawn node its own letter (for example "E") and list the Lake and Mountain hexes in the State text.
+- source: web-fetch
+
+### [LOW] /debug — "Map: 1 tiles." and raw engine ids in the State panel
+- pass: 28 (commit 0203e31)
+- viewport: desktop
+- category: voice
+- observation: At the start of every run the map's text alternative reads "Map: 1 tiles.". The State panel shows card and Skill names, but prints upgrades, milestones, the phase and the end reason as raw ids: "shop-1", "survive-round-5", "3 / prepare", "(ended: base)".
+- evidence: `apps/web/src/debug/MapView.tsx:48`; `apps/web/src/debug/StateView.tsx:23`, `:25`, `:36`, `:49`; `count()` helper in the same file
+- suggested fix: Use `count()` for the tile count; map upgrades to their content names and milestones through `milestoneLabel`, as /play does; print the phase and end reason in words.
+- source: web-fetch
+
+### [LOW] /play — the spoken hit line says "for 2" with no unit
+- pass: 28 (commit 0203e31)
+- viewport: desktop
+- category: a11y
+- observation: After a target pick the status line says "Strike hit grunt, 1 hex east for 2. 1 health left." With the place before it, "1 hex east for 2" is hard to parse by ear. The visible result and the log already say "damage".
+- evidence: `apps/web/src/play/engageView.ts:143` `${skill} hit ${name} for ${e.amount}. ${e.health} health left.`; used by the `role="status"` hit line in `apps/web/src/play/PlayPage.tsx`
+- suggested fix: Say "Strike hit the grunt 1 hex east: 2 damage, 1 health left." and update the label test.
+- source: web-fetch
+
+### [LOW] / — the Prepare step is one long item that also explains enemy targeting
+- pass: 28 (commit 0203e31)
+- viewport: mobile
+- category: comprehension
+- observation: The Prepare item joins card halves, Barricade and Tower stats, tile reveal, spawns and how enemies pick targets in one list item. At 375px it fills several screens, and the targeting rule matters in Combat, not Prepare. The Combat step was split for the same reason in an earlier pass.
+- evidence: `apps/web/src/home/HomePage.tsx:44-48` one `<li>` with `defenseText`, `revealText`, `spawnText`, `targetText`
+- suggested fix: Keep Prepare to the card-halves sentence and move defenses, map reveal and enemies into their own short items.
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
