@@ -22,17 +22,15 @@ function payload(event: GameEvent): string {
     .join(' ')
 }
 
-/** The event log, newest last, each line tagged with the rule that produced it. */
+/**
+ * The event log, newest last, each line tagged with the rule that produced it. Not a live region:
+ * one Autoplay adds hundreds of lines, so the console's status line sums up each step instead.
+ */
 export function EventLog({ events }: Props) {
   return (
     <section aria-labelledby="log-heading">
       <h2 id="log-heading">Event log ({events.length})</h2>
-      <ol
-        data-testid="log"
-        role="log"
-        aria-live="polite"
-        style={{ fontFamily: 'var(--font-number)', fontSize: '0.8125rem' }}
-      >
+      <ol data-testid="log" style={{ fontFamily: 'var(--font-number)', fontSize: '0.8125rem' }}>
         {events.map((event, i) => (
           <li key={i}>
             <strong>[{event.rule}]</strong> {event.type} {payload(event)}

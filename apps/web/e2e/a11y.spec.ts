@@ -60,7 +60,8 @@ test('/debug: after an action, focus returns to the action list heading', async 
   await first.focus()
   await page.keyboard.press('Enter')
   await expect(page.getByRole('heading', { name: /^Legal actions/ })).toBeFocused()
-  await expect(page.getByRole('log')).toBeAttached()
+  await expect(page.getByRole('status')).toHaveText(/^Action: \d+ new events?\. Round \d+, \w+\.$/)
+  await expect(page.getByRole('log')).toHaveCount(0)
 })
 
 test('/play: map targets name places, and the map names what stands on each hex', async ({

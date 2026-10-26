@@ -47,6 +47,11 @@ test('/debug: Autoplay plays the bot to the end of a run with no errors', async 
   await page.getByRole('button', { name: 'Autoplay' }).click()
   await expect(page.getByText('The run has ended.')).toBeVisible()
   await expect(page.getByTestId('state')).toContainText('ended')
+  // One status line sums up the Autoplay; the full log is not a live region.
+  await expect(page.getByTestId('step-status')).toHaveText(
+    /^Autoplay: \d+ actions\. The run ended in round \d+\.$/,
+  )
+  await expect(page.getByTestId('log')).not.toHaveAttribute('aria-live')
   expect(errors).toEqual([])
 })
 

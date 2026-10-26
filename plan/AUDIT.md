@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-26 (pass 154, cloud tick)
+
+Critique pass 28 (063ba4e) filed 6 findings on /debug, /play and /. No issues are open for triage. The critique gate is closed (pass 28 ran last commit) and so is the expand gate (pass 18, 5 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Shipped this pass: the critique MED on the Engine console. The whole event log was a polite live region, so one Autoplay (up to 5000 bot actions) read out hundreds of lines. A 6.0 (impact 5, ease 8, bias x1.5). The log is no longer live; a status line sums up each step in one sentence. Next in line: the "[Combat v3]" tags against the intro's "sections of the written rules" (critique MED, pass 28).
+
+## Top 5 findings (scored)
+
+### [x] [6.0] /debug: Autoplay floods screen readers through the live event log (critique MED, pass 28, bias x1.5)
+- category: external-critique (a11y)
+- impact: 5
+- ease: 8
+- next: drop the live region on the log; one status line per step
+- issue: #208
+- fixed: (this commit)
+
+### [ ] [5.3] /debug: the intro says bracketed tags are rule sections, but Combat events show "[Combat v3]" (critique MED, pass 28, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 7
+- next: show non-numeric tags in words and reword the intro
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [2.4] /play: the spoken hit line says "for 2" with no unit (critique LOW, pass 28)
+- category: external-critique (a11y)
+- impact: 3
+- ease: 8
+- next: say "Strike hit the grunt 1 hex east: 2 damage, 1 health left."
+
 # Site audit — 2026-10-26 (pass 153, cloud tick)
 
 Pass 152's Copy replay fix shipped (6948e73). No issues are open for triage. The critique gate is closed (pass 27, 10 commits ago, under 24 hours) and so is the expand gate (pass 18, 2 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight, so this pass audited the shipped pages fresh. Shipped this pass: a bug LOW on the Engine console. The State panel said "1 materials" for a player holding one material and "Move: 1 hexes left" for a Move with one hex left, though the same line already says "1 die". A 2.4 (impact 3, ease 8). Both counts now take the singular for 1, pinned by a new StateView unit test. Next in line: the rows that wait for /oversight.

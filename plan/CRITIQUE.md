@@ -18,15 +18,6 @@
 - suggested fix: Show a non-numeric tag in words (for example "not in the written rules", with the helper /decisions uses for citations) and reword the intro to match.
 - source: web-fetch
 
-### [MED] /debug — Autoplay floods screen readers through the live event log
-- pass: 28 (commit 0203e31)
-- viewport: desktop
-- category: a11y
-- observation: The whole event log is a polite live region. One Autoplay click can apply up to 5000 bot actions and add hundreds of lines at once, and each is announced.
-- evidence: `apps/web/src/debug/EventLog.tsx:32-33` `role="log" aria-live="polite"`; `apps/web/src/debug/DebugPage.tsx:23` `AUTOPLAY_LIMIT = 5000`
-- suggested fix: Turn the live region off on the full log and announce one short status line per action or per Autoplay ("Autoplay: 312 actions, the run ended in round 7").
-- source: web-fetch
-
 ### [LOW] /debug — the map shows terrain by colour only, and spawn marks differ only by case
 - pass: 28 (commit 0203e31)
 - viewport: desktop
@@ -118,6 +109,18 @@
 - source: user
 
 ## Done
+
+### [x] [MED] /debug — Autoplay floods screen readers through the live event log
+- pass: 28 (commit 0203e31)
+- viewport: desktop
+- category: a11y
+- observation: The whole event log is a polite live region. One Autoplay click can apply up to 5000 bot actions and add hundreds of lines at once, and each is announced.
+- evidence: `apps/web/src/debug/EventLog.tsx:32-33` `role="log" aria-live="polite"`; `apps/web/src/debug/DebugPage.tsx:23` `AUTOPLAY_LIMIT = 5000`
+- suggested fix: Turn the live region off on the full log and announce one short status line per action or per Autoplay ("Autoplay: 312 actions, the run ended in round 7").
+- source: web-fetch
+- issue: #208
+- addressed: (this commit)
+- resolution: The event log is no longer a live region. A status line under the controls sums up each step in one sentence: "Autoplay: 312 actions. The run ended in round 7." after Autoplay, "Bot step: 4 new events. Round 3, combat." or "Action: 1 new event. Round 2, prepare." after one step. A stepStatus unit test and the debug and a11y e2e pin it.
 
 ### [x] [LOW] /config — preset editor: card remove button sounds like "Remove preset"; Id help text is unclear
 - pass: 27 (commit a3ab1b5)

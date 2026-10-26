@@ -13,11 +13,20 @@ import { ActionLabel } from './ActionLabel.tsx'
 import styles from './DebugPage.module.css'
 import { EventLog } from './EventLog.tsx'
 import { StateView } from './StateView.tsx'
+import { type StepResult, stepStatus } from './stepStatus.ts'
 
-type Run = Readonly<{ seed: number; state: GameState; actions: readonly Action[] }>
+type Run = Readonly<{
+  seed: number
+  state: GameState
+  actions: readonly Action[]
+  /** The last step, for the status line; null at the start of a run. */
+  last: StepResult | null
+}>
 
 type Msg =
-  { kind: 'new'; seed: number } | { kind: 'act'; action: Action } | { kind: 'bot'; steps: number }
+  | { kind: 'new'; seed: number }
+  | { kind: 'act'; action: Action }
+  | { kind: 'bot'; steps: number; by: 'bot step' | 'autoplay' }
 
 /** Autoplay stops after this many bot actions (a stuck bot cannot freeze the page). */
 const AUTOPLAY_LIMIT = 5000
@@ -25,7 +34,12 @@ const AUTOPLAY_LIMIT = 5000
 /** Holds the run as seed + actions; every state comes from the engine. */
 function reducer(run: Run, msg: Msg): Run {
   if (msg.kind === 'new') {
-    return { seed: msg.seed, state: createGame(defaultContent.config, msg.seed), actions: [] }
+    return {
+      seed: msg.seed,
+      state: createGame(defaultContent.config, msg.seed),
+      actions: [],
+      last: null,
+    }
   }
   if (msg.kind === 'bot') {
     let state = run.state
@@ -36,12 +50,19 @@ function reducer(run: Run, msg: Msg): Run {
       state = applyAction(state, action).state
       actions.push(action)
     }
-    return { ...run, state, actions }
+    const last = {
+      by: msg.by,
+      actions: actions.length - run.actions.length,
+      events: state.log.length - run.state.log.length,
+    }
+    return { ...run, state, actions, last }
   }
+  const state = applyAction(run.state, msg.action).state
   return {
     ...run,
-    state: applyAction(run.state, msg.action).state,
+    state,
     actions: [...run.actions, msg.action],
+    last: { by: 'action', actions: 1, events: state.log.length - run.state.log.length },
   }
 }
 
@@ -108,10 +129,13 @@ export function DebugPage() {
           />
         </label>
         <button type="submit">New run</button>
-        <button type="button" onClick={() => step({ kind: 'bot', steps: 1 })}>
+        <button type="button" onClick={() => step({ kind: 'bot', steps: 1, by: 'bot step' })}>
           Bot step
         </button>
-        <button type="button" onClick={() => step({ kind: 'bot', steps: AUTOPLAY_LIMIT })}>
+        <button
+          type="button"
+          onClick={() => step({ kind: 'bot', steps: AUTOPLAY_LIMIT, by: 'autoplay' })}
+        >
           Autoplay
         </button>
         <button type="button" onClick={copyReplay}>
@@ -125,6 +149,9 @@ export function DebugPage() {
           {run.actions.length} action{run.actions.length === 1 ? '' : 's'}
         </span>
       </form>
+      <p role="status" data-testid="step-status">
+        {run.last ? stepStatus(run.last, run.state) : ''}
+      </p>
 
       <section aria-labelledby="actions-heading">
         <h2 id="actions-heading" ref={heading} tabIndex={-1}>
