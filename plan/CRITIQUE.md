@@ -18,15 +18,6 @@
 - suggested fix: Use `count()` for the tile count; map upgrades to their content names and milestones through `milestoneLabel`, as /play does; print the phase and end reason in words.
 - source: web-fetch
 
-### [LOW] /play — the spoken hit line says "for 2" with no unit
-- pass: 28 (commit 0203e31)
-- viewport: desktop
-- category: a11y
-- observation: After a target pick the status line says "Strike hit grunt, 1 hex east for 2. 1 health left." With the place before it, "1 hex east for 2" is hard to parse by ear. The visible result and the log already say "damage".
-- evidence: `apps/web/src/play/engageView.ts:143` `${skill} hit ${name} for ${e.amount}. ${e.health} health left.`; used by the `role="status"` hit line in `apps/web/src/play/PlayPage.tsx`
-- suggested fix: Say "Strike hit the grunt 1 hex east: 2 damage, 1 health left." and update the label test.
-- source: web-fetch
-
 ### [LOW] / — the Prepare step is one long item that also explains enemy targeting
 - pass: 28 (commit 0203e31)
 - viewport: mobile
@@ -91,6 +82,18 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play — the spoken hit line says "for 2" with no unit
+- pass: 28 (commit 0203e31)
+- viewport: desktop
+- category: a11y
+- observation: After a target pick the status line says "Strike hit grunt, 1 hex east for 2. 1 health left." With the place before it, "1 hex east for 2" is hard to parse by ear. The visible result and the log already say "damage".
+- evidence: `apps/web/src/play/engageView.ts:143` `${skill} hit ${name} for ${e.amount}. ${e.health} health left.`; used by the `role="status"` hit line in `apps/web/src/play/PlayPage.tsx`
+- suggested fix: Say "Strike hit the grunt 1 hex east: 2 damage, 1 health left." and update the label test.
+- source: web-fetch
+- issue: #211
+- addressed: (this commit)
+- resolution: The hit line now says "Strike hit grunt, 1 hex east: 2 damage, 1 health left.", the same "damage" and "health left" words the result and the log use. The label test pins the new wording.
 
 ### [x] [LOW] /debug — the map shows terrain by colour only, and spawn marks differ only by case
 - pass: 28 (commit 0203e31)

@@ -89,7 +89,7 @@ describe('the hit line and the damage floats (phase 24)', () => {
   it('reads out a hit and a defeat, from the state before the pick', () => {
     const hit: GameEvent[] = [{ type: 'enemyDamaged', rule: r, enemy: 'e1', amount: 2, health: 1 }]
     expect(hitLine(before, hit)).toMatch(
-      /^Strike hit grunt, 1 hex [a-z-]+ for 2\. 1 health left\.$/,
+      /^Strike hit grunt, 1 hex [a-z-]+: 2 damage, 1 health left\.$/,
     )
     const kill: GameEvent[] = [
       { type: 'enemyDamaged', rule: r, enemy: 'e2', amount: 2, health: 0 },

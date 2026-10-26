@@ -124,7 +124,7 @@ export function engageFoes(state: GameState): string {
 
 /**
  * What a target pick did, for screen readers while the modal steps aside: "Strike hit grunt,
- * 1 hex east for 2. 1 health left." or "Strike defeated grunt, 1 hex east." Empty when no
+ * 1 hex east: 2 damage, 1 health left." or "Strike defeated grunt, 1 hex east." Empty when no
  * enemy took damage. Names are read from the state before the pick (a defeated enemy is gone
  * after it).
  *
@@ -140,7 +140,7 @@ export function hitLine(before: GameState, events: readonly GameEvent[]): string
       if (e.type !== 'enemyDamaged') return []
       const name = enemyLabel(before, e.enemy, from)
       if (defeated.has(e.enemy)) return [`${skill} defeated ${name}.`]
-      return [`${skill} hit ${name} for ${e.amount}. ${e.health} health left.`]
+      return [`${skill} hit ${name}: ${e.amount} damage, ${e.health} health left.`]
     })
     .join(' ')
 }
