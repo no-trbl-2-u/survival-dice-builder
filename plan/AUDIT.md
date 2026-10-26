@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-26 (pass 153, cloud tick)
+
+Pass 152's Copy replay fix shipped (6948e73). No issues are open for triage. The critique gate is closed (pass 27, 10 commits ago, under 24 hours) and so is the expand gate (pass 18, 2 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight, so this pass audited the shipped pages fresh. Shipped this pass: a bug LOW on the Engine console. The State panel said "1 materials" for a player holding one material and "Move: 1 hexes left" for a Move with one hex left, though the same line already says "1 die". A 2.4 (impact 3, ease 8). Both counts now take the singular for 1, pinned by a new StateView unit test. Next in line: the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /debug: the State panel says "1 materials" and "1 hexes left" (audit, pass 153)
+- category: bug
+- impact: 3
+- ease: 8
+- next: say "1 material" and "1 hex left" for a count of 1
+- issue: #207
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [2.0] /decisions: the Event Calendar check cites ruling numbers (critique LOW, pass 25; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 7
+- next: /oversight rewrites the [needs-user-call] Event Calendar item in words
+
+### [ ] [1.2] sim: the bot cannot measure today's designer changes (critique LOW, session residue)
+- category: external-critique (sim)
+- impact: 3
+- ease: 4
+- next: a phase-sized bot policy change; belongs with /expand or /oversight
+
 # Site audit — 2026-10-25 (pass 152, cloud tick)
 
 Pass 151's run summary health chart fix shipped (bacf29d), and expand pass 18 found no new candidates (d03f0fb). No issues are open for triage. The critique gate is closed (pass 27, 8 commits ago, under 24 hours) and so is the expand gate (pass 18 ran last commit). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight, so this pass audited the shipped pages fresh. Shipped this pass: a bug LOW on the Engine console. After Copy replay the button said "Replay copied" through every later action until New run, though the copied replay no longer matched the run, and a refused clipboard write failed silently. A 2.4 (impact 3, ease 8). Every step now clears the label, and a refused write says "Copy failed", pinned by the debug e2e. Next in line: the rows that wait for /oversight.

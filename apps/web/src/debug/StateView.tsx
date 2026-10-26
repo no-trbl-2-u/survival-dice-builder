@@ -3,6 +3,9 @@ import { MapView } from './MapView.tsx'
 
 type Props = Readonly<{ state: GameState }>
 
+/** "1 material", "4 materials". */
+const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
+
 /** Plain-text view of the engine state for the debug console. */
 export function StateView({ state }: Props) {
   const cardName = (def: string) => state.content.cards.find((c) => c.id === def)?.name ?? def
@@ -72,7 +75,7 @@ export function StateView({ state }: Props) {
             <dt>In progress</dt>
             <dd>
               {active.kind === 'move'
-                ? `Move: ${active.hexesLeft} hexes left`
+                ? `Move: ${count(active.hexesLeft, 'hex', 'hexes')} left`
                 : `Build: ${active.buildsLeft} left, cost -${active.costReduction}`}
             </dd>
           </>
@@ -82,8 +85,8 @@ export function StateView({ state }: Props) {
             <dt>Player {p.id}</dt>
             <dd>
               at {at(p.hex)}, {p.health}/{p.maxHealth} health, {p.guard} guard, {p.dice}{' '}
-              {p.dice === 1 ? 'die' : 'dice'}, {p.materials} materials, {p.currency} currency,
-              orientation {p.orientation}
+              {p.dice === 1 ? 'die' : 'dice'}, {count(p.materials, 'material', 'materials')},{' '}
+              {p.currency} currency, orientation {p.orientation}
               {p.knockedOut ? ', knocked out' : ''}
             </dd>
             <dt>Hand</dt>
