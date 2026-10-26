@@ -64,3 +64,29 @@ describe('debug map marks in text', () => {
     expect(map.getAttribute('aria-label')).toContain('E elite spawn node')
   })
 })
+
+describe('debug state in words', () => {
+  it('says "1 tile" on a fresh map and names the phase', () => {
+    render(<StateView state={createGame(defaultContent.config, 1)} />)
+    expect(screen.getByTestId('map').getAttribute('aria-label')).toMatch(/^Map: 1 tile\./)
+    expect(screen.getByTestId('state').textContent).toMatch(/Round \/ phase1 \/ (Setup|Prepare)/)
+  })
+
+  it('names upgrades, milestones and the end of the run, not their ids', () => {
+    const game = createGame(defaultContent.config, 1)
+    const ended: GameState = {
+      ...game,
+      phase: 'ended',
+      endedBecause: 'base',
+      upgrades: ['shop-1'],
+      milestones: ['survive-round-5'],
+    }
+    render(<StateView state={ended} />)
+    const text = screen.getByTestId('state').textContent ?? ''
+    const shop = defaultContent.upgrades.find((u) => u.id === 'shop-1')?.name ?? ''
+    expect(text).toContain(`Upgrades${shop}Shop offers`)
+    expect(text).toContain('Survive to round 5')
+    expect(text).toContain('Run over (the base fell)')
+    expect(text).not.toMatch(/shop-1|survive-round-5|ended:/)
+  })
+})

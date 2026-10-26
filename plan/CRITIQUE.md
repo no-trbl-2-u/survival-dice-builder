@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /debug — "Map: 1 tiles." and raw engine ids in the State panel
-- pass: 28 (commit 0203e31)
-- viewport: desktop
-- category: voice
-- observation: At the start of every run the map's text alternative reads "Map: 1 tiles.". The State panel shows card and Skill names, but prints upgrades, milestones, the phase and the end reason as raw ids: "shop-1", "survive-round-5", "3 / prepare", "(ended: base)".
-- evidence: `apps/web/src/debug/MapView.tsx:48`; `apps/web/src/debug/StateView.tsx:23`, `:25`, `:36`, `:49`; `count()` helper in the same file
-- suggested fix: Use `count()` for the tile count; map upgrades to their content names and milestones through `milestoneLabel`, as /play does; print the phase and end reason in words.
-- source: web-fetch
-
 ### [LOW] / — the Prepare step is one long item that also explains enemy targeting
 - pass: 28 (commit 0203e31)
 - viewport: mobile
@@ -82,6 +73,18 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /debug — "Map: 1 tiles." and raw engine ids in the State panel
+- pass: 28 (commit 0203e31)
+- viewport: desktop
+- category: voice
+- observation: At the start of every run the map's text alternative reads "Map: 1 tiles.". The State panel shows card and Skill names, but prints upgrades, milestones, the phase and the end reason as raw ids: "shop-1", "survive-round-5", "3 / prepare", "(ended: base)".
+- evidence: `apps/web/src/debug/MapView.tsx:48`; `apps/web/src/debug/StateView.tsx:23`, `:25`, `:36`, `:49`; `count()` helper in the same file
+- suggested fix: Use `count()` for the tile count; map upgrades to their content names and milestones through `milestoneLabel`, as /play does; print the phase and end reason in words.
+- source: web-fetch
+- issue: #212
+- addressed: (this commit)
+- resolution: The map's text alternative says "Map: 1 tile." for one tile. The State panel names upgrades by their content name ("Shop I"), milestones through `milestoneLabel` as /play does ("Survive to round 5"), the phase as /play's phase bar does (Setup, Prepare, Combat, Run over), and an ended run as "(the base fell)". A unit test pins the words; the /debug e2e checks "1 / Setup" and "Run over (the base fell)".
 
 ### [x] [LOW] /play — the spoken hit line says "for 2" with no unit
 - pass: 28 (commit 0203e31)

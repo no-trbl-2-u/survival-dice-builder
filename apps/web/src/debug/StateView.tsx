@@ -1,5 +1,5 @@
-import { IMPASSABLE } from '@survival/content'
-import type { GameState } from '@survival/engine'
+import { IMPASSABLE, milestoneLabel } from '@survival/content'
+import type { GameState, Phase } from '@survival/engine'
 import { MapView } from './MapView.tsx'
 
 type Props = Readonly<{ state: GameState }>
@@ -7,10 +7,20 @@ type Props = Readonly<{ state: GameState }>
 /** "1 material", "4 materials". */
 const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
 
+/** The phase in words, as the /play phase bar names it. */
+const PHASE_WORDS: Record<Phase, string> = {
+  setup: 'Setup',
+  prepare: 'Prepare',
+  combat: 'Combat',
+  ended: 'Run over',
+}
+
 /** Plain-text view of the engine state for the debug console. */
 export function StateView({ state }: Props) {
   const cardName = (def: string) => state.content.cards.find((c) => c.id === def)?.name ?? def
   const skillName = (id: string) => state.content.skills.find((s) => s.id === id)?.name ?? id
+  const upgradeName = (id: string) => state.content.upgrades.find((u) => u.id === id)?.name ?? id
+  const milestone = (id: string) => milestoneLabel(id, state.config.milestones, state.content)
   const ex = state.exchange
   const at = (h: { q: number; r: number }) => `(${h.q},${h.r})`
   const active = state.active
@@ -24,9 +34,9 @@ export function StateView({ state }: Props) {
       <dl data-testid="state">
         <dt>Round / phase</dt>
         <dd>
-          {state.round} / {state.phase}
+          {state.round} / {PHASE_WORDS[state.phase]}
           {ex ? ` / ${ex.engage ? 'engagement' : 'exchange'}: ${ex.step}` : ''}
-          {state.endedBecause ? ` (ended: ${state.endedBecause})` : ''}
+          {state.endedBecause ? ' (the base fell)' : ''}
         </dd>
         <dt>Base</dt>
         <dd>
@@ -37,7 +47,7 @@ export function StateView({ state }: Props) {
           {state.experience} / {state.level}
         </dd>
         <dt>Upgrades</dt>
-        <dd>{state.upgrades.join(', ') || 'none'}</dd>
+        <dd>{state.upgrades.map(upgradeName).join(', ') || 'none'}</dd>
         <dt>Shop offers</dt>
         <dd>{state.shopOffers.map(cardName).join(', ') || 'closed'}</dd>
         {state.draft ? (
@@ -50,7 +60,7 @@ export function StateView({ state }: Props) {
           </>
         ) : null}
         <dt>Milestones</dt>
-        <dd>{state.milestones.join(', ') || 'none'}</dd>
+        <dd>{state.milestones.map(milestone).join(', ') || 'none'}</dd>
         <dt>Enemies</dt>
         <dd>
           {state.enemies.length === 0

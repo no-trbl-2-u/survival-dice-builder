@@ -34,7 +34,7 @@ test('/debug: a new seed starts a new run', async ({ page }) => {
   await page.getByLabel('Seed').fill('42')
   await page.getByRole('button', { name: 'New run' }).click()
   await expect(page.getByText('0 actions')).toBeVisible()
-  await expect(page.getByTestId('state')).toContainText('1 / setup')
+  await expect(page.getByTestId('state')).toContainText('1 / Setup')
 })
 
 test('/debug: Autoplay plays the bot to the end of a run with no errors', async ({ page }) => {
@@ -47,7 +47,7 @@ test('/debug: Autoplay plays the bot to the end of a run with no errors', async 
   await page.goto('/debug')
   await page.getByRole('button', { name: 'Autoplay' }).click()
   await expect(page.getByText('The run has ended.')).toBeVisible()
-  await expect(page.getByTestId('state')).toContainText('ended')
+  await expect(page.getByTestId('state')).toContainText('Run over (the base fell)')
   // One status line sums up the Autoplay; the full log is not a live region.
   await expect(page.getByTestId('step-status')).toHaveText(
     /^Autoplay: \d+ actions\. The run ended in round \d+\.$/,

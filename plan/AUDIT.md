@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-26 (pass 158, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 28, 5 commits ago, same day) and so is the expand gate (pass 18, 10 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Shipped this pass: the critique LOW on the Engine console State panel. The map's text alternative read "Map: 1 tiles." and the panel printed upgrades, milestones, the phase and the end reason as raw ids ("shop-1", "survive-round-5", "3 / prepare", "(ended: base)"). A 2.1 (impact 3, ease 7), named next in line by pass 157. The map now says "1 tile", upgrades and milestones carry their names, the phase reads Setup, Prepare, Combat or Run over, and an ended run says "(the base fell)". Next in line: the / Prepare step split (critique LOW, pass 28, 2.0).
+
+## Top 5 findings (scored)
+
+### [x] [2.1] /debug: "Map: 1 tiles." and raw engine ids in the State panel (critique LOW, pass 28)
+- category: external-critique (voice)
+- impact: 3
+- ease: 7
+- next: say "1 tile"; name upgrades, milestones, phase and end reason in words
+- issue: #212
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [2.0] /: the Prepare step is one long item that also explains enemy targeting (critique LOW, pass 28)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 7
+- next: keep Prepare to the card-halves sentence; move defenses, reveal and enemies into their own items
+
 # Site audit — 2026-10-26 (pass 157, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 28, 4 commits ago, same day) and so is the expand gate (pass 18, 9 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Shipped this pass: the critique LOW on the /play hit line. After a target pick the status line said "Strike hit grunt, 1 hex east for 2. 1 health left.", and "1 hex east for 2" is hard to parse by ear. A 2.4 (impact 3, ease 8), named next in line by pass 156. It now says "Strike hit grunt, 1 hex east: 2 damage, 1 health left." Next in line: the /debug "Map: 1 tiles." and raw engine ids (critique LOW, pass 28, 2.1).
