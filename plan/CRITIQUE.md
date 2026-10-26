@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /debug — the map shows terrain by colour only, and spawn marks differ only by case
-- pass: 28 (commit 0203e31)
-- viewport: desktop
-- category: a11y
-- observation: The map's comment says every mark is also in the state text, but terrain is a colour class only and the State panel gives tile counts, not Lake or Mountain hexes. A spawn node is "s" and an elite spawn node is "S"; a screen reader does not voice case.
-- evidence: `apps/web/src/debug/MapView.tsx:10-15` SITE_MARK, `:20-22` comment, `:48` aria-label; `apps/web/src/debug/StateView.tsx` Tiles row
-- suggested fix: Give the elite spawn node its own letter (for example "E") and list the Lake and Mountain hexes in the State text.
-- source: web-fetch
-
 ### [LOW] /debug — "Map: 1 tiles." and raw engine ids in the State panel
 - pass: 28 (commit 0203e31)
 - viewport: desktop
@@ -100,6 +91,18 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /debug — the map shows terrain by colour only, and spawn marks differ only by case
+- pass: 28 (commit 0203e31)
+- viewport: desktop
+- category: a11y
+- observation: The map's comment says every mark is also in the state text, but terrain is a colour class only and the State panel gives tile counts, not Lake or Mountain hexes. A spawn node is "s" and an elite spawn node is "S"; a screen reader does not voice case.
+- evidence: `apps/web/src/debug/MapView.tsx:10-15` SITE_MARK, `:20-22` comment, `:48` aria-label; `apps/web/src/debug/StateView.tsx` Tiles row
+- suggested fix: Give the elite spawn node its own letter (for example "E") and list the Lake and Mountain hexes in the State text.
+- source: web-fetch
+- issue: #210
+- addressed: (this commit)
+- resolution: The elite spawn node is now "E" on the map and in its text alternative, so no two marks differ only by case. The State panel gains an "Impassable hexes" row listing each lake and mountain hex with its coordinates ("lake at (1,-1)"), or "none". Two StateView unit tests pin both.
 
 ### [x] [MED] /debug — the intro says bracketed tags are rule sections, but most Combat events show "[Combat v3]"
 - pass: 28 (commit 0203e31)

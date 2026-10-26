@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-26 (pass 156, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 28, 3 commits ago, same day) and so is the expand gate (pass 18, 8 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Shipped this pass: the critique LOW on the Engine console map. Terrain was a colour only, the State text never named the lake and mountain hexes, and spawn nodes were "s" and "S", which a screen reader does not tell apart. A 2.1 (impact 3, ease 7), named next in line by pass 155 (the /play hit line scores 2.4 and is next). The elite spawn node is now "E" and the State panel lists the impassable hexes. Next in line: the /play hit line (critique LOW, pass 28, 2.4).
+
+## Top 5 findings (scored)
+
+### [x] [2.1] /debug: map terrain is colour-only and spawn marks differ only by case (critique LOW, pass 28)
+- category: external-critique (a11y)
+- impact: 3
+- ease: 7
+- next: mark the elite spawn node "E" and list lake and mountain hexes in the State text
+- issue: #210
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [2.4] /play: the spoken hit line says "for 2" with no unit (critique LOW, pass 28)
+- category: external-critique (a11y)
+- impact: 3
+- ease: 8
+- next: say "Strike hit the grunt 1 hex east: 2 damage, 1 health left."
+
+### [ ] [2.1] /debug: "Map: 1 tiles." and raw engine ids in the State panel (critique LOW, pass 28)
+- category: external-critique (voice)
+- impact: 3
+- ease: 7
+- next: use count() for tiles; name upgrades, milestones, phase and end reason in words
+
 # Site audit — 2026-10-26 (pass 155, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 28, 2 commits ago, same day) and so is the expand gate (pass 18, 7 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Shipped this pass: the critique MED on the Engine console's rule tags. The intro said numbers in [brackets] are rules sections, but Combat events showed "[Combat v3]" and draft events "[Draft pool (designer 2026-10-09)]". A 5.3 (impact 5, ease 7, bias x1.5). Non-numeric tags now read "[not in the written rules]" and the intro says so. Next in line: the /debug map's colour-only terrain and case-only spawn marks (critique LOW, pass 28).

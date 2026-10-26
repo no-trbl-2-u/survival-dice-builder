@@ -1,3 +1,4 @@
+import { IMPASSABLE } from '@survival/content'
 import type { GameState } from '@survival/engine'
 import { MapView } from './MapView.tsx'
 
@@ -13,6 +14,9 @@ export function StateView({ state }: Props) {
   const ex = state.exchange
   const at = (h: { q: number; r: number }) => `(${h.q},${h.r})`
   const active = state.active
+  const impassable = Object.entries(state.map.hexes)
+    .filter(([, hex]) => IMPASSABLE.includes(hex.terrain))
+    .map(([key, hex]) => `${hex.terrain} at (${key})`)
   return (
     <section aria-labelledby="state-heading">
       <h2 id="state-heading">State</h2>
@@ -70,6 +74,8 @@ export function StateView({ state }: Props) {
           spent
           {state.unplaced.length > 0 ? `; waiting to place: ${state.unplaced.join(', ')}` : ''}
         </dd>
+        <dt>Impassable hexes</dt>
+        <dd>{impassable.join(', ') || 'none'}</dd>
         {active ? (
           <>
             <dt>In progress</dt>

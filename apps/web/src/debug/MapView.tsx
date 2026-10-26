@@ -11,15 +11,15 @@ const SITE_MARK: Record<string, string> = {
   base: 'B',
   'gathering-node': 'g',
   'spawn-node': 's',
-  'elite-spawn-node': 'S',
+  'elite-spawn-node': 'E',
 }
 
 type Props = Readonly<{ state: GameState }>
 
 /**
  * A plain SVG of the map for the debug console: terrain colours, site letters, the player (P),
- * enemies (their id), and defenses (their id). Every mark is also listed in the state text, so
- * nothing here is hover-only.
+ * enemies (their id), and defenses (their id). Every mark is also listed in the state text (the
+ * impassable lake and mountain hexes too), so nothing here is colour-only or hover-only.
  */
 export function MapView({ state }: Props) {
   const keys = Object.keys(state.map.hexes)
@@ -45,7 +45,7 @@ export function MapView({ state }: Props) {
       className={styles.map}
       viewBox={`${minX} ${minY} ${width} ${height}`}
       role="img"
-      aria-label={`Map: ${state.map.tiles.length} tiles. Letters: B base, g gathering node, s spawn node, S elite spawn node, P player; enemy and defense ids are shown on their hex.`}
+      aria-label={`Map: ${state.map.tiles.length} tiles. Letters: B base, g gathering node, s spawn node, E elite spawn node, P player; enemy and defense ids are shown on their hex.`}
       data-testid="map"
     >
       {points.map(({ key, center }) => {

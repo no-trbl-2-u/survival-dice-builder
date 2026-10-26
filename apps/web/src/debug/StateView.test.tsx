@@ -31,3 +31,36 @@ describe('debug state counts', () => {
     expect(text).toContain(', 4 materials,')
   })
 })
+
+describe('debug map marks in text', () => {
+  /** A solo run with one lake and one mountain hex added beside the start. */
+  function withBlocks(): GameState {
+    const game = createGame(defaultContent.config, 1)
+    return {
+      ...game,
+      map: {
+        ...game.map,
+        hexes: {
+          ...game.map.hexes,
+          '5,0': { terrain: 'lake', site: null, tile: 't' },
+          '5,1': { terrain: 'mountain', site: null, tile: 't' },
+          '5,2': { terrain: 'forest', site: 'elite-spawn-node', tile: 't' },
+        },
+      },
+    }
+  }
+
+  it('lists the lake and mountain hexes, not only their colour', () => {
+    render(<StateView state={withBlocks()} />)
+    const text = screen.getByTestId('state').textContent ?? ''
+    expect(text).toContain('lake at (5,0)')
+    expect(text).toContain('mountain at (5,1)')
+  })
+
+  it('marks an elite spawn node "E", not a capital "S"', () => {
+    render(<StateView state={withBlocks()} />)
+    const map = screen.getByTestId('map')
+    expect(map.querySelector('[data-hex="5,2"]')?.textContent).toBe('E')
+    expect(map.getAttribute('aria-label')).toContain('E elite spawn node')
+  })
+})
