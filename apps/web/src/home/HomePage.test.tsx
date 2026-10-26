@@ -6,10 +6,24 @@ import { HomePage } from './HomePage.tsx'
 describe('HomePage', () => {
   it('says that a revealed tile adds enemies at every Combat, and whom enemies head for', () => {
     render(<HomePage />)
-    const prepare = screen.getByText(/new tile's spawn nodes add enemies at every Combat\./)
-    expect(prepare.textContent).toMatch(
+    const enemies = screen.getByText(/new tile's spawn nodes add enemies at every Combat\./)
+    expect(enemies.textContent).toMatch(/^Enemies: Each new tile's spawn nodes/)
+    expect(enemies.textContent).toMatch(
       /Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer\./,
     )
+  })
+
+  it('keeps Prepare to the card halves; defenses, the map and enemies get their own items (critique pass 28)', () => {
+    render(<HomePage />)
+    const items = screen.getAllByRole('listitem').map((li) => li.textContent ?? '')
+    expect(items).toContain(
+      'Prepare: play the top halves of your cards to move, gather materials and build Barricades and Towers.',
+    )
+    expect(items.find((text) => text.startsWith('Defenses: A Barricade costs'))).toMatch(
+      /The base starts with \d+ health\.$/,
+    )
+    expect(items.find((text) => text.startsWith('The map: Step off the edge'))).toBeTruthy()
+    expect(items.find((text) => text.startsWith('Enemies: Each new tile'))).toBeTruthy()
   })
 
   it('says what a player starts with and how a round turns over, before how a run goes', () => {

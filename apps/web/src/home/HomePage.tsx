@@ -43,8 +43,7 @@ export function HomePage() {
         <ol className={styles.steps}>
           <li>
             <strong>Prepare:</strong> play the top halves of your cards to move, gather materials
-            and build Barricades and Towers. {defenseText(config, defaultContent)}{' '}
-            {revealText(config)} {spawnText(config)} {targetText(config)}
+            and build Barricades and Towers.
           </li>
           <li>
             <strong>Combat:</strong> {combatText(config, 'engage', defaultContent)} This is the
@@ -54,6 +53,17 @@ export function HomePage() {
             {lower(siegeText(defaultContent))}
           </li>
         </ol>
+        <ul className={styles.steps}>
+          <li>
+            <strong>Defenses:</strong> {defenseText(config, defaultContent)}
+          </li>
+          <li>
+            <strong>The map:</strong> {revealText(config)}
+          </li>
+          <li>
+            <strong>Enemies:</strong> {spawnText(config)} {targetText(config)}
+          </li>
+        </ul>
         <p>
           {goalText()} {knockoutText(config)}
         </p>

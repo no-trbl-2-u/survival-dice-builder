@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Prepare step is one long item that also explains enemy targeting
-- pass: 28 (commit 0203e31)
-- viewport: mobile
-- category: comprehension
-- observation: The Prepare item joins card halves, Barricade and Tower stats, tile reveal, spawns and how enemies pick targets in one list item. At 375px it fills several screens, and the targeting rule matters in Combat, not Prepare. The Combat step was split for the same reason in an earlier pass.
-- evidence: `apps/web/src/home/HomePage.tsx:44-48` one `<li>` with `defenseText`, `revealText`, `spawnText`, `targetText`
-- suggested fix: Keep Prepare to the card-halves sentence and move defenses, map reveal and enemies into their own short items.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -74,6 +65,18 @@
 
 ## Done
 
+### [x] [LOW] / — the Prepare step is one long item that also explains enemy targeting
+- pass: 28 (commit 0203e31)
+- viewport: mobile
+- category: comprehension
+- observation: The Prepare item joins card halves, Barricade and Tower stats, tile reveal, spawns and how enemies pick targets in one list item. At 375px it fills several screens, and the targeting rule matters in Combat, not Prepare. The Combat step was split for the same reason in an earlier pass.
+- evidence: `apps/web/src/home/HomePage.tsx:44-48` one `<li>` with `defenseText`, `revealText`, `spawnText`, `targetText`
+- suggested fix: Keep Prepare to the card-halves sentence and move defenses, map reveal and enemies into their own short items.
+- source: web-fetch
+- issue: #213
+- addressed: (this commit)
+- resolution: The Prepare step on / keeps to the card-halves sentence. Defense costs and health, the base's starting health, tile reveal, spawns and enemy targeting move to a short list after the two steps, one item each: Defenses, The map, Enemies. A unit test pins the Prepare sentence and the three items.
+
 ### [x] [LOW] /debug — "Map: 1 tiles." and raw engine ids in the State panel
 - pass: 28 (commit 0203e31)
 - viewport: desktop
@@ -83,7 +86,7 @@
 - suggested fix: Use `count()` for the tile count; map upgrades to their content names and milestones through `milestoneLabel`, as /play does; print the phase and end reason in words.
 - source: web-fetch
 - issue: #212
-- addressed: (this commit)
+- addressed: 29e9061
 - resolution: The map's text alternative says "Map: 1 tile." for one tile. The State panel names upgrades by their content name ("Shop I"), milestones through `milestoneLabel` as /play does ("Survive to round 5"), the phase as /play's phase bar does (Setup, Prepare, Combat, Run over), and an ended run as "(the base fell)". A unit test pins the words; the /debug e2e checks "1 / Setup" and "Run over (the base fell)".
 
 ### [x] [LOW] /play — the spoken hit line says "for 2" with no unit
