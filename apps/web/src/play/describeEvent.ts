@@ -186,7 +186,8 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'diceGained':
       return `${who(event.player)} now ${solo(names) ? 'have' : 'has'} ${event.dice} action dice.`
     case 'currencyGained':
-      return `+${event.amount} currency (${event.currency}).`
+      // Currency is per player (8.2), so the line names who gets it: "Player 2 gained 3 currency".
+      return `${who(event.player)} gained ${event.amount} currency (now ${event.currency}).`
     case 'upgradeBought':
       return `${upgradeName(names, event.upgrade)} bought for ${materials(event.cost)} (base health ${event.baseHealth}).`
     case 'offerAdded':

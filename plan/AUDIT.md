@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-26 (pass 160, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 28, 7 commits ago, same day) and so is the expand gate (pass 18, 10 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight, so this pass audited the shipped pages fresh. Shipped this pass: a bug LOW in the /play log. When an enemy was defeated, the currency line read "+3 currency (5)." and named no one, though currency belongs to one player (8.2) and a Tower's defeat pays the player who built it. In co-op the log did not say who got it. A 3.6 (impact 4, ease 9). The line now reads "Player 2 gained 3 currency (now 5)." ("You gained" in a solo run), pinned by a new unit test. Next in line: the rows that wait for /oversight; the next tick re-audits.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play log: the currency line does not say which player got it (audit, pass 160)
+- category: bug
+- impact: 4
+- ease: 9
+- next: name the player, as the guard and gather lines do
+- issue: #214
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
 # Site audit — 2026-10-26 (pass 159, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 28, 6 commits ago, same day) and so is the expand gate (pass 18, 9 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Shipped this pass: the critique LOW on the / Prepare step. One list item joined the card halves, Barricade and Tower stats, the base's health, tile reveal, spawns and enemy targeting, and filled several screens at 375px. A 2.0 (impact 3, ease 7), named next in line by pass 158; the two 8.1 rows above it wait for /oversight. Prepare now keeps to the card-halves sentence, and Defenses, The map and Enemies follow as their own short items. Next in line: the /decisions rows wait for /oversight; the next tick re-audits.
