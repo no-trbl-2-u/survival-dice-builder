@@ -156,7 +156,8 @@ export function describeEvent(event: GameEvent, names: Names): string {
         ? `${who(event.player)} gathered nothing: gather on an unspent gathering node with no enemy on it.`
         : `${who(event.player)} gathered ${materials(event.amount)} (now ${event.materials})${event.spent ? '; the node is spent' : ''}.`
     case 'defenseBuilt':
-      return `${event.kind[0]?.toUpperCase()}${event.kind.slice(1)} built on ${place(names, event.hex)} for ${materials(event.cost)}.`
+      // Materials are per player, so the line names who paid: "Player 2 built a Tower on ...".
+      return `${who(event.player)} built ${article(upper(event.kind))} on ${place(names, event.hex)} for ${materials(event.cost)}.`
     case 'defenseDamaged':
       return `${defenseLabel(names, event.defense)} takes ${event.amount} damage (health ${event.health}).`
     case 'defenseRemoved':
@@ -189,7 +190,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
       // Currency is per player (8.2), so the line names who gets it: "Player 2 gained 3 currency".
       return `${who(event.player)} gained ${event.amount} currency (now ${event.currency}).`
     case 'upgradeBought':
-      return `${upgradeName(names, event.upgrade)} bought for ${materials(event.cost)} (base health ${event.baseHealth}).`
+      return `${who(event.player)} bought ${upgradeName(names, event.upgrade)} for ${materials(event.cost)} (base health ${event.baseHealth}).`
     case 'offerAdded':
       return `Shop offer: ${cardName(names, event.card)} (level ${event.level}).`
     case 'cardBought':

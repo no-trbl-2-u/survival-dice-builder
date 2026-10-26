@@ -174,18 +174,21 @@ describe('describeEvent', () => {
       hex: north,
       cost: 1,
     }
-    expect(describeEvent(built as never, state)).toMatch(/^Barricade built on .+ for 1 material\.$/)
+    expect(describeEvent(built as never, state)).toMatch(
+      /^You built a Barricade on .+ for 1 material\.$/,
+    )
     expect(describeEvent({ ...built, cost: 2 } as never, state)).toMatch(/ for 2 materials\.$/)
     const upgrade = state.content.upgrades[0]!
     const bought = {
       type: 'upgradeBought',
       rule: '8.1',
+      player: 'p1',
       upgrade: upgrade.id,
       cost: 1,
       baseHealth: 12,
     }
     expect(describeEvent(bought as never, state)).toBe(
-      `${upgrade.name} bought for 1 material (base health 12).`,
+      `You bought ${upgrade.name} for 1 material (base health 12).`,
     )
   })
 
