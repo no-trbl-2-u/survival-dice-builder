@@ -103,13 +103,14 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'guardGained':
       return `${who(event.player)} gained ${event.amount} guard (guard ${event.guard}).`
     case 'damageBonus':
-      return `+${event.amount} damage for the next damage Skill.`
+      return `+${event.amount} damage for ${solo(names) ? 'your' : `${seat(names, event.player)}'s`} next damage Skill.`
     case 'extraDice':
-      return `Extra dice rolled: ${event.faces.join(', ')}.`
+      return `${whose(event.player)} extra dice rolled: ${event.faces.join(', ')}.`
     case 'diceRolled':
-      return `Roll ${event.roll}: ${event.faces.join(', ')}.`
+      // Each player rolls their own dice, so the roll lines name whose: "Player 2's roll 1: ...".
+      return `${whose(event.player)} roll ${event.roll}: ${event.faces.join(', ')}.`
     case 'dieRerolled':
-      return `Die ${event.die + 1} rerolled: ${event.face}.`
+      return `${whose(event.player)} die ${event.die + 1} rerolled: ${event.face}.`
     case 'dieKept':
       return `Die ${event.die + 1} ${event.kept ? 'kept' : 'released'}.`
     case 'dieAssigned':
@@ -117,7 +118,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'dieUnassigned':
       return `Die ${event.die + 1} taken back.`
     case 'skillFired':
-      return `${skillName(names, event.skill)} fires.`
+      return `${whose(event.player)} ${skillName(names, event.skill)} fires.`
     case 'enemyDamaged':
       return `${upper(enemyLabel(names, event.enemy))} takes ${event.amount} damage (health ${event.health}).`
     case 'enemyDefeated':
