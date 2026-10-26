@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-26 (pass 162, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 28, 9 commits ago, same day) and so is the expand gate (pass 18, 12 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight, so this pass audited the shipped pages fresh. Shipped this pass: a bug LOW in the /play log, the same shape as passes 160 and 161. At each phase start every player's deck turns at once, and the log printed "Deck shuffled (10 cards)." and "Deck turned: bottom halves up." once per player with no name, so in co-op the lines repeated and did not say whose deck each was. A 3.6 (impact 4, ease 9). The lines now read "Player 2's deck shuffled (10 cards)." and "Player 2's deck turned: bottom halves up." ("Your deck ..." in a solo run), pinned by a new unit test. Next in line: the roll and Skill lines ("Roll 1: ...", "Strike fires.") also carry a player the log does not name; the next tick re-audits.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play log: the deck lines do not say whose deck turned (audit, pass 162)
+- category: bug
+- impact: 4
+- ease: 9
+- next: name the owner, as the build, upgrade and currency lines do
+- issue: #216
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [3.2] /play log: the roll, reroll, extra-dice, damage-bonus and Skill-fired lines name no player (audit, pass 162)
+- category: bug
+- impact: 4
+- ease: 8
+- next: name the player on each, as the card-played line does
+
 # Site audit — 2026-10-26 (pass 161, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 28, 8 commits ago, same day) and so is the expand gate (pass 18, 11 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight, so this pass audited the shipped pages fresh. Shipped this pass: a bug LOW in the /play log, the same shape as pass 160. A build read "Tower built on Plains (1,0) for 3 materials." and an upgrade "Shop I bought for 2 materials (base health 12)." Materials belong to one player, and a Tower's defeats pay its builder, so in co-op the log did not say who paid. A 3.6 (impact 4, ease 9). The lines now read "Player 2 built a Tower on ... for 3 materials." and "Player 2 bought Shop I for 2 materials ..." ("You" in a solo run), pinned by a new unit test. Next in line: the rows that wait for /oversight; the next tick re-audits.

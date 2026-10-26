@@ -69,6 +69,8 @@ const upper = (text: string) => `${text[0]?.toUpperCase() ?? ''}${text.slice(1)}
 export function describeEvent(event: GameEvent, names: Names): string {
   const who = (id: string) => seat(names, id)
   const whom = (id: string) => (solo(names) ? 'you' : seat(names, id))
+  /** The owner: "Your" in a solo run, "Player 2's" in co-op. */
+  const whose = (id: string) => (solo(names) ? 'Your' : `${seat(names, id)}'s`)
   /** Verb agreement: "You gather" but "Player 2 gathers". */
   const s = (verb: string) => (solo(names) ? verb : `${verb}s`)
   /** What an enemy heads for: the base, a player, or a defense. */
@@ -84,9 +86,10 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'phaseStarted':
       return `${event.phase[0]?.toUpperCase()}${event.phase.slice(1)} phase starts (round ${event.round}).`
     case 'deckShuffled':
-      return `Deck shuffled (${event.cards} cards).`
+      // Every player's deck turns at once, so each line names whose: "Player 2's deck shuffled".
+      return `${whose(event.player)} deck shuffled (${event.cards} cards).`
     case 'deckTurned':
-      return `Deck turned: ${event.orientation === 'top' ? 'top halves' : 'bottom halves'} up.`
+      return `${whose(event.player)} deck turned: ${event.orientation === 'top' ? 'top halves' : 'bottom halves'} up.`
     case 'cardsDrawn':
       return `${who(event.player)} drew ${event.cards.length} card${event.cards.length === 1 ? '' : 's'}.`
     case 'cardPlayed':
