@@ -5,25 +5,19 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
-# Site audit — 2026-10-26 (pass 154, cloud tick)
+# Site audit — 2026-10-26 (pass 155, cloud tick)
 
-Critique pass 28 (063ba4e) filed 6 findings on /debug, /play and /. No issues are open for triage. The critique gate is closed (pass 28 ran last commit) and so is the expand gate (pass 18, 5 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Shipped this pass: the critique MED on the Engine console. The whole event log was a polite live region, so one Autoplay (up to 5000 bot actions) read out hundreds of lines. A 6.0 (impact 5, ease 8, bias x1.5). The log is no longer live; a status line sums up each step in one sentence. Next in line: the "[Combat v3]" tags against the intro's "sections of the written rules" (critique MED, pass 28).
+No issues are open for triage. The critique gate is closed (pass 28, 2 commits ago, same day) and so is the expand gate (pass 18, 7 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Shipped this pass: the critique MED on the Engine console's rule tags. The intro said numbers in [brackets] are rules sections, but Combat events showed "[Combat v3]" and draft events "[Draft pool (designer 2026-10-09)]". A 5.3 (impact 5, ease 7, bias x1.5). Non-numeric tags now read "[not in the written rules]" and the intro says so. Next in line: the /debug map's colour-only terrain and case-only spawn marks (critique LOW, pass 28).
 
 ## Top 5 findings (scored)
 
-### [x] [6.0] /debug: Autoplay floods screen readers through the live event log (critique MED, pass 28, bias x1.5)
-- category: external-critique (a11y)
-- impact: 5
-- ease: 8
-- next: drop the live region on the log; one status line per step
-- issue: #208
-- fixed: (this commit)
-
-### [ ] [5.3] /debug: the intro says bracketed tags are rule sections, but Combat events show "[Combat v3]" (critique MED, pass 28, bias x1.5)
+### [x] [5.3] /debug: the intro says bracketed tags are rule sections, but Combat events show "[Combat v3]" (critique MED, pass 28, bias x1.5)
 - category: external-critique (comprehension)
 - impact: 5
 - ease: 7
 - next: show non-numeric tags in words and reword the intro
+- issue: #209
+- fixed: (this commit)
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

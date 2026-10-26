@@ -14,6 +14,15 @@ export function showValue(v: unknown): string {
   return String(v)
 }
 
+/**
+ * The bracketed tag for an event's rule: a section number of the written rules ("7.8",
+ * "7.8, Table 9") as it is, and any other tag ("Combat v3", a designer ruling) as "not in the
+ * written rules", since it names no section a reader can look up.
+ */
+export function ruleTag(rule: string): string {
+  return /^\d/.test(rule) ? rule : 'not in the written rules'
+}
+
 /** Shows an event as `type` plus its payload, without the repeated `type` and `rule` keys. */
 function payload(event: GameEvent): string {
   return Object.entries(event)
@@ -33,7 +42,7 @@ export function EventLog({ events }: Props) {
       <ol data-testid="log" style={{ fontFamily: 'var(--font-number)', fontSize: '0.8125rem' }}>
         {events.map((event, i) => (
           <li key={i}>
-            <strong>[{event.rule}]</strong> {event.type} {payload(event)}
+            <strong>[{ruleTag(event.rule)}]</strong> {event.type} {payload(event)}
           </li>
         ))}
       </ol>

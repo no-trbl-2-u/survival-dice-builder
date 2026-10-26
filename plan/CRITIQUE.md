@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /debug — the intro says bracketed tags are rule sections, but most Combat events show "[Combat v3]"
-- pass: 28 (commit 0203e31)
-- viewport: desktop
-- category: comprehension
-- observation: The intro says "Numbers in [brackets] are sections of the written rules." Under the default Engagements Combat most Combat events are tagged "[Combat v3]", a name already removed from /play and /config, and draft events show "[Draft pool (designer 2026-10-09)]". Neither is a number or a rules section.
-- evidence: `apps/web/src/debug/DebugPage.tsx:88` intro; `apps/web/src/debug/EventLog.tsx:38` prints `[{event.rule}]`; `packages/engine/src/combat/engage.ts:150`, `:166`, `:222` `rule: 'Combat v3'`; `packages/engine/src/progression/draft.ts:107`
-- suggested fix: Show a non-numeric tag in words (for example "not in the written rules", with the helper /decisions uses for citations) and reword the intro to match.
-- source: web-fetch
-
 ### [LOW] /debug — the map shows terrain by colour only, and spawn marks differ only by case
 - pass: 28 (commit 0203e31)
 - viewport: desktop
@@ -110,6 +101,18 @@
 
 ## Done
 
+### [x] [MED] /debug — the intro says bracketed tags are rule sections, but most Combat events show "[Combat v3]"
+- pass: 28 (commit 0203e31)
+- viewport: desktop
+- category: comprehension
+- observation: The intro says "Numbers in [brackets] are sections of the written rules." Under the default Engagements Combat most Combat events are tagged "[Combat v3]", a name already removed from /play and /config, and draft events show "[Draft pool (designer 2026-10-09)]". Neither is a number or a rules section.
+- evidence: `apps/web/src/debug/DebugPage.tsx:88` intro; `apps/web/src/debug/EventLog.tsx:38` prints `[{event.rule}]`; `packages/engine/src/combat/engage.ts:150`, `:166`, `:222` `rule: 'Combat v3'`; `packages/engine/src/progression/draft.ts:107`
+- suggested fix: Show a non-numeric tag in words (for example "not in the written rules", with the helper /decisions uses for citations) and reword the intro to match.
+- source: web-fetch
+- issue: #209
+- addressed: (this commit)
+- resolution: The log prints a rules section number as it is ("[7.8]", "[7.8, Table 9]") and any other tag ("Combat v3", the designer's draft pool ruling) as "[not in the written rules]". The intro now says each line starts with the section it follows, or [not in the written rules] when the step comes from a later design decision. A ruleTag unit test and the debug e2e pin it.
+
 ### [x] [MED] /debug — Autoplay floods screen readers through the live event log
 - pass: 28 (commit 0203e31)
 - viewport: desktop
@@ -119,7 +122,7 @@
 - suggested fix: Turn the live region off on the full log and announce one short status line per action or per Autoplay ("Autoplay: 312 actions, the run ended in round 7").
 - source: web-fetch
 - issue: #208
-- addressed: (this commit)
+- addressed: d5c1206
 - resolution: The event log is no longer a live region. A status line under the controls sums up each step in one sentence: "Autoplay: 312 actions. The run ended in round 7." after Autoplay, "Bot step: 4 new events. Round 3, combat." or "Action: 1 new event. Round 2, prepare." after one step. A stepStatus unit test and the debug and a11y e2e pin it.
 
 ### [x] [LOW] /config — preset editor: card remove button sounds like "Remove preset"; Id help text is unclear
