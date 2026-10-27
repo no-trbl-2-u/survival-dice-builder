@@ -35,6 +35,9 @@ export function StateView({ state }: Props) {
   const impassable = Object.entries(state.map.hexes)
     .filter(([, hex]) => IMPASSABLE.includes(hex.terrain))
     .map(([key, hex]) => `${capital(hex.terrain)} at (${key})`)
+  const unplaced = state.players.flatMap((p, index) =>
+    state.unplaced.includes(p.id) ? [`Player ${index + 1}`] : [],
+  )
   return (
     <section aria-labelledby="state-heading">
       <h2 id="state-heading">State</h2>
@@ -90,8 +93,13 @@ export function StateView({ state }: Props) {
           {state.map.tiles.length} placed, {state.tileDeck.length} in the tile deck,{' '}
           {state.spentNodes.length} gathering {state.spentNodes.length === 1 ? 'node' : 'nodes'}{' '}
           spent
-          {state.unplaced.length > 0 ? `; waiting to place: ${state.unplaced.join(', ')}` : ''}
         </dd>
+        {unplaced.length > 0 ? (
+          <>
+            <dt>Figures to place</dt>
+            <dd>{unplaced.join(', ')}</dd>
+          </>
+        ) : null}
         <dt>Impassable hexes</dt>
         <dd>{impassable.join(', ') || 'none'}</dd>
         {active ? (

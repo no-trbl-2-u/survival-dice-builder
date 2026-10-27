@@ -114,4 +114,22 @@ describe('debug state in words', () => {
     expect(text).toContain('1 / Combat / Exchange: Pick targets')
     expect(text).not.toMatch(/Player p\d|orientation|: targets/)
   })
+
+  it('lists the figures still to place by player number, apart from the tiles', () => {
+    const game = createGame(defaultContent.config, 1)
+    const two: GameState = {
+      ...game,
+      players: [...game.players, { ...game.players[0]!, id: 'p2' }],
+      unplaced: ['p2'],
+    }
+    render(<StateView state={two} />)
+    const text = screen.getByTestId('state').textContent ?? ''
+    expect(text).toContain('Figures to placePlayer 2')
+    expect(text).not.toMatch(/waiting to place|: p\d/)
+  })
+
+  it('drops the figures row once every figure is on the map', () => {
+    render(<StateView state={{ ...createGame(defaultContent.config, 1), unplaced: [] }} />)
+    expect(screen.getByTestId('state').textContent).not.toContain('Figures to place')
+  })
 })

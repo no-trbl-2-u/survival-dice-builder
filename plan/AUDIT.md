@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-27 (pass 170, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 29 ran 8 commits ago, same day) and so is the expand gate (pass 19 ran 3 commits ago). Phase 35 is still blocked on the designer's Skills session. The pass-29 critique queue is drained and its MED rows wait for /oversight, so this tick ships the item the last tick saw while testing. The /debug State panel's Tiles row ended with "; waiting to place: p1": those are players whose figure is not on the map yet, named by engine id, inside a row about tiles. They now get their own "Figures to place" row ("Player 2"), shown only while a figure waits. Two StateView tests pin the row and its absence.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /debug: the Tiles row lists figures to place by engine id (audit, pass 170)
+- category: voice
+- impact: 4
+- ease: 8
+- next: own "Figures to place" row named by player number
+- issue: #225
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-27 (pass 169, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 29 ran 7 commits ago, same day) and so is the expand gate (pass 19 ran last tick). Phase 35 is still blocked on the designer's Skills session. The /decisions MED rows still wait for /oversight, so the last pass-29 LOW row ships. The /debug State panel headed each player with the engine id ("Player p1"), printed "orientation top", named impassable hexes in lower case ("lake at (1,-1)") and showed the exchange step as a raw id ("engagement: targets"); the step status line said "Round 1, setup." under a panel that says "Setup". Players are now "Player 1", "Player 2"; the row says "top halves up"; terrain reads "Lake", "Mountain"; the exchange step reads "Exchange: Pick targets"; and stepStatus shares the panel's PHASE_WORDS ("Round 1, Setup."). A new StateView test pins the player heading, halves and step words; the Lake/Mountain and stepStatus tests follow. Seen while testing: the Tiles row still lists unplaced tiles by id ("waiting to place: p1"), a candidate for the next critique pass. The pass-29 queue is drained; what remains waits for /oversight.
