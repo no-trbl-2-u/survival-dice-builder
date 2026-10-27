@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-27 (pass 166, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 29 ran 3 commits ago, same day) and so is the expand gate (pass 18, about 43 hours and 17 commits ago). Phase 35 is still blocked on the designer's Skills session. The /decisions MED rows still wait for /oversight, so the top pass-29 LOW row ships. Experience is shared by every player, but its /play log line had no subject ("+2 experience (5).") right before a currency line that names one player. It now reads "All players gained 2 experience (now 5)." in co-op and "You gained ..." solo, in the same past tense as the currency line; a unit test pins both. The next tick takes the next pass-29 LOW row (whose die was kept, placed or taken back).
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play log: the experience line has no subject next to a currency line that names a player (critique LOW, pass 29)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 9
+- next: "All players gained N experience (now M)." in co-op, "You gained ..." solo
+- issue: #220
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [3.6] /play log: kept, placed and taken-back die lines do not name whose die (critique LOW, pass 29)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: start the three die lines with whose(...)
+
 # Site audit — 2026-10-27 (pass 165, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 29 ran 2 commits ago, same day) and so is the expand gate (pass 18, about 41 hours and 16 commits ago). Phase 35 is still blocked on the designer's Skills session. Shipped: the other pass-29 MED row. On / the Defenses, map and Enemies items sat in a second list right after the numbered Prepare and Combat steps, with no lead-in and a near-identical style, so they read like steps 3 to 5. An 8.1 (impact 6, ease 9, bias x1.5). A lead-in "On the board, every round:" now labels the list, and the list drops its bullets for a rule down its left edge; a unit test pins it. The next tick takes the top remaining row; the /decisions MED rows still wait for /oversight, so the pass-29 LOW rows are next.

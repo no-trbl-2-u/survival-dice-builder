@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the log's experience line has no subject next to a currency line that names a player
-- pass: 29 (commit 0f320fc)
-- viewport: desktop
-- category: comprehension
-- observation: Experience is shared by all players, but its line has no subject; the currency line right after it now names one player. A co-op reader may think the experience went to that player too.
-- evidence: `+${event.amount} experience (${event.experience}).` (`apps/web/src/play/describeEvent.ts:188`), then `${who(event.player)} gained ${event.amount} currency` (`:195`); home Levels item "Each defeated enemy gives experience to all players" (`packages/content/src/ruleText.ts:120`).
-- suggested fix: "All players gain N experience (now M)." in co-op, "You gain N experience (now M)." solo.
-- source: web-fetch
-
 ### [LOW] /play — the log names whose dice rolled but not whose die was kept, placed or taken back
 - pass: 29 (commit 0f320fc)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play — the log's experience line has no subject next to a currency line that names a player
+- pass: 29 (commit 0f320fc)
+- viewport: desktop
+- category: comprehension
+- observation: Experience is shared by all players, but its line has no subject; the currency line right after it now names one player. A co-op reader may think the experience went to that player too.
+- evidence: `+${event.amount} experience (${event.experience}).` (`apps/web/src/play/describeEvent.ts:188`), then `${who(event.player)} gained ${event.amount} currency` (`:195`); home Levels item "Each defeated enemy gives experience to all players" (`packages/content/src/ruleText.ts:120`).
+- suggested fix: "All players gain N experience (now M)." in co-op, "You gain N experience (now M)." solo.
+- source: web-fetch
+- issue: #220
+- fixed: (this commit)
 
 ### [x] [MED] / — the Defenses, map and Enemies list reads like more steps of a round
 - pass: 29 (commit 0f320fc)
