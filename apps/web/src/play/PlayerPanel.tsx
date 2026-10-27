@@ -9,6 +9,11 @@ export function seatName(state: GameState, seat: number): string {
   return state.players.length === 1 ? 'You' : `Player ${seat + 1}`
 }
 
+/** Whose turn's things these are: "Your" in a solo run, "Player N's" in co-op. */
+export function whose(state: GameState): string {
+  return state.players.length === 1 ? 'Your' : `${seatName(state, state.current)}'s`
+}
+
 /**
  * Every player's tracks (the current player first in bold, marked "turn"), the shared level,
  * and the base, as numbers with labels (never a bar alone). All hands are open (16.3).

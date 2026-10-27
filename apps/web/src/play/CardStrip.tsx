@@ -3,6 +3,7 @@ import type { Action, GameState } from '@survival/engine'
 import { useRef, useState, type PointerEvent, type RefObject } from 'react'
 import { optionText } from './CardView.tsx'
 import styles from './Play.module.css'
+import { whose } from './PlayerPanel.tsx'
 import { ofType } from './targets.ts'
 
 type Play = Extract<Action, { type: 'playOption' }>
@@ -57,7 +58,8 @@ export function pressMove(dx: number, dy: number): 'press' | 'drag' | 'scroll' {
  * The hand during an engagement, pinned to the bottom of the screen. A playable card is dragged
  * up onto the felt to play it (pointer events: mouse and touch alike); a tap, Enter, or Space
  * plays it too. A card with 2 options asks which on the felt. A card the engine does not offer
- * now is dimmed and does nothing.
+ * now is dimmed and does nothing. The list is named for whose hand it is: "Your hand" solo,
+ * "Player 2's hand" in co-op.
  */
 export function CardStrip({
   state,
@@ -130,7 +132,7 @@ export function CardStrip({
 
   return (
     <div className={styles.cardStrip} data-testid="card-strip">
-      <ul className={styles.cardStripList} aria-label="Your hand">
+      <ul className={styles.cardStripList} aria-label={`${whose(state)} hand`}>
         {cards.map((card) => {
           const playable = card.plays.length > 0
           const lifted = held?.id === card.id ? held : null

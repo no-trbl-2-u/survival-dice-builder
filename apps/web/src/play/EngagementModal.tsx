@@ -20,6 +20,7 @@ import {
   type EngageSummary,
 } from './engageView.ts'
 import styles from './Play.module.css'
+import { seatName } from './PlayerPanel.tsx'
 import { PlayMap } from './PlayMap.tsx'
 import { SkillBoard } from './SkillBoard.tsx'
 import { firstOf, ofType } from './targets.ts'
@@ -158,7 +159,6 @@ function Head({
   title = 'Engagement',
   onPeek,
 }: Readonly<{ state: GameState; stage: number; title?: string; onPeek?: () => void }>) {
-  const player = state.players[state.current]
   const foes = engageFoes(state)
   return (
     <header className={styles.engageHead}>
@@ -178,16 +178,7 @@ function Head({
             <span className={styles.engageNarrow}>Board</span>
           </button>
         ) : null}
-        {player ? (
-          <p className={styles.engageVitals} data-testid="engage-vitals">
-            <span>
-              <GameIcon name="health" /> Health {player.health}/{player.maxHealth}
-            </span>
-            <span>
-              <GameIcon name="guard" /> Guard {player.guard}
-            </span>
-          </p>
-        ) : null}
+        <EngageVitals state={state} />
       </div>
       <ol className={styles.engageSteps} aria-label="Engagement steps">
         {ENGAGE_STAGES.map((name, i) => (
@@ -203,6 +194,26 @@ function Head({
         ))}
       </ol>
     </header>
+  )
+}
+
+/**
+ * The engaged player's health and guard. In co-op the line starts with whose they are
+ * ("Player 2"), since the modal covers the Players panel that says whose turn it is.
+ */
+export function EngageVitals({ state }: Readonly<{ state: GameState }>) {
+  const player = state.players[state.current]
+  if (!player) return null
+  return (
+    <p className={styles.engageVitals} data-testid="engage-vitals">
+      {state.players.length > 1 ? <span>{seatName(state, state.current)}</span> : null}
+      <span>
+        <GameIcon name="health" /> Health {player.health}/{player.maxHealth}
+      </span>
+      <span>
+        <GameIcon name="guard" /> Guard {player.guard}
+      </span>
+    </p>
   )
 }
 

@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-27 (pass 173, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 29 ran 11 commits ago, same day) and so is the expand gate (pass 19 ran 4 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue's open rows wait for /oversight or need a new bot policy, so this tick follows the last two ticks' heading fixes into the engagement window. In co-op the window covers the Players panel, yet its header line read "Health 5/8 Guard 1" with no owner, and screen readers heard the card strip as "Your hand" and the dice as "Your dice" on every player's turn. In co-op the line now starts with "Player 2", and the strip and dice list are named "Player 2's hand" and "Player 2's dice"; solo stays "Your". The "Your"/"Player N's" wording moves into one `whose` helper beside `seatName`, which the Hand, Skills and Dice headings now share. New EngageVitals, CardStrip and DiceTray tests pin both wordings.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play: the engagement window does not say whose engagement it is (audit, pass 173)
+- category: voice
+- impact: 4
+- ease: 8
+- next: name the seat in the vitals line, the hand strip and the dice list in co-op
+- issue: #228
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-27 (pass 172, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 29 ran 10 commits ago, same day) and so is the expand gate (pass 19 ran 5 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue's open rows wait for /oversight, so this tick follows last tick's Hand fix on /play. In co-op each seat has its own Skills and dice, but the Skills panel heading read just "Skills" and the Dice panel "Dice — roll 1 of 3", with "Your dice" under the enemy dice, on every player's turn. They now read "Player 2's Skills", "Player 2's dice — roll 1 of 3" and "Player 2's dice" in co-op, and "Your Skills", "Your dice" solo, the same wording as the Hand heading. The sections' accessible names stay "Skills" and "Dice". New SkillBoard and DiceTray tests pin both wordings.

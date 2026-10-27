@@ -11,7 +11,7 @@ import { GameIcon } from '../icons/GameIcon.tsx'
 import { enemyFaceText } from './effectText.ts'
 import { enemyLabel, playerHex } from './engageView.ts'
 import styles from './Play.module.css'
-import { seatName } from './PlayerPanel.tsx'
+import { whose } from './PlayerPanel.tsx'
 import { firstOf, placementsFor } from './targets.ts'
 
 /** Loaded only when 3D dice are on: three.js stays out of the main bundle. */
@@ -37,8 +37,9 @@ type Props = Readonly<{
 /**
  * The exchange dice: keep toggles while rolling, rerolls from cards, and Select/Unselect for
  * Skill placement (any number of dice; the Skill board puts them all on 1 Skill). A die on a
- * Skill leaves the tray. The roll counter shows `roll n of max`. The headings name whose dice
- * they are: "Your dice" solo, "Player 2's dice" in co-op.
+ * Skill leaves the tray. The roll counter shows `roll n of max`. The headings (and, in the
+ * engagement, the dice list) name whose dice they are: "Your dice" solo, "Player 2's dice" in
+ * co-op.
  */
 export function DiceTray({
   state,
@@ -58,7 +59,7 @@ export function DiceTray({
   const roll = firstOf(legal, 'roll')
   const stop = firstOf(legal, 'stopRolling')
   const endReroll = firstOf(legal, 'endReroll')
-  const whose = state.players.length === 1 ? 'Your' : `${seatName(state, state.current)}'s`
+  const owner = whose(state)
   const dice3dView =
     dice3d && ex.rollsUsed > 0 ? (
       <Suspense fallback={<p className={styles.muted}>Loading 3D dice…</p>}>
@@ -112,24 +113,28 @@ export function DiceTray({
     return (
       <>
         {dice3dView}
-        <ul className={styles.engageDiceList} aria-label="Your dice">
+        <ul className={styles.engageDiceList} aria-label={`${owner} dice`}>
           {items}
         </ul>
-        {allPlaced ? <p className={styles.engageFeltNote}>All your dice are on Skills.</p> : null}
+        {allPlaced ? (
+          <p className={styles.engageFeltNote}>
+            All {state.players.length === 1 ? 'your' : owner} dice are on Skills.
+          </p>
+        ) : null}
       </>
     )
   }
   return (
     <section className={styles.panel} aria-label="Dice">
       <h2 className={styles.panelTitle}>
-        {whose} dice — roll {ex.rollsUsed} of {state.config.combat.maxRolls}
+        {owner} dice — roll {ex.rollsUsed} of {state.config.combat.maxRolls}
         {ex.step === 'reroll' ? ` · rerolls left ${ex.rerollsLeft}` : ''}
       </h2>
       {dice3dView}
       {ex.engage && enemyDice ? (
         <>
           <EnemyDice state={state} />
-          <h3 className={styles.subTitle}>{whose} dice</h3>
+          <h3 className={styles.subTitle}>{owner} dice</h3>
         </>
       ) : null}
       <ul className={styles.dice}>{items}</ul>

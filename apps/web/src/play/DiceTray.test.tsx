@@ -147,3 +147,32 @@ describe('the Dice headings name whose dice they are (16.3)', () => {
     expect(own).toBe("Player 2's dice")
   })
 })
+
+describe('the engagement dice list names whose dice they are (16.3)', () => {
+  const name = (state: GameState) => {
+    const { container } = render(
+      <DiceTray
+        state={state}
+        legal={[]}
+        act={() => {}}
+        selected={[]}
+        toggle={() => {}}
+        enemyDice={false}
+        controls={false}
+        bare
+      />,
+    )
+    return container.querySelector('ul')?.getAttribute('aria-label')
+  }
+
+  it('reads "Your dice" solo', () => {
+    expect(name(engagedState())).toBe('Your dice')
+  })
+
+  it('reads "Player 2\'s dice" on the second player\'s turn in co-op', () => {
+    const state = engagedState()
+    expect(name({ ...state, players: [state.players[0]!, state.players[0]!], current: 1 })).toBe(
+      "Player 2's dice",
+    )
+  })
+})

@@ -2,7 +2,7 @@ import { canFire, enemiesInRange, type Action, type GameState } from '@survival/
 import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { skillText } from './effectText.ts'
-import { seatName } from './PlayerPanel.tsx'
+import { whose } from './PlayerPanel.tsx'
 import styles from './Play.module.css'
 import { firstOf, fitsNoSkill, ofType, planPlacement } from './targets.ts'
 
@@ -40,10 +40,9 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
   const diceHeld = ex ? ex.dice.length : p.dice
   // The enemies that rolled dice in this engagement (the "vs" in the modal title).
   const engagedIds = ex?.engage ? new Set(ex.engage.enemyDice.map((d) => d.enemy)) : undefined
-  const whose = state.players.length === 1 ? 'Your' : `${seatName(state, state.current)}'s`
   return (
     <section className={styles.panel} aria-label="Skills">
-      <h2 className={styles.panelTitle}>{whose} Skills</h2>
+      <h2 className={styles.panelTitle}>{whose(state)} Skills</h2>
       {placing && fitsNoSkill(state, selected) ? (
         <p className={styles.noFit} role="status">
           These dice fit no Skill together. Unselect a die.

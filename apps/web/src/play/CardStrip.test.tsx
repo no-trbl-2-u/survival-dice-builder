@@ -112,3 +112,31 @@ describe('CardStrip', () => {
     expect(choose).not.toHaveBeenCalled()
   })
 })
+
+describe('the strip names whose hand it is (16.3)', () => {
+  const name = (state: ReturnType<typeof usingDice>) => {
+    const { container } = render(
+      <CardStrip
+        state={state}
+        legal={legalActions(state)}
+        act={() => {}}
+        felt={{ current: null }}
+        choose={() => {}}
+        onDrag={() => {}}
+        pending={null}
+      />,
+    )
+    return container.querySelector('ul')?.getAttribute('aria-label')
+  }
+
+  it('reads "Your hand" solo', () => {
+    expect(name(usingDice())).toBe('Your hand')
+  })
+
+  it('reads "Player 2\'s hand" on the second player\'s turn in co-op', () => {
+    const state = usingDice()
+    expect(name({ ...state, players: [state.players[0]!, state.players[0]!], current: 1 })).toBe(
+      "Player 2's hand",
+    )
+  })
+})
