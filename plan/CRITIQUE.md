@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — the home page never says a Tower's kill pays the player who built it
-- pass: 29 (commit 0f320fc)
-- viewport: desktop
-- category: comprehension
-- observation: The Shop item says you get currency for each enemy you defeat, and the Defenses item says a Tower hits the nearest enemy. Neither says a Tower's kill pays its builder, which is what the engine does. In co-op the /play log can now say "Player 2 gained 1 currency" during Player 1's Combat, and no page explains why.
-- evidence: "Pay for cards with currency, which you get for each enemy you defeat" (`packages/content/src/ruleText.ts:143`); Tower sentence in `defenseText` (`ruleText.ts:267`); `const payee = state.defenses.find((d) => d.id === by)?.builder ?? by` (`packages/engine/src/progression/experience.ts:56`, rule "8.2, 12.3"); log line `apps/web/src/play/describeEvent.ts:195`.
-- suggested fix: Add to the Tower sentence in `defenseText`: "When it defeats an enemy, the player who built it gets the currency."
-- source: web-fetch
-
 ### [MED] / — the Defenses, map and Enemies list reads like more steps of a round
 - pass: 29 (commit 0f320fc)
 - viewport: mobile
@@ -118,6 +109,18 @@
 - source: user
 
 ## Done
+
+### [x] [MED] / — the home page never says a Tower's kill pays the player who built it
+- pass: 29 (commit 0f320fc)
+- viewport: desktop
+- category: comprehension
+- observation: The Shop item says you get currency for each enemy you defeat, and the Defenses item says a Tower hits the nearest enemy. Neither says a Tower's kill pays its builder, which is what the engine does. In co-op the /play log can now say "Player 2 gained 1 currency" during Player 1's Combat, and no page explains why.
+- evidence: "Pay for cards with currency, which you get for each enemy you defeat" (`packages/content/src/ruleText.ts:143`); Tower sentence in `defenseText` (`ruleText.ts:267`); `const payee = state.defenses.find((d) => d.id === by)?.builder ?? by` (`packages/engine/src/progression/experience.ts:56`, rule "8.2, 12.3"); log line `apps/web/src/play/describeEvent.ts:195`.
+- suggested fix: Add to the Tower sentence in `defenseText`: "When it defeats an enemy, the player who built it gets the currency."
+- source: web-fetch
+- issue: #218
+- addressed: (this commit)
+- resolution: The Defenses item on / now says, after each attacking defense: "When a Tower defeats an enemy, the player who built it gets the currency." The sentence comes from `defenseText` in `ruleText`, so it names any defense with an attack; the unit test pins it.
 
 ### [x] [LOW] / — the Prepare step is one long item that also explains enemy targeting
 - pass: 28 (commit 0203e31)

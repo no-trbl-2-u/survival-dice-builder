@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-27 (pass 164, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 29 ran 1 commit ago, same day) and so is the expand gate (pass 18, about 40 hours and 15 commits ago). Phase 35 is still blocked on the designer's Skills session. Critique pass 29 filed 2 new MED rows; this pass took the first. Shipped: the Defenses item on / never said that a Tower's kill pays the player who built it, which the engine does (8.2, rows 40 and 53), so in co-op a "Player 2 gained 1 currency" line in Player 1's Combat had no explanation anywhere. An 8.1 (impact 6, ease 9, bias x1.5). `defenseText` now adds "When a Tower defeats an enemy, the player who built it gets the currency." after each defense with an attack, pinned by the unit test. The next tick takes the other pass-29 MED row (the Defenses, map and Enemies list reads like more steps).
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /: the home page never says a Tower's kill pays the player who built it (critique MED, pass 29, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: add the builder-pays sentence to `defenseText`
+- issue: #218
+- fixed: (this commit)
+
+### [ ] [8.1] /: the Defenses, map and Enemies list reads like more steps of a round (critique MED, pass 29, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: a short lead-in before the list and its own list style
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
 # Site audit — 2026-10-26 (pass 163, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 28, 10 commits ago, same day) and so is the expand gate (pass 18, about 28 hours and 15 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight, so this pass took the row pass 162 left next in line. Shipped this pass: a bug LOW in the /play log, the same shape as passes 160 to 162. Every player rolls their own dice, but the roll, reroll, extra-dice, damage-bonus and Skill-fired lines ("Roll 1: hit, blank.", "Strike fires.") named no player, so in co-op a reader could not tell whose roll or Skill each line was. A 3.2 (impact 4, ease 8). The lines now read "Player 2's roll 1: ...", "Player 2's die 2 rerolled: ...", "Player 2's extra dice rolled: ...", "+1 damage for Player 2's next damage Skill." and "Player 2's Strike fires." ("Your ..." in a solo run), pinned by a new unit test. The next tick re-audits.

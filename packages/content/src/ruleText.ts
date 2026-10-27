@@ -255,9 +255,10 @@ export function siegeText(content: Enemies): string {
 }
 
 /**
- * What each defense costs and does, and the base's starting health: the Prepare line on /.
+ * What each defense costs and does, who gets the currency when an attacking defense defeats
+ * an enemy, and the base's starting health: the Defenses line on /.
  *
- * @rule 12.1, 12.3, Table 7, 11
+ * @rule 8.2, 12.1, 12.3, Table 7, 11, OPEN-QUESTIONS rows 40, 53
  */
 export function defenseText(config: GameConfig, content: Pick<Content, 'defenses'>): string {
   const lines = content.defenses.map((d) => {
@@ -267,7 +268,10 @@ export function defenseText(config: GameConfig, content: Pick<Content, 'defenses
         `at the start of each Combat it deals ${d.attack.damage} damage to the nearest enemy within ${plural(d.attack.range, 'hex', 'hexes')}`,
     ].filter(Boolean)
     const effect = effects.length > 0 ? `; ${effects.join(', and ')}` : ''
-    return `${/^[aeiou]/i.test(d.name) ? 'An' : 'A'} ${d.name} costs ${plural(d.cost, 'material', 'materials')} and has ${d.health} health${effect}.`
+    const pays = d.attack
+      ? ` When ${withArticle(d.name)} defeats an enemy, the player who built it gets the currency.`
+      : ''
+    return `${/^[aeiou]/i.test(d.name) ? 'An' : 'A'} ${d.name} costs ${plural(d.cost, 'material', 'materials')} and has ${d.health} health${effect}.${pays}`
   })
   return `${lines.join(' ')} The base starts with ${config.base.startingHealth} health.`
 }
