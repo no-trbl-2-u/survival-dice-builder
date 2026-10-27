@@ -13,10 +13,10 @@ const gained = (players: number) =>
 
 describe('experience text in the log', () => {
   it('speaks to the one player in a solo run', () => {
-    expect(gained(1)).toBe('You gained 2 experience (now 5).')
+    expect(gained(1)).toBe('You gain 2 experience (now 5).')
   })
 
   it('says every player shares it in co-op', () => {
-    expect(gained(3)).toBe('All players gained 2 experience (now 5).')
+    expect(gained(3)).toBe('All players gain 2 experience (now 5).')
   })
 })

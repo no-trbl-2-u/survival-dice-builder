@@ -13,10 +13,10 @@ const gained = (players: number, player: string) =>
 
 describe('currency text in the log', () => {
   it('speaks to the one player in a solo run', () => {
-    expect(gained(1, 'p1')).toBe('You gained 3 currency (now 5).')
+    expect(gained(1, 'p1')).toBe('You gain 3 currency (now 5).')
   })
 
   it('names the player who gets the currency in co-op', () => {
-    expect(gained(3, 'p2')).toBe('Player 2 gained 3 currency (now 5).')
+    expect(gained(3, 'p2')).toBe('Player 2 gains 3 currency (now 5).')
   })
 })

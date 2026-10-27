@@ -38,14 +38,14 @@ const bought = (players: number, player: string) =>
 
 describe('build and upgrade text in the log', () => {
   it('speaks to the one player in a solo run', () => {
-    expect(built(1, 'p1', 'tower')).toBe('You built a Tower on (9,9) for 3 materials.')
-    expect(bought(1, 'p1')).toBe(`You bought ${upgrade.name} for 2 materials (base health 12).`)
+    expect(built(1, 'p1', 'tower')).toBe('You build a Tower on (9,9) for 3 materials.')
+    expect(bought(1, 'p1')).toBe(`You buy ${upgrade.name} for 2 materials (base health 12).`)
   })
 
   it('names the player who paid the materials in co-op', () => {
-    expect(built(3, 'p2', 'barricade')).toBe('Player 2 built a Barricade on (9,9) for 3 materials.')
-    expect(bought(2, 'p2')).toBe(
-      `Player 2 bought ${upgrade.name} for 2 materials (base health 12).`,
+    expect(built(3, 'p2', 'barricade')).toBe(
+      'Player 2 builds a Barricade on (9,9) for 3 materials.',
     )
+    expect(bought(2, 'p2')).toBe(`Player 2 buys ${upgrade.name} for 2 materials (base health 12).`)
   })
 })

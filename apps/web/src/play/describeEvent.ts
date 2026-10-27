@@ -91,17 +91,17 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'deckTurned':
       return `${whose(event.player)} deck turned: ${event.orientation === 'top' ? 'top halves' : 'bottom halves'} up.`
     case 'cardsDrawn':
-      return `${who(event.player)} drew ${event.cards.length} card${event.cards.length === 1 ? '' : 's'}.`
+      return `${who(event.player)} ${s('draw')} ${event.cards.length} card${event.cards.length === 1 ? '' : 's'}.`
     case 'cardPlayed':
-      return `${who(event.player)} played ${cardLabel(names, event.card)} (${event.half} half).`
+      return `${who(event.player)} ${s('play')} ${cardLabel(names, event.card)} (${event.half} half).`
     case 'cardDiscarded':
-      return `${who(event.player)} discarded ${cardLabel(names, event.card)}${event.unplayed ? ' without its effect' : ''}.`
+      return `${who(event.player)} ${s('discard')} ${cardLabel(names, event.card)}${event.unplayed ? ' without its effect' : ''}.`
     case 'effectDeferred':
       return `Not yet in the engine: ${event.effect}.`
     case 'healed':
-      return `${who(event.player)} healed ${event.amount} health (health ${event.health}).`
+      return `${who(event.player)} ${s('heal')} ${event.amount} health (health ${event.health}).`
     case 'guardGained':
-      return `${who(event.player)} gained ${event.amount} guard (guard ${event.guard}).`
+      return `${who(event.player)} ${s('gain')} ${event.amount} guard (guard ${event.guard}).`
     case 'damageBonus':
       return `+${event.amount} damage for ${solo(names) ? 'your' : `${seat(names, event.player)}'s`} next damage Skill.`
     case 'extraDice':
@@ -154,14 +154,14 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'enemySpawned':
       return `${upper(article(event.kind))} appears on ${place(names, event.hex)}${event.spilled ? ' (node taken: nearest empty hex)' : ''}.`
     case 'moved':
-      return `${who(event.player)} moved to ${place(names, event.to)} (cost ${event.cost}, ${event.hexesLeft} left).`
+      return `${who(event.player)} ${s('move')} to ${place(names, event.to)} (cost ${event.cost}, ${event.hexesLeft} left).`
     case 'gathered':
       return event.amount === 0
-        ? `${who(event.player)} gathered nothing: gather on an unspent gathering node with no enemy on it.`
-        : `${who(event.player)} gathered ${materials(event.amount)} (now ${event.materials})${event.spent ? '; the node is spent' : ''}.`
+        ? `${who(event.player)} ${s('gather')} nothing: gather on an unspent gathering node with no enemy on it.`
+        : `${who(event.player)} ${s('gather')} ${materials(event.amount)} (now ${event.materials})${event.spent ? '; the node is spent' : ''}.`
     case 'defenseBuilt':
-      // Materials are per player, so the line names who paid: "Player 2 built a Tower on ...".
-      return `${who(event.player)} built ${article(upper(event.kind))} on ${place(names, event.hex)} for ${materials(event.cost)}.`
+      // Materials are per player, so the line names who paid: "Player 2 builds a Tower on ...".
+      return `${who(event.player)} ${s('build')} ${article(upper(event.kind))} on ${place(names, event.hex)} for ${materials(event.cost)}.`
     case 'defenseDamaged':
       return `${defenseLabel(names, event.defense)} takes ${event.amount} damage (health ${event.health}).`
     case 'defenseRemoved':
@@ -186,26 +186,26 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `${who(event.player)} cannot enter ${place(names, event.hex)}: it is Lake or Mountain (${event.hexesLeft} left).`
     case 'experienceGained':
       // Experience is shared (8.1), so the line names everyone, beside a currency line that names one.
-      return `${solo(names) ? 'You' : 'All players'} gained ${event.amount} experience (now ${event.experience}).`
+      return `${solo(names) ? 'You' : 'All players'} gain ${event.amount} experience (now ${event.experience}).`
     case 'levelReached':
       return `Level ${event.level}! ${solo(names) ? 'You get' : 'Every player gets'} 1 action die.`
     case 'diceGained':
       return `${who(event.player)} now ${solo(names) ? 'have' : 'has'} ${event.dice} action dice.`
     case 'currencyGained':
-      // Currency is per player (8.2), so the line names who gets it: "Player 2 gained 3 currency".
-      return `${who(event.player)} gained ${event.amount} currency (now ${event.currency}).`
+      // Currency is per player (8.2), so the line names who gets it: "Player 2 gains 3 currency".
+      return `${who(event.player)} ${s('gain')} ${event.amount} currency (now ${event.currency}).`
     case 'upgradeBought':
-      return `${who(event.player)} bought ${upgradeName(names, event.upgrade)} for ${materials(event.cost)} (base health ${event.baseHealth}).`
+      return `${who(event.player)} ${s('buy')} ${upgradeName(names, event.upgrade)} for ${materials(event.cost)} (base health ${event.baseHealth}).`
     case 'offerAdded':
       return `Shop offer: ${cardName(names, event.card)} (level ${event.level}).`
     case 'cardBought':
-      return `${who(event.player)} bought ${cardName(names, event.card)} for ${event.cost} currency.`
+      return `${who(event.player)} ${s('buy')} ${cardName(names, event.card)} for ${event.cost} currency.`
     case 'starterReturned':
       return `Starter card ${cardLabel(names, event.card)} leaves the game.`
     case 'draftStarted':
       return `Skill draft: ${event.options.map((s) => skillName(names, s)).join(' or ')}.`
     case 'skillDrafted':
-      return `${who(event.player)} drafted ${skillName(names, event.skill)}.`
+      return `${who(event.player)} ${s('draft')} ${skillName(names, event.skill)}.`
     case 'draftSkipped':
       return 'No Skills left to draft.'
     case 'skillPooled':

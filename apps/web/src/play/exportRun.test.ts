@@ -135,23 +135,23 @@ describe('describeEvent', () => {
     const state = botRun(2).run.state
     const gathered = { type: 'gathered', rule: '6.7', player: 'p1', amount: 0, materials: 0 }
     expect(describeEvent(gathered as never, state)).toBe(
-      'You gathered nothing: gather on an unspent gathering node with no enemy on it.',
+      'You gather nothing: gather on an unspent gathering node with no enemy on it.',
     )
     const spent = { ...gathered, amount: 2, materials: 2, spent: true }
     expect(describeEvent(spent as never, state)).toBe(
-      'You gathered 2 materials (now 2); the node is spent.',
+      'You gather 2 materials (now 2); the node is spent.',
     )
     // A Gather off a node can give 1 (gather.offNodeAmount): the singular, as the knockout line.
     const one = { ...gathered, amount: 1, materials: 3 }
-    expect(describeEvent(one as never, state)).toBe('You gathered 1 material (now 3).')
+    expect(describeEvent(one as never, state)).toBe('You gather 1 material (now 3).')
     const coop = { ...state, players: [state.players[0]!, { ...state.players[0]!, id: 'p2' }] }
     const healed = { type: 'healed', rule: '6.4', player: 'p2', amount: 1, health: 5 }
-    expect(describeEvent(healed as never, coop)).toBe('Player 2 healed 1 health (health 5).')
+    expect(describeEvent(healed as never, coop)).toBe('Player 2 heals 1 health (health 5).')
     // As complete as the guard line: the amount names its unit.
     const guard = { type: 'guardGained', rule: '6.4', player: 'p1', amount: 2, guard: 3 }
-    expect(describeEvent(guard as never, state)).toBe('You gained 2 guard (guard 3).')
+    expect(describeEvent(guard as never, state)).toBe('You gain 2 guard (guard 3).')
     expect(describeEvent({ ...healed, player: 'p1' } as never, state)).toBe(
-      'You healed 1 health (health 5).',
+      'You heal 1 health (health 5).',
     )
   })
 
@@ -159,7 +159,7 @@ describe('describeEvent', () => {
     const state = botRun(2).run.state
     const card = state.content.cards.find((c) => c.level > 0)!
     const bought = { type: 'cardBought', rule: '6.8, 13.1', player: 'p1', card: card.id, cost: 3 }
-    expect(describeEvent(bought as never, state)).toBe(`You bought ${card.name} for 3 currency.`)
+    expect(describeEvent(bought as never, state)).toBe(`You buy ${card.name} for 3 currency.`)
   })
 
   it('says "1 material" for a build or upgrade a Mason or Engineer Build brings down to 1', () => {
@@ -175,7 +175,7 @@ describe('describeEvent', () => {
       cost: 1,
     }
     expect(describeEvent(built as never, state)).toMatch(
-      /^You built a Barricade on .+ for 1 material\.$/,
+      /^You build a Barricade on .+ for 1 material\.$/,
     )
     expect(describeEvent({ ...built, cost: 2 } as never, state)).toMatch(/ for 2 materials\.$/)
     const upgrade = state.content.upgrades[0]!
@@ -188,7 +188,7 @@ describe('describeEvent', () => {
       baseHealth: 12,
     }
     expect(describeEvent(bought as never, state)).toBe(
-      `You bought ${upgrade.name} for 1 material (base health 12).`,
+      `You buy ${upgrade.name} for 1 material (base health 12).`,
     )
   })
 

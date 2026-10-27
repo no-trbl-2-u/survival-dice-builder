@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the log mixes past and present tense for player actions
-- pass: 29 (commit 0f320fc)
-- viewport: desktop
-- category: voice
-- observation: Moving, gathering, building, gaining currency and buying are past tense; engaging, repairing, ignoring a hit and losing health are present tense. One Combat reads "You played Field Medic (bottom half)." then "You engage." then "You lose 2 health".
-- evidence: past: `moved to` (`apps/web/src/play/describeEvent.ts:157`), `gathered` (`:161`), `built` (`:164`), `gained` (`:195`), `bought` (`:197`); present: `s('engage')` (`:129`), `s('repair')` (`:131`), `s('ignore')` (`:136`), `s('lose')` (`:145`).
-- suggested fix: Use the present tense for every player action, to match the enemy lines ("attacks", "moves", "takes").
-- source: web-fetch
-
 ### [LOW] /debug — the State panel and step status print raw engine ids
 - pass: 29 (commit 0f320fc)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play — the log mixes past and present tense for player actions
+- pass: 29 (commit 0f320fc)
+- viewport: desktop
+- category: voice
+- observation: Moving, gathering, building, gaining currency and buying are past tense; engaging, repairing, ignoring a hit and losing health are present tense. One Combat reads "You played Field Medic (bottom half)." then "You engage." then "You lose 2 health".
+- evidence: past: `moved to` (`apps/web/src/play/describeEvent.ts:157`), `gathered` (`:161`), `built` (`:164`), `gained` (`:195`), `bought` (`:197`); present: `s('engage')` (`:129`), `s('repair')` (`:131`), `s('ignore')` (`:136`), `s('lose')` (`:145`).
+- suggested fix: Use the present tense for every player action, to match the enemy lines ("attacks", "moves", "takes").
+- source: web-fetch
+- issue: #222
+- fixed: (this commit)
 
 ### [x] [LOW] /play — the log names whose dice rolled but not whose die was kept, placed or taken back
 - pass: 29 (commit 0f320fc)
