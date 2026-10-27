@@ -123,3 +123,27 @@ describe('DiceTray enemy dice', () => {
     ).toBeUndefined()
   })
 })
+
+describe('the Dice headings name whose dice they are (16.3)', () => {
+  const headings = (state: GameState) => {
+    const { container } = render(
+      <DiceTray state={state} legal={[]} act={() => {}} selected={[]} toggle={() => {}} />,
+    )
+    return [...container.querySelectorAll('h2, h3')].map((h) => h.textContent)
+  }
+
+  it('reads "Your dice" solo', () => {
+    const [title, enemy, own] = headings(engagedState())
+    expect(title).toMatch(/^Your dice — roll \d+ of \d+/)
+    expect(enemy).toMatch(/^Enemy dice/)
+    expect(own).toBe('Your dice')
+  })
+
+  it('reads "Player 2\'s dice" on the second player\'s turn in co-op', () => {
+    const state = engagedState()
+    const coop = { ...state, players: [state.players[0]!, state.players[0]!], current: 1 }
+    const [title, , own] = headings(coop)
+    expect(title).toMatch(/^Player 2's dice — roll \d+ of \d+/)
+    expect(own).toBe("Player 2's dice")
+  })
+})

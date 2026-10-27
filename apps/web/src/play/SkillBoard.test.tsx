@@ -142,3 +142,19 @@ describe('SkillBoard: enemies in range against the engaged ones', () => {
     expect(strikeTile().textContent).not.toMatch(/engaged/)
   })
 })
+
+describe('the Skills heading names whose Skills they are (16.3)', () => {
+  const heading = (state: GameState) => {
+    render(<SkillBoard state={state} legal={[]} act={() => {}} actAll={() => {}} selected={[]} />)
+    return screen.getByRole('heading', { level: 2 }).textContent
+  }
+
+  it('reads "Your Skills" solo', () => {
+    expect(heading(createGame(config, 1))).toBe('Your Skills')
+  })
+
+  it('reads "Player 2\'s Skills" on the second player\'s turn in co-op', () => {
+    const game = { ...createGame(config, 1, defaultContent, { players: 3 }), current: 1 }
+    expect(heading(game)).toBe("Player 2's Skills")
+  })
+})

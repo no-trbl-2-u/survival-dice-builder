@@ -2,6 +2,7 @@ import { canFire, enemiesInRange, type Action, type GameState } from '@survival/
 import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { skillText } from './effectText.ts'
+import { seatName } from './PlayerPanel.tsx'
 import styles from './Play.module.css'
 import { firstOf, fitsNoSkill, ofType, planPlacement } from './targets.ts'
 
@@ -25,6 +26,7 @@ type Props = Readonly<{
  * of range it fires and hits nothing. When the chosen dice fit no Skill together, a line
  * above the list says so and asks the player to unselect a die. A Skill with more slots than
  * the player has dice says how many it needs (in Combat, the dice rolled so far).
+ * The heading names whose Skills they are: "Your Skills" solo, "Player 2's Skills" in co-op.
  */
 export function SkillBoard({ state, legal, act, actAll, selected, confirmButton = true }: Props) {
   const p = state.players[state.current]
@@ -38,9 +40,10 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
   const diceHeld = ex ? ex.dice.length : p.dice
   // The enemies that rolled dice in this engagement (the "vs" in the modal title).
   const engagedIds = ex?.engage ? new Set(ex.engage.enemyDice.map((d) => d.enemy)) : undefined
+  const whose = state.players.length === 1 ? 'Your' : `${seatName(state, state.current)}'s`
   return (
     <section className={styles.panel} aria-label="Skills">
-      <h2 className={styles.panelTitle}>Skills</h2>
+      <h2 className={styles.panelTitle}>{whose} Skills</h2>
       {placing && fitsNoSkill(state, selected) ? (
         <p className={styles.noFit} role="status">
           These dice fit no Skill together. Unselect a die.
