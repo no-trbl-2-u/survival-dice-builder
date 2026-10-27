@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /debug — the State panel and step status print raw engine ids
-- pass: 29 (commit 0f320fc)
-- viewport: desktop
-- category: voice
-- observation: The player row reads "Player p1" while the action buttons say "Player 1's figure"; it prints "orientation top" where /play says "top halves up"; impassable hexes read "lake at (1,-1)" in lower case. The step status line says "Round 1, setup." while the State panel above it says "1 / Setup", and the exchange step shows as a raw id ("engagement: targets").
-- evidence: `<dt>Player {p.id}</dt>` and `orientation {p.orientation}` (`apps/web/src/debug/StateView.tsx:101`, `:105`); `${hex.terrain} at (${key})` (`StateView.tsx:29`); `${ex.engage ? 'engagement' : 'exchange'}: ${ex.step}` (`StateView.tsx:38`); `Round ${state.round}, ${state.phase}.` (`apps/web/src/debug/stepStatus.ts:20`) against `PHASE_WORDS` (`StateView.tsx:11-16`).
-- suggested fix: Head the row "Player {index + 1}", print "top halves up", capitalise terrain names, use `PHASE_WORDS` in `stepStatus`, and name each exchange step in words.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /debug — the State panel and step status print raw engine ids
+- pass: 29 (commit 0f320fc)
+- viewport: desktop
+- category: voice
+- observation: The player row reads "Player p1" while the action buttons say "Player 1's figure"; it prints "orientation top" where /play says "top halves up"; impassable hexes read "lake at (1,-1)" in lower case. The step status line says "Round 1, setup." while the State panel above it says "1 / Setup", and the exchange step shows as a raw id ("engagement: targets").
+- evidence: `<dt>Player {p.id}</dt>` and `orientation {p.orientation}` (`apps/web/src/debug/StateView.tsx:101`, `:105`); `${hex.terrain} at (${key})` (`StateView.tsx:29`); `${ex.engage ? 'engagement' : 'exchange'}: ${ex.step}` (`StateView.tsx:38`); `Round ${state.round}, ${state.phase}.` (`apps/web/src/debug/stepStatus.ts:20`) against `PHASE_WORDS` (`StateView.tsx:11-16`).
+- suggested fix: Head the row "Player {index + 1}", print "top halves up", capitalise terrain names, use `PHASE_WORDS` in `stepStatus`, and name each exchange step in words.
+- source: web-fetch
+- issue: #224
+- fixed: (this commit)
 
 ### [x] [LOW] /play — the log mixes past and present tense for player actions
 - pass: 29 (commit 0f320fc)

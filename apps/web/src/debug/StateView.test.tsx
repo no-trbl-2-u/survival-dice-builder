@@ -53,8 +53,8 @@ describe('debug map marks in text', () => {
   it('lists the lake and mountain hexes, not only their colour', () => {
     render(<StateView state={withBlocks()} />)
     const text = screen.getByTestId('state').textContent ?? ''
-    expect(text).toContain('lake at (5,0)')
-    expect(text).toContain('mountain at (5,1)')
+    expect(text).toContain('Lake at (5,0)')
+    expect(text).toContain('Mountain at (5,1)')
   })
 
   it('marks an elite spawn node "E", not a capital "S"', () => {
@@ -88,5 +88,30 @@ describe('debug state in words', () => {
     expect(text).toContain('Survive to round 5')
     expect(text).toContain('Run over (the base fell)')
     expect(text).not.toMatch(/shop-1|survive-round-5|ended:/)
+  })
+
+  it('heads each player by number, says which halves are up, and names the exchange step', () => {
+    const game = createGame(defaultContent.config, 1)
+    const fighting: GameState = {
+      ...game,
+      players: [...game.players, { ...game.players[0]!, id: 'p2' }],
+      phase: 'combat',
+      exchange: {
+        engage: null,
+        step: 'targets',
+        dice: [],
+        rollsUsed: 1,
+        assignments: [],
+        bonusDamage: 0,
+        ignoreHits: 0,
+      } as unknown as GameState['exchange'],
+    }
+    render(<StateView state={fighting} />)
+    const text = screen.getByTestId('state').textContent ?? ''
+    expect(text).toContain('Player 1at')
+    expect(text).toContain('Player 2at')
+    expect(text).toContain('top halves up')
+    expect(text).toContain('1 / Combat / Exchange: Pick targets')
+    expect(text).not.toMatch(/Player p\d|orientation|: targets/)
   })
 })

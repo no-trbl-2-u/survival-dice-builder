@@ -1,4 +1,12 @@
-import type { GameState } from '@survival/engine'
+import type { GameState, Phase } from '@survival/engine'
+
+/** The phase in words, as the /play phase bar names it. */
+export const PHASE_WORDS: Record<Phase, string> = {
+  setup: 'Setup',
+  prepare: 'Prepare',
+  combat: 'Combat',
+  ended: 'Run over',
+}
 
 /** What one console step did: who stepped, how many actions it applied, how many events it logged. */
 export type StepResult = Readonly<{
@@ -17,7 +25,7 @@ export function stepStatus(step: StepResult, state: GameState): string {
   const where =
     state.phase === 'ended'
       ? `The run ended in round ${state.round}.`
-      : `Round ${state.round}, ${state.phase}.`
+      : `Round ${state.round}, ${PHASE_WORDS[state.phase]}.`
   if (step.by === 'autoplay') return `Autoplay: ${plural(step.actions, 'action')}. ${where}`
   const who = step.by === 'bot step' ? 'Bot step' : 'Action'
   return `${who}: ${plural(step.events, 'new event')}. ${where}`

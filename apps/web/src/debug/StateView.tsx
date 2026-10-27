@@ -1,19 +1,27 @@
 import { IMPASSABLE, milestoneLabel } from '@survival/content'
-import type { GameState, Phase } from '@survival/engine'
+import type { GameState } from '@survival/engine'
 import { MapView } from './MapView.tsx'
+import { PHASE_WORDS } from './stepStatus.ts'
 
 type Props = Readonly<{ state: GameState }>
 
 /** "1 material", "4 materials". */
 const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
 
-/** The phase in words, as the /play phase bar names it. */
-const PHASE_WORDS: Record<Phase, string> = {
-  setup: 'Setup',
-  prepare: 'Prepare',
-  combat: 'Combat',
-  ended: 'Run over',
+type ExchangeStep = NonNullable<GameState['exchange']>['step']
+
+/** Each exchange step in words, in play order. */
+const STEP_WORDS: Record<ExchangeStep, string> = {
+  roll: 'Roll',
+  cards: 'Add cards',
+  reroll: 'Reroll',
+  assign: 'Place dice on Skills',
+  targets: 'Pick targets',
+  resolve: 'Resolve',
 }
+
+/** "Lake", "Mountain". */
+const capital = (word: string) => word.charAt(0).toUpperCase() + word.slice(1)
 
 /** Plain-text view of the engine state for the debug console. */
 export function StateView({ state }: Props) {
@@ -26,7 +34,7 @@ export function StateView({ state }: Props) {
   const active = state.active
   const impassable = Object.entries(state.map.hexes)
     .filter(([, hex]) => IMPASSABLE.includes(hex.terrain))
-    .map(([key, hex]) => `${hex.terrain} at (${key})`)
+    .map(([key, hex]) => `${capital(hex.terrain)} at (${key})`)
   return (
     <section aria-labelledby="state-heading">
       <h2 id="state-heading">State</h2>
@@ -35,7 +43,7 @@ export function StateView({ state }: Props) {
         <dt>Round / phase</dt>
         <dd>
           {state.round} / {PHASE_WORDS[state.phase]}
-          {ex ? ` / ${ex.engage ? 'engagement' : 'exchange'}: ${ex.step}` : ''}
+          {ex ? ` / ${ex.engage ? 'Engagement' : 'Exchange'}: ${STEP_WORDS[ex.step]}` : ''}
           {state.endedBecause ? ' (the base fell)' : ''}
         </dd>
         <dt>Base</dt>
@@ -96,13 +104,13 @@ export function StateView({ state }: Props) {
             </dd>
           </>
         ) : null}
-        {state.players.map((p) => (
+        {state.players.map((p, index) => (
           <div key={p.id}>
-            <dt>Player {p.id}</dt>
+            <dt>Player {index + 1}</dt>
             <dd>
               at {at(p.hex)}, {p.health}/{p.maxHealth} health, {p.guard} guard, {p.dice}{' '}
               {p.dice === 1 ? 'die' : 'dice'}, {count(p.materials, 'material', 'materials')},{' '}
-              {p.currency} currency, orientation {p.orientation}
+              {p.currency} currency, {p.orientation} halves up
               {p.knockedOut ? ', knocked out' : ''}
             </dd>
             <dt>Hand</dt>

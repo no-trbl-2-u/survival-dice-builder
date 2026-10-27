@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-27 (pass 169, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 29 ran 7 commits ago, same day) and so is the expand gate (pass 19 ran last tick). Phase 35 is still blocked on the designer's Skills session. The /decisions MED rows still wait for /oversight, so the last pass-29 LOW row ships. The /debug State panel headed each player with the engine id ("Player p1"), printed "orientation top", named impassable hexes in lower case ("lake at (1,-1)") and showed the exchange step as a raw id ("engagement: targets"); the step status line said "Round 1, setup." under a panel that says "Setup". Players are now "Player 1", "Player 2"; the row says "top halves up"; terrain reads "Lake", "Mountain"; the exchange step reads "Exchange: Pick targets"; and stepStatus shares the panel's PHASE_WORDS ("Round 1, Setup."). A new StateView test pins the player heading, halves and step words; the Lake/Mountain and stepStatus tests follow. Seen while testing: the Tiles row still lists unplaced tiles by id ("waiting to place: p1"), a candidate for the next critique pass. The pass-29 queue is drained; what remains waits for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /debug: State panel and step status print raw engine ids (critique LOW, pass 29)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: player numbers, halves in words, capital terrain, PHASE_WORDS and step words
+- issue: #224
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-27 (pass 168, cloud tick)
 
 No issues are open for triage (#223, the push 403 from run 40468433445, waits for the user). The critique gate is closed (pass 29 ran 5 commits ago, same day) and so is the expand gate (pass 18, about 47 hours and 19 commits ago). Phase 35 is still blocked on the designer's Skills session. The /decisions MED rows still wait for /oversight, so the next pass-29 LOW row ships: the fix the 403 tick could not push. The /play log told drawing, playing, discarding, healing, guard, moving, gathering, building, buying, drafting and gaining in the past tense but engaging, repairing and losing health in the present, beside enemy lines that are all present. Every player-action line is now present tense with verb agreement ("You build a Tower", "Player 2 builds a Tower", "All players gain 2 experience"); tenseLog.test.ts pins all 13 lines solo and co-op, and the older log tests follow. The engagement result readout stays past tense: it sums up a finished fight. The next tick takes the next pass-29 LOW row (/debug raw engine ids).

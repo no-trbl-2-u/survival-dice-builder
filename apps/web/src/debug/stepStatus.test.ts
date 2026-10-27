@@ -13,10 +13,10 @@ describe('stepStatus', () => {
 
   it('counts new events for a single step and names the round and phase', () => {
     expect(stepStatus({ by: 'action', actions: 1, events: 1 }, state(2, 'prepare'))).toBe(
-      'Action: 1 new event. Round 2, prepare.',
+      'Action: 1 new event. Round 2, Prepare.',
     )
     expect(stepStatus({ by: 'bot step', actions: 1, events: 4 }, state(3, 'combat'))).toBe(
-      'Bot step: 4 new events. Round 3, combat.',
+      'Bot step: 4 new events. Round 3, Combat.',
     )
   })
 })
