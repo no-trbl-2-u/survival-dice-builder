@@ -53,7 +53,8 @@ export function HomePage() {
             {lower(siegeText(defaultContent))}
           </li>
         </ol>
-        <ul className={styles.steps}>
+        <p id="home-board">On the board, every round:</p>
+        <ul className={styles.board} aria-labelledby="home-board">
           <li>
             <strong>Defenses:</strong> {defenseText(config, defaultContent)}
           </li>

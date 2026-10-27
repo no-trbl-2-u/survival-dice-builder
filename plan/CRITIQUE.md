@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — the Defenses, map and Enemies list reads like more steps of a round
-- pass: 29 (commit 0f320fc)
-- viewport: mobile
-- category: comprehension
-- observation: The items moved out of the Prepare step now sit in a second list right after the numbered Prepare and Combat steps, with no heading or lead-in and the same list style, so they read like steps 3 to 5. Two of them happen inside Combat (enemies spawn at every Combat; Towers fire at the start of each Combat).
-- evidence: `apps/web/src/home/HomePage.tsx:43-55` `<ol className={styles.steps}>` (Prepare, Combat); `HomePage.tsx:56-66` `<ul className={styles.steps}>` (Defenses, The map, Enemies) with no heading.
-- suggested fix: Put a short lead-in before the list (for example "What is on the map:") and give the list its own style so it does not look like more steps.
-- source: web-fetch
-
 ### [LOW] /play — the log's experience line has no subject next to a currency line that names a player
 - pass: 29 (commit 0f320fc)
 - viewport: desktop
@@ -109,6 +100,18 @@
 - source: user
 
 ## Done
+
+### [x] [MED] / — the Defenses, map and Enemies list reads like more steps of a round
+- pass: 29 (commit 0f320fc)
+- viewport: mobile
+- category: comprehension
+- observation: The items moved out of the Prepare step now sit in a second list right after the numbered Prepare and Combat steps, with no heading or lead-in and the same list style, so they read like steps 3 to 5. Two of them happen inside Combat (enemies spawn at every Combat; Towers fire at the start of each Combat).
+- evidence: `apps/web/src/home/HomePage.tsx:43-55` `<ol className={styles.steps}>` (Prepare, Combat); `HomePage.tsx:56-66` `<ul className={styles.steps}>` (Defenses, The map, Enemies) with no heading.
+- suggested fix: Put a short lead-in before the list (for example "What is on the map:") and give the list its own style so it does not look like more steps.
+- source: web-fetch
+- issue: #219
+- addressed: (this commit)
+- resolution: A lead-in, "On the board, every round:", now sits before the Defenses, map and Enemies items, and labels their list for screen readers. The list has its own style (no bullets, a rule down its left edge), so it no longer looks like steps 3 to 5 after the numbered Prepare and Combat. A unit test pins the two-step list and the labelled three-item list.
 
 ### [x] [MED] / — the home page never says a Tower's kill pays the player who built it
 - pass: 29 (commit 0f320fc)
