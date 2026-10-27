@@ -112,11 +112,11 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'dieRerolled':
       return `${whose(event.player)} die ${event.die + 1} rerolled: ${event.face}.`
     case 'dieKept':
-      return `Die ${event.die + 1} ${event.kept ? 'kept' : 'released'}.`
+      return `${whose(event.player)} die ${event.die + 1} ${event.kept ? 'kept' : 'released'}.`
     case 'dieAssigned':
-      return `Die ${event.die + 1} on ${skillName(names, event.skill)} as ${event.asFace}.`
+      return `${whose(event.player)} die ${event.die + 1} on ${skillName(names, event.skill)} as ${event.asFace}.`
     case 'dieUnassigned':
-      return `Die ${event.die + 1} taken back.`
+      return `${whose(event.player)} die ${event.die + 1} taken back.`
     case 'skillFired':
       return `${whose(event.player)} ${skillName(names, event.skill)} fires.`
     case 'enemyDamaged':

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the log names whose dice rolled but not whose die was kept, placed or taken back
-- pass: 29 (commit 0f320fc)
-- viewport: desktop
-- category: voice
-- observation: In co-op, "Player 2's die 1 rerolled: Star." sits next to "Die 1 kept." and "Die 1 on Strike as Sword." with no owner.
-- evidence: `diceRolled` and `dieRerolled` use `whose(event.player)` (`apps/web/src/play/describeEvent.ts:111`, `:113`); `dieKept` (`:115`), `dieAssigned` (`:117`) and `dieUnassigned` (`:119`) do not.
-- suggested fix: Start the three die lines with `whose(...)` too, for example "Player 2's die 1 kept."
-- source: web-fetch
-
 ### [LOW] /play — the log mixes past and present tense for player actions
 - pass: 29 (commit 0f320fc)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play — the log names whose dice rolled but not whose die was kept, placed or taken back
+- pass: 29 (commit 0f320fc)
+- viewport: desktop
+- category: voice
+- observation: In co-op, "Player 2's die 1 rerolled: Star." sits next to "Die 1 kept." and "Die 1 on Strike as Sword." with no owner.
+- evidence: `diceRolled` and `dieRerolled` use `whose(event.player)` (`apps/web/src/play/describeEvent.ts:111`, `:113`); `dieKept` (`:115`), `dieAssigned` (`:117`) and `dieUnassigned` (`:119`) do not.
+- suggested fix: Start the three die lines with `whose(...)` too, for example "Player 2's die 1 kept."
+- source: web-fetch
+- issue: #221
+- fixed: (this commit)
 
 ### [x] [LOW] /play — the log's experience line has no subject next to a currency line that names a player
 - pass: 29 (commit 0f320fc)

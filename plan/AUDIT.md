@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-27 (pass 167, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 29 ran 4 commits ago, same day) and so is the expand gate (pass 18, about 44 hours and 18 commits ago). Phase 35 is still blocked on the designer's Skills session. The /decisions MED rows still wait for /oversight, so the top pass-29 LOW row ships. In co-op the /play log named whose dice rolled and rerolled ("Player 2's die 1 rerolled: Star.") but not whose die was kept, released, placed on a Skill or taken back ("Die 1 kept."). Those three lines now start the same way: "Player 2's die 1 kept." in co-op, "Your die 1 kept." solo; a unit test pins all four wordings both ways. The next tick takes the next pass-29 LOW row (the log's mixed past and present tense).
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play log: kept, placed and taken-back die lines do not name whose die (critique LOW, pass 29)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: start the three die lines with whose(...)
+- issue: #221
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [3.2] /play log: player actions mix past and present tense (critique LOW, pass 29)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: one tense for every player action line
+
 # Site audit — 2026-10-27 (pass 166, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 29 ran 3 commits ago, same day) and so is the expand gate (pass 18, about 43 hours and 17 commits ago). Phase 35 is still blocked on the designer's Skills session. The /decisions MED rows still wait for /oversight, so the top pass-29 LOW row ships. Experience is shared by every player, but its /play log line had no subject ("+2 experience (5).") right before a currency line that names one player. It now reads "All players gained 2 experience (now 5)." in co-op and "You gained ..." solo, in the same past tense as the currency line; a unit test pins both. The next tick takes the next pass-29 LOW row (whose die was kept, placed or taken back).
