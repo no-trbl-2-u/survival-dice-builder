@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-25 at commit bacf29d
-> Pass count: 18
+> Last pass: 2026-10-27 at commit cef1649
+> Pass count: 19
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -28,7 +28,8 @@
 - re-evidence (expand pass 16): critique pass 24 (6116ce3) added two LOW rows with the same cause, text that reaches /decisions from `OPEN-QUESTIONS.md` and `plan/AUDIT.md` and that no test reads: rule reading 4 says "unreachable with 8 non-base tiles" where /play and /config say "out of reach: the tile deck holds 8 tiles"; and row 78 and the "Art direction glance check" keep the serial comma that f5a5c17 dropped from the site and that tests now ban in ruleText, proposals and /config copy. The four rows from passes 20 and 21 are still pending, so 6 of the 8 Pending critique rows sit on this one surface. Scope gains one line: the voice tests (serial comma, "out of reach") also scan the /decisions sources. Score raised from 4.5 to 5.0: two passes in a row found more of the same, and `/iterate` cannot reword `[needs-user-call]` items.
 - re-evidence (expand pass 17): critique pass 25 (fe9d292) filed one more row with this cause: the Event Calendar check cites "Spec v2 ruling 14" and "ruling 9". `/iterate` shipped the reading-status half (26a870b) and a test that bars "ruling N" from status labels, but the check half is a `[needs-user-call]` item, so it was split into its own LOW row that waits for /oversight. A scan of the 5 prerendered pages at 4af48ad (dist text, scripts and tags removed) finds that check is the only "ruling N" left on the served site. All 5 Pending critique rows the site can act on are on /decisions and wait for /oversight; the only other Pending row is the phase-sized sim-bot row. Audit passes 121 to 134 shipped 14 single-row fixes (9dacefa to 4af48ad) while the 8.1 rows stayed queued. Score held at 5.0: same evidence, one more row.
 - progress (expand pass 18): ec2ebf6 (audit pass 142) shipped the guard: `citedRows` in `packages/content/src/decisions.ts` reads the rows a check cites ("row 57", "rows 30, 49", "rule readings 63-70"), and a content test fails when a check cites a row that does not exist, or a decided row outside a pinned list of today's stale citations (rows 7, 30, 49, 50 and 55 in "Spec v2 design work"; rows 65 and 69 in "Structural v2 questions"). Row 50 was stale too and no critique row had named it. The next decided row can no longer go stale on /decisions without a red test. Still open: the stale lines themselves (5 Pending critique rows, all in `[needs-user-call]` items that only `/oversight` may edit), and the one balance check built from the latest sim batch. Score lowered from 5.0 to 3.5: the part that needed a phase is mostly shipped; what holds the queue is an `/oversight` edit of the AUDIT lines, after which the pinned list shrinks to nothing and this row can close, or be cut down to the balance check alone.
-- last re-evidenced: 2026-10-25
+- re-evidence (expand pass 19): the 18 shipping commits since pass 18 were all single-row fixes, while the two 8.1 /decisions rows ("three balance checks", "Structural v2 questions") stayed at the head of every Top 5, marked "waits for /oversight". Critique pass 29 added no /decisions row; 5 of the 6 Pending critique rows the site can act on are still on /decisions, all in `[needs-user-call]` items. Score held at 3.5: nothing new, and nothing the loop can do without `/oversight`.
+- last re-evidenced: 2026-10-27
 
 ### [ ] [score 1.0] Milestones a default run can reach: every milestone reachable, or marked out of reach with its reason
 - proposed: 2026-10-17, expand pass 13
@@ -176,7 +177,8 @@
   - The URL contract amended to match HEAD (needs `/oversight`, since it is locked).
 - estimated phases: 1
 - conflicts: the locked URL contract text must change; routes do not. Overlaps phase 40's (was 38) route table; ship after it.
-- last re-evidenced: 2026-10-13
+- re-evidence (expand pass 19): critique passes 28 and 29 filed 5 rows on /debug, the Engine console (Autoplay flooding screen readers, "[Combat v3]" tags, colour-only terrain, "1 tiles" with raw ids, raw ids again), and 6 of the 18 shipping commits since pass 18 went there (0203e31, 6948e73, d5c1206, 4532a9b, 6b0d89c, 29e9061). One more /debug LOW (raw ids in the State panel) is pending. A stranger reads the engine console as a player page because the nav offers it as one, so loop ticks go to polishing a workbench. Score held at 4.5; the nav decision still needs the designer.
+- last re-evidenced: 2026-10-27
 - ruling audit: no rule rows; bearings URL contract checked (locked, out of date on 3 points). Loop scope: outside (navigation); needs the designer's yes.
 
 ### [ ] [score 4.5] Co-op at 2, 3 and 4 seats, proven: engine, bot batch and browser
@@ -276,6 +278,22 @@
 - conflicts: spec non-goal; retrospective "no art direction until Track B has data" (:276).
 - non-goal override: "Final art. Placeholder and open-license art only." (`spec/03-build-brief.md:15`) — needs the designer's yes.
 - ruling audit: no rule rows; ASSETS.md licence rows read. Loop scope: outside.
+
+### [ ] [score 3.0] The /play log read once, end to end: every event line pinned in one table test, solo and co-op
+- proposed: 2026-10-27, expand pass 19
+- source signals:
+  - Commit pattern: 7 of the 18 shipping commits since pass 18 went to `apps/web/src/play/describeEvent.ts`, one line family per commit (e333610 currency, 74f79f5 build and upgrade, bbee77c deck, 0f320fc roll and Skill, 1125182 experience, 3db5fc1 kept and placed dice, cef1649 tense). Each added or grew its own test file; `apps/web/src/play/` now holds 10 `*Log.test.ts` files.
+  - Coverage gap: `describeEvent.ts` has 63 `case` lines; 24 event types are never named in any web test (among them enemyMoved, enemySpawned, tilePlaced, tileRevealed, roundAdvanced, runEnded, baseDamaged, defenseDamaged, defenseRemoved, skillReplaced, starterReturned, playerReturned).
+  - Critique: pass 29 filed 3 LOW log rows (tense, whose die, experience subject), and audit passes 160 to 162 found 4 more without a critique pass. Each pass finds the next family of lines; nothing reads all 63 at once.
+- rationale: the log is how a player learns what the engine just did. The drip, one line family per tick, shows the voice rules (who acts, present tense, units, count words) are checked by family, not by line. The 24 lines no test names are where the next critique rows will come from.
+- proposed scope: 1 phase.
+  - One table test: a fixture event for each of the 63 types, rendered solo and with 2 players, its expected line written out; a test fails when `describeEvent` gains a case the table lacks.
+  - The voice checks (subject named in co-op, present tense, a unit after every number, "1 card" not "1 cards") run over the whole table once.
+  - The 10 family test files fold into the table, or stay only where they pin something the table does not.
+  - Any line the table shows wrong gets fixed in the same phase.
+- estimated phases: 1
+- conflicts: none. UI copy and tests; no rule or engine change. Overlaps Considered "Count words from one helper" (pass 18): the table would use that helper if it exists.
+- ruling audit: no rule rows. Loop scope: in (tests, UI copy).
 
 ## Considered (below threshold)
 
