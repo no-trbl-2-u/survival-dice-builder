@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-26 at commit 0203e31
-> Pass count: 28
+> Last pass: 2026-10-27 at commit 0f320fc
+> Pass count: 29
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — the home page never says a Tower's kill pays the player who built it
+- pass: 29 (commit 0f320fc)
+- viewport: desktop
+- category: comprehension
+- observation: The Shop item says you get currency for each enemy you defeat, and the Defenses item says a Tower hits the nearest enemy. Neither says a Tower's kill pays its builder, which is what the engine does. In co-op the /play log can now say "Player 2 gained 1 currency" during Player 1's Combat, and no page explains why.
+- evidence: "Pay for cards with currency, which you get for each enemy you defeat" (`packages/content/src/ruleText.ts:143`); Tower sentence in `defenseText` (`ruleText.ts:267`); `const payee = state.defenses.find((d) => d.id === by)?.builder ?? by` (`packages/engine/src/progression/experience.ts:56`, rule "8.2, 12.3"); log line `apps/web/src/play/describeEvent.ts:195`.
+- suggested fix: Add to the Tower sentence in `defenseText`: "When it defeats an enemy, the player who built it gets the currency."
+- source: web-fetch
+
+### [MED] / — the Defenses, map and Enemies list reads like more steps of a round
+- pass: 29 (commit 0f320fc)
+- viewport: mobile
+- category: comprehension
+- observation: The items moved out of the Prepare step now sit in a second list right after the numbered Prepare and Combat steps, with no heading or lead-in and the same list style, so they read like steps 3 to 5. Two of them happen inside Combat (enemies spawn at every Combat; Towers fire at the start of each Combat).
+- evidence: `apps/web/src/home/HomePage.tsx:43-55` `<ol className={styles.steps}>` (Prepare, Combat); `HomePage.tsx:56-66` `<ul className={styles.steps}>` (Defenses, The map, Enemies) with no heading.
+- suggested fix: Put a short lead-in before the list (for example "What is on the map:") and give the list its own style so it does not look like more steps.
+- source: web-fetch
+
+### [LOW] /play — the log's experience line has no subject next to a currency line that names a player
+- pass: 29 (commit 0f320fc)
+- viewport: desktop
+- category: comprehension
+- observation: Experience is shared by all players, but its line has no subject; the currency line right after it now names one player. A co-op reader may think the experience went to that player too.
+- evidence: `+${event.amount} experience (${event.experience}).` (`apps/web/src/play/describeEvent.ts:188`), then `${who(event.player)} gained ${event.amount} currency` (`:195`); home Levels item "Each defeated enemy gives experience to all players" (`packages/content/src/ruleText.ts:120`).
+- suggested fix: "All players gain N experience (now M)." in co-op, "You gain N experience (now M)." solo.
+- source: web-fetch
+
+### [LOW] /play — the log names whose dice rolled but not whose die was kept, placed or taken back
+- pass: 29 (commit 0f320fc)
+- viewport: desktop
+- category: voice
+- observation: In co-op, "Player 2's die 1 rerolled: Star." sits next to "Die 1 kept." and "Die 1 on Strike as Sword." with no owner.
+- evidence: `diceRolled` and `dieRerolled` use `whose(event.player)` (`apps/web/src/play/describeEvent.ts:111`, `:113`); `dieKept` (`:115`), `dieAssigned` (`:117`) and `dieUnassigned` (`:119`) do not.
+- suggested fix: Start the three die lines with `whose(...)` too, for example "Player 2's die 1 kept."
+- source: web-fetch
+
+### [LOW] /play — the log mixes past and present tense for player actions
+- pass: 29 (commit 0f320fc)
+- viewport: desktop
+- category: voice
+- observation: Moving, gathering, building, gaining currency and buying are past tense; engaging, repairing, ignoring a hit and losing health are present tense. One Combat reads "You played Field Medic (bottom half)." then "You engage." then "You lose 2 health".
+- evidence: past: `moved to` (`apps/web/src/play/describeEvent.ts:157`), `gathered` (`:161`), `built` (`:164`), `gained` (`:195`), `bought` (`:197`); present: `s('engage')` (`:129`), `s('repair')` (`:131`), `s('ignore')` (`:136`), `s('lose')` (`:145`).
+- suggested fix: Use the present tense for every player action, to match the enemy lines ("attacks", "moves", "takes").
+- source: web-fetch
+
+### [LOW] /debug — the State panel and step status print raw engine ids
+- pass: 29 (commit 0f320fc)
+- viewport: desktop
+- category: voice
+- observation: The player row reads "Player p1" while the action buttons say "Player 1's figure"; it prints "orientation top" where /play says "top halves up"; impassable hexes read "lake at (1,-1)" in lower case. The step status line says "Round 1, setup." while the State panel above it says "1 / Setup", and the exchange step shows as a raw id ("engagement: targets").
+- evidence: `<dt>Player {p.id}</dt>` and `orientation {p.orientation}` (`apps/web/src/debug/StateView.tsx:101`, `:105`); `${hex.terrain} at (${key})` (`StateView.tsx:29`); `${ex.engage ? 'engagement' : 'exchange'}: ${ex.step}` (`StateView.tsx:38`); `Round ${state.round}, ${state.phase}.` (`apps/web/src/debug/stepStatus.ts:20`) against `PHASE_WORDS` (`StateView.tsx:11-16`).
+- suggested fix: Head the row "Player {index + 1}", print "top halves up", capitalise terrain names, use `PHASE_WORDS` in `stepStatus`, and name each exchange step in words.
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
