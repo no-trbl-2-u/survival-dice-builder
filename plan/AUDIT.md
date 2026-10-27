@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-27 (pass 171, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 29 ran 9 commits ago, same day) and so is the expand gate (pass 19 ran 4 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue's open rows wait for /oversight or need a new bot policy, so this tick audits /play afresh. In co-op every hand is open and the Players panel names each seat, but the Hand panel heading read "Hand — top halves up (Prepare) · deck 7 · discard 0" without saying whose hand it shows, though it changes with every turn. It now reads "Player 2's hand — ..." in co-op and "Your hand — ..." solo, the same wording as the log's whose(...) lines. The section's accessible name stays "Hand". A new Hand.test.tsx pins both wordings.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play: the Hand panel heading does not say whose hand it is (audit, pass 171)
+- category: voice
+- impact: 4
+- ease: 8
+- next: start the heading with whose hand it is
+- issue: #226
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-27 (pass 170, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 29 ran 8 commits ago, same day) and so is the expand gate (pass 19 ran 3 commits ago). Phase 35 is still blocked on the designer's Skills session. The pass-29 critique queue is drained and its MED rows wait for /oversight, so this tick ships the item the last tick saw while testing. The /debug State panel's Tiles row ended with "; waiting to place: p1": those are players whose figure is not on the map yet, named by engine id, inside a row about tiles. They now get their own "Figures to place" row ("Player 2"), shown only while a figure waits. Two StateView tests pin the row and its absence.

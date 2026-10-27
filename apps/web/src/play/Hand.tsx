@@ -1,6 +1,7 @@
 import type { CombatOption } from '@survival/content'
 import { sameAction, type Action, type GameState } from '@survival/engine'
 import { bottomText, CardView, optionText } from './CardView.tsx'
+import { seatName } from './PlayerPanel.tsx'
 import styles from './Play.module.css'
 
 type Props = Readonly<{
@@ -14,6 +15,7 @@ type Props = Readonly<{
  * 180 degrees so the bottom halves read upright. Each card offers Play and Discard when legal;
  * in Combat, Play names the bottom-half effect it fires rather than the card's (Prepare) name.
  * In Combat v3 each card offers its Combat options (Engage can be played from anywhere).
+ * The heading names whose hand it is: "Your hand" solo, "Player 2's hand" in co-op.
  */
 export function Hand({ state, legal, act }: Props) {
   const p = state.players[state.current]
@@ -21,11 +23,12 @@ export function Hand({ state, legal, act }: Props) {
   const up = p.orientation
   const legalOf = (a: Action) => legal.find((x) => sameAction(x, a))
   const engageMode = state.config.combat.model === 'engage'
+  const whose = state.players.length === 1 ? 'Your' : `${seatName(state, state.current)}'s`
   return (
     <section className={styles.panel} aria-label="Hand">
       <h2 className={styles.panelTitle}>
-        Hand — {up === 'top' ? 'top halves up (Prepare)' : 'bottom halves up (Combat)'} · deck{' '}
-        {p.deck.length} · discard {p.discard.length}
+        {whose} hand — {up === 'top' ? 'top halves up (Prepare)' : 'bottom halves up (Combat)'} ·
+        deck {p.deck.length} · discard {p.discard.length}
       </h2>
       {p.hand.length === 0 ? <p>No cards in hand.</p> : null}
       <ul className={styles.hand} data-up={up}>
