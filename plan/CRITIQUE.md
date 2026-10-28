@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-27 at commit 0f320fc
-> Pass count: 29
+> Last pass: 2026-10-28 at commit c326fd1
+> Pass count: 30
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /play — the engagement result screen still says "You" in co-op and gives shared experience to one player
+- pass: 30 (commit c326fd1)
+- viewport: desktop
+- category: voice
+- observation: In co-op the result lines say "You dealt", "You healed", "You gained" while the vitals above name "Player 2". Experience is shared, and the log says "All players gain 2 experience", but the result screen says "You gained 2 experience". The heal line also ends in a bare number ("You healed 2."), while the log says "You heal 2 health".
+- evidence: `apps/web/src/play/EngagementModal.tsx:487` `You dealt ${summary.dealt} damage`, `:492` `You healed ${summary.healed}.`, `:497` `You gained ${rewards.join(' and ')}.`, `:500` `No enemy die hit you`; `apps/web/src/play/engageView.ts:296`, `:299`; against `apps/web/src/play/describeEvent.ts:189` and `:102`
+- suggested fix: Use the seat name in co-op result lines, say "All players gain N experience" for the shared part, and render "You healed N health."
+- source: web-fetch
+
+### [LOW] /play — the Exchanges Dice panel says "All your dice are on Skills." under a "Player 2's dice" heading
+- pass: 30 (commit c326fd1)
+- viewport: desktop
+- category: voice
+- observation: The engagement version of this note was made owner-aware; the Exchanges Combat version two lines below was not.
+- evidence: `apps/web/src/play/DiceTray.tsx:141` `All your dice are on Skills.` against `:121` `All {state.players.length === 1 ? 'your' : owner} dice are on Skills.`
+- suggested fix: Use the same owner-aware text at `:141` as at `:121`.
+- source: web-fetch
+
+### [LOW] /play — the delayed-return log line capitalises "You" after a colon
+- pass: 30 (commit c326fd1)
+- viewport: desktop
+- category: voice
+- observation: In solo it reads "No free base hex: You stay knocked out this round." Other log lines use lower case after a colon.
+- evidence: `apps/web/src/play/describeEvent.ts:231` `No free base hex: ${who(event.player)} ...`
+- suggested fix: Reorder to "You stay knocked out this round: no free base hex." (co-op: "Player 2 stays ...").
+- source: web-fetch
+
+### [LOW] /play — the blocked-step log line names the terrain, then hedges "it is Lake or Mountain"
+- pass: 30 (commit c326fd1)
+- viewport: desktop
+- category: voice
+- observation: "You cannot enter Lake (1,-1): it is Lake or Mountain (2 left)." The place already names the terrain, so the reason repeats it as a guess.
+- evidence: `apps/web/src/play/describeEvent.ts:186` `cannot enter ${place(names, event.hex)}: it is Lake or Mountain`; `apps/web/src/tiles/TileView.tsx:52` hexLabel capitalises the terrain
+- suggested fix: Reword to "cannot enter Lake (1,-1): it is impassable (2 hexes left)."
+- source: web-fetch
+
+### [LOW] /config — optional limits show "off" in lower case, and the spawn ramp help keeps a code formula
+- pass: 30 (commit c326fd1)
+- viewport: desktop
+- category: voice
+- observation: "Forced reveal every off" and "Spawn ramp every off" sit near "Maximum level Off". The spawn ramp help keeps "(1 + (round - 1) / N, rounded down)", a formula of the kind removed from /decisions.
+- evidence: `packages/content/data/config.meta.json:185`, `:195`, `:213` `"empty": "off"`; `:193` "Each spawn node spawns 1 more enemy every this many rounds (1 + (round - 1) / N, rounded down)."; `apps/web/src/config/ConfigPage.tsx:348`
+- suggested fix: Set the three "empty" values to "Off" and drop the bracketed formula from the spawn ramp help.
+- source: web-fetch
+
+### [LOW] /debug — the State panel Defenses row prints the kind in lower case ("d1 tower")
+- pass: 30 (commit c326fd1)
+- viewport: desktop
+- category: voice
+- observation: Bearings capitalises Barricade and Tower, and pass 29 capitalised terrain in the same panel. The id prefix is a deliberate /debug choice; only the kind word is wrong.
+- evidence: `apps/web/src/debug/StateView.tsx:88` `${d.id} ${d.kind}, ${d.health} health, at ${at(d.hex)}`
+- suggested fix: Print the kind capitalised ("d1 Tower, 3 health, at (1,0)"), as the Impassable hexes row does.
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
