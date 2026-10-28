@@ -183,7 +183,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'figurePlaced':
       return `${who(event.player)} ${solo(names) ? 'start' : 'starts'} on ${place(names, event.hex)}.`
     case 'revealStepBlocked':
-      return `${who(event.player)} cannot enter ${place(names, event.hex)}: it is Lake or Mountain (${event.hexesLeft} left).`
+      return `${who(event.player)} cannot enter ${place(names, event.hex)}: it is impassable (${event.hexesLeft} left).`
     case 'experienceGained':
       // Experience is shared (8.1), so the line names everyone, beside a currency line that names one.
       return `${solo(names) ? 'You' : 'All players'} gain ${event.amount} experience (now ${event.experience}).`

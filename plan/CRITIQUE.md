@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the blocked-step log line names the terrain, then hedges "it is Lake or Mountain"
-- pass: 30 (commit c326fd1)
-- viewport: desktop
-- category: voice
-- observation: "You cannot enter Lake (1,-1): it is Lake or Mountain (2 left)." The place already names the terrain, so the reason repeats it as a guess.
-- evidence: `apps/web/src/play/describeEvent.ts:186` `cannot enter ${place(names, event.hex)}: it is Lake or Mountain`; `apps/web/src/tiles/TileView.tsx:52` hexLabel capitalises the terrain
-- suggested fix: Reword to "cannot enter Lake (1,-1): it is impassable (2 hexes left)."
-- source: web-fetch
-
 ### [LOW] /config — optional limits show "off" in lower case, and the spawn ramp help keeps a code formula
 - pass: 30 (commit c326fd1)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play — the blocked-step log line names the terrain, then hedges "it is Lake or Mountain"
+- pass: 30 (commit c326fd1)
+- viewport: desktop
+- category: voice
+- observation: "You cannot enter Lake (1,-1): it is Lake or Mountain (2 left)." The place already names the terrain, so the reason repeats it as a guess.
+- evidence: `apps/web/src/play/describeEvent.ts:186` `cannot enter ${place(names, event.hex)}: it is Lake or Mountain`; `apps/web/src/tiles/TileView.tsx:52` hexLabel capitalises the terrain
+- suggested fix: Reword to "cannot enter Lake (1,-1): it is impassable (2 hexes left)."
+- source: web-fetch
+- issue: #232
+- fixed: (this commit)
 
 ### [x] [LOW] /play — the delayed-return log line capitalises "You" after a colon
 - pass: 30 (commit c326fd1)

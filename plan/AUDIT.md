@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-28 (pass 177, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 30 ran 4 commits ago, same day) and so is the expand gate (pass 19 ran 10 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left in the queue wait for /oversight, so this tick takes the last pass 30 LOW row. The blocked-step log line read "You cannot enter Lake (1,-1): it is Lake or Mountain (2 left).", naming the terrain and then guessing at it. The reason now says what the terrain does, in the word /tiles uses: "You cannot enter Lake (1,-1): it is impassable (2 left)." The "(2 left)" stays as on the move line beside it. The export log test pins the whole line.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play: the blocked-step log line hedges "it is Lake or Mountain" (critique LOW, pass 30)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: say "it is impassable", as /tiles does
+- issue: #232
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-28 (pass 176, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 30 ran 3 commits ago, same day) and so is the expand gate (pass 19 ran 9 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left in the queue wait for /oversight, so this tick takes the first pass 30 LOW row. The delayed-return log line read "No free base hex: You stay knocked out this round.", with a capital after the colon where other log lines use lower case. It now leads with the player and gives the reason after the colon: "You stay knocked out this round: no free base hex." solo, "Player 2 stays knocked out this round: no free base hex." in co-op. New knockout log tests pin both wordings.

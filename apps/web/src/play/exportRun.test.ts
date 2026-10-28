@@ -221,7 +221,9 @@ describe('describeEvent', () => {
       expect(describeEvent(e as never, state)).toMatch(/ for 2 damage\.$/)
     }
     const blocked = { type: 'revealStepBlocked', player: 'p1', hex: { q: 9, r: 9 }, hexesLeft: 1 }
-    expect(describeEvent(blocked as never, state)).toMatch(/it is Lake or Mountain \(1 left\)\.$/)
+    expect(describeEvent(blocked as never, state)).toMatch(
+      /^You cannot enter .+: it is impassable \(1 left\)\.$/,
+    )
   })
 
   it('names a defeated enemy once on the cancelled-die line', () => {
