@@ -78,12 +78,17 @@ export function enemyName(n: NameSource, id: string, from: Axial): string {
  * "grunt 2 hexes north of the base center".
  */
 export function enemyNameFromBase(n: NameSource, id: string): string {
-  const base = baseCentre(n.map)
-  const place = (e: Enemy) => {
-    const away = stepsAway(base, e.hex)
-    return `${e.kind} ${away === 'here' ? 'at the base center' : `${away} of the base center`}`
-  }
+  const place = (e: Enemy) => kindFromBase(n, e.kind, e.hex)
   return withOrdinal(n.enemies ?? [], id, place) ?? pastKind(n, id) ?? 'enemy'
+}
+
+/**
+ * A kind on a hex, placed from the base center: "grunt 2 hexes north of the base center". For a
+ * piece the log names where it stood, not where it is now.
+ */
+export function kindFromBase(n: NameSource, kind: string, hex: Axial): string {
+  const away = stepsAway(baseCentre(n.map), hex)
+  return `${kind} ${away === 'here' ? 'at the base center' : `${away} of the base center`}`
 }
 
 /** A defense's printed name ("Tower"). */

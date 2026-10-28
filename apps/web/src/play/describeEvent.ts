@@ -1,6 +1,6 @@
 import { milestoneLabel } from '@survival/content'
 import { hexKey, type GameEvent, type GameState } from '@survival/engine'
-import { defenseNameFromBase, enemyNameFromBase } from '../names/pieceNames.ts'
+import { defenseNameFromBase, enemyNameFromBase, kindFromBase } from '../names/pieceNames.ts'
 import { hexLabel } from '../tiles/TileView.tsx'
 
 /** What the log needs to name ids: the content, plus the pieces in play (usually the state). */
@@ -177,7 +177,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'baseDamaged':
       return `The base takes ${event.amount} damage (health ${event.health}).`
     case 'eliteReplaced':
-      return `Miniature limit: the ${enemyLabel(names, event.elite).replace(/^elite /, 'grunt ')} becomes an elite.`
+      return `Miniature limit: the ${kindFromBase(names, 'grunt', event.hex)} becomes an elite.`
     case 'tileRevealed':
       return `Tile revealed: ${tileName(names, event.tile)}.`
     case 'figurePlaced':

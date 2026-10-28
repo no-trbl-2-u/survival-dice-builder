@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-28 (pass 183, cloud tick)
+
+Pass 182's preset editor size line fix shipped (2298840). No issues are open for triage. The critique gate is closed (pass 30 ran 10 commits ago, under 24 hours) and so is the expand gate (pass 19 ran 16 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited the /play log lines fresh. The miniature limit line named the grunt by relabelling the new elite: once that elite was defeated it read "Miniature limit: the elite becomes an elite.", after the elite moved it gave the elite's new place, and an ordinal meant for another elite could land on the grunt. A 3.6 (impact 4, ease 9). The line now names the grunt from the event's own hex through a shared `kindFromBase`, pinned by a new log test. Next in line: the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play log: the miniature limit line says "the elite becomes an elite" once that elite is defeated (audit, pass 183)
+- category: voice
+- impact: 4
+- ease: 9
+- next: name the grunt from the event's hex, not by relabelling the elite
+- issue: #238
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-28 (pass 182, cloud tick)
 
 Pass 181's deck shuffled log line fix shipped (418b03c). No issues are open for triage. The critique gate is closed (pass 30 ran 9 commits ago, under 24 hours) and so is the expand gate (pass 19 ran 15 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited the shipped pages fresh for fixed plurals. Pass 180 made the deck preset label say "1 card", but the preset editor's own size line on /config still said "Deck: 1 cards" for a one-card preset. A 2.7 (impact 3, ease 9). Both now share one `cardCount` wording, pinned by a new unit test; the e2e check accepts either form. Next in line: the rows that wait for /oversight.
