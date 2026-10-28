@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /debug — the State panel Defenses row prints the kind in lower case ("d1 tower")
-- pass: 30 (commit c326fd1)
-- viewport: desktop
-- category: voice
-- observation: Bearings capitalises Barricade and Tower, and pass 29 capitalised terrain in the same panel. The id prefix is a deliberate /debug choice; only the kind word is wrong.
-- evidence: `apps/web/src/debug/StateView.tsx:88` `${d.id} ${d.kind}, ${d.health} health, at ${at(d.hex)}`
-- suggested fix: Print the kind capitalised ("d1 Tower, 3 health, at (1,0)"), as the Impassable hexes row does.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /debug — the State panel Defenses row prints the kind in lower case ("d1 tower")
+- pass: 30 (commit c326fd1)
+- viewport: desktop
+- category: voice
+- observation: Bearings capitalises Barricade and Tower, and pass 29 capitalised terrain in the same panel. The id prefix is a deliberate /debug choice; only the kind word is wrong.
+- evidence: `apps/web/src/debug/StateView.tsx:88` `${d.id} ${d.kind}, ${d.health} health, at ${at(d.hex)}`
+- suggested fix: Print the kind capitalised ("d1 Tower, 3 health, at (1,0)"), as the Impassable hexes row does.
+- source: web-fetch
+- issue: #234
+- fixed: (this commit)
 
 ### [x] [LOW] /config — optional limits show "off" in lower case, and the spawn ramp help keeps a code formula
 - pass: 30 (commit c326fd1)

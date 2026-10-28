@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-28 (pass 179, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 30 ran 6 commits ago, same day) and so is the expand gate (pass 19 ran 12 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left in the queue wait for /oversight, so this tick takes the last pass 30 LOW row. On /debug the State panel Defenses row printed the kind in lower case ("d1 tower, 3 health, at (1,0)"), while the Impassable hexes row in the same panel capitalises terrain. The kind now goes through the same `capital` helper: "d1 Tower, 3 health, at (1,0)". The id prefix stays, as a /debug choice. A new StateView test pins the row.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /debug: the State panel Defenses row prints the kind in lower case (critique LOW, pass 30)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: capitalise the kind, as the Impassable hexes row does
+- issue: #234
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-28 (pass 178, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 30 ran 5 commits ago, same day) and so is the expand gate (pass 19 ran 11 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left in the queue wait for /oversight, so this tick takes a pass 30 LOW row. On /config the three optional limits (Forced reveal every, Spawn ramp every, Spawn range) showed "off" in lower case beside "Maximum level Off", and the spawn ramp help kept the formula "(1 + (round - 1) / N, rounded down)". The placeholders now read "Off" and the formula is gone; /decisions still prints the value in lower case mid-sentence. New content tests pin capitalised placeholders and formula-free help.

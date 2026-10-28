@@ -57,6 +57,18 @@ describe('debug map marks in text', () => {
     expect(text).toContain('Mountain at (5,1)')
   })
 
+  it('capitalises the defense kind after its id', () => {
+    const game = createGame(defaultContent.config, 1)
+    const built: GameState = {
+      ...game,
+      defenses: [{ id: 'd1', kind: 'tower', hex: { q: 1, r: 0 }, health: 3, builder: 'p1' }],
+    }
+    render(<StateView state={built} />)
+    const text = screen.getByTestId('state').textContent ?? ''
+    expect(text).toContain('Defensesd1 Tower, 3 health, at (1,0)')
+    expect(text).not.toContain('d1 tower')
+  })
+
   it('marks an elite spawn node "E", not a capital "S"', () => {
     render(<StateView state={withBlocks()} />)
     const map = screen.getByTestId('map')

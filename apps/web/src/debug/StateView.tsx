@@ -20,7 +20,7 @@ const STEP_WORDS: Record<ExchangeStep, string> = {
   resolve: 'Resolve',
 }
 
-/** "Lake", "Mountain". */
+/** "Lake", "Mountain", "Tower". */
 const capital = (word: string) => word.charAt(0).toUpperCase() + word.slice(1)
 
 /** Plain-text view of the engine state for the debug console. */
@@ -85,7 +85,7 @@ export function StateView({ state }: Props) {
           {state.defenses.length === 0
             ? 'none'
             : state.defenses
-                .map((d) => `${d.id} ${d.kind}, ${d.health} health, at ${at(d.hex)}`)
+                .map((d) => `${d.id} ${capital(d.kind)}, ${d.health} health, at ${at(d.hex)}`)
                 .join(', ')}
         </dd>
         <dt>Tiles</dt>
