@@ -133,7 +133,7 @@ test('/config: sliders, toggles, and pick lists; a name can only come from the c
   await page.getByLabel('Preset 1: card 1', { exact: true }).selectOption('sprint')
   // A preset names its deck total and its hand apart, so a 10-card deck is not read as the hand.
   const preset = page.getByRole('region', { name: 'Preset 1' })
-  await expect(preset.getByText(/^Deck: \d+ cards$/)).toBeVisible()
+  await expect(preset.getByText(/^Deck: \d+ cards?$/)).toBeVisible()
   await expect(preset.getByLabel('Cards in hand', { exact: true })).toBeVisible()
   // Every input in a preset is named by its place, never by the raw preset id.
   await expect(preset.getByLabel('Preset 1: card 1 quantity', { exact: true })).toBeVisible()

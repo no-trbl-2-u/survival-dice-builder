@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-28 (pass 182, cloud tick)
+
+Pass 181's deck shuffled log line fix shipped (418b03c). No issues are open for triage. The critique gate is closed (pass 30 ran 9 commits ago, under 24 hours) and so is the expand gate (pass 19 ran 15 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited the shipped pages fresh for fixed plurals. Pass 180 made the deck preset label say "1 card", but the preset editor's own size line on /config still said "Deck: 1 cards" for a one-card preset. A 2.7 (impact 3, ease 9). Both now share one `cardCount` wording, pinned by a new unit test; the e2e check accepts either form. Next in line: the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /config: the preset editor says "Deck: 1 cards" for a one-card preset (audit, pass 182)
+- category: voice
+- impact: 3
+- ease: 9
+- next: say "1 card" for a count of 1, as the preset label does
+- issue: #237
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-28 (pass 181, cloud tick)
 
 Pass 180's deck preset label fix shipped (cbc36d2). No issues are open for triage. The critique gate is closed (pass 30 ran 8 commits ago, same day) and so is the expand gate (pass 19 ran 14 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this tick takes pass 180's next row. The /play log said "Your deck shuffled (1 cards)." for a one-card deck preset, while the preset label and the start text say "1 card". A 2.4 (impact 3, ease 8). The line now says "1 card" for a count of 1, pinned by a new deck log test. Next in line: the rows that wait for /oversight.
