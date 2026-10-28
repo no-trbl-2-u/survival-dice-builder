@@ -182,7 +182,7 @@
     "label": "Forced reveal every",
     "help": "At round end, if no tile was revealed in this many rounds, the top tile of the tile deck is revealed in the open slot nearest the base. Off (default): as in the written rules.",
     "rule": "10.1 (open question 63)",
-    "empty": "off",
+    "empty": "Off",
     "range": [1, 10]
   },
   "spawn": {
@@ -190,9 +190,9 @@
   },
   "spawn.rampEvery": {
     "label": "Spawn ramp every",
-    "help": "Each spawn node spawns 1 more enemy every this many rounds (1 + (round - 1) / N, rounded down). Off (default): as in the written rules.",
+    "help": "Each spawn node spawns 1 more enemy every this many rounds. Off (default): as in the written rules.",
     "rule": "9.2 (open question 64)",
-    "empty": "off",
+    "empty": "Off",
     "range": [1, 10]
   },
   "spawn.newTileDelay": {
@@ -210,7 +210,7 @@
     "label": "Spawn range",
     "help": "Only spawn nodes within this many hexes of a player figure, a Barricade, a Tower or the base spawn. Off (default): as in the written rules.",
     "rule": "9.2 (open question 70)",
-    "empty": "off",
+    "empty": "Off",
     "range": [1, 10]
   },
   "gather": {

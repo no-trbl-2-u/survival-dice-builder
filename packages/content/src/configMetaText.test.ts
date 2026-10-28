@@ -114,3 +114,18 @@ describe('config.meta.json says when things happen in plain words', () => {
     expect(help).not.toMatch(/divides/)
   })
 })
+
+describe('config.meta.json placeholders and help read as player text (critique pass 30)', () => {
+  it('an optional limit reads "Off" when empty, as the toggle beside it does', () => {
+    const empties = Object.values(defaultConfigMeta).flatMap((e) => (e.empty ? [e.empty] : []))
+    expect(empties.length).toBeGreaterThan(0)
+    for (const empty of empties) expect(empty[0]).toBe(empty[0]?.toUpperCase())
+  })
+
+  it('no help text writes a formula', () => {
+    const formulas = Object.entries(defaultConfigMeta)
+      .filter(([, e]) => /[+/=]|\(round\b/.test(e.help ?? ''))
+      .map(([path]) => path)
+    expect(formulas).toEqual([])
+  })
+})

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — optional limits show "off" in lower case, and the spawn ramp help keeps a code formula
-- pass: 30 (commit c326fd1)
-- viewport: desktop
-- category: voice
-- observation: "Forced reveal every off" and "Spawn ramp every off" sit near "Maximum level Off". The spawn ramp help keeps "(1 + (round - 1) / N, rounded down)", a formula of the kind removed from /decisions.
-- evidence: `packages/content/data/config.meta.json:185`, `:195`, `:213` `"empty": "off"`; `:193` "Each spawn node spawns 1 more enemy every this many rounds (1 + (round - 1) / N, rounded down)."; `apps/web/src/config/ConfigPage.tsx:348`
-- suggested fix: Set the three "empty" values to "Off" and drop the bracketed formula from the spawn ramp help.
-- source: web-fetch
-
 ### [LOW] /debug — the State panel Defenses row prints the kind in lower case ("d1 tower")
 - pass: 30 (commit c326fd1)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /config — optional limits show "off" in lower case, and the spawn ramp help keeps a code formula
+- pass: 30 (commit c326fd1)
+- viewport: desktop
+- category: voice
+- observation: "Forced reveal every off" and "Spawn ramp every off" sit near "Maximum level Off". The spawn ramp help keeps "(1 + (round - 1) / N, rounded down)", a formula of the kind removed from /decisions.
+- evidence: `packages/content/data/config.meta.json:185`, `:195`, `:213` `"empty": "off"`; `:193` "Each spawn node spawns 1 more enemy every this many rounds (1 + (round - 1) / N, rounded down)."; `apps/web/src/config/ConfigPage.tsx:348`
+- suggested fix: Set the three "empty" values to "Off" and drop the bracketed formula from the spawn ramp help.
+- source: web-fetch
+- issue: #233
+- fixed: (this commit)
 
 ### [x] [LOW] /play — the blocked-step log line names the terrain, then hedges "it is Lake or Mountain"
 - pass: 30 (commit c326fd1)

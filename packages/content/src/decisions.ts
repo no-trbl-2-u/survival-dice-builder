@@ -214,7 +214,7 @@ export function flagSettings(flag: string, config: GameConfig): FlagSetting[] {
 
 /**
  * A setting's value in plain words, as /decisions shows it: a select value by its /config
- * phrase without the "(default)" note, an empty optional by its /config placeholder, on/off,
+ * phrase without the "(default)" note, an empty optional by its /config placeholder in lower case, on/off,
  * numbers as they are, and a list or table as "a list on the Config page".
  *
  * @param path - the config path (`rulings.buildLevels`).
@@ -223,7 +223,7 @@ export function flagSettings(flag: string, config: GameConfig): FlagSetting[] {
  */
 export function settingValueText(path: string, json: string, meta: ConfigMeta): string {
   const entry = meta[path]
-  if (json === 'empty') return entry?.empty ?? 'off'
+  if (json === 'empty') return entry?.empty?.toLowerCase() ?? 'off'
   let value: unknown
   try {
     value = JSON.parse(json)

@@ -58,7 +58,7 @@ test('/config: the experiment options default off; the rules note links the rule
   await page.goto('/config')
   const reveal = page.getByLabel('Forced reveal every', { exact: true })
   await expect(reveal).toHaveValue('')
-  await expect(reveal).toHaveAttribute('placeholder', 'off')
+  await expect(reveal).toHaveAttribute('placeholder', 'Off')
   await expect(reveal).toHaveAccessibleDescription(
     /^At round end, .* Rules 10\.1 \(rule reading 63\)\./,
   )

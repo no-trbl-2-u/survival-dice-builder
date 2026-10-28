@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-28 (pass 178, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 30 ran 5 commits ago, same day) and so is the expand gate (pass 19 ran 11 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left in the queue wait for /oversight, so this tick takes a pass 30 LOW row. On /config the three optional limits (Forced reveal every, Spawn ramp every, Spawn range) showed "off" in lower case beside "Maximum level Off", and the spawn ramp help kept the formula "(1 + (round - 1) / N, rounded down)". The placeholders now read "Off" and the formula is gone; /decisions still prints the value in lower case mid-sentence. New content tests pin capitalised placeholders and formula-free help.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: optional limits show "off" in lower case; spawn ramp help keeps a formula (critique LOW, pass 30)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: "Off" placeholders, drop the formula
+- issue: #233
+- fixed: (this commit)
+
+### [ ] [3.6] /debug: the State panel Defenses row prints the kind in lower case (critique LOW, pass 30)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: capitalise the kind, as the Impassable hexes row does
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-28 (pass 177, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 30 ran 4 commits ago, same day) and so is the expand gate (pass 19 ran 10 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left in the queue wait for /oversight, so this tick takes the last pass 30 LOW row. The blocked-step log line read "You cannot enter Lake (1,-1): it is Lake or Mountain (2 left).", naming the terrain and then guessing at it. The reason now says what the terrain does, in the word /tiles uses: "You cannot enter Lake (1,-1): it is impassable (2 left)." The "(2 left)" stays as on the move line beside it. The export log test pins the whole line.
