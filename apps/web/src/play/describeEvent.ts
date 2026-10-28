@@ -87,7 +87,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `${event.phase[0]?.toUpperCase()}${event.phase.slice(1)} phase starts (round ${event.round}).`
     case 'deckShuffled':
       // Every player's deck turns at once, so each line names whose: "Player 2's deck shuffled".
-      return `${whose(event.player)} deck shuffled (${event.cards} cards).`
+      return `${whose(event.player)} deck shuffled (${event.cards} card${event.cards === 1 ? '' : 's'}).`
     case 'deckTurned':
       return `${whose(event.player)} deck turned: ${event.orientation === 'top' ? 'top halves' : 'bottom halves'} up.`
     case 'cardsDrawn':
