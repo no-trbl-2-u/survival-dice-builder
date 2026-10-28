@@ -291,20 +291,63 @@ export function cancelledLine(s: EngageSummary): string | null {
   return `${s.cancelled} ${s.cancelled === 1 ? 'die' : 'dice'} of defeated enemies did not hit.`
 }
 
-/** The 1-line verdict at the top of the result. */
-export function engageHeadline(s: EngageSummary): string {
-  if (s.knockedOut) return 'You were knocked out.'
+/**
+ * The 1-line verdict at the top of the result.
+ *
+ * @param s - the engagement's totals.
+ * @param seat - who engaged in co-op ("Player 2"); null solo, where the verdict says "You".
+ */
+export function engageHeadline(s: EngageSummary, seat: string | null = null): string {
+  const who = seat ?? 'You'
+  if (s.knockedOut) return `${who} ${seat ? 'was' : 'were'} knocked out.`
   const won =
     s.defeated > 0
-      ? `You defeated ${s.defeated} ${s.defeated === 1 ? 'enemy' : 'enemies'}`
+      ? `${who} defeated ${s.defeated} ${s.defeated === 1 ? 'enemy' : 'enemies'}`
       : s.dealt > 0
-        ? `You dealt ${s.dealt} damage`
-        : 'You dealt no damage'
+        ? `${who} dealt ${s.dealt} damage`
+        : `${who} dealt no damage`
   const hurt =
     s.toHealth > 0
       ? `took ${s.toHealth} damage`
       : s.toGuard > 0
-        ? `your guard stopped ${s.toGuard} damage`
+        ? `${seat ? 'their' : 'your'} guard stopped ${s.toGuard} damage`
         : 'took no damage'
   return `${won} and ${hurt}.`
+}
+
+/**
+ * The result lines for what the engaged player dealt, healed, gained and took. In co-op they
+ * name the seat ("Player 2 dealt 3 damage."), and experience, which is shared (8.1), goes to
+ * all players while currency (8.2) goes to the seat, as the log says.
+ *
+ * @param s - the engagement's totals.
+ * @param seat - who engaged in co-op ("Player 2"); null solo, where the lines say "You".
+ */
+export function resultLines(
+  s: EngageSummary,
+  seat: string | null = null,
+): Readonly<{ dealt: string; healed: string | null; gained: string[]; hit: string }> {
+  const who = seat ?? 'You'
+  const dealt =
+    s.dealt > 0
+      ? `${who} dealt ${s.dealt} damage${s.defeated > 0 ? ` and defeated ${s.defeated} ${s.defeated === 1 ? 'enemy' : 'enemies'}` : ''}.`
+      : `${who} dealt no damage.`
+  const healed = s.healed > 0 ? `${who} healed ${s.healed} health.` : null
+  const experience = s.experience > 0 ? `${s.experience} experience` : ''
+  const currency = s.currency > 0 ? `${s.currency} currency` : ''
+  const gained = seat
+    ? [
+        experience ? `All players gained ${experience}.` : '',
+        currency ? `${seat} gained ${currency}.` : '',
+      ].filter(Boolean)
+    : experience || currency
+      ? [`You gained ${[experience, currency].filter(Boolean).join(' and ')}.`]
+      : []
+  const target = seat ?? 'you'
+  const ignored = s.ignored > 0 ? ` (${s.ignored} ignored)` : ''
+  const hit =
+    s.hitsTaken === 0
+      ? `No enemy die hit ${target}${ignored}.`
+      : `${s.hitsTaken} enemy ${s.hitsTaken === 1 ? 'die' : 'dice'} hit ${target}: ${s.toGuard} to guard, ${s.toHealth} to health${ignored}.`
+  return { dealt, healed, gained, hit }
 }

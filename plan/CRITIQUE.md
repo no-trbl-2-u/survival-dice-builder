@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — the engagement result screen still says "You" in co-op and gives shared experience to one player
-- pass: 30 (commit c326fd1)
-- viewport: desktop
-- category: voice
-- observation: In co-op the result lines say "You dealt", "You healed", "You gained" while the vitals above name "Player 2". Experience is shared, and the log says "All players gain 2 experience", but the result screen says "You gained 2 experience". The heal line also ends in a bare number ("You healed 2."), while the log says "You heal 2 health".
-- evidence: `apps/web/src/play/EngagementModal.tsx:487` `You dealt ${summary.dealt} damage`, `:492` `You healed ${summary.healed}.`, `:497` `You gained ${rewards.join(' and ')}.`, `:500` `No enemy die hit you`; `apps/web/src/play/engageView.ts:296`, `:299`; against `apps/web/src/play/describeEvent.ts:189` and `:102`
-- suggested fix: Use the seat name in co-op result lines, say "All players gain N experience" for the shared part, and render "You healed N health."
-- source: web-fetch
-
 ### [LOW] /play — the Exchanges Dice panel says "All your dice are on Skills." under a "Player 2's dice" heading
 - pass: 30 (commit c326fd1)
 - viewport: desktop
@@ -118,6 +109,17 @@
 - source: user
 
 ## Done
+
+### [x] [MED] /play — the engagement result screen still says "You" in co-op and gives shared experience to one player
+- pass: 30 (commit c326fd1)
+- viewport: desktop
+- category: voice
+- observation: In co-op the result lines say "You dealt", "You healed", "You gained" while the vitals above name "Player 2". Experience is shared, and the log says "All players gain 2 experience", but the result screen says "You gained 2 experience". The heal line also ends in a bare number ("You healed 2."), while the log says "You heal 2 health".
+- evidence: `apps/web/src/play/EngagementModal.tsx:487` `You dealt ${summary.dealt} damage`, `:492` `You healed ${summary.healed}.`, `:497` `You gained ${rewards.join(' and ')}.`, `:500` `No enemy die hit you`; `apps/web/src/play/engageView.ts:296`, `:299`; against `apps/web/src/play/describeEvent.ts:189` and `:102`
+- suggested fix: Use the seat name in co-op result lines, say "All players gain N experience" for the shared part, and render "You healed N health."
+- source: web-fetch
+- issue: #229
+- fixed: (this commit)
 
 ### [x] [LOW] /debug — the State panel and step status print raw engine ids
 - pass: 29 (commit 0f320fc)

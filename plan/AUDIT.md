@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-28 (pass 174, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 30 ran 1 commit ago, same day) and so is the expand gate (pass 19 ran 7 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Pass 30 filed one MED row that does not wait for /oversight: in co-op the engagement result still said "You dealt", "You healed", "You gained" under vitals that name "Player 2", and it gave the shared experience to "You" while the log says "All players gain". The result lines and the verdict now name the seat in co-op ("Player 2 dealt 3 damage.", "1 enemy die hit Player 2", "Player 2 was knocked out."), experience goes to "All players" and currency to the seat, and the heal line reads "healed 2 health." The seat comes from the engagement's own `engaged` event. Solo wording is unchanged apart from the heal line. The lines move into a pure `resultLines` helper in `engageView.ts`, pinned by new tests for both wordings.
+
+## Top 5 findings (scored)
+
+### [x] [9.0] /play: the engagement result says "You" in co-op and gives shared experience to one player (critique MED, pass 30, bias x1.5)
+- category: external-critique (voice)
+- impact: 6
+- ease: 10
+- next: name the seat in the result lines and verdict, experience to all players
+- issue: #229
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-27 (pass 173, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 29 ran 11 commits ago, same day) and so is the expand gate (pass 19 ran 4 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue's open rows wait for /oversight or need a new bot policy, so this tick follows the last two ticks' heading fixes into the engagement window. In co-op the window covers the Players panel, yet its header line read "Health 5/8 Guard 1" with no owner, and screen readers heard the card strip as "Your hand" and the dice as "Your dice" on every player's turn. In co-op the line now starts with "Player 2", and the strip and dice list are named "Player 2's hand" and "Player 2's dice"; solo stays "Your". The "Your"/"Player N's" wording moves into one `whose` helper beside `seatName`, which the Hand, Skills and Dice headings now share. New EngageVitals, CardStrip and DiceTray tests pin both wordings.

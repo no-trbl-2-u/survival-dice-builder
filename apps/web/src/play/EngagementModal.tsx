@@ -16,6 +16,7 @@ import {
   enemyLabel,
   hitsLine,
   playerHex,
+  resultLines,
   rollAgain,
   type EngageSummary,
 } from './engageView.ts'
@@ -477,29 +478,21 @@ function SummaryView({
 }: Readonly<{ state: GameState; summary: EngageSummary; onClose: () => void }>) {
   const lines: string[] = []
   const skillName = (id: string) => state.content.skills.find((s) => s.id === id)?.name ?? id
+  // In co-op the result names whose engagement it was (from its own event), as the vitals do.
+  const engaged = summary.events.find((e) => e.type === 'engaged')
+  const index = state.players.findIndex((p) => p.id === engaged?.player)
+  const seat = state.players.length > 1 ? seatName(state, index < 0 ? state.current : index) : null
   lines.push(
     summary.fired.length > 0
       ? `Skills fired: ${summary.fired.map(skillName).join(', ')}.`
       : 'No Skill fired.',
   )
-  lines.push(
-    summary.dealt > 0
-      ? `You dealt ${summary.dealt} damage${summary.defeated > 0 ? ` and defeated ${summary.defeated} ${summary.defeated === 1 ? 'enemy' : 'enemies'}` : ''}.`
-      : 'You dealt no damage.',
-  )
+  const result = resultLines(summary, seat)
+  lines.push(result.dealt)
   const hits = hitsLine(summary, (id) => enemyLabel(state, id, playerHex(state)))
   if (hits) lines.push(hits)
-  if (summary.healed > 0) lines.push(`You healed ${summary.healed}.`)
-  const rewards = [
-    summary.experience > 0 ? `${summary.experience} experience` : '',
-    summary.currency > 0 ? `${summary.currency} currency` : '',
-  ].filter(Boolean)
-  if (rewards.length > 0) lines.push(`You gained ${rewards.join(' and ')}.`)
-  lines.push(
-    summary.hitsTaken === 0
-      ? `No enemy die hit you${summary.ignored > 0 ? ` (${summary.ignored} ignored)` : ''}.`
-      : `${summary.hitsTaken} enemy ${summary.hitsTaken === 1 ? 'die' : 'dice'} hit you: ${summary.toGuard} to guard, ${summary.toHealth} to health${summary.ignored > 0 ? ` (${summary.ignored} ignored)` : ''}.`,
-  )
+  if (result.healed) lines.push(result.healed)
+  lines.push(...result.gained, result.hit)
   const cancelled = cancelledLine(summary)
   if (cancelled) lines.push(cancelled)
   lines.push(combatEndText(state.config))
@@ -511,7 +504,7 @@ function SummaryView({
         role="status"
         data-testid="engage-headline"
       >
-        {engageHeadline(summary)}
+        {engageHeadline(summary, seat)}
       </p>
       <div className={styles.engageSummary} data-testid="engage-summary">
         {summary.enemyDice.length > 0 ? (

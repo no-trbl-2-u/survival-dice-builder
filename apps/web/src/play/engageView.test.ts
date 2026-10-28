@@ -9,6 +9,7 @@ import {
   engageStage,
   hitsLine,
   lastEngagement,
+  resultLines,
   rollAgain,
 } from './engageView.ts'
 
@@ -99,6 +100,47 @@ describe('engageView', () => {
     expect(engageHeadline({ ...s!, knockedOut: false, toHealth: 2, toGuard: 1 })).toBe(
       'You dealt 2 damage and took 2 damage.',
     )
+    // In co-op the verdict names the seat.
+    expect(engageHeadline(s!, 'Player 2')).toBe('Player 2 was knocked out.')
+    expect(engageHeadline({ ...s!, knockedOut: false, defeated: 1 }, 'Player 2')).toBe(
+      'Player 2 defeated 1 enemy and their guard stopped 1 damage.',
+    )
+  })
+
+  it('names the seat in co-op result lines and gives experience to all players (8.1, 8.2)', () => {
+    const log: GameEvent[] = [
+      { type: 'engaged', rule: r, player: 'p1', card: 'c1', enemyDice: [] },
+      { type: 'exchangeEnded', rule: r, player: 'p1' },
+    ]
+    const base = lastEngagement(log)!
+    const s = {
+      ...base,
+      dealt: 3,
+      defeated: 1,
+      healed: 2,
+      experience: 2,
+      currency: 3,
+      hitsTaken: 1,
+      toGuard: 1,
+    }
+    expect(resultLines(s)).toEqual({
+      dealt: 'You dealt 3 damage and defeated 1 enemy.',
+      healed: 'You healed 2 health.',
+      gained: ['You gained 2 experience and 3 currency.'],
+      hit: '1 enemy die hit you: 1 to guard, 0 to health.',
+    })
+    expect(resultLines(s, 'Player 2')).toEqual({
+      dealt: 'Player 2 dealt 3 damage and defeated 1 enemy.',
+      healed: 'Player 2 healed 2 health.',
+      gained: ['All players gained 2 experience.', 'Player 2 gained 3 currency.'],
+      hit: '1 enemy die hit Player 2: 1 to guard, 0 to health.',
+    })
+    expect(resultLines(base, 'Player 2')).toEqual({
+      dealt: 'Player 2 dealt no damage.',
+      healed: null,
+      gained: [],
+      hit: 'No enemy die hit Player 2.',
+    })
   })
 
   it('counts cancelled enemy dice and names them only when there are some', () => {
