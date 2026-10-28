@@ -64,6 +64,11 @@ describe('piece names', () => {
     expect(presets.map(presetName).join(' ')).not.toMatch(ENGINE_ID)
     expect(presetName(presets[0]!, 0)).toMatch(/^Preset 1: \d+ cards, hand of \d+$/)
   })
+
+  it('/config says "1 card" for a one-card preset', () => {
+    const one = { id: 'one', handSize: 1, cards: [{ card: 'c', quantity: 1 }] }
+    expect(presetName(one, 1)).toBe('Preset 2: 1 card, hand of 1')
+  })
 })
 
 /** Every line of player text a /play state produces: choices, banner, log, map titles. */

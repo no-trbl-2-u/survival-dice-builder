@@ -537,10 +537,10 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
 
 type Preset = { id: string; handSize: number; cards: { card: string; quantity: number }[] }
 
-/** A deck preset by its place in the list and its deck: "Preset 2: 10 cards, hand of 5". */
+/** A deck preset by its place in the list and its deck: "Preset 2: 10 cards, hand of 5", "1 card". */
 export function presetName(preset: Preset, index: number): string {
   const size = (preset.cards ?? []).reduce((n, c) => n + (Number(c.quantity) || 0), 0)
-  return `Preset ${index + 1}: ${size} cards, hand of ${preset.handSize}`
+  return `Preset ${index + 1}: ${size} ${size === 1 ? 'card' : 'cards'}, hand of ${preset.handSize}`
 }
 
 /** Deck presets: each one's id, hand size, and cards (picked from the card list) with quantities. */

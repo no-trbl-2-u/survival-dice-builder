@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-28 (pass 180, cloud tick)
+
+Pass 179's Defenses row fix shipped (0ffe618). No issues are open for triage. The critique gate is closed (pass 30 ran 7 commits ago, same day) and so is the expand gate (pass 19 ran 13 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited the shipped pages fresh. The /debug Enemies row keeps "grunt" in lower case, as bearings writes it. Shipped this pass: a voice LOW on /config. The deck preset label said "Preset 1: 1 cards, hand of 5" for a one-card preset, while the start text for the same deck says "1 card". A 2.7 (impact 3, ease 9). The label now says "1 card" for a count of 1, pinned by a new unit test. Next in line: the log's "deck shuffled (1 cards)" line for a one-card deck, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /config: a one-card deck preset reads "1 cards" (audit, pass 180)
+- category: voice
+- impact: 3
+- ease: 9
+- next: say "1 card" for a count of 1, as the start text does
+- issue: #235
+- fixed: (this commit)
+
+### [ ] [2.4] /play log: the deck shuffled line says "(1 cards)" for a one-card deck (audit, pass 180)
+- category: voice
+- impact: 3
+- ease: 8
+- next: say "1 card" for a count of 1
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-28 (pass 179, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 30 ran 6 commits ago, same day) and so is the expand gate (pass 19 ran 12 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left in the queue wait for /oversight, so this tick takes the last pass 30 LOW row. On /debug the State panel Defenses row printed the kind in lower case ("d1 tower, 3 health, at (1,0)"), while the Impassable hexes row in the same panel capitalises terrain. The kind now goes through the same `capital` helper: "d1 Tower, 3 health, at (1,0)". The id prefix stays, as a /debug choice. A new StateView test pins the row.
