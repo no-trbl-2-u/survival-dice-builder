@@ -71,6 +71,7 @@ export function DiceTray({
       </Suspense>
     ) : null
   const allPlaced = ex.dice.length > 0 && ex.dice.every((_, i) => placed.has(i))
+  const allPlacedNote = `All ${state.players.length === 1 ? 'your' : owner} dice are on Skills.`
   const items = ex.dice.map((d, i) => {
     if (placed.has(i)) return null
     const keep = has({ type: 'toggleKeep', die: i })
@@ -116,11 +117,7 @@ export function DiceTray({
         <ul className={styles.engageDiceList} aria-label={`${owner} dice`}>
           {items}
         </ul>
-        {allPlaced ? (
-          <p className={styles.engageFeltNote}>
-            All {state.players.length === 1 ? 'your' : owner} dice are on Skills.
-          </p>
-        ) : null}
+        {allPlaced ? <p className={styles.engageFeltNote}>{allPlacedNote}</p> : null}
       </>
     )
   }
@@ -138,7 +135,7 @@ export function DiceTray({
         </>
       ) : null}
       <ul className={styles.dice}>{items}</ul>
-      {allPlaced ? <p className={styles.muted}>All your dice are on Skills.</p> : null}
+      {allPlaced ? <p className={styles.muted}>{allPlacedNote}</p> : null}
       {controls ? (
         <div className={styles.row}>
           {stop ? (

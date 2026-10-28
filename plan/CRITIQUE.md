@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the Exchanges Dice panel says "All your dice are on Skills." under a "Player 2's dice" heading
-- pass: 30 (commit c326fd1)
-- viewport: desktop
-- category: voice
-- observation: The engagement version of this note was made owner-aware; the Exchanges Combat version two lines below was not.
-- evidence: `apps/web/src/play/DiceTray.tsx:141` `All your dice are on Skills.` against `:121` `All {state.players.length === 1 ? 'your' : owner} dice are on Skills.`
-- suggested fix: Use the same owner-aware text at `:141` as at `:121`.
-- source: web-fetch
-
 ### [LOW] /play — the delayed-return log line capitalises "You" after a colon
 - pass: 30 (commit c326fd1)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play — the Exchanges Dice panel says "All your dice are on Skills." under a "Player 2's dice" heading
+- pass: 30 (commit c326fd1)
+- viewport: desktop
+- category: voice
+- observation: The engagement version of this note was made owner-aware; the Exchanges Combat version two lines below was not.
+- evidence: `apps/web/src/play/DiceTray.tsx:141` `All your dice are on Skills.` against `:121` `All {state.players.length === 1 ? 'your' : owner} dice are on Skills.`
+- suggested fix: Use the same owner-aware text at `:141` as at `:121`.
+- source: web-fetch
+- issue: #230
+- fixed: (this commit)
 
 ### [x] [MED] /play — the engagement result screen still says "You" in co-op and gives shared experience to one player
 - pass: 30 (commit c326fd1)

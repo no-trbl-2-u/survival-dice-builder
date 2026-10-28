@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-28 (pass 175, cloud tick)
+
+No issues are open for triage. The critique gate is closed (pass 30 ran 2 commits ago, same day) and so is the expand gate (pass 19 ran 8 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left in the queue wait for /oversight, so this tick takes the cheapest pass 30 LOW row. In co-op the Dice panel's note under "Player 2's dice" still read "All your dice are on Skills." once every die was placed; the engagement window's copy of the note already named the seat. Both now share one owner-aware line: "All Player 2's dice are on Skills." in co-op, "All your dice are on Skills." solo. New DiceTray tests pin both wordings in and out of the engagement window.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play: the Dice panel all-placed note says "your" under "Player 2's dice" (critique LOW, pass 30)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: use the owner-aware note in both places
+- issue: #230
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-28 (pass 174, cloud tick)
 
 No issues are open for triage. The critique gate is closed (pass 30 ran 1 commit ago, same day) and so is the expand gate (pass 19 ran 7 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Pass 30 filed one MED row that does not wait for /oversight: in co-op the engagement result still said "You dealt", "You healed", "You gained" under vitals that name "Player 2", and it gave the shared experience to "You" while the log says "All players gain". The result lines and the verdict now name the seat in co-op ("Player 2 dealt 3 damage.", "1 enemy die hit Player 2", "Player 2 was knocked out."), experience goes to "All players" and currency to the seat, and the heal line reads "healed 2 health." The seat comes from the engagement's own `engaged` event. Solo wording is unchanged apart from the heal line. The lines move into a pure `resultLines` helper in `engageView.ts`, pinned by new tests for both wordings.

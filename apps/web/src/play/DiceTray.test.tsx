@@ -176,3 +176,42 @@ describe('the engagement dice list names whose dice they are (16.3)', () => {
     )
   })
 })
+
+describe('the all-placed note names whose dice they are (16.3)', () => {
+  const note = (state: GameState, bare: boolean) => {
+    const ex = state.exchange!
+    const assignments = ex.dice.map((_, die) => ({
+      die,
+      skill: 's',
+      use: 0,
+      slot: die,
+      asFace: 'Sword' as const,
+    }))
+    const placed = { ...state, exchange: { ...ex, assignments } }
+    const { container } = render(
+      <DiceTray
+        state={placed}
+        legal={[]}
+        act={() => {}}
+        selected={[]}
+        toggle={() => {}}
+        enemyDice={false}
+        controls={false}
+        bare={bare}
+      />,
+    )
+    return within(container).getByText(/dice are on Skills\.$/).textContent
+  }
+
+  it('reads "All your dice" solo, in and out of the engagement window', () => {
+    expect(note(engagedState(), false)).toBe('All your dice are on Skills.')
+    expect(note(engagedState(), true)).toBe('All your dice are on Skills.')
+  })
+
+  it('reads "All Player 2\'s dice" on the second player\'s turn in co-op', () => {
+    const state = engagedState()
+    const coop = { ...state, players: [state.players[0]!, state.players[0]!], current: 1 }
+    expect(note(coop, false)).toBe("All Player 2's dice are on Skills.")
+    expect(note(coop, true)).toBe("All Player 2's dice are on Skills.")
+  })
+})
