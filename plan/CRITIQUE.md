@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the delayed-return log line capitalises "You" after a colon
-- pass: 30 (commit c326fd1)
-- viewport: desktop
-- category: voice
-- observation: In solo it reads "No free base hex: You stay knocked out this round." Other log lines use lower case after a colon.
-- evidence: `apps/web/src/play/describeEvent.ts:231` `No free base hex: ${who(event.player)} ...`
-- suggested fix: Reorder to "You stay knocked out this round: no free base hex." (co-op: "Player 2 stays ...").
-- source: web-fetch
-
 ### [LOW] /play — the blocked-step log line names the terrain, then hedges "it is Lake or Mountain"
 - pass: 30 (commit c326fd1)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play — the delayed-return log line capitalises "You" after a colon
+- pass: 30 (commit c326fd1)
+- viewport: desktop
+- category: voice
+- observation: In solo it reads "No free base hex: You stay knocked out this round." Other log lines use lower case after a colon.
+- evidence: `apps/web/src/play/describeEvent.ts:231` `No free base hex: ${who(event.player)} ...`
+- suggested fix: Reorder to "You stay knocked out this round: no free base hex." (co-op: "Player 2 stays ...").
+- source: web-fetch
+- issue: #231
+- fixed: (this commit)
 
 ### [x] [LOW] /play — the Exchanges Dice panel says "All your dice are on Skills." under a "Player 2's dice" heading
 - pass: 30 (commit c326fd1)

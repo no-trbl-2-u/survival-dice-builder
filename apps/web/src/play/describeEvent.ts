@@ -228,6 +228,6 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'playerReturned':
       return `${who(event.player)} ${solo(names) ? 'are' : 'is'} back with ${event.health} health: choose a free base hex.`
     case 'returnDelayed':
-      return `No free base hex: ${who(event.player)} ${solo(names) ? 'stay' : 'stays'} knocked out this round.`
+      return `${who(event.player)} ${solo(names) ? 'stay' : 'stays'} knocked out this round: no free base hex.`
   }
 }

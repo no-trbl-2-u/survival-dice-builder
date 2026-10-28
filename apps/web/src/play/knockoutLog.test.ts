@@ -25,3 +25,22 @@ describe('knockout text in the log', () => {
     expect(knockout(0, 0)).toBe('You are knocked out: back at the next round start.')
   })
 })
+
+const delayed = (players: number, player: string) =>
+  describeEvent(
+    { type: 'returnDelayed', rule: '4.6', player } as never,
+    {
+      content: defaultContent,
+      players: Array.from({ length: players }, (_, i) => ({ id: `p${i + 1}` })),
+    } as never,
+  )
+
+describe('delayed return text in the log', () => {
+  it('leads with the player and gives the reason after the colon in a solo run', () => {
+    expect(delayed(1, 'p1')).toBe('You stay knocked out this round: no free base hex.')
+  })
+
+  it('names the player who stays out in co-op', () => {
+    expect(delayed(2, 'p2')).toBe('Player 2 stays knocked out this round: no free base hex.')
+  })
+})
