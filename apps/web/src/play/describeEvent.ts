@@ -163,15 +163,15 @@ export function describeEvent(event: GameEvent, names: Names): string {
       // Materials are per player, so the line names who paid: "Player 2 builds a Tower on ...".
       return `${who(event.player)} ${s('build')} ${article(upper(event.kind))} on ${place(names, event.hex)} for ${materials(event.cost)}.`
     case 'defenseDamaged':
-      return `${defenseLabel(names, event.defense)} takes ${event.amount} damage (health ${event.health}).`
+      return `${upper(defenseLabel(names, event.defense))} takes ${event.amount} damage (health ${event.health}).`
     case 'defenseRemoved':
-      return `${defenseLabel(names, event.defense)} is destroyed.`
+      return `${upper(defenseLabel(names, event.defense))} is destroyed.`
     case 'roundAdvanced':
       return `Round ${event.round}.`
     case 'enemyMoved':
       return `${upper(enemyLabel(names, event.enemy))} moves to ${place(names, event.to)}${event.target ? ` toward ${target(event.target)}` : ''}.`
     case 'towerAttacked':
-      return `${defenseLabel(names, event.tower)} hits ${enemyLabel(names, event.enemy)} for ${event.damage} damage.`
+      return `${upper(defenseLabel(names, event.tower))} hits ${enemyLabel(names, event.enemy)} for ${event.damage} damage.`
     case 'structureAttacked':
       return `${upper(enemyLabel(names, event.enemy))} attacks ${event.structure === 'base' ? 'the base' : defenseLabel(names, event.structure)} for ${event.damage} damage.`
     case 'baseDamaged':

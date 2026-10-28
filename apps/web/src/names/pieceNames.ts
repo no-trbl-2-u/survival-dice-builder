@@ -96,17 +96,25 @@ function defenseKind(n: NameSource, d: Defense): string {
   return n.content.defenses.find((x) => x.id === d.kind)?.name ?? d.kind
 }
 
+/** A destroyed defense from its build in the log, named where it stood. */
+function pastDefense(n: NameSource, id: string): string | undefined {
+  for (const e of n.log ?? []) {
+    if (e.type === 'defenseBuilt' && e.defense === id) {
+      const name = n.content.defenses.find((x) => x.id === e.kind)?.name ?? e.kind
+      return kindFromBase(n, name, e.hex)
+    }
+  }
+  return undefined
+}
+
 /**
  * A defense for the log and short labels: "Tower 1 hex west of the base center", with "(2)"
- * when two read the same; "a defense" once it is gone.
+ * when two read the same. Once it is gone the log names it where it stood; "a defense" when
+ * there is no log.
  */
 export function defenseNameFromBase(n: NameSource, id: string): string {
-  const base = baseCentre(n.map)
-  const place = (d: Defense) => {
-    const away = stepsAway(base, d.hex)
-    return `${defenseKind(n, d)} ${away === 'here' ? 'at the base center' : `${away} of the base center`}`
-  }
-  return withOrdinal(n.defenses ?? [], id, place) ?? 'a defense'
+  const place = (d: Defense) => kindFromBase(n, defenseKind(n, d), d.hex)
+  return withOrdinal(n.defenses ?? [], id, place) ?? pastDefense(n, id) ?? 'a defense'
 }
 
 /** True when a hex is on the map (a known place). */

@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-28 (pass 184, cloud tick)
+
+Pass 183's miniature limit line fix shipped (9e43257). No issues are open for triage. The critique gate is closed (pass 30 ran 10 commits ago, under 24 hours) and so is the expand gate (pass 19 ran 17 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited the /play log lines fresh. The log names pieces from the current state, so once a Tower was destroyed every line about it fell back to "a defense": "a defense is destroyed.", "a defense takes 2 damage (health 0).", lower case at the start of the sentence and with the Tower's name and place lost. A 3.6 (impact 4, ease 9). A destroyed defense is now named where it stood, from its build event in the log, and the defense lines start with a capital, pinned by a new log test. Next in line: the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play log: a destroyed Tower reads "a defense is destroyed." (audit, pass 184)
+- category: voice
+- impact: 4
+- ease: 9
+- next: name a destroyed defense from its build in the log; capitalise the defense lines
+- issue: #239
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-28 (pass 183, cloud tick)
 
 Pass 182's preset editor size line fix shipped (2298840). No issues are open for triage. The critique gate is closed (pass 30 ran 10 commits ago, under 24 hours) and so is the expand gate (pass 19 ran 16 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited the /play log lines fresh. The miniature limit line named the grunt by relabelling the new elite: once that elite was defeated it read "Miniature limit: the elite becomes an elite.", after the elite moved it gave the elite's new place, and an ordinal meant for another elite could land on the grunt. A 3.6 (impact 4, ease 9). The line now names the grunt from the event's own hex through a shared `kindFromBase`, pinned by a new log test. Next in line: the rows that wait for /oversight.
