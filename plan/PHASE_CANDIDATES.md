@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-27 at commit cef1649
-> Pass count: 19
+> Last pass: 2026-10-29 at commit c1e3be6
+> Pass count: 20
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -196,6 +196,8 @@
   - One seat-name helper for the 6 sites.
 - estimated phases: 1
 - conflicts: none. The verify gate grows; keep the 4-seat browser run short (seeded, a few rounds), per standing rule 3.
+- re-evidence (expand pass 20): 5 of the 17 `fix:` commits since pass 19 named the seat on one /play surface at a time (616b528 Hand, 659ad23 Skills and Dice headings, c326fd1 engagement window, 7d951e7 engagement result, 9e64aa5 all-placed note), each with its own "You" or "Player N" logic. Critique pass 31 filed the next one: `apps/web/src/play/DiceTray.tsx:191-192` still says "next to you" and "they hit you" under "Player 2's dice". The seat-name helper in this candidate's scope is what would stop the drip.
+- last re-evidenced: 2026-10-29
 - ruling audit: rows 6, 52-54 (decided), 55, 68 (proposed) checked; tests pin today's readings and mark row 68 unsettled. No conflict. Loop scope: in for engine and bot tests; e2e and the helper are web (minor).
 
 ### [ ] [score 4.0] Keyboard and screen-reader proof: a full run by keyboard and an automated audit on every route
@@ -294,10 +296,27 @@
 - estimated phases: 1
 - conflicts: none. UI copy and tests; no rule or engine change. Overlaps Considered "Count words from one helper" (pass 18): the table would use that helper if it exists.
 - ruling audit: no rule rows. Loop scope: in (tests, UI copy).
+- re-evidence (expand pass 20): 6 of the 17 `fix:` commits since pass 19 went to `apps/web/src/play/describeEvent.ts`, again one line family per commit (fd4ccf6 delayed return, b6447bb blocked step, 418b03c deck shuffled, 9e43257 miniature limit, 293e981 destroyed Tower, c1e3be6 starter returned). `apps/web/src/play/` now holds 14 `*Log.test.ts` files (10 at pass 19); `describeEvent.ts` still has 63 `case` lines. Critique pass 31 filed 3 more log rows (enemy named where it stands now, MED; rule tag "Draft pool (designer 2026-10-09)", LOW; "3 left" with no unit, LOW). Score 3.0 to 4.0 for the repeat.
+- last re-evidenced: 2026-10-29
+
+### [ ] [score 4.0] A log line never changes after it happens: each /play line is described from the state when it happened
+- proposed: 2026-10-29, expand pass 20
+- source signals:
+  - `apps/web/src/play/PlayLog.tsx:19` renders every shown line as `describeEvent(e, state)` with the current state, so a line about a piece reads that piece as it is now, not as it was.
+  - Commit pattern: 3 of the 17 `fix:` commits since pass 19 patched this cause one line family at a time: 9e43257 (miniature limit, named from `kindFromBase`), 293e981 (destroyed Tower, named where it stood), c1e3be6 (starter returned: the card was gone before the line named it, so the engine's `starterReturned` event in `packages/engine/src/events/events.ts` had to grow the card definition).
+  - Critique pass 31 [MED]: an enemy move line names the enemy from the hex it just moved to, and older lines about the same enemy change wording each time it moves (`describeEvent.ts:172` ignores `event.from`). Still pending.
+- rationale: a log that rewrites its own past is wrong in a way no single-line test catches, because each test renders one event against one state. Each fix so far has found one more event type that needs the old state; the remaining enemy, defense and tile lines are next.
+- proposed scope: 1 phase.
+  - Decide one mechanism: events carry what their line needs (the piece's kind and hex at the time), or the web log describes each line once, against the state it was appended to, and keeps the text.
+  - One test plays a seeded solo and 2-seat run, renders each line when it is appended and again at the end, and fails when any line changed.
+  - The enemy move row (critique pass 31) and any other line the test finds get fixed in the same phase.
+- estimated phases: 1
+- conflicts: none on rules. Event payloads may grow (engine types only, still plain data, no rule change). Overlaps "The /play log read once, end to end" above: same file, different cause (that one checks wording per event type, this one checks a line against time). Promote together or fold one into the other.
+- ruling audit: no rule rows. Loop scope: in (tests, UI copy, engine event types).
 
 ## Considered (below threshold)
 
-- [score 2.0] **Count words from one helper** (pass 18). Signals: 2 "1 material" fixes in this window (a3ab1b5 for the log, d274490 for the upgrade hint), each adding its own `materials` helper (`apps/web/src/play/describeEvent.ts:22`, `apps/web/src/play/BasePanel.tsx:17`); 35 inline `n === 1 ? '...'` ternaries across `apps/web/src` and `packages/content/src` (non-test). 5 of the 13 `fix:` commits this window went to /play log and Base panel copy, and each shipped with its own test. One shared plural helper in content, used by the log, the Base panel and ruleText, is one `/iterate` tick, not a phase. Not filed.
+- [score 2.5] **Count words from one helper** (pass 18; pass 20: 3 more "1 card" fixes, cbc36d2 and 2298840 on /config, 418b03c in the log; inline `=== 1 ? '` ternaries in non-test web and content source now 41, up from 35. Still one helper's worth of work; belongs in the log table candidate if promoted). Signals: 2 "1 material" fixes in this window (a3ab1b5 for the log, d274490 for the upgrade hint), each adding its own `materials` helper (`apps/web/src/play/describeEvent.ts:22`, `apps/web/src/play/BasePanel.tsx:17`); 35 inline `n === 1 ? '...'` ternaries across `apps/web/src` and `packages/content/src` (non-test). 5 of the 13 `fix:` commits this window went to /play log and Base panel copy, and each shipped with its own test. One shared plural helper in content, used by the log, the Base panel and ruleText, is one `/iterate` tick, not a phase. Not filed.
 - [score 2.0] **One voice check over every served page** (pass 17). Signals: 5 serial-comma fixes in 10 days (f5a5c17, 448f6e6, 054341d, 3917feb, 4af48ad), each on a surface the last guard did not scan, and each adding its own guard (ruleText, HomePage, DecisionsPage and /config tests). A scan of the 5 prerendered pages at 4af48ad finds no list that keeps the serial comma. The 4 hits the shared pattern finds are clause joins ("Each round is Prepare, then Combat, and each phase ...", "... a gathering node hex, and the node still works"), so a site-wide guard in `apps/web/e2e/static.spec.ts` needs a clause allowlist and would still miss /play and /debug, which are shells. Fits `/iterate` if a sixth surface regresses. Not filed.
 - [shipped] **/config help as one template** (score 2.0 at pass 12): the three rows shipped one at a time: ed27a5c (open-question citations link to /decisions), 90858d8 (baseline named one way), 0426919 (deck total and hand labelled apart). Pass 12 note follows.
   - (pass 12) Critique pass 17 and pass 13 leave three /config copy rows pending (plain-text "(open question N)" citations, the baseline named three ways, a deck preset's "Hand size" next to the deck total), after 3 /config fixes shipped this window (2e92a76, 44df05f, d916c91). The citation and baseline rows share a cause with "Player text on Spec v2" and belong in that phase if promoted; the preset label is one line for `/iterate`. Not filed separately.
