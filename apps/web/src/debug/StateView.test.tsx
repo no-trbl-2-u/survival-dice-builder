@@ -17,17 +17,17 @@ function moving(materials: number, hexesLeft: number): GameState {
 }
 
 describe('debug state counts', () => {
-  it('says "1 material" and "1 hex left" for a count of 1', () => {
+  it('says "1 material" and "1 movement left" for a count of 1', () => {
     render(<StateView state={moving(1, 1)} />)
     const text = screen.getByTestId('state').textContent ?? ''
-    expect(text).toContain('Move: 1 hex left')
+    expect(text).toContain('Move: 1 movement left')
     expect(text).toContain(', 1 material,')
   })
 
   it('keeps the plural for other counts', () => {
     render(<StateView state={moving(4, 2)} />)
     const text = screen.getByTestId('state').textContent ?? ''
-    expect(text).toContain('Move: 2 hexes left')
+    expect(text).toContain('Move: 2 movement left')
     expect(text).toContain(', 4 materials,')
   })
 })

@@ -32,3 +32,31 @@ describe('enemy move text in the log', () => {
     expect(line([], [spawned])).toMatch(/^Elite 2 hexes north of the base center moves to /)
   })
 })
+
+describe('player move text in the log', () => {
+  const solo = (e: unknown) =>
+    describeEvent(e as never, { content: defaultContent, map, enemies: [] } as never)
+
+  it('names the unit of what is left after a step', () => {
+    const moved = {
+      type: 'moved',
+      rule: '6.5',
+      player: 'p1',
+      to: { q: 0, r: -1 },
+      cost: 2,
+      hexesLeft: 3,
+    }
+    expect(solo(moved)).toMatch(/^You move to .*\(cost 2, 3 movement left\)\.$/)
+  })
+
+  it('names the same unit after a blocked reveal step', () => {
+    const blocked = {
+      type: 'revealStepBlocked',
+      rule: '6.7',
+      player: 'p1',
+      hex: { q: 0, r: -1 },
+      hexesLeft: 1,
+    }
+    expect(solo(blocked)).toMatch(/it is impassable \(1 movement left\)\.$/)
+  })
+})

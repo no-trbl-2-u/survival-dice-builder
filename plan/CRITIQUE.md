@@ -72,7 +72,8 @@
 - suggested fix: Name the seat in co-op: "Enemy dice next to Player 2 (locked: they hit Player 2 after the Skills)".
 - source: web-fetch
 
-### [LOW] /play and /debug — "3 left" after a move has no unit, and /debug calls it hexes
+## Done
+### [x] [LOW] /play and /debug — "3 left" after a move has no unit, and /debug calls it hexes
 - pass: 31 (commit 293e981)
 - viewport: desktop
 - category: comprehension
@@ -80,8 +81,9 @@
 - evidence: `apps/web/src/play/describeEvent.ts:157` `(cost ${event.cost}, ${event.hexesLeft} left)`; `:186` `it is impassable (${event.hexesLeft} left)`; `apps/web/src/debug/StateView.tsx:110` `Move: ${count(active.hexesLeft, 'hex', 'hexes')} left`
 - suggested fix: Name the unit the rules and the Move card use (for example "3 movement left") in both the log and /debug.
 - source: web-fetch
+- issue: #243
+- fixed: (this commit). The log reads "(cost 2, 3 movement left)" and "it is impassable (1 movement left)", /debug reads "Move: 3 movement left", and the Move banner "(1 movement left)", the word the engine uses for the Move budget.
 
-## Done
 ### [x] [LOW] /play — the log's rule tag prints "rule Draft pool (designer 2026-10-09)"
 - pass: 31 (commit 293e981)
 - viewport: desktop

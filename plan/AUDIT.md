@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-29 (pass 188, cloud tick)
+
+Pass 187's rule tag fix shipped (2f58448). No issues are open for triage. The critique gate is closed (pass 31 ran 5 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 3 commits ago). Phase 35 is still blocked on the designer's Skills session. Top of the queue: after a step the log read "(cost 2, 3 left)" and "it is impassable (1 left)" with no unit, while /debug called the same number "hexes", which is wrong when a step costs 2. Rescored to 3.2 (impact 4: the line after every step on /play, plus /debug and the Move banner; ease 8; no bias: LOW). All three now read "movement left", the word the engine uses for the Move budget, pinned by new move log tests and the updated /debug and banner tests. Next in line: the rows that wait for /oversight and the co-op enemy-dice subheading.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play and /debug: "3 left" after a move has no unit (critique LOW, pass 31)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: name the unit ("movement left") in the log, /debug, and the Move banner
+- issue: #243
+- fixed: (this commit)
+
+### [ ] [2.4] /play: in co-op the enemy-dice subheading still says "you" (critique LOW, pass 31)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: name the seat in co-op in `DiceTray.tsx`
+
 # Site audit — 2026-10-29 (pass 187, cloud tick)
 
 Pass 186's enemy move line fix shipped (66e0753). No issues are open for triage. The critique gate is closed (pass 31 ran 4 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 2 commits ago). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the /play log tagged a Skill going to the draft pool "rule Draft pool (designer 2026-10-09)" and engagement events "rule engagements", neither a section a reader can look up. A 3.0 (impact 3, ease 8, no bias: LOW). The log note now reads "rule 7.8" for a section of the written rules and "not in the written rules" for any other tag, the /debug reading, pinned by a new test. Next in line: the rows that wait for /oversight and the low critique rows (co-op enemy-dice subheading, the unit of "3 left").

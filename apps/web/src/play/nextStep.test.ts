@@ -89,11 +89,11 @@ describe('nextStep', () => {
       config: { ...config, combat: { ...config.combat, moveCostNextToEnemy: 2 } },
     }
     expect(nextStep(surcharge, legalActions(surcharge)).step).toBe(
-      'Move: click a highlighted hex (1 left), or stop moving. ' +
+      'Move: click a highlighted hex (1 movement left), or stop moving. ' +
         'A hex next to an enemy costs 2, more than you have left',
     )
     expect(nextStep(moving, legalActions(moving)).step).toBe(
-      'Move: click a highlighted hex (1 left), or stop moving',
+      'Move: click a highlighted hex (1 movement left), or stop moving',
     )
   })
 

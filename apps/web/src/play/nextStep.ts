@@ -55,7 +55,7 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
         : ''
     return step(
       state.phase === 'combat' ? 'Combat' : 'Prepare',
-      `Move: click a highlighted hex (${hexesLeft} left), or stop moving${costly}`,
+      `Move: click a highlighted hex (${hexesLeft} movement left), or stop moving${costly}`,
     )
   }
   if (state.active?.kind === 'build') {

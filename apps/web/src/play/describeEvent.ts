@@ -159,7 +159,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'enemySpawned':
       return `${upper(article(event.kind))} appears on ${place(names, event.hex)}${event.spilled ? ' (node taken: nearest empty hex)' : ''}.`
     case 'moved':
-      return `${who(event.player)} ${s('move')} to ${place(names, event.to)} (cost ${event.cost}, ${event.hexesLeft} left).`
+      return `${who(event.player)} ${s('move')} to ${place(names, event.to)} (cost ${event.cost}, ${event.hexesLeft} movement left).`
     case 'gathered':
       return event.amount === 0
         ? `${who(event.player)} ${s('gather')} nothing: gather on an unspent gathering node with no enemy on it.`
@@ -189,7 +189,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'figurePlaced':
       return `${who(event.player)} ${solo(names) ? 'start' : 'starts'} on ${place(names, event.hex)}.`
     case 'revealStepBlocked':
-      return `${who(event.player)} cannot enter ${place(names, event.hex)}: it is impassable (${event.hexesLeft} left).`
+      return `${who(event.player)} cannot enter ${place(names, event.hex)}: it is impassable (${event.hexesLeft} movement left).`
     case 'experienceGained':
       // Experience is shared (8.1), so the line names everyone, beside a currency line that names one.
       return `${solo(names) ? 'You' : 'All players'} gain ${event.amount} experience (now ${event.experience}).`

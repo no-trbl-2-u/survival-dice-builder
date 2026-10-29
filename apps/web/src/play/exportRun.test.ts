@@ -222,7 +222,7 @@ describe('describeEvent', () => {
     }
     const blocked = { type: 'revealStepBlocked', player: 'p1', hex: { q: 9, r: 9 }, hexesLeft: 1 }
     expect(describeEvent(blocked as never, state)).toMatch(
-      /^You cannot enter .+: it is impassable \(1 left\)\.$/,
+      /^You cannot enter .+: it is impassable \(1 movement left\)\.$/,
     )
   })
 
