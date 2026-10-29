@@ -2,7 +2,7 @@ import { canFire, enemiesInRange, type Action, type GameState } from '@survival/
 import { faceIcon } from '../icons/gameIcons.ts'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { skillText } from './effectText.ts'
-import { whose } from './PlayerPanel.tsx'
+import { seatName, whose } from './PlayerPanel.tsx'
 import styles from './Play.module.css'
 import { firstOf, fitsNoSkill, ofType, planPlacement } from './targets.ts'
 
@@ -38,6 +38,7 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
   const placed = new Set(ex?.assignments.map((a) => a.die) ?? [])
   const freeFaces = ex ? ex.dice.filter((_, i) => !placed.has(i)).map((d) => d.face) : []
   const diceHeld = ex ? ex.dice.length : p.dice
+  const holder = state.players.length === 1 ? undefined : seatName(state, state.current)
   // The enemies that rolled dice in this engagement (the "vs" in the modal title).
   const engagedIds = ex?.engage ? new Set(ex.engage.enemyDice.map((d) => d.enemy)) : undefined
   return (
@@ -148,7 +149,7 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
                 {skillText(skill.effect, state.config.combat.model)}
               </span>
               {skill.faces.length > diceHeld ? (
-                <NeedsDice needed={skill.faces.length} held={diceHeld} />
+                <NeedsDice needed={skill.faces.length} held={diceHeld} holder={holder} />
               ) : null}
               {skill.effect.kind === 'damage'
                 ? (() => {
@@ -174,14 +175,21 @@ export function SkillBoard({ state, legal, act, actAll, selected, confirmButton 
 
 /**
  * A Skill with more slots than the player has dice: how many it needs, and how to get more.
+ * Solo it speaks to "you"; in co-op it names the seat (`holder`, "Player 2").
  * Phones (760px and narrower) and an engagement with 5 or more Skills show the short form,
  * screen readers always hear the long one.
  */
-function NeedsDice({ needed, held }: Readonly<{ needed: number; held: number }>) {
+function NeedsDice({
+  needed,
+  held,
+  holder,
+}: Readonly<{ needed: number; held: number; holder?: string | undefined }>) {
   return (
     <span className={styles.needsDice}>
       <span className={styles.reachLong}>
-        Needs {needed} dice, you have {held}. A level up or a card that adds a die gives you more.
+        {holder
+          ? `Needs ${needed} dice, ${holder} has ${held}. A level up or a card that adds a die gives ${holder} more.`
+          : `Needs ${needed} dice, you have ${held}. A level up or a card that adds a die gives you more.`}
       </span>
       <span className={styles.reachShort} aria-hidden="true">
         needs {needed} dice

@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-29 (pass 191, cloud tick)
+
+Pass 190's co-op Base panel fix shipped (d0fc360). No issues are open for triage. The critique gate is closed (pass 31 ran 8 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 6 commits ago). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the item pass 190 saw while auditing. In co-op a Skill with more slots than the seat has dice said "Needs 2 dice, you have 1. A level up or a card that adds a die gives you more." under a "Player 2's Skills" heading. Rescored to 3.2 (impact 4: shows on every co-op turn at 1 die with a 2-slot Skill, the same reach as the Base panel lines; ease 8; no bias: LOW). It now reads "Player 2 has 1 ... gives Player 2 more" in co-op and "you have" solo, through `seatName`, pinned by a new SkillBoard test. Next in line: the rows that wait for /oversight; the critique queue holds no other actionable row.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play: in co-op the Skill dice hint says "you have 1" (audit LOW)
+- category: voice
+- impact: 4
+- ease: 8
+- next: name the seat in co-op in `SkillBoard.tsx`
+- issue: #246
+- fixed: (this commit)
+
 # Site audit — 2026-10-29 (pass 190, cloud tick)
 
 Pass 189's co-op enemy-dice subheading fix shipped (c98bce0). No issues are open for triage. The critique gate is closed (pass 31 ran 7 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 5 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited /play fresh for co-op wording. In co-op the Base panel still spoke to "you" about one seat's purse: the Build-card hint ended "You have 2 materials." and the Shop offers heading read "you have 3 currency", beside Hand, Skills and Dice panels that name the seat. A 3.2 (impact 4: both lines show on every co-op turn; ease 8; no bias: LOW). Both now read "Player 2 has" in co-op and "You have" solo, through `seatName`, pinned by new BasePanel tests. Seen while auditing: the Skill hint "Needs 2 dice, you have 1." in `SkillBoard.tsx` has the same co-op gap. Next in line: that hint, then the rows that wait for /oversight.

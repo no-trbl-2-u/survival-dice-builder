@@ -68,14 +68,17 @@ describe('SkillBoard: a Skill that fires more than once', () => {
 })
 
 describe('SkillBoard: a Skill with more slots than the player has dice', () => {
-  function game(startingDice: number): GameState {
-    return createGame(
+  function game(startingDice: number, players = 1): GameState {
+    const s = createGame(
       {
         ...config,
         player: { ...config.player, startingDice, starterSkills: ['strike', 'spark-burst'] },
       },
       4,
+      defaultContent,
+      { players },
     )
+    return players === 1 ? s : { ...s, current: 1 }
   }
   const renderBoard = (state: GameState) =>
     render(
@@ -98,6 +101,16 @@ describe('SkillBoard: a Skill with more slots than the player has dice', () => {
     ).toBeTruthy()
     const strike = screen.getByText('Strike:').closest('li')!
     expect(within(strike).queryByText(/Needs \d dice/)).toBeNull()
+  })
+
+  it('in co-op, names the seat whose dice they are', () => {
+    renderBoard(game(1, 2))
+    const spark = screen.getByText('Spark Burst:').closest('li')!
+    expect(
+      within(spark).getByText(
+        'Needs 2 dice, Player 2 has 1. A level up or a card that adds a die gives Player 2 more.',
+      ),
+    ).toBeTruthy()
   })
 
   it('at 2 dice, no Skill says it needs more', () => {
