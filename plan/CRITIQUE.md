@@ -63,15 +63,6 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [LOW] /play — the log's rule tag prints "rule Draft pool (designer 2026-10-09)"
-- pass: 31 (commit 293e981)
-- viewport: desktop
-- category: voice
-- observation: A Skill going to the draft pool is tagged with a build note and a date, and engagement events read "rule engagements". Neither is a section a reader can look up. /debug already shows such tags as "not in the written rules" (fixed for #209).
-- evidence: `packages/engine/src/progression/draft.ts:107` `rule: 'Draft pool (designer 2026-10-09)'`; `apps/web/src/play/PlayLog.tsx:20-21` `rule {ruleCitation(e.rule)}`; `apps/web/src/debug/EventLog.tsx` ruleTag
-- suggested fix: Use the /debug ruleTag reading in the /play log: the section number, or "not in the written rules".
-- source: web-fetch
-
 ### [LOW] /play — in co-op the enemy-dice subheading still says "you" under "Player 2's dice"
 - pass: 31 (commit 293e981)
 - viewport: desktop
@@ -91,6 +82,16 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] /play — the log's rule tag prints "rule Draft pool (designer 2026-10-09)"
+- pass: 31 (commit 293e981)
+- viewport: desktop
+- category: voice
+- observation: A Skill going to the draft pool is tagged with a build note and a date, and engagement events read "rule engagements". Neither is a section a reader can look up. /debug already shows such tags as "not in the written rules" (fixed for #209).
+- evidence: `packages/engine/src/progression/draft.ts:107` `rule: 'Draft pool (designer 2026-10-09)'`; `apps/web/src/play/PlayLog.tsx:20-21` `rule {ruleCitation(e.rule)}`; `apps/web/src/debug/EventLog.tsx` ruleTag
+- suggested fix: Use the /debug ruleTag reading in the /play log: the section number, or "not in the written rules".
+- source: web-fetch
+- issue: #242
+- fixed: (this commit) — the /play log note reads "rule 7.8" for a section of the written rules and "not in the written rules" for any other tag, the /debug reading
 
 ### [x] [MED] /play — the log names an enemy by where it stands now, not where it stood when the line happened
 - pass: 31 (commit 293e981)

@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-29 (pass 187, cloud tick)
+
+Pass 186's enemy move line fix shipped (66e0753). No issues are open for triage. The critique gate is closed (pass 31 ran 4 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 2 commits ago). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the /play log tagged a Skill going to the draft pool "rule Draft pool (designer 2026-10-09)" and engagement events "rule engagements", neither a section a reader can look up. A 3.0 (impact 3, ease 8, no bias: LOW). The log note now reads "rule 7.8" for a section of the written rules and "not in the written rules" for any other tag, the /debug reading, pinned by a new test. Next in line: the rows that wait for /oversight and the low critique rows (co-op enemy-dice subheading, the unit of "3 left").
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /play log: the rule tag prints "rule Draft pool (designer 2026-10-09)" (critique LOW, pass 31)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: use the /debug ruleTag reading in the /play log
+- issue: #242
+- fixed: (this commit)
+
+### [ ] [2.4] /play: in co-op the enemy-dice subheading still says "you" (critique LOW, pass 31)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: name the seat in co-op in `DiceTray.tsx`
+
+### [ ] [2.4] /play and /debug: "3 left" after a move has no unit (critique LOW, pass 31)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: name the unit ("movement left") in the log and /debug
+
 # Site audit — 2026-10-29 (pass 186, cloud tick)
 
 Pass 185's returned-starter line fix shipped (c1e3be6), and expand pass 20 filed 1 candidate (2585c5b). No issues are open for triage. The critique gate is closed (pass 31 ran 3 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 1 commit ago). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the enemy move line named the enemy by the hex it had just moved to, so "Grunt 1 hex north of the base center moves to Plains (0,-1)" said the grunt was already where it was going, and older move lines changed their wording each time it moved. A 4.5 (impact 5, ease 6, bias x1.5). The line now names the enemy where it stood before the move, from `event.from`, with its kind from the map or the log, pinned by a new log test. The damage and attack lines still name an enemy where it stands now, since their events carry no hex. Next in line: the rows that wait for /oversight and the low critique rows (rule tag, co-op enemy-dice subheading).
