@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-29 (pass 192, cloud tick)
+
+Pass 191's co-op Skill dice hint fix shipped (39716c8). No issues are open for triage. The critique gate is closed (pass 31 ran 9 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 7 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited /play fresh for co-op wording. In co-op the Skill draft and starter-return dialog never said whose choice it was: the modal covers the banner and the Players panel that name the seat, its accessible name was only "Skill draft: keep a Skill" or "Return a starter card", and its options said "(from your pool)" and "(you have 4)". A 3.2 (impact 4: every co-op level up drafts once per seat, and a co-op card buy can return a starter; ease 8; no bias: LOW). In co-op the dialog now shows "Player 2" above the title and in its accessible name, and the options read "(from Player 2's pool)" and "(Player 2 has 4)", as the engagement modal does; solo is unchanged. Pinned by new DecisionDialog tests. Next in line: the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play: in co-op the draft and return dialog does not name the seat (audit LOW)
+- category: voice
+- impact: 4
+- ease: 8
+- next: name the seat in co-op in `DecisionDialog.tsx`
+- issue: #247
+- fixed: (this commit)
+
 # Site audit — 2026-10-29 (pass 191, cloud tick)
 
 Pass 190's co-op Base panel fix shipped (d0fc360). No issues are open for triage. The critique gate is closed (pass 31 ran 8 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 6 commits ago). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the item pass 190 saw while auditing. In co-op a Skill with more slots than the seat has dice said "Needs 2 dice, you have 1. A level up or a card that adds a die gives you more." under a "Player 2's Skills" heading. Rescored to 3.2 (impact 4: shows on every co-op turn at 1 die with a 2-slot Skill, the same reach as the Base panel lines; ease 8; no bias: LOW). It now reads "Player 2 has 1 ... gives Player 2 more" in co-op and "you have" solo, through `seatName`, pinned by a new SkillBoard test. Next in line: the rows that wait for /oversight; the critique queue holds no other actionable row.

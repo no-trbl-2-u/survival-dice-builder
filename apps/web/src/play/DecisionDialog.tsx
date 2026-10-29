@@ -3,6 +3,7 @@ import type { Action, GameState } from '@survival/engine'
 import { useEffect, useRef } from 'react'
 import { cardText, skillText } from './effectText.ts'
 import styles from './Play.module.css'
+import { seatName } from './PlayerPanel.tsx'
 import { starterChoices } from './starterChoices.ts'
 import { ofType } from './targets.ts'
 
@@ -10,7 +11,9 @@ type Props = Readonly<{ state: GameState; legal: readonly Action[]; act: (a: Act
 
 /**
  * A modal for choices that block the run: the Skill draft (keep one; then, with full slots, the
- * Skill it replaces) and the replace-starter return. Focus moves to its first button.
+ * Skill it replaces) and the replace-starter return. Focus moves to its first button. In co-op
+ * it names whose choice it is ("Player 2"), since the modal covers the banner and the Players
+ * panel that say whose turn it is.
  */
 export function DecisionDialog({ state, legal, act }: Props) {
   const ref = useRef<HTMLDivElement>(null)
@@ -33,6 +36,7 @@ export function DecisionDialog({ state, legal, act }: Props) {
     : replaces.length
       ? draftFullText(state.config, skill(state.draft?.kept ?? '')?.name ?? '')
       : 'Return a starter card'
+  const seat = state.players.length > 1 ? seatName(state, state.current) : null
   return (
     <div className={styles.backdrop}>
       <div
@@ -40,8 +44,13 @@ export function DecisionDialog({ state, legal, act }: Props) {
         className={styles.dialog}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="decision-title"
+        aria-labelledby={seat ? 'decision-seat decision-title' : 'decision-title'}
       >
+        {seat ? (
+          <p id="decision-seat" className={styles.muted}>
+            {seat}
+          </p>
+        ) : null}
         <h2 id="decision-title" className={styles.panelTitle}>
           {title}
         </h2>
@@ -54,7 +63,7 @@ export function DecisionDialog({ state, legal, act }: Props) {
                 Draft {skill(a.skill)?.name} ({skill(a.skill)?.faces.join(' + ')})
                 <span className={styles.muted}>{effectOf(a.skill)}</span>
                 {state.draft?.fromPool?.includes(a.skill) ? (
-                  <span className={styles.muted}> (from your pool)</span>
+                  <span className={styles.muted}> (from {seat ? `${seat}'s` : 'your'} pool)</span>
                 ) : null}
               </button>
             </li>
@@ -71,7 +80,7 @@ export function DecisionDialog({ state, legal, act }: Props) {
             <li key={def.id}>
               <button type="button" onClick={() => act(action)}>
                 Return {def.name}
-                {copies > 1 && ` (you have ${copies})`}
+                {copies > 1 && ` (${seat ? `${seat} has` : 'you have'} ${copies})`}
                 <span className={styles.muted}>: {cardText(def, state.config)}</span>
               </button>
             </li>
