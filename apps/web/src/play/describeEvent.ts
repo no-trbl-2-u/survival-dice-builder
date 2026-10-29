@@ -33,7 +33,7 @@ const tileName = (n: Names, id: string) => n.content.tiles.find((t) => t.id === 
 const upgradeName = (n: Names, id: string) =>
   n.content.upgrades.find((u) => u.id === id)?.name ?? id
 
-/** A card instance (`c3`) by its card name; a returned starter is gone, so it stays generic. */
+/** A card instance (`c3`) by its card name; "a card" once the instance is gone. */
 function cardLabel(n: Names, instance: string): string {
   for (const p of n.players ?? []) {
     const found = [...p.hand, ...p.deck, ...p.discard, ...p.inPlay].find((c) => c.id === instance)
@@ -201,7 +201,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'cardBought':
       return `${who(event.player)} ${s('buy')} ${cardName(names, event.card)} for ${event.cost} currency.`
     case 'starterReturned':
-      return `Starter card ${cardLabel(names, event.card)} leaves the game.`
+      return `${who(event.player)} ${s('return')} ${cardName(names, event.def)}: it leaves the game.`
     case 'draftStarted':
       return `Skill draft: ${event.options.map((s) => skillName(names, s)).join(' or ')}.`
     case 'skillDrafted':

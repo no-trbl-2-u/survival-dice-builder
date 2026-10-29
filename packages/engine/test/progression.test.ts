@@ -209,8 +209,17 @@ describe('Shop (6.8, 11.5, 13.1, 18.1)', () => {
     expect(state.pendingReturn).toBe('p1')
     const returns = legalActions(state)
     expect(returns.every((a) => a.type === 'returnStarter')).toBe(true)
-    const after = applyAction(state, returns[0]!).state
+    const returned = applyAction(state, returns[0]!)
+    const after = returned.state
     const p = after.players[0]!
+    const card = [...state.players[0]!.deck, ...state.players[0]!.discard].find(
+      (c) => c.id === (returns[0] as { card: string }).card,
+    )!
+    // The event names the card's definition: the instance is gone from the state.
+    expect(returned.events.find((e) => e.type === 'starterReturned')).toMatchObject({
+      card: card.id,
+      def: card.def,
+    })
     // 10 starter cards and 1 card in hand, +1 bought, -1 returned.
     expect([...p.deck, ...p.discard, ...p.hand]).toHaveLength(11)
     expect(after.pendingReturn).toBeNull()

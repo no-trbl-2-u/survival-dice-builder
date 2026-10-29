@@ -63,15 +63,6 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [MED] /play — the returned-starter log line always reads "Starter card a card leaves the game."
-- pass: 31 (commit 293e981)
-- viewport: desktop
-- category: comprehension
-- observation: The engine takes the card out of the deck and discard pile before the line is written, so the name lookup finds nothing and falls back to "a card". In co-op the line also does not say which player returned it.
-- evidence: `apps/web/src/play/describeEvent.ts:204` `Starter card ${cardLabel(names, event.card)} leaves the game.`; `describeEvent.ts:42` falls back to 'a card'; `packages/engine/src/progression/shop.ts:113-119` removes the card, then emits `starterReturned` with the instance id
-- suggested fix: Carry the card's definition id on the `starterReturned` event and write "Player 2 returns Rest: it leaves the game." ("You return ..." solo).
-- source: web-fetch
-
 ### [MED] /play — the log names an enemy by where it stands now, not where it stood when the line happened
 - pass: 31 (commit 293e981)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — the returned-starter log line always reads "Starter card a card leaves the game."
+- pass: 31 (commit 293e981)
+- viewport: desktop
+- category: comprehension
+- observation: The engine takes the card out of the deck and discard pile before the line is written, so the name lookup finds nothing and falls back to "a card". In co-op the line also does not say which player returned it.
+- evidence: `apps/web/src/play/describeEvent.ts:204` `Starter card ${cardLabel(names, event.card)} leaves the game.`; `describeEvent.ts:42` falls back to 'a card'; `packages/engine/src/progression/shop.ts:113-119` removes the card, then emits `starterReturned` with the instance id
+- suggested fix: Carry the card's definition id on the `starterReturned` event and write "Player 2 returns Rest: it leaves the game." ("You return ..." solo).
+- source: web-fetch
+- issue: #240
+- fixed: (this commit)
 
 ### [x] [LOW] /debug — the State panel Defenses row prints the kind in lower case ("d1 tower")
 - pass: 30 (commit c326fd1)

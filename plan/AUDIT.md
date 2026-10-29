@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-29 (pass 185, cloud tick)
+
+Pass 184's destroyed Tower fix shipped (293e981), and critique pass 31 filed 5 rows (06a684f). No issues are open for triage. The critique gate is closed (pass 31 ran 1 commit ago) and so is the expand gate (pass 19 ran 19 commits and about 42 hours ago, under 20 and 48). Phase 35 is still blocked on the designer's Skills session. Top of the new critique rows: the returned-starter log line always read "Starter card a card leaves the game.", because the engine removes the card before the line names it, and in co-op it did not say who returned it. A 6.0 (impact 5, ease 8, bias x1.5). The `starterReturned` event now carries the card's definition, and the line reads "Player 2 returns Rest: it leaves the game." ("You return ..." solo), pinned by an engine test and a new log test. Next in line: the enemy move line that names an enemy by where it stands now (critique MED, pass 31).
+
+## Top 5 findings (scored)
+
+### [x] [6.0] /play log: the returned-starter line reads "Starter card a card leaves the game." (critique MED, pass 31, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 8
+- next: carry the card definition on `starterReturned`; name the player and the card
+- issue: #240
+- fixed: (this commit)
+
+### [ ] [4.5] /play log: an enemy is named by where it stands now, not where it stood (critique MED, pass 31, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 6
+- next: name the moving enemy from `event.from` with `kindFromBase`
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-28 (pass 184, cloud tick)
 
 Pass 183's miniature limit line fix shipped (9e43257). No issues are open for triage. The critique gate is closed (pass 30 ran 10 commits ago, under 24 hours) and so is the expand gate (pass 19 ran 17 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited the /play log lines fresh. The log names pieces from the current state, so once a Tower was destroyed every line about it fell back to "a defense": "a defense is destroyed.", "a defense takes 2 damage (health 0).", lower case at the start of the sentence and with the Tower's name and place lost. A 3.6 (impact 4, ease 9). A destroyed defense is now named where it stood, from its build event in the log, and the defense lines start with a capital, pinned by a new log test. Next in line: the rows that wait for /oversight.

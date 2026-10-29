@@ -109,6 +109,8 @@ export function buyCard(state: GameState, card: string): Step {
  */
 export function returnStarter(state: GameState, cardId: string): Step {
   const player = currentPlayer(state)
+  // The card's name is gone once it leaves, so the event carries its definition.
+  const returned = [...player.deck, ...player.discard].find((c) => c.id === cardId)
   const next = updateCurrentPlayer(state, (p) => ({
     ...p,
     deck: p.deck.filter((c) => c.id !== cardId),
@@ -116,6 +118,14 @@ export function returnStarter(state: GameState, cardId: string): Step {
   }))
   return [
     { ...next, pendingReturn: null },
-    [{ type: 'starterReturned', rule: '18.1', player: player.id, card: cardId }],
+    [
+      {
+        type: 'starterReturned',
+        rule: '18.1',
+        player: player.id,
+        card: cardId,
+        def: returned?.def ?? cardId,
+      },
+    ],
   ]
 }

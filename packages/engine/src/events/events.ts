@@ -81,7 +81,7 @@ export type GameEvent = Readonly<
     | { type: 'upgradeBought'; player: string; upgrade: string; cost: number; baseHealth: number }
     | { type: 'offerAdded'; card: string; level: string }
     | { type: 'cardBought'; player: string; card: string; instance: string; cost: number }
-    | { type: 'starterReturned'; player: string; card: string }
+    | { type: 'starterReturned'; player: string; card: string; def: string }
     | { type: 'draftStarted'; player: string; level: string; options: readonly string[] }
     | { type: 'skillDrafted'; player: string; skill: string }
     | { type: 'draftSkipped'; player: string }
