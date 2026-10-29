@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-29 (pass 193, cloud tick)
+
+Pass 192's co-op draft and return dialog fix shipped (2814744). No issues are open for triage. The critique gate is closed (pass 31 ran 10 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 8 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited /play fresh for co-op wording. In co-op the Base panel's Shop hint still read "Buy a card while your figure is on the Base tile, with enough currency." under a Shop heading that says "Player 2 has 3 currency". A 3.2 (impact 4: the hint shows on every co-op turn after Shop I when the seat cannot buy, the same reach as the Base panel lines fixed at d0fc360; ease 8; no bias: LOW). It now reads "while Player 2's figure is on the Base tile" in co-op and "your figure" solo, through `whose`, pinned by a new BasePanel test. Seen while auditing: the card strip's back button is labelled "Keep the card in your hand" under a "Player 2's hand" list in co-op (screen readers only). Next in line: that label, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play: in co-op the Shop hint says "your figure" (audit LOW)
+- category: voice
+- impact: 4
+- ease: 8
+- next: name the seat in co-op in `BasePanel.tsx`
+- issue: #248
+- fixed: (this commit)
+
+### [ ] [1.6] /play: in co-op the card strip's back button says "your hand" (audit LOW)
+- category: voice
+- impact: 2
+- ease: 8
+- next: name the seat in co-op in `CardStrip.tsx` `OptionChips`
+
 # Site audit — 2026-10-29 (pass 192, cloud tick)
 
 Pass 191's co-op Skill dice hint fix shipped (39716c8). No issues are open for triage. The critique gate is closed (pass 31 ran 9 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 7 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited /play fresh for co-op wording. In co-op the Skill draft and starter-return dialog never said whose choice it was: the modal covers the banner and the Players panel that name the seat, its accessible name was only "Skill draft: keep a Skill" or "Return a starter card", and its options said "(from your pool)" and "(you have 4)". A 3.2 (impact 4: every co-op level up drafts once per seat, and a co-op card buy can return a starter; ease 8; no bias: LOW). In co-op the dialog now shows "Player 2" above the title and in its accessible name, and the options read "(from Player 2's pool)" and "(Player 2 has 4)", as the engagement modal does; solo is unchanged. Pinned by new DecisionDialog tests. Next in line: the rows that wait for /oversight.

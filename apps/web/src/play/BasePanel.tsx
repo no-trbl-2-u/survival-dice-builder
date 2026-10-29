@@ -9,7 +9,7 @@ import { GameIcon } from '../icons/GameIcon.tsx'
 import { cardText } from './effectText.ts'
 import { MilestoneList } from './MilestoneList.tsx'
 import styles from './Play.module.css'
-import { seatName } from './PlayerPanel.tsx'
+import { seatName, whose } from './PlayerPanel.tsx'
 import { ofType } from './targets.ts'
 
 type Props = Readonly<{ state: GameState; legal: readonly Action[]; act: (a: Action) => void }>
@@ -116,7 +116,8 @@ export function BasePanel({ state, legal, act }: Props) {
         <>
           {buys.length === 0 ? (
             <p className={styles.muted}>
-              Buy a card while your figure is on the Base tile, with enough currency.
+              Buy a card while {state.players.length === 1 ? 'your' : whose(state)} figure is on the
+              Base tile, with enough currency.
             </p>
           ) : null}
           <ul className={styles.offers}>

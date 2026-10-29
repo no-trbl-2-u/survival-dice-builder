@@ -103,4 +103,17 @@ describe('whose materials and currency the Base panel counts (16.3)', () => {
       /Player 2 has\s+3\s+currency/,
     )
   })
+
+  it('the Shop hint names whose figure stands on the Base tile', () => {
+    const game = { ...createGame(defaultContent.config, 1), shopOffers: ['starter-move'] }
+    const solo = game.players[0]!
+    render(<BasePanel state={game} legal={[]} act={() => {}} />)
+    expect(screen.getByText(/Buy a card while/).textContent).toMatch(/while your figure is on the/)
+    cleanup()
+    const coop = { ...game, current: 1, players: [solo, solo] }
+    render(<BasePanel state={coop} legal={[]} act={() => {}} />)
+    const hint = screen.getByText(/Buy a card while/).textContent ?? ''
+    expect(hint).toMatch(/while Player 2's figure is on the/)
+    expect(hint).not.toContain('your')
+  })
 })
