@@ -1,7 +1,7 @@
 # Critique log
 
-> Last pass: 2026-10-28 at commit c326fd1
-> Pass count: 30
+> Last pass: 2026-10-29 at commit 293e981
+> Pass count: 31
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
@@ -62,6 +62,51 @@
 - evidence: session 2026-10-09; `docs/reports/phase-23-defeated-dice.md`; `tools/sim/src/run.test.ts` pins unchanged by 256bdb4; `packages/bot/src/policy.ts`
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
+
+### [MED] /play — the returned-starter log line always reads "Starter card a card leaves the game."
+- pass: 31 (commit 293e981)
+- viewport: desktop
+- category: comprehension
+- observation: The engine takes the card out of the deck and discard pile before the line is written, so the name lookup finds nothing and falls back to "a card". In co-op the line also does not say which player returned it.
+- evidence: `apps/web/src/play/describeEvent.ts:204` `Starter card ${cardLabel(names, event.card)} leaves the game.`; `describeEvent.ts:42` falls back to 'a card'; `packages/engine/src/progression/shop.ts:113-119` removes the card, then emits `starterReturned` with the instance id
+- suggested fix: Carry the card's definition id on the `starterReturned` event and write "Player 2 returns Rest: it leaves the game." ("You return ..." solo).
+- source: web-fetch
+
+### [MED] /play — the log names an enemy by where it stands now, not where it stood when the line happened
+- pass: 31 (commit 293e981)
+- viewport: desktop
+- category: comprehension
+- observation: A move line names the enemy by the hex it just moved to ("Grunt 1 hex north of the base center moves to Plains (0,-1)"), and older lines about the same enemy change their wording each time it moves. Recent commits fixed this for destroyed Towers and the miniature limit, but not for enemies.
+- evidence: `apps/web/src/play/describeEvent.ts:172` uses `enemyLabel(names, event.enemy)` and ignores `event.from`; `apps/web/src/play/PlayLog.tsx` re-renders every line with the current state; `apps/web/src/names/pieceNames.ts` names from the enemy's current hex
+- suggested fix: Name the moving enemy from `event.from` with `kindFromBase`, as the miniature limit line does; give other enemy lines the hex at the time of the event.
+- source: web-fetch
+
+### [LOW] /play — the log's rule tag prints "rule Draft pool (designer 2026-10-09)"
+- pass: 31 (commit 293e981)
+- viewport: desktop
+- category: voice
+- observation: A Skill going to the draft pool is tagged with a build note and a date, and engagement events read "rule engagements". Neither is a section a reader can look up. /debug already shows such tags as "not in the written rules" (fixed for #209).
+- evidence: `packages/engine/src/progression/draft.ts:107` `rule: 'Draft pool (designer 2026-10-09)'`; `apps/web/src/play/PlayLog.tsx:20-21` `rule {ruleCitation(e.rule)}`; `apps/web/src/debug/EventLog.tsx` ruleTag
+- suggested fix: Use the /debug ruleTag reading in the /play log: the section number, or "not in the written rules".
+- source: web-fetch
+
+### [LOW] /play — in co-op the enemy-dice subheading still says "you" under "Player 2's dice"
+- pass: 31 (commit 293e981)
+- viewport: desktop
+- category: voice
+- observation: The Dice panel heading names the seat in co-op, but the subheading under it speaks to "you". Same mismatch as the fixed "All your dice are on Skills." note.
+- evidence: `apps/web/src/play/DiceTray.tsx:191-192` "Enemy dice: none (no enemy next to you)" / "Enemy dice from adjacent enemies (locked: they hit you after your Skills)"
+- suggested fix: Name the seat in co-op: "Enemy dice next to Player 2 (locked: they hit Player 2 after the Skills)".
+- source: web-fetch
+
+### [LOW] /play and /debug — "3 left" after a move has no unit, and /debug calls it hexes
+- pass: 31 (commit 293e981)
+- viewport: desktop
+- category: comprehension
+- observation: The move and blocked-step log lines end "(cost 2, 3 left)" and "it is impassable (1 left)". A step can cost 2, so the number is movement, not hexes, yet /debug prints "Move: 3 hexes left" for the same number.
+- evidence: `apps/web/src/play/describeEvent.ts:157` `(cost ${event.cost}, ${event.hexesLeft} left)`; `:186` `it is impassable (${event.hexesLeft} left)`; `apps/web/src/debug/StateView.tsx:110` `Move: ${count(active.hexesLeft, 'hex', 'hexes')} left`
+- suggested fix: Name the unit the rules and the Move card use (for example "3 movement left") in both the log and /debug.
+- source: web-fetch
 
 ## Done
 
