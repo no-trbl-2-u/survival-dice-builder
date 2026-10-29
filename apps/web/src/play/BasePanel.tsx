@@ -9,12 +9,17 @@ import { GameIcon } from '../icons/GameIcon.tsx'
 import { cardText } from './effectText.ts'
 import { MilestoneList } from './MilestoneList.tsx'
 import styles from './Play.module.css'
+import { seatName } from './PlayerPanel.tsx'
 import { ofType } from './targets.ts'
 
 type Props = Readonly<{ state: GameState; legal: readonly Action[]; act: (a: Action) => void }>
 
 /** "1 material", "4 materials". */
 const materials = (n: number) => `${n} ${n === 1 ? 'material' : 'materials'}`
+
+/** Who holds the current player's purse: "You have" solo, "Player N has" in co-op. */
+const holder = (state: GameState): string =>
+  state.players.length === 1 ? 'You have' : `${seatName(state, state.current)} has`
 
 /**
  * The base board: health, the 2 upgrade tracks (bought, next, cost; Buy while a Build is active
@@ -90,15 +95,15 @@ export function BasePanel({ state, legal, act }: Props) {
       {upgrades.length === 0 && leftToBuy && player ? (
         <p className={styles.muted} data-testid="upgrade-hint">
           To buy an upgrade, stand on the Base tile and play a Build card, then pay its materials.
-          You have {materials(player.materials)}.
+          {holder(state)} {materials(player.materials)}.
         </p>
       ) : null}
       <h3 className={styles.subTitle}>
         Shop offers{' '}
         {player ? (
           <>
-            · you have <GameIcon name="currency" className={styles.currency} /> {player.currency}{' '}
-            currency
+            · {state.players.length === 1 ? 'you have' : holder(state)}{' '}
+            <GameIcon name="currency" className={styles.currency} /> {player.currency} currency
           </>
         ) : null}
       </h3>

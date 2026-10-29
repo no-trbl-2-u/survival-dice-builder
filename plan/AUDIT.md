@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-29 (pass 190, cloud tick)
+
+Pass 189's co-op enemy-dice subheading fix shipped (c98bce0). No issues are open for triage. The critique gate is closed (pass 31 ran 7 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 5 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited /play fresh for co-op wording. In co-op the Base panel still spoke to "you" about one seat's purse: the Build-card hint ended "You have 2 materials." and the Shop offers heading read "you have 3 currency", beside Hand, Skills and Dice panels that name the seat. A 3.2 (impact 4: both lines show on every co-op turn; ease 8; no bias: LOW). Both now read "Player 2 has" in co-op and "You have" solo, through `seatName`, pinned by new BasePanel tests. Seen while auditing: the Skill hint "Needs 2 dice, you have 1." in `SkillBoard.tsx` has the same co-op gap. Next in line: that hint, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play: in co-op the Base panel says "You have" for one seat's materials and currency (audit LOW)
+- category: voice
+- impact: 4
+- ease: 8
+- next: name the seat in co-op in `BasePanel.tsx`
+- issue: #245
+- fixed: (this commit)
+
+### [ ] [2.4] /play: in co-op the Skill dice hint says "you have 1" (audit LOW)
+- category: voice
+- impact: 3
+- ease: 8
+- next: name the seat in co-op in `SkillBoard.tsx`
+
 # Site audit — 2026-10-29 (pass 189, cloud tick)
 
 Pass 188's movement-left fix shipped (d77cf3d). No issues are open for triage. The critique gate is closed (pass 31 ran 6 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 4 commits ago). Phase 35 is still blocked on the designer's Skills session. Top of the queue: in co-op the enemy-dice subheading in the Dice panel said "no enemy next to you" and "they hit you after your Skills" under a "Player 2's dice" heading. Rescored to 3.2 (impact 4: the subheading on every engagement turn in co-op, the same reach as the all-placed note fixed at 9e64aa5; ease 8; no bias: LOW). The subheading now names the seat in co-op and still speaks to "you" solo, pinned by new DiceTray tests. Next in line: the rows that wait for /oversight; the critique queue holds no other actionable row.

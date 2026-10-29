@@ -76,3 +76,31 @@ describe('upgrade tiers no Build card can buy (rules 11.4, 17; row 78)', () => {
     expect(screen.queryByTestId('upgrade-reach')).toBeNull()
   })
 })
+
+describe('whose materials and currency the Base panel counts (16.3)', () => {
+  it('says "You have" solo', () => {
+    const game = createGame(defaultContent.config, 1)
+    render(<BasePanel state={game} legal={[]} act={() => {}} />)
+    expect(screen.getByTestId('upgrade-hint').textContent).toContain('You have 0 materials.')
+    expect(screen.getByRole('heading', { name: /Shop offers/ }).textContent).toMatch(
+      /you have\s+0\s+currency/,
+    )
+  })
+
+  it("names the seat on the second player's turn in co-op", () => {
+    const game = createGame(defaultContent.config, 1)
+    const solo = game.players[0]!
+    const coop = {
+      ...game,
+      current: 1,
+      players: [solo, { ...solo, materials: 2, currency: 3 }],
+    }
+    render(<BasePanel state={coop} legal={[]} act={() => {}} />)
+    const hint = screen.getByTestId('upgrade-hint').textContent ?? ''
+    expect(hint).toContain('Player 2 has 2 materials.')
+    expect(hint).not.toContain('You have')
+    expect(screen.getByRole('heading', { name: /Shop offers/ }).textContent).toMatch(
+      /Player 2 has\s+3\s+currency/,
+    )
+  })
+})
