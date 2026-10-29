@@ -193,12 +193,22 @@ export function CardStrip({
   )
 }
 
-/** The options of a card dropped on the felt: 1 chip each, plus a way back. */
+/**
+ * The options of a card dropped on the felt: 1 chip each, plus a way back.
+ *
+ * @param seat - whose hand the card goes back to in co-op ("Player 2"); null solo ("your hand").
+ */
 export function OptionChips({
   card,
   act,
   onDone,
-}: Readonly<{ card: StripCard; act: (a: Action) => void; onDone: () => void }>) {
+  seat = null,
+}: Readonly<{
+  card: StripCard
+  act: (a: Action) => void
+  onDone: () => void
+  seat?: string | null
+}>) {
   return (
     <div className={styles.optionChips} role="group" aria-label={`Play ${card.def.name} as`}>
       <strong className={styles.optionChipsName}>{card.def.name}</strong>
@@ -224,7 +234,7 @@ export function OptionChips({
       <button
         type="button"
         className={styles.optionChipsBack}
-        aria-label="Keep the card in your hand"
+        aria-label={`Keep the card in ${seat ? `${seat}'s` : 'your'} hand`}
         onClick={onDone}
       >
         ×

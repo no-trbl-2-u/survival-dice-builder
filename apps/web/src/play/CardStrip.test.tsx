@@ -2,7 +2,7 @@ import { defaultContent } from '@survival/content'
 import { legalActions } from '@survival/engine'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { CardStrip, pressMove, stripCards } from './CardStrip.tsx'
+import { CardStrip, OptionChips, pressMove, stripCards } from './CardStrip.tsx'
 import { forceEngagement } from './devEngage.ts'
 import { newRun } from './run.ts'
 
@@ -138,5 +138,24 @@ describe('the strip names whose hand it is (16.3)', () => {
     expect(name({ ...state, players: [state.players[0]!, state.players[0]!], current: 1 })).toBe(
       "Player 2's hand",
     )
+  })
+})
+
+describe('the option chips name whose hand the card goes back to (16.3)', () => {
+  const back = (seat: string | null) => {
+    const card = stripCards(usingDice(), legalActions(usingDice())).find((c) => c.plays.length > 0)
+    if (!card) throw new Error('no playable card')
+    const { container } = render(
+      <OptionChips card={card} act={() => {}} onDone={() => {}} seat={seat} />,
+    )
+    return container.querySelector('[aria-label^="Keep the card in"]')?.getAttribute('aria-label')
+  }
+
+  it('reads "your hand" solo', () => {
+    expect(back(null)).toBe('Keep the card in your hand')
+  })
+
+  it('names the seat in co-op', () => {
+    expect(back('Player 2')).toBe("Keep the card in Player 2's hand")
   })
 })

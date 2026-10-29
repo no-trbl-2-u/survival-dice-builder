@@ -287,7 +287,14 @@ function LiveView({
           data-drop={drag === 'none' ? undefined : drag}
         >
           <span className={styles.dropSlot} aria-hidden="true" />
-          {chosen ? <OptionChips card={chosen} act={act} onDone={() => setChoosing(null)} /> : null}
+          {chosen ? (
+            <OptionChips
+              card={chosen}
+              act={act}
+              onDone={() => setChoosing(null)}
+              seat={state.players.length > 1 ? seatName(state, state.current) : null}
+            />
+          ) : null}
           <RollPips
             used={ex.rollsUsed}
             max={state.config.combat.maxRolls}

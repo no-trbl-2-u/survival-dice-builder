@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-29 (pass 194, cloud tick)
+
+Pass 193's co-op Shop hint fix shipped (8809bb7). No issues are open for triage. The critique gate is closed (pass 31 ran 11 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 9 commits ago). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the item pass 193 saw while auditing. In co-op the × button that takes a dropped card back from the option chips was named "Keep the card in your hand", under a hand list named "Player 2's hand". Rescored as a11y to 3.0 (impact 3: the label is the button's only name, read on every co-op card drop with more than one option; ease 10: one prop, the seat name already at hand; no bias: LOW). It now reads "Keep the card in Player 2's hand" in co-op and "your hand" solo, through a `seat` prop the engagement modal fills from `seatName`, pinned by new CardStrip tests. Seen while auditing: the map figure's accessible name reads "P2's figure" in co-op, where the rest of the page says "Player 2's figure". Next in line: that label, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /play: in co-op the card chips' back button says "your hand" (audit LOW)
+- category: a11y
+- impact: 3
+- ease: 10
+- next: name the seat in co-op in `CardStrip.tsx` `OptionChips`
+- issue: #249
+- fixed: (this commit)
+
+### [ ] [1.8] /play: in co-op the map figure's accessible name says "P2's figure" (audit LOW)
+- category: a11y
+- impact: 2
+- ease: 9
+- next: use the seat name in `PlayMap.tsx` figure `aria-label`
+
 # Site audit — 2026-10-29 (pass 193, cloud tick)
 
 Pass 192's co-op draft and return dialog fix shipped (2814744). No issues are open for triage. The critique gate is closed (pass 31 ran 10 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 8 commits ago). Phase 35 is still blocked on the designer's Skills session. The critique queue holds only rows that wait for /oversight and the sim bot-policy row, so this pass audited /play fresh for co-op wording. In co-op the Base panel's Shop hint still read "Buy a card while your figure is on the Base tile, with enough currency." under a Shop heading that says "Player 2 has 3 currency". A 3.2 (impact 4: the hint shows on every co-op turn after Shop I when the seat cannot buy, the same reach as the Base panel lines fixed at d0fc360; ease 8; no bias: LOW). It now reads "while Player 2's figure is on the Base tile" in co-op and "your figure" solo, through `whose`, pinned by a new BasePanel test. Seen while auditing: the card strip's back button is labelled "Keep the card in your hand" under a "Player 2's hand" list in co-op (screen readers only). Next in line: that label, then the rows that wait for /oversight.
@@ -19,7 +39,7 @@ Pass 192's co-op draft and return dialog fix shipped (2814744). No issues are op
 - issue: #248
 - fixed: (this commit)
 
-### [ ] [1.6] /play: in co-op the card strip's back button says "your hand" (audit LOW)
+### [x] [1.6] /play: in co-op the card strip's back button says "your hand" (audit LOW)
 - category: voice
 - impact: 2
 - ease: 8
