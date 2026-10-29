@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-29 (pass 186, cloud tick)
+
+Pass 185's returned-starter line fix shipped (c1e3be6), and expand pass 20 filed 1 candidate (2585c5b). No issues are open for triage. The critique gate is closed (pass 31 ran 3 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 1 commit ago). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the enemy move line named the enemy by the hex it had just moved to, so "Grunt 1 hex north of the base center moves to Plains (0,-1)" said the grunt was already where it was going, and older move lines changed their wording each time it moved. A 4.5 (impact 5, ease 6, bias x1.5). The line now names the enemy where it stood before the move, from `event.from`, with its kind from the map or the log, pinned by a new log test. The damage and attack lines still name an enemy where it stands now, since their events carry no hex. Next in line: the rows that wait for /oversight and the low critique rows (rule tag, co-op enemy-dice subheading).
+
+## Top 5 findings (scored)
+
+### [x] [4.5] /play log: an enemy is named by where it stands now, not where it stood (critique MED, pass 31, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 6
+- next: name the moving enemy from `event.from` with `kindFromBase`
+- issue: #241
+- fixed: (this commit)
+
+### [ ] [3.0] /play log: the rule tag prints "rule Draft pool (designer 2026-10-09)" (critique LOW, pass 31)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: use the /debug ruleTag reading in the /play log
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: waits for /oversight
+
 # Site audit — 2026-10-29 (pass 185, cloud tick)
 
 Pass 184's destroyed Tower fix shipped (293e981), and critique pass 31 filed 5 rows (06a684f). No issues are open for triage. The critique gate is closed (pass 31 ran 1 commit ago) and so is the expand gate (pass 19 ran 19 commits and about 42 hours ago, under 20 and 48). Phase 35 is still blocked on the designer's Skills session. Top of the new critique rows: the returned-starter log line always read "Starter card a card leaves the game.", because the engine removes the card before the line names it, and in co-op it did not say who returned it. A 6.0 (impact 5, ease 8, bias x1.5). The `starterReturned` event now carries the card's definition, and the line reads "Player 2 returns Rest: it leaves the game." ("You return ..." solo), pinned by an engine test and a new log test. Next in line: the enemy move line that names an enemy by where it stands now (critique MED, pass 31).

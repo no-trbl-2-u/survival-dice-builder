@@ -63,15 +63,6 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [MED] /play — the log names an enemy by where it stands now, not where it stood when the line happened
-- pass: 31 (commit 293e981)
-- viewport: desktop
-- category: comprehension
-- observation: A move line names the enemy by the hex it just moved to ("Grunt 1 hex north of the base center moves to Plains (0,-1)"), and older lines about the same enemy change their wording each time it moves. Recent commits fixed this for destroyed Towers and the miniature limit, but not for enemies.
-- evidence: `apps/web/src/play/describeEvent.ts:172` uses `enemyLabel(names, event.enemy)` and ignores `event.from`; `apps/web/src/play/PlayLog.tsx` re-renders every line with the current state; `apps/web/src/names/pieceNames.ts` names from the enemy's current hex
-- suggested fix: Name the moving enemy from `event.from` with `kindFromBase`, as the miniature limit line does; give other enemy lines the hex at the time of the event.
-- source: web-fetch
-
 ### [LOW] /play — the log's rule tag prints "rule Draft pool (designer 2026-10-09)"
 - pass: 31 (commit 293e981)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — the log names an enemy by where it stands now, not where it stood when the line happened
+- pass: 31 (commit 293e981)
+- viewport: desktop
+- category: comprehension
+- observation: A move line names the enemy by the hex it just moved to ("Grunt 1 hex north of the base center moves to Plains (0,-1)"), and older lines about the same enemy change their wording each time it moves. Recent commits fixed this for destroyed Towers and the miniature limit, but not for enemies.
+- evidence: `apps/web/src/play/describeEvent.ts:172` uses `enemyLabel(names, event.enemy)` and ignores `event.from`; `apps/web/src/play/PlayLog.tsx` re-renders every line with the current state; `apps/web/src/names/pieceNames.ts` names from the enemy's current hex
+- suggested fix: Name the moving enemy from `event.from` with `kindFromBase`, as the miniature limit line does; give other enemy lines the hex at the time of the event.
+- source: web-fetch
+- issue: #241
+- fixed: (this commit). The move line names the enemy from `event.from` ("Grunt 2 hexes north of the base center moves to Plains (0,-1)."), so it reads the same after the enemy moves on or is defeated. The other enemy lines (damage, attack) still name the enemy where it stands now: their events carry no hex.
 
 ### [x] [MED] /play — the returned-starter log line always reads "Starter card a card leaves the game."
 - pass: 31 (commit 293e981)

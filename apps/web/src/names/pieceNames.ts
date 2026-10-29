@@ -82,6 +82,11 @@ export function enemyNameFromBase(n: NameSource, id: string): string {
   return withOrdinal(n.enemies ?? [], id, place) ?? pastKind(n, id) ?? 'enemy'
 }
 
+/** An enemy's kind, on the map or from the log; "enemy" when neither knows it. */
+export function enemyKind(n: NameSource, id: string): string {
+  return n.enemies?.find((e) => e.id === id)?.kind ?? pastKind(n, id) ?? 'enemy'
+}
+
 /**
  * A kind on a hex, placed from the base center: "grunt 2 hexes north of the base center". For a
  * piece the log names where it stood, not where it is now.

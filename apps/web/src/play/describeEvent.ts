@@ -1,6 +1,11 @@
 import { milestoneLabel } from '@survival/content'
 import { hexKey, type GameEvent, type GameState } from '@survival/engine'
-import { defenseNameFromBase, enemyNameFromBase, kindFromBase } from '../names/pieceNames.ts'
+import {
+  defenseNameFromBase,
+  enemyKind,
+  enemyNameFromBase,
+  kindFromBase,
+} from '../names/pieceNames.ts'
 import { hexLabel } from '../tiles/TileView.tsx'
 
 /** What the log needs to name ids: the content, plus the pieces in play (usually the state). */
@@ -169,7 +174,8 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'roundAdvanced':
       return `Round ${event.round}.`
     case 'enemyMoved':
-      return `${upper(enemyLabel(names, event.enemy))} moves to ${place(names, event.to)}${event.target ? ` toward ${target(event.target)}` : ''}.`
+      // Named where it stood before the move, so the line reads the same after it moves on.
+      return `${upper(kindFromBase(names, enemyKind(names, event.enemy), event.from))} moves to ${place(names, event.to)}${event.target ? ` toward ${target(event.target)}` : ''}.`
     case 'towerAttacked':
       return `${upper(defenseLabel(names, event.tower))} hits ${enemyLabel(names, event.enemy)} for ${event.damage} damage.`
     case 'structureAttacked':
