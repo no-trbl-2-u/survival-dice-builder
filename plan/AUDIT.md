@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-29 (pass 189, cloud tick)
+
+Pass 188's movement-left fix shipped (d77cf3d). No issues are open for triage. The critique gate is closed (pass 31 ran 6 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 4 commits ago). Phase 35 is still blocked on the designer's Skills session. Top of the queue: in co-op the enemy-dice subheading in the Dice panel said "no enemy next to you" and "they hit you after your Skills" under a "Player 2's dice" heading. Rescored to 3.2 (impact 4: the subheading on every engagement turn in co-op, the same reach as the all-placed note fixed at 9e64aa5; ease 8; no bias: LOW). The subheading now names the seat in co-op and still speaks to "you" solo, pinned by new DiceTray tests. Next in line: the rows that wait for /oversight; the critique queue holds no other actionable row.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play: in co-op the enemy-dice subheading still says "you" (critique LOW, pass 31)
+- category: external-critique (voice)
+- impact: 4
+- ease: 8
+- next: name the seat in co-op in `DiceTray.tsx`
+- issue: #244
+- fixed: (this commit)
+
 # Site audit — 2026-10-29 (pass 188, cloud tick)
 
 Pass 187's rule tag fix shipped (2f58448). No issues are open for triage. The critique gate is closed (pass 31 ran 5 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 3 commits ago). Phase 35 is still blocked on the designer's Skills session. Top of the queue: after a step the log read "(cost 2, 3 left)" and "it is impassable (1 left)" with no unit, while /debug called the same number "hexes", which is wrong when a step costs 2. Rescored to 3.2 (impact 4: the line after every step on /play, plus /debug and the Move banner; ease 8; no bias: LOW). All three now read "movement left", the word the engine uses for the Move budget, pinned by new move log tests and the updated /debug and banner tests. Next in line: the rows that wait for /oversight and the co-op enemy-dice subheading.

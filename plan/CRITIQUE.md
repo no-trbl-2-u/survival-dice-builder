@@ -63,7 +63,8 @@
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
 
-### [LOW] /play — in co-op the enemy-dice subheading still says "you" under "Player 2's dice"
+## Done
+### [x] [LOW] /play — in co-op the enemy-dice subheading still says "you" under "Player 2's dice"
 - pass: 31 (commit 293e981)
 - viewport: desktop
 - category: voice
@@ -71,8 +72,9 @@
 - evidence: `apps/web/src/play/DiceTray.tsx:191-192` "Enemy dice: none (no enemy next to you)" / "Enemy dice from adjacent enemies (locked: they hit you after your Skills)"
 - suggested fix: Name the seat in co-op: "Enemy dice next to Player 2 (locked: they hit Player 2 after the Skills)".
 - source: web-fetch
+- issue: #244
+- fixed: (this commit). In co-op the subheading reads "Enemy dice from enemies next to Player 2 (locked: they hit Player 2 after the Skills)" and "Enemy dice: none (no enemy next to Player 2)"; solo still speaks to "you".
 
-## Done
 ### [x] [LOW] /play and /debug — "3 left" after a move has no unit, and /debug calls it hexes
 - pass: 31 (commit 293e981)
 - viewport: desktop

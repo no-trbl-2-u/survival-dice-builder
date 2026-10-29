@@ -11,7 +11,7 @@ import { GameIcon } from '../icons/GameIcon.tsx'
 import { enemyFaceText } from './effectText.ts'
 import { enemyLabel, playerHex } from './engageView.ts'
 import styles from './Play.module.css'
-import { whose } from './PlayerPanel.tsx'
+import { seatName, whose } from './PlayerPanel.tsx'
 import { firstOf, placementsFor } from './targets.ts'
 
 /** Loaded only when 3D dice are on: three.js stays out of the main bundle. */
@@ -161,7 +161,8 @@ export function DiceTray({
 
 /**
  * The enemy dice of an engagement: black dice rolled once by the engaged enemy and every enemy
- * next to the player. Locked: they hit after the player's Skills.
+ * next to the player. Locked: they hit after the player's Skills. The heading says "you" solo
+ * and names the seat in co-op, like the Dice headings above it.
  */
 export function EnemyDice({
   state,
@@ -183,13 +184,16 @@ export function EnemyDice({
   // Dice that will not hit (`combat.engage.defeatedDice: "cancelled"`): the engine decides.
   const cancelled = new Set(rolls ? [] : cancelledEnemyDice(state))
   const gone = new Set(defeated)
+  const seat = state.players.length === 1 ? null : seatName(state, state.current)
   return (
     <div data-testid="enemy-dice" className={bare ? styles.engageDiceGroup : undefined}>
       {heading ? (
         <h3 className={styles.subTitle}>
           {dice.length === 0
-            ? 'Enemy dice: none (no enemy next to you)'
-            : 'Enemy dice from adjacent enemies (locked: they hit you after your Skills)'}
+            ? `Enemy dice: none (no enemy next to ${seat ?? 'you'})`
+            : seat
+              ? `Enemy dice from enemies next to ${seat} (locked: they hit ${seat} after the Skills)`
+              : 'Enemy dice from adjacent enemies (locked: they hit you after your Skills)'}
         </h3>
       ) : null}
       <ul

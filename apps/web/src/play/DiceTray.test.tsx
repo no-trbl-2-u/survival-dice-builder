@@ -148,6 +148,32 @@ describe('the Dice headings name whose dice they are (16.3)', () => {
   })
 })
 
+describe('the enemy dice heading names whose engagement it is (16.3)', () => {
+  const heading = (state: GameState) =>
+    render(<EnemyDice state={state} />).container.querySelector('h3')?.textContent
+
+  it('speaks to "you" solo', () => {
+    const state = engagedState()
+    expect(heading(state)).toBe(
+      'Enemy dice from adjacent enemies (locked: they hit you after your Skills)',
+    )
+    expect(heading({ ...state, exchange: { ...state.exchange!, engage: { enemyDice: [] } } })).toBe(
+      'Enemy dice: none (no enemy next to you)',
+    )
+  })
+
+  it("names the seat on the second player's turn in co-op", () => {
+    const state = engagedState()
+    const coop = { ...state, players: [state.players[0]!, state.players[0]!], current: 1 }
+    expect(heading(coop)).toBe(
+      'Enemy dice from enemies next to Player 2 (locked: they hit Player 2 after the Skills)',
+    )
+    expect(heading({ ...coop, exchange: { ...coop.exchange!, engage: { enemyDice: [] } } })).toBe(
+      'Enemy dice: none (no enemy next to Player 2)',
+    )
+  })
+})
+
 describe('the engagement dice list names whose dice they are (16.3)', () => {
   const name = (state: GameState) => {
     const { container } = render(
