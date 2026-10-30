@@ -139,9 +139,9 @@ describe('rule text from config', () => {
   })
 
   it('reveal: the step cost follows tiles.revealMoveCost', () => {
-    expect(revealText(base)).toMatch(/costs 1 hex of movement/)
+    expect(revealText(base)).toMatch(/costs 1 movement\./)
     const two = With((c) => ({ ...c, tiles: { ...c.tiles, revealMoveCost: 2 } }))
-    expect(revealText(two)).toMatch(/costs 2 hexes of movement/)
+    expect(revealText(two)).toMatch(/costs 2 movement\./)
   })
 
   it('spawning: a new tile delay is named (row 66)', () => {

@@ -6,7 +6,7 @@ test('/config: each field has a label, help with its rules section, and plain op
   await page.goto('/config')
   const cost = page.getByLabel('Move cost next to an enemy', { exact: true })
   await expect(cost).toHaveAttribute('min', '1')
-  await expect(cost).toHaveAccessibleDescription(/Hexes a Move pays .* Rules 6\.9\./)
+  await expect(cost).toHaveAccessibleDescription(/Movement a Move pays .* Rules 6\.9\./)
   const blocked = page.getByLabel('Blocked enemy', { exact: true })
   await expect(blocked.locator('option:checked')).toHaveText('Move toward the next nearest target')
   await expect(page.getByRole('group', { name: 'Designer rulings' })).toBeVisible()

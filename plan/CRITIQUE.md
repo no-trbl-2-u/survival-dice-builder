@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / and /config — Move cost is still given in hexes, not movement
-- pass: 32 (commit a97bccc)
-- viewport: desktop
-- category: voice
-- observation: Pass 31 made "movement" the unit of the Move budget in the log, /debug and the Move banner. The home page map item and one /config help line still give the cost in hexes, while another /config field already says "Movement".
-- evidence: Home, The map: "the step costs 1 hex of movement." (`packages/content/src/ruleText.ts`). /config Move cost next to an enemy: "Hexes a Move pays to enter a hex next to an enemy." /config Movement to reveal a tile: "Movement a step off the map edge costs." (`packages/content/data/config.meta.json`)
-- suggested fix: Write "the step costs 1 movement" and start the move-cost help with "Movement a Move pays to enter a hex next to an enemy."
-- source: web-fetch
-
 ### [LOW] /decisions — game terms change case inside the page
 - pass: 32 (commit a97bccc)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: user
 
 ## Done
+### [x] [LOW] / and /config — Move cost is still given in hexes, not movement
+- pass: 32 (commit a97bccc)
+- viewport: desktop
+- category: voice
+- observation: Pass 31 made "movement" the unit of the Move budget in the log, /debug and the Move banner. The home page map item and one /config help line still give the cost in hexes, while another /config field already says "Movement".
+- evidence: Home, The map: "the step costs 1 hex of movement." (`packages/content/src/ruleText.ts`). /config Move cost next to an enemy: "Hexes a Move pays to enter a hex next to an enemy." /config Movement to reveal a tile: "Movement a step off the map edge costs." (`packages/content/data/config.meta.json`)
+- suggested fix: Write "the step costs 1 movement" and start the move-cost help with "Movement a Move pays to enter a hex next to an enemy."
+- source: web-fetch
+- issue: #251
+- addressed: (this commit); the home page map item says "the step costs 1 movement." and the /config Move cost help begins "Movement a Move pays to enter a hex next to an enemy."
+
 ### [x] [MED] /decisions — rule reading 56 says an enemy attacks only its target, which is false in the default Engagements Combat
 - pass: 32 (commit a97bccc)
 - viewport: desktop

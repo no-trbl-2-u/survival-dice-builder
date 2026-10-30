@@ -42,8 +42,7 @@ export function knockoutText(config: GameConfig): string {
  * @rule core loop v2 (exploring), 10.1
  */
 export function revealText(config: GameConfig): string {
-  const cost = plural(config.tiles.revealMoveCost, 'hex', 'hexes')
-  return `Step off the edge of the map to reveal a new tile; the step costs ${cost} of movement.`
+  return `Step off the edge of the map to reveal a new tile; the step costs ${config.tiles.revealMoveCost} movement.`
 }
 
 /**

@@ -20,7 +20,7 @@ Teach these rules (generated from the game's config: `pnpm sim -- kit`):
 <!-- kit:teach -->
 - Keep the base standing for as many rounds as you can. The run ends when the base falls.
 - Your 10-card deck is played twice each round: top halves in Prepare, then bottom halves in Combat. Draw 5 at a time.
-- Step off the edge of the map to reveal a new tile; the step costs 1 hex of movement. Each new tile's spawn nodes add enemies at every Combat. Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer.
+- Step off the edge of the map to reveal a new tile; the step costs 1 movement. Each new tile's spawn nodes add enemies at every Combat. Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer.
 - Gather 2 on an unspent gathering node (the node is spent). Each node gives materials once.
 - Combat: Play a card's Engage option (on Move and Gather) to roll your dice from where you stand, plus the enemy dice of each enemy next to you (a grunt rolls 1, an elite 2). Put your dice on your Skills one at a time. When you choose End engagement or no dice are left, every enemy die hits you at once, even the dice of an enemy you defeated. Your guard takes the damage first, then your health. Play or discard each card. Cards you do not play yet stay in your hand between engagements, and Combat ends when every hand and deck is empty.
 - A player at 0 health is knocked out and comes back next round with half of their maximum health, rounded up. They lose all their materials and currency.

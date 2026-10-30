@@ -100,7 +100,7 @@
   },
   "combat.moveCostNextToEnemy": {
     "label": "Move cost next to an enemy",
-    "help": "Hexes a Move pays to enter a hex next to an enemy. 1 (default): no extra cost, as in the written rules. 2: the older rule, kept for playtests.",
+    "help": "Movement a Move pays to enter a hex next to an enemy. 1 (default): no extra cost, as in the written rules. 2: the older rule, kept for playtests.",
     "rule": "6.9",
     "range": [1, 6]
   },

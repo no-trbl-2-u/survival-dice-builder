@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-30 (pass 196, cloud tick)
+
+Pass 195's rule reading 56 fix shipped (eead64e). No issues are open for triage. The critique gate is closed (pass 32 ran 2 commits ago) and so is the expand gate (pass 20 ran 12 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 32 LOW voice row. The home page map item said "the step costs 1 hex of movement" and the /config Move cost help began "Hexes a Move pays", while the log, /debug and the Move banner count the Move budget in movement. A 3.0 (impact 3: two lines a new player reads while learning Move; ease 10: two strings, their tests and the regenerated playtest kit). The map item now says "the step costs 1 movement." and the help begins "Movement a Move pays to enter a hex next to an enemy." Next in line: the /config Knockout and base health wording, then the co-op map figure label, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] / and /config: Move cost still given in hexes, not movement (critique pass 32 LOW)
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: reword `ruleText.ts` map item and `config.meta.json` move-cost help, regenerate `docs/playtests/PROTOCOL.md`
+- issue: #251
+- fixed: (this commit)
+
+### [ ] [2.7] /config: Knockout tick boxes say "When on", only one marks its default (critique pass 32 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "When ticked (default), ..." in `config.meta.json`
+
+### [ ] [2.7] /config: base health help says the run "stops" (critique pass 32 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "The run ends when it reaches 0." in `config.meta.json`
+
+### [ ] [1.8] /play: in co-op the map figure's accessible name says "P2's figure" (audit LOW)
+- category: a11y
+- impact: 2
+- ease: 9
+- next: use the seat name in `PlayMap.tsx` figure `aria-label`
+
+### [ ] [1.6] /decisions: game terms change case inside the page (critique pass 32 LOW)
+- category: external-critique
+- impact: 2
+- ease: 8
+- next: "Engagements" in the intro, "Lake or Mountain" in row 61, one case for die faces
+
 # Site audit — 2026-10-30 (pass 195, cloud tick)
 
 Pass 194's co-op card chips fix shipped (a97bccc), and critique pass 32 filed 6 findings (96669d8). No issues are open for triage. The critique gate is closed (pass 32 ran at the last commit) and so is the expand gate (pass 20 ran 11 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the critique pass 32 MED row. /decisions rule reading 56 said "An enemy attacks only its target", which is false in the default Engagements Combat, where every enemy next to the player rolls its dice (row 69 and the home page Combat step say so). A 7.2 (impact 6: the /decisions page is where the designer confirms readings, and the sentence contradicts two other texts; ease 8: one sentence and a regenerated doc; bias x1.5: external-critique MED). Row 56 now limits the sentence to targeting: "An enemy moves only toward its target, so a figure on the Base tile is never pulled". Next in line: the pass 32 LOW voice rows, then the co-op map figure label, then the rows that wait for /oversight.
