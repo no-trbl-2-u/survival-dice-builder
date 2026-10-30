@@ -99,6 +99,13 @@ describe('DecisionsPage', () => {
     expect(row78).not.toMatch(/ruling \d/)
   })
 
+  it('says what rule reading 70 leaves to the physical edition, not "a table question" (critique pass 32)', () => {
+    const { container } = render(<DecisionsPage />)
+    const text = container.querySelector('[data-question="70"]')?.textContent ?? ''
+    expect(text).toContain('a question for the physical edition')
+    expect(text).not.toMatch(/\btable question\b/i)
+  })
+
   it('drops the serial comma in the readings and checks, as the rest of the site does (critique pass 24)', () => {
     /** A comma before the "and" or "or" that ends a list: "Shop III, Training II, or Training III". */
     const SERIAL = /,[^,;:.()]*, (?:and|or)\b/

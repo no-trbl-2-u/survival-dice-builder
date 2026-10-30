@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — rule reading 70 still calls the upkeep saving "a table question"
-- pass: 32 (commit a97bccc)
-- viewport: desktop
-- category: voice
-- observation: Pass 26 removed "table upkeep" from row 70's heading, and a test keeps tabletop words out of proposals. The reading text still has one.
-- evidence: Row 70: "Bot report (N = 4): end round unchanged; the upkeep saving is a table question. Recommendation: needs a playtest."
-- suggested fix: Reword to "fewer enemies to place each round is a question for the physical edition", or drop the clause.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: user
 
 ## Done
+### [x] [LOW] /decisions — rule reading 70 still calls the upkeep saving "a table question"
+- pass: 32 (commit a97bccc)
+- viewport: desktop
+- category: voice
+- observation: Pass 26 removed "table upkeep" from row 70's heading, and a test keeps tabletop words out of proposals. The reading text still has one.
+- evidence: Row 70: "Bot report (N = 4): end round unchanged; the upkeep saving is a table question. Recommendation: needs a playtest."
+- suggested fix: Reword to "fewer enemies to place each round is a question for the physical edition", or drop the clause.
+- source: web-fetch
+- issue: #256
+- addressed: (this commit); the reading now says "whether fewer enemies to place each round saves time is a question for the physical edition."
+
 ### [x] [LOW] /decisions — game terms change case inside the page
 - pass: 32 (commit a97bccc)
 - viewport: desktop
@@ -82,7 +84,7 @@
 - suggested fix: Write "Engagements" in the intro (update the tests that pin the old text), "Lake or Mountain" in row 61, and pick one case for die faces across `OPEN-QUESTIONS.md` and `config.meta.json`.
 - source: web-fetch
 - issue: #255
-- addressed: (this commit); the intro now reads "Combat uses Engagements by default.", row 61 reads "...whose hex under the step is Lake or Mountain.", and the /config Enemy die faces help reads "The 6 faces of an enemy die: Hit, Miss or Special." to match row 72, the rules and the /play dice.
+- addressed: 70ad49a; the intro now reads "Combat uses Engagements by default.", row 61 reads "...whose hex under the step is Lake or Mountain.", and the /config Enemy die faces help reads "The 6 faces of an enemy die: Hit, Miss or Special." to match row 72, the rules and the /play dice.
 
 ### [x] [LOW] /config — the base health help says the run "stops"; the home page says it "ends"
 - pass: 32 (commit a97bccc)

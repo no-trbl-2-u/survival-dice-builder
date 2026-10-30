@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-30 (pass 201, cloud tick)
+
+Pass 200's /decisions case fix shipped (70ad49a). No issues are open for triage. The critique gate is closed (pass 32 ran 7 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 17 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 32 LOW voice row on /decisions, where rule reading 70 still called the upkeep saving "a table question". A 1.2 (impact 2: one sentence on one page; ease 6: one reading and a regenerated digest). The reading now says "whether fewer enemies to place each round saves time is a question for the physical edition.", and a DecisionsPage test pins it. Next in line: the rows that wait for /oversight; the next critique pass opens the queue again.
+
+## Top 5 findings (scored)
+
+### [x] [1.2] /decisions: rule reading 70 still calls the upkeep saving "a table question" (critique pass 32 LOW)
+- category: external-critique
+- impact: 2
+- ease: 6
+- next: reword row 70 in `OPEN-QUESTIONS.md`, regenerate `docs/DECISIONS.md`
+- issue: #256
+- fixed: (this commit)
+
 # Site audit — 2026-10-30 (pass 200, cloud tick)
 
 Pass 199's co-op map figure fix shipped (855d09c). No issues are open for triage. The critique gate is closed (pass 32 ran 6 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 16 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 32 LOW voice row on /decisions, where game terms changed case inside the page: "engagements" beside "Exchanges" in the intro, "lake or mountain" in row 61 while /tiles and /play write "Lake" and "Mountain", and "hit, miss or special" on /config while row 72, the rules and /play write "Hit", "Miss" and "Special". A 1.6 (impact 2: three lines on two pages; ease 8: three strings and two pinned tests). The intro now says "Combat uses Engagements by default.", row 61 says "Lake or Mountain", and the /config Enemy die faces help says "Hit, Miss or Special." Next in line: rule reading 70's wording, then the rows that wait for /oversight.
@@ -17,7 +31,7 @@ Pass 199's co-op map figure fix shipped (855d09c). No issues are open for triage
 - ease: 8
 - next: "Engagements" in the intro, "Lake or Mountain" in row 61, one case for die faces
 - issue: #255
-- fixed: (this commit)
+- fixed: 70ad49a
 
 ### [ ] [1.2] /decisions: rule reading 70 still calls the upkeep saving "a table question" (critique pass 32 LOW)
 - category: external-critique
