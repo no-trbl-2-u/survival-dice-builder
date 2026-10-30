@@ -5,6 +5,42 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-30 (pass 202, cloud tick)
+
+Pass 201's rule reading 70 fix shipped (d632676). No issues are open for triage. The critique gate is closed (pass 32 ran 8 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 18 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. No finding the loop can ship scores 3.0 or more, so there is no actionable iterate work. Handed to `/expand` (pass 21, bold posture). The five /decisions critique rows (three MED at 8.1 with the bias, two LOW) all edit `[needs-user-call]` items and wait for /oversight. The sim bot-policy row (critique LOW, user) is phase-sized. Checked this pass: every "you" and "your" string in `apps/web/src/play` (non-test) either names the seat in co-op through `seatName`, `whose` or a `seat` argument, or is solo-only (`nextStep.ts`, `engageView.ts`). The co-op wording drip from passes 189 to 199 found nothing new. Seat logic is now in 12 files, 25 sites.
+
+## Top 5 findings (scored)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [8.1] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 65 and 69 and the advice to turn on removed options
+
+### [ ] [8.1] /decisions: the "Spec v2 design work" check lists rows already decided (critique MED, pass 20, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight drops rows 7, 30, 49 and 55 from that item
+
+### [ ] [1.4] /decisions: the "Reset /config once" check names a URL path and an unknowable date (critique LOW, pass 21; waits for /oversight)
+- category: external-critique (voice)
+- impact: 2
+- ease: 7
+- next: /oversight rewords or closes the item
+
+### [ ] [1.4] /decisions: the Event Calendar check still cites ruling numbers (critique LOW, pass 25; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 2
+- ease: 7
+- next: /oversight names the rules in words in that `[needs-user-call]` item
+
 # Site audit — 2026-10-30 (pass 201, cloud tick)
 
 Pass 200's /decisions case fix shipped (70ad49a). No issues are open for triage. The critique gate is closed (pass 32 ran 7 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 17 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 32 LOW voice row on /decisions, where rule reading 70 still called the upkeep saving "a table question". A 1.2 (impact 2: one sentence on one page; ease 6: one reading and a regenerated digest). The reading now says "whether fewer enemies to place each round saves time is a question for the physical edition.", and a DecisionsPage test pins it. Next in line: the rows that wait for /oversight; the next critique pass opens the queue again.
@@ -17,7 +53,7 @@ Pass 200's /decisions case fix shipped (70ad49a). No issues are open for triage.
 - ease: 6
 - next: reword row 70 in `OPEN-QUESTIONS.md`, regenerate `docs/DECISIONS.md`
 - issue: #256
-- fixed: (this commit)
+- fixed: d632676
 
 # Site audit — 2026-10-30 (pass 200, cloud tick)
 

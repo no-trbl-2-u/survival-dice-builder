@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-29 at commit c1e3be6
-> Pass count: 20
+> Last pass: 2026-10-30 at commit d632676
+> Pass count: 21
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -29,7 +29,8 @@
 - re-evidence (expand pass 17): critique pass 25 (fe9d292) filed one more row with this cause: the Event Calendar check cites "Spec v2 ruling 14" and "ruling 9". `/iterate` shipped the reading-status half (26a870b) and a test that bars "ruling N" from status labels, but the check half is a `[needs-user-call]` item, so it was split into its own LOW row that waits for /oversight. A scan of the 5 prerendered pages at 4af48ad (dist text, scripts and tags removed) finds that check is the only "ruling N" left on the served site. All 5 Pending critique rows the site can act on are on /decisions and wait for /oversight; the only other Pending row is the phase-sized sim-bot row. Audit passes 121 to 134 shipped 14 single-row fixes (9dacefa to 4af48ad) while the 8.1 rows stayed queued. Score held at 5.0: same evidence, one more row.
 - progress (expand pass 18): ec2ebf6 (audit pass 142) shipped the guard: `citedRows` in `packages/content/src/decisions.ts` reads the rows a check cites ("row 57", "rows 30, 49", "rule readings 63-70"), and a content test fails when a check cites a row that does not exist, or a decided row outside a pinned list of today's stale citations (rows 7, 30, 49, 50 and 55 in "Spec v2 design work"; rows 65 and 69 in "Structural v2 questions"). Row 50 was stale too and no critique row had named it. The next decided row can no longer go stale on /decisions without a red test. Still open: the stale lines themselves (5 Pending critique rows, all in `[needs-user-call]` items that only `/oversight` may edit), and the one balance check built from the latest sim batch. Score lowered from 5.0 to 3.5: the part that needed a phase is mostly shipped; what holds the queue is an `/oversight` edit of the AUDIT lines, after which the pinned list shrinks to nothing and this row can close, or be cut down to the balance check alone.
 - re-evidence (expand pass 19): the 18 shipping commits since pass 18 were all single-row fixes, while the two 8.1 /decisions rows ("three balance checks", "Structural v2 questions") stayed at the head of every Top 5, marked "waits for /oversight". Critique pass 29 added no /decisions row; 5 of the 6 Pending critique rows the site can act on are still on /decisions, all in `[needs-user-call]` items. Score held at 3.5: nothing new, and nothing the loop can do without `/oversight`.
-- last re-evidenced: 2026-10-27
+- re-evidence (expand pass 21): critique pass 32 (96669d8) filed three more /decisions copy rows; `/iterate` shipped them as eead64e (rule reading 56), 70ad49a (game-term case) and d632676 (rule reading 70). Five older rows are still pending, three MED at 8.1 and two LOW, all in `[needs-user-call]` items that only `/oversight` may edit. Score held at 3.5: nothing new for the loop, and the `/oversight` edit is still what clears the queue.
+- last re-evidenced: 2026-10-30
 
 ### [ ] [score 1.0] Milestones a default run can reach: every milestone reachable, or marked out of reach with its reason
 - proposed: 2026-10-17, expand pass 13
@@ -197,7 +198,8 @@
 - estimated phases: 1
 - conflicts: none. The verify gate grows; keep the 4-seat browser run short (seeded, a few rounds), per standing rule 3.
 - re-evidence (expand pass 20): 5 of the 17 `fix:` commits since pass 19 named the seat on one /play surface at a time (616b528 Hand, 659ad23 Skills and Dice headings, c326fd1 engagement window, 7d951e7 engagement result, 9e64aa5 all-placed note), each with its own "You" or "Player N" logic. Critique pass 31 filed the next one: `apps/web/src/play/DiceTray.tsx:191-192` still says "next to you" and "they hit you" under "Player 2's dice". The seat-name helper in this candidate's scope is what would stop the drip.
-- last re-evidenced: 2026-10-29
+- re-evidence (expand pass 21): 7 of the 18 `fix:` commits since pass 20 named the seat on one more /play surface each (c98bce0 enemy-dice subheading, d0fc360 Base panel purse, 39716c8 Skill dice hint, 2814744 draft and return dialog, 8809bb7 Shop hint, a97bccc card chips' back button, 855d09c map figure's accessible name). Audit pass 202 read every "you" string in `apps/web/src/play` and found no more co-op gaps, so the wording drip looks drained. The seat logic it left is now in 12 files and 25 sites (`players.length === 1` or `solo(names)`), up from 6 sites at discovery. Score held at 4.5: the visible harm is fixed, but the 4-seat engine, bot and browser proof in scope is still missing.
+- last re-evidenced: 2026-10-30
 - ruling audit: rows 6, 52-54 (decided), 55, 68 (proposed) checked; tests pin today's readings and mark row 68 unsettled. No conflict. Loop scope: in for engine and bot tests; e2e and the helper are web (minor).
 
 ### [ ] [score 4.0] Keyboard and screen-reader proof: a full run by keyboard and an automated audit on every route
@@ -297,7 +299,8 @@
 - conflicts: none. UI copy and tests; no rule or engine change. Overlaps Considered "Count words from one helper" (pass 18): the table would use that helper if it exists.
 - ruling audit: no rule rows. Loop scope: in (tests, UI copy).
 - re-evidence (expand pass 20): 6 of the 17 `fix:` commits since pass 19 went to `apps/web/src/play/describeEvent.ts`, again one line family per commit (fd4ccf6 delayed return, b6447bb blocked step, 418b03c deck shuffled, 9e43257 miniature limit, 293e981 destroyed Tower, c1e3be6 starter returned). `apps/web/src/play/` now holds 14 `*Log.test.ts` files (10 at pass 19); `describeEvent.ts` still has 63 `case` lines. Critique pass 31 filed 3 more log rows (enemy named where it stands now, MED; rule tag "Draft pool (designer 2026-10-09)", LOW; "3 left" with no unit, LOW). Score 3.0 to 4.0 for the repeat.
-- last re-evidenced: 2026-10-29
+- re-evidence (expand pass 21): 2 more log fixes since pass 20, one line family each (2f58448 rule tag with no section, d77cf3d unit for the movement left). Both closed critique pass 31 LOW rows. Score held at 4.0: the drip is slower and has not stopped.
+- last re-evidenced: 2026-10-30
 
 ### [ ] [score 4.0] A log line never changes after it happens: each /play line is described from the state when it happened
 - proposed: 2026-10-29, expand pass 20
@@ -313,6 +316,8 @@
 - estimated phases: 1
 - conflicts: none on rules. Event payloads may grow (engine types only, still plain data, no rule change). Overlaps "The /play log read once, end to end" above: same file, different cause (that one checks wording per event type, this one checks a line against time). Promote together or fold one into the other.
 - ruling audit: no rule rows. Loop scope: in (tests, UI copy, engine event types).
+- progress (expand pass 21): 66e0753 fixed the critique pass 31 MED row. The enemy move line now names the enemy from `event.from` and stays the same after later moves, pinned by a moveLog test. That is the fourth event type fixed one at a time for this cause. The test that renders each line when it is appended and again at the end, which would find the fifth, is still missing. Score held at 4.0.
+- last re-evidenced: 2026-10-30
 
 ## Considered (below threshold)
 
