@@ -42,7 +42,7 @@ describe('DecisionsPage', () => {
 
   it('says the default Combat model; no open reading is for one model only (Spec v2)', () => {
     const { container } = render(<DecisionsPage />)
-    expect(container.textContent).toContain('Combat uses engagements by default.')
+    expect(container.textContent).toContain('Combat uses Engagements by default.')
     // Spec v2 (ruling 18) removed the exchange-only options of rows 65 and 69.
     expect(container.querySelector('[data-question="65"]')).toBeNull()
     expect(container.querySelector('[data-question="69"]')).toBeNull()

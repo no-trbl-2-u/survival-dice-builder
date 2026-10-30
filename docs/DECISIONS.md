@@ -8,7 +8,7 @@ change its status in `OPEN-QUESTIONS.md`; to change its value, use `/config`.
 Evidence: the bot batch report (`docs/reports/phase-9-bot-batch.md`) and the playtest
 kit (`docs/playtests/`, `pnpm sim -- playtests`).
 
-Combat uses engagements by default. A reading marked "Exchanges only" changes nothing unless you choose Exchanges on the Play start panel (one run) or on the Config page (every new run).
+Combat uses Engagements by default. A reading marked "Exchanges only" changes nothing unless you choose Exchanges on the Play start panel (one run) or on the Config page (every new run).
 
 ## Rule readings
 
@@ -60,7 +60,7 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 - Reading: Not in scope until the base engine is ready; a later brainstorm.
 - Setting: not a config setting ((none))
 
-### 61. A step off the map edge reveals a tile whose hex under the step is lake or mountain (rule Core loop v2)
+### 61. A step off the map edge reveals a tile whose hex under the step is Lake or Mountain (rule Core loop v2)
 
 - Status: proposed 2026-10-04 (phase 20)
 - Reading: **The tile is placed and the step's cost is paid; the figure stays where it was** (3.4) and may keep moving.

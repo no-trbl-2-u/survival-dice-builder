@@ -182,7 +182,7 @@ describe('decisions', () => {
     }
     for (const n of [1, 7, 65, 66, 69, 73, 74]) expect(model(n), `row ${n}`).toBeNull()
     expect(combatModelLine(config)).toMatch(
-      /^Combat uses engagements by default\. .*"Exchanges only"/,
+      /^Combat uses Engagements by default\. .*"Exchanges only"/,
     )
     expect(combatModelLine(config)).toMatch(
       /choose Exchanges on the Play start panel \(one run\) or on the Config page \(every new run\)\.$/,

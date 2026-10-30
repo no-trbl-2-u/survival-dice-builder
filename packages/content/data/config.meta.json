@@ -118,7 +118,7 @@
   },
   "combat.engage.enemyDie": {
     "label": "Enemy die faces",
-    "help": "The 6 faces of an enemy die: hit, miss or special.",
+    "help": "The 6 faces of an enemy die: Hit, Miss or Special.",
     "rule": "Table 4"
   },
   "combat.engage.hitDamage": {

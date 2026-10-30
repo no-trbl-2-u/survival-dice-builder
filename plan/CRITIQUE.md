@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — game terms change case inside the page
-- pass: 32 (commit a97bccc)
-- viewport: desktop
-- category: voice
-- observation: The intro writes "engagements" in lower case beside a capitalised "Exchanges"; row 61 writes terrain in lower case while /tiles and the /play log use "Lake" and "Mountain"; decided row 72 capitalises the enemy die faces while /config writes them in lower case.
-- evidence: Intro: "Combat uses engagements by default." / "...unless you choose Exchanges on the Play start panel". Row 61: "...whose hex under the step is lake or mountain." Row 72: "2 Hit, 3 Miss, 1 Special". /config Enemy die faces: "The 6 faces of an enemy die: hit, miss or special."
-- suggested fix: Write "Engagements" in the intro (update the tests that pin the old text), "Lake or Mountain" in row 61, and pick one case for die faces across `OPEN-QUESTIONS.md` and `config.meta.json`.
-- source: web-fetch
-
 ### [LOW] /decisions — rule reading 70 still calls the upkeep saving "a table question"
 - pass: 32 (commit a97bccc)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: user
 
 ## Done
+### [x] [LOW] /decisions — game terms change case inside the page
+- pass: 32 (commit a97bccc)
+- viewport: desktop
+- category: voice
+- observation: The intro writes "engagements" in lower case beside a capitalised "Exchanges"; row 61 writes terrain in lower case while /tiles and the /play log use "Lake" and "Mountain"; decided row 72 capitalises the enemy die faces while /config writes them in lower case.
+- evidence: Intro: "Combat uses engagements by default." / "...unless you choose Exchanges on the Play start panel". Row 61: "...whose hex under the step is lake or mountain." Row 72: "2 Hit, 3 Miss, 1 Special". /config Enemy die faces: "The 6 faces of an enemy die: hit, miss or special."
+- suggested fix: Write "Engagements" in the intro (update the tests that pin the old text), "Lake or Mountain" in row 61, and pick one case for die faces across `OPEN-QUESTIONS.md` and `config.meta.json`.
+- source: web-fetch
+- issue: #255
+- addressed: (this commit); the intro now reads "Combat uses Engagements by default.", row 61 reads "...whose hex under the step is Lake or Mountain.", and the /config Enemy die faces help reads "The 6 faces of an enemy die: Hit, Miss or Special." to match row 72, the rules and the /play dice.
+
 ### [x] [LOW] /config — the base health help says the run "stops"; the home page says it "ends"
 - pass: 32 (commit a97bccc)
 - viewport: desktop
@@ -91,7 +93,7 @@
 - suggested fix: Reword the help to "The base health at the start of a run. The run ends when it reaches 0."
 - source: web-fetch
 - issue: #253
-- addressed: (this commit); the /config Starting base health help now reads "The base health at the start of a run. The run ends when it reaches 0."
+- addressed: 07a74ee; the /config Starting base health help now reads "The base health at the start of a run. The run ends when it reaches 0."
 
 ### [x] [LOW] /config — the two Knockout tick boxes say "When on", and only one marks its default
 - pass: 32 (commit a97bccc)
