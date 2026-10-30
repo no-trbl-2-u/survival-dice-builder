@@ -13,6 +13,7 @@ import { hexTitle } from '../map/places.ts'
 import type { DamageFloat } from './damageFloats.ts'
 import { enemyLabel, playerHex } from './engageView.ts'
 import { placeTag } from './mapTag.ts'
+import { seatName } from './PlayerPanel.tsx'
 import styles from './Play.module.css'
 import { hexTargets, ofType } from './targets.ts'
 
@@ -263,7 +264,7 @@ export function PlayMap({
               key={p.id}
               className={styles.mover}
               style={place(c.x, c.y)}
-              aria-label={`${label === 'You' ? 'Your' : `${label}'s`} figure at ${p.hex.q},${p.hex.r}`}
+              aria-label={`${state.players.length === 1 ? 'Your' : `${seatName(state, seat)}'s`} figure at ${p.hex.q},${p.hex.r}`}
             >
               <circle
                 className={`${styles.figure} ${seat === state.current ? styles.figureCurrent : ''}`}

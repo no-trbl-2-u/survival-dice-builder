@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-30 (pass 199, cloud tick)
+
+Pass 198's base health fix shipped (07a74ee). No issues are open for triage. The critique gate is closed (pass 32 ran 5 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 15 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the audit LOW a11y row on the /play map figure. In co-op its accessible name read "P2's figure at 0,0", taken from the short "P2" drawn on the token, while every other /play panel names the seat "Player 2". A 1.8 (impact 2: screen-reader users in co-op; ease 9: one label). The name now comes from `seatName` ("Player 2's figure at 0,0"); the token still shows "P2". A new PlayMap test pins the solo and co-op names. Next in line: the /decisions case row, then rule reading 70's wording, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /play: in co-op the map figure's accessible name says "P2's figure" (audit LOW)
+- category: a11y
+- impact: 2
+- ease: 9
+- next: use the seat name in `PlayMap.tsx` figure `aria-label`
+- issue: #254
+- fixed: (this commit)
+
+### [ ] [1.6] /decisions: game terms change case inside the page (critique pass 32 LOW)
+- category: external-critique
+- impact: 2
+- ease: 8
+- next: "Engagements" in the intro, "Lake or Mountain" in row 61, one case for die faces
+
+### [ ] [1.2] /decisions: rule reading 70 still calls the upkeep saving "a table question" (critique pass 32 LOW)
+- category: external-critique
+- impact: 2
+- ease: 6
+- next: reword row 70 in `OPEN-QUESTIONS.md`, regenerate `docs/DECISIONS.md`
+
 # Site audit — 2026-10-30 (pass 198, cloud tick)
 
 Pass 197's Knockout tick box fix shipped (f86dd08). No issues are open for triage. The critique gate is closed (pass 32 ran 4 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 14 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 32 LOW voice row on the /config base health help, which said "The run stops when it reaches 0." while the home page says "The run ends when the base falls." "Stops" can read as a pause. A 2.7 (impact 3: the first setting on /config; ease 9: one string). It now says "The run ends when it reaches 0." Next in line: the co-op map figure label, then the /decisions case row, then the rows that wait for /oversight.
@@ -17,7 +43,7 @@ Pass 197's Knockout tick box fix shipped (f86dd08). No issues are open for triag
 - ease: 9
 - next: "The run ends when it reaches 0." in `config.meta.json`
 - issue: #253
-- fixed: (this commit)
+- fixed: 07a74ee
 
 ### [ ] [1.8] /play: in co-op the map figure's accessible name says "P2's figure" (audit LOW)
 - category: a11y
