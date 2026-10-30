@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-29 at commit 293e981
-> Pass count: 31
+> Last pass: 2026-10-30 at commit a97bccc
+> Pass count: 32
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /decisions — rule reading 56 says an enemy attacks only its target, which is false in the default Engagements Combat
+- pass: 32 (commit a97bccc)
+- viewport: desktop
+- category: comprehension
+- observation: Row 56 is not marked "Exchanges only", so it reads as true in the default Engagements Combat. But in an engagement every enemy next to the player rolls its dice at the player, whatever its target; row 69 on the same page and the home page Combat step both say so.
+- evidence: Row 56: "An enemy attacks only its target, so a figure on the Base tile is never pulled (the base is always nearer)." Row 69: "In an engagement every enemy next to the player rolls its enemy dice, whatever its target (7.8 step 2)." Home Combat step: "plus the enemy dice of each enemy next to you" (`packages/content/src/ruleText.ts`).
+- suggested fix: In `OPEN-QUESTIONS.md` row 56, limit the sentence to targeting, e.g. "An enemy moves only toward its target, so a figure on the Base tile is never pulled (the base is always nearer)", and regenerate `docs/DECISIONS.md`.
+- source: web-fetch
+
+### [LOW] / and /config — Move cost is still given in hexes, not movement
+- pass: 32 (commit a97bccc)
+- viewport: desktop
+- category: voice
+- observation: Pass 31 made "movement" the unit of the Move budget in the log, /debug and the Move banner. The home page map item and one /config help line still give the cost in hexes, while another /config field already says "Movement".
+- evidence: Home, The map: "the step costs 1 hex of movement." (`packages/content/src/ruleText.ts`). /config Move cost next to an enemy: "Hexes a Move pays to enter a hex next to an enemy." /config Movement to reveal a tile: "Movement a step off the map edge costs." (`packages/content/data/config.meta.json`)
+- suggested fix: Write "the step costs 1 movement" and start the move-cost help with "Movement a Move pays to enter a hex next to an enemy."
+- source: web-fetch
+
+### [LOW] /decisions — game terms change case inside the page
+- pass: 32 (commit a97bccc)
+- viewport: desktop
+- category: voice
+- observation: The intro writes "engagements" in lower case beside a capitalised "Exchanges"; row 61 writes terrain in lower case while /tiles and the /play log use "Lake" and "Mountain"; decided row 72 capitalises the enemy die faces while /config writes them in lower case.
+- evidence: Intro: "Combat uses engagements by default." / "...unless you choose Exchanges on the Play start panel". Row 61: "...whose hex under the step is lake or mountain." Row 72: "2 Hit, 3 Miss, 1 Special". /config Enemy die faces: "The 6 faces of an enemy die: hit, miss or special."
+- suggested fix: Write "Engagements" in the intro (update the tests that pin the old text), "Lake or Mountain" in row 61, and pick one case for die faces across `OPEN-QUESTIONS.md` and `config.meta.json`.
+- source: web-fetch
+
+### [LOW] /decisions — rule reading 70 still calls the upkeep saving "a table question"
+- pass: 32 (commit a97bccc)
+- viewport: desktop
+- category: voice
+- observation: Pass 26 removed "table upkeep" from row 70's heading, and a test keeps tabletop words out of proposals. The reading text still has one.
+- evidence: Row 70: "Bot report (N = 4): end round unchanged; the upkeep saving is a table question. Recommendation: needs a playtest."
+- suggested fix: Reword to "fewer enemies to place each round is a question for the physical edition", or drop the clause.
+- source: web-fetch
+
+### [LOW] /config — the two Knockout tick boxes say "When on", and only one marks its default
+- pass: 32 (commit a97bccc)
+- viewport: desktop
+- category: voice
+- observation: Both knockout options are ticked by default. Only the currency help says "(default)", and its "too" points back to a materials line that does not. Other tick boxes on the page say "When ticked".
+- evidence: "When on, a knocked-out player loses all the materials they carried." / "When on (default), a knocked-out player loses all their currency too." against "When ticked, the player may rotate a revealed tile." (`packages/content/data/config.meta.json`)
+- suggested fix: "When ticked (default), a knocked-out player loses all their materials." and the same pattern for currency.
+- source: web-fetch
+
+### [LOW] /config — the base health help says the run "stops"; the home page says it "ends"
+- pass: 32 (commit a97bccc)
+- viewport: desktop
+- category: voice
+- observation: Two verbs for the run end on two pages. "Stops" can read as a pause, or as the stalled sim runs the proposal lines describe.
+- evidence: /config Starting base health: "The run stops when it reaches 0." Home: "The run ends when the base falls."
+- suggested fix: Reword the help to "The base health at the start of a run. The run ends when it reaches 0."
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
