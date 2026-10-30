@@ -27,15 +27,6 @@
 - suggested fix: Reword to "fewer enemies to place each round is a question for the physical edition", or drop the clause.
 - source: web-fetch
 
-### [LOW] /config — the base health help says the run "stops"; the home page says it "ends"
-- pass: 32 (commit a97bccc)
-- viewport: desktop
-- category: voice
-- observation: Two verbs for the run end on two pages. "Stops" can read as a pause, or as the stalled sim runs the proposal lines describe.
-- evidence: /config Starting base health: "The run stops when it reaches 0." Home: "The run ends when the base falls."
-- suggested fix: Reword the help to "The base health at the start of a run. The run ends when it reaches 0."
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: user
 
 ## Done
+### [x] [LOW] /config — the base health help says the run "stops"; the home page says it "ends"
+- pass: 32 (commit a97bccc)
+- viewport: desktop
+- category: voice
+- observation: Two verbs for the run end on two pages. "Stops" can read as a pause, or as the stalled sim runs the proposal lines describe.
+- evidence: /config Starting base health: "The run stops when it reaches 0." Home: "The run ends when the base falls."
+- suggested fix: Reword the help to "The base health at the start of a run. The run ends when it reaches 0."
+- source: web-fetch
+- issue: #253
+- addressed: (this commit); the /config Starting base health help now reads "The base health at the start of a run. The run ends when it reaches 0."
+
 ### [x] [LOW] /config — the two Knockout tick boxes say "When on", and only one marks its default
 - pass: 32 (commit a97bccc)
 - viewport: desktop
@@ -100,7 +102,7 @@
 - suggested fix: "When ticked (default), a knocked-out player loses all their materials." and the same pattern for currency.
 - source: web-fetch
 - issue: #252
-- addressed: (this commit); both help lines now read "When ticked (default), a knocked-out player loses all the materials they carried." and "When ticked (default), a knocked-out player loses all their currency."
+- addressed: f86dd08; both help lines now read "When ticked (default), a knocked-out player loses all the materials they carried." and "When ticked (default), a knocked-out player loses all their currency."
 
 ### [x] [LOW] / and /config — Move cost is still given in hexes, not movement
 - pass: 32 (commit a97bccc)
