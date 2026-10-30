@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-30 (pass 197, cloud tick)
+
+Pass 196's Move cost fix shipped (8437dae). No issues are open for triage. The critique gate is closed (pass 32 ran 3 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 13 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 32 LOW voice row on the /config Knockout tick boxes. Both are ticked by default, but the materials help said "When on" with no default mark, and the currency help said "When on (default)" with a "too" that pointed back at it, while every other tick box on the page says "When ticked". A 2.7 (impact 3: two help lines on the page where a designer sets the knockout rules; ease 9: two strings). Both now say "When ticked (default), a knocked-out player loses all ...". Next in line: the /config base health wording, then the co-op map figure label, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /config: Knockout tick boxes say "When on", only one marks its default (critique pass 32 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "When ticked (default), ..." in `config.meta.json`
+- issue: #252
+- fixed: (this commit)
+
+### [ ] [2.7] /config: base health help says the run "stops" (critique pass 32 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "The run ends when it reaches 0." in `config.meta.json`
+
+### [ ] [1.8] /play: in co-op the map figure's accessible name says "P2's figure" (audit LOW)
+- category: a11y
+- impact: 2
+- ease: 9
+- next: use the seat name in `PlayMap.tsx` figure `aria-label`
+
+### [ ] [1.6] /decisions: game terms change case inside the page (critique pass 32 LOW)
+- category: external-critique
+- impact: 2
+- ease: 8
+- next: "Engagements" in the intro, "Lake or Mountain" in row 61, one case for die faces
+
+### [ ] [1.2] /decisions: rule reading 70 still calls the upkeep saving "a table question" (critique pass 32 LOW)
+- category: external-critique
+- impact: 2
+- ease: 6
+- next: reword row 70 in `OPEN-QUESTIONS.md`, regenerate `docs/DECISIONS.md`
+
 # Site audit — 2026-10-30 (pass 196, cloud tick)
 
 Pass 195's rule reading 56 fix shipped (eead64e). No issues are open for triage. The critique gate is closed (pass 32 ran 2 commits ago) and so is the expand gate (pass 20 ran 12 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 32 LOW voice row. The home page map item said "the step costs 1 hex of movement" and the /config Move cost help began "Hexes a Move pays", while the log, /debug and the Move banner count the Move budget in movement. A 3.0 (impact 3: two lines a new player reads while learning Move; ease 10: two strings, their tests and the regenerated playtest kit). The map item now says "the step costs 1 movement." and the help begins "Movement a Move pays to enter a hex next to an enemy." Next in line: the /config Knockout and base health wording, then the co-op map figure label, then the rows that wait for /oversight.
@@ -17,7 +55,7 @@ Pass 195's rule reading 56 fix shipped (eead64e). No issues are open for triage.
 - ease: 10
 - next: reword `ruleText.ts` map item and `config.meta.json` move-cost help, regenerate `docs/playtests/PROTOCOL.md`
 - issue: #251
-- fixed: (this commit)
+- fixed: 8437dae
 
 ### [ ] [2.7] /config: Knockout tick boxes say "When on", only one marks its default (critique pass 32 LOW)
 - category: external-critique

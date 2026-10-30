@@ -27,15 +27,6 @@
 - suggested fix: Reword to "fewer enemies to place each round is a question for the physical edition", or drop the clause.
 - source: web-fetch
 
-### [LOW] /config — the two Knockout tick boxes say "When on", and only one marks its default
-- pass: 32 (commit a97bccc)
-- viewport: desktop
-- category: voice
-- observation: Both knockout options are ticked by default. Only the currency help says "(default)", and its "too" points back to a materials line that does not. Other tick boxes on the page say "When ticked".
-- evidence: "When on, a knocked-out player loses all the materials they carried." / "When on (default), a knocked-out player loses all their currency too." against "When ticked, the player may rotate a revealed tile." (`packages/content/data/config.meta.json`)
-- suggested fix: "When ticked (default), a knocked-out player loses all their materials." and the same pattern for currency.
-- source: web-fetch
-
 ### [LOW] /config — the base health help says the run "stops"; the home page says it "ends"
 - pass: 32 (commit a97bccc)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: user
 
 ## Done
+### [x] [LOW] /config — the two Knockout tick boxes say "When on", and only one marks its default
+- pass: 32 (commit a97bccc)
+- viewport: desktop
+- category: voice
+- observation: Both knockout options are ticked by default. Only the currency help says "(default)", and its "too" points back to a materials line that does not. Other tick boxes on the page say "When ticked".
+- evidence: "When on, a knocked-out player loses all the materials they carried." / "When on (default), a knocked-out player loses all their currency too." against "When ticked, the player may rotate a revealed tile." (`packages/content/data/config.meta.json`)
+- suggested fix: "When ticked (default), a knocked-out player loses all their materials." and the same pattern for currency.
+- source: web-fetch
+- issue: #252
+- addressed: (this commit); both help lines now read "When ticked (default), a knocked-out player loses all the materials they carried." and "When ticked (default), a knocked-out player loses all their currency."
+
 ### [x] [LOW] / and /config — Move cost is still given in hexes, not movement
 - pass: 32 (commit a97bccc)
 - viewport: desktop
@@ -109,7 +111,7 @@
 - suggested fix: Write "the step costs 1 movement" and start the move-cost help with "Movement a Move pays to enter a hex next to an enemy."
 - source: web-fetch
 - issue: #251
-- addressed: (this commit); the home page map item says "the step costs 1 movement." and the /config Move cost help begins "Movement a Move pays to enter a hex next to an enemy."
+- addressed: 8437dae; the home page map item says "the step costs 1 movement." and the /config Move cost help begins "Movement a Move pays to enter a hex next to an enemy."
 
 ### [x] [MED] /decisions — rule reading 56 says an enemy attacks only its target, which is false in the default Engagements Combat
 - pass: 32 (commit a97bccc)

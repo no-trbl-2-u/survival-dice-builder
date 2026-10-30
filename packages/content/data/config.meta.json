@@ -233,12 +233,12 @@
   },
   "knockout.loseMaterials": {
     "label": "Knockout loses materials",
-    "help": "When on, a knocked-out player loses all the materials they carried.",
+    "help": "When ticked (default), a knocked-out player loses all the materials they carried.",
     "rule": "14.2"
   },
   "knockout.loseCurrency": {
     "label": "Knockout loses currency",
-    "help": "When on (default), a knocked-out player loses all their currency too.",
+    "help": "When ticked (default), a knocked-out player loses all their currency.",
     "rule": "14.2"
   },
   "shop": {
