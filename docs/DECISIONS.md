@@ -45,7 +45,7 @@ Combat uses engagements by default. A reading marked "Exchanges only" changes no
 ### 56. Enemies prefer structures; how much nearer must a player be to draw an enemy instead? (rule Core loop v2)
 
 - Status: proposed 2026-10-04 (engine: phase 21, shipped)
-- Reading: **2 or more hexes nearer** than the nearest structure: a player ranks at distance + 2, and ties go to the player (row 15). An enemy attacks only its target, so a figure on the Base tile is never pulled (the base is always nearer).
+- Reading: **2 or more hexes nearer** than the nearest structure: a player ranks at distance + 2, and ties go to the player (row 15). An enemy moves only toward its target, so a figure on the Base tile is never pulled (the base is always nearer).
 - Setting: `rulings.playerPullDistance` = `2`
 
 ### 57. The designer will add more tiles. How many, and what is on them? (rule Core loop v2)

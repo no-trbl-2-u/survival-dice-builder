@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-30 (pass 195, cloud tick)
+
+Pass 194's co-op card chips fix shipped (a97bccc), and critique pass 32 filed 6 findings (96669d8). No issues are open for triage. The critique gate is closed (pass 32 ran at the last commit) and so is the expand gate (pass 20 ran 11 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the critique pass 32 MED row. /decisions rule reading 56 said "An enemy attacks only its target", which is false in the default Engagements Combat, where every enemy next to the player rolls its dice (row 69 and the home page Combat step say so). A 7.2 (impact 6: the /decisions page is where the designer confirms readings, and the sentence contradicts two other texts; ease 8: one sentence and a regenerated doc; bias x1.5: external-critique MED). Row 56 now limits the sentence to targeting: "An enemy moves only toward its target, so a figure on the Base tile is never pulled". Next in line: the pass 32 LOW voice rows, then the co-op map figure label, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [7.2] /decisions: rule reading 56 says an enemy attacks only its target (critique pass 32 MED)
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: reword row 56 in `OPEN-QUESTIONS.md`, regenerate `docs/DECISIONS.md`
+- issue: #250
+- fixed: (this commit)
+
+### [ ] [3.0] / and /config: Move cost still given in hexes, not movement (critique pass 32 LOW)
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: reword `ruleText.ts` map item and `config.meta.json` move-cost help
+
+### [ ] [2.7] /config: Knockout tick boxes say "When on", only one marks its default (critique pass 32 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "When ticked (default), ..." in `config.meta.json`
+
+### [ ] [2.7] /config: base health help says the run "stops" (critique pass 32 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "The run ends when it reaches 0." in `config.meta.json`
+
+### [ ] [1.8] /play: in co-op the map figure's accessible name says "P2's figure" (audit LOW)
+- category: a11y
+- impact: 2
+- ease: 9
+- next: use the seat name in `PlayMap.tsx` figure `aria-label`
+
 # Site audit — 2026-10-29 (pass 194, cloud tick)
 
 Pass 193's co-op Shop hint fix shipped (8809bb7). No issues are open for triage. The critique gate is closed (pass 31 ran 11 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 9 commits ago). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the item pass 193 saw while auditing. In co-op the × button that takes a dropped card back from the option chips was named "Keep the card in your hand", under a hand list named "Player 2's hand". Rescored as a11y to 3.0 (impact 3: the label is the button's only name, read on every co-op card drop with more than one option; ease 10: one prop, the seat name already at hand; no bias: LOW). It now reads "Keep the card in Player 2's hand" in co-op and "your hand" solo, through a `seat` prop the engagement modal fills from `seatName`, pinned by new CardStrip tests. Seen while auditing: the map figure's accessible name reads "P2's figure" in co-op, where the rest of the page says "Player 2's figure". Next in line: that label, then the rows that wait for /oversight.

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — rule reading 56 says an enemy attacks only its target, which is false in the default Engagements Combat
-- pass: 32 (commit a97bccc)
-- viewport: desktop
-- category: comprehension
-- observation: Row 56 is not marked "Exchanges only", so it reads as true in the default Engagements Combat. But in an engagement every enemy next to the player rolls its dice at the player, whatever its target; row 69 on the same page and the home page Combat step both say so.
-- evidence: Row 56: "An enemy attacks only its target, so a figure on the Base tile is never pulled (the base is always nearer)." Row 69: "In an engagement every enemy next to the player rolls its enemy dice, whatever its target (7.8 step 2)." Home Combat step: "plus the enemy dice of each enemy next to you" (`packages/content/src/ruleText.ts`).
-- suggested fix: In `OPEN-QUESTIONS.md` row 56, limit the sentence to targeting, e.g. "An enemy moves only toward its target, so a figure on the Base tile is never pulled (the base is always nearer)", and regenerate `docs/DECISIONS.md`.
-- source: web-fetch
-
 ### [LOW] / and /config — Move cost is still given in hexes, not movement
 - pass: 32 (commit a97bccc)
 - viewport: desktop
@@ -118,6 +109,17 @@
 - source: user
 
 ## Done
+### [x] [MED] /decisions — rule reading 56 says an enemy attacks only its target, which is false in the default Engagements Combat
+- pass: 32 (commit a97bccc)
+- viewport: desktop
+- category: comprehension
+- observation: Row 56 is not marked "Exchanges only", so it reads as true in the default Engagements Combat. But in an engagement every enemy next to the player rolls its dice at the player, whatever its target; row 69 on the same page and the home page Combat step both say so.
+- evidence: Row 56: "An enemy attacks only its target, so a figure on the Base tile is never pulled (the base is always nearer)." Row 69: "In an engagement every enemy next to the player rolls its enemy dice, whatever its target (7.8 step 2)." Home Combat step: "plus the enemy dice of each enemy next to you" (`packages/content/src/ruleText.ts`).
+- suggested fix: In `OPEN-QUESTIONS.md` row 56, limit the sentence to targeting, e.g. "An enemy moves only toward its target, so a figure on the Base tile is never pulled (the base is always nearer)", and regenerate `docs/DECISIONS.md`.
+- source: web-fetch
+- issue: #250
+- fixed: (this commit). Row 56 now reads "An enemy moves only toward its target, so a figure on the Base tile is never pulled (the base is always nearer)."; `docs/DECISIONS.md` regenerated.
+
 ### [x] [LOW] /play — in co-op the enemy-dice subheading still says "you" under "Player 2's dice"
 - pass: 31 (commit 293e981)
 - viewport: desktop
