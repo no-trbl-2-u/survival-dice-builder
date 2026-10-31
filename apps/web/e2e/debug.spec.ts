@@ -75,3 +75,15 @@ test('/debug: Copy replay copies the run and says so only until the next action'
   await page.getByRole('button', { name: 'Bot step' }).click()
   await expect(page.getByRole('button', { name: 'Copy replay' })).toBeVisible()
 })
+
+test('/debug: the written rules link says it opens GitHub, as on / and /config', async ({
+  page,
+}) => {
+  await page.goto('/debug')
+  const intro = page.getByText(/^Play the rules engine one action at a time\./)
+  await expect(intro).toContainText('the section of the written rules (on GitHub) it follows')
+  await expect(intro.getByRole('link', { name: 'written rules' })).toHaveAttribute(
+    'href',
+    /\/blob\/main\/spec\/01-spec-v2-rules\.md$/,
+  )
+})

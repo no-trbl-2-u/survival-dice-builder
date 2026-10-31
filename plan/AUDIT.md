@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-31 (pass 210, cloud tick)
+
+Pass 209 fixed the /credits issue link (6dbc4b2). No issues are open for triage. The critique gate is closed (pass 33 ran 8 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 1 commit ago). Phase 35 is still blocked on the designer's Skills session. Fresh audit finding: the /debug intro links "written rules" to GitHub with no notice, while / and /config say "(on GitHub)" after the same link. A 1.8 (impact 2: one link on a tool page; ease 9: one string and an e2e check). The intro now says "the section of the written rules (on GitHub) it follows", and the debug e2e test pins it. The rows left all edit `[needs-user-call]` items, which /oversight owns.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /debug: the "written rules" link does not say it opens GitHub (audit, navigation)
+- category: links (navigation)
+- impact: 2
+- ease: 9
+- next: add "(on GitHub)" as on / and /config
+- issue: #263
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [7.2] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: /oversight drops rows 65 and 69 from that item
+
 # Site audit — 2026-10-31 (pass 209, cloud tick)
 
 Pass 208 handed to `/expand` (pass 22, 05dbd05). No issues are open for triage. The critique gate is closed (pass 33 ran 7 commits ago, under 24 hours) and so is the expand gate (pass 22 ran at the last commit). Phase 35 is still blocked on the designer's Skills session. Fresh audit finding: the /credits intro links "open an issue" to GitHub with no notice, while / and /config say "(on GitHub)" after theirs (pass 206 fixed /config). A 1.8 (impact 2: one link; ease 9: one string and an e2e check). The intro now says "open an issue (on GitHub).", and the credits e2e test pins it. The rows left all edit `[needs-user-call]` items, which /oversight owns.

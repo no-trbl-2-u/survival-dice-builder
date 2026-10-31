@@ -108,9 +108,9 @@ export function DebugPage() {
     <div className={styles.page}>
       <p>
         Play the rules engine one action at a time. Each log line starts with the section of the{' '}
-        <a href={rulesUrl}>written rules</a> it follows, in [brackets], or [not in the written
-        rules] when the step comes from a later design decision. It always plays the standard rules,
-        not a config saved on <a href="/config">Config</a>.
+        <a href={rulesUrl}>written rules</a> (on GitHub) it follows, in [brackets], or [not in the
+        written rules] when the step comes from a later design decision. It always plays the
+        standard rules, not a config saved on <a href="/config">Config</a>.
       </p>
       <form
         className={styles.controls}
