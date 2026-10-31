@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Combat model help still says "play Engage"
-- pass: 33 (commit 5f977be)
-- viewport: desktop
-- category: voice
-- observation: Engage is an option on the Move and Gather cards, not a card; earlier passes removed "play Engage" from the home page for that reason. The /config help still uses it.
-- evidence: `packages/content/data/config.meta.json:109` "Engagements (default): play Engage to roll from where you stand; enemies hit structures in the siege step at the end of Combat." Home page: "Play a card's Engage option (on Move and Gather) to roll your dice from where you stand".
-- suggested fix: Reword to "Engagements (default): play a card's Engage option to roll from where you stand; enemies hit structures in the siege step at the end of Combat." ("siege step" is the rules' own term, 7.10-7.11.)
-- source: web-fetch
-
 ### [LOW] /decisions — "row N" links to a reading under "Decided recently" leave the page, and "rows 65 and 69" is not linked
 - pass: 33 (commit 5f977be)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: user
 
 ## Done
+### [x] [LOW] /config — the Combat model help still says "play Engage"
+- pass: 33 (commit 5f977be)
+- viewport: desktop
+- category: voice
+- observation: Engage is an option on the Move and Gather cards, not a card; earlier passes removed "play Engage" from the home page for that reason. The /config help still uses it.
+- evidence: `packages/content/data/config.meta.json:109` "Engagements (default): play Engage to roll from where you stand; enemies hit structures in the siege step at the end of Combat." Home page: "Play a card's Engage option (on Move and Gather) to roll your dice from where you stand".
+- suggested fix: Reword to "Engagements (default): play a card's Engage option to roll from where you stand; enemies hit structures in the siege step at the end of Combat." ("siege step" is the rules' own term, 7.10-7.11.)
+- source: web-fetch
+- issue: #258
+- addressed: (this commit); the help now says "play a card's Engage option to roll from where you stand", and a configMetaText test fails if any help says "play Engage".
+
 ### [x] [MED] /config — Start run always starts a solo run, and fails when the saved minimum is above 1
 - pass: 33 (commit 5f977be)
 - viewport: desktop
@@ -109,7 +111,7 @@
 - suggested fix: Point Start run at the /play start panel (seed and player count chosen there), or pass `players=${config.players.min}` and label the button for what it starts; pin it with a test.
 - source: web-fetch
 - issue: #257
-- addressed: (this commit); the /config bar button now reads "Set up a run" and opens the /play start panel, which picks the player count (from Fewest players up) and the seed. The e2e test pins it.
+- addressed: 216c617; the /config bar button now reads "Set up a run" and opens the /play start panel, which picks the player count (from Fewest players up) and the seed. The e2e test pins it.
 
 ### [x] [LOW] /decisions — rule reading 70 still calls the upkeep saving "a table question"
 - pass: 32 (commit a97bccc)

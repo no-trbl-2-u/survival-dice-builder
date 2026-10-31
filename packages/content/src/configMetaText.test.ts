@@ -85,6 +85,15 @@ describe('config.meta.json marks the Spec v2 rule as the written one', () => {
     })
     expect(entry?.help).not.toContain('(the written rule)')
   })
+
+  it('7.8: Engage is a card option, not a card', () => {
+    const help = defaultConfigMeta['combat.model']?.help ?? ''
+    expect(help).toContain("play a card's Engage option to roll from where you stand")
+    const found = Object.entries(defaultConfigMeta)
+      .filter(([, e]) => /\bplay Engage\b/i.test(e.help ?? ''))
+      .map(([path]) => path)
+    expect(found).toEqual([])
+  })
 })
 
 describe('config.meta.json names the baseline one way', () => {
