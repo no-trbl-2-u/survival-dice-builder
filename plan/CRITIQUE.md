@@ -27,15 +27,6 @@
 - suggested fix: Add "(on GitHub)" after the /config link, as on the home page.
 - source: web-fetch
 
-### [LOW] /play — the Build step says "(2 left)" with no unit
-- pass: 33 (commit 5f977be)
-- viewport: desktop
-- category: comprehension
-- observation: The next-step banner's Build line ends in a bare count. The Move line in the same function says "movement left". Read from source; /play is a JS shell for the web-fetch engine.
-- evidence: `apps/web/src/play/nextStep.ts:67` `Build: click a highlighted hex (${state.active.buildsLeft} left), or stop building`; `:58` `(${hexesLeft} movement left)`.
-- suggested fix: "Build: click a highlighted hex (2 builds left), or stop building", singular for 1; pin both in the nextStep test.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -91,6 +82,18 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /play — the Build step says "(2 left)" with no unit
+- pass: 33 (commit 5f977be)
+- viewport: desktop
+- category: comprehension
+- observation: The next-step banner's Build line ends in a bare count. The Move line in the same function says "movement left". Read from source; /play is a JS shell for the web-fetch engine.
+- evidence: `apps/web/src/play/nextStep.ts:67` `Build: click a highlighted hex (${state.active.buildsLeft} left), or stop building`; `:58` `(${hexesLeft} movement left)`.
+- suggested fix: "Build: click a highlighted hex (2 builds left), or stop building", singular for 1; pin both in the nextStep test.
+- source: web-fetch
+- issue: #259
+- addressed: (this commit); the Build banner now says "(2 builds left)", and "(1 build left)" for one, and a nextStep test pins both.
+
 ### [x] [LOW] /config — the Combat model help still says "play Engage"
 - pass: 33 (commit 5f977be)
 - viewport: desktop
@@ -100,7 +103,7 @@
 - suggested fix: Reword to "Engagements (default): play a card's Engage option to roll from where you stand; enemies hit structures in the siege step at the end of Combat." ("siege step" is the rules' own term, 7.10-7.11.)
 - source: web-fetch
 - issue: #258
-- addressed: (this commit); the help now says "play a card's Engage option to roll from where you stand", and a configMetaText test fails if any help says "play Engage".
+- addressed: a239cf6; the help now says "play a card's Engage option to roll from where you stand", and a configMetaText test fails if any help says "play Engage".
 
 ### [x] [MED] /config — Start run always starts a solo run, and fails when the saved minimum is above 1
 - pass: 33 (commit 5f977be)

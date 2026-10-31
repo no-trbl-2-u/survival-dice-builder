@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-31 (pass 205, cloud tick)
+
+Pass 204's Combat model help fix shipped (a239cf6). No issues are open for triage. The critique gate is closed (pass 33 ran 4 commits ago, under 24 hours) and so is the expand gate (pass 21 ran 5 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the pass 33 LOW comprehension row on /play, where the Build step ended in a bare count, "(2 left)", while the Move step says "movement left". A 1.8 (impact 2: one banner line; ease 9: one string and a pinned test). The banner now says "(2 builds left)", and "(1 build left)" for one, and a nextStep test pins both. Next in line: the "written rules" link on /config, the /decisions row links, then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /play: the Build step says "(2 left)" with no unit (critique pass 33 LOW)
+- category: external-critique (comprehension)
+- impact: 2
+- ease: 9
+- next: "(2 builds left)", singular for 1, pin in the nextStep test
+- issue: #259
+- fixed: (this commit)
+
+### [ ] [1.8] /config: the "written rules" link does not say it opens GitHub (critique pass 33 LOW)
+- category: external-critique (navigation)
+- impact: 2
+- ease: 9
+- next: add "(on GitHub)" as on the home page
+
+### [ ] [1.2] /decisions: "row N" links to Decided recently rows leave the page (critique pass 33 LOW)
+- category: external-critique (navigation)
+- impact: 2
+- ease: 6
+- next: ids on Decided recently items, link each number after "rows"
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [7.2] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: /oversight drops rows 65 and 69 from that item
+
 # Site audit — 2026-10-31 (pass 204, cloud tick)
 
 Pass 203's /config bar fix shipped (216c617). No issues are open for triage. The critique gate is closed (pass 33 ran 2 commits ago, under 24 hours) and so is the expand gate (pass 21 ran 3 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the pass 33 LOW voice row on /config, where the Combat model help said "play Engage" although Engage is an option on the Move and Gather cards, not a card. A 1.8 (impact 2: one help line; ease 9: one string and a pinned test). The help now says "play a card's Engage option to roll from where you stand", as the home page does, and a configMetaText test fails if any help says "play Engage". Next in line: the Build step unit on /play, the "written rules" link on /config, the /decisions row links, then the rows that wait for /oversight.
@@ -17,7 +55,7 @@ Pass 203's /config bar fix shipped (216c617). No issues are open for triage. The
 - ease: 9
 - next: reword the config.meta.json help string
 - issue: #258
-- fixed: (this commit)
+- fixed: a239cf6
 
 ### [ ] [1.8] /play: the Build step says "(2 left)" with no unit (critique pass 33 LOW)
 - category: external-critique (comprehension)

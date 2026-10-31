@@ -73,6 +73,20 @@ describe('nextStep', () => {
     expect(bannerActions(legal).map((a) => a.type)).toContain('buyUpgrade')
   })
 
+  it('the Build banner names the unit of the builds left, singular for 1', () => {
+    const s = createGame(config, 3)
+    const placed = applyAction(s, legalActions(s)[0]!).state
+    const legal: Action[] = [{ type: 'build', defense: 'wall', q: 0, r: -2 }]
+    const building = (buildsLeft: number) =>
+      ({ ...placed, active: { kind: 'build', buildsLeft, costReduction: 0, level: 1 } }) as const
+    expect(nextStep(building(2), legal).step).toBe(
+      'Build: click a highlighted hex (2 builds left), or stop building',
+    )
+    expect(nextStep(building(1), legal).step).toBe(
+      'Build: click a highlighted hex (1 build left), or stop building',
+    )
+  })
+
   it('the Move banner says why a hex next to an enemy is not offered when the surcharge is on', () => {
     const start = createGame(config, 1)
     const placed = applyAction(start, { type: 'placeFigure', q: 0, r: 0 }).state

@@ -62,9 +62,10 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
     if (has('buyUpgrade')) return step('Prepare', 'Build: buy a base upgrade, or stop building')
     if (!has('build'))
       return step('Prepare', 'Build: not enough materials for anything here, so stop building')
+    const { buildsLeft } = state.active
     return step(
       'Prepare',
-      `Build: click a highlighted hex (${state.active.buildsLeft} left), or stop building`,
+      `Build: click a highlighted hex (${buildsLeft} ${buildsLeft === 1 ? 'build' : 'builds'} left), or stop building`,
     )
   }
   if (state.phase === 'combat' && state.config.combat.model === 'engage')
