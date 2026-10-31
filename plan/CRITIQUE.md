@@ -18,15 +18,6 @@
 - suggested fix: Give each Decided recently item an id from `rowId()`, add those rows to the set `rowRefs` links in-page, and link each number after "rows".
 - source: web-fetch
 
-### [LOW] /config — the "written rules" link does not say it opens GitHub
-- pass: 33 (commit 5f977be)
-- viewport: desktop
-- category: navigation
-- observation: The /config intro links "written rules" to the rules file on GitHub with no notice. The home page link says "(on GitHub)".
-- evidence: `apps/web/src/config/ConfigPage.tsx:760-761` "Each field names its section of the written rules." (href `rulesUrl`); `apps/web/src/home/HomePage.tsx:50` "the written rules (on GitHub)".
-- suggested fix: Add "(on GitHub)" after the /config link, as on the home page.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /config — the "written rules" link does not say it opens GitHub
+- pass: 33 (commit 5f977be)
+- viewport: desktop
+- category: navigation
+- observation: The /config intro links "written rules" to the rules file on GitHub with no notice. The home page link says "(on GitHub)".
+- evidence: `apps/web/src/config/ConfigPage.tsx:760-761` "Each field names its section of the written rules." (href `rulesUrl`); `apps/web/src/home/HomePage.tsx:50` "the written rules (on GitHub)".
+- suggested fix: Add "(on GitHub)" after the /config link, as on the home page.
+- source: web-fetch
+- issue: #260
+- fixed: (this commit) — the /config intro says "the written rules (on GitHub)", as on the home page; a config e2e test pins the text and the link
 
 ### [x] [LOW] /play — the Build step says "(2 left)" with no unit
 - pass: 33 (commit 5f977be)

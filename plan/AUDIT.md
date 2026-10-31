@@ -5,25 +5,19 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
-# Site audit — 2026-10-31 (pass 205, cloud tick)
+# Site audit — 2026-10-31 (pass 206, cloud tick)
 
-Pass 204's Combat model help fix shipped (a239cf6). No issues are open for triage. The critique gate is closed (pass 33 ran 4 commits ago, under 24 hours) and so is the expand gate (pass 21 ran 5 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the pass 33 LOW comprehension row on /play, where the Build step ended in a bare count, "(2 left)", while the Move step says "movement left". A 1.8 (impact 2: one banner line; ease 9: one string and a pinned test). The banner now says "(2 builds left)", and "(1 build left)" for one, and a nextStep test pins both. Next in line: the "written rules" link on /config, the /decisions row links, then the rows that wait for /oversight.
+Pass 205's Build step fix shipped (9ea1df7). No issues are open for triage. The critique gate is closed (pass 33 ran 5 commits ago, under 24 hours) and so is the expand gate (pass 21 ran 6 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the pass 33 LOW navigation row on /config, where the intro linked "written rules" to GitHub with no notice, while the home page says "(on GitHub)". A 1.8 (impact 2: one link; ease 9: one string and an e2e check). The intro now says "the written rules (on GitHub)", and a config e2e test pins the text and the link. Next in line: the /decisions row links, then the rows that wait for /oversight.
 
 ## Top 5 findings (scored)
 
-### [x] [1.8] /play: the Build step says "(2 left)" with no unit (critique pass 33 LOW)
-- category: external-critique (comprehension)
-- impact: 2
-- ease: 9
-- next: "(2 builds left)", singular for 1, pin in the nextStep test
-- issue: #259
-- fixed: (this commit)
-
-### [ ] [1.8] /config: the "written rules" link does not say it opens GitHub (critique pass 33 LOW)
+### [x] [1.8] /config: the "written rules" link does not say it opens GitHub (critique pass 33 LOW)
 - category: external-critique (navigation)
 - impact: 2
 - ease: 9
 - next: add "(on GitHub)" as on the home page
+- issue: #260
+- fixed: (this commit)
 
 ### [ ] [1.2] /decisions: "row N" links to Decided recently rows leave the page (critique pass 33 LOW)
 - category: external-critique (navigation)

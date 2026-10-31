@@ -17,6 +17,20 @@ test('/config: each field has a label, help with its rules section, and plain op
   )
 })
 
+test('/config: the written rules link says it opens GitHub, as on the home page (critique pass 33)', async ({
+  page,
+}) => {
+  await page.goto('/config')
+  const intro = page.getByText(/^Change any rule value or option for playtests\./)
+  await expect(intro).toContainText(
+    'Each field names its section of the written rules (on GitHub).',
+  )
+  await expect(intro.getByRole('link', { name: 'written rules' })).toHaveAttribute(
+    'href',
+    /\/blob\/main\/spec\/01-spec-v2-rules\.md$/,
+  )
+})
+
 test('/config: a ruling the engine does not read yet says so', async ({ page }) => {
   await page.goto('/config')
   await expect(page.getByLabel('Heal targets', { exact: true })).toHaveAccessibleDescription(

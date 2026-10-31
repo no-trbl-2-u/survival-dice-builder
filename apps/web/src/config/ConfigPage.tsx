@@ -758,8 +758,8 @@ function ConfigForm({ store }: Readonly<{ store: KeyValue | undefined }>) {
     <div className={styles.page}>
       <p>
         Change any rule value or option for playtests. Each field names its section of the{' '}
-        <a href={rulesUrl}>written rules</a>. The config is saved in this browser only. A run keeps
-        the config it started with.
+        <a href={rulesUrl}>written rules</a> (on GitHub). The config is saved in this browser only.
+        A run keeps the config it started with.
       </p>
       <ConfigChanges
         config={saved}
