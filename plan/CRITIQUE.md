@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — Start run always starts a solo run, and fails when the saved minimum is above 1
-- pass: 33 (commit 5f977be)
-- viewport: desktop
-- category: navigation
-- observation: The Start run button on the /config bar opens /play with a seed and no player count, so /play starts 1 player and skips the start panel. There is no way to start co-op from it, and the button does not say it is solo. If the saved config sets Fewest players to 2 or more, the engine refuses the 1-player setup and the run does not start.
-- evidence: `apps/web/src/config/ConfigPage.tsx:819` `play(`/play?seed=${Date.now() % 100000}`)`; `apps/web/src/play/PlayPage.tsx:106` `params.get('players') ?? '1'`; `packages/engine/src/api/createGame.ts:34-35` throws "Player count 1 is outside 2-4". /config help for Fewest players: "The smallest player count a new run allows."
-- suggested fix: Point Start run at the /play start panel (seed and player count chosen there), or pass `players=${config.players.min}` and label the button for what it starts; pin it with a test.
-- source: web-fetch
-
 ### [LOW] /config — the Combat model help still says "play Engage"
 - pass: 33 (commit 5f977be)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: user
 
 ## Done
+### [x] [MED] /config — Start run always starts a solo run, and fails when the saved minimum is above 1
+- pass: 33 (commit 5f977be)
+- viewport: desktop
+- category: navigation
+- observation: The Start run button on the /config bar opens /play with a seed and no player count, so /play starts 1 player and skips the start panel. There is no way to start co-op from it, and the button does not say it is solo. If the saved config sets Fewest players to 2 or more, the engine refuses the 1-player setup and the run does not start.
+- evidence: `apps/web/src/config/ConfigPage.tsx:819` `play(`/play?seed=${Date.now() % 100000}`)`; `apps/web/src/play/PlayPage.tsx:106` `params.get('players') ?? '1'`; `packages/engine/src/api/createGame.ts:34-35` throws "Player count 1 is outside 2-4". /config help for Fewest players: "The smallest player count a new run allows."
+- suggested fix: Point Start run at the /play start panel (seed and player count chosen there), or pass `players=${config.players.min}` and label the button for what it starts; pin it with a test.
+- source: web-fetch
+- issue: #257
+- addressed: (this commit); the /config bar button now reads "Set up a run" and opens the /play start panel, which picks the player count (from Fewest players up) and the seed. The e2e test pins it.
+
 ### [x] [LOW] /decisions — rule reading 70 still calls the upkeep saving "a table question"
 - pass: 32 (commit a97bccc)
 - viewport: desktop

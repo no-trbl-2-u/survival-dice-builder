@@ -814,12 +814,10 @@ function ConfigForm({ store }: Readonly<{ store: KeyValue | undefined }>) {
                   Resume run (round {resumable.state.round})
                 </button>
               ) : null}
-              <button
-                type="button"
-                className="brass"
-                onClick={() => play(`/play?seed=${Date.now() % 100000}`)}
-              >
-                Start run
+              {/* The Play page's start panel picks the player count and seed, so co-op and a raised
+                  Fewest players both start from here (critique pass 33). */}
+              <button type="button" className="brass" onClick={() => play('/play')}>
+                Set up a run
               </button>
             </span>
           </div>

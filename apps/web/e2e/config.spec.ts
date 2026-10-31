@@ -162,7 +162,9 @@ test('/config: sliders, toggles, and pick lists; a name can only come from the c
   await expect(page.getByTestId('player-panel')).toContainText('16 / 16')
 })
 
-test('/config: Start run saves the edits first and starts a run with them', async ({ page }) => {
+test('/config: Set up a run saves the edits first and opens the start panel with them', async ({
+  page,
+}) => {
   const dialogs: string[] = []
   page.on('dialog', async (d) => {
     dialogs.push(d.type())
@@ -170,12 +172,16 @@ test('/config: Start run saves the edits first and starts a run with them', asyn
   })
   await page.goto('/config')
   await page.getByLabel('Maximum health', { exact: true }).fill('17')
-  await page.getByTestId('config-bar').getByRole('button', { name: 'Start run' }).click()
-  await page.waitForURL(/\/play\?seed=\d+$/)
-  await expect(page.getByTestId('next-step')).toBeVisible()
+  await page.getByTestId('config-bar').getByRole('button', { name: 'Set up a run' }).click()
+  await page.waitForURL(/\/play$/)
+  await expect(page.getByTestId('start-panel')).toContainText('Maximum health: 17')
+  await page.getByRole('button', { name: 'Start run' }).click()
+  await expect(page.getByTestId('player-panel')).toContainText('17 / 17')
   expect(dialogs).toEqual([])
   await page.goto('/config')
   await expect(page.getByLabel('Maximum health', { exact: true })).toHaveValue('17')
+  await page.getByRole('button', { name: 'Reset to the standard rules' }).click()
+  await page.getByRole('button', { name: 'Yes, reset every value' }).click()
 })
 
 test('/config: Resume run shows only with an autosave, and carries on with it', async ({

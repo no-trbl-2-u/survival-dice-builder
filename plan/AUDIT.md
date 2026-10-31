@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-31 (pass 203, cloud tick)
+
+Critique pass 33 (914aacb) filed five rows: one MED, four LOW. No issues are open for triage. The critique gate is closed (pass 33 ran at the last commit) and so is the expand gate (pass 21 ran 2 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Top of the queue: the pass 33 MED navigation row on /config, where the bar's Start run button opened /play with a seed and no player count, so it always started a solo run and failed when the saved Fewest players was 2 or more. A 7.2 (impact 6: every run started from /config, and co-op could not start there; ease 8: one button and one e2e test; bias x1.5). The button now reads "Set up a run" and opens the /play start panel, which offers the player counts the config allows and a seed. Next in line: the four pass 33 LOW rows (Combat model help wording, /decisions row links, the "written rules" link, the Build step unit), then the rows that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [7.2] /config: Start run always starts a solo run, and fails when the saved minimum is above 1 (critique pass 33 MED, bias x1.5)
+- category: external-critique (navigation)
+- impact: 6
+- ease: 8
+- next: point the bar button at the /play start panel, pin it in e2e
+- issue: #257
+- fixed: (this commit)
+
+### [ ] [1.8] /play: the Build step says "(2 left)" with no unit (critique pass 33 LOW)
+- category: external-critique (comprehension)
+- impact: 2
+- ease: 9
+- next: "(2 builds left)", singular for 1, pin in the nextStep test
+
+### [ ] [1.8] /config: the "written rules" link does not say it opens GitHub (critique pass 33 LOW)
+- category: external-critique (navigation)
+- impact: 2
+- ease: 9
+- next: add "(on GitHub)" as on the home page
+
+### [ ] [1.8] /config: the Combat model help still says "play Engage" (critique pass 33 LOW)
+- category: external-critique (voice)
+- impact: 2
+- ease: 9
+- next: reword the config.meta.json help string
+
+### [ ] [1.2] /decisions: "row N" links to Decided recently rows leave the page (critique pass 33 LOW)
+- category: external-critique (navigation)
+- impact: 2
+- ease: 6
+- next: ids on Decided recently items, link each number after "rows"
+
 # Site audit — 2026-10-30 (pass 202, cloud tick)
 
 Pass 201's rule reading 70 fix shipped (d632676). No issues are open for triage. The critique gate is closed (pass 32 ran 8 commits ago, under 24 hours) and so is the expand gate (pass 20 ran 18 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. No finding the loop can ship scores 3.0 or more, so there is no actionable iterate work. Handed to `/expand` (pass 21, bold posture). The five /decisions critique rows (three MED at 8.1 with the bias, two LOW) all edit `[needs-user-call]` items and wait for /oversight. The sim bot-policy row (critique LOW, user) is phase-sized. Checked this pass: every "you" and "your" string in `apps/web/src/play` (non-test) either names the seat in co-op through `seatName`, `whose` or a `seat` argument, or is solo-only (`nextStep.ts`, `engageView.ts`). The co-op wording drip from passes 189 to 199 found nothing new. Seat logic is now in 12 files, 25 sites.
