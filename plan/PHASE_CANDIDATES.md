@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-30 at commit d632676
-> Pass count: 21
+> Last pass: 2026-10-31 at commit d29b03d
+> Pass count: 22
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -30,7 +30,8 @@
 - progress (expand pass 18): ec2ebf6 (audit pass 142) shipped the guard: `citedRows` in `packages/content/src/decisions.ts` reads the rows a check cites ("row 57", "rows 30, 49", "rule readings 63-70"), and a content test fails when a check cites a row that does not exist, or a decided row outside a pinned list of today's stale citations (rows 7, 30, 49, 50 and 55 in "Spec v2 design work"; rows 65 and 69 in "Structural v2 questions"). Row 50 was stale too and no critique row had named it. The next decided row can no longer go stale on /decisions without a red test. Still open: the stale lines themselves (5 Pending critique rows, all in `[needs-user-call]` items that only `/oversight` may edit), and the one balance check built from the latest sim batch. Score lowered from 5.0 to 3.5: the part that needed a phase is mostly shipped; what holds the queue is an `/oversight` edit of the AUDIT lines, after which the pinned list shrinks to nothing and this row can close, or be cut down to the balance check alone.
 - re-evidence (expand pass 19): the 18 shipping commits since pass 18 were all single-row fixes, while the two 8.1 /decisions rows ("three balance checks", "Structural v2 questions") stayed at the head of every Top 5, marked "waits for /oversight". Critique pass 29 added no /decisions row; 5 of the 6 Pending critique rows the site can act on are still on /decisions, all in `[needs-user-call]` items. Score held at 3.5: nothing new, and nothing the loop can do without `/oversight`.
 - re-evidence (expand pass 21): critique pass 32 (96669d8) filed three more /decisions copy rows; `/iterate` shipped them as eead64e (rule reading 56), 70ad49a (game-term case) and d632676 (rule reading 70). Five older rows are still pending, three MED at 8.1 and two LOW, all in `[needs-user-call]` items that only `/oversight` may edit. Score held at 3.5: nothing new for the loop, and the `/oversight` edit is still what clears the queue.
-- last re-evidenced: 2026-10-30
+- re-evidence (expand pass 22): critique pass 33 (914aacb) filed one more /decisions row: a "row N" link to a reading under Decided recently left the page for GitHub, and "rows 65 and 69" linked nothing. d29b03d gave Decided recently items ids and linked each number after "rows". The same five older rows still wait for `/oversight`, three MED at 8.1 and two LOW. Score held at 3.5.
+- last re-evidenced: 2026-10-31
 
 ### [ ] [score 1.0] Milestones a default run can reach: every milestone reachable, or marked out of reach with its reason
 - proposed: 2026-10-17, expand pass 13
@@ -94,7 +95,8 @@
 - progress (expand pass 11): `/iterate` shipped most of the copy half one row at a time: f0ad808, 7dfe010, 091c25e, 3f400ae, 28b4d0b, 61c8ce0, 158a70f, 92101d6, a4e131f (pass 15 rows 1-5 and the pass 13 timing and target rows are done). What is left is the guard: "written rule" is still typed by hand in 6 places (`HomePage.tsx:45`, `ConfigPage.tsx:711`, `DebugPage.tsx:84`, `config.meta.json:280`, `decisions.ts:100`, and a stale "(Spec v1)" comment at `decisions/Inline.tsx:7`), and the pass 13 /config rows (baseline named three ways, "Rules engagements." notes) are still pending. Score lowered from 6.5: the visible harm is mostly gone; the reason to promote is the next rules change.
 - progress (expand pass 12): three more rows of the copy half shipped one at a time: 44df05f (/config rules note names only written-rules sections), 30ef913 (/decisions row 7 gives only the Spec v2 siege reading), b77dc49 (/decisions row 17 says steps of 3). The guard is still missing: "written rule" is typed by hand in `HomePage.tsx:45`, `ConfigPage.tsx:711`, `DebugPage.tsx:84`, `config.meta.json:103,280` and `decisions.ts:100`, and `decisions/Inline.tsx:7` still says "(Spec v1)". Critique pass 17 adds a /config row of the same kind: help texts cite "(open question N)" as plain text, and several of those numbers are not on /decisions; the pass 13 "baseline named three ways" row is still pending. Score held at 4.0.
 - progress (expand pass 13): four more rows of the copy half shipped: ed27a5c (/config links each open-question reading it cites to /decisions), 90858d8 (the baseline named one way), 431fb35 (level steps worded one way), a740b4e (the start panel reads its rule lines from the saved config). The pass 13 and pass 17 /config rows this candidate absorbed are now closed. The guard is still missing: nothing fails when help text calls a non-default value "the written rule". Score held at 4.0; the reason to promote remains the next rules change.
-- last re-evidenced: 2026-10-17
+- re-evidence (expand pass 22): critique pass 33 found two more hand-typed rule phrases on /config: the Combat model help said "play Engage", though under Spec v2 Engage is an option on the Move and Gather cards (a239cf6), and the "written rules" link did not say it opens GitHub (35073ff). Each shipped with its own string test. The guard in scope, rule phrases from `ruleText` checked against the Spec v2 defaults, is still missing. Score held at 4.0.
+- last re-evidenced: 2026-10-31
 
 ### [ ] [score 6.0] The table sheets on Spec v2: one-pager facts rewritten, and a test that ties them to config
 - proposed: 2026-10-13, expand pass 10
@@ -199,7 +201,8 @@
 - conflicts: none. The verify gate grows; keep the 4-seat browser run short (seeded, a few rounds), per standing rule 3.
 - re-evidence (expand pass 20): 5 of the 17 `fix:` commits since pass 19 named the seat on one /play surface at a time (616b528 Hand, 659ad23 Skills and Dice headings, c326fd1 engagement window, 7d951e7 engagement result, 9e64aa5 all-placed note), each with its own "You" or "Player N" logic. Critique pass 31 filed the next one: `apps/web/src/play/DiceTray.tsx:191-192` still says "next to you" and "they hit you" under "Player 2's dice". The seat-name helper in this candidate's scope is what would stop the drip.
 - re-evidence (expand pass 21): 7 of the 18 `fix:` commits since pass 20 named the seat on one more /play surface each (c98bce0 enemy-dice subheading, d0fc360 Base panel purse, 39716c8 Skill dice hint, 2814744 draft and return dialog, 8809bb7 Shop hint, a97bccc card chips' back button, 855d09c map figure's accessible name). Audit pass 202 read every "you" string in `apps/web/src/play` and found no more co-op gaps, so the wording drip looks drained. The seat logic it left is now in 12 files and 25 sites (`players.length === 1` or `solo(names)`), up from 6 sites at discovery. Score held at 4.5: the visible harm is fixed, but the 4-seat engine, bot and browser proof in scope is still missing.
-- last re-evidenced: 2026-10-30
+- re-evidence (expand pass 22): critique pass 33 [MED] found that the /config bar's Start run always started a solo run, and the engine refused it when the saved Fewest players was 2 or more (216c617 now opens the start panel). No browser test had started a co-op run from a saved config. That is the browser half of this scope. Score held at 4.5.
+- last re-evidenced: 2026-10-31
 - ruling audit: rows 6, 52-54 (decided), 55, 68 (proposed) checked; tests pin today's readings and mark row 68 unsettled. No conflict. Loop scope: in for engine and bot tests; e2e and the helper are web (minor).
 
 ### [ ] [score 4.0] Keyboard and screen-reader proof: a full run by keyboard and an automated audit on every route

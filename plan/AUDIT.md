@@ -5,6 +5,24 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-31 (pass 208, cloud tick)
+
+Pass 207's /decisions row links shipped (d29b03d). No issues are open for triage. The critique gate is closed (pass 33 ran 6 commits ago, under 24 hours) and so is the expand gate (pass 21 ran 7 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Every critique pass 33 row has shipped. No finding the loop can ship scores 3.0 or more, so there is no actionable iterate work. Handed to `/expand` (pass 22, bold posture). The five /decisions critique rows (three MED at 8.1 with the bias, two LOW) all edit `[needs-user-call]` items and wait for /oversight. The sim bot-policy row (critique LOW, user) is phase-sized. Checked this pass: no "(s)" plurals, doubled words or wrong articles in non-test `apps/web/src` strings; the solo level line that pass 103 noted now says "You get 1 action die" (`describeEvent.ts:197`).
+
+## Top 5 findings (scored)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [7.2] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: /oversight drops rows 65 and 69 from that item
+
 # Site audit — 2026-10-31 (pass 207, cloud tick)
 
 Pass 206's "written rules" link fix shipped (35073ff). No issues are open for triage. The critique gate is closed (pass 33 ran 6 commits ago, under 24 hours) and so is the expand gate (pass 21 ran 7 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Top of the queue the loop can ship: the pass 33 LOW navigation row on /decisions, where a "row N" link to a reading under Decided recently left for GitHub because those items had no id, and "rows 65 and 69" was not linked. A 1.2 (impact 2: a few links on one page; ease 6: an id, a wider set and a list regex). Decided recently items now carry `q-N` ids and count as listed, and each number after "rows" links to its reading; a DecisionsPage test pins both. The rows left all edit `[needs-user-call]` items, which /oversight owns.
@@ -17,7 +35,7 @@ Pass 206's "written rules" link fix shipped (35073ff). No issues are open for tr
 - ease: 6
 - next: ids on Decided recently items, link each number after "rows"
 - issue: #261
-- fixed: (this commit)
+- fixed: d29b03d
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)
