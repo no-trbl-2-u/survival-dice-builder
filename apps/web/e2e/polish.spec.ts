@@ -72,6 +72,8 @@ test('/credits lists every icon author and the fonts', async ({ page }) => {
   await expect(page.locator('main')).toContainText('Alfa Slab One')
   // The intro says where to report a missing credit, not how the page is built.
   await expect(page.locator('main')).not.toContainText('asset register')
+  // The report link says it leaves the site, as on / and /config.
+  await expect(page.locator('main')).toContainText('open an issue (on GitHub).')
   await expect(page.getByRole('link', { name: 'open an issue' })).toHaveAttribute(
     'href',
     'https://github.com/no-trbl-2-u/survival-dice-builder/issues',

@@ -96,7 +96,7 @@ export function CreditsPage() {
     <div className={styles.page}>
       <p>
         Every asset in the game, with its license. If a credit is missing or wrong,{' '}
-        <a href={ISSUES_URL}>open an issue</a>.
+        <a href={ISSUES_URL}>open an issue</a> (on GitHub).
       </p>
       <h2>Icons</h2>
       <CreditList credits={icons} noun="icon" testId="credits-assets" />
