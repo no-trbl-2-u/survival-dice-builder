@@ -171,6 +171,35 @@ export function gatherText(amount: number, config: GameConfig): string {
   return `Gather ${amount} on an unspent gathering node (the node is spent)${elsewhere}`
 }
 
+/**
+ * Where materials come from, for the Materials line on /: the starter deck's Gather amount,
+ * where a Gather card works, and that a node gives its materials once.
+ *
+ * @rule 6.7, Table 1, OPEN-QUESTIONS rows 20, 59, 67
+ */
+export function materialsText(config: GameConfig, content: Pick<Content, 'cards'>): string {
+  const preset = config.deck.presets.find((p) => p.id === config.deck.preset)
+  const amounts = [
+    ...new Set(
+      (preset?.cards ?? []).flatMap((entry) => {
+        const top = content.cards.find((c) => c.id === entry.card)?.top
+        return top?.kind === 'gather' ? [top.amount] : []
+      }),
+    ),
+  ]
+  const [only] = amounts
+  const gets =
+    amounts.length === 1 && only !== undefined
+      ? plural(only, 'material', 'materials')
+      : 'its materials'
+  if (!config.rulings.gatherNeedsNode)
+    return `Play a Gather card anywhere to get ${gets}; a gathering node it is played on gives materials once.`
+  const off = config.gather.offNodeAmount
+  const elsewhere =
+    off > 0 ? ` Anywhere else, a Gather card gets ${plural(off, 'material', 'materials')}.` : ''
+  return `Play a Gather card on a gathering node to get ${gets}; each node gives its materials once.${elsewhere}`
+}
+
 /** "a grunt rolls 1, an elite 2": each enemy's enemy dice, from the enemy content. */
 const enemyDiceText = (content: Enemies) =>
   content.enemies.enemies

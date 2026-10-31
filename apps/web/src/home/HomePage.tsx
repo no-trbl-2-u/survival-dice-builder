@@ -5,6 +5,7 @@ import {
   goalText,
   knockoutText,
   levelText,
+  materialsText,
   playersText,
   revealText,
   roundText,
@@ -55,6 +56,9 @@ export function HomePage() {
         </ol>
         <p id="home-board">On the board, every round:</p>
         <ul className={styles.board} aria-labelledby="home-board">
+          <li>
+            <strong>Materials:</strong> {materialsText(config, defaultContent)}
+          </li>
           <li>
             <strong>Defenses:</strong> {defenseText(config, defaultContent)}
           </li>

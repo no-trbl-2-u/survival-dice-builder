@@ -86,6 +86,7 @@ export {
   goalText,
   knockoutText,
   levelText,
+  materialsText,
   milestoneIds,
   milestoneLabel,
   milestoneOutOfReach,

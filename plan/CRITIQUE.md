@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — the home page prices everything in materials but never says where materials come from
-- pass: 34 (commit 7418ddf)
-- viewport: desktop
-- category: comprehension
-- observation: Barricades, Towers and Shop I are priced in materials, but the only source the page gives is the verb "gather" in the Prepare step. It never says a Gather card must be played on a gathering node, or that each node gives its materials once. A stranger learns this only from the /tiles legend.
-- evidence: "Prepare: play the top halves of your cards to move, gather materials and build Barricades and Towers."; "A Barricade costs 2 materials"; /tiles: "Gathering node (a Gather card here gets its materials, once)" (`apps/web/src/home/HomePage.tsx:45`)
-- suggested fix: Add a Materials item to the "On the board, every round:" list, built from the gathering-node site text and the Gather amount in config ("Play Gather on a gathering node to get N materials; each node gives its materials once.").
-- source: web-fetch
-
 ### [LOW] /config — the Enemy die damage help writes the faces in lower case and names the target only once
 - pass: 34 (commit 7418ddf)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: user
 
 ## Done
+
+### [x] [MED] / — the home page prices everything in materials but never says where materials come from
+- pass: 34 (commit 7418ddf)
+- viewport: desktop
+- category: comprehension
+- observation: Barricades, Towers and Shop I are priced in materials, but the only source the page gives is the verb "gather" in the Prepare step. It never says a Gather card must be played on a gathering node, or that each node gives its materials once. A stranger learns this only from the /tiles legend.
+- evidence: "Prepare: play the top halves of your cards to move, gather materials and build Barricades and Towers."; "A Barricade costs 2 materials"; /tiles: "Gathering node (a Gather card here gets its materials, once)" (`apps/web/src/home/HomePage.tsx:45`)
+- suggested fix: Add a Materials item to the "On the board, every round:" list, built from the gathering-node site text and the Gather amount in config ("Play Gather on a gathering node to get N materials; each node gives its materials once.").
+- source: web-fetch
+- issue: #265
+- addressed: (this commit); a Materials item now opens the "On the board, every round:" list on /: "Play a Gather card on a gathering node to get 2 materials; each node gives its materials once." `materialsText` builds it from the starter deck's Gather amount, `gather.offNodeAmount` and `rulings.gatherNeedsNode`; ruleText and HomePage tests pin it.
 
 ### [x] [LOW] /decisions — "row N" links to a reading under "Decided recently" leave the page, and "rows 65 and 69" is not linked
 - pass: 33 (commit 5f977be)

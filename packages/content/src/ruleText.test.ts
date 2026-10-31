@@ -15,6 +15,7 @@ import {
   gatherText,
   knockoutText,
   levelText,
+  materialsText,
   milestoneIds,
   milestoneLabel,
   milestoneOutOfReach,
@@ -227,6 +228,34 @@ describe('rule text from config', () => {
     expect(defenseText({ ...base, base: { ...base.base, startingHealth: 9 } }, cheap)).toBe(
       'A Tower costs 1 material and has 3 health; at the start of each Combat it deals 3 damage to the nearest enemy within 1 hex. When a Tower defeats an enemy, the player who built it gets the currency. The base starts with 9 health.',
     )
+  })
+
+  it('materials: the starter Gather amount, where Gather works, and a node giving its materials once (6.7, rows 59, 67)', () => {
+    expect(materialsText(base, defaultContent)).toBe(
+      'Play a Gather card on a gathering node to get 2 materials; each node gives its materials once.',
+    )
+    expect(
+      materialsText(
+        With((c) => ({ ...c, gather: { offNodeAmount: 1 } })),
+        defaultContent,
+      ),
+    ).toBe(
+      'Play a Gather card on a gathering node to get 2 materials; each node gives its materials once. Anywhere else, a Gather card gets 1 material.',
+    )
+    expect(
+      materialsText(
+        With((c) => ({ ...c, rulings: { ...c.rulings, gatherNeedsNode: false } })),
+        defaultContent,
+      ),
+    ).toBe(
+      'Play a Gather card anywhere to get 2 materials; a gathering node it is played on gives materials once.',
+    )
+    const one = {
+      cards: defaultContent.cards.map((c) =>
+        c.top.kind === 'gather' ? { ...c, top: { ...c.top, amount: 1 } } : c,
+      ),
+    }
+    expect(materialsText(base, one)).toMatch(/to get 1 material;/)
   })
 
   it('Combat end: discarding is named unless every card must be played (row 10)', () => {

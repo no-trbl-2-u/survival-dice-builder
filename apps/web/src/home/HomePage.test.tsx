@@ -26,6 +26,14 @@ describe('HomePage', () => {
     expect(items.find((text) => text.startsWith('Enemies: Each new tile'))).toBeTruthy()
   })
 
+  it('says where materials come from before the prices that spend them (critique pass 34)', () => {
+    render(<HomePage />)
+    const items = screen.getAllByRole('listitem').map((li) => li.textContent ?? '')
+    expect(items).toContain(
+      'Materials: Play a Gather card on a gathering node to get 2 materials; each node gives its materials once.',
+    )
+  })
+
   it('puts defenses, the map and enemies in their own labelled list, not more round steps (critique pass 29)', () => {
     render(<HomePage />)
     const steps = screen.getAllByRole('list').find((list) => list.tagName === 'OL')
@@ -33,7 +41,12 @@ describe('HomePage', () => {
     const board = screen.getAllByRole('list', { name: 'On the board, every round:' })[0]
     expect(board?.tagName).toBe('UL')
     const items = [...(board?.querySelectorAll('li') ?? [])].map((li) => li.textContent ?? '')
-    expect(items.map((text) => text.split(':')[0])).toEqual(['Defenses', 'The map', 'Enemies'])
+    expect(items.map((text) => text.split(':')[0])).toEqual([
+      'Materials',
+      'Defenses',
+      'The map',
+      'Enemies',
+    ])
   })
 
   it('says what a player starts with and how a round turns over, before how a run goes', () => {

@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-31 (pass 212, cloud tick)
+
+Pass 211 fixed the /decisions file links (7418ddf), and critique pass 34 (32a483b) filed five rows. No issues are open for triage. The critique gate is closed (pass 34 ran 1 commit ago) and so is the expand gate (pass 22 ran 4 commits ago). Phase 35 is still blocked on the designer's Skills session. Top finding: the pass 34 MED row. The home page prices Barricades, Towers and Shop I in materials but never says where materials come from. A 6.3 (impact 6: the first page every visitor reads; ease 7: one rule-text helper and two tests; MED bias x1.5). A Materials item now opens the "On the board, every round:" list, built by `materialsText` from the starter deck's Gather amount and the Gather config. Next in line: the four pass 34 LOW rows (Enemy die damage help, "Still hit" help, the "Also:" line names, the /credits icon license intro).
+
+## Top 5 findings (scored)
+
+### [x] [6.3] /: the home page never says where materials come from (critique MED, pass 34, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7
+- next: add a Materials item from the Gather amount and the gathering-node rule
+- issue: #265
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [7.2] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: /oversight drops rows 65 and 69 from that item
+
+### [ ] [2.7] /config: the Enemy die damage help writes the faces in lower case (critique LOW, pass 34)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: "Damage a Hit face deals to the player." and the Special line to match
+
+### [ ] [2.7] /: the "Also:" line names the Tile sheet and Config pages differently from their headings (critique LOW, pass 34)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 9
+- next: "Also: the Tile sheet, the Config page, the Decisions page ... and Credits."
+
 # Site audit — 2026-10-31 (pass 211, cloud tick)
 
 Pass 210 fixed the /debug rules link (47d29d5). No issues are open for triage. The critique gate is closed (pass 33 ran 9 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 2 commits ago). Phase 35 is still blocked on the designer's Skills session. Fresh audit finding: the /decisions intro links `OPEN-QUESTIONS.md` and `docs/DECISIONS.md` to GitHub with no notice, while /, /config, /credits and /debug now say "(on GitHub)". A 1.8 (impact 2: two links on one page; ease 9: one string and a unit check). The intro now ends "docs/DECISIONS.md (both on GitHub).", and a DecisionsPage test pins it. With this, every intro link to GitHub on the site says so. The rows left all edit `[needs-user-call]` items, which /oversight owns.
