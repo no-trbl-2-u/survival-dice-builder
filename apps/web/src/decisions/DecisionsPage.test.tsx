@@ -146,6 +146,25 @@ describe('DecisionsPage', () => {
     expect(hidden?.getAttribute('href')).toBe(repoFileUrl('OPEN-QUESTIONS.md'))
   })
 
+  it('links a row decided recently in-page, and each number after "rows" (critique pass 33)', () => {
+    const { container } = render(<DecisionsPage />)
+    const decided = (n: number) => container.querySelector(`[data-decided="${n}"]`)
+    const links = (n: number) => [...decided(n)!.querySelectorAll('a')]
+    // Row 73 names row 7, which is listed under Decided recently: the link stays on the page.
+    const row7 = links(73).find((a) => a.textContent === 'row 7')
+    expect(row7?.getAttribute('href')).toBe('#q-7')
+    expect(container.querySelector('#q-7')).toBe(decided(7))
+    // Row 74 says "rows 65 and 69": each number links to its own reading.
+    const listed = links(74).filter((a) => a.textContent === '65' || a.textContent === '69')
+    expect(listed.map((a) => a.getAttribute('href'))).toEqual(
+      expect.arrayContaining(['#q-65', '#q-69']),
+    )
+    expect(decided(74)?.textContent).toContain('rows 65 and 69')
+    // Ids stay unique across open and decided readings.
+    const ids = [...container.querySelectorAll('[id^="q-"]')].map((el) => el.id)
+    expect(new Set(ids).size).toBe(ids.length)
+  })
+
   it('words row 57 for a visitor: no raw rule tag or data file name (critique pass 20)', () => {
     const { container } = render(<DecisionsPage />)
     const row = container.querySelector('[data-question="57"]')?.textContent ?? ''

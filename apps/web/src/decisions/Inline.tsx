@@ -23,23 +23,31 @@ export function RepoFile({ path }: Readonly<{ path: string }>) {
   )
 }
 
-/** The element id of an open reading on /decisions. */
+/** The element id of a reading on /decisions (open, or decided recently). */
 export const rowId = (n: number) => `q-${n}`
 
+/** A row reference: "row 7", or a plural list such as "rows 65 and 69", "rows 26, 28", "rows 63-70". */
+const ROW_REF = /(\brow \d+\b|\brows \d+(?:(?:, | and |-)\d+)*\b)/
+
 /**
- * Links each "row N" in plain text: to the reading on this page when it is listed, else to
- * `OPEN-QUESTIONS.md` on GitHub, where every row (settled ones too) is kept.
+ * Links each row number in plain text ("row N", and each number after "rows"): to the reading
+ * on this page when it is listed, else to `OPEN-QUESTIONS.md` on GitHub, where every row
+ * (settled ones too) is kept.
  */
 function rowRefs(text: string, rows: ReadonlySet<number>, key: number): ReactNode[] {
-  return text.split(/(\brow \d+\b)/).map((part, i) => {
-    const n = /^row (\d+)$/.exec(part)?.[1]
-    if (!n) return part
-    const href = rows.has(Number(n)) ? `#${rowId(Number(n))}` : repoFileUrl('OPEN-QUESTIONS.md')
-    return (
-      <a key={`${key}-${i}`} href={href}>
-        {part}
-      </a>
-    )
+  const link = (n: number, label: string, k: string) => (
+    <a key={k} href={rows.has(n) ? `#${rowId(n)}` : repoFileUrl('OPEN-QUESTIONS.md')}>
+      {label}
+    </a>
+  )
+  return text.split(ROW_REF).flatMap((part, i): ReactNode[] => {
+    const single = /^row (\d+)$/.exec(part)?.[1]
+    if (single) return [link(Number(single), part, `${key}-${i}`)]
+    if (!/^rows \d/.test(part)) return [part]
+    // A list: "rows " stays text and each number links to its own reading.
+    return part
+      .split(/(\d+)/)
+      .map((bit, j) => (/^\d+$/.test(bit) ? link(Number(bit), bit, `${key}-${i}-${j}`) : bit))
   })
 }
 
@@ -49,7 +57,7 @@ function rowRefs(text: string, rows: ReadonlySet<number>, key: number): ReactNod
  * "row N" links to that reading (see `rowRefs`).
  *
  * @param text - one cell or line of markdown.
- * @param rows - the row numbers listed on the page.
+ * @param rows - the row numbers that have a reading on the page.
  */
 export function Inline({ text, rows }: Readonly<{ text: string; rows?: ReadonlySet<number> }>) {
   const parts: ReactNode[] = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/).map((part, i) => {

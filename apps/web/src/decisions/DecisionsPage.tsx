@@ -91,7 +91,8 @@ export function DecisionsPage() {
   const open = openQuestions(questions)
   const recent = recentDecisions(questions)
   const calls = parseUserCalls(auditMd)
-  const shown = new Set(open.map((q) => q.number))
+  // Open and recently decided readings both have an id here, so a row reference links in-page.
+  const shown = new Set([...open, ...recent].map((q) => q.number))
   return (
     <div className={styles.page}>
       <p>
@@ -151,7 +152,7 @@ export function DecisionsPage() {
       </p>
       <ol className={styles.list} data-testid="recent">
         {recent.map((q) => (
-          <li key={q.number} className={styles.item} data-decided={q.number}>
+          <li key={q.number} id={rowId(q.number)} className={styles.item} data-decided={q.number}>
             <h3 className={styles.question}>
               {q.number}. <Inline text={q.question} rows={shown} />{' '}
               <span className={styles.muted}>

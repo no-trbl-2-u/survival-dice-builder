@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — "row N" links to a reading under "Decided recently" leave the page, and "rows 65 and 69" is not linked
-- pass: 33 (commit 5f977be)
-- viewport: desktop
-- category: navigation
-- observation: A "row N" link goes to the reading on this page only when the row is open. Rows listed under "Decided recently" (for example row 7, named in row 73, and row 49, named in row 30) link to the top of `OPEN-QUESTIONS.md` on GitHub instead, because those items have no id. The plural "rows 65 ... and 69" in row 74 gets no link at all.
-- evidence: `apps/web/src/decisions/DecisionsPage.tsx:94` (`shown` holds open rows only) and `:154` (Decided recently `<li>` has no id); `apps/web/src/decisions/Inline.tsx:34` splits on `\brow \d+\b` only.
-- suggested fix: Give each Decided recently item an id from `rowId()`, add those rows to the set `rowRefs` links in-page, and link each number after "rows".
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /decisions — "row N" links to a reading under "Decided recently" leave the page, and "rows 65 and 69" is not linked
+- pass: 33 (commit 5f977be)
+- viewport: desktop
+- category: navigation
+- observation: A "row N" link goes to the reading on this page only when the row is open. Rows listed under "Decided recently" (for example row 7, named in row 73, and row 49, named in row 30) link to the top of `OPEN-QUESTIONS.md` on GitHub instead, because those items have no id. The plural "rows 65 ... and 69" in row 74 gets no link at all.
+- evidence: `apps/web/src/decisions/DecisionsPage.tsx:94` (`shown` holds open rows only) and `:154` (Decided recently `<li>` has no id); `apps/web/src/decisions/Inline.tsx:34` splits on `\brow \d+\b` only.
+- suggested fix: Give each Decided recently item an id from `rowId()`, add those rows to the set `rowRefs` links in-page, and link each number after "rows".
+- source: web-fetch
+- issue: #261
+- addressed: (this commit); Decided recently items now carry `q-N` ids and count as listed, so "row 7" in row 73 stays on the page, and each number after "rows" links ("rows 65 and 69"). A DecisionsPage test pins both.
 
 ### [x] [LOW] /config — the "written rules" link does not say it opens GitHub
 - pass: 33 (commit 5f977be)
