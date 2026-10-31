@@ -40,6 +40,13 @@ describe('DecisionsPage', () => {
     expect(container.textContent).not.toMatch(/undefined|\*\*/)
   })
 
+  it('says its two file links open GitHub, as the other pages do', () => {
+    const { container } = render(<DecisionsPage />)
+    expect(container.querySelector('p')?.textContent).toContain(
+      'The same list is in docs/DECISIONS.md (both on GitHub).',
+    )
+  })
+
   it('says the default Combat model; no open reading is for one model only (Spec v2)', () => {
     const { container } = render(<DecisionsPage />)
     expect(container.textContent).toContain('Combat uses Engagements by default.')

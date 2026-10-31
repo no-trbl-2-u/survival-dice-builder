@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-10-31 (pass 211, cloud tick)
+
+Pass 210 fixed the /debug rules link (47d29d5). No issues are open for triage. The critique gate is closed (pass 33 ran 9 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 2 commits ago). Phase 35 is still blocked on the designer's Skills session. Fresh audit finding: the /decisions intro links `OPEN-QUESTIONS.md` and `docs/DECISIONS.md` to GitHub with no notice, while /, /config, /credits and /debug now say "(on GitHub)". A 1.8 (impact 2: two links on one page; ease 9: one string and a unit check). The intro now ends "docs/DECISIONS.md (both on GitHub).", and a DecisionsPage test pins it. With this, every intro link to GitHub on the site says so. The rows left all edit `[needs-user-call]` items, which /oversight owns.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /decisions: the two file links in the intro do not say they open GitHub (audit, navigation)
+- category: links (navigation)
+- impact: 2
+- ease: 9
+- next: add "(both on GitHub)" as on /, /config, /credits and /debug
+- issue: #264
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [7.2] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: /oversight drops rows 65 and 69 from that item
+
 # Site audit — 2026-10-31 (pass 210, cloud tick)
 
 Pass 209 fixed the /credits issue link (6dbc4b2). No issues are open for triage. The critique gate is closed (pass 33 ran 8 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 1 commit ago). Phase 35 is still blocked on the designer's Skills session. Fresh audit finding: the /debug intro links "written rules" to GitHub with no notice, while / and /config say "(on GitHub)" after the same link. A 1.8 (impact 2: one link on a tool page; ease 9: one string and an e2e check). The intro now says "the section of the written rules (on GitHub) it follows", and the debug e2e test pins it. The rows left all edit `[needs-user-call]` items, which /oversight owns.

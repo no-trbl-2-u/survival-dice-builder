@@ -99,7 +99,7 @@ export function DecisionsPage() {
         {open.length} rule readings and {calls.length} checks wait on the designer. To change a
         value, follow its link to the Config page. The designer confirms a reading by changing its
         status in <RepoFile path="OPEN-QUESTIONS.md" />. The same list is in{' '}
-        <RepoFile path="docs/DECISIONS.md" />.
+        <RepoFile path="docs/DECISIONS.md" /> (both on GitHub).
       </p>
       <p>{combatModelLine(defaultContent.config)}</p>
       <nav aria-label="On this page">
