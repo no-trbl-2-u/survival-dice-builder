@@ -1,13 +1,58 @@
 # Critique log
 
-> Last pass: 2026-10-30 at commit a97bccc
-> Pass count: 32
+> Last pass: 2026-10-31 at commit 5f977be
+> Pass count: 33
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /config — Start run always starts a solo run, and fails when the saved minimum is above 1
+- pass: 33 (commit 5f977be)
+- viewport: desktop
+- category: navigation
+- observation: The Start run button on the /config bar opens /play with a seed and no player count, so /play starts 1 player and skips the start panel. There is no way to start co-op from it, and the button does not say it is solo. If the saved config sets Fewest players to 2 or more, the engine refuses the 1-player setup and the run does not start.
+- evidence: `apps/web/src/config/ConfigPage.tsx:819` `play(`/play?seed=${Date.now() % 100000}`)`; `apps/web/src/play/PlayPage.tsx:106` `params.get('players') ?? '1'`; `packages/engine/src/api/createGame.ts:34-35` throws "Player count 1 is outside 2-4". /config help for Fewest players: "The smallest player count a new run allows."
+- suggested fix: Point Start run at the /play start panel (seed and player count chosen there), or pass `players=${config.players.min}` and label the button for what it starts; pin it with a test.
+- source: web-fetch
+
+### [LOW] /config — the Combat model help still says "play Engage"
+- pass: 33 (commit 5f977be)
+- viewport: desktop
+- category: voice
+- observation: Engage is an option on the Move and Gather cards, not a card; earlier passes removed "play Engage" from the home page for that reason. The /config help still uses it.
+- evidence: `packages/content/data/config.meta.json:109` "Engagements (default): play Engage to roll from where you stand; enemies hit structures in the siege step at the end of Combat." Home page: "Play a card's Engage option (on Move and Gather) to roll your dice from where you stand".
+- suggested fix: Reword to "Engagements (default): play a card's Engage option to roll from where you stand; enemies hit structures in the siege step at the end of Combat." ("siege step" is the rules' own term, 7.10-7.11.)
+- source: web-fetch
+
+### [LOW] /decisions — "row N" links to a reading under "Decided recently" leave the page, and "rows 65 and 69" is not linked
+- pass: 33 (commit 5f977be)
+- viewport: desktop
+- category: navigation
+- observation: A "row N" link goes to the reading on this page only when the row is open. Rows listed under "Decided recently" (for example row 7, named in row 73, and row 49, named in row 30) link to the top of `OPEN-QUESTIONS.md` on GitHub instead, because those items have no id. The plural "rows 65 ... and 69" in row 74 gets no link at all.
+- evidence: `apps/web/src/decisions/DecisionsPage.tsx:94` (`shown` holds open rows only) and `:154` (Decided recently `<li>` has no id); `apps/web/src/decisions/Inline.tsx:34` splits on `\brow \d+\b` only.
+- suggested fix: Give each Decided recently item an id from `rowId()`, add those rows to the set `rowRefs` links in-page, and link each number after "rows".
+- source: web-fetch
+
+### [LOW] /config — the "written rules" link does not say it opens GitHub
+- pass: 33 (commit 5f977be)
+- viewport: desktop
+- category: navigation
+- observation: The /config intro links "written rules" to the rules file on GitHub with no notice. The home page link says "(on GitHub)".
+- evidence: `apps/web/src/config/ConfigPage.tsx:760-761` "Each field names its section of the written rules." (href `rulesUrl`); `apps/web/src/home/HomePage.tsx:50` "the written rules (on GitHub)".
+- suggested fix: Add "(on GitHub)" after the /config link, as on the home page.
+- source: web-fetch
+
+### [LOW] /play — the Build step says "(2 left)" with no unit
+- pass: 33 (commit 5f977be)
+- viewport: desktop
+- category: comprehension
+- observation: The next-step banner's Build line ends in a bare count. The Move line in the same function says "movement left". Read from source; /play is a JS shell for the web-fetch engine.
+- evidence: `apps/web/src/play/nextStep.ts:67` `Build: click a highlighted hex (${state.active.buildsLeft} left), or stop building`; `:58` `(${hexesLeft} movement left)`.
+- suggested fix: "Build: click a highlighted hex (2 builds left), or stop building", singular for 1; pin both in the nextStep test.
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
