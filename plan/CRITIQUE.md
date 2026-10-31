@@ -1,13 +1,58 @@
 # Critique log
 
-> Last pass: 2026-10-31 at commit 5f977be
-> Pass count: 33
+> Last pass: 2026-10-31 at commit 7418ddf
+> Pass count: 34
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — the home page prices everything in materials but never says where materials come from
+- pass: 34 (commit 7418ddf)
+- viewport: desktop
+- category: comprehension
+- observation: Barricades, Towers and Shop I are priced in materials, but the only source the page gives is the verb "gather" in the Prepare step. It never says a Gather card must be played on a gathering node, or that each node gives its materials once. A stranger learns this only from the /tiles legend.
+- evidence: "Prepare: play the top halves of your cards to move, gather materials and build Barricades and Towers."; "A Barricade costs 2 materials"; /tiles: "Gathering node (a Gather card here gets its materials, once)" (`apps/web/src/home/HomePage.tsx:45`)
+- suggested fix: Add a Materials item to the "On the board, every round:" list, built from the gathering-node site text and the Gather amount in config ("Play Gather on a gathering node to get N materials; each node gives its materials once.").
+- source: web-fetch
+
+### [LOW] /config — the Enemy die damage help writes the faces in lower case and names the target only once
+- pass: 34 (commit 7418ddf)
+- viewport: desktop
+- category: voice
+- observation: The first field of the group capitalises the faces (Hit, Miss or Special); the next two go back to lower case. One damage help says "to you", the other names no target.
+- evidence: "The 6 faces of an enemy die: Hit, Miss or Special." then "Damage a hit face deals to you." and "Damage a special face deals." (`packages/content/data/config.meta.json:121`, `:126`, `:132`)
+- suggested fix: "Damage a Hit face deals to the player." and "Damage a Special face deals to the player."
+- source: web-fetch
+
+### [LOW] /config — the "Defeated enemies' dice" help names an option "Hit" that the list calls "Still hit"
+- pass: 34 (commit 7418ddf)
+- viewport: desktop
+- category: voice
+- observation: The help explains the choices as "Hit" and "Cancelled", but the select labels them "Still hit (default)" and "Cancelled (experiment)". The visitor cannot find "Hit" in the list.
+- evidence: Help: "Hit: a defeated enemy's dice still hit (default). Cancelled: they do not hit (experiment)." Options: "Still hit (default)", "Cancelled (experiment)" (`packages/content/data/config.meta.json:138`, `:142-143`)
+- suggested fix: Start the help with "Still hit:" so it matches the option label.
+- source: web-fetch
+
+### [LOW] / — the "Also:" line names two pages differently from the nav and their headings
+- pass: 34 (commit 7418ddf)
+- viewport: desktop
+- category: navigation
+- observation: "the map tiles" opens a page headed "Tile sheet", and "the rules config" opens one headed "Config". The nav labels already match the headings; this line does not.
+- evidence: "Also: the map tiles, the rules config, the Decisions page (rule readings that wait on the designer) and credits." (`apps/web/src/home/HomePage.tsx:84`; nav in `apps/web/src/routes.tsx:24-26`)
+- suggested fix: "Also: the Tile sheet, the Config page, the Decisions page (rule readings that wait on the designer) and Credits."
+- source: web-fetch
+
+### [LOW] /credits — the Icons intro reads as if the icons drawn for this game are CC BY 3.0 too
+- pass: 34 (commit 7418ddf)
+- viewport: desktop
+- category: comprehension
+- observation: The intro says every icon is under CC BY 3.0 "unless a line says otherwise". The in-house lines say only "drawn for this game" and name no license, so read literally the CC BY 3.0 sentence covers them.
+- evidence: "Unless a line says otherwise, every icon is under CC BY 3.0. Each name links to its source." then "Blank die face (empty): drawn for this game" (`apps/web/src/credits/CreditsPage.tsx:67-70`, `:41-43`)
+- suggested fix: Name the exception in the intro: "Every icon by a named artist is under CC BY 3.0; the icons drawn for this game are not."
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
