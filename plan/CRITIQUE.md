@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-10-31 at commit 7418ddf
-> Pass count: 34
+> Last pass: 2026-11-01 at commit 800a190
+> Pass count: 35
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /play and /debug — engagement and draft-pool log lines say "not in the written rules", but Spec v2 7.8 and 11.7 are those rules
+- pass: 35 (commit 800a190)
+- viewport: desktop
+- category: comprehension
+- observation: Under the standard rules, the /play log and /debug tag most engagement events and every pooled Skill as "not in the written rules"; the /debug intro says that tag means "a later design decision". Since Spec v2, engagements are rule 7.8 and the draft pool is rule 11.7, and /config labels the pool option "written rules". The log contradicts the rules link on the same page.
+- evidence: `packages/engine/src/combat/engage.ts:150`, `:166`, `:222` and `combat/resolve.ts:157` `rule: 'Combat v3'`; `packages/engine/src/progression/draft.ts:107` `rule: 'Draft pool (designer 2026-10-09)'`; `apps/web/src/play/PlayLog.tsx:17` prints "not in the written rules" for any tag that does not start with a digit. Spec 11.7: "Put the other Skills in your draft pool."
+- suggested fix: Tag engagement events with their 7.8 step (7.10/7.11 for the siege) and the pooled Skill with "11.7", so the log cites the section the default rules follow; pin with an engine test.
+- source: web-fetch
+
+### [MED] /config — the "Defeated enemies' dice" note says "Not in the written rules", but rule 7.8 step 7 is the default
+- pass: 35 (commit 800a190)
+- viewport: desktop
+- category: comprehension
+- observation: The rules note under the field says the setting is not in the written rules. Spec v2 7.8 step 7 says a defeated enemy's dice still hit, which is the default choice. The field's rule tag is still "Combat v3".
+- evidence: Live /config: "Engagements only. Not in the written rules." `packages/content/data/config.meta.json:139` `"rule": "Combat v3"`; `spec/01-spec-v2-rules.md:168` "An enemy that you defeated in this engagement also hits you."
+- suggested fix: Set the field's rule to "7.8" so the note reads "Rules 7.8.", and say in the help that Still hit is the written rule.
+- source: web-fetch
+
+### [LOW] /config — tick-box helps say "Off (default)" for a box that has no "Off" label
+- pass: 35 (commit 800a190)
+- viewport: desktop
+- category: voice
+- observation: Since the tick-box default fix, boxes ticked by default say "When ticked (default)", but boxes that start unticked say "When ticked, ..." then "Off (default)". The control shows a box, not an "Off" state, so the default reads in a different word from the control.
+- evidence: "When ticked, each spawn node spawns 1 enemy per 2 seats, rounded up ... Off (default): as in the written rules." (`packages/content/data/config.meta.json:206`; also `:169`, `:398`) against "When ticked (default), a knocked-out player loses all the materials they carried."
+- suggested fix: For tick boxes only, replace "Off (default):" with "Not ticked (default):"; number limits keep "Off".
+- source: web-fetch
+
+### [LOW] /config — the "Defeated enemies' dice" help puts "(default)" at the end of the sentence, unlike every other choice help
+- pass: 35 (commit 800a190)
+- viewport: desktop
+- category: voice
+- observation: The rewritten help puts the markers after each sentence; every other choice help puts the marker right after the choice name, before the colon.
+- evidence: "Still hit: a defeated enemy's dice hit anyway (default). Cancelled: they do not hit (experiment)." (`config.meta.json:138`) against "Engagements (default): play a card's Engage option ..." and "Your pool (default): they go to your own pool ...".
+- suggested fix: "Still hit (default): a defeated enemy's dice hit anyway. Cancelled (experiment): they do not hit."
+- source: web-fetch
+
+### [LOW] / — the Materials line names only the starter Gather card, not the Shop cards that also gather
+- pass: 35 (commit 800a190)
+- viewport: desktop
+- category: comprehension
+- observation: The new Materials item gives the starter Gather card's amount only. Shop cards also gather (Haul 3, Excavate 4, Quarry 6) under the same node rule, and the page does not say so.
+- evidence: Live /: "Materials: Play a Gather card on a gathering node to get 2 materials; each node gives its materials once." (`packages/content/src/ruleText.ts:200`); `packages/content/data/cards.json` Haul amount 3, Excavate 4, Quarry 6.
+- suggested fix: "Play a card's Gather option on a gathering node to get its materials (2 for the starter Gather card); each node gives its materials once."
+- source: web-fetch
+
+### [LOW] /play and /debug — a seed that is not a number silently starts seed 0
+- pass: 35 (commit 800a190)
+- viewport: desktop
+- category: comprehension
+- observation: The start panel's Seed field takes any text. Text that is not a whole number starts the run with seed 0 and nothing says so, while the hint promises "The same seed and the same choices give the same game." /debug does the same.
+- evidence: `apps/web/src/play/StartPanel.tsx:88` `Number.parseInt(seed, 10) || 0`; hint at `:126`; `apps/web/src/debug/DebugPage.tsx:120` same fallback.
+- suggested fix: Disable Start run and show "Type a whole number" while the seed is not a whole number, on /play and /debug; pin with a test.
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
