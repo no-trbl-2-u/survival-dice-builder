@@ -148,4 +148,12 @@ describe('config.meta.json placeholders and help read as player text (critique p
       expect(defaultConfigMeta[path]?.help).toBe(`Damage a ${face} face deals to the player.`)
     }
   })
+
+  it('Combat v3: the defeated dice help names each choice as the list labels it', () => {
+    const entry = defaultConfigMeta['combat.engage.defeatedDice']
+    const labels = Object.values(entry?.options ?? {}).map((o) => o.replace(/\s*\(.*\)$/, ''))
+    expect(labels).toEqual(['Still hit', 'Cancelled'])
+    for (const label of labels) expect(entry?.help).toContain(`${label}: `)
+    expect(entry?.help).not.toMatch(/^Hit:/)
+  })
 })

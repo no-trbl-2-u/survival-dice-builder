@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the "Defeated enemies' dice" help names an option "Hit" that the list calls "Still hit"
-- pass: 34 (commit 7418ddf)
-- viewport: desktop
-- category: voice
-- observation: The help explains the choices as "Hit" and "Cancelled", but the select labels them "Still hit (default)" and "Cancelled (experiment)". The visitor cannot find "Hit" in the list.
-- evidence: Help: "Hit: a defeated enemy's dice still hit (default). Cancelled: they do not hit (experiment)." Options: "Still hit (default)", "Cancelled (experiment)" (`packages/content/data/config.meta.json:138`, `:142-143`)
-- suggested fix: Start the help with "Still hit:" so it matches the option label.
-- source: web-fetch
-
 ### [LOW] / — the "Also:" line names two pages differently from the nav and their headings
 - pass: 34 (commit 7418ddf)
 - viewport: desktop
@@ -92,6 +83,17 @@
 
 ## Done
 
+### [x] [LOW] /config — the "Defeated enemies' dice" help names an option "Hit" that the list calls "Still hit"
+- pass: 34 (commit 7418ddf)
+- viewport: desktop
+- category: voice
+- observation: The help explains the choices as "Hit" and "Cancelled", but the select labels them "Still hit (default)" and "Cancelled (experiment)". The visitor cannot find "Hit" in the list.
+- evidence: Help: "Hit: a defeated enemy's dice still hit (default). Cancelled: they do not hit (experiment)." Options: "Still hit (default)", "Cancelled (experiment)" (`packages/content/data/config.meta.json:138`, `:142-143`)
+- suggested fix: Start the help with "Still hit:" so it matches the option label.
+- source: web-fetch
+- issue: #267
+- addressed: (this commit); the help now opens "Still hit: a defeated enemy's dice hit anyway (default).", so both choices read as the list labels them. A configMetaText test pins it.
+
 ### [x] [LOW] /config — the Enemy die damage help writes the faces in lower case and names the target only once
 - pass: 34 (commit 7418ddf)
 - viewport: desktop
@@ -101,7 +103,7 @@
 - suggested fix: "Damage a Hit face deals to the player." and "Damage a Special face deals to the player."
 - source: web-fetch
 - issue: #266
-- addressed: (this commit); the helps now read "Damage a Hit face deals to the player." and "Damage a Special face deals to the player.", matching the capitalised faces in the Enemy die faces help. A configMetaText test pins both.
+- addressed: e655e40; the helps now read "Damage a Hit face deals to the player." and "Damage a Special face deals to the player.", matching the capitalised faces in the Enemy die faces help. A configMetaText test pins both.
 
 ### [x] [MED] / — the home page prices everything in materials but never says where materials come from
 - pass: 34 (commit 7418ddf)

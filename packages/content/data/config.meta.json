@@ -135,7 +135,7 @@
   },
   "combat.engage.defeatedDice": {
     "label": "Defeated enemies' dice",
-    "help": "Hit: a defeated enemy's dice still hit (default). Cancelled: they do not hit (experiment).",
+    "help": "Still hit: a defeated enemy's dice hit anyway (default). Cancelled: they do not hit (experiment).",
     "rule": "Combat v3",
     "combatModel": "engage",
     "options": {
