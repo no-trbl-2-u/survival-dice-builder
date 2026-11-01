@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-01 (pass 220, cloud tick)
+
+Pass 219 named the default in every /config tick box and limit (6abf961). No issues are open for triage. The critique gate is closed (pass 34 ran 9 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 13 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The two MED /decisions rows edit `[needs-user-call]` items, which /oversight owns. Top finding: the sim LOW row (the bot cannot measure today's designer changes) is stale. Phase 36 (5890e54) shipped the defender bot, which defeats enemies before their dice hit, keeps its heal cards across engagements and buys Training, and `docs/reports/phase-36-defender.md` sections 3 and 4 re-ran the defeated-dice and draft-pool comparisons the row asks for. A 3.2 (impact 3: a stale row keeps a done ask in the queue; ease 9: state files only; +0.5 user source). The row moves to Done with the phase 36 numbers and the residual the report's caveat records (the bot keeps only heal cards). Next in line: no row scores 3.0 or more outside the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] sim: the bot cannot measure today's designer changes; phase 36 already measured them (critique LOW, source user)
+- category: external-critique (tests)
+- impact: 3
+- ease: 9
+- next: move the CRITIQUE.md row to Done, citing the phase 36 report
+- issue: #273
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [7.2] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: /oversight drops rows 65 and 69 from that item
+
 # Site audit — 2026-11-01 (pass 219, cloud tick)
 
 Pass 218 marked the default choice in every /config list (6a8354f). No issues are open for triage. The critique gate is closed (pass 34 ran 8 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 12 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The two MED /decisions rows edit `[needs-user-call]` items, which /oversight owns. Top finding, new this pass: the lists now mark their default, and some tick boxes and limits say "(default)" in their help, but five do not: Maximum level ("Off: no maximum."), Tile rotation, Every card must be played, Defenses on gathering nodes and Gather needs a node. A 3.2 (impact 4: five fields on a tool page, and the designer cannot tell which setting the written rules use; ease 8: five strings and a content test). Each help now names its default ("Off (default): as in the written rules." or "When ticked (default), ..."), every default being a written rule or a decided reading (spec 8.4 and 18.1; open questions 5, 10, 14, 59), and a configMetaText test fails when a tick box or optional limit leaves its default unnamed. Next in line: the sim LOW row (the bot cannot measure today's designer changes).

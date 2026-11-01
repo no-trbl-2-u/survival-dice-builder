@@ -54,7 +54,9 @@
 - suggested fix: Drop the decided rows from that `[needs-user-call]` item in `plan/AUDIT.md` so it names only open rows.
 - source: web-fetch
 
-### [LOW] sim — the bot cannot measure today's designer changes
+## Done
+
+### [x] [LOW] sim — the bot cannot measure today's designer changes
 - pass: session residue (2026-10-09)
 - viewport: n/a
 - category: sim
@@ -62,8 +64,8 @@
 - evidence: session 2026-10-09; `docs/reports/phase-23-defeated-dice.md`; `tools/sim/src/run.test.ts` pins unchanged by 256bdb4; `packages/bot/src/policy.ts`
 - suggested fix: A bot policy that engages to defeat enemies first, keeps cards for later engagements, and buys Training so drafts happen; then re-run the defeated-dice and draft-pool comparisons.
 - source: user
-
-## Done
+- issue: #273
+- fixed: (this commit). Phase 36 (5890e54) shipped the defender bot (`--policy defender`, `packages/bot/src/defender.ts`): it picks targets to defeat enemies before their dice hit, keeps its heal cards across engagements, and buys Training before Shop. `docs/reports/phase-36-defender.md` §3 re-ran defeated dice (`cancelled` cancels 2,268 enemy dice solo, 21% of the hits, against about 8% for the default bot in phase 23) and §4 the draft pool (`pool` against `supply`: median 10 both, within noise). Residual, recorded in that report's caveat: the bot keeps only heal cards, and never trades cards or plans a draft.
 
 ### [x] [LOW] /credits — the Icons intro reads as if the icons drawn for this game are CC BY 3.0 too
 - pass: 34 (commit 7418ddf)
