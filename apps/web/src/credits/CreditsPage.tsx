@@ -20,6 +20,11 @@ function iconFor(path: string): string | null {
   return gameIcons[name] ? name : null
 }
 
+/** An in-house asset: drawn for this game, so it needs no attribution. */
+function inHouse(c: Credit): boolean {
+  return c.attribution === 'none required'
+}
+
 /**
  * One credit line: the work's name links to its source, the author and site follow, and the
  * license (linked) is stated once. Every link name is unique, so a links list reads well.
@@ -39,7 +44,7 @@ function CreditLine({ credit: a, shared }: Readonly<{ credit: Credit; shared: st
     <span>
       <strong>{a.asset}</strong>:{' '}
       {/* An in-house asset needs no license note: "drawn for this game" already says whose it is. */}
-      {a.attribution === 'none required' ? (
+      {inHouse(a) ? (
         <>drawn for this game</>
       ) : (
         <>
@@ -60,14 +65,24 @@ function CreditList({
 }: Readonly<{ credits: readonly Credit[]; noun: string; testId: string }>) {
   const shared = commonLicense(credits)
   const all = shared !== null && credits.every((c) => c.license === shared.license)
+  // In-house lines name no license, so the intro excludes them in words rather than leaving
+  // "unless a line says otherwise" to cover them.
+  const own = credits.some(inHouse)
+  const othersShare =
+    shared !== null && credits.every((c) => inHouse(c) || c.license === shared.license)
+  const lead = all
+    ? `Every ${noun} is under `
+    : own
+      ? `${othersShare ? 'Every' : 'Unless a line says otherwise, every'} ${noun} by a named artist is under `
+      : `Unless a line says otherwise, every ${noun} is under `
   return (
     <>
       {shared ? (
         <p>
-          {all
-            ? `Every ${noun} is under `
-            : `Unless a line says otherwise, every ${noun} is under `}
-          <a href={shared.licenseUrl}>{shared.license}</a>. Each name links to its source.
+          {lead}
+          <a href={shared.licenseUrl}>{shared.license}</a>
+          {own && !all ? `; the ${noun}s drawn for this game are not` : ''}. Each name links to its
+          source.
         </p>
       ) : null}
       <ul className={styles.list} data-testid={testId}>

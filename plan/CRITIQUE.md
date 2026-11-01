@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /credits — the Icons intro reads as if the icons drawn for this game are CC BY 3.0 too
-- pass: 34 (commit 7418ddf)
-- viewport: desktop
-- category: comprehension
-- observation: The intro says every icon is under CC BY 3.0 "unless a line says otherwise". The in-house lines say only "drawn for this game" and name no license, so read literally the CC BY 3.0 sentence covers them.
-- evidence: "Unless a line says otherwise, every icon is under CC BY 3.0. Each name links to its source." then "Blank die face (empty): drawn for this game" (`apps/web/src/credits/CreditsPage.tsx:67-70`, `:41-43`)
-- suggested fix: Name the exception in the intro: "Every icon by a named artist is under CC BY 3.0; the icons drawn for this game are not."
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /credits — the Icons intro reads as if the icons drawn for this game are CC BY 3.0 too
+- pass: 34 (commit 7418ddf)
+- viewport: desktop
+- category: comprehension
+- observation: The intro says every icon is under CC BY 3.0 "unless a line says otherwise". The in-house lines say only "drawn for this game" and name no license, so read literally the CC BY 3.0 sentence covers them.
+- evidence: "Unless a line says otherwise, every icon is under CC BY 3.0. Each name links to its source." then "Blank die face (empty): drawn for this game" (`apps/web/src/credits/CreditsPage.tsx:67-70`, `:41-43`)
+- suggested fix: Name the exception in the intro: "Every icon by a named artist is under CC BY 3.0; the icons drawn for this game are not."
+- source: web-fetch
+- issue: #269
+- addressed: (this commit); the intro now reads "Every icon by a named artist is under CC BY 3.0; the icons drawn for this game are not. Each name links to its source." A CreditsPage test pins the icon and texture sentences.
 
 ### [x] [LOW] / — the "Also:" line names two pages differently from the nav and their headings
 - pass: 34 (commit 7418ddf)
