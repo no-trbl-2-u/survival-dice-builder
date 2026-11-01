@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { rulesUrl } from '../decisions/Inline.tsx'
+import { NAV } from '../routes.tsx'
 import { HomePage } from './HomePage.tsx'
 
 describe('HomePage', () => {
@@ -135,10 +136,16 @@ describe('HomePage', () => {
     expect(screen.queryByText(/wait on you/)).toBeNull()
   })
 
-  it('names the tiles on the Also line as the map tiles, not proposed ones', () => {
+  it('names the pages on the Also line by their nav labels and headings', () => {
     render(<HomePage />)
-    const link = screen.getAllByRole('link', { name: 'the map tiles' })[0]
-    expect(link?.getAttribute('href')).toBe('/tiles')
+    for (const [path, label] of NAV) {
+      if (path === '/tiles' || path === '/config' || path === '/credits') {
+        const link = screen.getAllByRole('link', { name: label })[0]
+        expect(link?.getAttribute('href')).toBe(path)
+      }
+    }
+    expect(screen.queryByRole('link', { name: 'the map tiles' })).toBeNull()
+    expect(screen.queryByRole('link', { name: 'the rules config' })).toBeNull()
     expect(screen.queryByText(/proposed tiles/)).toBeNull()
   })
 

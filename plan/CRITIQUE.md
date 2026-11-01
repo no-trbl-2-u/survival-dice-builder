@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the "Also:" line names two pages differently from the nav and their headings
-- pass: 34 (commit 7418ddf)
-- viewport: desktop
-- category: navigation
-- observation: "the map tiles" opens a page headed "Tile sheet", and "the rules config" opens one headed "Config". The nav labels already match the headings; this line does not.
-- evidence: "Also: the map tiles, the rules config, the Decisions page (rule readings that wait on the designer) and credits." (`apps/web/src/home/HomePage.tsx:84`; nav in `apps/web/src/routes.tsx:24-26`)
-- suggested fix: "Also: the Tile sheet, the Config page, the Decisions page (rule readings that wait on the designer) and Credits."
-- source: web-fetch
-
 ### [LOW] /credits — the Icons intro reads as if the icons drawn for this game are CC BY 3.0 too
 - pass: 34 (commit 7418ddf)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] / — the "Also:" line names two pages differently from the nav and their headings
+- pass: 34 (commit 7418ddf)
+- viewport: desktop
+- category: navigation
+- observation: "the map tiles" opens a page headed "Tile sheet", and "the rules config" opens one headed "Config". The nav labels already match the headings; this line does not.
+- evidence: "Also: the map tiles, the rules config, the Decisions page (rule readings that wait on the designer) and credits." (`apps/web/src/home/HomePage.tsx:84`; nav in `apps/web/src/routes.tsx:24-26`)
+- suggested fix: "Also: the Tile sheet, the Config page, the Decisions page (rule readings that wait on the designer) and Credits."
+- source: web-fetch
+- issue: #268
+- addressed: (this commit); the line now reads "Also: the Tile sheet, the Config page, the Decisions page (rule readings that wait on the designer) and Credits." A HomePage test checks the three links against their nav labels.
 
 ### [x] [LOW] /config — the "Defeated enemies' dice" help names an option "Hit" that the list calls "Still hit"
 - pass: 34 (commit 7418ddf)
