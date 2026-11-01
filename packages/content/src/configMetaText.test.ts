@@ -150,12 +150,19 @@ describe('config.meta.json placeholders and help read as player text (critique p
     }
   })
 
-  it('Combat v3: the defeated dice help names each choice as the list labels it', () => {
+  it('7.8: the defeated dice help names each choice as the list labels it, marker before the colon', () => {
     const entry = defaultConfigMeta['combat.engage.defeatedDice']
-    const labels = Object.values(entry?.options ?? {}).map((o) => o.replace(/\s*\(.*\)$/, ''))
+    const options = Object.values(entry?.options ?? {})
+    const labels = options.map((o) => o.replace(/\s*\(.*\)$/, ''))
     expect(labels).toEqual(['Still hit', 'Cancelled'])
-    for (const label of labels) expect(entry?.help).toContain(`${label}: `)
-    expect(entry?.help).not.toMatch(/^Hit:/)
+    for (const option of options) expect(entry?.help).toContain(`${option}: `)
+    expect(entry?.help).not.toMatch(/^Hit:|\((default|experiment)\)\./)
+  })
+
+  it('7.8 step 7: the defeated dice field cites rule 7.8 and names Still hit as the written rule', () => {
+    const entry = defaultConfigMeta['combat.engage.defeatedDice']
+    expect(configRuleNote(entry?.rule ?? '')).toBe('Rules 7.8.')
+    expect(entry?.help).toMatch(/^Still hit \(default\): [^.]*as in the written rules\./)
   })
 
   it('11.7: the unpicked Skills help names each choice as the list labels it', () => {

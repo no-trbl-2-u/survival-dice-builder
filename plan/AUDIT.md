@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-01 (pass 222, cloud tick)
+
+Pass 221 named all 7 Base tile hexes the base (800a190), and critique pass 35 filed 6 rows (2f8713b). No issues are open for triage. The critique gate is closed (pass 35 ran 1 commit ago) and so is the expand gate (pass 22 ran 16 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, new from pass 35: the /config "Defeated enemies' dice" note says "Not in the written rules", but Spec v2 rule 7.8 step 7 is the default choice. A 6.8 (impact 5: a rules note contradicts the written rules; ease 9: one content field and a test; bias x1.5 for critique MED). The field now cites 7.8 and its help says Still hit is the written rule; the same sentence takes the pass 35 LOW marker-placement fix. Next in line: the pass 35 MED log-tag row (engagement and draft-pool log lines say "not in the written rules"; tag them 7.8 and 11.7), then the pass 35 LOWs.
+
+## Top 5 findings (scored)
+
+### [x] [6.8] /config: "Defeated enemies' dice" says not in the written rules; rule 7.8 step 7 is the default (critique MED, pass 35, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 5
+- ease: 9
+- next: cite 7.8 on the field and name Still hit as the written rule
+- issue: #275
+- fixed: (this commit)
+
+### [ ] [5.4] /play and /debug: engagement and draft-pool log lines say "not in the written rules" (critique MED, pass 35, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 6
+- next: tag engagement events with their 7.8 / 7.10 / 7.11 step and the pooled Skill with 11.7; pin with an engine test
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-01 (pass 221, cloud tick)
 
 Pass 220 closed the sim row (bea13b7). No issues are open for triage. The critique gate is closed (pass 34 ran 10 commits ago, a few minutes under 24 hours) and so is the expand gate (pass 22 ran 14 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The two MED /decisions rows edit `[needs-user-call]` items, which /oversight owns. Top finding, new this pass: the Tile sheet says the Broken Village has "1 Base" and lists only its center as "Plains, Base", while rule 3.6 and decided reading 16 make all 7 hexes the base, and the engine and the page's own site legend ("stand on the Base tile") play it that way. A 4.0 (impact 5: a reference page contradicts a rule; ease 8: one caption, one label helper and tests). The caption now reads "All 7 hexes are the base", and every Base tile hex names "Base" in its hex list and drawing label; the printed icon stays on the center, as the tile prints it. Next in line: no row scores 3.0 or more outside the /oversight-owned /decisions rows.

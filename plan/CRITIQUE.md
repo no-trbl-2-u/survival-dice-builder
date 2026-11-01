@@ -18,15 +18,6 @@
 - suggested fix: Tag engagement events with their 7.8 step (7.10/7.11 for the siege) and the pooled Skill with "11.7", so the log cites the section the default rules follow; pin with an engine test.
 - source: web-fetch
 
-### [MED] /config — the "Defeated enemies' dice" note says "Not in the written rules", but rule 7.8 step 7 is the default
-- pass: 35 (commit 800a190)
-- viewport: desktop
-- category: comprehension
-- observation: The rules note under the field says the setting is not in the written rules. Spec v2 7.8 step 7 says a defeated enemy's dice still hit, which is the default choice. The field's rule tag is still "Combat v3".
-- evidence: Live /config: "Engagements only. Not in the written rules." `packages/content/data/config.meta.json:139` `"rule": "Combat v3"`; `spec/01-spec-v2-rules.md:168` "An enemy that you defeated in this engagement also hits you."
-- suggested fix: Set the field's rule to "7.8" so the note reads "Rules 7.8.", and say in the help that Still hit is the written rule.
-- source: web-fetch
-
 ### [LOW] /config — tick-box helps say "Off (default)" for a box that has no "Off" label
 - pass: 35 (commit 800a190)
 - viewport: desktop
@@ -34,15 +25,6 @@
 - observation: Since the tick-box default fix, boxes ticked by default say "When ticked (default)", but boxes that start unticked say "When ticked, ..." then "Off (default)". The control shows a box, not an "Off" state, so the default reads in a different word from the control.
 - evidence: "When ticked, each spawn node spawns 1 enemy per 2 seats, rounded up ... Off (default): as in the written rules." (`packages/content/data/config.meta.json:206`; also `:169`, `:398`) against "When ticked (default), a knocked-out player loses all the materials they carried."
 - suggested fix: For tick boxes only, replace "Off (default):" with "Not ticked (default):"; number limits keep "Off".
-- source: web-fetch
-
-### [LOW] /config — the "Defeated enemies' dice" help puts "(default)" at the end of the sentence, unlike every other choice help
-- pass: 35 (commit 800a190)
-- viewport: desktop
-- category: voice
-- observation: The rewritten help puts the markers after each sentence; every other choice help puts the marker right after the choice name, before the colon.
-- evidence: "Still hit: a defeated enemy's dice hit anyway (default). Cancelled: they do not hit (experiment)." (`config.meta.json:138`) against "Engagements (default): play a card's Engage option ..." and "Your pool (default): they go to your own pool ...".
-- suggested fix: "Still hit (default): a defeated enemy's dice hit anyway. Cancelled (experiment): they do not hit."
 - source: web-fetch
 
 ### [LOW] / — the Materials line names only the starter Gather card, not the Shop cards that also gather
@@ -109,6 +91,28 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /config — the "Defeated enemies' dice" note says "Not in the written rules", but rule 7.8 step 7 is the default
+- pass: 35 (commit 800a190)
+- viewport: desktop
+- category: comprehension
+- observation: The rules note under the field says the setting is not in the written rules. Spec v2 7.8 step 7 says a defeated enemy's dice still hit, which is the default choice. The field's rule tag is still "Combat v3".
+- evidence: Live /config: "Engagements only. Not in the written rules." `packages/content/data/config.meta.json:139` `"rule": "Combat v3"`; `spec/01-spec-v2-rules.md:168` "An enemy that you defeated in this engagement also hits you."
+- suggested fix: Set the field's rule to "7.8" so the note reads "Rules 7.8.", and say in the help that Still hit is the written rule.
+- source: web-fetch
+- issue: #275
+- addressed: (this commit); the field's rule is now "7.8", so the note reads "Engagements only. Rules 7.8.", and the help reads "Still hit (default): a defeated enemy's dice hit anyway, as in the written rules. Cancelled (experiment): they do not hit." A configMetaText test pins the note and the written-rule phrase.
+
+### [x] [LOW] /config — the "Defeated enemies' dice" help puts "(default)" at the end of the sentence, unlike every other choice help
+- pass: 35 (commit 800a190)
+- viewport: desktop
+- category: voice
+- observation: The rewritten help puts the markers after each sentence; every other choice help puts the marker right after the choice name, before the colon.
+- evidence: "Still hit: a defeated enemy's dice hit anyway (default). Cancelled: they do not hit (experiment)." (`config.meta.json:138`) against "Engagements (default): play a card's Engage option ..." and "Your pool (default): they go to your own pool ...".
+- suggested fix: "Still hit (default): a defeated enemy's dice hit anyway. Cancelled (experiment): they do not hit."
+- source: web-fetch
+- issue: #275
+- addressed: (this commit), with the MED row above: the same help sentence now puts each marker after its choice name, before the colon; the configMetaText test checks each full option label is followed by ": ".
 
 ### [x] [LOW] sim — the bot cannot measure today's designer changes
 - pass: session residue (2026-10-09)
