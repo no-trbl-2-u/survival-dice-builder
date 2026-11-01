@@ -156,4 +156,14 @@ describe('config.meta.json placeholders and help read as player text (critique p
     for (const label of labels) expect(entry?.help).toContain(`${label}: `)
     expect(entry?.help).not.toMatch(/^Hit:/)
   })
+
+  it('11.7: the unpicked Skills help names each choice as the list labels it', () => {
+    const entry = defaultConfigMeta['draft.unpicked']
+    const labels = Object.values(entry?.options ?? {}).map((o) => o.replace(/\s*\(.*\)$/, ''))
+    expect(labels).toEqual(['Your pool', 'Back to the supply'])
+    for (const label of labels) {
+      expect(entry?.help).toMatch(new RegExp(`(^|\\. )${label}( \\(default\\))?: `))
+    }
+    expect(entry?.help).not.toMatch(/^Pool\b|\. Supply:/)
+  })
 })

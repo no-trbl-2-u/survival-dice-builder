@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-01 (pass 217, cloud tick)
+
+Pass 216 fixed the /credits Icons intro (650e1b9). No issues are open for triage. The critique gate is closed (pass 34 ran 6 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 10 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The two MED /decisions rows edit `[needs-user-call]` items, which /oversight owns. Top finding: the pass 214 audit note on the /config "Skills you do not keep" help. A 2.4 (impact 3: one field on a tool page; ease 8: one string and a unit check). The help now opens "Your pool (default):" and names the other choice "Back to the supply:", so both choices read as the list labels them, and a configMetaText test pins it. Next in line: the sim LOW row (the bot cannot measure today's designer changes).
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /config: the "Unpicked Skills" help names its choices "Pool" and "Supply"; the list says "Your pool" and "Back to the supply" (audit, voice)
+- category: voice
+- impact: 3
+- ease: 8
+- next: open each choice in the help with the list label
+- issue: #270
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [7.2] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: /oversight drops rows 65 and 69 from that item
+
+### [ ] [1.8] sim: the bot cannot measure today's designer changes (critique LOW)
+- category: external-critique (tests)
+- impact: 3
+- ease: 6
+- next: see the CRITIQUE.md row
+
 # Site audit — 2026-11-01 (pass 216, cloud tick)
 
 Pass 215 fixed the home page "Also:" line (ab521ad). No issues are open for triage. The critique gate is closed (pass 34 ran 5 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 9 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The two MED /decisions rows edit `[needs-user-call]` items, which /oversight owns. Top finding: the pass 34 LOW row on the /credits Icons intro. A 2.7 (impact 3: one sentence on a tool page; ease 9: one string and a unit check). The intro now reads "Every icon by a named artist is under CC BY 3.0; the icons drawn for this game are not. Each name links to its source." The Textures intro is unchanged ("Every texture is under CC0."), and a CreditsPage test pins both. Next in line: the "Unpicked Skills" help names.
