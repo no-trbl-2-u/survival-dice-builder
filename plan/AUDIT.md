@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-01 (pass 218, cloud tick)
+
+Pass 217 fixed the /config "Skills you do not keep" help (95d7426). No issues are open for triage. The critique gate is closed (pass 34 ran 7 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 11 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The two MED /decisions rows edit `[needs-user-call]` items, which /oversight owns. Top finding, new this pass: four /config lists mark their default choice and eight do not (Bought cards, Blocked enemy, Co-op Prepare order, Draft with full slots, Shop timing, and the unused Shop refill, Heal targets and Grunt that becomes an elite). A 3.2 (impact 4: eight fields on a tool page, and the designer cannot tell which choice the written rules use; ease 8: eight strings and a content test). Each default choice now ends "(default)", and a configMetaText test fails when any list leaves its default unmarked. /decisions drops the bracket when it quotes a choice, so its text is unchanged. Next in line: the sim LOW row (the bot cannot measure today's designer changes).
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /config: eight lists do not mark their default choice; four others do (audit, comprehension)
+- category: comprehension
+- impact: 4
+- ease: 8
+- next: add "(default)" to each default choice and a test over every list
+- issue: #271
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [7.2] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: /oversight drops rows 65 and 69 from that item
+
+### [ ] [1.8] sim: the bot cannot measure today's designer changes (critique LOW)
+- category: external-critique (tests)
+- impact: 3
+- ease: 6
+- next: see the CRITIQUE.md row
+
 # Site audit — 2026-11-01 (pass 217, cloud tick)
 
 Pass 216 fixed the /credits Icons intro (650e1b9). No issues are open for triage. The critique gate is closed (pass 34 ran 6 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 10 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The two MED /decisions rows edit `[needs-user-call]` items, which /oversight owns. Top finding: the pass 214 audit note on the /config "Skills you do not keep" help. A 2.4 (impact 3: one field on a tool page; ease 8: one string and a unit check). The help now opens "Your pool (default):" and names the other choice "Back to the supply:", so both choices read as the list labels them, and a configMetaText test pins it. Next in line: the sim LOW row (the bot cannot measure today's designer changes).

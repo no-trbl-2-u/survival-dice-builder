@@ -358,7 +358,7 @@
     "help": "What a card bought in the Shop does to the deck.",
     "rule": "18.1, 13.1 (open question 44)",
     "options": {
-      "add": "Add to the deck",
+      "add": "Add to the deck (default)",
       "replace-starter": "Replace a starter card"
     }
   },
@@ -389,7 +389,7 @@
     "help": "What an enemy does when every path to its nearest target is blocked.",
     "rule": "9.7 (open questions 2, 39)",
     "options": {
-      "next-target": "Move toward the next nearest target",
+      "next-target": "Move toward the next nearest target (default)",
       "wait": "Wait where it is"
     }
   },
@@ -404,7 +404,7 @@
     "help": "How players take turns in the Prepare phase when more than one plays.",
     "rule": "16.8 (open question 6)",
     "options": {
-      "alternate-hands": "Players alternate hands of cards",
+      "alternate-hands": "Players alternate hands of cards (default)",
       "full-turn": "Each player plays a whole deck in turn"
     }
   },
@@ -413,7 +413,7 @@
     "help": "What a draft does when every draft Skill slot is full.",
     "rule": "11.9 (open question 46)",
     "options": {
-      "swap": "The kept Skill replaces a drafted Skill",
+      "swap": "The kept Skill replaces a drafted Skill (default)",
       "skip": "No draft for that player"
     }
   },
@@ -427,7 +427,7 @@
     "help": "When a player on the base may buy cards.",
     "rule": "6.8 (open questions 11, 43)",
     "options": {
-      "any-time-on-base": "At any time on the base",
+      "any-time-on-base": "At any time on the base (default)",
       "prepare-only": "Only in the Prepare phase"
     }
   },
@@ -437,7 +437,7 @@
     "rule": "11.5 (open question 11)",
     "unused": true,
     "options": {
-      "immediate": "At once",
+      "immediate": "At once (default)",
       "end-of-turn": "At the end of the turn"
     }
   },
@@ -447,7 +447,7 @@
     "rule": "Table 3, 6.7 (open question 12)",
     "unused": true,
     "options": {
-      "self": "The player only",
+      "self": "The player only (default)",
       "any-adjacent": "The player or an adjacent ally"
     }
   },
@@ -457,7 +457,7 @@
     "rule": "10.5 (open question 13)",
     "unused": true,
     "options": {
-      "nearest-base": "The grunt nearest the base",
+      "nearest-base": "The grunt nearest the base (default)",
       "player-choice": "The players choose"
     }
   },

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { defaultContent } from './content.ts'
 import { defaultConfigMeta } from './configMeta.ts'
 import { configRuleNote } from './ruleText.ts'
 import type { ConfigMeta } from './schemas/configMeta.ts'
@@ -165,5 +166,21 @@ describe('config.meta.json placeholders and help read as player text (critique p
       expect(entry?.help).toMatch(new RegExp(`(^|\\. )${label}( \\(default\\))?: `))
     }
     expect(entry?.help).not.toMatch(/^Pool\b|\. Supply:/)
+  })
+
+  it('every list marks its default choice, as the Combat model list does', () => {
+    const unmarked = Object.entries(defaultConfigMeta).flatMap(([path, entry]) => {
+      if (!entry.options) return []
+      const value = path
+        .split('.')
+        .reduce<unknown>((at, key) => (at as Record<string, unknown>)?.[key], defaultContent.config)
+      const label = entry.options[String(value)]
+      return label && /\(default\b/.test(label) ? [] : [`${path}: ${String(value)}`]
+    })
+    expect(unmarked).toEqual([])
+    expect(defaultConfigMeta['rulings.blockedPathRule']?.options).toEqual({
+      'next-target': 'Move toward the next nearest target (default)',
+      wait: 'Wait where it is',
+    })
   })
 })
