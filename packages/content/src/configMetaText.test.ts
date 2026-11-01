@@ -137,4 +137,15 @@ describe('config.meta.json placeholders and help read as player text (critique p
       .map(([path]) => path)
     expect(formulas).toEqual([])
   })
+
+  it('Table 4: the damage helps name the faces as the enemy die help does, and the target', () => {
+    const faces = defaultConfigMeta['combat.engage.enemyDie']?.help ?? ''
+    for (const [path, face] of [
+      ['combat.engage.hitDamage', 'Hit'],
+      ['combat.engage.specialDamage', 'Special'],
+    ] as const) {
+      expect(faces).toContain(face)
+      expect(defaultConfigMeta[path]?.help).toBe(`Damage a ${face} face deals to the player.`)
+    }
+  })
 })

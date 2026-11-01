@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-01 (pass 213, cloud tick)
+
+Pass 212 fixed the home page materials line (ab3aab8). No issues are open for triage. The critique gate is closed (pass 34 ran 1 commit ago, under 24 hours) and so is the expand gate (pass 22 ran 6 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The two MED /decisions rows edit `[needs-user-call]` items, which /oversight owns. Top finding: the pass 34 LOW row on the /config Enemy die damage help. A 2.7 (impact 3: one field group on a tool page; ease 9: two strings and a unit check). The helps now read "Damage a Hit face deals to the player." and "Damage a Special face deals to the player.", and a configMetaText test pins both. Next in line: the three pass 34 LOW rows left ("Still hit" help, the "Also:" line names, the /credits icon license intro).
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /config: the Enemy die damage help writes the faces in lower case (critique LOW, pass 34)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: "Damage a Hit face deals to the player." and the Special line to match
+- issue: #266
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [7.2] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: /oversight drops rows 65 and 69 from that item
+
+### [ ] [2.7] /config: the "Defeated enemies' dice" help names an option "Hit" that the list calls "Still hit" (critique LOW, pass 34)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: start the help with "Still hit:" to match the option label
+
+### [ ] [2.7] /: the "Also:" line names the Tile sheet and Config pages differently from their headings (critique LOW, pass 34)
+- category: external-critique (navigation)
+- impact: 3
+- ease: 9
+- next: "Also: the Tile sheet, the Config page, the Decisions page ... and Credits."
+
 # Site audit — 2026-10-31 (pass 212, cloud tick)
 
 Pass 211 fixed the /decisions file links (7418ddf), and critique pass 34 (32a483b) filed five rows. No issues are open for triage. The critique gate is closed (pass 34 ran 1 commit ago) and so is the expand gate (pass 22 ran 4 commits ago). Phase 35 is still blocked on the designer's Skills session. Top finding: the pass 34 MED row. The home page prices Barricades, Towers and Shop I in materials but never says where materials come from. A 6.3 (impact 6: the first page every visitor reads; ease 7: one rule-text helper and two tests; MED bias x1.5). A Materials item now opens the "On the board, every round:" list, built by `materialsText` from the starter deck's Gather amount and the Gather config. Next in line: the four pass 34 LOW rows (Enemy die damage help, "Still hit" help, the "Also:" line names, the /credits icon license intro).
@@ -17,7 +55,7 @@ Pass 211 fixed the /decisions file links (7418ddf), and critique pass 34 (32a483
 - ease: 7
 - next: add a Materials item from the Gather amount and the gathering-node rule
 - issue: #265
-- fixed: (this commit)
+- fixed: ab3aab8
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

@@ -123,13 +123,13 @@
   },
   "combat.engage.hitDamage": {
     "label": "Hit damage",
-    "help": "Damage a hit face deals to you.",
+    "help": "Damage a Hit face deals to the player.",
     "rule": "Table 4",
     "range": [0, 6]
   },
   "combat.engage.specialDamage": {
     "label": "Special damage",
-    "help": "Damage a special face deals.",
+    "help": "Damage a Special face deals to the player.",
     "rule": "Table 4",
     "range": [0, 6]
   },

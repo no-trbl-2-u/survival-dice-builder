@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Enemy die damage help writes the faces in lower case and names the target only once
-- pass: 34 (commit 7418ddf)
-- viewport: desktop
-- category: voice
-- observation: The first field of the group capitalises the faces (Hit, Miss or Special); the next two go back to lower case. One damage help says "to you", the other names no target.
-- evidence: "The 6 faces of an enemy die: Hit, Miss or Special." then "Damage a hit face deals to you." and "Damage a special face deals." (`packages/content/data/config.meta.json:121`, `:126`, `:132`)
-- suggested fix: "Damage a Hit face deals to the player." and "Damage a Special face deals to the player."
-- source: web-fetch
-
 ### [LOW] /config — the "Defeated enemies' dice" help names an option "Hit" that the list calls "Still hit"
 - pass: 34 (commit 7418ddf)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: user
 
 ## Done
+
+### [x] [LOW] /config — the Enemy die damage help writes the faces in lower case and names the target only once
+- pass: 34 (commit 7418ddf)
+- viewport: desktop
+- category: voice
+- observation: The first field of the group capitalises the faces (Hit, Miss or Special); the next two go back to lower case. One damage help says "to you", the other names no target.
+- evidence: "The 6 faces of an enemy die: Hit, Miss or Special." then "Damage a hit face deals to you." and "Damage a special face deals." (`packages/content/data/config.meta.json:121`, `:126`, `:132`)
+- suggested fix: "Damage a Hit face deals to the player." and "Damage a Special face deals to the player."
+- source: web-fetch
+- issue: #266
+- addressed: (this commit); the helps now read "Damage a Hit face deals to the player." and "Damage a Special face deals to the player.", matching the capitalised faces in the Enemy die faces help. A configMetaText test pins both.
 
 ### [x] [MED] / — the home page prices everything in materials but never says where materials come from
 - pass: 34 (commit 7418ddf)
