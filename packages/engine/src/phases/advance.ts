@@ -254,7 +254,7 @@ function engageCombatStep(state: GameState): readonly [GameState, readonly GameE
   const player = currentPlayer(state)
   if (!player.knockedOut && player.hand.length > 0) return [state, [], true]
   if (state.turnFresh && hasTurns(player)) {
-    const [next, events] = draw(state, 'Combat v3')
+    const [next, events] = draw(state, '7.7')
     return [{ ...next, turnFresh: false }, events, false]
   }
   const seat = nextSeat(state, hasTurns)

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play and /debug — engagement and draft-pool log lines say "not in the written rules", but Spec v2 7.8 and 11.7 are those rules
-- pass: 35 (commit 800a190)
-- viewport: desktop
-- category: comprehension
-- observation: Under the standard rules, the /play log and /debug tag most engagement events and every pooled Skill as "not in the written rules"; the /debug intro says that tag means "a later design decision". Since Spec v2, engagements are rule 7.8 and the draft pool is rule 11.7, and /config labels the pool option "written rules". The log contradicts the rules link on the same page.
-- evidence: `packages/engine/src/combat/engage.ts:150`, `:166`, `:222` and `combat/resolve.ts:157` `rule: 'Combat v3'`; `packages/engine/src/progression/draft.ts:107` `rule: 'Draft pool (designer 2026-10-09)'`; `apps/web/src/play/PlayLog.tsx:17` prints "not in the written rules" for any tag that does not start with a digit. Spec 11.7: "Put the other Skills in your draft pool."
-- suggested fix: Tag engagement events with their 7.8 step (7.10/7.11 for the siege) and the pooled Skill with "11.7", so the log cites the section the default rules follow; pin with an engine test.
-- source: web-fetch
-
 ### [LOW] /config — tick-box helps say "Off (default)" for a box that has no "Off" label
 - pass: 35 (commit 800a190)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play and /debug — engagement and draft-pool log lines say "not in the written rules", but Spec v2 7.8 and 11.7 are those rules
+- pass: 35 (commit 800a190)
+- viewport: desktop
+- category: comprehension
+- observation: Under the standard rules, the /play log and /debug tag most engagement events and every pooled Skill as "not in the written rules"; the /debug intro says that tag means "a later design decision". Since Spec v2, engagements are rule 7.8 and the draft pool is rule 11.7, and /config labels the pool option "written rules". The log contradicts the rules link on the same page.
+- evidence: `packages/engine/src/combat/engage.ts:150`, `:166`, `:222` and `combat/resolve.ts:157` `rule: 'Combat v3'`; `packages/engine/src/progression/draft.ts:107` `rule: 'Draft pool (designer 2026-10-09)'`; `apps/web/src/play/PlayLog.tsx:17` prints "not in the written rules" for any tag that does not start with a digit. Spec 11.7: "Put the other Skills in your draft pool."
+- suggested fix: Tag engagement events with their 7.8 step (7.10/7.11 for the siege) and the pooled Skill with "11.7", so the log cites the section the default rules follow; pin with an engine test.
+- source: web-fetch
+- issue: #276
+- addressed: (this commit); under the default rules the engine tags engagement events with 7.7 or 7.8 (an enemy die hit "7.8, Table 4", an engagement's end "7.8 step 9"), repair "7.7, 12.5", and a pooled Skill 11.7, so the /play log reads "rule 7.8" and /debug "[7.8]". The siege was already 7.11. Only the "Cancelled" experiment's cancelled die keeps the design tag. Engine tests pin the tags.
 
 ### [x] [MED] /config — the "Defeated enemies' dice" note says "Not in the written rules", but rule 7.8 step 7 is the default
 - pass: 35 (commit 800a190)

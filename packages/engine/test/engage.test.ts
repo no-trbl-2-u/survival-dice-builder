@@ -1,6 +1,11 @@
 import { defaultContent, type Face, type GameConfig, type SkillFace } from '@survival/content'
 import { describe, expect, it } from 'vitest'
-import { cancelledEnemyDice, finishEngagement, siege } from '../src/combat/engage.ts'
+import {
+  cancelledEnemyDice,
+  ENGAGEMENT_END,
+  finishEngagement,
+  siege,
+} from '../src/combat/engage.ts'
 import {
   applyAction,
   createGame,
@@ -222,6 +227,19 @@ describe("Combat v3 defeated enemies' dice (designer 2026-10-09)", () => {
   }
   const health = (s: GameState) => s.players[0]!.health
   const hitDamage = config.combat.engage.hitDamage
+
+  it('the default rules tag each event of the engagement end with a section of rule 7.8', () => {
+    const [, events] = finishEngagement(ending('hit', 1))
+    expect(events.map((e) => [e.type, e.rule])).toEqual([
+      ['hitIgnored', '7.8'],
+      ['enemyAttacked', '7.8, Table 4'],
+      ['playerDamaged', '7.8'],
+      ['enemyAttacked', '7.8, Table 4'],
+      ['playerDamaged', '7.8'],
+      ['exchangeEnded', ENGAGEMENT_END],
+    ])
+    expect(ENGAGEMENT_END).toBe('7.8 step 9')
+  })
 
   it('Combat v3 "hit" (default): every die rolled hits, even a defeated enemy\'s', () => {
     expect(defaultContent.config.combat.engage.defeatedDice).toBe('hit')

@@ -21,9 +21,7 @@ const RULE_NUMBER = new RegExp(`\\b${NUMBER}(?: to ${NUMBER})? ${RULE_WORD}\\b`,
 const BUILD_WORD = /\b(?:[Rr]ows? \d+|[Pp]hases? \d+|Combat v\d|[Cc]ore loop v\d|Spec v\d)\b/g
 
 /** Code that names an engine log tag to compare it, not to show it. */
-const BUILD_ALLOWED: Readonly<Record<string, readonly string[]>> = {
-  'play/describeEvent.ts': ['Combat v3'],
-}
+const BUILD_ALLOWED: Readonly<Record<string, readonly string[]>> = {}
 
 /**
  * Facts of the pieces, not rule numbers from config: a tile has 7 hexes (Table 1), and a

@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-01 (pass 223, cloud tick)
+
+Pass 222 cited rule 7.8 on the /config defeated dice note (4144937). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 2 commits ago) and so is the expand gate (pass 22 ran 17 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, from pass 35: under the default rules the /play log and /debug tag most engagement events and every pooled Skill "not in the written rules", while Spec v2 writes them as rules 7.7, 7.8 and 11.7. A 5.4 (impact 6, ease 6, bias x1.5 for critique MED). The engine now tags a bottom-half card, its heal, move or repair 7.7 (repair "7.7, 12.5"), the Combat draw 7.7, a card reroll, a fired Skill, an ignored hit and the damage 7.8, an enemy die hit "7.8, Table 4", an engagement's end "7.8 step 9" (exported as `ENGAGEMENT_END`, so the log still tells it from a v1 exchange's "7.8"), and a pooled Skill 11.7. Only the "Cancelled" experiment's cancelled die keeps the engagement design tag, as it is not the written rule. Engine tests pin the engagement-end tags and the pool tag; the engagement golden replay hash was regenerated because the log is part of the state (only `expectedHash` changed). Next in line: the pass 35 LOWs and the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [5.4] /play and /debug: engagement and draft-pool log lines say "not in the written rules" (critique MED, pass 35, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 6
+- next: tag engagement events with their 7.7 / 7.8 section and the pooled Skill with 11.7; pin with an engine test
+- issue: #276
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-01 (pass 222, cloud tick)
 
 Pass 221 named all 7 Base tile hexes the base (800a190), and critique pass 35 filed 6 rows (2f8713b). No issues are open for triage. The critique gate is closed (pass 35 ran 1 commit ago) and so is the expand gate (pass 22 ran 16 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, new from pass 35: the /config "Defeated enemies' dice" note says "Not in the written rules", but Spec v2 rule 7.8 step 7 is the default choice. A 6.8 (impact 5: a rules note contradicts the written rules; ease 9: one content field and a test; bias x1.5 for critique MED). The field now cites 7.8 and its help says Still hit is the written rule; the same sentence takes the pass 35 LOW marker-placement fix. Next in line: the pass 35 MED log-tag row (engagement and draft-pool log lines say "not in the written rules"; tag them 7.8 and 11.7), then the pass 35 LOWs.

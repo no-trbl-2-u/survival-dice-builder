@@ -154,7 +154,7 @@ export function fireIfFull(state: GameState, skill: string, use: number): Step {
     step: 'resolve',
     queue: [{ skill, use, bonusDamage: 0 }],
   }))
-  const events: GameEvent[] = [{ type: 'skillFired', rule: 'Combat v3', player: player.id, skill }]
+  const events: GameEvent[] = [{ type: 'skillFired', rule: '7.8', player: player.id, skill }]
   const choices = resolveChoices(fired)
   const only = choices.length === 1 ? choices[0] : undefined
   if (only && !only.enemy) {

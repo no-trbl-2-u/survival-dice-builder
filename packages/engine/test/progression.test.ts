@@ -275,7 +275,7 @@ describe('Skill draft (10.8, 11.6-11.9)', () => {
     expect(state.players[0]!.draftPool).toEqual([second])
     expect(state.supplies.skills['1']).toHaveLength(5)
     expect(events).toContainEqual(
-      expect.objectContaining({ type: 'skillPooled', skill: second, player: 'p1' }),
+      expect.objectContaining({ type: 'skillPooled', rule: '11.7', skill: second, player: 'p1' }),
     )
 
     // The next draft: 2 new Skills from the supply, then the pool.

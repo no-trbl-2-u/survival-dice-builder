@@ -99,12 +99,12 @@ export function startDraft(state: GameState): Step {
   ]
 }
 
-/** Puts an unkept Skill in the current player's draft pool. @rule designer 2026-10-09 */
+/** Puts an unkept Skill in the current player's draft pool. @rule 11.7 */
 function toPool(state: GameState, skill: string): Step {
   const player = currentPlayer(state)
   return [
     updateCurrentPlayer(state, (p) => ({ ...p, draftPool: [...draftPool(p), skill] })),
-    [{ type: 'skillPooled', rule: 'Draft pool (designer 2026-10-09)', skill, player: player.id }],
+    [{ type: 'skillPooled', rule: '11.7', skill, player: player.id }],
   ]
 }
 

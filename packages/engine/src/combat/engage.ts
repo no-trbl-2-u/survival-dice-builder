@@ -21,6 +21,14 @@ import type { Enemy, EnemyDieRoll, GameState } from '../state/types.ts'
 import { applyBottomEffect, healCurrent, updateExchange } from './cardEffects.ts'
 import { knockOut } from './knockout.ts'
 
+/**
+ * The rule tag on the `exchangeEnded` event of an engagement: step 9 removes guard and discards
+ * the played cards. A v1 exchange ends with plain "7.8", so the log can tell the two apart.
+ *
+ * @rule 7.8 step 9
+ */
+export const ENGAGEMENT_END = '7.8 step 9'
+
 /** True when Combat is played as Combat v3 engagements. @rule Combat v3 */
 export function engageMode(state: GameState): boolean {
   return state.config.combat.model === 'engage'
@@ -147,7 +155,7 @@ function rerollFree(state: GameState): Step {
     dice.flatMap((d, die) =>
       used.has(die)
         ? []
-        : [{ type: 'dieRerolled' as const, rule: 'Combat v3', player, die, face: d.face }],
+        : [{ type: 'dieRerolled' as const, rule: '7.8', player, die, face: d.face }],
     ),
   ]
 }
@@ -163,7 +171,7 @@ export function playOption(state: GameState, card: string, option: CombatOption)
   const player = currentPlayer(state)
   const played: GameEvent = {
     type: 'cardPlayed',
-    rule: 'Combat v3',
+    rule: state.exchange ? '7.8' : '7.7',
     player: player.id,
     card,
     half: 'bottom',
@@ -176,7 +184,7 @@ export function playOption(state: GameState, card: string, option: CombatOption)
         : option.kind === 'reroll'
           ? applyBottomEffect(tabled, { kind: 'reroll', dice: option.dice })
           : option.kind === 'heal'
-            ? healCurrent(tabled, option.amount, 'Combat v3')
+            ? healCurrent(tabled, option.amount, '7.8')
             : [tabled, []]
     return [after, [played, ...events]]
   }
@@ -191,7 +199,7 @@ export function playOption(state: GameState, card: string, option: CombatOption)
         [played],
       ]
     case 'heal': {
-      const [after, events] = healCurrent(discarded, option.amount, 'Combat v3')
+      const [after, events] = healCurrent(discarded, option.amount, '7.7')
       return [after, [played, ...events]]
     }
     case 'repair': {
@@ -219,7 +227,7 @@ export function repair(state: GameState, amount: number): Step {
       [
         {
           type: 'repaired',
-          rule: 'Combat v3',
+          rule: '7.7, 12.5',
           player: player.id,
           structure: 'base',
           amount: health - state.base.health,
@@ -243,7 +251,7 @@ export function repair(state: GameState, amount: number): Step {
     [
       {
         type: 'repaired',
-        rule: 'Combat v3',
+        rule: '7.7, 12.5',
         player: player.id,
         structure: damaged.d.id,
         amount: health - damaged.d.health,
@@ -298,12 +306,12 @@ export function finishEngagement(state: GameState): Step {
     }
     if (ignore > 0) {
       ignore -= 1
-      events.push({ type: 'hitIgnored', rule: 'Combat v3', enemy: roll.enemy, player: playerId })
+      events.push({ type: 'hitIgnored', rule: '7.8', enemy: roll.enemy, player: playerId })
       continue
     }
     events.push({
       type: 'enemyAttacked',
-      rule: 'Combat v3',
+      rule: '7.8, Table 4',
       enemy: roll.enemy,
       player: playerId,
       damage,
@@ -314,14 +322,14 @@ export function finishEngagement(state: GameState): Step {
     current = updateCurrentPlayer(current, (p) => ({ ...p, guard: p.guard - toGuard, health }))
     events.push({
       type: 'playerDamaged',
-      rule: 'Combat v3',
+      rule: '7.8',
       player: playerId,
       toGuard,
       toHealth: damage - toGuard,
       health,
     })
   }
-  events.push({ type: 'exchangeEnded', rule: 'Combat v3', player: playerId })
+  events.push({ type: 'exchangeEnded', rule: ENGAGEMENT_END, player: playerId })
   current = {
     ...updateCurrentPlayer(current, (p) => clearPlayed({ ...p, guard: 0 })),
     exchange: null,

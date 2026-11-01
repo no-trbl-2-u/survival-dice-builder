@@ -16,7 +16,7 @@ export { canFire } from './skills/canFire.ts'
 export { enemiesInRange } from './combat/resolve.ts'
 export { stepsOutOfReach } from './movement/move.ts'
 export { legalUpgrades, type UpgradeOption } from './progression/upgrades.ts'
-export { cancelledEnemyDice } from './combat/engage.ts'
+export { ENGAGEMENT_END, cancelledEnemyDice } from './combat/engage.ts'
 export type {
   Assignment,
   CardInstance,

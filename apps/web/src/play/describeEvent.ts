@@ -1,5 +1,5 @@
 import { milestoneLabel } from '@survival/content'
-import { hexKey, type GameEvent, type GameState } from '@survival/engine'
+import { ENGAGEMENT_END, hexKey, type GameEvent, type GameState } from '@survival/engine'
 import {
   defenseNameFromBase,
   enemyKind,
@@ -150,8 +150,8 @@ export function describeEvent(event: GameEvent, names: Names): string {
         : `${who(event.player)} ${s('lose')} ${lost.join(' and ')} (health ${event.health}).`
     }
     case 'exchangeEnded':
-      // The engine tags an engagement's end with the engagement rule (Combat v3), an exchange's with 7.8.
-      return event.rule === 'Combat v3' ? 'The engagement ends.' : 'The exchange ends.'
+      // The engine tags an engagement's end with its own tag (7.8 step 9), an exchange's with 7.8.
+      return event.rule === ENGAGEMENT_END ? 'The engagement ends.' : 'The exchange ends.'
     case 'stepDeferred':
       return `Not yet in the engine: ${event.step}.`
     case 'tilePlaced':
