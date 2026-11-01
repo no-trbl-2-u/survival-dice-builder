@@ -364,7 +364,7 @@
   },
   "options.maxLevel": {
     "label": "Maximum level",
-    "help": "The highest level the players can reach. Off: no maximum.",
+    "help": "The highest level the players can reach. Off (default): no maximum, as in the written rules.",
     "rule": "18.1, 8.4",
     "range": [1, 20]
   },
@@ -395,7 +395,7 @@
   },
   "rulings.tileRotation": {
     "label": "Tile rotation",
-    "help": "When ticked, the player may rotate a revealed tile.",
+    "help": "When ticked, the player may rotate a revealed tile. Off (default): as in the written rules.",
     "rule": "10.1 (open question 5)",
     "unused": true
   },
@@ -419,7 +419,7 @@
   },
   "rulings.mandatoryPlays": {
     "label": "Every card must be played",
-    "help": "When ticked, a card cannot be discarded without its effect.",
+    "help": "When ticked, a card cannot be discarded without its effect. Off (default): as in the written rules.",
     "rule": "6.2, 7.8 step 5 (open question 10)"
   },
   "rulings.shopTiming": {
@@ -463,12 +463,12 @@
   },
   "rulings.buildOnNode": {
     "label": "Defenses on gathering nodes",
-    "help": "When ticked, a defense may stand on a gathering node hex, and the node still works.",
+    "help": "When ticked (default), a defense may stand on a gathering node hex, and the node still works.",
     "rule": "12.2 (open question 14)"
   },
   "rulings.gatherNeedsNode": {
     "label": "Gather needs a node",
-    "help": "When ticked, Gather gives materials only on an unspent gathering node, and spends it. When not ticked, Gather also works off a node.",
+    "help": "When ticked (default), Gather gives materials only on an unspent gathering node, and spends it. When not ticked, Gather also works off a node.",
     "rule": "6.7, Table 8 (open question 59)"
   },
   "rulings.targetTieBreak": {

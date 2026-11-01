@@ -183,4 +183,18 @@ describe('config.meta.json placeholders and help read as player text (critique p
       wait: 'Wait where it is',
     })
   })
+
+  it('every tick box and optional limit names its default in its help, as the lists do', () => {
+    const unmarked = Object.entries(defaultConfigMeta).flatMap(([path, entry]) => {
+      const value = path
+        .split('.')
+        .reduce<unknown>((at, key) => (at as Record<string, unknown>)?.[key], defaultContent.config)
+      if (typeof value !== 'boolean' && value !== null) return []
+      return /\(default\)/.test(entry.help ?? '') ? [] : [`${path}: ${String(value)}`]
+    })
+    expect(unmarked).toEqual([])
+    expect(defaultConfigMeta['options.maxLevel']?.help).toBe(
+      'The highest level the players can reach. Off (default): no maximum, as in the written rules.',
+    )
+  })
 })
