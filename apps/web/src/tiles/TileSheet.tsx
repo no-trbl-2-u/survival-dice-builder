@@ -11,9 +11,9 @@ import {
   capitalize,
   HEX_LIST_ORDER,
   HEX_POSITION,
-  hexLabel,
   SITE_ICON,
   SITE_LABEL,
+  tileHexLabel,
   TileView,
 } from './TileView.tsx'
 import styles from './TileSheet.module.css'
@@ -52,6 +52,16 @@ function siteSummary(sites: readonly (Site | null)[]): string {
       .filter(([, n]) => n > 0)
       .map(([s, n]) => `${n} ${SITE_LABEL[s]}${n > 1 ? 's' : ''}`),
   )
+}
+
+/**
+ * The caption under a tile's name: its sites counted, or for the Base tile that every hex is
+ * the base (3.6), since it prints the base icon on its center only.
+ */
+function tileSummary(tile: TileDef): string {
+  return tile.kind === 'base'
+    ? `All ${tile.hexes.length} hexes are the base`
+    : siteSummary(tile.hexes.map((h) => h.site))
 }
 
 /**
@@ -97,14 +107,14 @@ export function TileSheet() {
                   <TileView tile={tile} />
                   <figcaption>
                     <h3 className={styles.name}>{tile.name}</h3>
-                    {siteSummary(tile.hexes.map((h) => h.site))}
+                    {tileSummary(tile)}
                     <ul className={styles.hexList} aria-label={`${tile.name} hexes`}>
                       {HEX_LIST_ORDER.map((i) => {
                         const hex = tile.hexes[i]
                         return hex ? (
                           <li key={i} data-hex-row={i}>
                             <span className={styles.position}>{HEX_POSITION[i]}:</span>{' '}
-                            {hexLabel(hex)}
+                            {tileHexLabel(tile, hex)}
                           </li>
                         ) : null
                       })}

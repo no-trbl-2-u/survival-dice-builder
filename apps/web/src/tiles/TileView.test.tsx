@@ -2,7 +2,7 @@ import { defaultContent } from '@survival/content'
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { TileSheet } from './TileSheet.tsx'
-import { HEX_LIST_ORDER, HEX_POSITION, hexLabel, TileView } from './TileView.tsx'
+import { HEX_LIST_ORDER, HEX_POSITION, hexLabel, tileHexLabel, TileView } from './TileView.tsx'
 
 describe('TileView', () => {
   it('3.1 draws 7 hexes with each terrain and site from the tile', () => {
@@ -56,7 +56,7 @@ describe('TileSheet', () => {
       return name.nextSibling?.textContent ?? ''
     })
     const base = defaultContent.tiles.findIndex((t) => t.kind === 'base')
-    expect(summaries[base]).toMatch(/^1 Base\b/)
+    expect(summaries[base]).toBe('All 7 hexes are the base')
     expect(summaries.join(', ')).toMatch(/Gathering node/)
     for (const summary of summaries) {
       expect(summary).not.toMatch(/\d (base|gathering|spawn|elite)/)
@@ -84,7 +84,7 @@ describe('TileSheet hex list', () => {
     const rows = container.querySelectorAll(`[data-tile="${tile.id}"] [data-hex-row]`)
     rows.forEach((row, n) => {
       const i = HEX_LIST_ORDER[n]!
-      expect(row.textContent).toBe(`${HEX_POSITION[i]}: ${hexLabel(tile.hexes[i]!)}`)
+      expect(row.textContent).toBe(`${HEX_POSITION[i]}: ${tileHexLabel(tile, tile.hexes[i]!)}`)
     })
   })
 
@@ -101,6 +101,20 @@ describe('TileSheet hex list', () => {
       'Lower left',
       'Upper left',
     ])
+  })
+
+  it('3.6 names every hex of the Base tile the base, in the list and the drawing', () => {
+    const { container } = render(<TileSheet />)
+    const tile = defaultContent.tiles.find((t) => t.kind === 'base')!
+    const rows = container.querySelectorAll(`[data-tile="${tile.id}"] [data-hex-row]`)
+    expect(rows).toHaveLength(7)
+    rows.forEach((row) => expect(row.textContent).toMatch(/, Base$/))
+    const titles = container.querySelectorAll(`[data-tile="${tile.id}"] [data-hex] title`)
+    expect(titles).toHaveLength(7)
+    titles.forEach((t) => expect(t.textContent).toMatch(/, Base$/))
+    const core = defaultContent.tiles.find((t) => t.kind === 'core')!
+    const plain = core.hexes.find((h) => !h.site)!
+    expect(tileHexLabel(core, plain)).toBe(hexLabel(plain))
   })
 
   it('capitalises terrain and names the site', () => {

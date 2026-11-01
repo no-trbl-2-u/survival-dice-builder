@@ -25,6 +25,10 @@ test('/tiles shows the 9 proposed tiles with no console errors', async ({ page }
   await expect(page.getByRole('list', { name: 'Broken Village hexes' })).toContainText(
     'Center: Plains, Base',
   )
+  // Rule 3.6: every hex of the Base tile is the base, not only the printed center.
+  await expect(page.getByRole('list', { name: 'Broken Village hexes' })).toContainText(
+    'Top: Plains, Base',
+  )
   await expect(page.locator('#tiles-intro')).not.toContainText('Hover')
   // The site icons have a legend, each with its icon, name, and what it does.
   const sites = page.getByRole('list', { name: 'Site legend' })

@@ -54,6 +54,24 @@ export function hexLabel(hex: Readonly<{ terrain: string; site: Site | null }>):
   return hex.site ? `${terrain}, ${SITE_LABEL[hex.site]}` : terrain
 }
 
+/**
+ * A hex's site as the game plays it: every hex of the Base tile is the base, though the tile
+ * prints the base icon on its center only.
+ *
+ * @rule 3.6, OPEN-QUESTIONS row 16
+ */
+export function playedSite(tile: Pick<TileDef, 'kind'>, site: Site | null): Site | null {
+  return tile.kind === 'base' ? 'base' : site
+}
+
+/** "Plains, Base": a hex of a tile in words, with its site as the game plays it (3.6). */
+export function tileHexLabel(
+  tile: Pick<TileDef, 'kind'>,
+  hex: Readonly<{ terrain: string; site: Site | null }>,
+): string {
+  return hexLabel({ terrain: hex.terrain, site: playedSite(tile, hex.site) })
+}
+
 type Props = Readonly<{ tile: TileDef }>
 
 /**
@@ -76,7 +94,7 @@ export function TileView({ tile }: Props) {
         const pos = positions[i]
         if (!pos) return null
         const center = hexToPixel(pos, HEX_SIZE)
-        const label = hexLabel(hex)
+        const label = tileHexLabel(tile, hex)
         return (
           <g key={hexKey(pos)} data-hex={i} data-terrain={hex.terrain} data-site={hex.site ?? ''}>
             <title>{label}</title>

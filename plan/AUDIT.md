@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-01 (pass 221, cloud tick)
+
+Pass 220 closed the sim row (bea13b7). No issues are open for triage. The critique gate is closed (pass 34 ran 10 commits ago, a few minutes under 24 hours) and so is the expand gate (pass 22 ran 14 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The two MED /decisions rows edit `[needs-user-call]` items, which /oversight owns. Top finding, new this pass: the Tile sheet says the Broken Village has "1 Base" and lists only its center as "Plains, Base", while rule 3.6 and decided reading 16 make all 7 hexes the base, and the engine and the page's own site legend ("stand on the Base tile") play it that way. A 4.0 (impact 5: a reference page contradicts a rule; ease 8: one caption, one label helper and tests). The caption now reads "All 7 hexes are the base", and every Base tile hex names "Base" in its hex list and drawing label; the printed icon stays on the center, as the tile prints it. Next in line: no row scores 3.0 or more outside the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [4.0] /tiles: the Base tile reads as 1 base hex; rule 3.6 makes all 7 the base (audit, comprehension)
+- category: comprehension
+- impact: 5
+- ease: 8
+- next: say all 7 hexes are the base under the tile and name each hex "Base"
+- issue: #274
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [7.2] /decisions: the "Structural v2 questions" check names rows already decided (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: /oversight drops rows 65 and 69 from that item
+
 # Site audit — 2026-11-01 (pass 220, cloud tick)
 
 Pass 219 named the default in every /config tick box and limit (6abf961). No issues are open for triage. The critique gate is closed (pass 34 ran 9 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 13 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. The two MED /decisions rows edit `[needs-user-call]` items, which /oversight owns. Top finding: the sim LOW row (the bot cannot measure today's designer changes) is stale. Phase 36 (5890e54) shipped the defender bot, which defeats enemies before their dice hit, keeps its heal cards across engagements and buys Training, and `docs/reports/phase-36-defender.md` sections 3 and 4 re-ran the defeated-dice and draft-pool comparisons the row asks for. A 3.2 (impact 3: a stale row keeps a done ask in the queue; ease 9: state files only; +0.5 user source). The row moves to Done with the phase 36 numbers and the residual the report's caveat records (the bot keeps only heal cards). Next in line: no row scores 3.0 or more outside the /oversight-owned /decisions rows.
