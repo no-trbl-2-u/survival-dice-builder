@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-02 (pass 233, cloud tick)
+
+Pass 232 put the /config Combat model siege step after both options (51499f9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 2 commits ago) and so is the expand gate (pass 24 ran 4 commits ago). Phase 35 is still blocked on the designer's Skills session. The five LOW rows from critique pass 36 score 3.0-3.2; the top one is the a11y row: clearing the Seed field on /play or /debug shows "Type a whole number." in a role="alert" at once, so a screen reader announces an error before the player types. A 3.2 (impact 4: every screen-reader player who types a seed; ease 8: two components and one helper). A blank field now keeps Start disabled and shows the message quietly (no alert, aria-invalid false); text that is not digits still gets the alert. A component test pins both cases. Next in line: the other four LOW rows from pass 36, then the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play and /debug: clearing the Seed field announces an error at once (critique LOW, pass 36)
+- category: external-critique (a11y)
+- impact: 4
+- ease: 8
+- next: `isSeedBlank` in `apps/web/src/play/seed.ts`; blank field renders the message without role="alert" on both pages
+- issue: #285
+- fixed: (this commit)
+
+### [ ] [3.0] /: the Materials line under "every round" says a node gives its materials "once" (critique LOW, pass 36)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 10
+- next: add "then it is spent for the rest of the run" in `ruleText.ts`
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-02 (pass 232, cloud tick)
 
 Pass 231 named the tests in the RULES-COVERAGE row for Tables 5 and 7 (634872c), and critique pass 36 ran after it (7bedca7). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 1 commit ago) and so is the expand gate (pass 24 ran 3 commits ago). Phase 35 is still blocked on the designer's Skills session. Top finding, new from critique pass 36: the /config Combat model help puts the siege step under Engagements only, while the engine runs it under both models and / says "Either way". A 9.0 (critique MED, impact 6, ease 10, bias x1.5, clamped). The help now names both options, then "In both, enemies hit structures in the siege step at the end of Combat."; a content test pins it. Next in line: the five LOW rows from pass 36, then the /oversight-owned /decisions rows.

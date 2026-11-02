@@ -45,15 +45,6 @@
 - suggested fix: Write "Rule 7.8." for one section and "Rules 7.8, 12.5." for more than one.
 - source: web-fetch
 
-### [LOW] /play and /debug — clearing the Seed field announces an error at once
-- pass: 36 (commit 634872c)
-- viewport: mobile
-- category: a11y
-- observation: The seed check shows "Type a whole number." in a role="alert" as soon as the field is empty, so a player who clears the field to type a new seed hears an error before typing.
-- evidence: `apps/web/src/play/StartPanel.tsx:128` `{seedValue === null && (<p id="seed-error" role="alert">`; same at `apps/web/src/debug/DebugPage.tsx:137`; `apps/web/src/play/seed.ts:11`.
-- suggested fix: Treat an empty field as "not yet typed": keep Start disabled but show the message without role="alert" (or only once the field holds text that is not digits).
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play and /debug — clearing the Seed field announces an error at once
+- pass: 36 (commit 634872c)
+- viewport: mobile
+- category: a11y
+- observation: The seed check shows "Type a whole number." in a role="alert" as soon as the field is empty, so a player who clears the field to type a new seed hears an error before typing.
+- evidence: `apps/web/src/play/StartPanel.tsx:128` `{seedValue === null && (<p id="seed-error" role="alert">`; same at `apps/web/src/debug/DebugPage.tsx:137`; `apps/web/src/play/seed.ts:11`.
+- suggested fix: Treat an empty field as "not yet typed": keep Start disabled but show the message without role="alert" (or only once the field holds text that is not digits).
+- source: web-fetch
+- issue: #285
+- fixed: (this commit) — a blank Seed field keeps Start disabled and shows the message without role="alert" (aria-invalid false); text that is not digits still raises the alert, on /play and /debug.
 
 ### [x] [MED] /config — the Combat model help puts the siege step under Engagements only
 - pass: 36 (commit 634872c)

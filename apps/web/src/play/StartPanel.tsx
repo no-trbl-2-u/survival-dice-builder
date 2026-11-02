@@ -13,7 +13,7 @@ import { resetConfig, type KeyValue } from '../config/configStore.ts'
 import { importRun, readAutosave } from './exportRun.ts'
 import styles from './Play.module.css'
 import type { Run } from './run.ts'
-import { parseSeed, SEED_ERROR } from './seed.ts'
+import { isSeedBlank, parseSeed, SEED_ERROR } from './seed.ts'
 
 /** Which Combat a new run plays: engagements (Spec v2), or the older exchanges kept for playtests. */
 export type CombatModel = 'exchange' | 'engage'
@@ -68,6 +68,7 @@ export function StartPanel({
   // The reset asks first, as on /config.
   const [confirming, setConfirming] = useState(false)
   const seedValue = parseSeed(seed)
+  const seedBlank = isSeedBlank(seed)
   const load = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -106,7 +107,7 @@ export function StartPanel({
             inputMode="numeric"
             value={seed}
             onChange={(e) => setSeed(e.target.value)}
-            aria-invalid={seedValue === null}
+            aria-invalid={seedValue === null && !seedBlank}
             aria-describedby={seedValue === null ? 'seed-error seed-hint' : 'seed-hint'}
           />
         </label>
@@ -125,11 +126,16 @@ export function StartPanel({
           Start run
         </button>
       </form>
-      {seedValue === null && (
-        <p id="seed-error" role="alert">
-          {SEED_ERROR}
-        </p>
-      )}
+      {seedValue === null &&
+        (seedBlank ? (
+          <p id="seed-error" key="seed-blank">
+            {SEED_ERROR}
+          </p>
+        ) : (
+          <p id="seed-error" key="seed-invalid" role="alert">
+            {SEED_ERROR}
+          </p>
+        ))}
       <p id="seed-hint" className={styles.muted}>
         The same seed and the same choices give the same game.
       </p>

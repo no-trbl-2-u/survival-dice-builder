@@ -12,3 +12,12 @@ export function parseSeed(text: string): number | null {
   const seed = Number(trimmed)
   return Number.isSafeInteger(seed) ? seed : null
 }
+
+/**
+ * True while the Seed field holds no text (or only spaces): the player has cleared it to
+ * type a new seed. The page keeps Start disabled and shows the hint quietly, not as an
+ * alert, so clearing the field does not announce an error.
+ */
+export function isSeedBlank(text: string): boolean {
+  return text.trim() === ''
+}

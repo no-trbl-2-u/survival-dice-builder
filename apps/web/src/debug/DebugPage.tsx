@@ -14,7 +14,7 @@ import styles from './DebugPage.module.css'
 import { EventLog } from './EventLog.tsx'
 import { StateView } from './StateView.tsx'
 import { type StepResult, stepStatus } from './stepStatus.ts'
-import { parseSeed, SEED_ERROR } from '../play/seed.ts'
+import { isSeedBlank, parseSeed, SEED_ERROR } from '../play/seed.ts'
 
 type Run = Readonly<{
   seed: number
@@ -75,6 +75,7 @@ function reducer(run: Run, msg: Msg): Run {
 export function DebugPage() {
   const [seedText, setSeedText] = useState('1')
   const seedValue = parseSeed(seedText)
+  const seedBlank = isSeedBlank(seedText)
   const [run, dispatch] = useReducer(reducer, undefined, () =>
     reducer({} as Run, { kind: 'new', seed: 1 }),
   )
@@ -130,15 +131,20 @@ export function DebugPage() {
             value={seedText}
             onChange={(e) => setSeedText(e.target.value)}
             aria-label="Seed"
-            aria-invalid={seedValue === null}
+            aria-invalid={seedValue === null && !seedBlank}
             aria-describedby={seedValue === null ? 'debug-seed-error' : undefined}
           />
         </label>
-        {seedValue === null && (
-          <span id="debug-seed-error" role="alert">
-            {SEED_ERROR}
-          </span>
-        )}
+        {seedValue === null &&
+          (seedBlank ? (
+            <span id="debug-seed-error" key="seed-blank">
+              {SEED_ERROR}
+            </span>
+          ) : (
+            <span id="debug-seed-error" key="seed-invalid" role="alert">
+              {SEED_ERROR}
+            </span>
+          ))}
         <button type="submit" disabled={seedValue === null}>
           New run
         </button>
