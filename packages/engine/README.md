@@ -1,6 +1,6 @@
 # @survival/engine
 
-**Purpose:** the pure rules engine for Spec v1. Pure functions over plain data: no classes, no
+**Purpose:** the pure rules engine for Spec v2. Pure functions over plain data: no classes, no
 mutation of inputs, no I/O, no `Date` or `Math.random` (enforced by ESLint). Every export has
 TSDoc naming its rule section (`@rule`). Rule numbers come from `GameState.config`, never from
 literals.
@@ -80,7 +80,7 @@ at 0 health is knocked out (`combat/knockout.ts`) and returns at the next round 
 Progression (phase 8): defeats pay shared experience and the killer's currency; levels add
 dice; a Build on the base buys upgrades; the Shop sells at any decision while on the base;
 even-round drafts while Training is open; milestones are recorded at 10.10 and at the end.
-The engine is feature-complete for Spec v1 (Milestone 1).
+The engine was feature-complete for Spec v1 at Milestone 1 and plays Spec v2 since phase 41.
 
 Co-op (phase 13): `createGame(config, seed, content, { players: 1-4 })`. `state.current` is
 the seat whose decision it is; `turnFresh` marks a new Prepare turn or Combat exchange.

@@ -29,5 +29,5 @@ function loadDefault(): Content {
   return result.content
 }
 
-/** The validated default content (Spec v1, Issue 006 draft). */
+/** The validated default content (Spec v2). */
 export const defaultContent: Content = loadDefault()

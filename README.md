@@ -2,7 +2,7 @@
 
 Defend the base, build your dice, survive one more round.
 
-A playable web prototype of a 1 to 4 player co-op survival dice-builder (Spec v1). Live at
+A playable web prototype of a 1 to 4 player co-op survival dice-builder (Spec v2). Live at
 https://survival-dice-builder.pages.dev.
 
 ## Setup

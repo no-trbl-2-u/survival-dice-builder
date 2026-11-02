@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-02 (pass 229, cloud tick)
+
+Pass 228 made the engine and web doc comments quote Spec v2 (9191956). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 9 commits ago, about 16 hours) and so is the expand gate (pass 23 ran 4 commits ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. Top finding, new this pass: pass 228 swept engine and web doc comments, but four other places still describe the game as Spec v1. The repo README (the GitHub landing page) says "(Spec v1)"; the engine README says "the pure rules engine for Spec v1" and "feature-complete for Spec v1"; the `pnpm sim` help says `rules` prints "each Spec v1 rule" while it renders Spec v2; the `defaultContent` TSDoc says "Spec v1, Issue 006 draft". A 3.0 (impact 3: the first page a GitHub visitor reads names the wrong rules; ease 10: five lines). All now say Spec v2; the engine README keeps Milestone 1 as Spec v1 history and adds that phase 41 moved the engine to Spec v2. `agents.md` and `spec/` keep their Spec v1 lines: the rule book and the spec change only through /oversight. Next in line: the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] README, engine README, sim help and content TSDoc still say Spec v1 (audit, docs)
+- category: docs (rules accuracy)
+- impact: 3
+- ease: 10
+- next: "Spec v2" in `README.md`, `packages/engine/README.md`, the `rules` line of the `pnpm sim` help, and the `defaultContent` TSDoc
+- issue: #282
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-02 (pass 228, cloud tick)
 
 Pass 227 dropped the /play next-level target when experience cannot raise the level (ac87099). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 8 commits ago, about 16 hours) and so is the expand gate (pass 23 ran 3 commits ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. Top finding, new this pass: two doc comments still describe Spec v1. The TSDoc of `experienceForLevel` (rule 8.5) quotes Spec v1 steps of 5, 10, 15 (totals 5, 15, 30, 50) while Spec v2 8.5 and `config.default.json` use steps of 3 (totals 3, 9, 18, 30); the `rulesUrl` comment calls the linked `spec/01-spec-v2-rules.md` "Spec v1". A 3.0 (impact 3: the rule-cited TSDoc that standing rule 6 makes the engine's contract misstates a rule's numbers, and the rules-lawyer reads it; ease 10: two comment lines). Both now say Spec v2; the numbers are already pinned by `levels.test.ts` and `spec-v2.test.ts` "change 6". No other Spec v1 numbers remain in engine or web doc comments. Next in line: the /oversight-owned /decisions rows.

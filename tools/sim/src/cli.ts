@@ -50,7 +50,7 @@ sweep: a batch for every value of every --set (a dotted config key), seat count 
 timing: minutes per round and time shares per phase and decision, from real run exports.
 playtests: every run export in a folder, against the 8-9 minutes-per-round estimate.
 decisions: the designer decision digest from OPEN-QUESTIONS.md and plan/AUDIT.md.
-rules: each Spec v1 rule as written beside what the engine does (the rules as played).
+rules: each Spec v2 rule as written beside what the engine does (the rules as played).
 kit: rewrites the generated rule blocks of docs/playtests/PROTOCOL.md, SURVEY.md and REPORT.md.`
 
 /** Reads `--name value` pairs. */
