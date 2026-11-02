@@ -1,4 +1,4 @@
-import { experienceForLevel, type GameState } from '@survival/engine'
+import { experienceForNextLevel, type GameState } from '@survival/engine'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import styles from './Play.module.css'
 
@@ -16,19 +16,23 @@ export function whose(state: GameState): string {
 
 /**
  * Every player's tracks (the current player first in bold, marked "turn"), the shared level,
- * and the base, as numbers with labels (never a bar alone). All hands are open (16.3).
+ * and the base, as numbers with labels (never a bar alone). All hands are open (16.3). The
+ * experience shows a next-level target only when experience can still raise the level (18.1,
+ * row 17); at a maximum level the level says so.
  */
 export function PlayerPanel({ state }: Props) {
-  const next = experienceForLevel(state.level + 1, state.config)
+  const next = experienceForNextLevel(state.level, state.config)
+  const top = state.config.options.maxLevel !== null && state.level >= state.config.options.maxLevel
   return (
     <section className={styles.panel} aria-label="Players">
       <h2 className={styles.panelTitle}>
         {state.players.length === 1 ? 'You' : 'Players'} ·{' '}
         <span key={state.level} className={state.level > 1 ? styles.levelUp : undefined}>
           level {state.level}
+          {top ? ' (maximum)' : ''}
         </span>{' '}
-        · <GameIcon name="experience" /> experience {state.experience} / {next} · base{' '}
-        {state.base.health} / {state.base.maxHealth}
+        · <GameIcon name="experience" /> experience {state.experience}
+        {next === null ? '' : ` / ${next}`} · base {state.base.health} / {state.base.maxHealth}
       </h2>
       <div data-testid="player-panel" className={styles.playerList}>
         {state.players.map((p, seat) => {

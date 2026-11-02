@@ -1,6 +1,6 @@
 import { defaultContent, loadContent, defaultRawContent, type GameConfig } from '@survival/content'
 import { describe, expect, it } from 'vitest'
-import { experienceForLevel, levelForExperience } from './levels.ts'
+import { experienceForLevel, experienceForNextLevel, levelForExperience } from './levels.ts'
 
 const config = defaultContent.config
 
@@ -20,6 +20,19 @@ describe('levels', () => {
   it('18.1 max level caps the level when set', () => {
     const capped: GameConfig = { ...config, options: { ...config.options, maxLevel: 2 } }
     expect(levelForExperience(1000, capped)).toBe(2)
+  })
+
+  it('8.3, 18.1, row 17 the next level target is null when experience cannot raise the level', () => {
+    expect(experienceForNextLevel(1, config)).toBe(3)
+    expect(experienceForNextLevel(3, config)).toBe(18)
+    const capped: GameConfig = { ...config, options: { ...config.options, maxLevel: 3 } }
+    expect(experienceForNextLevel(2, capped)).toBe(9)
+    expect(experienceForNextLevel(3, capped)).toBeNull()
+    const elite: GameConfig = {
+      ...config,
+      experience: { ...config.experience, levelPerEliteSpawn: true },
+    }
+    expect(experienceForNextLevel(1, elite)).toBeNull()
   })
 
   it('spec 1: changing a number in config.default.json changes the game, with no code edit', () => {

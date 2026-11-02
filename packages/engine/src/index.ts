@@ -11,7 +11,11 @@ export { deserialize, serialize } from './api/serialize.ts'
 export type { GameEvent, GameEventType } from './events/events.ts'
 export type { Axial } from './hex.ts'
 export { AXIAL_DIRECTIONS, hexDistance, hexKey, hexNeighbors, tileHexes } from './hex.ts'
-export { experienceForLevel, levelForExperience } from './progression/levels.ts'
+export {
+  experienceForLevel,
+  experienceForNextLevel,
+  levelForExperience,
+} from './progression/levels.ts'
 export { canFire } from './skills/canFire.ts'
 export { enemiesInRange } from './combat/resolve.ts'
 export { stepsOutOfReach } from './movement/move.ts'

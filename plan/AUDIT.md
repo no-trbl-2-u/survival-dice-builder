@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-02 (pass 227, cloud tick)
+
+Pass 226 fixed the Materials line on / (4414830). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 7 commits ago, about 14 hours) and so is the expand gate (pass 23 ran 1 commit ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row now edits a `[needs-user-call]` item, which /oversight owns. Top finding, new this pass: the /play player panel always shows "experience N / T" for the next level, but with a Maximum level set on /config and reached, or with the "1 level for each elite that spawns" experiment on, no experience total raises the level (`levelForExperience`, `raiseLevel`). The panel shows a target the player cannot reach. A 3.2 (impact 4: the one progress number on /play misleads under two /config options; ease 8: an engine helper, one label and tests). The engine's new `experienceForNextLevel` returns null in both cases. The panel then shows "experience N" with no target, and "level N (maximum)" at the cap. Engine and PlayerPanel tests pin it. Next in line: the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play: the player panel shows a next-level target no experience can reach (audit, comprehension)
+- category: comprehension
+- impact: 4
+- ease: 8
+- next: `experienceForNextLevel` in the engine; the panel drops the target when it is null and says "(maximum)" at the cap
+- issue: #280
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-02 (pass 226, cloud tick)
 
 Pass 225 made /config tick boxes that start unticked say "Not ticked (default)" (3c0624a), and expand pass 23 found no new candidates (c88a809). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 6 commits ago, about 13 hours) and so is the expand gate (pass 23 ran 0 commits ago). Phase 35 is still blocked on the designer's Skills session. Top finding, from pass 35: the Materials line on / names only the starter Gather card, while Shop cards (Haul, Excavate, Quarry) gather too under the same node rule. A 2.7 (impact 3, ease 9), the last Pending critique row the site can act on without /oversight. `materialsText` now says "Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card)", in the "Engage option" wording the Combat line uses; the off-node and anywhere readings follow. ruleText and HomePage tests pin it. Next in line: only the /oversight-owned /decisions rows remain.

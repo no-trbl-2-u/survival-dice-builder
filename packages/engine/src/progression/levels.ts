@@ -32,3 +32,20 @@ export function levelForExperience(experience: number, config: GameConfig): numb
   while (level < cap && experience >= experienceForLevel(level + 1, config)) level += 1
   return level
 }
+
+/**
+ * Returns the experience total at which the next level starts, or null when experience cannot
+ * raise the level: the level is at `options.maxLevel` (18.1), or the row 17 experiment
+ * `experience.levelPerEliteSpawn` raises it on elite spawns instead.
+ *
+ * @param level - the current shared level (1 or more).
+ * @param config - the game configuration (reads `experience` and `options.maxLevel`).
+ * @returns the cumulative experience for `level + 1`, or null when no experience total reaches it.
+ * @rule 8.3, 8.5, 18.1, OPEN-QUESTIONS row 17
+ */
+export function experienceForNextLevel(level: number, config: GameConfig): number | null {
+  if (config.experience.levelPerEliteSpawn) return null
+  const cap = config.options.maxLevel
+  if (cap !== null && level >= cap) return null
+  return experienceForLevel(level + 1, config)
+}
