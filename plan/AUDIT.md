@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-02 (pass 226, cloud tick)
+
+Pass 225 made /config tick boxes that start unticked say "Not ticked (default)" (3c0624a), and expand pass 23 found no new candidates (c88a809). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 6 commits ago, about 13 hours) and so is the expand gate (pass 23 ran 0 commits ago). Phase 35 is still blocked on the designer's Skills session. Top finding, from pass 35: the Materials line on / names only the starter Gather card, while Shop cards (Haul, Excavate, Quarry) gather too under the same node rule. A 2.7 (impact 3, ease 9), the last Pending critique row the site can act on without /oversight. `materialsText` now says "Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card)", in the "Engage option" wording the Combat line uses; the off-node and anywhere readings follow. ruleText and HomePage tests pin it. Next in line: only the /oversight-owned /decisions rows remain.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /: the Materials line names only the starter Gather card, not the Shop cards that also gather (critique LOW, pass 35)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 9
+- next: "Play a card's Gather option ... to get its materials (2 materials for the starter Gather card)" in `materialsText`
+- issue: #279
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-02 (pass 225, cloud tick)
 
 Pass 224 made /play and /debug refuse a seed that is not a whole number (f0ed9f4). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 4 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 19 commits ago, about 45 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, from pass 35: on /config the tick boxes that start unticked say "Off (default)" while the control shows a box, not an "Off" state, and the boxes ticked by default say "When ticked (default)". A 2.7 (impact 3, ease 9), the only Pending critique row the site can act on without /oversight. The four boolean helps (1 level for each elite that spawns, Spawns scale with seats, Tile rotation, Every card must be played) now say "Not ticked (default):"; number limits keep "Off". A configMetaText test fails when a tick box says "Off (default)". Next in line: the /oversight-owned /decisions rows.

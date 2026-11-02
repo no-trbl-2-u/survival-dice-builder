@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Materials line names only the starter Gather card, not the Shop cards that also gather
-- pass: 35 (commit 800a190)
-- viewport: desktop
-- category: comprehension
-- observation: The new Materials item gives the starter Gather card's amount only. Shop cards also gather (Haul 3, Excavate 4, Quarry 6) under the same node rule, and the page does not say so.
-- evidence: Live /: "Materials: Play a Gather card on a gathering node to get 2 materials; each node gives its materials once." (`packages/content/src/ruleText.ts:200`); `packages/content/data/cards.json` Haul amount 3, Excavate 4, Quarry 6.
-- suggested fix: "Play a card's Gather option on a gathering node to get its materials (2 for the starter Gather card); each node gives its materials once."
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -64,6 +55,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Materials line names only the starter Gather card, not the Shop cards that also gather
+- pass: 35 (commit 800a190)
+- viewport: desktop
+- category: comprehension
+- observation: The new Materials item gives the starter Gather card's amount only. Shop cards also gather (Haul 3, Excavate 4, Quarry 6) under the same node rule, and the page does not say so.
+- evidence: Live /: "Materials: Play a Gather card on a gathering node to get 2 materials; each node gives its materials once." (`packages/content/src/ruleText.ts:200`); `packages/content/data/cards.json` Haul amount 3, Excavate 4, Quarry 6.
+- suggested fix: "Play a card's Gather option on a gathering node to get its materials (2 for the starter Gather card); each node gives its materials once."
+- source: web-fetch
+- issue: #279
+- fixed: (this commit) — materialsText says "a card's Gather option ... its materials (2 materials for the starter Gather card)"
 
 ### [x] [LOW] /config — tick-box helps say "Off (default)" for a box that has no "Off" label
 - pass: 35 (commit 800a190)

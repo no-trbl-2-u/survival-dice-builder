@@ -230,9 +230,9 @@ describe('rule text from config', () => {
     )
   })
 
-  it('materials: the starter Gather amount, where Gather works, and a node giving its materials once (6.7, rows 59, 67)', () => {
+  it('materials: any card gathers, the starter Gather amount as the example, where Gather works, and a node giving its materials once (6.7, rows 59, 67)', () => {
     expect(materialsText(base, defaultContent)).toBe(
-      'Play a Gather card on a gathering node to get 2 materials; each node gives its materials once.',
+      "Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card); each node gives its materials once.",
     )
     expect(
       materialsText(
@@ -240,7 +240,7 @@ describe('rule text from config', () => {
         defaultContent,
       ),
     ).toBe(
-      'Play a Gather card on a gathering node to get 2 materials; each node gives its materials once. Anywhere else, a Gather card gets 1 material.',
+      "Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card); each node gives its materials once. Anywhere else, a Gather option gets 1 material.",
     )
     expect(
       materialsText(
@@ -248,14 +248,14 @@ describe('rule text from config', () => {
         defaultContent,
       ),
     ).toBe(
-      'Play a Gather card anywhere to get 2 materials; a gathering node it is played on gives materials once.',
+      "Play a card's Gather option anywhere to get its materials (2 materials for the starter Gather card); a gathering node it is played on gives materials once.",
     )
     const one = {
       cards: defaultContent.cards.map((c) =>
         c.top.kind === 'gather' ? { ...c, top: { ...c.top, amount: 1 } } : c,
       ),
     }
-    expect(materialsText(base, one)).toMatch(/to get 1 material;/)
+    expect(materialsText(base, one)).toMatch(/\(1 material for the starter Gather card\);/)
   })
 
   it('Combat end: discarding is named unless every card must be played (row 10)', () => {

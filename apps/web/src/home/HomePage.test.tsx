@@ -27,11 +27,11 @@ describe('HomePage', () => {
     expect(items.find((text) => text.startsWith('Enemies: Each new tile'))).toBeTruthy()
   })
 
-  it('says where materials come from before the prices that spend them (critique pass 34)', () => {
+  it('says where materials come from, Shop cards included, before the prices that spend them (critique passes 34, 35)', () => {
     render(<HomePage />)
     const items = screen.getAllByRole('listitem').map((li) => li.textContent ?? '')
     expect(items).toContain(
-      'Materials: Play a Gather card on a gathering node to get 2 materials; each node gives its materials once.',
+      "Materials: Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card); each node gives its materials once.",
     )
   })
 
