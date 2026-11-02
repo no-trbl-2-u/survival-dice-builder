@@ -67,4 +67,33 @@ describe('StartPanel', () => {
     expect(view.queryByRole('group', { name: 'Reset to the standard rules?' })).toBeNull()
     expect(view.getByRole('button', { name: 'Reset to the standard rules' })).toBeTruthy()
   })
+
+  it('does not start a run while the seed is not a whole number', () => {
+    const starts: number[] = []
+    const view = within(
+      render(
+        <StartPanel
+          config={defaultContent.config}
+          changes={[]}
+          updated={[]}
+          store={undefined}
+          combat="engage"
+          onStart={(_players, seed) => starts.push(seed)}
+          onLoad={() => {}}
+        />,
+      ).container,
+    )
+    const input = view.getByLabelText(/Seed/)
+    const start = view.getByRole('button', { name: 'Start run' }) as HTMLButtonElement
+    fireEvent.change(input, { target: { value: 'abc' } })
+    expect(start.disabled).toBe(true)
+    expect(view.getByRole('alert').textContent).toBe('Type a whole number.')
+    fireEvent.submit(start.closest('form') as HTMLFormElement)
+    expect(starts).toEqual([])
+    fireEvent.change(input, { target: { value: '42' } })
+    expect(start.disabled).toBe(false)
+    expect(view.queryByRole('alert')).toBeNull()
+    fireEvent.click(start)
+    expect(starts).toEqual([42])
+  })
 })

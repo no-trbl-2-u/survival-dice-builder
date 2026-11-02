@@ -13,6 +13,7 @@ import { resetConfig, type KeyValue } from '../config/configStore.ts'
 import { importRun, readAutosave } from './exportRun.ts'
 import styles from './Play.module.css'
 import type { Run } from './run.ts'
+import { parseSeed, SEED_ERROR } from './seed.ts'
 
 /** Which Combat a new run plays: engagements (Spec v2), or the older exchanges kept for playtests. */
 export type CombatModel = 'exchange' | 'engage'
@@ -66,6 +67,7 @@ export function StartPanel({
   const [saved] = useState(() => readAutosave(store))
   // The reset asks first, as on /config.
   const [confirming, setConfirming] = useState(false)
+  const seedValue = parseSeed(seed)
   const load = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -85,7 +87,7 @@ export function StartPanel({
         className={styles.startForm}
         onSubmit={(e) => {
           e.preventDefault()
-          onStart(players, Number.parseInt(seed, 10) || 0, combat)
+          if (seedValue !== null) onStart(players, seedValue, combat)
         }}
       >
         <label>
@@ -104,7 +106,8 @@ export function StartPanel({
             inputMode="numeric"
             value={seed}
             onChange={(e) => setSeed(e.target.value)}
-            aria-describedby="seed-hint"
+            aria-invalid={seedValue === null}
+            aria-describedby={seedValue === null ? 'seed-error seed-hint' : 'seed-hint'}
           />
         </label>
         <label>
@@ -118,10 +121,15 @@ export function StartPanel({
             <option value="exchange">{COMBAT_LABEL.exchange ?? 'exchange'}</option>
           </select>
         </label>
-        <button type="submit" className={styles.primary}>
+        <button type="submit" className={styles.primary} disabled={seedValue === null}>
           Start run
         </button>
       </form>
+      {seedValue === null && (
+        <p id="seed-error" role="alert">
+          {SEED_ERROR}
+        </p>
+      )}
       <p id="seed-hint" className={styles.muted}>
         The same seed and the same choices give the same game.
       </p>

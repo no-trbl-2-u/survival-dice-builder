@@ -27,15 +27,6 @@
 - suggested fix: "Play a card's Gather option on a gathering node to get its materials (2 for the starter Gather card); each node gives its materials once."
 - source: web-fetch
 
-### [LOW] /play and /debug — a seed that is not a number silently starts seed 0
-- pass: 35 (commit 800a190)
-- viewport: desktop
-- category: comprehension
-- observation: The start panel's Seed field takes any text. Text that is not a whole number starts the run with seed 0 and nothing says so, while the hint promises "The same seed and the same choices give the same game." /debug does the same.
-- evidence: `apps/web/src/play/StartPanel.tsx:88` `Number.parseInt(seed, 10) || 0`; hint at `:126`; `apps/web/src/debug/DebugPage.tsx:120` same fallback.
-- suggested fix: Disable Start run and show "Type a whole number" while the seed is not a whole number, on /play and /debug; pin with a test.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play and /debug — a seed that is not a number silently starts seed 0
+- pass: 35 (commit 800a190)
+- viewport: desktop
+- category: comprehension
+- observation: The start panel's Seed field takes any text. Text that is not a whole number starts the run with seed 0 and nothing says so, while the hint promises "The same seed and the same choices give the same game." /debug does the same.
+- evidence: `apps/web/src/play/StartPanel.tsx:88` `Number.parseInt(seed, 10) || 0`; hint at `:126`; `apps/web/src/debug/DebugPage.tsx:120` same fallback.
+- suggested fix: Disable Start run and show "Type a whole number" while the seed is not a whole number, on /play and /debug; pin with a test.
+- source: web-fetch
+- issue: #277
+- addressed: (this commit); /play's Start run and /debug's New run are disabled while the seed is not a whole number, and the field says "Type a whole number." (an alert, named by the field's description). One `parseSeed` reads both fields; a unit test and a StartPanel test pin it.
 
 ### [x] [MED] /play and /debug — engagement and draft-pool log lines say "not in the written rules", but Spec v2 7.8 and 11.7 are those rules
 - pass: 35 (commit 800a190)

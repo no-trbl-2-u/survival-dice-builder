@@ -14,6 +14,7 @@ import styles from './DebugPage.module.css'
 import { EventLog } from './EventLog.tsx'
 import { StateView } from './StateView.tsx'
 import { type StepResult, stepStatus } from './stepStatus.ts'
+import { parseSeed, SEED_ERROR } from '../play/seed.ts'
 
 type Run = Readonly<{
   seed: number
@@ -73,6 +74,7 @@ function reducer(run: Run, msg: Msg): Run {
  */
 export function DebugPage() {
   const [seedText, setSeedText] = useState('1')
+  const seedValue = parseSeed(seedText)
   const [run, dispatch] = useReducer(reducer, undefined, () =>
     reducer({} as Run, { kind: 'new', seed: 1 }),
   )
@@ -116,8 +118,9 @@ export function DebugPage() {
         className={styles.controls}
         onSubmit={(e) => {
           e.preventDefault()
+          if (seedValue === null) return
           setCopied(null)
-          dispatch({ kind: 'new', seed: Number.parseInt(seedText, 10) || 0 })
+          dispatch({ kind: 'new', seed: seedValue })
         }}
       >
         <label>
@@ -127,9 +130,18 @@ export function DebugPage() {
             value={seedText}
             onChange={(e) => setSeedText(e.target.value)}
             aria-label="Seed"
+            aria-invalid={seedValue === null}
+            aria-describedby={seedValue === null ? 'debug-seed-error' : undefined}
           />
         </label>
-        <button type="submit">New run</button>
+        {seedValue === null && (
+          <span id="debug-seed-error" role="alert">
+            {SEED_ERROR}
+          </span>
+        )}
+        <button type="submit" disabled={seedValue === null}>
+          New run
+        </button>
         <button type="button" onClick={() => step({ kind: 'bot', steps: 1, by: 'bot step' })}>
           Bot step
         </button>
