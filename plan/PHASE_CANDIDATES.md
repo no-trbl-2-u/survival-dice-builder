@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-10-31 at commit d29b03d
-> Pass count: 22
+> Last pass: 2026-11-02 at commit 3c0624a
+> Pass count: 23
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -31,7 +31,8 @@
 - re-evidence (expand pass 19): the 18 shipping commits since pass 18 were all single-row fixes, while the two 8.1 /decisions rows ("three balance checks", "Structural v2 questions") stayed at the head of every Top 5, marked "waits for /oversight". Critique pass 29 added no /decisions row; 5 of the 6 Pending critique rows the site can act on are still on /decisions, all in `[needs-user-call]` items. Score held at 3.5: nothing new, and nothing the loop can do without `/oversight`.
 - re-evidence (expand pass 21): critique pass 32 (96669d8) filed three more /decisions copy rows; `/iterate` shipped them as eead64e (rule reading 56), 70ad49a (game-term case) and d632676 (rule reading 70). Five older rows are still pending, three MED at 8.1 and two LOW, all in `[needs-user-call]` items that only `/oversight` may edit. Score held at 3.5: nothing new for the loop, and the `/oversight` edit is still what clears the queue.
 - re-evidence (expand pass 22): critique pass 33 (914aacb) filed one more /decisions row: a "row N" link to a reading under Decided recently left the page for GitHub, and "rows 65 and 69" linked nothing. d29b03d gave Decided recently items ids and linked each number after "rows". The same five older rows still wait for `/oversight`, three MED at 8.1 and two LOW. Score held at 3.5.
-- last re-evidenced: 2026-10-31
+- re-evidence (expand pass 23): critique passes 34 (32a483b) and 35 (2f8713b) filed no /decisions row, and `/iterate` shipped one /decisions fix this window (7418ddf, the two file links say they open GitHub). The same five older rows still head the queue, three MED at 8.1 and two LOW, all in `[needs-user-call]` items that only `/oversight` may edit; audit pass 225 names them "next in line" again. Score held at 3.5.
+- last re-evidenced: 2026-11-02
 
 ### [ ] [score 1.0] Milestones a default run can reach: every milestone reachable, or marked out of reach with its reason
 - proposed: 2026-10-17, expand pass 13
@@ -77,7 +78,7 @@
 - progress (expand pass 14): three modal rows shipped one at a time: eb40e28 (the result names each damaged enemy and its health left), a6dc51f (the dice of each defeated enemy are marked), 4fdb8a5 (the Move banner says when a hex next to an enemy costs too much). Still pending in `plan/CRITIQUE.md`: the "in range" count, card timing and the Special face at Roll, the 375px fit, and the mini-map label. Score lowered from 4.5 to 4.0: the result text, the largest gap, is closed.
 - last re-evidenced: 2026-10-20
 
-### [ ] [score 4.0] Player text on Spec v2: the site stops calling Spec v1 options "the written rules"
+### [ ] [score 4.5] Player text on Spec v2: the site stops calling Spec v1 options "the written rules"
 - proposed: 2026-10-13, expand pass 10
 - source signals:
   - Spec v2 signed off 2026-10-12 (`1aec080`, `spec/01-spec-v2-rules.md`); phase 41 (`6f26cd6`) moved the engine but not the copy around it.
@@ -96,7 +97,8 @@
 - progress (expand pass 12): three more rows of the copy half shipped one at a time: 44df05f (/config rules note names only written-rules sections), 30ef913 (/decisions row 7 gives only the Spec v2 siege reading), b77dc49 (/decisions row 17 says steps of 3). The guard is still missing: "written rule" is typed by hand in `HomePage.tsx:45`, `ConfigPage.tsx:711`, `DebugPage.tsx:84`, `config.meta.json:103,280` and `decisions.ts:100`, and `decisions/Inline.tsx:7` still says "(Spec v1)". Critique pass 17 adds a /config row of the same kind: help texts cite "(open question N)" as plain text, and several of those numbers are not on /decisions; the pass 13 "baseline named three ways" row is still pending. Score held at 4.0.
 - progress (expand pass 13): four more rows of the copy half shipped: ed27a5c (/config links each open-question reading it cites to /decisions), 90858d8 (the baseline named one way), 431fb35 (level steps worded one way), a740b4e (the start panel reads its rule lines from the saved config). The pass 13 and pass 17 /config rows this candidate absorbed are now closed. The guard is still missing: nothing fails when help text calls a non-default value "the written rule". Score held at 4.0; the reason to promote remains the next rules change.
 - re-evidence (expand pass 22): critique pass 33 found two more hand-typed rule phrases on /config: the Combat model help said "play Engage", though under Spec v2 Engage is an option on the Move and Gather cards (a239cf6), and the "written rules" link did not say it opens GitHub (35073ff). Each shipped with its own string test. The guard in scope, rule phrases from `ruleText` checked against the Spec v2 defaults, is still missing. Score held at 4.0.
-- last re-evidenced: 2026-10-31
+- re-evidence (expand pass 23): critique pass 35 (2f8713b) filed two MED rows with exactly this cause, both found by a stranger, not a test: the /config "Defeated enemies' dice" note said "Not in the written rules" because the field was tagged "Combat v3", while Spec v2 7.8 step 7 is its default (4144937); and the /play log and /debug tagged most engagement events and every pooled Skill "not in the written rules", while Spec v2 writes them as 7.7, 7.8 and 11.7 (611750c, which also regenerated the engagement golden hash). Each fix pins its own field or tags. Nothing yet fails when a config field or an engine event that is the Spec v2 default carries a design tag ("Combat v3", "designer <date>") and so reads "not in the written rules". Scope gains that check, over `config.meta.json` rule tags and the engine's event rule tags. Score raised from 4.0 to 4.5: two MED rows in one pass, three weeks after Spec v2.
+- last re-evidenced: 2026-11-02
 
 ### [ ] [score 6.0] The table sheets on Spec v2: one-pager facts rewritten, and a test that ties them to config
 - proposed: 2026-10-13, expand pass 10
@@ -324,6 +326,7 @@
 
 ## Considered (below threshold)
 
+- [score 1.5] **/config choice helps from the schema** (pass 23). Signals: 7 of the 15 `fix:` commits since pass 22 went to /config help markers (e655e40, 62a3e23, 95d7426, 6a8354f, 6abf961, 4144937, 3c0624a): choice names that differ from the list labels, defaults left unmarked, "Off (default)" on a tick box. Unlike the earlier drips, each of these added a schema-wide check in `packages/content/src/configMetaText.test.ts` (every list marks its default, every tick box and optional limit names its default, each choice in a help reads as its list label, no tick box says "Off"), so the class is now guarded. Generating the helps from the schema would be a rewrite for no visible gain. Not filed; re-evaluate if a critique pass finds a /config help row the tests let through.
 - [score 2.5] **Count words from one helper** (pass 18; pass 20: 3 more "1 card" fixes, cbc36d2 and 2298840 on /config, 418b03c in the log; inline `=== 1 ? '` ternaries in non-test web and content source now 41, up from 35. Still one helper's worth of work; belongs in the log table candidate if promoted). Signals: 2 "1 material" fixes in this window (a3ab1b5 for the log, d274490 for the upgrade hint), each adding its own `materials` helper (`apps/web/src/play/describeEvent.ts:22`, `apps/web/src/play/BasePanel.tsx:17`); 35 inline `n === 1 ? '...'` ternaries across `apps/web/src` and `packages/content/src` (non-test). 5 of the 13 `fix:` commits this window went to /play log and Base panel copy, and each shipped with its own test. One shared plural helper in content, used by the log, the Base panel and ruleText, is one `/iterate` tick, not a phase. Not filed.
 - [score 2.0] **One voice check over every served page** (pass 17). Signals: 5 serial-comma fixes in 10 days (f5a5c17, 448f6e6, 054341d, 3917feb, 4af48ad), each on a surface the last guard did not scan, and each adding its own guard (ruleText, HomePage, DecisionsPage and /config tests). A scan of the 5 prerendered pages at 4af48ad finds no list that keeps the serial comma. The 4 hits the shared pattern finds are clause joins ("Each round is Prepare, then Combat, and each phase ...", "... a gathering node hex, and the node still works"), so a site-wide guard in `apps/web/e2e/static.spec.ts` needs a clause allowlist and would still miss /play and /debug, which are shells. Fits `/iterate` if a sixth surface regresses. Not filed.
 - [shipped] **/config help as one template** (score 2.0 at pass 12): the three rows shipped one at a time: ed27a5c (open-question citations link to /decisions), 90858d8 (baseline named one way), 0426919 (deck total and hand labelled apart). Pass 12 note follows.
