@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — tick-box helps say "Off (default)" for a box that has no "Off" label
-- pass: 35 (commit 800a190)
-- viewport: desktop
-- category: voice
-- observation: Since the tick-box default fix, boxes ticked by default say "When ticked (default)", but boxes that start unticked say "When ticked, ..." then "Off (default)". The control shows a box, not an "Off" state, so the default reads in a different word from the control.
-- evidence: "When ticked, each spawn node spawns 1 enemy per 2 seats, rounded up ... Off (default): as in the written rules." (`packages/content/data/config.meta.json:206`; also `:169`, `:398`) against "When ticked (default), a knocked-out player loses all the materials they carried."
-- suggested fix: For tick boxes only, replace "Off (default):" with "Not ticked (default):"; number limits keep "Off".
-- source: web-fetch
-
 ### [LOW] / — the Materials line names only the starter Gather card, not the Shop cards that also gather
 - pass: 35 (commit 800a190)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — tick-box helps say "Off (default)" for a box that has no "Off" label
+- pass: 35 (commit 800a190)
+- viewport: desktop
+- category: voice
+- observation: Since the tick-box default fix, boxes ticked by default say "When ticked (default)", but boxes that start unticked say "When ticked, ..." then "Off (default)". The control shows a box, not an "Off" state, so the default reads in a different word from the control.
+- evidence: "When ticked, each spawn node spawns 1 enemy per 2 seats, rounded up ... Off (default): as in the written rules." (`packages/content/data/config.meta.json:206`; also `:169`, `:398`) against "When ticked (default), a knocked-out player loses all the materials they carried."
+- suggested fix: For tick boxes only, replace "Off (default):" with "Not ticked (default):"; number limits keep "Off".
+- source: web-fetch
+- issue: #278
+- addressed: (this commit); the four tick boxes that start unticked (1 level for each elite that spawns, Spawns scale with seats, Tile rotation, Every card must be played) now say "Not ticked (default):"; number limits keep "Off". A configMetaText test fails when a tick box says "Off (default)".
 
 ### [x] [LOW] /play and /debug — a seed that is not a number silently starts seed 0
 - pass: 35 (commit 800a190)

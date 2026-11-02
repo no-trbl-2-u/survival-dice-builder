@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-02 (pass 225, cloud tick)
+
+Pass 224 made /play and /debug refuse a seed that is not a whole number (f0ed9f4). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 4 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 19 commits ago, about 45 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, from pass 35: on /config the tick boxes that start unticked say "Off (default)" while the control shows a box, not an "Off" state, and the boxes ticked by default say "When ticked (default)". A 2.7 (impact 3, ease 9), the only Pending critique row the site can act on without /oversight. The four boolean helps (1 level for each elite that spawns, Spawns scale with seats, Tile rotation, Every card must be played) now say "Not ticked (default):"; number limits keep "Off". A configMetaText test fails when a tick box says "Off (default)". Next in line: the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /config: tick-box helps say "Off (default)" for a box with no "Off" label (critique LOW, pass 35)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: for tick boxes only, write "Not ticked (default):" in `config.meta.json`
+- issue: #278
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-02 (pass 224, cloud tick)
 
 Pass 223 tagged engagement and draft-pool log lines with rules 7.7, 7.8 and 11.7 (611750c). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 3 commits ago, under 24 hours) and so is the expand gate (pass 22 ran 18 commits ago, under 48 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, from pass 35: on /play and /debug a seed that is not a whole number silently starts seed 0, against the hint "The same seed and the same choices give the same game." A 3.5 (impact 5: a run starts on a seed the player did not type, and nothing says so; ease 7: one shared parser, two forms, tests). Both forms now read the field with one `parseSeed` (digits only, a safe integer); while it is not a whole number the start button is disabled and the field says "Type a whole number." A unit test and a StartPanel test pin it. Next in line: the pass 35 LOWs (tick-box "Off (default)" wording, the Materials line) and the /oversight-owned /decisions rows.
@@ -19,7 +39,7 @@ Pass 223 tagged engagement and draft-pool log lines with rules 7.7, 7.8 and 11.7
 - issue: #277
 - fixed: (this commit)
 
-### [ ] [2.7] /config: tick-box helps say "Off (default)" for a box with no "Off" label (critique LOW, pass 35)
+### [x] [2.7] /config: tick-box helps say "Off (default)" for a box with no "Off" label (critique LOW, pass 35)
 - category: external-critique (voice)
 - impact: 3
 - ease: 9

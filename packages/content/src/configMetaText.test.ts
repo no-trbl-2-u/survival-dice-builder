@@ -109,7 +109,7 @@ describe('config.meta.json names the baseline one way', () => {
 
   it('an experiment that is off by default says so, as in the written rules', () => {
     expect(defaultConfigMeta['spawn.perSeat']?.help).toContain(
-      'Off (default): as in the written rules.',
+      'Not ticked (default): as in the written rules.',
     )
     expect(defaultConfigMeta['experience.eliteBonus']?.help).toContain(
       'Off (default): 0, as in the written rules.',
@@ -202,6 +202,19 @@ describe('config.meta.json placeholders and help read as player text (critique p
     expect(unmarked).toEqual([])
     expect(defaultConfigMeta['options.maxLevel']?.help).toBe(
       'The highest level the players can reach. Off (default): no maximum, as in the written rules.',
+    )
+  })
+
+  it('a tick box names its unticked default "Not ticked", as the box shows no "Off" (critique pass 35)', () => {
+    const offBoxes = Object.entries(defaultConfigMeta).flatMap(([path, entry]) => {
+      const value = path
+        .split('.')
+        .reduce<unknown>((at, key) => (at as Record<string, unknown>)?.[key], defaultContent.config)
+      return typeof value === 'boolean' && /\bOff \(default\)/.test(entry.help ?? '') ? [path] : []
+    })
+    expect(offBoxes).toEqual([])
+    expect(defaultConfigMeta['rulings.tileRotation']?.help).toBe(
+      'When ticked, the player may rotate a revealed tile. Not ticked (default): as in the written rules.',
     )
   })
 })

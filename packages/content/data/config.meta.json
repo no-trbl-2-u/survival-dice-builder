@@ -166,7 +166,7 @@
   },
   "experience.levelPerEliteSpawn": {
     "label": "1 level for each elite that spawns",
-    "help": "When ticked, the level rises by 1 each time an elite spawns (also when the miniature limit turns a grunt into an elite), and experience no longer raises the level. Off (default): as in the written rules.",
+    "help": "When ticked, the level rises by 1 each time an elite spawns (also when the miniature limit turns a grunt into an elite), and experience no longer raises the level. Not ticked (default): as in the written rules.",
     "rule": "8.3 (open question 17)"
   },
   "miniatureLimit": {
@@ -203,7 +203,7 @@
   },
   "spawn.perSeat": {
     "label": "Spawns scale with seats",
-    "help": "When ticked, each spawn node spawns 1 enemy per 2 seats, rounded up (1 for 1-2 seats, 2 for 3-4). Off (default): as in the written rules.",
+    "help": "When ticked, each spawn node spawns 1 enemy per 2 seats, rounded up (1 for 1-2 seats, 2 for 3-4). Not ticked (default): as in the written rules.",
     "rule": "9.2, 16 (open question 68)"
   },
   "spawn.nodeRange": {
@@ -395,7 +395,7 @@
   },
   "rulings.tileRotation": {
     "label": "Tile rotation",
-    "help": "When ticked, the player may rotate a revealed tile. Off (default): as in the written rules.",
+    "help": "When ticked, the player may rotate a revealed tile. Not ticked (default): as in the written rules.",
     "rule": "10.1 (open question 5)",
     "unused": true
   },
@@ -419,7 +419,7 @@
   },
   "rulings.mandatoryPlays": {
     "label": "Every card must be played",
-    "help": "When ticked, a card cannot be discarded without its effect. Off (default): as in the written rules.",
+    "help": "When ticked, a card cannot be discarded without its effect. Not ticked (default): as in the written rules.",
     "rule": "6.2, 7.8 step 5 (open question 10)"
   },
   "rulings.shopTiming": {
