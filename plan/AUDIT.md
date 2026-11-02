@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-02 (pass 228, cloud tick)
+
+Pass 227 dropped the /play next-level target when experience cannot raise the level (ac87099). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 8 commits ago, about 16 hours) and so is the expand gate (pass 23 ran 3 commits ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. Top finding, new this pass: two doc comments still describe Spec v1. The TSDoc of `experienceForLevel` (rule 8.5) quotes Spec v1 steps of 5, 10, 15 (totals 5, 15, 30, 50) while Spec v2 8.5 and `config.default.json` use steps of 3 (totals 3, 9, 18, 30); the `rulesUrl` comment calls the linked `spec/01-spec-v2-rules.md` "Spec v1". A 3.0 (impact 3: the rule-cited TSDoc that standing rule 6 makes the engine's contract misstates a rule's numbers, and the rules-lawyer reads it; ease 10: two comment lines). Both now say Spec v2; the numbers are already pinned by `levels.test.ts` and `spec-v2.test.ts` "change 6". No other Spec v1 numbers remain in engine or web doc comments. Next in line: the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] Engine and web doc comments still quote Spec v1 (rule 8.5 steps, the rules link) (audit, docs)
+- category: docs (rules accuracy)
+- impact: 3
+- ease: 10
+- next: Spec v2 numbers in the `experienceForLevel` TSDoc; "Spec v2" in the `rulesUrl` comment
+- issue: #281
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-02 (pass 227, cloud tick)
 
 Pass 226 fixed the Materials line on / (4414830). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 7 commits ago, about 14 hours) and so is the expand gate (pass 23 ran 1 commit ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row now edits a `[needs-user-call]` item, which /oversight owns. Top finding, new this pass: the /play player panel always shows "experience N / T" for the next level, but with a Maximum level set on /config and reached, or with the "1 level for each elite that spawns" experiment on, no experience total raises the level (`levelForExperience`, `raiseLevel`). The panel shows a target the player cannot reach. A 3.2 (impact 4: the one progress number on /play misleads under two /config options; ease 8: an engine helper, one label and tests). The engine's new `experienceForNextLevel` returns null in both cases. The panel then shows "experience N" with no target, and "level N (maximum)" at the cap. Engine and PlayerPanel tests pin it. Next in line: the /oversight-owned /decisions rows.

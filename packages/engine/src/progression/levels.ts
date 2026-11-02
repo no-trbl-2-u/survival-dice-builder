@@ -3,7 +3,7 @@ import type { GameConfig } from '@survival/content'
 /**
  * Returns the experience needed to reach each level, as a cumulative total.
  * Level 2 needs `firstStep`; each later step needs `stepIncrease` more than the step before
- * (defaults: steps 5, 10, 15 ... so totals 5, 15, 30, 50 ...).
+ * (Spec v2 defaults: steps 3, 6, 9 ... so totals 3, 9, 18, 30 ...).
  *
  * @param level - the level to reach (1 or more). Level 1 needs 0.
  * @param config - the game configuration (reads `experience`).
