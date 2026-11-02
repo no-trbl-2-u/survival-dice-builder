@@ -95,6 +95,14 @@ describe('config.meta.json marks the Spec v2 rule as the written one', () => {
       .map(([path]) => path)
     expect(found).toEqual([])
   })
+
+  it('7.10: the siege step ends Combat under both models, not Engagements only', () => {
+    const help = defaultConfigMeta['combat.model']?.help ?? ''
+    expect(help).toMatch(
+      /Exchanges: the older Combat, kept for playtests\. In both, enemies hit structures in the siege step at the end of Combat\.$/,
+    )
+    expect(help).not.toMatch(/stand; enemies hit structures/)
+  })
 })
 
 describe('config.meta.json names the baseline one way', () => {

@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-02 (pass 232, cloud tick)
+
+Pass 231 named the tests in the RULES-COVERAGE row for Tables 5 and 7 (634872c), and critique pass 36 ran after it (7bedca7). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 1 commit ago) and so is the expand gate (pass 24 ran 3 commits ago). Phase 35 is still blocked on the designer's Skills session. Top finding, new from critique pass 36: the /config Combat model help puts the siege step under Engagements only, while the engine runs it under both models and / says "Either way". A 9.0 (critique MED, impact 6, ease 10, bias x1.5, clamped). The help now names both options, then "In both, enemies hit structures in the siege step at the end of Combat."; a content test pins it. Next in line: the five LOW rows from pass 36, then the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [9.0] /config Combat model help puts the siege step under Engagements only (critique MED, pass 36, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 10
+- next: move the siege clause after both options in `config.meta.json` `combat.model.help`
+- issue: #284
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-02 (pass 231, cloud tick)
 
 Pass 230 handed to /expand (pass 24, 6dd10e4). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 11 commits ago, just under 24 hours) and so is the expand gate (pass 24 ran 1 commit ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. Top finding, new this pass: the `RULES-COVERAGE.md` row for Tables 5 and 7 (the enemy and defense records) names no test. Its test column still reads "schema validation only; behaviour tests in phases 6-7", a plan note from before those phases shipped. A 3.0 (impact 3: standing rule 6 asks every rule to map to a test in this file and the rules-lawyer audits it; ease 10: one row). The row now names the two schemas, the load and rule-text tests and the Tower test, and points to the rows that hold the behaviour tests. Every other row names at least one test. Next in line: the /oversight-owned /decisions rows.

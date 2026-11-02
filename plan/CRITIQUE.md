@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — the Combat model help puts the siege step under Engagements only
-- pass: 36 (commit 634872c)
-- viewport: desktop
-- category: comprehension
-- observation: The help attaches the siege step to the Engagements option only, so Exchanges reads as having no siege. The home page says the siege happens "Either way", and the engine runs it under both Combat models.
-- evidence: "Engagements (default): play a card's Engage option to roll from where you stand; enemies hit structures in the siege step at the end of Combat. Exchanges: the older Combat, kept for playtests." (`packages/content/data/config.meta.json:109`); / "Either way, when Combat ends, each enemy next to a Barricade, a Tower or the base hits one of them" (`apps/web/src/home/HomePage.tsx:53`); `packages/engine/src/combat/engage.ts:345` "Siege, at the end of Combat (both Combat models)".
-- suggested fix: Move the siege clause after both options: "... Exchanges: the older Combat, kept for playtests. In both, enemies hit structures in the siege step at the end of Combat."
-- source: web-fetch
-
 ### [LOW] / — the Materials line under "every round" says a node gives its materials "once"
 - pass: 36 (commit 634872c)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /config — the Combat model help puts the siege step under Engagements only
+- pass: 36 (commit 634872c)
+- viewport: desktop
+- category: comprehension
+- observation: The help attaches the siege step to the Engagements option only, so Exchanges reads as having no siege. The home page says the siege happens "Either way", and the engine runs it under both Combat models.
+- evidence: "Engagements (default): play a card's Engage option to roll from where you stand; enemies hit structures in the siege step at the end of Combat. Exchanges: the older Combat, kept for playtests." (`packages/content/data/config.meta.json:109`); / "Either way, when Combat ends, each enemy next to a Barricade, a Tower or the base hits one of them" (`apps/web/src/home/HomePage.tsx:53`); `packages/engine/src/combat/engage.ts:345` "Siege, at the end of Combat (both Combat models)".
+- suggested fix: Move the siege clause after both options: "... Exchanges: the older Combat, kept for playtests. In both, enemies hit structures in the siege step at the end of Combat."
+- source: web-fetch
+- issue: #284
+- fixed: (this commit) — the siege clause follows both options: "In both, enemies hit structures in the siege step at the end of Combat."
 
 ### [x] [LOW] / — the Materials line names only the starter Gather card, not the Shop cards that also gather
 - pass: 35 (commit 800a190)
