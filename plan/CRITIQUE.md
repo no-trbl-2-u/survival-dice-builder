@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-01 at commit 800a190
-> Pass count: 35
+> Last pass: 2026-11-02 at commit 634872c
+> Pass count: 36
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /config — the Combat model help puts the siege step under Engagements only
+- pass: 36 (commit 634872c)
+- viewport: desktop
+- category: comprehension
+- observation: The help attaches the siege step to the Engagements option only, so Exchanges reads as having no siege. The home page says the siege happens "Either way", and the engine runs it under both Combat models.
+- evidence: "Engagements (default): play a card's Engage option to roll from where you stand; enemies hit structures in the siege step at the end of Combat. Exchanges: the older Combat, kept for playtests." (`packages/content/data/config.meta.json:109`); / "Either way, when Combat ends, each enemy next to a Barricade, a Tower or the base hits one of them" (`apps/web/src/home/HomePage.tsx:53`); `packages/engine/src/combat/engage.ts:345` "Siege, at the end of Combat (both Combat models)".
+- suggested fix: Move the siege clause after both options: "... Exchanges: the older Combat, kept for playtests. In both, enemies hit structures in the siege step at the end of Combat."
+- source: web-fetch
+
+### [LOW] / — the Materials line under "every round" says a node gives its materials "once"
+- pass: 36 (commit 634872c)
+- viewport: desktop
+- category: comprehension
+- observation: The line sits under "On the board, every round:", so "each node gives its materials once" can read as once per round. The engine spends a node for the rest of the run.
+- evidence: `apps/web/src/home/HomePage.tsx:57` "On the board, every round:"; `packages/content/src/ruleText.ts:208` "...; each node gives its materials once."; `packages/engine/src/gather/gather.ts:8` "then the node is spent for good".
+- suggested fix: "each node gives its materials once, then it is spent for the rest of the run."
+- source: web-fetch
+
+### [LOW] /play — the player panel's next-level target is a total, while / and /config give level costs as "more"
+- pass: 36 (commit 634872c)
+- viewport: desktop
+- category: comprehension
+- observation: The panel shows "experience 3 / 9", a running total, but / and /config say "level 3 needs 6 more, level 4 needs 9 more". A visitor cannot match "/ 9" to "6 more" without adding, and the panel does not say the number is a total.
+- evidence: `apps/web/src/play/PlayerPanel.tsx:34` "experience {state.experience} / {next}"; `packages/engine/src/progression/levels.ts:43` "the cumulative experience for level + 1"; `packages/content/src/ruleText.ts:116` "Level 2 needs 3 experience, level 3 needs 6 more".
+- suggested fix: Name the target, for example "experience 3 (level 3 at 9)".
+- source: web-fetch
+
+### [LOW] /debug — the intro explains a [not in the written rules] tag the page never shows
+- pass: 36 (commit 634872c)
+- viewport: desktop
+- category: comprehension
+- observation: The intro says a log line reads "[not in the written rules] when the step comes from a later design decision", and then says the page always plays the standard rules. The only event with a non-section tag is the "Cancelled" defeated-dice option, which is off in the standard rules, so the tag never shows on /debug.
+- evidence: `apps/web/src/debug/DebugPage.tsx:112`; `packages/engine/src/combat/engage.ts:301` rule "Combat v3" (fires only when defeatedDice is "cancelled"); `packages/content/data/config.default.json:54` "defeatedDice": "hit".
+- suggested fix: Drop the [not in the written rules] clause from the /debug intro, or keep it only if a standard-rules event can carry it.
+- source: web-fetch
+
+### [LOW] /config — a single rule section is cited as "Rules 7.8."
+- pass: 36 (commit 634872c)
+- viewport: desktop
+- category: voice
+- observation: /config writes one section with the plural "Rules 7.8.", while the /play log says "rule 7.8". The same citation reads two ways, and the plural is wrong for one section.
+- evidence: `packages/content/src/ruleText.ts:425` `Rules ${sections}` (renders "Rules 7.8.", "Rules 8.5." on /config); `apps/web/src/play/PlayLog.tsx:17` `rule ${cited}`.
+- suggested fix: Write "Rule 7.8." for one section and "Rules 7.8, 12.5." for more than one.
+- source: web-fetch
+
+### [LOW] /play and /debug — clearing the Seed field announces an error at once
+- pass: 36 (commit 634872c)
+- viewport: mobile
+- category: a11y
+- observation: The seed check shows "Type a whole number." in a role="alert" as soon as the field is empty, so a player who clears the field to type a new seed hears an error before typing.
+- evidence: `apps/web/src/play/StartPanel.tsx:128` `{seedValue === null && (<p id="seed-error" role="alert">`; same at `apps/web/src/debug/DebugPage.tsx:137`; `apps/web/src/play/seed.ts:11`.
+- suggested fix: Treat an empty field as "not yet typed": keep Start disabled but show the message without role="alert" (or only once the field holds text that is not digits).
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
