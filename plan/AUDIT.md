@@ -5,6 +5,18 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-02 (pass 230, cloud tick)
+
+Pass 229 made the READMEs, sim help and content TSDoc say Spec v2 (e74354f). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 10 commits ago, about 23 hours) and so is the expand gate (pass 23 ran 5 commits ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass checked the rest of the repo for Spec v1 text (only history lines and Spec v1 option names remain), the route descriptions and served head tags, the count-and-noun strings in /play and /debug, and the sim option sets against OPEN-QUESTIONS (rows 63, 64, 66, 67 and 70 are still proposed, and rows 65 and 69 are already left out). Nothing scored 3.0 or more. No actionable iterate work, so the tick hands to /expand (bold posture): pass 24 adds the Spec v1 doc drift from passes 228 and 229 as evidence for "Player text on Spec v2". Next in line: the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-02 (pass 229, cloud tick)
 
 Pass 228 made the engine and web doc comments quote Spec v2 (9191956). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 35 ran 9 commits ago, about 16 hours) and so is the expand gate (pass 23 ran 4 commits ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. Top finding, new this pass: pass 228 swept engine and web doc comments, but four other places still describe the game as Spec v1. The repo README (the GitHub landing page) says "(Spec v1)"; the engine README says "the pure rules engine for Spec v1" and "feature-complete for Spec v1"; the `pnpm sim` help says `rules` prints "each Spec v1 rule" while it renders Spec v2; the `defaultContent` TSDoc says "Spec v1, Issue 006 draft". A 3.0 (impact 3: the first page a GitHub visitor reads names the wrong rules; ease 10: five lines). All now say Spec v2; the engine README keeps Milestone 1 as Spec v1 history and adds that phase 41 moved the engine to Spec v2. `agents.md` and `spec/` keep their Spec v1 lines: the rule book and the spec change only through /oversight. Next in line: the /oversight-owned /decisions rows.

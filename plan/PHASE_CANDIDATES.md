@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-11-02 at commit 3c0624a
-> Pass count: 23
+> Last pass: 2026-11-02 at commit e74354f
+> Pass count: 24
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -98,6 +98,7 @@
 - progress (expand pass 13): four more rows of the copy half shipped: ed27a5c (/config links each open-question reading it cites to /decisions), 90858d8 (the baseline named one way), 431fb35 (level steps worded one way), a740b4e (the start panel reads its rule lines from the saved config). The pass 13 and pass 17 /config rows this candidate absorbed are now closed. The guard is still missing: nothing fails when help text calls a non-default value "the written rule". Score held at 4.0; the reason to promote remains the next rules change.
 - re-evidence (expand pass 22): critique pass 33 found two more hand-typed rule phrases on /config: the Combat model help said "play Engage", though under Spec v2 Engage is an option on the Move and Gather cards (a239cf6), and the "written rules" link did not say it opens GitHub (35073ff). Each shipped with its own string test. The guard in scope, rule phrases from `ruleText` checked against the Spec v2 defaults, is still missing. Score held at 4.0.
 - re-evidence (expand pass 23): critique pass 35 (2f8713b) filed two MED rows with exactly this cause, both found by a stranger, not a test: the /config "Defeated enemies' dice" note said "Not in the written rules" because the field was tagged "Combat v3", while Spec v2 7.8 step 7 is its default (4144937); and the /play log and /debug tagged most engagement events and every pooled Skill "not in the written rules", while Spec v2 writes them as 7.7, 7.8 and 11.7 (611750c, which also regenerated the engagement golden hash). Each fix pins its own field or tags. Nothing yet fails when a config field or an engine event that is the Spec v2 default carries a design tag ("Combat v3", "designer <date>") and so reads "not in the written rules". Scope gains that check, over `config.meta.json` rule tags and the engine's event rule tags. Score raised from 4.0 to 4.5: two MED rows in one pass, three weeks after Spec v2.
+- re-evidence (expand pass 24): audit passes 228 and 229 found the same drift one level down, in text no test reads. 9191956: the `experienceForLevel` TSDoc (rule 8.5) quoted Spec v1 steps of 5 (Spec v2 and the config use 3), and the `rulesUrl` comment called `spec/01-spec-v2-rules.md` "Spec v1". e74354f: the repo README (the GitHub landing page), the engine README, the `pnpm sim` help line for `rules` and the `defaultContent` TSDoc all still said Spec v1. Both were found by hand, three weeks after sign-off. Audit pass 230 then found nothing at or above 3.0 and handed to `/expand`. Scope gains one line: the guard also scans READMEs, CLI help and rule-cited TSDoc for "Spec v1" outside lines marked as history. Score held at 4.5: the drift is now in docs, not on the served site.
 - last re-evidenced: 2026-11-02
 
 ### [ ] [score 6.0] The table sheets on Spec v2: one-pager facts rewritten, and a test that ties them to config
