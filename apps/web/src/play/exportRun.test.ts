@@ -242,7 +242,7 @@ describe('describeEvent voice', () => {
     const state = run.state
     const spawned = {
       type: 'enemySpawned',
-      rule: '10.2',
+      rule: '7.3',
       enemy: 'e9',
       kind: 'elite',
       hex: { q: 0, r: 0 },

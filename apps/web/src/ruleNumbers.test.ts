@@ -1,8 +1,9 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { ruleCitation } from '@survival/content'
+import { parseSpec, ruleCitation } from '@survival/content'
 import { describe, expect, it } from 'vitest'
+import { logRuleNote } from './play/PlayLog.tsx'
 
 const SRC = path.dirname(fileURLToPath(import.meta.url))
 
@@ -75,6 +76,37 @@ function engineRuleTags(): string[] {
   return [...new Set(tags)]
 }
 
+/**
+ * Every log tag the engine writes, also the ones it passes as an argument
+ * (`spawnEnemy(..., '7.3')`, `raiseLevel(..., 'row 17')`): each string literal in the engine
+ * source (tests excluded) that opens with a section number or a row.
+ */
+function engineTagLiterals(): string[] {
+  const dir = path.resolve(SRC, '../../../packages/engine/src')
+  const walk = (d: string): string[] =>
+    fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => {
+      const full = path.join(d, e.name)
+      if (e.isDirectory()) return walk(full)
+      return /\.ts$/.test(e.name) && !/\.test\.ts$/.test(e.name) ? [full] : []
+    })
+  const tags = walk(dir).flatMap((file) =>
+    [
+      ...stripComments(fs.readFileSync(file, 'utf8')).matchAll(/'((?:\d+\.\d+|row \d+)[^']*)'/g),
+    ].map((m) => m[1] ?? ''),
+  )
+  return [...new Set(tags)]
+}
+
+/** The rule sections Spec v2 deleted ("9.2 Deleted in Spec v2: ..."). */
+function deletedSections(): Set<string> {
+  const md = fs.readFileSync(path.resolve(SRC, '../../../spec/01-spec-v2-rules.md'), 'utf8')
+  return new Set(
+    parseSpec(md)
+      .rules.filter((r) => /^Deleted in Spec v2/.test(r.text))
+      .map((r) => r.id),
+  )
+}
+
 describe('rule text comes from config (standing rule 7)', () => {
   it('no component or view writes a rule number by hand; ruleText builds it from config', () => {
     const found = sources(SRC).flatMap((file) =>
@@ -107,6 +139,19 @@ describe('rule text comes from config (standing rule 7)', () => {
     const tags = engineRuleTags()
     expect(tags).toContain('Combat v3')
     expect(tags.flatMap((t) => ruleCitation(t).match(BUILD_WORD) ?? [])).toEqual([])
+  })
+
+  it('no /play log note cites a section Spec v2 deleted or names a row', () => {
+    const tags = engineTagLiterals()
+    expect(tags).toEqual(expect.arrayContaining(['7.3', '6.7', 'row 63', 'row 17']))
+    const deleted = deletedSections()
+    expect(deleted).toContain('9.2')
+    expect(deleted).toContain('10.1')
+    const notes = tags.map((t) => `${t} -> ${logRuleNote(t)}`)
+    const cites = (note: string) => note.split(' -> ')[1]?.match(/\b\d+\.\d+\b/g) ?? []
+    expect(notes.filter((n) => cites(n).some((id) => deleted.has(id)))).toEqual([])
+    expect(notes.flatMap((n) => n.split(' -> ')[1]?.match(BUILD_WORD) ?? [])).toEqual([])
+    expect(logRuleNote('row 63')).toBe('not in the written rules')
   })
 
   it('catches a hand-written build word, but not one in a comment', () => {

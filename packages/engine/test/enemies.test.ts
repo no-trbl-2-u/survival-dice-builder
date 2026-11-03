@@ -198,14 +198,14 @@ describe('enemy movement (7.5, 9.4, 9.7)', () => {
   })
 })
 
-describe('spawning (core loop v2, 9.2, 9.8, 10.5)', () => {
+describe('spawning (core loop v2, 7.3, 9.8, 10.5)', () => {
   it('core loop v2 every spawn node spawns 1 grunt each time; an occupied node spills over', () => {
     const s = board(twoTiles(), { q: -1, r: 0 }, [])
     const nodes = spawnNodes(s)
     expect(nodes).toHaveLength(1)
     const [once, first] = spawnAtNodes(s)
     expect(once.enemies.map((e) => e.hex)).toEqual([nodes[0]!.hex])
-    expect(first).toEqual([expect.objectContaining({ type: 'enemySpawned', rule: '9.2' })])
+    expect(first).toEqual([expect.objectContaining({ type: 'enemySpawned', rule: '7.3' })])
     const [twice, second] = spawnAtNodes(once)
     expect(twice.enemies).toHaveLength(2)
     expect(second).toEqual([expect.objectContaining({ rule: '9.8', spilled: true })])

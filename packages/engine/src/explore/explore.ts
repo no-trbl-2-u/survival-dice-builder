@@ -9,7 +9,7 @@ import type { GameState } from '../state/types.ts'
  * (row 66), the reveal counts for the milestones (17), and `progress.lastRevealRound` is set
  * (row 63). An empty tile deck reveals nothing.
  *
- * @rule 10.1, 17, core loop v2 rows 63, 66
+ * @rule 6.7, 17, core loop v2 rows 63, 66
  */
 function revealAt(state: GameState, center: Axial, rule: string): Step {
   const [top, ...rest] = state.tileDeck
@@ -43,10 +43,10 @@ function revealAt(state: GameState, center: Axial, rule: string): Step {
  *
  * @param state - the state during a Move.
  * @param hex - the off-map hex the figure steps into.
- * @rule 10.1, 10.2, 17, core loop v2 (exploring)
+ * @rule 6.7, 7.3, 17, core loop v2 (exploring)
  */
 export function revealUnder(state: GameState, hex: Axial): Step {
-  return revealAt(state, slotCovering(hex), '10.1')
+  return revealAt(state, slotCovering(hex), '6.7')
 }
 
 /**
@@ -66,7 +66,7 @@ export function forcedRevealDue(state: GameState): boolean {
  * revealed in the open slot nearest the base (ties: slot order, `emptySlots`). The engine picks
  * the slot so bot runs stay deterministic. Off (`null`): nothing happens.
  *
- * @rule 10.1, core loop v2 row 63 (proposed: forced reveal)
+ * @rule core loop v2 row 63 (proposed: forced reveal)
  */
 export function forcedReveal(state: GameState): Step {
   if (!forcedRevealDue(state)) return [state, []]
@@ -75,5 +75,5 @@ export function forcedReveal(state: GameState): Step {
     .sort(
       (a, b) => hexDistance(a.center, BASE_HEX) - hexDistance(b.center, BASE_HEX) || a.i - b.i,
     )[0]
-  return slot ? revealAt(state, slot.center, '10.1, row 63') : [state, []]
+  return slot ? revealAt(state, slot.center, 'row 63') : [state, []]
 }

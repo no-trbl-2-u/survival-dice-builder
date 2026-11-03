@@ -199,7 +199,7 @@ describe('summary maths', () => {
     const t = addEvents(EMPTY_TALLY, [
       {
         type: 'enemySpawned',
-        rule: '10.2',
+        rule: '7.3',
         enemy: 'e1',
         kind: 'grunt',
         hex: { q: 3, r: 0 },

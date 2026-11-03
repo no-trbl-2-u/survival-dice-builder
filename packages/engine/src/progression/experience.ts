@@ -32,7 +32,7 @@ export function raiseLevel(state: GameState, level: number, rule = '8.3'): Step 
  */
 export function levelForEliteSpawn(state: GameState): Step {
   if (!state.config.experience.levelPerEliteSpawn) return [state, []]
-  return raiseLevel(state, state.level + 1, '8.3, row 17')
+  return raiseLevel(state, state.level + 1, 'row 17')
 }
 
 /**

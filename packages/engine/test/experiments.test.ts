@@ -114,8 +114,8 @@ describe('row 63 forced reveal (clock.forcedRevealEvery)', () => {
     expect(after.tileDeck).toEqual(s.tileDeck.slice(1))
     expect(after.progress).toMatchObject({ tilesRevealed: 1, lastRevealRound: 3 })
     expect(events.map((e) => [e.type, e.rule])).toEqual([
-      ['tileRevealed', '10.1, row 63'],
-      ['tilePlaced', '10.1, row 63'],
+      ['tileRevealed', 'row 63'],
+      ['tilePlaced', 'row 63'],
     ])
     // A reveal resets the count: not due again until 3 more rounds pass.
     expect(forcedRevealDue({ ...after, round: 5 })).toBe(false)

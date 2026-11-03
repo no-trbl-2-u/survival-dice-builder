@@ -87,7 +87,7 @@ export function spawnCount(state: GameState): number {
  * past the miniature limit the grunt nearest the base becomes an elite instead (10.5, row 32).
  * There is no wave track.
  *
- * @rule 9.8, 10.5, core loop v2 (Combat step 3), rows 64, 66, 68, 70
+ * @rule 7.3, 9.8, 10.5, core loop v2 (Combat step 3), rows 64, 66, 68, 70
  */
 export function spawnAtNodes(state: GameState): Step {
   let current = state
@@ -95,7 +95,7 @@ export function spawnAtNodes(state: GameState): Step {
   const count = spawnCount(state)
   for (const node of activeSpawnNodes(state)) {
     for (let n = 0; n < count; n++) {
-      const [next, more] = spawnEnemy(current, node.kind, node.hex, '9.2')
+      const [next, more] = spawnEnemy(current, node.kind, node.hex, '7.3')
       current = next
       events.push(...more)
     }

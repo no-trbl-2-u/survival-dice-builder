@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-03 (pass 241, cloud tick)
+
+Pass 240 moved seven /config cites off the deleted Spec v2 rules 9.2 and 10.1 (ee64539). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 10 commits ago, just under 24 hours) and so is the expand gate (pass 25 ran 3 commits ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass checked the engine's log tags against the deleted section list. Top finding, new this pass: the /play log shows "rule 9.2" after every spawn and "rule 10.1" after every tile reveal, and two default-off experiments show "rule 8.3, row 17" and "rule 10.1, row 63". The engine passes these tags as arguments, so the log-tag test, which reads only `rule: '...'`, missed them. A 3.0 (impact 3: every run logs them; ease 10: four tags). Spawns now cite 7.3 and step-off reveals 6.7; the two experiments are tagged by row only, so the log says "not in the written rules". A new ruleNumbers test reads every tag literal in the engine and fails on a deleted section or a row in a log note. Next in line: the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /play: the log cites Spec v2 rules 9.2 and 10.1, which v2 deleted (audit)
+- category: comprehension
+- impact: 3
+- ease: 10
+- next: tag spawns 7.3 and reveals 6.7 in the engine; test every engine tag literal
+- issue: #292
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-03 (pass 240, cloud tick)
 
 Pass 239 reworded the /config Exchange range help (76e49e4). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 9 commits ago, about 17 hours) and so is the expand gate (pass 25 ran 2 commits ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass checked every /config rule cite against the Spec v2 section list. Top finding, new this pass: seven fields cite sections Spec v2 deleted. "Rule 9.2" (spawn ramp, new tile wait, spawns per seat, spawn range) now reads "Deleted in Spec v2: each spawn node gets an enemy in each Combat (7.3)", and "Rule 10.1" (forced reveal, new tile wait, reveal move cost, tile rotation) reads "Deleted in Spec v2: tiles are revealed when a figure steps off the map (6.7)". A 3.0 (impact 3: a playtester who looks up the cite finds a deleted line; ease 10: seven rule strings). The fields now cite 7.3 and 6.7, the sections the deleted lines point to, and a configMeta test reads the spec and fails on any cite of a deleted section. The generated docs/RULES-AS-PLAYED.md is unchanged (it lists changed fields only when the config differs from the defaults). Next in line: the /oversight-owned /decisions rows.

@@ -97,9 +97,9 @@ export function replaceGruntWithElite(state: GameState): Step {
  * grunt (10.5) and for a new elite (row 32). A new elite raises the level with
  * `experience.levelPerEliteSpawn` (row 17).
  *
- * @rule 2.2, 4.4, 9.2, 9.8, 10.2, 10.5, OPEN-QUESTIONS rows 17, 32
+ * @rule 2.2, 4.4, 7.3, 9.8, 10.5, OPEN-QUESTIONS rows 17, 32
  */
-export function spawnEnemy(state: GameState, kind: string, node: Axial, rule = '10.2'): Step {
+export function spawnEnemy(state: GameState, kind: string, node: Axial, rule = '7.3'): Step {
   if (miniatureCount(state) >= state.config.miniatureLimit) return replaceGruntWithElite(state)
   const hex = spawnHex(state, node)
   if (!hex) return [state, []]
