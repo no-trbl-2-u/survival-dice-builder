@@ -87,7 +87,7 @@
   },
   "combat.exchangeRange": {
     "label": "Exchange range",
-    "help": "If no enemy is within this many hexes, the exchange has no effect and the hand is discarded.",
+    "help": "The older rules: if no enemy was within this many hexes, an exchange had no effect and the hand was discarded. The written rules have no range: when no enemy is next to you, no enemy dice roll.",
     "rule": "7.9",
     "unused": true,
     "range": [1, 6]

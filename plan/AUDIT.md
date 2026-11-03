@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-03 (pass 239, cloud tick)
+
+Pass 238 found nothing to ship and handed to /expand (pass 25, 0fa67de). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 8 commits ago, about 17 hours) and so is the expand gate (pass 25 ran 1 commit ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass read the served text of /config against Spec v2. Top finding, new this pass: the "Exchange range" help ("If no enemy is within this many hexes, the exchange has no effect and the hand is discarded.") is the Spec v1 text of 7.9, but the field cites "Rule 7.9.", whose Spec v2 text is "If no enemy is next to you, no enemy dice roll." A 3.0 (impact 3: a playtester who follows the rule link reads a different rule; ease 10: one help string). The help now opens "The older rules:" and gives the written 7.9 reading; the configMeta test pins both. The field stays marked as not read by the engine. Next in line: the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /config: the Exchange range help paraphrases Spec v1 7.9 under a Spec v2 "Rule 7.9" cite (audit)
+- category: comprehension
+- impact: 3
+- ease: 10
+- next: reword the `combat.exchangeRange` help in `config.meta.json`
+- issue: #290
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-03 (pass 238, cloud tick)
 
 Pass 237 dropped the [not in the written rules] clause from the /debug intro (185d655). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 7 commits ago, about 15 hours) and so is the expand gate (pass 24 ran 9 commits ago, about 23 hours). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass read the served text of /, /tiles and /credits against Spec v2 (start, round, Combat, knockout, level and shop lines), checked the status codes of every route, the 404 page, robots.txt and the sitemap, the head tags of /, /play and /tiles, and the colocated tests of the /play helpers. Nothing scored 3.0 or more. The /credits line "the icons drawn for this game are not" names no license for them, but the repo has no license file, so that wording is the designer's call, not a loop fix. No actionable iterate work, so the tick hands to /expand (bold posture): pass 25 adds critique pass 36's two hand-typed rule phrases (51499f9, 185d655) as evidence for "Player text on Spec v2". Next in line: the /oversight-owned /decisions rows.

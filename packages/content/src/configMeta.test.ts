@@ -64,6 +64,13 @@ describe('config metadata (rule 18.1)', () => {
     ])
   })
 
+  it('the exchange range help names the older rules and the written 7.9 (no range)', () => {
+    const entry = defaultConfigMeta['combat.exchangeRange']
+    expect(entry?.rule).toBe('7.9')
+    expect(entry?.help).toMatch(/^The older rules: /)
+    expect(entry?.help).toContain('when no enemy is next to you, no enemy dice roll')
+  })
+
   it('/config names every milestone: in a field line, or in the Milestones note (17)', () => {
     const config = defaultContent.config
     const shown = [
