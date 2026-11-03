@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-03 (pass 242, cloud tick)
+
+Pass 241 moved the /play log tags off the deleted Spec v2 rules 9.2 and 10.1 (cbaf8a6), and critique pass 37 (adbd215) filed 6 rows. No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 37 ran 1 commit ago) and so is the expand gate (pass 25 ran 6 commits ago). Phase 35 is still blocked on the designer's Skills session. Top finding, new from critique pass 37: the /config Exchange range help describes the older Exchanges Combat, then the unused mark says "Not used by the engine yet", which reads as a promise the engine will use it, while no Combat model in this build reads the field. An 8.1 (critique MED: impact 6, ease 9, bias x1.5). The help now ends "The Exchanges Combat in this build does not use this range either.", and the metadata schema gains a "retired" unused mark, which /config shows as "Not used by the engine: changing it changes nothing." Removing the field instead would need a config version bump and golden replays for a range nothing reads. Next in line: the /decisions row 77 cite (critique MED, pass 37), then the pass 37 LOW /config wording rows.
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /config: the Exchange range says "not used by the engine yet" for a range no Combat model reads (critique MED, pass 37, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: retired unused mark and a help sentence in `config.meta.json`
+- issue: #293
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-03 (pass 241, cloud tick)
 
 Pass 240 moved seven /config cites off the deleted Spec v2 rules 9.2 and 10.1 (ee64539). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 10 commits ago, just under 24 hours) and so is the expand gate (pass 25 ran 3 commits ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass checked the engine's log tags against the deleted section list. Top finding, new this pass: the /play log shows "rule 9.2" after every spawn and "rule 10.1" after every tile reveal, and two default-off experiments show "rule 8.3, row 17" and "rule 10.1, row 63". The engine passes these tags as arguments, so the log-tag test, which reads only `rule: '...'`, missed them. A 3.0 (impact 3: every run logs them; ease 10: four tags). Spawns now cite 7.3 and step-off reveals 6.7; the two experiments are tagged by row only, so the log says "not in the written rules". A new ruleNumbers test reads every tag literal in the engine and fails on a deleted section or a row in a log note. Next in line: the /oversight-owned /decisions rows.

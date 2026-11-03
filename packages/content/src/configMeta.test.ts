@@ -90,6 +90,18 @@ describe('config metadata (rule 18.1)', () => {
     expect(entry?.help).toContain('when no enemy is next to you, no enemy dice roll')
   })
 
+  it('the exchange range is retired: no Combat model reads it, and its help says so', () => {
+    const entry = defaultConfigMeta['combat.exchangeRange']
+    expect(entry?.unused).toBe('retired')
+    expect(entry?.help).toMatch(
+      /The Exchanges Combat in this build does not use this range either\.$/,
+    )
+    const retired = Object.entries(defaultConfigMeta)
+      .filter(([, e]) => e.unused === 'retired')
+      .map(([path]) => path)
+    expect(retired).toEqual(['combat.exchangeRange'])
+  })
+
   it('/config names every milestone: in a field line, or in the Milestones note (17)', () => {
     const config = defaultContent.config
     const shown = [

@@ -33,7 +33,7 @@ describe('/config "not used by the engine yet" marks (rule 18.1)', () => {
     const wrong = fields.flatMap(({ path: field }) => {
       const key = field.split('.').at(-1) ?? field
       const read = readsKey(source, key)
-      const marked = defaultConfigMeta[field]?.unused === true
+      const marked = defaultConfigMeta[field]?.unused !== undefined
       if (read && marked) return [`${field}: read by the engine but marked unused`]
       if (!read && !marked) return [`${field}: never read by the engine but not marked unused`]
       return []

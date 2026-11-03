@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — the Exchange range help says "not used by the engine yet" for a range Exchanges never reads
-- pass: 37 (commit cbaf8a6)
-- viewport: desktop
-- category: comprehension
-- observation: The help describes the older Exchanges Combat in the past tense, then the unused mark says "Not used by the engine yet", which suggests the engine will read it later. The Combat model list offers "Exchanges (older rules)", so a visitor who picks Exchanges expects this range to apply; the engine never reads the field. Other model-only fields carry an "Engagements only" note; this one has no "Exchanges only" note.
-- evidence: "The older rules: if no enemy was within this many hexes, an exchange had no effect and the hand was discarded. The written rules have no range: when no enemy is next to you, no enemy dice roll." plus the unused mark (`packages/content/data/config.meta.json:88-93`, `"unused": true`); `exchangeRange` is not read anywhere under `packages/engine/src`.
-- suggested fix: Say plainly that the Exchanges Combat in this build does not use this range (drop "yet" for this field), or remove the field.
-- source: web-fetch
-
 ### [MED] /decisions — row 77 calls "back to the supply" the written 11.7, but the written 11.7 is the draft pool
 - pass: 37 (commit cbaf8a6)
 - viewport: desktop
@@ -109,6 +100,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /config — the Exchange range help says "not used by the engine yet" for a range Exchanges never reads
+- pass: 37 (commit cbaf8a6)
+- viewport: desktop
+- category: comprehension
+- observation: The help describes the older Exchanges Combat in the past tense, then the unused mark says "Not used by the engine yet", which suggests the engine will read it later. The Combat model list offers "Exchanges (older rules)", so a visitor who picks Exchanges expects this range to apply; the engine never reads the field. Other model-only fields carry an "Engagements only" note; this one has no "Exchanges only" note.
+- evidence: "The older rules: if no enemy was within this many hexes, an exchange had no effect and the hand was discarded. The written rules have no range: when no enemy is next to you, no enemy dice roll." plus the unused mark (`packages/content/data/config.meta.json:88-93`, `"unused": true`); `exchangeRange` is not read anywhere under `packages/engine/src`.
+- suggested fix: Say plainly that the Exchanges Combat in this build does not use this range (drop "yet" for this field), or remove the field.
+- source: web-fetch
+- issue: #293
+- fixed: (this commit)
+- resolution: The help now ends "The Exchanges Combat in this build does not use this range either.", and the field's unused mark is "retired", so /config shows "Not used by the engine: changing it changes nothing." with no "yet". A configMeta test pins the sentence and that only this field is retired; the config e2e pins the note; the engine configUse test counts a retired mark as unused.
 
 ### [x] [LOW] /debug — the intro explains a [not in the written rules] tag the page never shows
 - pass: 36 (commit 634872c)

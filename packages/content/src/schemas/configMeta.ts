@@ -13,8 +13,12 @@ export const ConfigMetaEntrySchema = z.strictObject({
   options: z.record(z.string(), z.string().min(1)).optional(),
   /** The placeholder of an empty optional number field (default "no maximum"). */
   empty: z.string().min(1).optional(),
-  /** The engine never reads this field yet: /config marks it, and changing it changes nothing. */
-  unused: z.literal(true).optional(),
+  /**
+   * The engine does not read this field: /config marks it, and changing it changes nothing.
+   * `true`: not read yet (a ruling the engine may play later). `"retired"`: an older rule
+   * no Combat model in this build reads, and none will.
+   */
+  unused: z.union([z.literal(true), z.literal('retired')]).optional(),
   /**
    * A number field's slider bounds on /config, [low, high]. A UI hint only: the schema still
    * decides what is valid, and the number box beside the slider takes any valid value.

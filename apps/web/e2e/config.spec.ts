@@ -41,6 +41,11 @@ test('/config: a ruling the engine does not read yet says so', async ({ page }) 
   await expect(page.getByLabel('Blocked enemy', { exact: true })).not.toHaveAccessibleDescription(
     /Not used by the engine yet/,
   )
+  const range = page.getByLabel('Exchange range', { exact: true })
+  await expect(range).toHaveAccessibleDescription(
+    /does not use this range either\. Not used by the engine: changing it changes nothing\./,
+  )
+  await expect(range).not.toHaveAccessibleDescription(/Not used by the engine yet/)
 })
 
 test('/config: a field one Combat model ignores is tagged, and says so under the other (phase 37)', async ({

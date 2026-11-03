@@ -290,7 +290,9 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
         {meta?.unused ? (
           <strong className={styles.unused}>
             {' '}
-            Not used by the engine yet: changing it changes nothing.
+            {meta.unused === 'retired'
+              ? 'Not used by the engine: changing it changes nothing.'
+              : 'Not used by the engine yet: changing it changes nothing.'}
           </strong>
         ) : null}
         {meta?.combatModel ? (
