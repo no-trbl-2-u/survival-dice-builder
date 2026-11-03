@@ -76,7 +76,7 @@ test('/config: the experiment options default off; the rules note links the rule
   await expect(reveal).toHaveValue('')
   await expect(reveal).toHaveAttribute('placeholder', 'Off')
   await expect(reveal).toHaveAccessibleDescription(
-    /^At round end, .* Rule 10\.1 \(rule reading 63\)\./,
+    /^At round end, .* Rule 6\.7 \(rule reading 63\)\./,
   )
   const link = page.getByRole('link', { name: '63', exact: true })
   await expect(link).toHaveAttribute('href', '/decisions#q-63')

@@ -181,7 +181,7 @@
   "clock.forcedRevealEvery": {
     "label": "Forced reveal every",
     "help": "At round end, if no tile was revealed in this many rounds, the top tile of the tile deck is revealed in the open slot nearest the base. Off (default): as in the written rules.",
-    "rule": "10.1 (open question 63)",
+    "rule": "6.7 (open question 63)",
     "empty": "Off",
     "range": [1, 10]
   },
@@ -191,25 +191,25 @@
   "spawn.rampEvery": {
     "label": "Spawn ramp every",
     "help": "Each spawn node spawns 1 more enemy every this many rounds. Off (default): as in the written rules.",
-    "rule": "9.2 (open question 64)",
+    "rule": "7.3 (open question 64)",
     "empty": "Off",
     "range": [1, 10]
   },
   "spawn.newTileDelay": {
     "label": "New tile waits",
     "help": "Rounds a newly revealed tile waits before its spawn nodes spawn. Off (default): 0, as in the written rules.",
-    "rule": "9.2, 10.1 (open question 66)",
+    "rule": "6.7, 7.3 (open question 66)",
     "range": [0, 6]
   },
   "spawn.perSeat": {
     "label": "Spawns scale with seats",
     "help": "When ticked, each spawn node spawns 1 enemy per 2 seats, rounded up (1 for 1-2 seats, 2 for 3-4). Not ticked (default): as in the written rules.",
-    "rule": "9.2, 16 (open question 68)"
+    "rule": "7.3, 16 (open question 68)"
   },
   "spawn.nodeRange": {
     "label": "Spawn range",
     "help": "Only spawn nodes within this many hexes of a player figure, a Barricade, a Tower or the base spawn. Off (default): as in the written rules.",
-    "rule": "9.2 (open question 70)",
+    "rule": "7.3 (open question 70)",
     "empty": "Off",
     "range": [1, 10]
   },
@@ -314,7 +314,7 @@
   "tiles.revealMoveCost": {
     "label": "Movement to reveal a tile",
     "help": "Movement a step off the map edge costs. The step reveals the top tile of the tile deck under the hex entered.",
-    "rule": "10.1 (core loop v2)",
+    "rule": "6.7 (core loop v2)",
     "range": [1, 4]
   },
   "milestones": {
@@ -396,7 +396,7 @@
   "rulings.tileRotation": {
     "label": "Tile rotation",
     "help": "When ticked, the player may rotate a revealed tile. Not ticked (default): as in the written rules.",
-    "rule": "10.1 (open question 5)",
+    "rule": "6.7 (open question 5)",
     "unused": true
   },
   "rulings.coopPrepareOrder": {

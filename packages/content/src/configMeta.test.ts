@@ -1,6 +1,8 @@
+import fs from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { defaultContent } from './content.ts'
 import { configMetaPaths, configMetaProblems, defaultConfigMeta, metaFor } from './configMeta.ts'
+import { parseSpec } from './rulesAsPlayed.ts'
 import { milestoneIds, milestoneLabel, ruleLineFor } from './ruleText.ts'
 
 describe('config metadata (rule 18.1)', () => {
@@ -62,6 +64,23 @@ describe('config metadata (rule 18.1)', () => {
       'rulings.healTargets',
       'rulings.eliteReplacement',
     ])
+  })
+
+  it('no field cites a section Spec v2 deleted (9.2 and 10.1 moved to 7.3 and 6.7)', () => {
+    const specMd = fs.readFileSync(
+      new URL('../../../spec/01-spec-v2-rules.md', import.meta.url),
+      'utf-8',
+    )
+    const deleted = new Set(
+      parseSpec(specMd)
+        .rules.filter((r) => /^Deleted in Spec v2/.test(r.text))
+        .map((r) => r.id),
+    )
+    expect(deleted).toContain('9.2')
+    const cites = Object.entries(defaultConfigMeta).flatMap(([path, entry]) =>
+      (entry.rule?.match(/\b\d+\.\d+\b/g) ?? []).map((id) => `${path}: ${id}`),
+    )
+    expect(cites.filter((c) => deleted.has(c.split(': ')[1] ?? ''))).toEqual([])
   })
 
   it('the exchange range help names the older rules and the written 7.9 (no range)', () => {

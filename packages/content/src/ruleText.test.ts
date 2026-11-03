@@ -318,7 +318,7 @@ describe('rule text from config', () => {
   it('config rules note: sections only; a field with none is not in the written rules (18.1)', () => {
     expect(configRuleNote('6.9')).toBe('Rule 6.9.')
     expect(configRuleNote('7.8, Combat v3')).toBe('Rule 7.8.')
-    expect(configRuleNote('10.1 (core loop v2)')).toBe('Rule 10.1.')
+    expect(configRuleNote('6.7 (core loop v2)')).toBe('Rule 6.7.')
     expect(configRuleNote('9.3, core loop v2 (open question 56)', new Set([56]))).toBe(
       'Rule 9.3 (rule reading 56).',
     )

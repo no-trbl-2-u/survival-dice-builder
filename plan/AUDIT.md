@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-03 (pass 240, cloud tick)
+
+Pass 239 reworded the /config Exchange range help (76e49e4). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 9 commits ago, about 17 hours) and so is the expand gate (pass 25 ran 2 commits ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass checked every /config rule cite against the Spec v2 section list. Top finding, new this pass: seven fields cite sections Spec v2 deleted. "Rule 9.2" (spawn ramp, new tile wait, spawns per seat, spawn range) now reads "Deleted in Spec v2: each spawn node gets an enemy in each Combat (7.3)", and "Rule 10.1" (forced reveal, new tile wait, reveal move cost, tile rotation) reads "Deleted in Spec v2: tiles are revealed when a figure steps off the map (6.7)". A 3.0 (impact 3: a playtester who looks up the cite finds a deleted line; ease 10: seven rule strings). The fields now cite 7.3 and 6.7, the sections the deleted lines point to, and a configMeta test reads the spec and fails on any cite of a deleted section. The generated docs/RULES-AS-PLAYED.md is unchanged (it lists changed fields only when the config differs from the defaults). Next in line: the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /config: seven fields cite Spec v2 rules 9.2 and 10.1, which v2 deleted (audit)
+- category: comprehension
+- impact: 3
+- ease: 10
+- next: cite 7.3 and 6.7 in `config.meta.json`; test that no cite names a deleted section
+- issue: #291
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-03 (pass 239, cloud tick)
 
 Pass 238 found nothing to ship and handed to /expand (pass 25, 0fa67de). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 8 commits ago, about 17 hours) and so is the expand gate (pass 25 ran 1 commit ago). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass read the served text of /config against Spec v2. Top finding, new this pass: the "Exchange range" help ("If no enemy is within this many hexes, the exchange has no effect and the hand is discarded.") is the Spec v1 text of 7.9, but the field cites "Rule 7.9.", whose Spec v2 text is "If no enemy is next to you, no enemy dice roll." A 3.0 (impact 3: a playtester who follows the rule link reads a different rule; ease 10: one help string). The help now opens "The older rules:" and gives the written 7.9 reading; the configMeta test pins both. The field stays marked as not read by the engine. Next in line: the /oversight-owned /decisions rows.
