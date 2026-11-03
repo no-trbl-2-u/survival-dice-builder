@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-03 (pass 234, cloud tick)
+
+Pass 233 kept a blank Seed field from announcing an error on /play and /debug (6eb51c8). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 3 commits ago, about 10 hours) and so is the expand gate (pass 24 ran 5 commits ago, about 19 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, from critique pass 36: the / Materials line sits under "On the board, every round:" and says "each node gives its materials once", which can read as once per round; the engine spends a node for the rest of the run. A 3.0 (impact 3, ease 10). The default-rules line now ends "each node gives its materials once, then it is spent for the rest of the run."; the ruleText and HomePage tests pin it. The gatherNeedsNode-off wording is unchanged: there a spent node gives the same as any other hex. Next in line: the three other LOW rows from pass 36, then the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /: the Materials line under "every round" says a node gives its materials "once" (critique LOW, pass 36)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 10
+- next: add "then it is spent for the rest of the run" in `ruleText.ts`
+- issue: #286
+- fixed: (this commit)
+
+### [ ] [3.0] /config: a single rule section is cited as "Rules 7.8." (critique LOW, pass 36)
+- category: external-critique (voice)
+- impact: 3
+- ease: 10
+- next: singular "Rule" for one section in `ruleText.ts`
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-02 (pass 233, cloud tick)
 
 Pass 232 put the /config Combat model siege step after both options (51499f9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 2 commits ago) and so is the expand gate (pass 24 ran 4 commits ago). Phase 35 is still blocked on the designer's Skills session. The five LOW rows from critique pass 36 score 3.0-3.2; the top one is the a11y row: clearing the Seed field on /play or /debug shows "Type a whole number." in a role="alert" at once, so a screen reader announces an error before the player types. A 3.2 (impact 4: every screen-reader player who types a seed; ease 8: two components and one helper). A blank field now keeps Start disabled and shows the message quietly (no alert, aria-invalid false); text that is not digits still gets the alert. A component test pins both cases. Next in line: the other four LOW rows from pass 36, then the /oversight-owned /decisions rows.

@@ -232,7 +232,7 @@ describe('rule text from config', () => {
 
   it('materials: any card gathers, the starter Gather amount as the example, where Gather works, and a node giving its materials once (6.7, rows 59, 67)', () => {
     expect(materialsText(base, defaultContent)).toBe(
-      "Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card); each node gives its materials once.",
+      "Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card); each node gives its materials once, then it is spent for the rest of the run.",
     )
     expect(
       materialsText(
@@ -240,7 +240,7 @@ describe('rule text from config', () => {
         defaultContent,
       ),
     ).toBe(
-      "Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card); each node gives its materials once. Anywhere else, a Gather option gets 1 material.",
+      "Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card); each node gives its materials once, then it is spent for the rest of the run. Anywhere else, a Gather option gets 1 material.",
     )
     expect(
       materialsText(

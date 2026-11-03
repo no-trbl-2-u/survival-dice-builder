@@ -31,7 +31,7 @@ describe('HomePage', () => {
     render(<HomePage />)
     const items = screen.getAllByRole('listitem').map((li) => li.textContent ?? '')
     expect(items).toContain(
-      "Materials: Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card); each node gives its materials once.",
+      "Materials: Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card); each node gives its materials once, then it is spent for the rest of the run.",
     )
   })
 

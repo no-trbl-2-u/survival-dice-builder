@@ -174,7 +174,7 @@ export function gatherText(amount: number, config: GameConfig): string {
 /**
  * Where materials come from, for the Materials line on /: any card's Gather option (Shop cards
  * gather too), the starter deck's Gather card and its amount as the example, where a Gather
- * option works, and that a node gives its materials once.
+ * option works, and that a node gives its materials once and is then spent for the rest of the run.
  *
  * @rule 6.7, Table 1, OPEN-QUESTIONS rows 20, 59, 67
  */
@@ -205,7 +205,7 @@ export function materialsText(config: GameConfig, content: Pick<Content, 'cards'
   const off = config.gather.offNodeAmount
   const elsewhere =
     off > 0 ? ` Anywhere else, a Gather option gets ${plural(off, 'material', 'materials')}.` : ''
-  return `Play a card's Gather option on a gathering node to get its materials${example}; each node gives its materials once.${elsewhere}`
+  return `Play a card's Gather option on a gathering node to get its materials${example}; each node gives its materials once, then it is spent for the rest of the run.${elsewhere}`
 }
 
 /** "a grunt rolls 1, an elite 2": each enemy's enemy dice, from the enemy content. */

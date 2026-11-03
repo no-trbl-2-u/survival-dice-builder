@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Materials line under "every round" says a node gives its materials "once"
-- pass: 36 (commit 634872c)
-- viewport: desktop
-- category: comprehension
-- observation: The line sits under "On the board, every round:", so "each node gives its materials once" can read as once per round. The engine spends a node for the rest of the run.
-- evidence: `apps/web/src/home/HomePage.tsx:57` "On the board, every round:"; `packages/content/src/ruleText.ts:208` "...; each node gives its materials once."; `packages/engine/src/gather/gather.ts:8` "then the node is spent for good".
-- suggested fix: "each node gives its materials once, then it is spent for the rest of the run."
-- source: web-fetch
-
 ### [LOW] /play — the player panel's next-level target is a total, while / and /config give level costs as "more"
 - pass: 36 (commit 634872c)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Materials line under "every round" says a node gives its materials "once"
+- pass: 36 (commit 634872c)
+- viewport: desktop
+- category: comprehension
+- observation: The line sits under "On the board, every round:", so "each node gives its materials once" can read as once per round. The engine spends a node for the rest of the run.
+- evidence: `apps/web/src/home/HomePage.tsx:57` "On the board, every round:"; `packages/content/src/ruleText.ts:208` "...; each node gives its materials once."; `packages/engine/src/gather/gather.ts:8` "then the node is spent for good".
+- suggested fix: "each node gives its materials once, then it is spent for the rest of the run."
+- source: web-fetch
+- issue: #286
+- fixed: (this commit) — the / Materials line now reads "each node gives its materials once, then it is spent for the rest of the run."; ruleText and HomePage tests pin it.
 
 ### [x] [LOW] /play and /debug — clearing the Seed field announces an error at once
 - pass: 36 (commit 634872c)
