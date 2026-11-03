@@ -36,15 +36,6 @@
 - suggested fix: Legend: "a card's Gather option here gets its materials once; then the node is spent for the rest of the run".
 - source: web-fetch
 
-### [LOW] / — the Skills line never says the unkept Skills go to your pool
-- pass: 37 (commit cbaf8a6)
-- viewport: desktop
-- category: comprehension
-- observation: The Skills line says each player looks at 2 Skills and keeps 1. Under the default rules (11.6-11.7, `draft.unpicked: "pool"`) the others go to the player's draft pool and later drafts offer the pool too, so "looks at 2 Skills" is wrong from the second draft on.
-- evidence: "... in rounds 2, 4, 6 and so on, each player looks at 2 Skills and keeps 1 for free." (`packages/content/src/ruleText.ts:157`, `trainingText`); spec 11.6 "Each player also looks at the Skills in their draft pool."
-- suggested fix: When `draft.unpicked` is "pool", add to `trainingText`: "The others go to your pool, and each later draft offers them again."
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Skills line never says the unkept Skills go to your pool
+- pass: 37 (commit cbaf8a6)
+- viewport: desktop
+- category: comprehension
+- observation: The Skills line says each player looks at 2 Skills and keeps 1. Under the default rules (11.6-11.7, `draft.unpicked: "pool"`) the others go to the player's draft pool and later drafts offer the pool too, so "looks at 2 Skills" is wrong from the second draft on.
+- evidence: "... in rounds 2, 4, 6 and so on, each player looks at 2 Skills and keeps 1 for free." (`packages/content/src/ruleText.ts:157`, `trainingText`); spec 11.6 "Each player also looks at the Skills in their draft pool."
+- suggested fix: When `draft.unpicked` is "pool", add to `trainingText`: "The others go to your pool, and each later draft offers them again."
+- source: web-fetch
+- issue: #295
+- fixed: (this commit)
 
 ### [x] [MED] /decisions — row 77 calls "back to the supply" the written 11.7, but the written 11.7 is the draft pool
 - pass: 37 (commit cbaf8a6)

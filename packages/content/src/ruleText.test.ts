@@ -82,9 +82,13 @@ describe('rule text from config', () => {
     expect(shopText(base, rich)).toMatch(/\(a grunt 2, an elite 5\)/)
   })
 
-  it('training: the draft round and the Skills shown follow config (10.8, 11.6)', () => {
+  it('training: the draft round, the Skills shown and where the rest go follow config (10.8, 11.6, 11.7)', () => {
     expect(trainingText(base, defaultContent)).toBe(
-      'Stand on the Base tile and buy Training I (a Build card and 3 materials) to open the Training Ground: in rounds 2, 4, 6 and so on, each player looks at 2 Skills and keeps 1 for free.',
+      'Stand on the Base tile and buy Training I (a Build card and 3 materials) to open the Training Ground: in rounds 2, 4, 6 and so on, each player looks at 2 Skills and keeps 1 for free. The Skills you do not keep go to your pool. Later drafts offer them again.',
+    )
+    const supply = With((c) => ({ ...c, draft: { ...c.draft, unpicked: 'supply' } }))
+    expect(trainingText(supply, defaultContent)).toMatch(
+      /keeps 1 for free\. The Skills you do not keep go back to the supply\.$/,
     )
     const often = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 1, reveal: 3 } }))
     expect(trainingText(often, defaultContent)).toMatch(

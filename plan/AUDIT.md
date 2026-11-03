@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-03 (pass 244, cloud tick)
+
+Pass 243 moved /decisions row 77 to "(the older rule)" (412c645). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 37 ran 3 commits ago) and so is the expand gate (pass 25 ran 8 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The /decisions MED rows (balance checks, Structural v2 questions, Spec v2 design work) still wait for /oversight. Top finding, from critique pass 37: the / Skills line says each player looks at 2 Skills and keeps 1, but never says the others go to the draft pool (11.7) that later drafts also offer (11.6). A 3.2 (critique LOW: impact 4, ease 8). `trainingText` now ends with `draftPoolText`, the same sentence /play shows: "The Skills you do not keep go to your pool. Later drafts offer them again." (or "go back to the supply." under the older rule). Next in line: the pass 37 LOW /config wording rows and the /tiles gathering-node legend.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /: the Skills line never says the unkept Skills go to your pool (critique LOW, pass 37)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 8
+- next: append `draftPoolText` to `trainingText` in `packages/content/src/ruleText.ts`
+- issue: #295
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [3.0] /tiles: the gathering-node legend still says "a Gather card ... once" (critique LOW, pass 37)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 10
+- next: legend wording in `ruleText.ts:83`
+
+### [ ] [2.4] /config: the Combat model help names the second option "Exchanges:", the list says "Exchanges (older rules)" (critique LOW, pass 37)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: match the help to the option label in `config.meta.json`
+
 # Site audit — 2026-11-03 (pass 243, cloud tick)
 
 Pass 242 dropped the "yet" from the /config Exchange range note (799b5b9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 37 ran 2 commits ago) and so is the expand gate (pass 25 ran 7 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 37: /decisions row 77 calls the bottom of the supply "the written 11.7", while Spec v2 11.7 sends unkept Skills to the draft pool and /config labels the supply "older rule". An 8.1 (critique MED: impact 6, ease 9, bias x1.5). Row 77 and the structural note now say "(the older rule)"; the decided reading is unchanged. Next in line: the pass 37 LOW /config wording rows (Combat model help "Exchanges:", the model-only note).

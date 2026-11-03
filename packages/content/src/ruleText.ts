@@ -143,7 +143,7 @@ export function shopText(config: GameConfig, content: Upgrades & Enemies): strin
 }
 
 /**
- * How the Training Ground opens, and when its Skill draft happens.
+ * How the Training Ground opens, when its Skill draft happens, and where the unkept Skills go.
  *
  * @rule 10.8, 11.6, 11.7, Table 6
  */
@@ -154,7 +154,7 @@ export function trainingText(config: GameConfig, content: Upgrades): string {
     : 'Open the Training Ground from the Base tile'
   const n = config.draft.everyNRounds
   const when = n === 1 ? 'every round' : `in rounds ${n}, ${2 * n}, ${3 * n} and so on`
-  return `${open}: ${when}, each player looks at ${plural(config.draft.reveal, 'Skill', 'Skills')} and keeps 1 for free.`
+  return `${open}: ${when}, each player looks at ${plural(config.draft.reveal, 'Skill', 'Skills')} and keeps 1 for free. ${draftPoolText(config)}`
 }
 
 /**
