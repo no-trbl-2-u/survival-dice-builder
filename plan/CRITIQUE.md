@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-02 at commit 634872c
-> Pass count: 36
+> Last pass: 2026-11-03 at commit cbaf8a6
+> Pass count: 37
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /config — the Exchange range help says "not used by the engine yet" for a range Exchanges never reads
+- pass: 37 (commit cbaf8a6)
+- viewport: desktop
+- category: comprehension
+- observation: The help describes the older Exchanges Combat in the past tense, then the unused mark says "Not used by the engine yet", which suggests the engine will read it later. The Combat model list offers "Exchanges (older rules)", so a visitor who picks Exchanges expects this range to apply; the engine never reads the field. Other model-only fields carry an "Engagements only" note; this one has no "Exchanges only" note.
+- evidence: "The older rules: if no enemy was within this many hexes, an exchange had no effect and the hand was discarded. The written rules have no range: when no enemy is next to you, no enemy dice roll." plus the unused mark (`packages/content/data/config.meta.json:88-93`, `"unused": true`); `exchangeRange` is not read anywhere under `packages/engine/src`.
+- suggested fix: Say plainly that the Exchanges Combat in this build does not use this range (drop "yet" for this field), or remove the field.
+- source: web-fetch
+
+### [MED] /decisions — row 77 calls "back to the supply" the written 11.7, but the written 11.7 is the draft pool
+- pass: 37 (commit cbaf8a6)
+- viewport: desktop
+- category: comprehension
+- observation: Row 77 says the bottom of the supply is "the written 11.7". Spec v2 11.7 sends unkept Skills to the draft pool, and /config labels the pool "written rules" and the supply "older rule". The two pages contradict each other on which choice the rules make.
+- evidence: `OPEN-QUESTIONS.md:92` "The bottom of the supply (the written 11.7) stays an option."; `OPEN-QUESTIONS.md:165` "`\"supply\"` (the written 11.7)"; `spec/01-spec-v2-rules.md:245` "11.7 Keep 1 Skill. It is free. Put the other Skills in your draft pool."; /config "Your pool (default, written rules)" / "Back to the supply (older rule)".
+- suggested fix: In `OPEN-QUESTIONS.md` row 77 and line 165, write "(the older rule)" instead of "(the written 11.7)", then regenerate the decisions page source. Wording only; the decided reading does not change.
+- source: web-fetch
+
+### [LOW] /config — the Combat model help names the second option "Exchanges:", the list says "Exchanges (older rules)"
+- pass: 37 (commit cbaf8a6)
+- viewport: desktop
+- category: voice
+- observation: The help names the first option exactly as the list does ("Engagements (default):") but the second one only "Exchanges:". On the same page the older-rule tag is written two ways: "(older rules)" on Combat model, "(older rule)" on the Skill draft choice.
+- evidence: "Exchanges: the older Combat, kept for playtests." against the option "Exchanges (older rules)" (`packages/content/data/config.meta.json:109`, `:112-113`); "Back to the supply (older rule)" (`:281`).
+- suggested fix: Start the second clause with the list label, and use one form of the tag ("older rule") in every option label.
+- source: web-fetch
+
+### [LOW] /config — the model-only note writes "Exchanges only" then "Combat is set to exchanges"
+- pass: 37 (commit cbaf8a6)
+- viewport: desktop
+- category: voice
+- observation: When the Combat model is switched, the note under a model-only field capitalises the model in its tag and lower-cases it in the next sentence. Pass 32 fixed the same case drift on /decisions.
+- evidence: "Engagements only. Combat is set to exchanges, so changing it changes nothing." (`packages/content/src/decisions.ts:321-322`, `playing = current === 'engage' ? 'engagements' : 'exchanges'`)
+- suggested fix: Use the capitalised names: "Combat is set to Exchanges, so changing it changes nothing."
+- source: web-fetch
+
+### [LOW] /tiles — the gathering-node legend still says "a Gather card ... once"
+- pass: 37 (commit cbaf8a6)
+- viewport: desktop
+- category: comprehension
+- observation: The / Materials line now says any card's Gather option works on a node and that a spent node stays spent for the run. The /tiles legend still names only "a Gather card" and ends on a bare "once". Shop cards Haul, Forage, Excavate and Quarry also gather.
+- evidence: /tiles "Gathering node (a Gather card here gets its materials, once)" (`packages/content/src/ruleText.ts:83`); / "Play a card's Gather option on a gathering node to get its materials ... each node gives its materials once, then it is spent for the rest of the run." (`ruleText.ts:208`)
+- suggested fix: Legend: "a card's Gather option here gets its materials once; then the node is spent for the rest of the run".
+- source: web-fetch
+
+### [LOW] / — the Skills line never says the unkept Skills go to your pool
+- pass: 37 (commit cbaf8a6)
+- viewport: desktop
+- category: comprehension
+- observation: The Skills line says each player looks at 2 Skills and keeps 1. Under the default rules (11.6-11.7, `draft.unpicked: "pool"`) the others go to the player's draft pool and later drafts offer the pool too, so "looks at 2 Skills" is wrong from the second draft on.
+- evidence: "... in rounds 2, 4, 6 and so on, each player looks at 2 Skills and keeps 1 for free." (`packages/content/src/ruleText.ts:157`, `trainingText`); spec 11.6 "Each player also looks at the Skills in their draft pool."
+- suggested fix: When `draft.unpicked` is "pool", add to `trainingText`: "The others go to your pool, and each later draft offers them again."
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
