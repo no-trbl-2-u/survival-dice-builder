@@ -82,6 +82,9 @@ test('/debug: the written rules link says it opens GitHub, as on / and /config',
   await page.goto('/debug')
   const intro = page.getByText(/^Play the rules engine one action at a time\./)
   await expect(intro).toContainText('the section of the written rules (on GitHub) it follows')
+  // Pass 36: the standard rules never log a step without a section, so the
+  // intro does not explain a [not in the written rules] tag.
+  await expect(intro).not.toContainText('not in the written rules')
   await expect(intro.getByRole('link', { name: 'written rules' })).toHaveAttribute(
     'href',
     /\/blob\/main\/spec\/01-spec-v2-rules\.md$/,

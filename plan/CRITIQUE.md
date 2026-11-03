@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /debug — the intro explains a [not in the written rules] tag the page never shows
-- pass: 36 (commit 634872c)
-- viewport: desktop
-- category: comprehension
-- observation: The intro says a log line reads "[not in the written rules] when the step comes from a later design decision", and then says the page always plays the standard rules. The only event with a non-section tag is the "Cancelled" defeated-dice option, which is off in the standard rules, so the tag never shows on /debug.
-- evidence: `apps/web/src/debug/DebugPage.tsx:112`; `packages/engine/src/combat/engage.ts:301` rule "Combat v3" (fires only when defeatedDice is "cancelled"); `packages/content/data/config.default.json:54` "defeatedDice": "hit".
-- suggested fix: Drop the [not in the written rules] clause from the /debug intro, or keep it only if a standard-rules event can carry it.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -64,6 +55,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /debug — the intro explains a [not in the written rules] tag the page never shows
+- pass: 36 (commit 634872c)
+- viewport: desktop
+- category: comprehension
+- observation: The intro says a log line reads "[not in the written rules] when the step comes from a later design decision", and then says the page always plays the standard rules. The only event with a non-section tag is the "Cancelled" defeated-dice option, which is off in the standard rules, so the tag never shows on /debug.
+- evidence: `apps/web/src/debug/DebugPage.tsx:112`; `packages/engine/src/combat/engage.ts:301` rule "Combat v3" (fires only when defeatedDice is "cancelled"); `packages/content/data/config.default.json:54` "defeatedDice": "hit".
+- suggested fix: Drop the [not in the written rules] clause from the /debug intro, or keep it only if a standard-rules event can carry it.
+- source: web-fetch
+- issue: #289
+- fixed: (this commit)
+- resolution: The /debug intro now says each log line starts with the section of the written rules it follows, in [brackets], and drops the [not in the written rules] clause: under the standard rules the page plays, every engine event carries a section. The debug e2e pins that the intro does not name the tag.
 
 ### [x] [LOW] /play — the player panel's next-level target is a total, while / and /config give level costs as "more"
 - pass: 36 (commit 634872c)

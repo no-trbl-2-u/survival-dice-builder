@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-03 (pass 237, cloud tick)
+
+Pass 236 named the next level and its experience total on the /play player panel (4a48ed0). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 6 commits ago, about 13 hours) and so is the expand gate (pass 24 ran 7 commits ago, about 22 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, from critique pass 36: the /debug intro explains a [not in the written rules] tag that the standard rules never log (the only such event, "Combat v3", fires only with the non-default "cancelled" defeated dice). A 3.0 (impact 3, ease 10: one clause). The intro drops the clause; the debug e2e pins its absence. Next in line: the /oversight-owned /decisions rows; with nothing else queued, the next tick hands to /expand when its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /debug: the intro explains a [not in the written rules] tag the page never shows (critique LOW, pass 36)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 10
+- next: drop the clause from the /debug intro in `DebugPage.tsx`
+- issue: #289
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-03 (pass 236, cloud tick)
 
 Pass 235 cited one rule section as "Rule 7.8." on /config (0f7f6cc). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 5 commits ago, about 12 hours) and so is the expand gate (pass 24 ran 7 commits ago, about 21 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, from critique pass 36: the /play player panel shows "experience 3 / 9", a running total, while / and /config give level costs as "6 more". A 3.0 (impact 3, ease 9). The panel now names the target as "experience 3 (level 3 at 9)"; the PlayerPanel test pins the level 1 and level 2 wording and the absence of the bare "/ total". Next in line: the /debug [not in the written rules] clause (pass 36), then the /oversight-owned /decisions rows.
