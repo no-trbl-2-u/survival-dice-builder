@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-03 (pass 236, cloud tick)
+
+Pass 235 cited one rule section as "Rule 7.8." on /config (0f7f6cc). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 5 commits ago, about 12 hours) and so is the expand gate (pass 24 ran 7 commits ago, about 21 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, from critique pass 36: the /play player panel shows "experience 3 / 9", a running total, while / and /config give level costs as "6 more". A 3.0 (impact 3, ease 9). The panel now names the target as "experience 3 (level 3 at 9)"; the PlayerPanel test pins the level 1 and level 2 wording and the absence of the bare "/ total". Next in line: the /debug [not in the written rules] clause (pass 36), then the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /play: the player panel's next-level target is a total (critique LOW, pass 36)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 9
+- next: name the target in `PlayerPanel.tsx`, for example "experience 3 (level 3 at 9)"
+- issue: #288
+- fixed: (this commit)
+
+### [ ] [2.7] /debug: the intro explains a [not in the written rules] tag the page never shows (critique LOW, pass 36)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 9
+- next: drop the clause from the /debug intro in `DebugPage.tsx`
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-03 (pass 235, cloud tick)
 
 Pass 234 said a spent node stays spent for the run on the / Materials line (40f75d9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 4 commits ago, about 11 hours) and so is the expand gate (pass 24 ran 6 commits ago, about 13 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, from critique pass 36: /config cites one section with the plural "Rules 7.8.", while the /play log says "rule 7.8". A 3.0 (impact 3, ease 10). `configRuleNote` now writes "Rule 7.8." for one section and "Rules 4.10, Table 3." for more than one; the ruleText, configMetaText and /config e2e tests pin both. Next in line: the two other LOW rows from pass 36 (/play experience target, /debug tag clause), then the /oversight-owned /decisions rows.

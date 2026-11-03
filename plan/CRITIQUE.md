@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the player panel's next-level target is a total, while / and /config give level costs as "more"
-- pass: 36 (commit 634872c)
-- viewport: desktop
-- category: comprehension
-- observation: The panel shows "experience 3 / 9", a running total, but / and /config say "level 3 needs 6 more, level 4 needs 9 more". A visitor cannot match "/ 9" to "6 more" without adding, and the panel does not say the number is a total.
-- evidence: `apps/web/src/play/PlayerPanel.tsx:34` "experience {state.experience} / {next}"; `packages/engine/src/progression/levels.ts:43` "the cumulative experience for level + 1"; `packages/content/src/ruleText.ts:116` "Level 2 needs 3 experience, level 3 needs 6 more".
-- suggested fix: Name the target, for example "experience 3 (level 3 at 9)".
-- source: web-fetch
-
 ### [LOW] /debug — the intro explains a [not in the written rules] tag the page never shows
 - pass: 36 (commit 634872c)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the player panel's next-level target is a total, while / and /config give level costs as "more"
+- pass: 36 (commit 634872c)
+- viewport: desktop
+- category: comprehension
+- observation: The panel shows "experience 3 / 9", a running total, but / and /config say "level 3 needs 6 more, level 4 needs 9 more". A visitor cannot match "/ 9" to "6 more" without adding, and the panel does not say the number is a total.
+- evidence: `apps/web/src/play/PlayerPanel.tsx:34` "experience {state.experience} / {next}"; `packages/engine/src/progression/levels.ts:43` "the cumulative experience for level + 1"; `packages/content/src/ruleText.ts:116` "Level 2 needs 3 experience, level 3 needs 6 more".
+- suggested fix: Name the target, for example "experience 3 (level 3 at 9)".
+- source: web-fetch
+- issue: #288
+- fixed: (this commit)
 
 ### [x] [LOW] /config — a single rule section is cited as "Rules 7.8."
 - pass: 36 (commit 634872c)

@@ -18,7 +18,8 @@ export function whose(state: GameState): string {
  * Every player's tracks (the current player first in bold, marked "turn"), the shared level,
  * and the base, as numbers with labels (never a bar alone). All hands are open (16.3). The
  * experience shows a next-level target only when experience can still raise the level (18.1,
- * row 17); at a maximum level the level says so.
+ * row 17), named as the total that reaches it ("level 3 at 9", 8.5); at a maximum level the
+ * level says so.
  */
 export function PlayerPanel({ state }: Props) {
   const next = experienceForNextLevel(state.level, state.config)
@@ -32,7 +33,8 @@ export function PlayerPanel({ state }: Props) {
           {top ? ' (maximum)' : ''}
         </span>{' '}
         · <GameIcon name="experience" /> experience {state.experience}
-        {next === null ? '' : ` / ${next}`} · base {state.base.health} / {state.base.maxHealth}
+        {next === null ? '' : ` (level ${state.level + 1} at ${next})`} · base {state.base.health} /{' '}
+        {state.base.maxHealth}
       </h2>
       <div data-testid="player-panel" className={styles.playerList}>
         {state.players.map((p, seat) => {
