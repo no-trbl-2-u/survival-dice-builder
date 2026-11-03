@@ -6,7 +6,7 @@ test('/config: each field has a label, help with its rules section, and plain op
   await page.goto('/config')
   const cost = page.getByLabel('Move cost next to an enemy', { exact: true })
   await expect(cost).toHaveAttribute('min', '1')
-  await expect(cost).toHaveAccessibleDescription(/Movement a Move pays .* Rules 6\.9\./)
+  await expect(cost).toHaveAccessibleDescription(/Movement a Move pays .* Rule 6\.9\./)
   const blocked = page.getByLabel('Blocked enemy', { exact: true })
   await expect(blocked.locator('option:checked')).toHaveText(
     'Move toward the next nearest target (default)',
@@ -76,13 +76,13 @@ test('/config: the experiment options default off; the rules note links the rule
   await expect(reveal).toHaveValue('')
   await expect(reveal).toHaveAttribute('placeholder', 'Off')
   await expect(reveal).toHaveAccessibleDescription(
-    /^At round end, .* Rules 10\.1 \(rule reading 63\)\./,
+    /^At round end, .* Rule 10\.1 \(rule reading 63\)\./,
   )
   const link = page.getByRole('link', { name: '63', exact: true })
   await expect(link).toHaveAttribute('href', '/decisions#q-63')
   // A decided question is not on /decisions, so the note leaves it out.
   await expect(page.getByLabel('Blocked enemy', { exact: true })).toHaveAccessibleDescription(
-    /Rules 9\.7\.(?: |$)/,
+    /Rule 9\.7\.(?: |$)/,
   )
 })
 

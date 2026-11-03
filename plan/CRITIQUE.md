@@ -27,15 +27,6 @@
 - suggested fix: Drop the [not in the written rules] clause from the /debug intro, or keep it only if a standard-rules event can carry it.
 - source: web-fetch
 
-### [LOW] /config — a single rule section is cited as "Rules 7.8."
-- pass: 36 (commit 634872c)
-- viewport: desktop
-- category: voice
-- observation: /config writes one section with the plural "Rules 7.8.", while the /play log says "rule 7.8". The same citation reads two ways, and the plural is wrong for one section.
-- evidence: `packages/content/src/ruleText.ts:425` `Rules ${sections}` (renders "Rules 7.8.", "Rules 8.5." on /config); `apps/web/src/play/PlayLog.tsx:17` `rule ${cited}`.
-- suggested fix: Write "Rule 7.8." for one section and "Rules 7.8, 12.5." for more than one.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — a single rule section is cited as "Rules 7.8."
+- pass: 36 (commit 634872c)
+- viewport: desktop
+- category: voice
+- observation: /config writes one section with the plural "Rules 7.8.", while the /play log says "rule 7.8". The same citation reads two ways, and the plural is wrong for one section.
+- evidence: `packages/content/src/ruleText.ts:425` `Rules ${sections}` (renders "Rules 7.8.", "Rules 8.5." on /config); `apps/web/src/play/PlayLog.tsx:17` `rule ${cited}`.
+- suggested fix: Write "Rule 7.8." for one section and "Rules 7.8, 12.5." for more than one.
+- source: web-fetch
+- issue: #287
+- fixed: (this commit)
 
 ### [x] [LOW] / — the Materials line under "every round" says a node gives its materials "once"
 - pass: 36 (commit 634872c)

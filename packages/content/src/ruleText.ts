@@ -403,7 +403,8 @@ export const READING_REF = /(rule readings? [\d, ]*\d)/
 
 /**
  * A /config field's rules note: the written-rules sections it reads, without design-document
- * tags; a field with no section left is "Not in the written rules". A cited open question is
+ * tags, as "Rule 7.8." for one section and "Rules 4.10, Table 3." for more than one; a field
+ * with no section left is "Not in the written rules". A cited open question is
  * named as a rule reading only while /decisions lists it; a decided one is left out.
  *
  * @param rule - a config field's rules section ("7.8, Combat v3", "9.7 (open questions 2, 39)").
@@ -422,7 +423,9 @@ export function configRuleNote(rule: string, listed: ReadonlySet<number> = new S
     .replace(DESIGN_TAG, '')
     .trim()
     .replace(/^,\s*/, '')
-  if (/^(?:\d|Table)/.test(sections)) return `Rules ${sections}${ref}.`
+  if (/^(?:\d|Table)/.test(sections)) {
+    return `${sections.includes(',') ? 'Rules' : 'Rule'} ${sections}${ref}.`
+  }
   return `Not in the written rules${sections ? ` ${sections}` : ''}${ref}.`
 }
 

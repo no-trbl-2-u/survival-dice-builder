@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-03 (pass 235, cloud tick)
+
+Pass 234 said a spent node stays spent for the run on the / Materials line (40f75d9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 4 commits ago, about 11 hours) and so is the expand gate (pass 24 ran 6 commits ago, about 13 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, from critique pass 36: /config cites one section with the plural "Rules 7.8.", while the /play log says "rule 7.8". A 3.0 (impact 3, ease 10). `configRuleNote` now writes "Rule 7.8." for one section and "Rules 4.10, Table 3." for more than one; the ruleText, configMetaText and /config e2e tests pin both. Next in line: the two other LOW rows from pass 36 (/play experience target, /debug tag clause), then the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /config: a single rule section is cited as "Rules 7.8." (critique LOW, pass 36)
+- category: external-critique (voice)
+- impact: 3
+- ease: 10
+- next: singular "Rule" for one section in `ruleText.ts`
+- issue: #287
+- fixed: (this commit)
+
+### [ ] [3.0] /play: the player panel's next-level target is a total (critique LOW, pass 36)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 9
+- next: name the target in `PlayerPanel.tsx`, for example "experience 3 (level 3 at 9)"
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-03 (pass 234, cloud tick)
 
 Pass 233 kept a blank Seed field from announcing an error on /play and /debug (6eb51c8). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 3 commits ago, about 10 hours) and so is the expand gate (pass 24 ran 5 commits ago, about 19 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, from critique pass 36: the / Materials line sits under "On the board, every round:" and says "each node gives its materials once", which can read as once per round; the engine spends a node for the rest of the run. A 3.0 (impact 3, ease 10). The default-rules line now ends "each node gives its materials once, then it is spent for the rest of the run."; the ruleText and HomePage tests pin it. The gatherNeedsNode-off wording is unchanged: there a spent node gives the same as any other hex. Next in line: the three other LOW rows from pass 36, then the /oversight-owned /decisions rows.

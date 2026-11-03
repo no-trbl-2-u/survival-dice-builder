@@ -169,7 +169,7 @@ describe('config.meta.json placeholders and help read as player text (critique p
 
   it('7.8 step 7: the defeated dice field cites rule 7.8 and names Still hit as the written rule', () => {
     const entry = defaultConfigMeta['combat.engage.defeatedDice']
-    expect(configRuleNote(entry?.rule ?? '')).toBe('Rules 7.8.')
+    expect(configRuleNote(entry?.rule ?? '')).toBe('Rule 7.8.')
     expect(entry?.help).toMatch(/^Still hit \(default\): [^.]*as in the written rules\./)
   })
 
