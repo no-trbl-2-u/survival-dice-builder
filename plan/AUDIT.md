@@ -5,6 +5,18 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-03 (pass 238, cloud tick)
+
+Pass 237 dropped the [not in the written rules] clause from the /debug intro (185d655). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 7 commits ago, about 15 hours) and so is the expand gate (pass 24 ran 9 commits ago, about 23 hours). Phase 35 is still blocked on the designer's Skills session. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass read the served text of /, /tiles and /credits against Spec v2 (start, round, Combat, knockout, level and shop lines), checked the status codes of every route, the 404 page, robots.txt and the sitemap, the head tags of /, /play and /tiles, and the colocated tests of the /play helpers. Nothing scored 3.0 or more. The /credits line "the icons drawn for this game are not" names no license for them, but the repo has no license file, so that wording is the designer's call, not a loop fix. No actionable iterate work, so the tick hands to /expand (bold posture): pass 25 adds critique pass 36's two hand-typed rule phrases (51499f9, 185d655) as evidence for "Player text on Spec v2". Next in line: the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-03 (pass 237, cloud tick)
 
 Pass 236 named the next level and its experience total on the /play player panel (4a48ed0). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 36 ran 6 commits ago, about 13 hours) and so is the expand gate (pass 24 ran 7 commits ago, about 22 hours). Phase 35 is still blocked on the designer's Skills session. Top finding, from critique pass 36: the /debug intro explains a [not in the written rules] tag that the standard rules never log (the only such event, "Combat v3", fires only with the non-default "cancelled" defeated dice). A 3.0 (impact 3, ease 10: one clause). The intro drops the clause; the debug e2e pins its absence. Next in line: the /oversight-owned /decisions rows; with nothing else queued, the next tick hands to /expand when its gate opens.
