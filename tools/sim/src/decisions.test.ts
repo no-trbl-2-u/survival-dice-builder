@@ -25,6 +25,14 @@ describe('docs/DECISIONS.md', () => {
     )
     expect(read('docs/DECISIONS.md').replace(/\r\n/g, '\n')).toBe(expected)
   })
+
+  it('row 77 names the supply the older rule, as /config does (Spec v2 11.7 is the pool)', () => {
+    const questions = read('OPEN-QUESTIONS.md')
+    const row = questions.split('\n').find((line) => line.startsWith('| 77 |')) ?? ''
+    expect(row).toContain('The bottom of the supply (the older rule) stays an option.')
+    expect(questions).not.toContain('(the written 11.7)')
+    expect(defaultConfigMeta['draft.unpicked']?.options?.supply).toContain('older rule')
+  })
 })
 
 describe('docs/playtests kit', () => {

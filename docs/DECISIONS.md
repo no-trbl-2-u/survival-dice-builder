@@ -133,7 +133,7 @@ Readings the designer decided on the last 2 decision dates, newest first. The ga
 - **75. How many times may a Skill fire in one exchange or engagement?** (rule 18.1, 7.8 step 6, 2026-10-09) **Any number of times** (designer 2026-10-09), as long as the dice fill it again.
   - Now in the written rules: a Skill fires again each time dice fill it again (7.8 step 5); the once-per-exchange option is removed.
 - **76. What does a step onto a hex next to an enemy cost?** (rule 6.9, 2026-10-09) **1, like any step** (designer 2026-10-09). The written surcharge of 2 stays an option.
-- **77. Where do the Skills a player is offered and does not keep go?** (rule 11.6, 11.7, 2026-10-09) **To that player's own draft pool** (designer 2026-10-09): each later draft offers the new Skills from the open training level plus the whole pool. The bottom of the supply (the written 11.7) stays an option.
+- **77. Where do the Skills a player is offered and does not keep go?** (rule 11.6, 11.7, 2026-10-09) **To that player's own draft pool** (designer 2026-10-09): each later draft offers the new Skills from the open training level plus the whole pool. The bottom of the supply (the older rule) stays an option.
 
 ## Checks
 

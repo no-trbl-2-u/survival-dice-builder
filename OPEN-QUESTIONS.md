@@ -89,7 +89,7 @@ until then).
 | 74 | 7.8 step 8, 9.3, Combat v3 | Do rows 65 (enemies attack once per Combat) and 69 (every adjacent enemy attacks) apply under engagements? | **No, exchanges only** (as shipped): in an engagement every adjacent enemy rolls its enemy dice once per engagement whatever its target, and there is no enemy attack phase. Both options change nothing under engagements: the defender bot batches are identical run for run (`docs/reports/phase-36-defender.md`). **Spec v2:** both options are removed (rows 65 and 69). | (removed in Spec v2) | decided 2026-10-11 (Spec v2, ruling 18) |
 | 75 | 18.1, 7.8 step 6 | How many times may a Skill fire in one exchange or engagement? | **Any number of times** (designer 2026-10-09), as long as the dice fill it again. **Spec v2:** a Skill fires again each time dice fill it again (7.8 step 5); the once-per-exchange option is removed. | (removed in Spec v2: always unlimited) | decided 2026-10-09 |
 | 76 | 6.9 | What does a step onto a hex next to an enemy cost? | **1, like any step** (designer 2026-10-09). The written surcharge of 2 stays an option. | `combat.moveCostNextToEnemy: 1` | decided 2026-10-09 |
-| 77 | 11.6, 11.7 | Where do the Skills a player is offered and does not keep go? | **To that player's own draft pool** (designer 2026-10-09): each later draft offers the new Skills from the open training level plus the whole pool. The bottom of the supply (the written 11.7) stays an option. | `draft.unpicked: "pool"` | decided 2026-10-09 |
+| 77 | 11.6, 11.7 | Where do the Skills a player is offered and does not keep go? | **To that player's own draft pool** (designer 2026-10-09): each later draft offers the new Skills from the open training level plus the whole pool. The bottom of the supply (the older rule) stays an option. | `draft.unpicked: "pool"` | decided 2026-10-09 |
 | 78 | 11.4, 12.1, 17 | Spec v2 levels the Build card, and every Build card is Build I (Build II and III are not designed yet). Then no card buys Shop II, Shop III, Training II or Training III, so 2 milestones are out of reach: "Buy 3 base upgrades" (0 of 200 bot runs) and "Fire Arcane Rain" (a level 3 Skill needs Training III). | **As shipped:** the rule as written (Build levels: Levelled). Build levels: Any tier plays the Spec v1 rule (any Build buys the next tier) for playtests until the designer adds Build II and III cards or gives the existing cards higher levels. | `rulings.buildLevels: "levelled"` | proposed 2026-10-13 (engine: phase 41) |
 
 ## Structural questions (rows 63-70)
@@ -162,7 +162,7 @@ phase 21 experiments), upgraded Skill tiers and Skill caps (rows 9, 46,
   to the bottom of the supply. Each later draft offers `draft.reveal` new
   Skills from the open training level plus the whole pool; the player keeps
   1 and the rest return to the pool. The pool grows, and a player is not
-  tied to one training level. `"supply"` (the written 11.7) stays an
+  tied to one training level. `"supply"` (the older rule) stays an
   option.
 
 ## Physical edition constraint (standing)

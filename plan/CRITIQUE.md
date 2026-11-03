@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — row 77 calls "back to the supply" the written 11.7, but the written 11.7 is the draft pool
-- pass: 37 (commit cbaf8a6)
-- viewport: desktop
-- category: comprehension
-- observation: Row 77 says the bottom of the supply is "the written 11.7". Spec v2 11.7 sends unkept Skills to the draft pool, and /config labels the pool "written rules" and the supply "older rule". The two pages contradict each other on which choice the rules make.
-- evidence: `OPEN-QUESTIONS.md:92` "The bottom of the supply (the written 11.7) stays an option."; `OPEN-QUESTIONS.md:165` "`\"supply\"` (the written 11.7)"; `spec/01-spec-v2-rules.md:245` "11.7 Keep 1 Skill. It is free. Put the other Skills in your draft pool."; /config "Your pool (default, written rules)" / "Back to the supply (older rule)".
-- suggested fix: In `OPEN-QUESTIONS.md` row 77 and line 165, write "(the older rule)" instead of "(the written 11.7)", then regenerate the decisions page source. Wording only; the decided reading does not change.
-- source: web-fetch
-
 ### [LOW] /config — the Combat model help names the second option "Exchanges:", the list says "Exchanges (older rules)"
 - pass: 37 (commit cbaf8a6)
 - viewport: desktop
@@ -100,6 +91,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — row 77 calls "back to the supply" the written 11.7, but the written 11.7 is the draft pool
+- pass: 37 (commit cbaf8a6)
+- viewport: desktop
+- category: comprehension
+- observation: Row 77 says the bottom of the supply is "the written 11.7". Spec v2 11.7 sends unkept Skills to the draft pool, and /config labels the pool "written rules" and the supply "older rule". The two pages contradict each other on which choice the rules make.
+- evidence: `OPEN-QUESTIONS.md:92` "The bottom of the supply (the written 11.7) stays an option."; `OPEN-QUESTIONS.md:165` "`\"supply\"` (the written 11.7)"; `spec/01-spec-v2-rules.md:245` "11.7 Keep 1 Skill. It is free. Put the other Skills in your draft pool."; /config "Your pool (default, written rules)" / "Back to the supply (older rule)".
+- suggested fix: In `OPEN-QUESTIONS.md` row 77 and line 165, write "(the older rule)" instead of "(the written 11.7)", then regenerate the decisions page source. Wording only; the decided reading does not change.
+- source: web-fetch
+- issue: #294
+- fixed: (this commit)
+- resolution: Row 77 and the structural note now call the bottom of the supply "the older rule", as /config does; the written 11.7 is the pool. docs/DECISIONS.md is regenerated. A decisions test pins the row 77 sentence, that no "(the written 11.7)" remains, and that /config still labels the supply the older rule.
 
 ### [x] [MED] /config — the Exchange range help says "not used by the engine yet" for a range Exchanges never reads
 - pass: 37 (commit cbaf8a6)

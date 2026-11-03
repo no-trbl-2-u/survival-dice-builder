@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-03 (pass 243, cloud tick)
+
+Pass 242 dropped the "yet" from the /config Exchange range note (799b5b9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 37 ran 2 commits ago) and so is the expand gate (pass 25 ran 7 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 37: /decisions row 77 calls the bottom of the supply "the written 11.7", while Spec v2 11.7 sends unkept Skills to the draft pool and /config labels the supply "older rule". An 8.1 (critique MED: impact 6, ease 9, bias x1.5). Row 77 and the structural note now say "(the older rule)"; the decided reading is unchanged. Next in line: the pass 37 LOW /config wording rows (Combat model help "Exchanges:", the model-only note).
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /decisions: row 77 calls the bottom of the supply the written 11.7, which is the draft pool (critique MED, pass 37, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: wording in `OPEN-QUESTIONS.md` row 77 and the structural note; regenerate `docs/DECISIONS.md`
+- issue: #294
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [2.4] /config: the Combat model help names the second option "Exchanges:", the list says "Exchanges (older rules)" (critique LOW, pass 37)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: match the help to the option label in `config.meta.json`
+
 # Site audit — 2026-11-03 (pass 242, cloud tick)
 
 Pass 241 moved the /play log tags off the deleted Spec v2 rules 9.2 and 10.1 (cbaf8a6), and critique pass 37 (adbd215) filed 6 rows. No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 37 ran 1 commit ago) and so is the expand gate (pass 25 ran 6 commits ago). Phase 35 is still blocked on the designer's Skills session. Top finding, new from critique pass 37: the /config Exchange range help describes the older Exchanges Combat, then the unused mark says "Not used by the engine yet", which reads as a promise the engine will use it, while no Combat model in this build reads the field. An 8.1 (critique MED: impact 6, ease 9, bias x1.5). The help now ends "The Exchanges Combat in this build does not use this range either.", and the metadata schema gains a "retired" unused mark, which /config shows as "Not used by the engine: changing it changes nothing." Removing the field instead would need a config version bump and golden replays for a range nothing reads. Next in line: the /decisions row 77 cite (critique MED, pass 37), then the pass 37 LOW /config wording rows.
