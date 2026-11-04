@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-04 (pass 245, cloud tick)
+
+Pass 244 appended the draft-pool sentence to the / Skills line (dd58ace). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 37 ran 4 commits ago, under 24 hours) and so is the expand gate (pass 25 ran 9 commits ago, under 48 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The /decisions MED rows (balance checks, Structural v2 questions, Spec v2 design work) still wait for /oversight. Top finding, from critique pass 37: the /tiles gathering-node legend says "a Gather card here gets its materials, once", while / says any card's Gather option works on a node and a spent node stays spent for the run. A 3.0 (critique LOW: impact 3, ease 10). The legend now reads "a card's Gather option here gets its materials once; then the node is spent for the rest of the run" (and, with the node ruling off, "the first Gather option played here spends it"). Next in line: the pass 37 LOW /config wording rows (Combat model help "Exchanges:", the model-only note).
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /tiles: the gathering-node legend still says "a Gather card ... once" (critique LOW, pass 37)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 10
+- next: legend wording in `ruleText.ts:83`
+- issue: #296
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
+### [ ] [2.4] /config: the Combat model help names the second option "Exchanges:", the list says "Exchanges (older rules)" (critique LOW, pass 37)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: match the help to the option label in `config.meta.json`
+
+### [ ] [2.4] /config: the model-only note writes "Exchanges only" then "Combat is set to exchanges" (critique LOW, pass 37)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: capitalise the model name in `packages/content/src/decisions.ts:321-322`
+
 # Site audit — 2026-11-03 (pass 244, cloud tick)
 
 Pass 243 moved /decisions row 77 to "(the older rule)" (412c645). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 37 ran 3 commits ago) and so is the expand gate (pass 25 ran 8 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The /decisions MED rows (balance checks, Structural v2 questions, Spec v2 design work) still wait for /oversight. Top finding, from critique pass 37: the / Skills line says each player looks at 2 Skills and keeps 1, but never says the others go to the draft pool (11.7) that later drafts also offer (11.6). A 3.2 (critique LOW: impact 4, ease 8). `trainingText` now ends with `draftPoolText`, the same sentence /play shows: "The Skills you do not keep go to your pool. Later drafts offer them again." (or "go back to the supply." under the older rule). Next in line: the pass 37 LOW /config wording rows and the /tiles gathering-node legend.

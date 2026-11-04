@@ -80,8 +80,8 @@ export function siteText(site: Site, config: GameConfig, content: Upgrades): str
   }
   if (site === 'gathering-node')
     return config.rulings.gatherNeedsNode
-      ? 'a Gather card here gets its materials, once'
-      : 'the first Gather card here spends it'
+      ? "a card's Gather option here gets its materials once; then the node is spent for the rest of the run"
+      : 'the first Gather option played here spends it'
   const s = config.spawn
   const one = s.rampEvery === null && !s.perSeat
   const enemy = site === 'spawn-node' ? 'grunt' : 'elite'

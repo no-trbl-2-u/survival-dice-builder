@@ -160,7 +160,7 @@ describe('rule text from config', () => {
       'the players defend it; stand on the Base tile to buy upgrades, and cards once Shop I is built',
     )
     expect(siteText('gathering-node', base, defaultContent)).toBe(
-      'a Gather card here gets its materials, once',
+      "a card's Gather option here gets its materials once; then the node is spent for the rest of the run",
     )
     expect(siteText('spawn-node', base, defaultContent)).toBe('gets 1 grunt at each Combat')
     expect(siteText('elite-spawn-node', base, defaultContent)).toBe('gets 1 elite at each Combat')

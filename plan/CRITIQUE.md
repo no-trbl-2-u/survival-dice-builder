@@ -27,15 +27,6 @@
 - suggested fix: Use the capitalised names: "Combat is set to Exchanges, so changing it changes nothing."
 - source: web-fetch
 
-### [LOW] /tiles — the gathering-node legend still says "a Gather card ... once"
-- pass: 37 (commit cbaf8a6)
-- viewport: desktop
-- category: comprehension
-- observation: The / Materials line now says any card's Gather option works on a node and that a spent node stays spent for the run. The /tiles legend still names only "a Gather card" and ends on a bare "once". Shop cards Haul, Forage, Excavate and Quarry also gather.
-- evidence: /tiles "Gathering node (a Gather card here gets its materials, once)" (`packages/content/src/ruleText.ts:83`); / "Play a card's Gather option on a gathering node to get its materials ... each node gives its materials once, then it is spent for the rest of the run." (`ruleText.ts:208`)
-- suggested fix: Legend: "a card's Gather option here gets its materials once; then the node is spent for the rest of the run".
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -82,6 +73,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /tiles — the gathering-node legend still says "a Gather card ... once"
+- pass: 37 (commit cbaf8a6)
+- viewport: desktop
+- category: comprehension
+- observation: The / Materials line now says any card's Gather option works on a node and that a spent node stays spent for the run. The /tiles legend still names only "a Gather card" and ends on a bare "once". Shop cards Haul, Forage, Excavate and Quarry also gather.
+- evidence: /tiles "Gathering node (a Gather card here gets its materials, once)" (`packages/content/src/ruleText.ts:83`); / "Play a card's Gather option on a gathering node to get its materials ... each node gives its materials once, then it is spent for the rest of the run." (`ruleText.ts:208`)
+- suggested fix: Legend: "a card's Gather option here gets its materials once; then the node is spent for the rest of the run".
+- source: web-fetch
+- issue: #296
+- fixed: (this commit) — the legend reads "a card's Gather option here gets its materials once; then the node is spent for the rest of the run"; with the node ruling off, "the first Gather option played here spends it"
+
 
 ### [x] [LOW] / — the Skills line never says the unkept Skills go to your pool
 - pass: 37 (commit cbaf8a6)
