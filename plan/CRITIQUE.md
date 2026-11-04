@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — row 68 gives two different 4-seat bot results for seat scaling
-- pass: 38 (commit 3f71c3b)
-- viewport: desktop
-- category: comprehension
-- observation: Row 68's reading says the 4-seat median end round goes from 5 to 4; the measured block under the same row says 5 to 3. A visitor cannot tell which result is current. Row 67 had the same problem and was fixed by cutting its old bot report; row 68 still carries its old one.
-- evidence: "Bot report: same as the default at 2 seats (by construction); at 4 seats median 5 to 4." then "Measured with Engagements Combat, 200 bot runs each, 4 seats. Default bot: the median run ends in round 5, now 3." (`OPEN-QUESTIONS.md` row 68, rendered on /decisions)
-- suggested fix: Cut the old "Bot report: ..." sentence from row 68's reading so only the measured block gives numbers, regenerate `docs/DECISIONS.md`, and have a test fail when a proposed row's reading still carries a "Bot report:" sentence next to a measured block.
-- source: web-fetch
-
 ### [MED] /decisions — decided row 49 still says the engine lets one Build card buy tier I and tier II
 - pass: 38 (commit 3f71c3b)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — row 68 gives two different 4-seat bot results for seat scaling
+- pass: 38 (commit 3f71c3b)
+- viewport: desktop
+- category: comprehension
+- observation: Row 68's reading says the 4-seat median end round goes from 5 to 4; the measured block under the same row says 5 to 3. A visitor cannot tell which result is current. Row 67 had the same problem and was fixed by cutting its old bot report; row 68 still carries its old one.
+- evidence: "Bot report: same as the default at 2 seats (by construction); at 4 seats median 5 to 4." then "Measured with Engagements Combat, 200 bot runs each, 4 seats. Default bot: the median run ends in round 5, now 3." (`OPEN-QUESTIONS.md` row 68, rendered on /decisions)
+- suggested fix: Cut the old "Bot report: ..." sentence from row 68's reading so only the measured block gives numbers, regenerate `docs/DECISIONS.md`, and have a test fail when a proposed row's reading still carries a "Bot report:" sentence next to a measured block.
+- source: web-fetch
+- issue: #300
+- fixed: (this commit) — the "Bot report:" sentences are cut from rows 63, 64, 66, 68 and 70, so each measured proposal row gives only the measured block's numbers (row 70 keeps its physical-edition note as its own sentence); docs/DECISIONS.md is regenerated; a DecisionsPage test fails when a measured proposal's reading carries a "Bot report"
 
 ### [x] [LOW] /config — the Combat model help names the second option "Exchanges:", the list says "Exchanges (older rules)"
 - pass: 37 (commit cbaf8a6)

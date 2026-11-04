@@ -78,6 +78,14 @@ describe('DecisionsPage', () => {
     expect(rows.find((r) => r.number === 67)?.reading).not.toContain('Recommendation')
   })
 
+  it('gives one set of bot numbers per reading: a measured proposal has no older "Bot report" (critique pass 38)', () => {
+    const rows = parseQuestions(questionsMd)
+    for (const proposal of defaultProposals.filter((p) => p.measured)) {
+      const reading = rows.find((r) => r.number === proposal.row)?.reading ?? ''
+      expect(reading, `row ${proposal.row}`).not.toMatch(/Bot report/)
+    }
+  })
+
   it('lists the readings decided recently, newest first (phase 37)', () => {
     const { container } = render(<DecisionsPage />)
     const recent = [...container.querySelectorAll('[data-testid="recent"] > li')]

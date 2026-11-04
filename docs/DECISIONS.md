@@ -69,19 +69,19 @@ Combat uses Engagements by default. A reading marked "Exchanges only" changes no
 ### 63. No clock: enemies spawn only on revealed tiles, and only players reveal tiles. The score is rounds survived. A run where nobody steps off the Base tile never ends (row 62). What replaces the wave track as the clock? (rule Core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: forced reveal**. At round end, if no tile was revealed in the last N rounds and the tile deck is not empty, the top tile is revealed in the open slot nearest the base (ties: slot order). Bot report: without it a turtle run never ends; with N = 3 the turtle ends in rounds 8-14 (median 11). Recommendation: turn on.
+- Reading: **Proposed: forced reveal**. At round end, if no tile was revealed in the last N rounds and the tile deck is not empty, the top tile is revealed in the open slot nearest the base (ties: slot order). Recommendation: turn on.
 - Setting: `clock.forcedRevealEvery` = `empty`
 
 ### 64. Difficulty is a function of map state, not time: spawns per Combat equal revealed spawn nodes (0 to 13 with 8 tiles), chosen by the players. How does pressure ramp with the round? (rule Core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: spawn ramp**. Each node spawns 1 more enemy per Combat every N rounds, with the usual spill-over and miniature limit. Bot report (N = 4): end round unchanged (runs end before the ramp builds), miniature limit reached in 180 of 200 runs. Recommendation: needs a playtest with the combined set.
+- Reading: **Proposed: spawn ramp**. Each node spawns 1 more enemy per Combat every N rounds, with the usual spill-over and miniature limit. Recommendation: needs a playtest with the combined set.
 - Setting: `spawn.rampEvery` = `empty`
 
 ### 66. A tile revealed in Prepare spawns at that same round's Combat, and players do not move in Combat. The explorer ends Prepare on a fresh tile and is pinned next to new spawns for every exchange. Is that the intended cost of exploring? (rule Core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: new tiles wait one round**. A tile's nodes first spawn at the Combat of the round after its reveal; /play names the node "spawns from round N". Bot report: median end round 6 to 7. Recommendation: turn on.
+- Reading: **Proposed: new tiles wait one round**. A tile's nodes first spawn at the Combat of the round after its reveal; /play names the node "spawns from round N". Recommendation: turn on.
 - Setting: `spawn.newTileDelay` = `0`
 
 ### 67. Materials are a fixed budget: 10 single-use nodes give 20 materials per run with starter Gather, and the 6 upgrades cost 33. Spent nodes leave 4 of 10 starter cards dead in Prepare, and the 10-card minimum forbids thinning them (rule 6.7, Table 6, core loop v2)
@@ -93,13 +93,13 @@ Combat uses Engagements by default. A reading marked "Exchanges only" changes no
 ### 68. Co-op does not scale pressure: spawns per node are fixed per Combat regardless of seats, player damage scales with seats and materials per player fall with seats (row 67) (rule 16, core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: seat scaling**. Each node spawns 1 enemy per 2 seats, rounded up. Bot report: same as the default at 2 seats (by construction); at 4 seats median 5 to 4. Co-op is already shorter than solo for the bot. Recommendation: keep off.
+- Reading: **Proposed: seat scaling**. Each node spawns 1 enemy per 2 seats, rounded up. Recommendation: keep off.
 - Setting: `spawn.perSeat` = `false`
 
 ### 70. Up to 13 new enemies each Combat; each spills to the nearest empty hex, and the nearest grunt promotes at the miniature limit (20), every round (rule Core loop v2, physical edition)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: spawn range**. Only nodes within N hexes of a player figure, a Barricade, a Tower or a Base tile hex spawn. Bot report (N = 4): end round unchanged; whether fewer enemies to place each round saves time is a question for the physical edition. Recommendation: needs a playtest.
+- Reading: **Proposed: spawn range**. Only nodes within N hexes of a player figure, a Barricade, a Tower or a Base tile hex spawn. Whether fewer enemies to place each round saves time is a question for the physical edition. Recommendation: needs a playtest.
 - Setting: `spawn.nodeRange` = `empty`; `miniatureLimit` = `20`
 
 ### 78. Spec v2 levels the Build card, and every Build card is Build I (Build II and III are not designed yet). Then no card buys Shop II, Shop III, Training II or Training III, so 2 milestones are out of reach: "Buy 3 base upgrades" (0 of 200 bot runs) and "Fire Arcane Rain" (a level 3 Skill needs Training III) (rule 11.4, 12.1, 17)
