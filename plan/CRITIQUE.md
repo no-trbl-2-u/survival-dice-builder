@@ -1,13 +1,31 @@
 # Critique log
 
-> Last pass: 2026-11-03 at commit cbaf8a6
-> Pass count: 37
+> Last pass: 2026-11-04 at commit 3f71c3b
+> Pass count: 38
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /decisions — row 68 gives two different 4-seat bot results for seat scaling
+- pass: 38 (commit 3f71c3b)
+- viewport: desktop
+- category: comprehension
+- observation: Row 68's reading says the 4-seat median end round goes from 5 to 4; the measured block under the same row says 5 to 3. A visitor cannot tell which result is current. Row 67 had the same problem and was fixed by cutting its old bot report; row 68 still carries its old one.
+- evidence: "Bot report: same as the default at 2 seats (by construction); at 4 seats median 5 to 4." then "Measured with Engagements Combat, 200 bot runs each, 4 seats. Default bot: the median run ends in round 5, now 3." (`OPEN-QUESTIONS.md` row 68, rendered on /decisions)
+- suggested fix: Cut the old "Bot report: ..." sentence from row 68's reading so only the measured block gives numbers, regenerate `docs/DECISIONS.md`, and have a test fail when a proposed row's reading still carries a "Bot report:" sentence next to a measured block.
+- source: web-fetch
+
+### [MED] /decisions — decided row 49 still says the engine lets one Build card buy tier I and tier II
+- pass: 38 (commit 3f71c3b)
+- viewport: desktop
+- category: comprehension
+- observation: Decided row 49 opens with "Current engine: yes, each Build is a separate purchase" and ends "To write into Spec v2.", but it is decided as Spec v2 ruling 25 and the engine plays `rulings.buildLevels: "levelled"`: a Build I card buys level 1 structures only. Open row 78 on the same page says every Build card is Build I. The row has no "Now in the written rules:" line, so the #95 test (decided rows whose setting Spec v2 removed) missed it.
+- evidence: "Current engine: yes, each Build is a separate purchase. ... To write into Spec v2." (`OPEN-QUESTIONS.md` row 49); `packages/engine/src/progression/upgrades.ts` (`required <= level` unless `buildLevels` is "any")
+- suggested fix: Drop "To write into Spec v2." from row 49 and add a `**Spec v2:**` note saying a Build I card builds level 1 structures only (ruling 25), then regenerate `docs/DECISIONS.md`.
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
