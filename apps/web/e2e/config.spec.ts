@@ -57,7 +57,7 @@ test('/config: a field one Combat model ignores is tagged, and says so under the
   await expect(defeated).not.toHaveAccessibleDescription(/changes nothing/)
   await page.getByLabel('Combat model', { exact: true }).selectOption('exchange')
   await expect(defeated).toHaveAccessibleDescription(
-    /Engagements only\. Combat is set to exchanges, so changing it changes nothing\./,
+    /Engagements only\. Combat is set to Exchanges, so changing it changes nothing\./,
   )
 })
 

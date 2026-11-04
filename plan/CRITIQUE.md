@@ -18,15 +18,6 @@
 - suggested fix: Start the second clause with the list label, and use one form of the tag ("older rule") in every option label.
 - source: web-fetch
 
-### [LOW] /config — the model-only note writes "Exchanges only" then "Combat is set to exchanges"
-- pass: 37 (commit cbaf8a6)
-- viewport: desktop
-- category: voice
-- observation: When the Combat model is switched, the note under a model-only field capitalises the model in its tag and lower-cases it in the next sentence. Pass 32 fixed the same case drift on /decisions.
-- evidence: "Engagements only. Combat is set to exchanges, so changing it changes nothing." (`packages/content/src/decisions.ts:321-322`, `playing = current === 'engage' ? 'engagements' : 'exchanges'`)
-- suggested fix: Use the capitalised names: "Combat is set to Exchanges, so changing it changes nothing."
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -73,6 +64,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the model-only note writes "Exchanges only" then "Combat is set to exchanges"
+- pass: 37 (commit cbaf8a6)
+- viewport: desktop
+- category: voice
+- observation: When the Combat model is switched, the note under a model-only field capitalises the model in its tag and lower-cases it in the next sentence. Pass 32 fixed the same case drift on /decisions.
+- evidence: "Engagements only. Combat is set to exchanges, so changing it changes nothing." (`packages/content/src/decisions.ts:321-322`, `playing = current === 'engage' ? 'engagements' : 'exchanges'`)
+- suggested fix: Use the capitalised names: "Combat is set to Exchanges, so changing it changes nothing."
+- source: web-fetch
+- issue: #297
+- fixed: (this commit) — the note reads "Combat is set to Exchanges, so changing it changes nothing." (or "Engagements")
+
 
 ### [x] [LOW] /tiles — the gathering-node legend still says "a Gather card ... once"
 - pass: 37 (commit cbaf8a6)

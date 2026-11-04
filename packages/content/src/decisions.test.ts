@@ -290,10 +290,10 @@ describe('decisions', () => {
   it('notes a field the engine reads under one Combat model', () => {
     expect(combatModelNote('exchange', 'exchange')).toBe('Exchanges only.')
     expect(combatModelNote('exchange', 'engage')).toBe(
-      'Exchanges only. Combat is set to engagements, so changing it changes nothing.',
+      'Exchanges only. Combat is set to Engagements, so changing it changes nothing.',
     )
     expect(combatModelNote('engage', 'exchange')).toBe(
-      'Engagements only. Combat is set to exchanges, so changing it changes nothing.',
+      'Engagements only. Combat is set to Exchanges, so changing it changes nothing.',
     )
   })
 

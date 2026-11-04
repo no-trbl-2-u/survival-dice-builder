@@ -318,7 +318,7 @@ export function combatModelNote(
 ): string {
   const tag = `${combatModelTag(model)}.`
   if (model === current) return tag
-  const playing = current === 'engage' ? 'engagements' : 'exchanges'
+  const playing = current === 'engage' ? 'Engagements' : 'Exchanges'
   return `${tag} Combat is set to ${playing}, so changing it changes nothing.`
 }
 
