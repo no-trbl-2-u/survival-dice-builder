@@ -106,11 +106,11 @@
   },
   "combat.model": {
     "label": "Combat model",
-    "help": "How a Combat plays. Engagements (default): play a card's Engage option to roll from where you stand. Exchanges: the older Combat, kept for playtests. In both, enemies hit structures in the siege step at the end of Combat.",
+    "help": "How a Combat plays. Engagements (default): play a card's Engage option to roll from where you stand. Exchanges (older rule): the earlier Combat, kept for playtests. In both, enemies hit structures in the siege step at the end of Combat.",
     "rule": "7.8, Combat v3",
     "options": {
       "engage": "Engagements (default)",
-      "exchange": "Exchanges (older rules)"
+      "exchange": "Exchanges (older rule)"
     }
   },
   "combat.engage": {

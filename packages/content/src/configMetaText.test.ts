@@ -99,9 +99,17 @@ describe('config.meta.json marks the Spec v2 rule as the written one', () => {
   it('7.10: the siege step ends Combat under both models, not Engagements only', () => {
     const help = defaultConfigMeta['combat.model']?.help ?? ''
     expect(help).toMatch(
-      /Exchanges: the older Combat, kept for playtests\. In both, enemies hit structures in the siege step at the end of Combat\.$/,
+      /Exchanges \(older rule\): the earlier Combat, kept for playtests\. In both, enemies hit structures in the siege step at the end of Combat\.$/,
     )
     expect(help).not.toMatch(/stand; enemies hit structures/)
+  })
+
+  it('every option label writes the older-rule tag one way', () => {
+    const labels = Object.values(defaultConfigMeta).flatMap((entry) =>
+      Object.values(entry?.options ?? {}),
+    )
+    expect(labels.filter((label) => /\(older rules\)/.test(label))).toEqual([])
+    expect(labels).toContain('Exchanges (older rule)')
   })
 })
 

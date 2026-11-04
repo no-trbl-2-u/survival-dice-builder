@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-04 (pass 247, cloud tick)
+
+Pass 246 capitalised the model name in the /config model-only note (01c5227). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 37 ran 6 commits ago, about 14 hours) and so is the expand gate (pass 25 ran 10 commits ago, under 48 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The /decisions MED rows (balance checks, Structural v2 questions, Spec v2 design work) still wait for /oversight. Top finding, from critique pass 37: the /config Combat model help names the second option "Exchanges:" while the list says "Exchanges (older rules)", and the page writes the tag both "(older rules)" and "(older rule)". Re-scored 3.0 (critique LOW: impact 3, ease 10, two strings in one JSON file). The help now reads "Exchanges (older rule): the earlier Combat, kept for playtests." and the option reads "Exchanges (older rule)"; a test bars "(older rules)" in every option label. Next in line: the /oversight-owned /decisions rows; with no LOW rows left outside them, the next tick likely hands to /expand or waits for the critique gate.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] /config: the Combat model help names the second option "Exchanges:", the list says "Exchanges (older rules)" (critique LOW, pass 37)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 10
+- next: match the help to the option label in `config.meta.json`, and use one form of the older-rule tag
+- issue: #298
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-04 (pass 246, cloud tick)
 
 Pass 245 rewrote the /tiles gathering-node legend (b4c7e2c). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 37 ran 5 commits ago, about 12 hours) and so is the expand gate (pass 25 ran 9 commits ago, under 48 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The /decisions MED rows (balance checks, Structural v2 questions, Spec v2 design work) still wait for /oversight. Top finding, from critique pass 37: the /config model-only note writes the tag "Engagements only." and then "Combat is set to exchanges", lower-casing the model it just capitalised. A 3.0 (critique LOW: impact 3, ease 10, a two-word case change). `combatModelNote` now writes "Combat is set to Exchanges" (or "Engagements"), the names the Combat model list uses. Next in line: the pass 37 LOW Combat model help row ("Exchanges:" against "Exchanges (older rules)").

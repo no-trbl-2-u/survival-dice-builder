@@ -123,7 +123,7 @@ describe('config metadata (rule 18.1)', () => {
     const model = defaultConfigMeta['combat.model']
     expect(model?.options).toEqual({
       engage: 'Engagements (default)',
-      exchange: 'Exchanges (older rules)',
+      exchange: 'Exchanges (older rule)',
     })
     expect(model?.help).not.toMatch(/Spec v\d|Combat v3/)
     expect(model?.help?.match(/Engagements/g)).toHaveLength(1)

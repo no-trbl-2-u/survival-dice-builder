@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Combat model help names the second option "Exchanges:", the list says "Exchanges (older rules)"
-- pass: 37 (commit cbaf8a6)
-- viewport: desktop
-- category: voice
-- observation: The help names the first option exactly as the list does ("Engagements (default):") but the second one only "Exchanges:". On the same page the older-rule tag is written two ways: "(older rules)" on Combat model, "(older rule)" on the Skill draft choice.
-- evidence: "Exchanges: the older Combat, kept for playtests." against the option "Exchanges (older rules)" (`packages/content/data/config.meta.json:109`, `:112-113`); "Back to the supply (older rule)" (`:281`).
-- suggested fix: Start the second clause with the list label, and use one form of the tag ("older rule") in every option label.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -64,6 +55,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the Combat model help names the second option "Exchanges:", the list says "Exchanges (older rules)"
+- pass: 37 (commit cbaf8a6)
+- viewport: desktop
+- category: voice
+- observation: The help names the first option exactly as the list does ("Engagements (default):") but the second one only "Exchanges:". On the same page the older-rule tag is written two ways: "(older rules)" on Combat model, "(older rule)" on the Skill draft choice.
+- evidence: "Exchanges: the older Combat, kept for playtests." against the option "Exchanges (older rules)" (`packages/content/data/config.meta.json:109`, `:112-113`); "Back to the supply (older rule)" (`:281`).
+- suggested fix: Start the second clause with the list label, and use one form of the tag ("older rule") in every option label.
+- source: web-fetch
+- issue: #298
+- fixed: (this commit) — the help reads "Exchanges (older rule): the earlier Combat, kept for playtests." and the option reads "Exchanges (older rule)", the same tag as "Back to the supply (older rule)"; a configMetaText test bars "(older rules)" in every option label
+
 
 ### [x] [LOW] /config — the model-only note writes "Exchanges only" then "Combat is set to exchanges"
 - pass: 37 (commit cbaf8a6)
