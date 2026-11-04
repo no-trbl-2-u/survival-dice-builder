@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-11-03 at commit 185d655
-> Pass count: 25
+> Last pass: 2026-11-04 at commit 81aa9d9
+> Pass count: 26
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -100,7 +100,8 @@
 - re-evidence (expand pass 23): critique pass 35 (2f8713b) filed two MED rows with exactly this cause, both found by a stranger, not a test: the /config "Defeated enemies' dice" note said "Not in the written rules" because the field was tagged "Combat v3", while Spec v2 7.8 step 7 is its default (4144937); and the /play log and /debug tagged most engagement events and every pooled Skill "not in the written rules", while Spec v2 writes them as 7.7, 7.8 and 11.7 (611750c, which also regenerated the engagement golden hash). Each fix pins its own field or tags. Nothing yet fails when a config field or an engine event that is the Spec v2 default carries a design tag ("Combat v3", "designer <date>") and so reads "not in the written rules". Scope gains that check, over `config.meta.json` rule tags and the engine's event rule tags. Score raised from 4.0 to 4.5: two MED rows in one pass, three weeks after Spec v2.
 - re-evidence (expand pass 24): audit passes 228 and 229 found the same drift one level down, in text no test reads. 9191956: the `experienceForLevel` TSDoc (rule 8.5) quoted Spec v1 steps of 5 (Spec v2 and the config use 3), and the `rulesUrl` comment called `spec/01-spec-v2-rules.md` "Spec v1". e74354f: the repo README (the GitHub landing page), the engine README, the `pnpm sim` help line for `rules` and the `defaultContent` TSDoc all still said Spec v1. Both were found by hand, three weeks after sign-off. Audit pass 230 then found nothing at or above 3.0 and handed to `/expand`. Scope gains one line: the guard also scans READMEs, CLI help and rule-cited TSDoc for "Spec v1" outside lines marked as history. Score held at 4.5: the drift is now in docs, not on the served site.
 - re-evidence (expand pass 25): critique pass 36 (7bedca7) filed two more rows with this cause, both found by a stranger and fixed by hand. 51499f9: the /config Combat model help tied the siege step to Engagements only, though the engine runs it under both models (MED). 185d655: the /debug intro explained a [not in the written rules] tag that /debug never shows, because the only event that carries it is the non-default "cancelled" defeated dice (LOW). Each fix pins its own string. Audit pass 238 then found nothing at or above 3.0 and handed to `/expand`. Score held at 4.5: the guard in scope is still what would catch these before a stranger does.
-- last re-evidenced: 2026-11-03
+- re-evidence (expand pass 26): critique pass 37 (adbd215) filed a MED row with this cause: /decisions row 77 called "back to the supply" the written 11.7, while Spec v2 11.7 sends unkept Skills to the draft pool (412c645, fixed by hand with its own sentence test). Audit passes 239-241 found two more by hand: the /config Exchange range help gave the Spec v1 text of 7.9 under a Spec v2 cite (76e49e4), and seven /config fields plus the /play log cited sections 9.2 and 10.1, which Spec v2 deleted (ee64539, cbaf8a6). Those two commits added the first guards of the kind this candidate asks for: a configMeta test and a ruleNumbers test fail on a cite of a deleted Spec v2 section. What is still missing is the other half: nothing checks that a "written rule" or "older rule" label sits on the Spec v2 default of its option (row 77 would have passed every test). Audit pass 248 then found nothing at or above 3.0 and handed to `/expand`. Score held at 4.5: the deleted-section guard narrows the scope, the default-label guard is still open.
+- last re-evidenced: 2026-11-04
 
 ### [ ] [score 6.0] The table sheets on Spec v2: one-pager facts rewritten, and a test that ties them to config
 - proposed: 2026-10-13, expand pass 10
@@ -130,7 +131,8 @@
 - conflicts: [needs-user-call] which branch. The designer kept exchanges as an option at phase 41; removal is theirs to approve.
 - ruling audit: Spec v2 6.10, 7.8; phase 41 upfront decision. Loop scope: outside until the designer picks a branch.
 - re-evidence (expand pass 15): critique pass 22 [MED] found the Dodge effect saying "this exchange" under the default Engagements Combat; bf619f8 fixed it by branching the card text on the Combat model, one more string that pays for both. The log still keeps two end lines for one event type (`apps/web/src/play/describeEvent.ts`, `exchangeEnded` tagged `Combat v3` or 7.8). Score held at 5.0; the branch is still the designer's call.
-- last re-evidenced: 2026-10-20
+- re-evidence (expand pass 26): critique pass 37 (adbd215) filed four rows that exist only because exchanges remain, and the loop fixed each by hand: the Exchange range help said "not used by the engine yet" for a field no Combat model reads (799b5b9, MED; the config metadata schema gained an `unused: "retired"` mark for it), the help gave the Spec v1 text of 7.9 (76e49e4), the model-only note lower-cased "Exchanges" (01c5227), and the Combat model help and option label used two forms of the older-rule tag (81aa9d9). Four of the pass's six rows, one cause. The fence branch has partly happened by accretion ("Exchanges (older rule)" label, a retired-field mark) without the single `ruleText` label or the grouping the scope names. Score held at 5.0; the branch is still the designer's call.
+- last re-evidenced: 2026-11-04
 
 > Discovery pass 1 (2026-10-10). Each row below adds a `ruling audit` field. "Loop scope" refers to the
 > owner ruling of 2026-10-06 (`docs/retrospective-2026-10-06.md:210,231,248`): the loop ships docs, bot

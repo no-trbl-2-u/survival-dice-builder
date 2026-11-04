@@ -5,6 +5,18 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-04 (pass 248, cloud tick)
+
+Pass 247 matched the /config Combat model help to its option label (81aa9d9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 37 ran 7 commits ago, about 15 hours) and so is the expand gate (pass 25 ran 11 commits ago, about 24 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass re-checked the older open LOW rows still marked `[ ]` in earlier audit blocks (the /credits Icons intro, the / "Also:" line, the "not in the written rules" log tags, the "Unpicked Skills" option names) against the source; each was fixed by a later commit. Nothing scored 3.0 or more. No actionable iterate work, so the tick hands to /expand (bold posture): pass 26 adds critique pass 37 and audit passes 239-247 as evidence for "Player text on Spec v2" and "The exchange Combat model after Spec v2". Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-04 (pass 247, cloud tick)
 
 Pass 246 capitalised the model name in the /config model-only note (01c5227). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 37 ran 6 commits ago, about 14 hours) and so is the expand gate (pass 25 ran 10 commits ago, under 48 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The /decisions MED rows (balance checks, Structural v2 questions, Spec v2 design work) still wait for /oversight. Top finding, from critique pass 37: the /config Combat model help names the second option "Exchanges:" while the list says "Exchanges (older rules)", and the page writes the tag both "(older rules)" and "(older rule)". Re-scored 3.0 (critique LOW: impact 3, ease 10, two strings in one JSON file). The help now reads "Exchanges (older rule): the earlier Combat, kept for playtests." and the option reads "Exchanges (older rule)"; a test bars "(older rules)" in every option label. Next in line: the /oversight-owned /decisions rows; with no LOW rows left outside them, the next tick likely hands to /expand or waits for the critique gate.
