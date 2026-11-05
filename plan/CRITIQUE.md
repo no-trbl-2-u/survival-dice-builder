@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / (shell) — the iOS home-screen label is not set, so it falls back to the page title
-- pass: 39 (commit 0bc9e92)
-- viewport: mobile
-- category: seo
-- observation: The manifest gives a 12-character short_name for the home-screen label, but the shell has no apple-mobile-web-app-title. iOS uses the page title instead, and the title changes per page ("Play - Survival Dice-Builder"), so the label depends on the page the visitor adds.
-- evidence: Live /manifest.webmanifest: "short_name": "Dice-Builder". `apps/web/index.html` has no `apple-mobile-web-app-title` meta.
-- suggested fix: Add `<meta name="apple-mobile-web-app-title">` with the manifest short_name, and a test that the two match.
-- source: web-fetch
-
 ### [LOW] / — the pitch and the description give the tagline two ways
 - pass: 39 (commit 0bc9e92)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / (shell) — the iOS home-screen label is not set, so it falls back to the page title
+- pass: 39 (commit 0bc9e92)
+- viewport: mobile
+- category: seo
+- observation: The manifest gives a 12-character short_name for the home-screen label, but the shell has no apple-mobile-web-app-title. iOS uses the page title instead, and the title changes per page ("Play - Survival Dice-Builder"), so the label depends on the page the visitor adds.
+- evidence: Live /manifest.webmanifest: "short_name": "Dice-Builder". `apps/web/index.html` has no `apple-mobile-web-app-title` meta.
+- suggested fix: Add `<meta name="apple-mobile-web-app-title">` with the manifest short_name, and a test that the two match.
+- source: web-fetch
+- issue: #310
+- fixed: (this commit)
 
 ### [x] [MED] /decisions — decided row 49 still says the engine lets one Build card buy tier I and tier II
 - pass: 38 (commit 3f71c3b)

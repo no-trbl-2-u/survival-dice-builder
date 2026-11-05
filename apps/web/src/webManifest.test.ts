@@ -49,6 +49,12 @@ describe('web app manifest', () => {
     expect(manifest).toMatchObject({ start_url: '/', scope: '/', display: 'standalone' })
   })
 
+  it('gives iOS the same home-screen label as the manifest, whatever page is added', () => {
+    // iOS reads apple-mobile-web-app-title, not the manifest, and falls back to the page title.
+    const label = /<meta name="apple-mobile-web-app-title" content="([^"]*)" \/>/.exec(shell)?.[1]
+    expect(label).toBe(manifest.short_name)
+  })
+
   it('takes its colours from the light theme: the browser bar and the page background', () => {
     const lightTheme =
       /<meta name="theme-color" content="(#[0-9a-f]{6})" media="\(prefers-color-scheme: light\)" \/>/.exec(
