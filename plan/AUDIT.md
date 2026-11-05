@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-05 (pass 250, cloud tick)
+
+Pass 249 cut the older bot reports from the measured proposal rows (d0e124f). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 2 commits ago, about 14 hours) and so is the expand gate (pass 26 ran 3 commits ago, about 15 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 38: decided row 49 still opened "Current engine: yes, each Build is a separate purchase" and ended "To write into Spec v2." Scored 7.2 (critique MED: impact 6, ease 8, bias x1.5). Row 49 now says what the game plays under Spec v2 (11.4) in a Spec v2 note, and a test bars "To write into Spec v2" in every decided row. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [7.2] /decisions: decided row 49 still says the engine lets one Build card buy tier I and tier II (critique MED, pass 38, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: drop "To write into Spec v2." from row 49 and add a Spec v2 note naming 11.4, regenerate `docs/DECISIONS.md`, add a test
+- issue: #301
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-04 (pass 249, cloud tick)
 
 Critique pass 38 filed two MED rows on /decisions (e356f80). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 1 commit ago) and so is the expand gate (pass 26 ran 2 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 38: rule reading 68 says the 4-seat median goes from 5 to 4 while its measured block says 5 to 3. Scored 7.2 (critique MED: impact 6, ease 8, bias x1.5). Rows 63, 64, 66 and 70 carry the same older "Bot report:" sentence next to their measured blocks, so all five are cut (row 70 keeps its physical-edition note); a test bars "Bot report" in a measured proposal's reading. Next in line: the pass 38 MED row 49 (decided row still says "To write into Spec v2.").

@@ -270,7 +270,12 @@ describe('decisions', () => {
   it('gives each decided row Spec v2 changed a Spec v2 note (critique pass 15 and 16)', () => {
     const rows = parseQuestions(questionsMd)
     const note = (n: number) => splitReading(rows.find((r) => r.number === n)?.reading ?? '').specV2
-    for (const n of [7, 55, 65, 69, 72, 74, 75]) expect(note(n), `row ${n}`).not.toBeNull()
+    for (const n of [7, 55, 65, 69, 72, 74, 75, 49]) expect(note(n), `row ${n}`).not.toBeNull()
+    // A decided row says what the game plays, not what is still to write (critique pass 38).
+    for (const r of rows.filter((q) => q.status.startsWith('decided')))
+      expect(r.reading, `row ${r.number}`).not.toMatch(
+        /To write into Spec v2|Current engine: yes, each Build/,
+      )
     // Each row whose setting Spec v2 removed says so in its note.
     for (const r of rows.filter(
       (q) => q.flag.startsWith('(removed in Spec v2') && q.status.startsWith('decided'),

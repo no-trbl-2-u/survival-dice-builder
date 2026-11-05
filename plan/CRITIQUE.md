@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — decided row 49 still says the engine lets one Build card buy tier I and tier II
-- pass: 38 (commit 3f71c3b)
-- viewport: desktop
-- category: comprehension
-- observation: Decided row 49 opens with "Current engine: yes, each Build is a separate purchase" and ends "To write into Spec v2.", but it is decided as Spec v2 ruling 25 and the engine plays `rulings.buildLevels: "levelled"`: a Build I card buys level 1 structures only. Open row 78 on the same page says every Build card is Build I. The row has no "Now in the written rules:" line, so the #95 test (decided rows whose setting Spec v2 removed) missed it.
-- evidence: "Current engine: yes, each Build is a separate purchase. ... To write into Spec v2." (`OPEN-QUESTIONS.md` row 49); `packages/engine/src/progression/upgrades.ts` (`required <= level` unless `buildLevels` is "any")
-- suggested fix: Drop "To write into Spec v2." from row 49 and add a `**Spec v2:**` note saying a Build I card builds level 1 structures only (ruling 25), then regenerate `docs/DECISIONS.md`.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -64,6 +55,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — decided row 49 still says the engine lets one Build card buy tier I and tier II
+- pass: 38 (commit 3f71c3b)
+- viewport: desktop
+- category: comprehension
+- observation: Decided row 49 opens with "Current engine: yes, each Build is a separate purchase" and ends "To write into Spec v2.", but it is decided as Spec v2 ruling 25 and the engine plays `rulings.buildLevels: "levelled"`: a Build I card buys level 1 structures only. Open row 78 on the same page says every Build card is Build I. The row has no "Now in the written rules:" line, so the #95 test (decided rows whose setting Spec v2 removed) missed it.
+- evidence: "Current engine: yes, each Build is a separate purchase. ... To write into Spec v2." (`OPEN-QUESTIONS.md` row 49); `packages/engine/src/progression/upgrades.ts` (`required <= level` unless `buildLevels` is "any")
+- suggested fix: Drop "To write into Spec v2." from row 49 and add a `**Spec v2:**` note saying a Build I card builds level 1 structures only (ruling 25), then regenerate `docs/DECISIONS.md`.
+- source: web-fetch
+- issue: #301
+- fixed: (this commit) — row 49 drops "To write into Spec v2." and the stale "Current engine" sentence, and carries a Spec v2 note (11.4: Build I buys level I upgrades only, so "Build I 2 times" never buys tier I and tier II of one track); docs/DECISIONS.md is regenerated; a decisions test fails when a decided row still says "To write into Spec v2"
 
 ### [x] [MED] /decisions — row 68 gives two different 4-seat bot results for seat scaling
 - pass: 38 (commit 3f71c3b)
