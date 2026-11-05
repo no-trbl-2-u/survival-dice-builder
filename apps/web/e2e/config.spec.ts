@@ -264,3 +264,22 @@ test('/config: Apply sets a proposal in the draft, and Save marks it (phase 39)'
   )
   await expect(page.getByTestId('config-proposal-list')).toContainText('In this config.')
 })
+
+test('/config: each settings section is a heading, so a screen reader can jump between them (audit pass 254)', async ({
+  page,
+}) => {
+  await page.goto('/config')
+  const form = page.getByRole('group', { name: 'Rules', exact: true })
+  for (const name of ['Players', 'Combat', 'Shop', 'Designer rulings']) {
+    await expect(form.getByRole('heading', { level: 2, name, exact: true })).toHaveCount(1)
+    await expect(page.getByRole('group', { name, exact: true })).toHaveCount(1)
+  }
+  await expect(form.getByRole('heading', { level: 3, name: 'Enemy die', exact: true })).toHaveCount(
+    1,
+  )
+  // The root group stays plain text under the page's h1.
+  await expect(page.getByRole('heading', { name: 'Rules', exact: true })).toHaveCount(0)
+  const legends = await form.locator('legend').count()
+  const headings = await form.locator('legend > h2, legend > h3').count()
+  expect(headings).toBe(legends - 1)
+})

@@ -215,6 +215,17 @@ function RuleNote({ rule }: Readonly<{ rule: string }>) {
     )
 }
 
+/**
+ * The legend text of a settings group. Each section is a heading too (h2, a
+ * nested group h3), so a screen reader can jump between the sections by
+ * heading; the root "Rules" group stays plain text under the page's h1.
+ */
+export function groupHeading(depth: number, label: string): ReactNode {
+  if (depth === 0) return label
+  const Heading = depth === 1 ? 'h2' : 'h3'
+  return <Heading className={styles.groupHeading}>{label}</Heading>
+}
+
 function Field({ schema, value, path, draft, problems, onChange }: FieldProps): ReactNode {
   const id = fieldId(path)
   const meta = path.length > 0 ? defaultConfigMeta[path.join('.')] : undefined
@@ -235,7 +246,7 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
   if (type === 'object' && schema.shape) {
     return (
       <fieldset className={styles.group} aria-describedby={meta?.help ? `${id}-help` : undefined}>
-        <legend>{label}</legend>
+        <legend>{groupHeading(path.length, label)}</legend>
         {meta?.help ? (
           <p id={`${id}-help`} className={styles.groupHelp}>
             {meta.help}

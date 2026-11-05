@@ -128,6 +128,15 @@ form > .group > .field {
   font-size: var(--text-xs);
 }
 
+/* The heading inside a legend keeps the plaque's look. */
+.groupHeading {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+}
+
 /* One ledger line: label, control, help underneath. Rows are ruled like a ledger. */
 .field {
   display: grid;

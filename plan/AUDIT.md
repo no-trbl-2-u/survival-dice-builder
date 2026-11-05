@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-05 (pass 254, cloud tick)
+
+Pass 253 gave the hashed `/assets/` files a one-year immutable cache (e39aed3). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 6 commits ago, about 18 hours) and so is the expand gate (pass 26 ran 7 commits ago, about 19 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass re-read the live headers, fonts, chunks, titles, sitemap and 404, which are all right, and the heading outline of every prerendered page. /config is one long form of 18 settings sections, each a fieldset with a legend, but its only heading is the h1, so a screen reader user cannot jump between sections by heading. Scored 3.2 (a11y: impact 4, the longest page; ease 8). Each section legend now holds an h2 (the nested "Enemy die" group an h3), styled like the plaque; the root "Rules" group stays plain text. A unit test checks the heading levels and an e2e test checks the served headings and that each group keeps its name. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /config: the 18 settings sections are not headings, so they cannot be jumped to (a11y)
+- category: a11y
+- impact: 4
+- ease: 8
+- next: put an h2 in each section legend (h3 when nested), styled like the plaque, with tests
+- issue: #305
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-05 (pass 253, cloud tick)
 
 Pass 252 named `twitter:card` once on every page (5c352a8). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 5 commits ago, under 5 hours) and so is the expand gate (pass 26 ran 7 commits ago, about 17 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass read the live response headers: Cloudflare Pages serves the content-hashed files under `/assets/` (page chunks, the three.js dice chunk, the CSS, the fonts) with `max-age=0, must-revalidate`, so every repeat visit asks again for each one. Scored 4.5 (perf: impact 5, every repeat visit; ease 9). `apps/web/public/_headers` gives `/assets/*` a one-year immutable cache; pages and unhashed files keep the default so a deploy shows at once. A unit test reads the file and bars a long cache on any other path. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
