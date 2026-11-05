@@ -34,6 +34,7 @@ for (const [path, title, copy] of ROUTES) {
     expect(description).toMatch(/^[A-Z].*\.$/)
     expect(attr(html, /<meta property="og:description" content="([^"]*)"/)).toBe(description)
     expect(html).not.toContain('name="robots"')
+    expect(attr(html, /<meta property="og:image" content="([^"]*)"/)).toBe(`${SITE}/og-card.png`)
     if (copy) {
       const heading = title.replace(/ - Survival Dice-Builder$/, '')
       expect(html).toContain(`<h1>${heading}</h1>`)
@@ -96,4 +97,10 @@ test("the prerendered /decisions and /config read this browser's config once hyd
   await expect(page.getByTestId('config-changes')).toContainText(
     'Playing with the proposal: Forced reveal.',
   )
+})
+
+test('the link-preview image every page names is served as a PNG', async ({ request }) => {
+  const res = await request.get('/og-card.png')
+  expect(res.status()).toBe(200)
+  expect(res.headers()['content-type']).toContain('image/png')
 })

@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { headFor, headTags, pageHtml, SITE_URL } from './head.ts'
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { headFor, headTags, OG_IMAGE, pageHtml, SITE_URL } from './head.ts'
 import { notFound, routes } from './routes.tsx'
 
 const TEMPLATE = `<html><head><title>Survival Dice-Builder</title>
@@ -33,6 +36,23 @@ describe('headTags', () => {
       '<meta property="og:title" content="Tile sheet - Survival Dice-Builder" />',
     )
     expect(tags).toContain(`<meta name="description" content="${tiles.description}" />`)
+  })
+
+  it('names the shared preview image on every page, the not-found page too', () => {
+    for (const route of [...routes, notFound]) {
+      const tags = headTags(headFor(route))
+      expect(tags).toContain(`<meta property="og:image" content="${SITE_URL}/og-card.png" />`)
+      expect(tags).toContain('<meta name="twitter:card" content="summary_large_image" />')
+    }
+  })
+
+  it('names a preview image that is in public/ at the size the tags give', () => {
+    const png = fs.readFileSync(
+      path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public', 'og-card.png'),
+    )
+    expect(png.subarray(1, 4).toString('ascii')).toBe('PNG')
+    expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([OG_IMAGE.width, OG_IMAGE.height])
+    expect(OG_IMAGE.url).toBe(`${SITE_URL}/og-card.png`)
   })
 
   it('escapes text', () => {

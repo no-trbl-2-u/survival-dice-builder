@@ -3,6 +3,14 @@ import { documentTitle, type Route } from './router.tsx'
 /** The deployed site; canonical links and link previews name pages under it. */
 export const SITE_URL = 'https://survival-dice-builder.pages.dev'
 
+/** The link-preview image every page names (rendered by `scripts/og-card.mjs`). */
+export const OG_IMAGE = Object.freeze({
+  url: `${SITE_URL}/og-card.png`,
+  width: 1200,
+  height: 630,
+  alt: 'Survival Dice-Builder: a die on a hex tile, with the line "Defend the base together, build your dice, survive one more round."',
+})
+
 /** What a page's served `<head>` says about it. */
 export type Head = Readonly<{
   title: string
@@ -30,7 +38,8 @@ const escapeHtml = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
 /**
- * The per-page tags for the `<!--app-head-->` marker: description, link preview, and the
+ * The per-page tags for the `<!--app-head-->` marker: description, link preview (with the
+ * shared preview image), and the
  * canonical link (or robots noindex on the not-found page).
  *
  * @param head - the page's head.
@@ -40,6 +49,13 @@ export function headTags(head: Head): string {
     `<meta name="description" content="${escapeHtml(head.description)}" />`,
     `<meta property="og:title" content="${escapeHtml(head.title)}" />`,
     `<meta property="og:description" content="${escapeHtml(head.description)}" />`,
+    '<meta property="og:type" content="website" />',
+    '<meta property="og:site_name" content="Survival Dice-Builder" />',
+    `<meta property="og:image" content="${escapeHtml(OG_IMAGE.url)}" />`,
+    `<meta property="og:image:width" content="${OG_IMAGE.width}" />`,
+    `<meta property="og:image:height" content="${OG_IMAGE.height}" />`,
+    `<meta property="og:image:alt" content="${escapeHtml(OG_IMAGE.alt)}" />`,
+    '<meta name="twitter:card" content="summary_large_image" />',
     ...(head.url
       ? [
           `<meta property="og:url" content="${escapeHtml(head.url)}" />`,

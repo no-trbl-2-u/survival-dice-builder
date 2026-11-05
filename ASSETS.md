@@ -72,6 +72,8 @@ The named phase downloads the file and flips the row to `in use`.
 | Alfa Slab One | display | SIL OFL 1.1 | https://github.com/google/fonts/blob/main/ofl/alfaslabone/OFL.txt |
 | Bitter | body and numbers | SIL OFL 1.1 | https://github.com/google/fonts/blob/main/ofl/bitter/OFL.txt |
 
+Both fonts are also drawn into the link-preview image `apps/web/public/og-card.png` (rendered by `scripts/og-card.mjs`; original artwork, no third-party files). SIL OFL 1.1 allows text set in the fonts in images.
+
 ## Libraries (npm dependencies; licenses checked, adopted by the phase that uses them)
 
 | Library | Use | License | License URL | Status |
