@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-05 (pass 258, cloud tick)
+
+Pass 257 named the site in WebSite structured data on the home page (fcf9708). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 10 commits ago, under 24 hours) and so is the expand gate (pass 26 ran 11 commits ago, about 25 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass requested the files a browser asks for when a visitor installs a site: `/manifest.webmanifest` returns the 404 page and the shell links no manifest, so Android's "Add to Home screen" and desktop Chrome's "Install" give a page shortcut with a guessed name and icon, and the game cannot open in its own window. A one-screen hot-seat game is likely played on a tablet on the table. Scored 3.2 (seo: impact 4, every install on Android and desktop; ease 8). `apps/web/public/manifest.webmanifest` names the site, the home description, start URL /, standalone display, and the light theme colours; `scripts/touch-icon.mjs` now also renders opaque 192 and 512 icons and a maskable 512 (the die in the middle 60%), and the shell links the manifest. A unit test ties the name, description and colours to the shell, routes and tokens and checks each icon's size and opacity; the smoke e2e test checks the served link, manifest and icons. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] Every page: no web app manifest, so Android installs get a guessed name and icon (seo)
+- category: seo
+- impact: 4
+- ease: 8
+- next: add `apps/web/public/manifest.webmanifest` with 192, 512 and maskable 512 icons from `scripts/touch-icon.mjs`, link it from the shell, with tests
+- issue: #309
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-05 (pass 257, cloud tick)
 
 Pass 256 named both colour schemes and a theme-color for each (1d74198). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 9 commits ago, about 23 hours) and so is the expand gate (pass 26 ran 10 commits ago, about 24 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass looked for structured data on the served pages and found none: search engines read the site name for a result from a schema.org `WebSite` object on the home page, and without one they guess from the title or the domain. Scored 3.2 (seo: impact 4, every search result for the site; ease 8). `headTags` now writes a `WebSite` JSON-LD script (name, url, the home description) on the home page only, with `<` escaped so no text can close the script. A unit test checks the object, that no other page or the not-found page carries it, and the escaping; the smoke e2e test checks the served home page and /play. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.

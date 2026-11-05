@@ -84,6 +84,20 @@ test('the shell links a favicon and a home-screen icon, and both are served as i
   expect(touch.headers()['content-type']).toContain('image/png')
 })
 
+test('the shell links a web app manifest, and its icons are served', async ({ request }) => {
+  const html = await (await request.get('/play')).text()
+  expect(html).toContain('<link rel="manifest" href="/manifest.webmanifest" />')
+  const res = await request.get('/manifest.webmanifest')
+  expect(res.ok()).toBe(true)
+  const manifest = (await res.json()) as { name: string; icons: { src: string }[] }
+  expect(manifest.name).toBe('Survival Dice-Builder')
+  for (const icon of manifest.icons) {
+    const served = await request.get(icon.src)
+    expect(served.ok()).toBe(true)
+    expect(served.headers()['content-type']).toContain('image/png')
+  }
+})
+
 test('every served page names both colour schemes and a browser bar colour for each', async ({
   request,
 }) => {
