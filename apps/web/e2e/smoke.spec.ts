@@ -53,7 +53,7 @@ test('the served /play shell carries its own link-preview tags for apps that run
     '<meta property="og:url" content="https://survival-dice-builder.pages.dev/play" />',
   )
   expect(html).toMatch(/property="og:description"\s+content="Start a run/)
-  expect(html).toContain('<meta name="twitter:card" content="summary" />')
+  expect(html).toContain('<meta name="twitter:card" content="summary_large_image" />')
 })
 
 test('with JavaScript off the shell says what the game is and that it needs JavaScript', async ({

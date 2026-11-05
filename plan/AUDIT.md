@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-05 (pass 252, cloud tick)
+
+Pass 251 named a link-preview image on every page (566d865). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 4 commits ago, under 4 hours) and so is the expand gate (pass 26 ran 6 commits ago, about 17 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass read the served head of / on the live site: `apps/web/index.html` still carried its own `og:type`, `og:site_name` and `twitter:card` ("summary"), and pass 251's `headTags` adds all three again, so every page names `twitter:card` twice with different values. A preview service that reads the first one shows a small card, not the new image. Scored 4.9 (seo: impact 7, every page and the point of pass 251; ease 7). The three static tags are dropped, so `headTags` alone names them; the /play shell test now expects `summary_large_image`, and the served-head e2e test fails when any route names a meta tag twice. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [4.9] Every page: twitter:card named twice, "summary" before "summary_large_image" (seo)
+- category: seo
+- impact: 7
+- ease: 7
+- next: drop the static `og:type`, `og:site_name` and `twitter:card` from `apps/web/index.html`; e2e bars a repeated meta tag
+- issue: #303
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-05 (pass 251, cloud tick)
 
 Pass 250 made decided row 49 say what Spec v2 plays (4fca278). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 3 commits ago, under 3 hours) and so is the expand gate (pass 26 ran 4 commits ago, about 15 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass checked the served head of every live route: titles, descriptions, canonicals, the sitemap and the 404 are right, but no page names a link-preview image, so a shared link shows no card. Scored 3.5 (seo: impact 5, every page; ease 7). `scripts/og-card.mjs` renders one 1200x630 card in the light palette and the site fonts to `apps/web/public/og-card.png`; `headTags` names it (og:image with size and alt, og:type, og:site_name, twitter:card); a unit test checks the PNG size against the tags and an e2e test checks every served page names it and the server returns it. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.

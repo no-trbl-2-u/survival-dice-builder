@@ -35,6 +35,8 @@ for (const [path, title, copy] of ROUTES) {
     expect(attr(html, /<meta property="og:description" content="([^"]*)"/)).toBe(description)
     expect(html).not.toContain('name="robots"')
     expect(attr(html, /<meta property="og:image" content="([^"]*)"/)).toBe(`${SITE}/og-card.png`)
+    const named = [...html.matchAll(/<meta (?:name|property)="([^"]+)"/g)].map((m) => m[1])
+    expect(named.filter((key, i) => named.indexOf(key) !== i)).toEqual([])
     if (copy) {
       const heading = title.replace(/ - Survival Dice-Builder$/, '')
       expect(html).toContain(`<h1>${heading}</h1>`)
