@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-05 (pass 255, cloud tick)
+
+Pass 254 made each /config settings section a heading (80e495d). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 7 commits ago, about 19 hours) and so is the expand gate (pass 26 ran 8 commits ago, about 19 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass requested the icon files a browser or phone asks for on its own: the shell links only the SVG favicon, and `/apple-touch-icon.png` returns the 404 page, so an iOS home-screen bookmark shows a page screenshot, not the game's icon. Scored 3.2 (seo: impact 4, every phone bookmark and link share on iOS; ease 8). `scripts/touch-icon.mjs` renders the favicon on the light background to an opaque 180x180 `apps/web/public/apple-touch-icon.png`; the shell links it; a unit test checks the link, the size and that the PNG has no alpha, and the smoke e2e test checks the served file. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] Every page: no apple-touch-icon, so iOS home-screen bookmarks show a screenshot (seo)
+- category: seo
+- impact: 4
+- ease: 8
+- next: render the favicon to an opaque 180x180 `apps/web/public/apple-touch-icon.png` and link it from the shell, with tests
+- issue: #306
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-05 (pass 254, cloud tick)
 
 Pass 253 gave the hashed `/assets/` files a one-year immutable cache (e39aed3). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 6 commits ago, about 18 hours) and so is the expand gate (pass 26 ran 7 commits ago, about 19 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass re-read the live headers, fonts, chunks, titles, sitemap and 404, which are all right, and the heading outline of every prerendered page. /config is one long form of 18 settings sections, each a fieldset with a legend, but its only heading is the h1, so a screen reader user cannot jump between sections by heading. Scored 3.2 (a11y: impact 4, the longest page; ease 8). Each section legend now holds an h2 (the nested "Enemy die" group an h3), styled like the plaque; the root "Rules" group stays plain text. A unit test checks the heading levels and an e2e test checks the served headings and that each group keeps its name. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.

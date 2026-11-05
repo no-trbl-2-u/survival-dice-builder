@@ -69,7 +69,7 @@ test('with JavaScript off the shell says what the game is and that it needs Java
   expect(noscript).toContain('Turn JavaScript on to play.')
 })
 
-test('the shell links a favicon, and the favicon is served as an SVG image', async ({
+test('the shell links a favicon and a home-screen icon, and both are served as images', async ({
   request,
 }) => {
   const html = await (await request.get('/tiles')).text()
@@ -78,6 +78,10 @@ test('the shell links a favicon, and the favicon is served as an SVG image', asy
   expect(icon.ok()).toBe(true)
   expect(icon.headers()['content-type']).toContain('image/svg+xml')
   expect(await icon.text()).toContain('<polygon')
+  expect(html).toContain('<link rel="apple-touch-icon" href="/apple-touch-icon.png" />')
+  const touch = await request.get('/apple-touch-icon.png')
+  expect(touch.ok()).toBe(true)
+  expect(touch.headers()['content-type']).toContain('image/png')
 })
 
 test('the sitemap is served as XML, lists every nav page, and robots.txt names it', async ({
