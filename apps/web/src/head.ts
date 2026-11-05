@@ -34,13 +34,31 @@ export function headFor(route: Route): Head {
   }
 }
 
+/**
+ * The home page's schema.org `WebSite` object, which search engines read for the site name in
+ * a result. Only the home page names it: that is where they look for it.
+ *
+ * @param head - the home page's head.
+ */
+export function websiteJsonLd(head: Head): string {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Survival Dice-Builder',
+    url: `${SITE_URL}/`,
+    description: head.description,
+  }
+  // `<` written as \u003c, so no text can close the script element early.
+  return JSON.stringify(data).replace(/</g, '\\u003c')
+}
+
 const escapeHtml = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
 /**
  * The per-page tags for the `<!--app-head-->` marker: description, link preview (with the
- * shared preview image), and the
- * canonical link (or robots noindex on the not-found page).
+ * shared preview image), the canonical link (or robots noindex on the not-found page), and on
+ * the home page its `WebSite` structured data.
  *
  * @param head - the page's head.
  */
@@ -63,6 +81,9 @@ export function headTags(head: Head): string {
         ]
       : []),
     ...(head.noindex ? ['<meta name="robots" content="noindex" />'] : []),
+    ...(head.url === `${SITE_URL}/`
+      ? [`<script type="application/ld+json">${websiteJsonLd(head)}</script>`]
+      : []),
   ]
   return tags.join('\n    ')
 }

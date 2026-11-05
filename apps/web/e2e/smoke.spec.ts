@@ -99,6 +99,19 @@ test('every served page names both colour schemes and a browser bar colour for e
   }
 })
 
+test('the served home page names the site in WebSite structured data; other pages do not', async ({
+  request,
+}) => {
+  const html = await (await request.get('/')).text()
+  const json = /<script type="application\/ld\+json">(.*?)<\/script>/.exec(html)?.[1]
+  expect(JSON.parse(json ?? 'null')).toMatchObject({
+    '@type': 'WebSite',
+    name: 'Survival Dice-Builder',
+    url: 'https://survival-dice-builder.pages.dev/',
+  })
+  expect(await (await request.get('/play')).text()).not.toContain('ld+json')
+})
+
 test('the sitemap is served as XML, lists every nav page, and robots.txt names it', async ({
   page,
   request,

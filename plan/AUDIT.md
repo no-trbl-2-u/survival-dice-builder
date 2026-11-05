@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-05 (pass 257, cloud tick)
+
+Pass 256 named both colour schemes and a theme-color for each (1d74198). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 9 commits ago, about 23 hours) and so is the expand gate (pass 26 ran 10 commits ago, about 24 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass looked for structured data on the served pages and found none: search engines read the site name for a result from a schema.org `WebSite` object on the home page, and without one they guess from the title or the domain. Scored 3.2 (seo: impact 4, every search result for the site; ease 8). `headTags` now writes a `WebSite` JSON-LD script (name, url, the home description) on the home page only, with `<` escaped so no text can close the script. A unit test checks the object, that no other page or the not-found page carries it, and the escaping; the smoke e2e test checks the served home page and /play. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] Home page: no WebSite structured data, so search results guess the site name (seo)
+- category: seo
+- impact: 4
+- ease: 8
+- next: write a `WebSite` JSON-LD script into the home page head in `apps/web/src/head.ts`, with tests
+- issue: #308
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-05 (pass 256, cloud tick)
 
 Pass 255 linked an opaque 180x180 home-screen icon (1276380). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 8 commits ago, about 22 hours) and so is the expand gate (pass 26 ran 9 commits ago, about 22 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass read the served head again: the site follows `prefers-color-scheme`, but only its stylesheet says so. The shell names no `color-scheme`, so a dark-mode visitor's browser paints a white canvas until the CSS arrives, and no `theme-color`, so phone browsers leave their toolbar untinted. Scored 3.6 (seo: impact 4, every dark-mode visit and every phone; ease 9). The shell now names `color-scheme: light dark` and one `theme-color` per scheme, the `--wood-table` colour the page paints around the board. A unit test ties both colours to tokens.css; the served-head e2e test allows `theme-color` twice (one per scheme) and still bars any other repeated meta tag; the smoke e2e test checks served pages carry all three tags. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.

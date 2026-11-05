@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { headFor, headTags, OG_IMAGE, pageHtml, SITE_URL } from './head.ts'
+import { headFor, headTags, OG_IMAGE, pageHtml, SITE_URL, websiteJsonLd } from './head.ts'
 import { notFound, routes } from './routes.tsx'
 
 const TEMPLATE = `<html><head><title>Survival Dice-Builder</title>
@@ -53,6 +53,33 @@ describe('headTags', () => {
     expect(png.subarray(1, 4).toString('ascii')).toBe('PNG')
     expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([OG_IMAGE.width, OG_IMAGE.height])
     expect(OG_IMAGE.url).toBe(`${SITE_URL}/og-card.png`)
+  })
+
+  it('names the WebSite structured data on the home page only', () => {
+    const home = routes.find((r) => r.path === '/')!
+    const tags = headTags(headFor(home))
+    const json = /<script type="application\/ld\+json">(.*)<\/script>/.exec(tags)?.[1]
+    expect(JSON.parse(json!)).toEqual({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Survival Dice-Builder',
+      url: `${SITE_URL}/`,
+      description: home.description,
+    })
+    for (const route of [...routes.filter((r) => r !== home), notFound]) {
+      expect(headTags(headFor(route))).not.toContain('ld+json')
+    }
+  })
+
+  it('keeps structured data text from closing its script element', () => {
+    const json = websiteJsonLd({
+      title: 't',
+      description: '</script><x>',
+      url: null,
+      noindex: false,
+    })
+    expect(json).not.toContain('<')
+    expect(JSON.parse(json).description).toBe('</script><x>')
   })
 
   it('escapes text', () => {
