@@ -1,13 +1,49 @@
 # Critique log
 
-> Last pass: 2026-11-04 at commit 3f71c3b
-> Pass count: 38
+> Last pass: 2026-11-05 at commit 0bc9e92
+> Pass count: 39
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [LOW] / (shell) — the iOS home-screen label is not set, so it falls back to the page title
+- pass: 39 (commit 0bc9e92)
+- viewport: mobile
+- category: seo
+- observation: The manifest gives a 12-character short_name for the home-screen label, but the shell has no apple-mobile-web-app-title. iOS uses the page title instead, and the title changes per page ("Play - Survival Dice-Builder"), so the label depends on the page the visitor adds.
+- evidence: Live /manifest.webmanifest: "short_name": "Dice-Builder". `apps/web/index.html` has no `apple-mobile-web-app-title` meta.
+- suggested fix: Add `<meta name="apple-mobile-web-app-title">` with the manifest short_name, and a test that the two match.
+- source: web-fetch
+
+### [LOW] / — the pitch and the description give the tagline two ways
+- pass: 39 (commit 0bc9e92)
+- viewport: desktop
+- category: voice
+- observation: The visible pitch on / leaves out "together". The meta description, og:description, JSON-LD description, manifest description and og-card image all say "Defend the base together".
+- evidence: Page: "Defend the base, build your dice, survive one more round." (`apps/web/src/home/HomePage.tsx:34`). Head: "Defend the base together, build your dice, survive one more round: a co-op survival dice-builder." (`apps/web/src/routes.tsx:44`).
+- suggested fix: Use one wording in the pitch and the descriptions, from one constant (the og-card image text fixes the "together" form unless it is redrawn).
+- source: web-fetch
+
+### [LOW] /play — the description says "at one screen" and "together" for a page that also starts solo runs
+- pass: 39 (commit 0bc9e92)
+- viewport: desktop
+- category: voice
+- observation: The /play meta description says "at one screen"; the home page says "on one screen". "Together" does not fit a solo run, which /play allows.
+- evidence: "Start a run in the browser: defend the base together at one screen, build your dice and last as many rounds as you can." (`apps/web/src/routes.tsx:53`). Home: "for 1 to 4 players on one screen" (`HomePage.tsx:35`).
+- suggested fix: "Start a run in the browser: 1 to 4 players on one screen defend the base, build their dice and last as many rounds as they can."
+- source: web-fetch
+
+### [LOW] /sitemap.xml — the sitemap lists /debug, a design-tool shell with no content without JavaScript
+- pass: 39 (commit 0bc9e92)
+- viewport: desktop
+- category: seo
+- observation: The sitemap asks crawlers to index /debug. The nav groups it under "Design tools", and it is served as an empty shell, so a search result would land on a page with only a title.
+- evidence: Sitemap: "<loc>https://survival-dice-builder.pages.dev/debug</loc>". `apps/web/src/routes.tsx` puts /debug in group 'tool' with served: 'shell'.
+- suggested fix: Drop shell-served tool routes from sitemap.xml (or mark them noindex), with a test that the sitemap lists only prerendered routes.
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
