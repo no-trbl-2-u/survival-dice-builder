@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-05 (pass 256, cloud tick)
+
+Pass 255 linked an opaque 180x180 home-screen icon (1276380). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 8 commits ago, about 22 hours) and so is the expand gate (pass 26 ran 9 commits ago, about 22 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass read the served head again: the site follows `prefers-color-scheme`, but only its stylesheet says so. The shell names no `color-scheme`, so a dark-mode visitor's browser paints a white canvas until the CSS arrives, and no `theme-color`, so phone browsers leave their toolbar untinted. Scored 3.6 (seo: impact 4, every dark-mode visit and every phone; ease 9). The shell now names `color-scheme: light dark` and one `theme-color` per scheme, the `--wood-table` colour the page paints around the board. A unit test ties both colours to tokens.css; the served-head e2e test allows `theme-color` twice (one per scheme) and still bars any other repeated meta tag; the smoke e2e test checks served pages carry all three tags. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] Every page: no color-scheme or theme-color meta, so dark mode flashes white and phone toolbars stay untinted (seo)
+- category: seo
+- impact: 4
+- ease: 9
+- next: name `color-scheme` and a `theme-color` per scheme (the `--wood-table` token) in `apps/web/index.html`, with tests
+- issue: #307
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-05 (pass 255, cloud tick)
 
 Pass 254 made each /config settings section a heading (80e495d). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 7 commits ago, about 19 hours) and so is the expand gate (pass 26 ran 8 commits ago, about 19 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass requested the icon files a browser or phone asks for on its own: the shell links only the SVG favicon, and `/apple-touch-icon.png` returns the 404 page, so an iOS home-screen bookmark shows a page screenshot, not the game's icon. Scored 3.2 (seo: impact 4, every phone bookmark and link share on iOS; ease 8). `scripts/touch-icon.mjs` renders the favicon on the light background to an opaque 180x180 `apps/web/public/apple-touch-icon.png`; the shell links it; a unit test checks the link, the size and that the PNG has no alpha, and the smoke e2e test checks the served file. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.

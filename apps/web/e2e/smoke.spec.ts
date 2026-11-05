@@ -84,6 +84,21 @@ test('the shell links a favicon and a home-screen icon, and both are served as i
   expect(touch.headers()['content-type']).toContain('image/png')
 })
 
+test('every served page names both colour schemes and a browser bar colour for each', async ({
+  request,
+}) => {
+  for (const route of ['/', '/play', '/decisions']) {
+    const html = await (await request.get(route)).text()
+    expect(html).toContain('<meta name="color-scheme" content="light dark" />')
+    expect(html).toMatch(
+      /<meta name="theme-color" content="#[0-9a-f]{6}" media="\(prefers-color-scheme: light\)" \/>/,
+    )
+    expect(html).toMatch(
+      /<meta name="theme-color" content="#[0-9a-f]{6}" media="\(prefers-color-scheme: dark\)" \/>/,
+    )
+  }
+})
+
 test('the sitemap is served as XML, lists every nav page, and robots.txt names it', async ({
   page,
   request,

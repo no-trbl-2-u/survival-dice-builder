@@ -36,7 +36,10 @@ for (const [path, title, copy] of ROUTES) {
     expect(html).not.toContain('name="robots"')
     expect(attr(html, /<meta property="og:image" content="([^"]*)"/)).toBe(`${SITE}/og-card.png`)
     const named = [...html.matchAll(/<meta (?:name|property)="([^"]+)"/g)].map((m) => m[1])
-    expect(named.filter((key, i) => named.indexOf(key) !== i)).toEqual([])
+    // theme-color is named once per colour scheme (each with its own media query).
+    const once = named.filter((key) => key !== 'theme-color')
+    expect(once.filter((key, i) => once.indexOf(key) !== i)).toEqual([])
+    expect(named.filter((key) => key === 'theme-color')).toHaveLength(2)
     if (copy) {
       const heading = title.replace(/ - Survival Dice-Builder$/, '')
       expect(html).toContain(`<h1>${heading}</h1>`)
