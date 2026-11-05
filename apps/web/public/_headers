@@ -1,0 +1,7 @@
+# Cloudflare Pages response headers (copied to the build root).
+# Files under /assets/ are named by a hash of their content, so a name never
+# points at changed content: browsers may keep them for a year without asking.
+# Pages, og-card.png, the favicon, robots.txt and sitemap.xml keep the default
+# (max-age=0, must-revalidate), so a deploy shows up on the next visit.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-05 (pass 253, cloud tick)
+
+Pass 252 named `twitter:card` once on every page (5c352a8). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 5 commits ago, under 5 hours) and so is the expand gate (pass 26 ran 7 commits ago, about 17 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass read the live response headers: Cloudflare Pages serves the content-hashed files under `/assets/` (page chunks, the three.js dice chunk, the CSS, the fonts) with `max-age=0, must-revalidate`, so every repeat visit asks again for each one. Scored 4.5 (perf: impact 5, every repeat visit; ease 9). `apps/web/public/_headers` gives `/assets/*` a one-year immutable cache; pages and unhashed files keep the default so a deploy shows at once. A unit test reads the file and bars a long cache on any other path. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [4.5] Every page: hashed /assets files served with max-age=0, so repeat visits refetch (perf)
+- category: perf
+- impact: 5
+- ease: 9
+- next: add `apps/web/public/_headers` with a one-year immutable cache on `/assets/*`, with a test
+- issue: #304
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-05 (pass 252, cloud tick)
 
 Pass 251 named a link-preview image on every page (566d865). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 38 ran 4 commits ago, under 4 hours) and so is the expand gate (pass 26 ran 6 commits ago, about 17 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass read the served head of / on the live site: `apps/web/index.html` still carried its own `og:type`, `og:site_name` and `twitter:card` ("summary"), and pass 251's `headTags` adds all three again, so every page names `twitter:card` twice with different values. A preview service that reads the first one shows a small card, not the new image. Scored 4.9 (seo: impact 7, every page and the point of pass 251; ease 7). The three static tags are dropped, so `headTags` alone names them; the /play shell test now expects `summary_large_image`, and the served-head e2e test fails when any route names a meta tag twice. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
