@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the description says "at one screen" and "together" for a page that also starts solo runs
-- pass: 39 (commit 0bc9e92)
-- viewport: desktop
-- category: voice
-- observation: The /play meta description says "at one screen"; the home page says "on one screen". "Together" does not fit a solo run, which /play allows.
-- evidence: "Start a run in the browser: defend the base together at one screen, build your dice and last as many rounds as you can." (`apps/web/src/routes.tsx:53`). Home: "for 1 to 4 players on one screen" (`HomePage.tsx:35`).
-- suggested fix: "Start a run in the browser: 1 to 4 players on one screen defend the base, build their dice and last as many rounds as they can."
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -64,6 +55,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the description says "at one screen" and "together" for a page that also starts solo runs
+- pass: 39 (commit 0bc9e92)
+- viewport: desktop
+- category: voice
+- observation: The /play meta description says "at one screen"; the home page says "on one screen". "Together" does not fit a solo run, which /play allows.
+- evidence: "Start a run in the browser: defend the base together at one screen, build your dice and last as many rounds as you can." (`apps/web/src/routes.tsx:53`). Home: "for 1 to 4 players on one screen" (`HomePage.tsx:35`).
+- suggested fix: "Start a run in the browser: 1 to 4 players on one screen defend the base, build their dice and last as many rounds as they can."
+- source: web-fetch
+- issue: #313
+- fixed: (this commit) — the description reads "Start a run in the browser: 1 to 4 players on one screen defend the base, build their dice and last as many rounds as they can.", the player count from `playersText` as on the home page; a routes test bars "together" and "at one screen"
 
 ### [x] [LOW] / — the pitch and the description give the tagline two ways
 - pass: 39 (commit 0bc9e92)

@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-06 (pass 262, cloud tick)
+
+Pass 261 gave the / pitch the one tagline wording (0424f8d). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 39 ran 4 commits ago, about 15 hours) and so is the expand gate (pass 26 ran 16 commits ago, about 40 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The top row is the pass 39 /play description row: it says "defend the base together at one screen", while the home page says "on one screen" and /play also starts solo runs. Scored 2.4 (voice: impact 3, ease 8). It ships ahead of a hand-off to /expand, as earlier sub-3.0 critique rows did, because the expand gate is closed. The description now reads "Start a run in the browser: 1 to 4 players on one screen defend the base, build their dice and last as many rounds as they can.", with the player count from `playersText`, as the home page has it; a routes test ties the two and bars "together" and "at one screen". Next in line: the /oversight-owned /decisions rows; with no other actionable row, the next tick with the expand gate open hands to /expand.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /play description says "at one screen" and "together" for a page that starts solo runs (critique LOW, pass 39)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: reword the /play description to the suggested fix, player count from `playersText`
+- issue: #313
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-06 (pass 261, cloud tick)
 
 Pass 260 left /debug out of the sitemap (a245cec). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 39 ran 3 commits ago, about 14 hours) and so is the expand gate (pass 26 ran 15 commits ago, about 40 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The top row is the pass 39 tagline row: the / pitch says "Defend the base, build your dice", while the home description, the manifest, the preview-image alt and the og-card image say "Defend the base together". Scored 2.7 (voice: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 critique rows did, because the expand gate is closed. `TAGLINE` in `apps/web/src/router.tsx` is now the one wording: the pitch, the home description (which the manifest test already ties to the manifest) and the preview-image alt read it. A HomePage test ties all four to it and to the og-card script's line, and the smoke e2e test checks the served pitch. Next in line: the /play description; then the /oversight-owned /decisions rows.

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { defaultContent, playersText } from '@survival/content'
 import { FILES } from './entry-server.tsx'
 import { NAV, notFound, routeFor, routes } from './routes.tsx'
 
@@ -17,6 +18,12 @@ describe('routes', () => {
 
   it('gives every route a one-sentence description', () => {
     for (const r of [...routes, notFound]) expect(r.description).toMatch(/^[A-Z].*\.$/)
+  })
+
+  it('describes /play with the player count the home page gives, solo runs included', () => {
+    const play = routeFor('/play').description
+    expect(play).toContain(`${playersText(defaultContent.config)} on one screen`)
+    expect(play).not.toMatch(/together|at one screen/)
   })
 
   it('finds a route by path and the not-found page for any other path', () => {

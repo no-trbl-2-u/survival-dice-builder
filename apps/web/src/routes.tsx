@@ -1,3 +1,4 @@
+import { defaultContent, playersText } from '@survival/content'
 import { HomePage } from './home/HomePage.tsx'
 import { lazyPage } from './lazyPage.tsx'
 import { NotFoundPage } from './notfound/NotFoundPage.tsx'
@@ -48,8 +49,7 @@ export const routes: readonly Route[] = [
   {
     path: '/play',
     title: 'Play',
-    description:
-      'Start a run in the browser: defend the base together at one screen, build your dice and last as many rounds as you can.',
+    description: `Start a run in the browser: ${playersText(defaultContent.config)} on one screen defend the base, build their dice and last as many rounds as they can.`,
     served: 'shell',
     load: play.load,
     render: () => <play.Page />,
