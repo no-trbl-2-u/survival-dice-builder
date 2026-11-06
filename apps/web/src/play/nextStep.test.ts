@@ -73,6 +73,26 @@ describe('nextStep', () => {
     expect(bannerActions(legal).map((a) => a.type)).toContain('buyUpgrade')
   })
 
+  it('a Build on the base with no upgrade in its reach says so, not "not enough materials"', () => {
+    const s = createGame(config, 3)
+    const placed = applyAction(s, legalActions(s)[0]!).state
+    const building = (materials: number, upgrades: string[]) =>
+      ({
+        ...placed,
+        upgrades,
+        active: { kind: 'build', buildsLeft: 1, costReduction: 0, level: 1 },
+        players: placed.players.map((p) => ({ ...p, materials })),
+      }) as const
+    const bought = building(50, ['shop-1', 'training-1'])
+    expect(nextStep(bought, legalActions(bought)).step).toBe(
+      'Build: no upgrade left here that this Build card can buy, so stop building',
+    )
+    const poor = building(0, [])
+    expect(nextStep(poor, legalActions(poor)).step).toBe(
+      'Build: not enough materials for anything here, so stop building',
+    )
+  })
+
   it('the Build banner names the unit of the builds left, singular for 1', () => {
     const s = createGame(config, 3)
     const placed = applyAction(s, legalActions(s)[0]!).state

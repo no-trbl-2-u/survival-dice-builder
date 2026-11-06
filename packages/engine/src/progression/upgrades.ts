@@ -25,6 +25,19 @@ export function buildReaches(state: GameState, level: number, required: number):
 }
 
 /**
+ * The next tier of each track a Build of `level` may buy, whatever its cost: empty when every
+ * tier in reach is bought, so the only thing the Build can do on the base is stop.
+ *
+ * @rule Spec v2 11.4, 12.1 (ruling 25)
+ */
+export function upgradesInReach(state: GameState, level: number): UpgradeDef[] {
+  return (['shop', 'training'] as const).flatMap((track): UpgradeDef[] => {
+    const def = nextTier(state, track)
+    return def && buildReaches(state, level, def.tier) ? [def] : []
+  })
+}
+
+/**
  * The upgrades a Build on the base can buy: the next tier of each track (11.4) whose tier is
  * at most the Build's level (Build I buys tier I), paid in materials, less the card's cost
  * reduction (Mason, Engineer; row 42), never below 0.
@@ -37,9 +50,7 @@ export function legalUpgrades(
   level: number,
 ): UpgradeOption[] {
   const materials = currentPlayer(state).materials
-  return (['shop', 'training'] as const).flatMap((track): UpgradeOption[] => {
-    const def = nextTier(state, track)
-    if (!def || !buildReaches(state, level, def.tier)) return []
+  return upgradesInReach(state, level).flatMap((def): UpgradeOption[] => {
     const cost = Math.max(0, def.cost - costReduction)
     return cost <= materials ? [{ upgrade: def.id, cost }] : []
   })

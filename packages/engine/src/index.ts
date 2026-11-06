@@ -19,7 +19,8 @@ export {
 export { canFire } from './skills/canFire.ts'
 export { enemiesInRange } from './combat/resolve.ts'
 export { stepsOutOfReach } from './movement/move.ts'
-export { legalUpgrades, type UpgradeOption } from './progression/upgrades.ts'
+export { legalUpgrades, upgradesInReach, type UpgradeOption } from './progression/upgrades.ts'
+export { onBase } from './progression/shop.ts'
 export { ENGAGEMENT_END, cancelledEnemyDice } from './combat/engage.ts'
 export type {
   Assignment,

@@ -1,5 +1,12 @@
 import { cardStepText } from '@survival/content'
-import { enemiesInRange, stepsOutOfReach, type Action, type GameState } from '@survival/engine'
+import {
+  enemiesInRange,
+  onBase,
+  stepsOutOfReach,
+  upgradesInReach,
+  type Action,
+  type GameState,
+} from '@survival/engine'
 import { defenseName } from '../map/places.ts'
 import { engageInstruction, enemyLabel } from './engageView.ts'
 import { ofType } from './targets.ts'
@@ -60,9 +67,14 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
   }
   if (state.active?.kind === 'build') {
     if (has('buyUpgrade')) return step('Prepare', 'Build: buy a base upgrade, or stop building')
+    const { buildsLeft, level } = state.active
     if (!has('build'))
-      return step('Prepare', 'Build: not enough materials for anything here, so stop building')
-    const { buildsLeft } = state.active
+      return step(
+        'Prepare',
+        onBase(state) && upgradesInReach(state, level).length === 0
+          ? 'Build: no upgrade left here that this Build card can buy, so stop building'
+          : 'Build: not enough materials for anything here, so stop building',
+      )
     return step(
       'Prepare',
       `Build: click a highlighted hex (${buildsLeft} ${buildsLeft === 1 ? 'build' : 'builds'} left), or stop building`,

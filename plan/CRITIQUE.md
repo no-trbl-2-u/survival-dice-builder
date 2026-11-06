@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — the Build banner says "not enough materials" when the only upgrades left are out of reach for a Build card
-- pass: 40 (commit 0094d97)
-- viewport: desktop
-- category: comprehension
-- observation: On the Base tile, once Shop I and Training I are bought, no upgrade is legal for a Build card, and the banner says "not enough materials for anything here" however many materials the player has. The Base panel below says the next tiers are out of reach.
-- evidence: `apps/web/src/play/nextStep.ts:63-64` shows that line whenever no `build` or `buyUpgrade` action is legal; on the base, `legalActions.ts:102-109` offers only `stopBuilding` plus `legalUpgrades`, which drops tiers the Build level does not reach (`packages/engine/src/progression/upgrades.ts:42`); `BasePanel.tsx:92` "Out of reach: Build cards can buy only Shop I and Training I."
-- suggested fix: On the Base tile with no upgrade in reach, say "Build: no upgrade here that a Build card can buy, so stop building"; keep "not enough materials" for an upgrade in reach that costs more than the player has.
-- source: web-fetch
-
 ### [LOW] /config — the "Skills you do not keep" help does not start each choice with its list label
 - pass: 40 (commit 0094d97)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — the Build banner says "not enough materials" when the only upgrades left are out of reach for a Build card
+- pass: 40 (commit 0094d97)
+- viewport: desktop
+- category: comprehension
+- observation: On the Base tile, once Shop I and Training I are bought, no upgrade is legal for a Build card, and the banner says "not enough materials for anything here" however many materials the player has. The Base panel below says the next tiers are out of reach.
+- evidence: `apps/web/src/play/nextStep.ts:63-64` shows that line whenever no `build` or `buyUpgrade` action is legal; on the base, `legalActions.ts:102-109` offers only `stopBuilding` plus `legalUpgrades`, which drops tiers the Build level does not reach (`packages/engine/src/progression/upgrades.ts:42`); `BasePanel.tsx:92` "Out of reach: Build cards can buy only Shop I and Training I."
+- suggested fix: On the Base tile with no upgrade in reach, say "Build: no upgrade here that a Build card can buy, so stop building"; keep "not enough materials" for an upgrade in reach that costs more than the player has.
+- source: web-fetch
+- issue: #320
+- fixed: (this commit) — on the Base tile with no next tier in reach of the Build card (new engine `upgradesInReach`), the banner says "Build: no upgrade left here that this Build card can buy, so stop building"; "not enough materials" stays for a tier in reach the player cannot pay; nextStep and engine tests pin both
 
 ### [x] [MED] /play — Shop offers and the Return a starter card dialog show a card's Exchanges Combat half, not its default Combat options
 - pass: 40 (commit 0094d97)

@@ -1,7 +1,13 @@
 import { defaultContent, milestoneIds, type GameConfig } from '@survival/content'
 import { describe, expect, it } from 'vitest'
 import { damageEnemy } from '../src/combat/resolve.ts'
-import { applyAction, createGame, legalActions, type GameState } from '../src/index.ts'
+import {
+  applyAction,
+  createGame,
+  legalActions,
+  upgradesInReach,
+  type GameState,
+} from '../src/index.ts'
 import { advance } from '../src/phases/advance.ts'
 import { draftDue, startDraft } from '../src/progression/draft.ts'
 import { checkMilestones } from '../src/progression/milestones.ts'
@@ -125,6 +131,15 @@ describe('base upgrades (11.1-11.4)', () => {
       active: { kind: 'build' as const, buildsLeft: 1, costReduction: 0, level: 2 },
     }
     expect(offered(level2)).toEqual(['shop-2', 'training-1'])
+  })
+
+  it('Spec v2 11.4 upgradesInReach names the next tiers a Build may buy, whatever they cost', () => {
+    const ids = (x: GameState, level: number) => upgradesInReach(x, level).map((u) => u.id)
+    expect(ids(building(0), 1)).toEqual(['shop-1', 'training-1'])
+    const firsts = { ...building(50), upgrades: ['shop-1', 'training-1'] }
+    expect(ids(firsts, 1)).toEqual([])
+    expect(legalActions(firsts).map((a) => a.type)).toEqual(['stopBuilding'])
+    expect(ids(firsts, 2)).toEqual(['shop-2', 'training-2'])
   })
 
   it('Table 8 row 42 Mason lowers an upgrade cost by 1', () => {
