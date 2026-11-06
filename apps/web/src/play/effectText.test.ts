@@ -1,5 +1,6 @@
 import { defaultContent } from '@survival/content'
 import { describe, expect, it } from 'vitest'
+import { combatSideText } from './CardView.tsx'
 import { cardText, enemyFaceText, skillText } from './effectText.ts'
 
 describe('effect text', () => {
@@ -24,6 +25,19 @@ describe('effect text', () => {
     for (const c of defaultContent.cards) {
       expect(cardText(c, defaultContent.config)).toMatch(/^Prepare: .+\. Combat: .+\.$/)
     }
+  })
+
+  it('prints the Combat half the run plays, as the Hand does (critique pass 40)', () => {
+    const config = defaultContent.config
+    expect(config.combat.model).toBe('engage')
+    const haul = defaultContent.cards.find((c) => c.id === 'haul')
+    expect(haul?.combat).toBeDefined()
+    if (!haul) return
+    expect(cardText(haul, config)).toContain(`Combat: ${combatSideText(haul, true)}.`)
+    expect(cardText(haul, config)).toContain('Engage')
+    const exchange = { ...config, combat: { ...config.combat, model: 'exchange' as const } }
+    expect(cardText(haul, exchange)).toContain(`Combat: ${combatSideText(haul, false)}.`)
+    expect(cardText(haul, exchange)).not.toBe(cardText(haul, config))
   })
 
   it('gives each enemy die face its damage from config', () => {

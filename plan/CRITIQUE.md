@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — Shop offers and the Return a starter card dialog show a card's Exchanges Combat half, not its default Combat options
-- pass: 40 (commit 0094d97)
-- viewport: desktop
-- category: comprehension
-- observation: Under the default Engagements Combat, the Hand shows a card's Combat options (a Haul reads "Engage / Reroll 2 dice"), but the same card as a Shop offer or in the Return a starter card dialog reads "Combat: +2 damage.", the older Exchanges bottom half the engine does not use under the default.
-- evidence: `apps/web/src/play/effectText.ts:15` `Combat: ${def.bottom.map(bottomText).join(', ')}` (used at `BasePanel.tsx:131`, `DecisionDialog.tsx:84`); the Hand uses `combatSideText(def, engage)` (`CardView.tsx:67-70`); default `combat.model: "engage"` (`packages/content/config.default.json`).
-- suggested fix: Make `cardText` use `combatSideText(def, config.combat.model === 'engage')` for the Combat half, as the Hand does; pin a Shop-offer line under the default config in a test.
-- source: web-fetch
-
 ### [MED] /play — the Build banner says "not enough materials" when the only upgrades left are out of reach for a Build card
 - pass: 40 (commit 0094d97)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — Shop offers and the Return a starter card dialog show a card's Exchanges Combat half, not its default Combat options
+- pass: 40 (commit 0094d97)
+- viewport: desktop
+- category: comprehension
+- observation: Under the default Engagements Combat, the Hand shows a card's Combat options (a Haul reads "Engage / Reroll 2 dice"), but the same card as a Shop offer or in the Return a starter card dialog reads "Combat: +2 damage.", the older Exchanges bottom half the engine does not use under the default.
+- evidence: `apps/web/src/play/effectText.ts:15` `Combat: ${def.bottom.map(bottomText).join(', ')}` (used at `BasePanel.tsx:131`, `DecisionDialog.tsx:84`); the Hand uses `combatSideText(def, engage)` (`CardView.tsx:67-70`); default `combat.model: "engage"` (`packages/content/config.default.json`).
+- suggested fix: Make `cardText` use `combatSideText(def, config.combat.model === 'engage')` for the Combat half, as the Hand does; pin a Shop-offer line under the default config in a test.
+- source: web-fetch
+- issue: #319
+- fixed: (this commit) — `cardText` prints the Combat half with `combatSideText(def, config.combat.model === 'engage')`, the Hand's words, so a Shop offer and the Return a starter card dialog read a Haul's "Engage / Reroll 2 dice" under the default; an effectText test pins both models
 
 ### [x] [LOW] /play — the description says "at one screen" and "together" for a page that also starts solo runs
 - pass: 39 (commit 0bc9e92)
