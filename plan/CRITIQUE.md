@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the pitch and the description give the tagline two ways
-- pass: 39 (commit 0bc9e92)
-- viewport: desktop
-- category: voice
-- observation: The visible pitch on / leaves out "together". The meta description, og:description, JSON-LD description, manifest description and og-card image all say "Defend the base together".
-- evidence: Page: "Defend the base, build your dice, survive one more round." (`apps/web/src/home/HomePage.tsx:34`). Head: "Defend the base together, build your dice, survive one more round: a co-op survival dice-builder." (`apps/web/src/routes.tsx:44`).
-- suggested fix: Use one wording in the pitch and the descriptions, from one constant (the og-card image text fixes the "together" form unless it is redrawn).
-- source: web-fetch
-
 ### [LOW] /play — the description says "at one screen" and "together" for a page that also starts solo runs
 - pass: 39 (commit 0bc9e92)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the pitch and the description give the tagline two ways
+- pass: 39 (commit 0bc9e92)
+- viewport: desktop
+- category: voice
+- observation: The visible pitch on / leaves out "together". The meta description, og:description, JSON-LD description, manifest description and og-card image all say "Defend the base together".
+- evidence: Page: "Defend the base, build your dice, survive one more round." (`apps/web/src/home/HomePage.tsx:34`). Head: "Defend the base together, build your dice, survive one more round: a co-op survival dice-builder." (`apps/web/src/routes.tsx:44`).
+- suggested fix: Use one wording in the pitch and the descriptions, from one constant (the og-card image text fixes the "together" form unless it is redrawn).
+- source: web-fetch
+- issue: #312
+- fixed: (this commit) — `TAGLINE` in `apps/web/src/router.tsx` is the one wording: the / pitch now says "Defend the base together", as the home description, the manifest, the preview-image alt and the og-card do; a HomePage test ties them all to it
 
 ### [x] [LOW] /sitemap.xml — the sitemap lists /debug, a design-tool shell with no content without JavaScript
 - pass: 39 (commit 0bc9e92)

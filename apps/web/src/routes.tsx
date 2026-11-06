@@ -1,7 +1,7 @@
 import { HomePage } from './home/HomePage.tsx'
 import { lazyPage } from './lazyPage.tsx'
 import { NotFoundPage } from './notfound/NotFoundPage.tsx'
-import { matchRoute, SITE_NAME, type Route } from './router.tsx'
+import { matchRoute, SITE_NAME, TAGLINE, type Route } from './router.tsx'
 
 // Every page but home and not-found is its own chunk, so the first load carries only the
 // home page; the client loads a route's chunk before it renders (see main.tsx).
@@ -40,8 +40,7 @@ export const routes: readonly Route[] = [
   {
     path: '/',
     title: SITE_NAME,
-    description:
-      'Defend the base together, build your dice, survive one more round: a co-op survival dice-builder.',
+    description: `${TAGLINE}: a co-op survival dice-builder.`,
     served: 'page',
     render: () => <HomePage />,
   },

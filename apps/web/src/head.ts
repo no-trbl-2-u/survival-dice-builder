@@ -1,4 +1,4 @@
-import { documentTitle, type Route } from './router.tsx'
+import { documentTitle, TAGLINE, type Route } from './router.tsx'
 
 /** The deployed site; canonical links and link previews name pages under it. */
 export const SITE_URL = 'https://survival-dice-builder.pages.dev'
@@ -8,7 +8,7 @@ export const OG_IMAGE = Object.freeze({
   url: `${SITE_URL}/og-card.png`,
   width: 1200,
   height: 630,
-  alt: 'Survival Dice-Builder: a die on a hex tile, with the line "Defend the base together, build your dice, survive one more round."',
+  alt: `Survival Dice-Builder: a die on a hex tile, with the line "${TAGLINE}."`,
 })
 
 /** What a page's served `<head>` says about it. */

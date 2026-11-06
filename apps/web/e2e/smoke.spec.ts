@@ -15,7 +15,7 @@ test('home renders the title and a 7-hex tile with no console errors', async ({ 
     /^Survival Dice-Builder v\d+\.\d+\.\d+ · build \S+$/,
   )
   // The page says what the game is and links straight into a run.
-  await expect(page.locator('main')).toContainText('Defend the base, build your dice')
+  await expect(page.locator('main')).toContainText('Defend the base together, build your dice')
   await page.getByRole('link', { name: 'Start a run' }).click()
   await expect(page).toHaveURL(/\/play$/)
   await expect(page.getByTestId('start-panel')).toBeVisible()

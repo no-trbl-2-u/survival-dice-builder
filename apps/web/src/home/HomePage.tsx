@@ -18,6 +18,7 @@ import {
 } from '@survival/content'
 import { rulesUrl } from '../decisions/Inline.tsx'
 import { HexTile } from '../map/HexTile.tsx'
+import { TAGLINE } from '../router.tsx'
 import styles from './HomePage.module.css'
 
 /** `/` describes the default rules: every rule phrase comes from `ruleText`. */
@@ -31,8 +32,8 @@ export function HomePage() {
     <div className={styles.home}>
       <div className={styles.text}>
         <p className={styles.pitch}>
-          Defend the base, build your dice, survive one more round. A co-op survival dice-builder
-          for {playersText(config)} on one screen: all players defend one base.
+          {TAGLINE}. A co-op survival dice-builder for {playersText(config)} on one screen: all
+          players defend one base.
         </p>
         <a className={styles.start} href="/play">
           Start a run

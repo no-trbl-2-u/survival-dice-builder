@@ -1,7 +1,12 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { rulesUrl } from '../decisions/Inline.tsx'
-import { NAV } from '../routes.tsx'
+import { headFor, OG_IMAGE } from '../head.ts'
+import { TAGLINE } from '../router.tsx'
+import { NAV, routes } from '../routes.tsx'
 import { HomePage } from './HomePage.tsx'
 
 describe('HomePage', () => {
@@ -155,5 +160,27 @@ describe('HomePage', () => {
     expect(link?.getAttribute('href')).toBe(rulesUrl)
     expect(link?.nextSibling?.textContent).toMatch(/^ \(on GitHub\)\./)
     expect(rulesUrl).toMatch(/\/blob\/main\/spec\/01-spec-v2-rules\.md$/)
+  })
+
+  it('opens with the tagline the home description, the preview image and the og-card say (critique pass 39)', () => {
+    render(<HomePage />)
+    const pitch = screen.getAllByText(/A co-op survival dice-builder/)[0]
+    expect(pitch?.textContent).toMatch(new RegExp(`^${TAGLINE}\\. A co-op`))
+    const home = routes.find((r) => r.path === '/')
+    expect(home && headFor(home).description).toBe(`${TAGLINE}: a co-op survival dice-builder.`)
+    expect(OG_IMAGE.alt).toContain(`"${TAGLINE}."`)
+    const ogCard = fs.readFileSync(
+      path.join(
+        path.dirname(fileURLToPath(import.meta.url)),
+        '..',
+        '..',
+        '..',
+        '..',
+        'scripts',
+        'og-card.mjs',
+      ),
+      'utf-8',
+    )
+    expect(ogCard).toContain(`<p>${TAGLINE}.</p>`)
   })
 })

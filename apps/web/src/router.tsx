@@ -35,6 +35,12 @@ export function matchRoute(routes: readonly Route[], pathname: string, notFound:
 export const SITE_NAME = 'Survival Dice-Builder'
 
 /**
+ * The one-line pitch, without its full stop: the home page opens with it, and the home
+ * description, the web app manifest and the link-preview image all say it the same way.
+ */
+export const TAGLINE = 'Defend the base together, build your dice, survive one more round'
+
+/**
  * The browser tab title for a route: "Tile sheet - Survival Dice-Builder", or the bare site
  * name on the home page.
  *
