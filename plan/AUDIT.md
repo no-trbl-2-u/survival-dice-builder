@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-06 (pass 265, cloud tick)
+
+Pass 264 renamed the /decisions proposal buttons to name the Play page (a109944). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 39 ran 7 commits ago, about 18 hours) and so is the expand gate (pass 26 ran 18 commits ago, about 43 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass looked again for web modules with no test: `play/damageFloats.ts` builds the damage number that floats off an enemy on the /play board after a target pick, and only the engagement e2e test sees one float. A change that dropped the defeated flag (the token that fades out with the number), placed a float at the wrong hex, or drew one for an enemy the state does not have would go unnoticed. Scored 2.7 (tests: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. A new unit test checks one float per `enemyDamaged` event at the enemy hex with its kind and amount, the defeated flag only on the enemy the same action defeats, and no float for a missing enemy or for other events. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours, and the expand gate after 20 commits or 48 hours.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /play: the board damage number has no unit test (tests)
+- category: tests
+- impact: 3
+- ease: 9
+- next: a `damageFloats` unit test for hex, kind, amount, the defeated flag, and missing enemies
+- issue: #316
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-06 (pass 264, cloud tick)
 
 Pass 263 tested that every icon name the app draws has a file (af1c087). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 39 ran 6 commits ago, about 18 hours) and so is the expand gate (pass 26 ran 18 commits ago, about 43 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass looked for page text that names a URL path where the nav names the page: each of the 6 proposals on /decisions has a button labelled "Try this on /play". The /config save message had the same problem and now says "the Play page" (#103). Scored 2.7 (voice: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. The button now reads "Try this on the Play page"; a DecisionsPage test checks that no button on the page names a path, and the e2e tests click the new label. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
