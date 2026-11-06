@@ -127,7 +127,7 @@ test('the served home page names the site in WebSite structured data; other page
   expect(await (await request.get('/play')).text()).not.toContain('ld+json')
 })
 
-test('the sitemap is served as XML, lists every nav page, and robots.txt names it', async ({
+test('the sitemap is served as XML, lists every nav page but the engine console, and robots.txt names it', async ({
   page,
   request,
 }) => {
@@ -142,7 +142,8 @@ test('the sitemap is served as XML, lists every nav page, and robots.txt names i
     .getByRole('navigation', { name: 'Main' })
     .getByRole('link')
     .evaluateAll((links) => links.map((a) => new URL((a as HTMLAnchorElement).href).pathname))
-  expect([...listed].sort()).toEqual([...nav].sort())
+  // The engine console is a shell-served design tool: no content until its script runs.
+  expect([...listed].sort()).toEqual(nav.filter((p) => p !== '/debug').sort())
   const robots = await (await request.get('/robots.txt')).text()
   expect(robots).toContain('Sitemap: https://survival-dice-builder.pages.dev/sitemap.xml')
 })

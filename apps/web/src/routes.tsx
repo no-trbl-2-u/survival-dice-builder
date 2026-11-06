@@ -101,6 +101,14 @@ export const routes: readonly Route[] = [
   },
 ]
 
+/**
+ * The paths `public/sitemap.xml` lists: every route but a shell-served design tool, which has
+ * nothing to read until its script runs, so a search result would land on an empty page.
+ */
+export const SITEMAP_PATHS: readonly string[] = routes
+  .filter((r) => !(r.served === 'shell' && NAV.some(([p, , g]) => p === r.path && g === 'tool')))
+  .map((r) => r.path)
+
 /** Any path no route matches; its empty path marks no nav link as current. */
 export const notFound: Route = {
   path: '',

@@ -27,15 +27,6 @@
 - suggested fix: "Start a run in the browser: 1 to 4 players on one screen defend the base, build their dice and last as many rounds as they can."
 - source: web-fetch
 
-### [LOW] /sitemap.xml — the sitemap lists /debug, a design-tool shell with no content without JavaScript
-- pass: 39 (commit 0bc9e92)
-- viewport: desktop
-- category: seo
-- observation: The sitemap asks crawlers to index /debug. The nav groups it under "Design tools", and it is served as an empty shell, so a search result would land on a page with only a title.
-- evidence: Sitemap: "<loc>https://survival-dice-builder.pages.dev/debug</loc>". `apps/web/src/routes.tsx` puts /debug in group 'tool' with served: 'shell'.
-- suggested fix: Drop shell-served tool routes from sitemap.xml (or mark them noindex), with a test that the sitemap lists only prerendered routes.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /sitemap.xml — the sitemap lists /debug, a design-tool shell with no content without JavaScript
+- pass: 39 (commit 0bc9e92)
+- viewport: desktop
+- category: seo
+- observation: The sitemap asks crawlers to index /debug. The nav groups it under "Design tools", and it is served as an empty shell, so a search result would land on a page with only a title.
+- evidence: Sitemap: "<loc>https://survival-dice-builder.pages.dev/debug</loc>". `apps/web/src/routes.tsx` puts /debug in group 'tool' with served: 'shell'.
+- suggested fix: Drop shell-served tool routes from sitemap.xml (or mark them noindex), with a test that the sitemap lists only prerendered routes.
+- source: web-fetch
+- issue: #311
+- fixed: (this commit) — /debug left out of sitemap.xml; `SITEMAP_PATHS` in routes.tsx names the listed routes and a unit test ties the file to it
 
 ### [x] [LOW] / (shell) — the iOS home-screen label is not set, so it falls back to the page title
 - pass: 39 (commit 0bc9e92)

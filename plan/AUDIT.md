@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-06 (pass 260, cloud tick)
+
+Pass 259 gave iOS the manifest's home-screen label (516c4f4). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 39 ran 2 commits ago, about 14 hours) and so is the expand gate (pass 26 ran 14 commits ago, about 39 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The top row is the pass 39 sitemap row: `public/sitemap.xml` lists /debug, the engine console, which is a shell-served design tool with no content until its script runs. Scored 3.2 (seo: impact 4, ease 8). The sitemap now leaves /debug out; `SITEMAP_PATHS` in `apps/web/src/routes.tsx` names the routes it lists (every route but a shell-served tool), a unit test ties the file to it, and the smoke e2e test checks the served sitemap lists every nav page but the engine console. /play stays listed: it is a shell, but it is the game. Next in line: the pitch and descriptions word the tagline two ways; the /play description; then the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /sitemap.xml lists /debug, a shell-served design tool (critique LOW, pass 39)
+- category: external-critique (seo)
+- impact: 4
+- ease: 8
+- next: drop shell-served tool routes from the sitemap, with a test that it lists only prerendered routes
+- issue: #311
+- fixed: (this commit)
+
+### [ ] [2.7] / and the head word the tagline two ways ("together") (critique LOW, pass 39)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: one wording from one constant for the pitch and the descriptions
+
+### [ ] [2.4] /play description says "at one screen" and "together" for a page that starts solo runs (critique LOW, pass 39)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: reword the /play description to the suggested fix
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-05 (pass 259, cloud tick)
 
 Pass 258 linked a web app manifest with home-screen icons (0bc9e92), and critique pass 39 then filed four LOW rows (330c0df). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 39 ran 1 commit ago) and so is the expand gate (pass 26 ran 13 commits ago, about 24 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Of the four new critique rows, the iOS home-screen label is the cheapest: the shell names no `apple-mobile-web-app-title`, so iOS labels a home-screen icon with the page title, which differs per page ("Play - Survival Dice-Builder"), instead of the manifest's "Dice-Builder". Scored 3.6 (seo: impact 4, every iOS home-screen add; ease 9). The shell now names `apple-mobile-web-app-title` with the manifest short_name; a unit test ties the two together, and the smoke e2e test checks the served tag. Next in line: the other pass 39 rows (the sitemap lists /debug; the pitch and descriptions word the tagline two ways; the /play description), then the /oversight-owned /decisions rows.
