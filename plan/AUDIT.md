@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-06 (pass 264, cloud tick)
+
+Pass 263 tested that every icon name the app draws has a file (af1c087). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 39 ran 6 commits ago, about 18 hours) and so is the expand gate (pass 26 ran 18 commits ago, about 43 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass looked for page text that names a URL path where the nav names the page: each of the 6 proposals on /decisions has a button labelled "Try this on /play". The /config save message had the same problem and now says "the Play page" (#103). Scored 2.7 (voice: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. The button now reads "Try this on the Play page"; a DecisionsPage test checks that no button on the page names a path, and the e2e tests click the new label. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /decisions: proposal buttons say "Try this on /play", a URL path (voice)
+- category: voice
+- impact: 3
+- ease: 9
+- next: label the button "Try this on the Play page"; a test checks that no /decisions button names a path
+- issue: #315
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-06 (pass 263, cloud tick)
 
 Pass 262 named the player count in the /play description (00806c6). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 39 ran 5 commits ago, about 17 hours) and so is the expand gate (pass 26 ran 17 commits ago, about 42 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass looked for web modules with no test: `icons/gameIcons.ts` has none, and every lookup into it falls back to empty markup, so an icon name with no file draws nothing. The play map draws enemies and defenses by their content id, so a new enemy or defense in the content with no icon file would be an invisible piece on the board, and a renamed die-face file a blank die. The site-to-icon map was also written out twice, in the tile sheet and the play map. Scored 2.7 (tests: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. `SITE_ICON` now lives once in `icons/gameIcons.ts`, typed over every site; a new unit test checks that every action and enemy die face, every content enemy and defense id, every site and every panel icon has a file, and that the markup keeps only the shapes. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.

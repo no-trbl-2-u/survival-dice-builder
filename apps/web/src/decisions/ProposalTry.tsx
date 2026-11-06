@@ -6,7 +6,7 @@ import styles from './DecisionsPage.module.css'
 
 /**
  * A reading's proposal on /decisions: what it does, its measured effect under engagements, the
- * recommendation, and "Try this on /play", which sets it in this browser's config (the other
+ * recommendation, and "Try this on the Play page", which sets it in this browser's config (the other
  * changes stay) and opens /play. An option that acts only under exchanges has no button.
  */
 export function ProposalTry({ proposal }: Readonly<{ proposal: Proposal }>) {
@@ -39,7 +39,7 @@ export function ProposalTry({ proposal }: Readonly<{ proposal: Proposal }>) {
         ) : (
           <p>
             <button type="button" className="brass" onClick={tryIt}>
-              Try this on /play
+              Try this on the Play page
             </button>{' '}
             <span className={styles.muted}>Saved in this browser only; no default changes.</span>
           </p>

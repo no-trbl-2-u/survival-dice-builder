@@ -62,8 +62,15 @@ describe('DecisionsPage', () => {
     expect(row63?.textContent).toContain('Proposal: Forced reveal.')
     expect(row63?.textContent).toContain('Measured with Engagements Combat')
     expect(row63?.textContent).toContain('Recommendation from the bot batches')
-    expect(row63?.querySelector('button')?.textContent).toBe('Try this on /play')
+    expect(row63?.querySelector('button')?.textContent).toBe('Try this on the Play page')
     expect(container.querySelectorAll('[data-proposal]').length).toBe(6)
+  })
+
+  it('names pages, not URL paths, on its buttons (audit pass 264)', () => {
+    const { container } = render(<DecisionsPage />)
+    const buttons = [...container.querySelectorAll('button')]
+    expect(buttons.length).toBeGreaterThan(0)
+    for (const b of buttons) expect(b.textContent).not.toMatch(/(^|\s)\/[a-z]/)
   })
 
   it("gives one recommendation per reading: the reading's own never contradicts its proposal (critique pass 26)", () => {

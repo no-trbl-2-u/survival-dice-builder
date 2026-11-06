@@ -222,13 +222,13 @@ test('/config: Resume run shows only with an autosave, and carries on with it', 
   await expect(page.getByTestId('start-panel')).toHaveCount(0)
 })
 
-test('/decisions: Try this on /play plays a proposal, and the start panel resets it (phase 39)', async ({
+test('/decisions: Try this on the Play page plays a proposal, and the start panel resets it (phase 39)', async ({
   page,
 }) => {
   await page.goto('/decisions')
   const row = page.locator('[data-question="63"]')
   await expect(row).toContainText('Measured with Engagements Combat')
-  await row.getByRole('button', { name: 'Try this on /play' }).click()
+  await row.getByRole('button', { name: 'Try this on the Play page' }).click()
   await expect(page).toHaveURL(/\/play$/)
   const changes = page.getByTestId('config-changes')
   await expect(changes).toContainText('Playing with the proposal: Forced reveal.')

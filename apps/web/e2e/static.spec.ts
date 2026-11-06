@@ -94,7 +94,7 @@ test("the prerendered /decisions and /config read this browser's config once hyd
   page,
 }) => {
   await page.goto('/decisions')
-  await page.getByRole('button', { name: 'Try this on /play' }).first().click()
+  await page.getByRole('button', { name: 'Try this on the Play page' }).first().click()
   await expect(page).toHaveURL(/\/play$/)
   await page.goto('/decisions')
   await expect(page.locator('main')).toContainText('Your config plays with this proposal now.')
