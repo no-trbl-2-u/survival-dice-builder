@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-05 at commit 0bc9e92
-> Pass count: 39
+> Last pass: 2026-11-06 at commit 0094d97
+> Pass count: 40
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /play — Shop offers and the Return a starter card dialog show a card's Exchanges Combat half, not its default Combat options
+- pass: 40 (commit 0094d97)
+- viewport: desktop
+- category: comprehension
+- observation: Under the default Engagements Combat, the Hand shows a card's Combat options (a Haul reads "Engage / Reroll 2 dice"), but the same card as a Shop offer or in the Return a starter card dialog reads "Combat: +2 damage.", the older Exchanges bottom half the engine does not use under the default.
+- evidence: `apps/web/src/play/effectText.ts:15` `Combat: ${def.bottom.map(bottomText).join(', ')}` (used at `BasePanel.tsx:131`, `DecisionDialog.tsx:84`); the Hand uses `combatSideText(def, engage)` (`CardView.tsx:67-70`); default `combat.model: "engage"` (`packages/content/config.default.json`).
+- suggested fix: Make `cardText` use `combatSideText(def, config.combat.model === 'engage')` for the Combat half, as the Hand does; pin a Shop-offer line under the default config in a test.
+- source: web-fetch
+
+### [MED] /play — the Build banner says "not enough materials" when the only upgrades left are out of reach for a Build card
+- pass: 40 (commit 0094d97)
+- viewport: desktop
+- category: comprehension
+- observation: On the Base tile, once Shop I and Training I are bought, no upgrade is legal for a Build card, and the banner says "not enough materials for anything here" however many materials the player has. The Base panel below says the next tiers are out of reach.
+- evidence: `apps/web/src/play/nextStep.ts:63-64` shows that line whenever no `build` or `buyUpgrade` action is legal; on the base, `legalActions.ts:102-109` offers only `stopBuilding` plus `legalUpgrades`, which drops tiers the Build level does not reach (`packages/engine/src/progression/upgrades.ts:42`); `BasePanel.tsx:92` "Out of reach: Build cards can buy only Shop I and Training I."
+- suggested fix: On the Base tile with no upgrade in reach, say "Build: no upgrade here that a Build card can buy, so stop building"; keep "not enough materials" for an upgrade in reach that costs more than the player has.
+- source: web-fetch
+
+### [LOW] /config — the "Skills you do not keep" help does not start each choice with its list label
+- pass: 40 (commit 0094d97)
+- viewport: desktop
+- category: voice
+- observation: The help writes "Your pool (default):" and "Back to the supply:" and puts "the older rule" at the end; the list says "Your pool (default, written rules)" and "Back to the supply (older rule)". The Combat model and Defeated enemies' dice helps already start each choice with its exact label.
+- evidence: `packages/content/data/config.meta.json:277` (help), `:280-281` (option labels).
+- suggested fix: "Your pool (default, written rules): they go to your own pool, ... Back to the supply (older rule): they go to the bottom of their supply, kept for playtests."
+- source: web-fetch
+
+### [LOW] /tiles — the Base legend does not say a Build card is needed to buy upgrades
+- pass: 40 (commit 0094d97)
+- viewport: desktop
+- category: comprehension
+- observation: The legend says "stand on the Base tile to buy upgrades"; / and the /play Base panel both say to stand there and play a Build card, then pay its materials.
+- evidence: `packages/content/src/ruleText.ts:79` (legend); `:133` (home); `apps/web/src/play/BasePanel.tsx:97`.
+- suggested fix: "the players defend it; stand on the Base tile and play a Build card to buy upgrades, and buy cards once Shop I is built".
+- source: web-fetch
+
+### [LOW] /play — the Gather card text never says an enemy on the node blocks it
+- pass: 40 (commit 0094d97)
+- viewport: desktop
+- category: comprehension
+- observation: A Gather on a node with an enemy on it gives nothing, and only the log line after the card is spent says so. The card text, the /tiles node legend and the / Materials line all say an unspent node is enough.
+- evidence: `packages/engine/src/gather/gather.ts:22-25` (`blocked` gives 0); log "gather on an unspent gathering node with no enemy on it" (`apps/web/src/play/describeEvent.ts:165`); card "Gather 2 on an unspent gathering node (the node is spent)" (`packages/content/src/ruleText.ts:171`); legend `:83`.
+- suggested fix: Add "with no enemy on it" to the Gather card text, the node legend and the Materials line, as the log line says.
+- source: web-fetch
+
+### [LOW] /play — the Skill draft buttons say "Draft" under a banner and title that say "keep"
+- pass: 40 (commit 0094d97)
+- viewport: desktop
+- category: voice
+- observation: Banner "Choose a Skill to keep" and dialog title "Skill draft: keep a Skill"; the buttons say "Draft <name>" and the log says "draft".
+- evidence: `apps/web/src/play/nextStep.ts:28`; `packages/content/src/ruleText.ts:439`; `apps/web/src/play/DecisionDialog.tsx:63`; `describeEvent.ts:214`.
+- suggested fix: Label the buttons "Keep <name> (<faces>)" and the log line "<who> keep(s) <Skill>"; keep "Skill draft" as the event name.
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
