@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-06 (pass 266, cloud tick)
+
+Pass 265 tested the /play board damage number (7ac55c4). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 39 ran 9 commits ago, about 23 hours) and so is the expand gate (pass 27 ran 1 commit ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass looked again for web modules with no test: `play/NextStepBanner.tsx` draws the line at the top of /play and holds the only buttons for stop moving, stop building, and a Tower's target. Only e2e tests read its text. A change that sent the wrong action from a button, showed a map move as a button, named a Tower target by its engine id, or lost the combat colour would go unnoticed. Scored 2.7 (tests: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. A new component test checks the phase and step text with no buttons during setup, a stop-moving button that sends exactly that action (and no button for the map move), and a Tower target button that names the enemy and its health but no engine id, with the banner in its combat colour. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours, and the expand gate after 20 commits or 48 hours.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /play: the next-step banner buttons have no component test (tests)
+- category: tests
+- impact: 3
+- ease: 9
+- next: a `NextStepBanner` component test for the step text, the actions its buttons send, Tower target labels, and the combat colour
+- issue: #317
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-06 (pass 265, cloud tick)
 
 Pass 264 renamed the /decisions proposal buttons to name the Play page (a109944). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 39 ran 7 commits ago, about 18 hours) and so is the expand gate (pass 26 ran 18 commits ago, about 43 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass looked again for web modules with no test: `play/damageFloats.ts` builds the damage number that floats off an enemy on the /play board after a target pick, and only the engagement e2e test sees one float. A change that dropped the defeated flag (the token that fades out with the number), placed a float at the wrong hex, or drew one for an enemy the state does not have would go unnoticed. Scored 2.7 (tests: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. A new unit test checks one float per `enemyDamaged` event at the enemy hex with its kind and amount, the defeated flag only on the enemy the same action defeats, and no float for a missing enemy or for other events. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours, and the expand gate after 20 commits or 48 hours.
