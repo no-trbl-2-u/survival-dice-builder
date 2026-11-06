@@ -1,3 +1,5 @@
+import type { Site } from '@survival/content'
+
 // Game and die-face icons from assets/icons (see ASSETS.md), inlined as SVG markup at build time.
 const game = import.meta.glob('../../../../assets/icons/game/*.svg', {
   query: '?raw',
@@ -35,3 +37,11 @@ export const faceIcon = (face: string) => `face-${face.toLowerCase()}`
 
 /** The 512-unit size of every game-icons.net viewBox. */
 export const ICON_VIEWBOX = 512
+
+/** Which icon marks each printed site, on the tile sheet and the play map. */
+export const SITE_ICON: Readonly<Record<Site, string>> = {
+  base: 'base',
+  'gathering-node': 'gathering-node',
+  'spawn-node': 'spawn-node',
+  'elite-spawn-node': 'elite',
+}

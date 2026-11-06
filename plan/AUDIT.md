@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-06 (pass 263, cloud tick)
+
+Pass 262 named the player count in the /play description (00806c6). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 39 ran 5 commits ago, about 17 hours) and so is the expand gate (pass 26 ran 17 commits ago, about 42 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass looked for web modules with no test: `icons/gameIcons.ts` has none, and every lookup into it falls back to empty markup, so an icon name with no file draws nothing. The play map draws enemies and defenses by their content id, so a new enemy or defense in the content with no icon file would be an invisible piece on the board, and a renamed die-face file a blank die. The site-to-icon map was also written out twice, in the tile sheet and the play map. Scored 2.7 (tests: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. `SITE_ICON` now lives once in `icons/gameIcons.ts`, typed over every site; a new unit test checks that every action and enemy die face, every content enemy and defense id, every site and every panel icon has a file, and that the markup keeps only the shapes. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] Icons: a missing icon name draws nothing and no test checks the names the app asks for (tests)
+- category: tests
+- impact: 3
+- ease: 9
+- next: one `SITE_ICON` in `icons/gameIcons.ts`, and a unit test that every name the app draws has a file
+- issue: #314
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-06 (pass 262, cloud tick)
 
 Pass 261 gave the / pitch the one tagline wording (0424f8d). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 39 ran 4 commits ago, about 15 hours) and so is the expand gate (pass 26 ran 16 commits ago, about 40 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The top row is the pass 39 /play description row: it says "defend the base together at one screen", while the home page says "on one screen" and /play also starts solo runs. Scored 2.4 (voice: impact 3, ease 8). It ships ahead of a hand-off to /expand, as earlier sub-3.0 critique rows did, because the expand gate is closed. The description now reads "Start a run in the browser: 1 to 4 players on one screen defend the base, build their dice and last as many rounds as they can.", with the player count from `playersText`, as the home page has it; a routes test ties the two and bars "together" and "at one screen". Next in line: the /oversight-owned /decisions rows; with no other actionable row, the next tick with the expand gate open hands to /expand.

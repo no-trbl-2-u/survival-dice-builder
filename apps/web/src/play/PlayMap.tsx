@@ -6,7 +6,7 @@ import {
   type GameState,
 } from '@survival/engine'
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
-import { gameIcons, ICON_VIEWBOX } from '../icons/gameIcons.ts'
+import { gameIcons, ICON_VIEWBOX, SITE_ICON } from '../icons/gameIcons.ts'
 import { describeAction } from '../debug/describeAction.ts'
 import { hexPolygonPoints, hexToPixel } from '../map/geometry.ts'
 import { hexTitle } from '../map/places.ts'
@@ -18,12 +18,6 @@ import styles from './Play.module.css'
 import { hexTargets, ofType } from './targets.ts'
 
 const SIZE = 30
-const SITE_ICON: Record<string, string> = {
-  base: 'base',
-  'gathering-node': 'gathering-node',
-  'spawn-node': 'spawn-node',
-  'elite-spawn-node': 'elite',
-}
 
 type Props = Readonly<{
   state: GameState
@@ -216,7 +210,7 @@ export function PlayMap({
             {hex.site ? (
               <g className={spent.has(key) ? styles.spent : undefined}>
                 <Icon
-                  name={SITE_ICON[hex.site] ?? ''}
+                  name={SITE_ICON[hex.site]}
                   x={center.x}
                   y={center.y - SIZE * 0.35}
                   size={SIZE * 0.6}

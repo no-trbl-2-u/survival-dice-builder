@@ -1,19 +1,11 @@
 import type { Site, TileDef } from '@survival/content'
 import { hexKey, tileHexes } from '@survival/engine'
-import { gameIcons, ICON_VIEWBOX } from '../icons/gameIcons.ts'
+import { gameIcons, ICON_VIEWBOX, SITE_ICON } from '../icons/gameIcons.ts'
 import { hexPolygonPoints, hexToPixel } from '../map/geometry.ts'
 import styles from './TileView.module.css'
 
 const HEX_SIZE = 40
 const ICON_SIZE = 40
-
-/** Which icon marks each printed site. */
-export const SITE_ICON: Record<Site, string> = {
-  base: 'base',
-  'gathering-node': 'gathering-node',
-  'spawn-node': 'spawn-node',
-  'elite-spawn-node': 'elite',
-}
 
 /** Plain-language site names for labels and tooltips. */
 export const SITE_LABEL: Record<Site, string> = {

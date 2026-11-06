@@ -7,11 +7,11 @@ import {
   type TileDef,
 } from '@survival/content'
 import { GameIcon } from '../icons/GameIcon.tsx'
+import { SITE_ICON } from '../icons/gameIcons.ts'
 import {
   capitalize,
   HEX_LIST_ORDER,
   HEX_POSITION,
-  SITE_ICON,
   SITE_LABEL,
   tileHexLabel,
   TileView,
