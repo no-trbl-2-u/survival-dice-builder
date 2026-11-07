@@ -154,7 +154,11 @@ export function trainingText(config: GameConfig, content: Upgrades): string {
     : 'Open the Training Ground from the Base tile'
   const n = config.draft.everyNRounds
   const when = n === 1 ? 'every round' : `in rounds ${n}, ${2 * n}, ${3 * n} and so on`
-  return `${open}: ${when}, each player looks at ${plural(config.draft.reveal, 'Skill', 'Skills')} and keeps 1 for free. ${draftPoolText(config)}`
+  const shown =
+    config.draft.unpicked === 'pool'
+      ? `${plural(config.draft.reveal, 'new Skill', 'new Skills')} plus their own pool`
+      : plural(config.draft.reveal, 'Skill', 'Skills')
+  return `${open}: ${when}, each player looks at ${shown} and keeps 1 for free. ${draftPoolText(config)}`
 }
 
 /**

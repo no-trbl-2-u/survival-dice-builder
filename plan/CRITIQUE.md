@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — the Skills line says a draft shows 2 Skills, but later drafts add the player's whole pool
-- pass: 41 (commit 8e8b4a3)
-- viewport: desktop
-- category: comprehension
-- observation: The home page says "each player looks at 2 Skills and keeps 1 for free". Under the default `draft.unpicked: "pool"`, each later draft offers the 2 new Skills plus that player's whole pool, so after the first draft a player sees more than 2. The /config "Skills revealed" help says "Skills each player looks at in a draft", with the same gap. The /config "Skills you do not keep" help already says "the new Skills plus your whole pool".
-- evidence: "in rounds 2, 4, 6 and so on, each player looks at 2 Skills and keeps 1 for free." (`packages/content/src/ruleText.ts:157`, live /); engine `packages/engine/src/progression/draft.ts:82` `const options = [...fresh, ...pool]`; `packages/content/data/config.meta.json:258` (Skills revealed help), `:277` (pool help).
-- suggested fix: In `trainingText`, say "each player looks at 2 new Skills plus their own pool and keeps 1 for free"; make the "Skills revealed" help "New Skills each player looks at in a draft".
-- source: web-fetch
-
 ### [MED] /config — the Draft Skill slots line states a game moment, and does not say which Skill is replaced or where it goes
 - pass: 41 (commit 8e8b4a3)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — the Skills line says a draft shows 2 Skills, but later drafts add the player's whole pool
+- pass: 41 (commit 8e8b4a3)
+- viewport: desktop
+- category: comprehension
+- observation: The home page says "each player looks at 2 Skills and keeps 1 for free". Under the default `draft.unpicked: "pool"`, each later draft offers the 2 new Skills plus that player's whole pool, so after the first draft a player sees more than 2. The /config "Skills revealed" help says "Skills each player looks at in a draft", with the same gap. The /config "Skills you do not keep" help already says "the new Skills plus your whole pool".
+- evidence: "in rounds 2, 4, 6 and so on, each player looks at 2 Skills and keeps 1 for free." (`packages/content/src/ruleText.ts:157`, live /); engine `packages/engine/src/progression/draft.ts:82` `const options = [...fresh, ...pool]`; `packages/content/data/config.meta.json:258` (Skills revealed help), `:277` (pool help).
+- suggested fix: In `trainingText`, say "each player looks at 2 new Skills plus their own pool and keeps 1 for free"; make the "Skills revealed" help "New Skills each player looks at in a draft".
+- source: web-fetch
+- issue: #328
+- fixed: (this commit) — under the pool rule `trainingText` now says each player "looks at 2 new Skills plus their own pool and keeps 1 for free" (the supply rule keeps "looks at 2 Skills"); the /config "Skills revealed" help reads "New Skills each player looks at in a draft, from the top of the supply."; the ruleText training test pins both rules
 
 ### [x] [LOW] /config — the "Skills you do not keep" help does not start each choice with its list label
 - pass: 40 (commit 0094d97)

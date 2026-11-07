@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-07 (pass 275, cloud tick)
+
+Pass 274 added the /decisions inline markdown unit test (8e8b4a3), and critique pass 41 filed 6 findings (290d32f). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 just ran) and so is the expand gate (pass 28 ran 5 commits ago, about 3 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 41: the / Skills line says each player looks at 2 Skills, but under the default pool rule (11.6) every later draft also offers that player's pool, and the /config "Skills revealed" help has the same gap. Scored 9.0 (critique MED: impact 6, ease 10, bias x1.5, capped). `trainingText` now says "looks at 2 new Skills plus their own pool" under the pool rule and keeps "looks at 2 Skills" under the supply rule; the "Skills revealed" help says "New Skills each player looks at in a draft, from the top of the supply." Next in line: the pass 41 MED Draft Skill slots line, then the pass 41 LOW rows.
+
+## Top 5 findings (scored)
+
+### [x] [9.0] /: the Skills line says a draft shows 2 Skills, but later drafts add the pool (critique MED, pass 41, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 10
+- next: reword `trainingText` and the "Skills revealed" help
+- issue: #328
+- fixed: (this commit)
+
+### [ ] [8.1] /config: the Draft Skill slots line states a game moment and does not say which Skill is replaced or where it goes (critique MED, pass 41, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: write the rule in `ruleLineFor` and add "it goes to the bottom of its supply" to the /play dialog
+
 # Site audit — 2026-11-07 (pass 274, cloud tick)
 
 Pass 273 added the /play event log component test (b5e5475). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 10 commits ago, about 22 hours) and so is the expand gate (pass 28 ran 3 commits ago, about 3 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). This pass looked again for web modules with no test: `decisions/Inline.tsx` renders the inline markdown on /decisions (bold, code, repository file links, row links) and is only checked through `DecisionsPage.test.tsx` against the live `OPEN-QUESTIONS.md`, so a reading edit can drop the case a check relied on. Scored 2.7 (tests: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. A new unit test uses fixed strings: bold and code, a repository path linked and a bare file name left plain, "row N" in-page or to the full table, each number after "rows" in list and range forms, and no link for "Row N", a number inside a word, or a row inside bold or code. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
