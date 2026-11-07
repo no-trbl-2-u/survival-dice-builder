@@ -74,9 +74,9 @@ export function siteText(site: Site, config: GameConfig, content: Upgrades): str
   if (site === 'base') {
     const shop = firstUpgrade('shop', content)
     const cards = shop
-      ? `, and cards once ${shop.name} is built`
-      : ', and cards once the Shop opens'
-    return `the players defend it; stand on the Base tile to buy upgrades${cards}`
+      ? `, and buy cards once ${shop.name} is built`
+      : ', and buy cards once the Shop opens'
+    return `the players defend it; stand on the Base tile and play a Build card to buy upgrades${cards}`
   }
   if (site === 'gathering-node')
     return config.rulings.gatherNeedsNode

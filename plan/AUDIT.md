@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-07 (pass 268, cloud tick)
+
+Pass 267 added "with no enemy on it" to the Gather texts (b96be5c). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 4 commits ago, about 16 hours) and so is the expand gate (pass 27 ran 6 commits ago, about 20 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top: the /tiles Base legend says "stand on the Base tile to buy upgrades" and never names the Build card, while / and the /play Base panel say a Build card and its materials buy an upgrade. Scored 2.7 (critique LOW: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. The legend now reads "stand on the Base tile and play a Build card to buy upgrades, and buy cards once Shop I is built"; the ruleText and TileView tests pin it. Next in line: the pass 40 LOW rows (Skill draft "Keep" buttons, /config Skills help labels), then the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /tiles: the Base legend does not say a Build card is needed to buy upgrades (external-critique LOW, pass 40)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 9
+- next: "stand on the Base tile and play a Build card to buy upgrades"
+- issue: #322
+- fixed: (this commit)
+
+### [ ] [2.4] /play: the Skill draft buttons say "Draft" under a banner that says "keep" (external-critique LOW, pass 40)
+- category: external-critique (voice)
+- impact: 3
+- ease: 8
+- next: label the buttons "Keep <name> (<faces>)"
+
+### [ ] [2.4] /config: the "Skills you do not keep" help does not start each choice with its list label (external-critique LOW, pass 40)
+- category: external-critique (voice)
+- impact: 2
+- ease: 9
+- next: start each choice with its exact list label
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-07 (pass 267, cloud tick)
 
 Passes since 266 fixed the two pass 40 MED rows on /play (Shop offers print the default Combat half, 92c6634; the Build banner says no upgrade is in reach, cd95418). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 3 commits ago, about 13 hours) and so is the expand gate (pass 27 ran 5 commits ago, about 19 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Four pass 40 LOW rows can ship without /oversight. Top: the Gather card, the /tiles node legend and the / Materials line never say an enemy on the hex blocks a Gather (rule 6.9), so a player learns it only from the log after the card is spent. Scored 3.2 (critique LOW: impact 4, a wasted card; ease 8). Each text now says "with no enemy on it" in every reading (node rule, off-node amount, anywhere), and a ruleText test checks all three readings. Next in line: the pass 40 LOW rows (/tiles Base legend Build card, Skill draft "Keep" buttons, /config Skills help labels), then the /oversight-owned /decisions rows.

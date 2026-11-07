@@ -18,15 +18,6 @@
 - suggested fix: "Your pool (default, written rules): they go to your own pool, ... Back to the supply (older rule): they go to the bottom of their supply, kept for playtests."
 - source: web-fetch
 
-### [LOW] /tiles — the Base legend does not say a Build card is needed to buy upgrades
-- pass: 40 (commit 0094d97)
-- viewport: desktop
-- category: comprehension
-- observation: The legend says "stand on the Base tile to buy upgrades"; / and the /play Base panel both say to stand there and play a Build card, then pay its materials.
-- evidence: `packages/content/src/ruleText.ts:79` (legend); `:133` (home); `apps/web/src/play/BasePanel.tsx:97`.
-- suggested fix: "the players defend it; stand on the Base tile and play a Build card to buy upgrades, and buy cards once Shop I is built".
-- source: web-fetch
-
 ### [LOW] /play — the Skill draft buttons say "Draft" under a banner and title that say "keep"
 - pass: 40 (commit 0094d97)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /tiles — the Base legend does not say a Build card is needed to buy upgrades
+- pass: 40 (commit 0094d97)
+- viewport: desktop
+- category: comprehension
+- observation: The legend says "stand on the Base tile to buy upgrades"; / and the /play Base panel both say to stand there and play a Build card, then pay its materials.
+- evidence: `packages/content/src/ruleText.ts:79` (legend); `:133` (home); `apps/web/src/play/BasePanel.tsx:97`.
+- suggested fix: "the players defend it; stand on the Base tile and play a Build card to buy upgrades, and buy cards once Shop I is built".
+- source: web-fetch
+- issue: #322
+- fixed: (this commit) — the /tiles Base legend reads "the players defend it; stand on the Base tile and play a Build card to buy upgrades, and buy cards once Shop I is built", as / and the /play Base panel say; the ruleText and TileView tests pin the text
 
 ### [x] [LOW] /play — the Gather card text never says an enemy on the node blocks it
 - pass: 40 (commit 0094d97)

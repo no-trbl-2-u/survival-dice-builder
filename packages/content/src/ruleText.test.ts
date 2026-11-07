@@ -157,7 +157,7 @@ describe('rule text from config', () => {
 
   it('sites: Table 1 functions, with spawn options named (rows 64, 66, 68, 70)', () => {
     expect(siteText('base', base, defaultContent)).toBe(
-      'the players defend it; stand on the Base tile to buy upgrades, and cards once Shop I is built',
+      'the players defend it; stand on the Base tile and play a Build card to buy upgrades, and buy cards once Shop I is built',
     )
     expect(siteText('gathering-node', base, defaultContent)).toBe(
       "a card's Gather option played here with no enemy on the node gets its materials once; then the node is spent for the rest of the run",
