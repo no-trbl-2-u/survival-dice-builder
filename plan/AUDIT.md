@@ -5,6 +5,18 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-07 (pass 271, cloud tick)
+
+Pass 270's /config Skills help labels shipped (7ec021c). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 7 commits ago, about 17 hours) and so is the expand gate (pass 27 ran 9 commits ago, about 22 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every critique pass 40 row has shipped. No finding the loop can ship scores 3.0 or more, so there is no actionable iterate work. Handed to `/expand` (pass 28, bold posture). The five /decisions critique rows (three MED at 8.1 with the bias, two LOW) all edit `[needs-user-call]` items and wait for /oversight. Checked this pass: no "Draft <Skill>" button or "drafts" log string is left in non-test `apps/web/src` or `packages/content/src` after b0967f1; the Shop offer and Return a starter card texts no longer reach the Exchanges bottom half under the default Combat (92c6634).
+
+## Top 5 findings (scored)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-07 (pass 270, cloud tick)
 
 Pass 269 said "keep" on the /play Skill draft buttons and log (b0967f1). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 6 commits ago, about 16 hours) and so is the expand gate (pass 27 ran 8 commits ago, about 22 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top: the /config "Skills you do not keep" help writes "Your pool (default):" and "Back to the supply:" while the list says "Your pool (default, written rules)" and "Back to the supply (older rule)". Scored 2.4 (critique LOW: impact 2, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. The help now opens each choice with its exact list label, and the configMetaText 11.7 test pins both. Next in line: the /oversight-owned /decisions rows; with the critique queue otherwise drained, the next tick hands to /critique or /expand as their gates open.
@@ -17,7 +29,7 @@ Pass 269 said "keep" on the /play Skill draft buttons and log (b0967f1). No issu
 - ease: 9
 - next: start each choice with its exact list label
 - issue: #324
-- fixed: (this commit)
+- fixed: 7ec021c
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)

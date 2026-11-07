@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-11-06 at commit 7ac55c4
-> Pass count: 27
+> Last pass: 2026-11-07 at commit 7ec021c
+> Pass count: 28
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -55,7 +55,8 @@
 - progress (expand pass 16): `/iterate` shipped most of the scope one row at a time. 23f95a5 (level) and 8c3b940 (Arcane Rain) give every milestone kind an out-of-reach answer; e2f727e makes the sim report list every milestone from 0, which is the hit-rate half; 3baaf7b and 7fbb0b8 show the list during the run with "(3 out of reach)". The default batch now reads, on seeds 1-200: round 5 in 200, an elite in 39, round 10 in 4, and 0 for the other 5. Three of the 5 are out of reach (Arcane Rain, 3 upgrades, 10 tiles); round 15 and level 5 are reachable but no bot run gets there (the longest run ends at round 13). Critique pass 24 [LOW]: /config names 7 milestones and /play 8, because "Defeat an elite" has no setting. Still missing: the content test that fails on a new milestone with neither a path nor a reason, and the `/oversight` question, which now covers 5 milestones rather than 2 (rows 4 and 78 plus the two the bot never reaches). Score held at 3.5: the scope is smaller and the designer question larger.
 - progress (expand pass 17): 9dacefa adds the /config Milestones note "Defeat an elite is always a milestone and has no setting.", and a configMeta test checks that /config names every milestone. 142c4e6 gives rule reading 4 the /play "out of reach" words. Still missing: the content test that fails on a new milestone with neither a path nor an out-of-reach reason, and the `/oversight` question on the 5 milestones no default run meets. Score held at 3.5.
 - progress (expand pass 18): 023653b (audit pass 141) shipped the last test in scope: every milestone kind in `milestoneIds` is either always within reach (survive to a round, defeat an elite) or has a config that puts it out of reach with a reason (fire a Skill, buy upgrades, reveal tiles, reach a level); a new kind in neither list fails. e2a17fd adds a test that the engine's milestones match the lists /play, /config and the sim show. The whole loop-side scope has shipped. What is left is the `/oversight` question on the 5 milestones no default bot run meets (rows 4 and 78, Arcane Rain, round 15, level 5). Score lowered from 3.5 to 1.0: `/oversight` can ask the question and close this row.
-- last re-evidenced: 2026-10-25
+- re-evidence (expand pass 28): critique pass 40 (81a84ee) filed a MED row from the same reach gap behind row 78: on the Base tile, once Shop I and Training I are bought, the /play Build banner said "not enough materials for anything here" however many materials the player held, because no tier above I is in reach of a Build card. cd95418 fixed it by hand with a new engine `upgradesInReach` and a banner line that says no upgrade is in reach. A stranger again met an out-of-reach goal before any text explained it. Score held at 1.0: the loop-side scope has shipped; the `/oversight` question on rows 4 and 78 is what is left.
+- last re-evidenced: 2026-11-07
 
 ### [ ] [score 1.0] The engagement modal reads on its own: who took the damage, what "in range" counts, when cards play
 - proposed: 2026-10-14, expand pass 11
@@ -134,7 +135,8 @@
 - ruling audit: Spec v2 6.10, 7.8; phase 41 upfront decision. Loop scope: outside until the designer picks a branch.
 - re-evidence (expand pass 15): critique pass 22 [MED] found the Dodge effect saying "this exchange" under the default Engagements Combat; bf619f8 fixed it by branching the card text on the Combat model, one more string that pays for both. The log still keeps two end lines for one event type (`apps/web/src/play/describeEvent.ts`, `exchangeEnded` tagged `Combat v3` or 7.8). Score held at 5.0; the branch is still the designer's call.
 - re-evidence (expand pass 26): critique pass 37 (adbd215) filed four rows that exist only because exchanges remain, and the loop fixed each by hand: the Exchange range help said "not used by the engine yet" for a field no Combat model reads (799b5b9, MED; the config metadata schema gained an `unused: "retired"` mark for it), the help gave the Spec v1 text of 7.9 (76e49e4), the model-only note lower-cased "Exchanges" (01c5227), and the Combat model help and option label used two forms of the older-rule tag (81aa9d9). Four of the pass's six rows, one cause. The fence branch has partly happened by accretion ("Exchanges (older rule)" label, a retired-field mark) without the single `ruleText` label or the grouping the scope names. Score held at 5.0; the branch is still the designer's call.
-- last re-evidenced: 2026-11-04
+- re-evidence (expand pass 28): critique pass 40 (81a84ee) filed a MED row that exists only because exchanges remain: under the default Engagements Combat, a card shown as a Shop offer or in the Return a starter card dialog read "Combat: +2 damage.", its Exchanges bottom half, while the Hand showed its Combat options. 92c6634 fixed it by hand, routing `cardText` through `combatSideText` on the Combat model, with a Shop-offer test. One more text path that pays for both models. Score held at 5.0; the branch is still the designer's call.
+- last re-evidenced: 2026-11-07
 
 > Discovery pass 1 (2026-10-10). Each row below adds a `ruling audit` field. "Loop scope" refers to the
 > owner ruling of 2026-10-06 (`docs/retrospective-2026-10-06.md:210,231,248`): the loop ships docs, bot
