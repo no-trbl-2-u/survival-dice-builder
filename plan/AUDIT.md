@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-07 (pass 274, cloud tick)
+
+Pass 273 added the /play event log component test (b5e5475). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 10 commits ago, about 22 hours) and so is the expand gate (pass 28 ran 3 commits ago, about 3 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). This pass looked again for web modules with no test: `decisions/Inline.tsx` renders the inline markdown on /decisions (bold, code, repository file links, row links) and is only checked through `DecisionsPage.test.tsx` against the live `OPEN-QUESTIONS.md`, so a reading edit can drop the case a check relied on. Scored 2.7 (tests: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. A new unit test uses fixed strings: bold and code, a repository path linked and a bare file name left plain, "row N" in-page or to the full table, each number after "rows" in list and range forms, and no link for "Row N", a number inside a word, or a row inside bold or code. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /decisions inline markdown: no unit test of its own (tests)
+- category: tests
+- impact: 3
+- ease: 9
+- next: add `decisions/Inline.test.tsx`
+- issue: #327
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-07 (pass 273, cloud tick)
 
 Pass 272 labelled the Engine console Skill draft option "Keep <Skill>" (bfbd11e). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 9 commits ago, about 19 hours) and so is the expand gate (pass 28 ran 2 commits ago, about 2 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). This pass looked again for web modules with no test: `play/PlayLog.tsx` draws the /play event log, and only its `logRuleNote` helper is tested. A change that showed the oldest line first, dropped the 60-line cap, or lost the rule note after a line would go unnoticed outside the e2e tests. Scored 2.7 (tests: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. A new component test checks the labelled region and heading, the newest line first with its rule note, only the 60 newest lines in a long run, and "not in the written rules" for a tag with no section. Checked this pass: /decisions links every lower-case "row N" and "rows N, M and K" in the rendered readings and checks; the capitalised "Row N" in `OPEN-QUESTIONS.md` and `plan/AUDIT.md` sits in prose the page does not render. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
@@ -17,7 +37,7 @@ Pass 272 labelled the Engine console Skill draft option "Keep <Skill>" (bfbd11e)
 - ease: 9
 - next: add `play/PlayLog.test.tsx`
 - issue: #326
-- fixed: (this commit)
+- fixed: b5e5475
 
 ### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
 - category: external-critique (comprehension)
