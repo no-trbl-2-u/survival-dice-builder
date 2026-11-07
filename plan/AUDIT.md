@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-07 (pass 272, cloud tick)
+
+Pass 271 handed to `/expand` (pass 28, 4961141). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 8 commits ago, about 18 hours) and so is the expand gate (pass 28 ran 0 commits ago, about 1 hour); a second expand pass with nothing moved would be churn. Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top: the Engine console still labels a Skill draft option "Draft <Skill>" and its state row "Draft", while /play (b0967f1) and the shared event log say "keep". Pass 271's "no Draft <Skill> left" check did not cover the Engine console's `describeAction`. Scored 1.8 (voice: impact 2, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. The action now reads "Keep <Skill>" and the state row "Skill draft"; a describeAction test pins the label. Next in line: the /oversight-owned /decisions rows; the next tick hands to /critique or /expand as their gates open.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] Engine console: the Skill draft option says "Draft <Skill>", not "Keep" (voice)
+- category: voice
+- impact: 2
+- ease: 9
+- next: label the action "Keep <Skill>" and the state row "Skill draft"
+- issue: #325
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-07 (pass 271, cloud tick)
 
 Pass 270's /config Skills help labels shipped (7ec021c). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 7 commits ago, about 17 hours) and so is the expand gate (pass 27 ran 9 commits ago, about 22 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every critique pass 40 row has shipped. No finding the loop can ship scores 3.0 or more, so there is no actionable iterate work. Handed to `/expand` (pass 28, bold posture). The five /decisions critique rows (three MED at 8.1 with the bias, two LOW) all edit `[needs-user-call]` items and wait for /oversight. Checked this pass: no "Draft <Skill>" button or "drafts" log string is left in non-test `apps/web/src` or `packages/content/src` after b0967f1; the Shop offer and Return a starter card texts no longer reach the Exchanges bottom half under the default Combat (92c6634).

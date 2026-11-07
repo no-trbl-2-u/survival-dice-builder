@@ -125,7 +125,7 @@ function label(action: Action, state: GameState): string {
       return `Buy upgrade ${def?.name ?? action.upgrade}`
     }
     case 'draftSkill':
-      return `Draft ${skillName(state, action.skill)}`
+      return `Keep ${skillName(state, action.skill)}`
     case 'replaceSkill':
       return `Replace ${skillName(state, action.skill)}`
     case 'playOption': {

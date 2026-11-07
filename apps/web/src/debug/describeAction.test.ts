@@ -81,6 +81,13 @@ describe('describeAction', () => {
     ).toBe('Put die 1 (Star) on Strike as Sword')
   })
 
+  it('labels a Skill draft option "Keep <Skill>", as /play does', () => {
+    const state = createGame(defaultContent.config, 1)
+    const def = defaultContent.skills[0]!
+    const label = describeAction({ type: 'draftSkill', skill: def.id }, state)
+    expect(label).toBe(`Keep ${def.name}`)
+  })
+
   it('names moves and builds by place and direction, and keeps the coordinate apart', () => {
     const base = createGame(defaultContent.config, 1)
     const move = { type: 'moveTo' as const, q: 0, r: -1 }

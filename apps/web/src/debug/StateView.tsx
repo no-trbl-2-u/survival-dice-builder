@@ -63,7 +63,7 @@ export function StateView({ state }: Props) {
         <dd>{state.shopOffers.map(cardName).join(', ') || 'closed'}</dd>
         {state.draft ? (
           <>
-            <dt>Draft</dt>
+            <dt>Skill draft</dt>
             <dd>
               {state.draft.options.map(skillName).join(', ')}
               {state.draft.kept ? ` (kept ${skillName(state.draft.kept)}: choose a slot)` : ''}
