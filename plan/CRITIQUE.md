@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-06 at commit 0094d97
-> Pass count: 40
+> Last pass: 2026-11-07 at commit 8e8b4a3
+> Pass count: 41
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — the Skills line says a draft shows 2 Skills, but later drafts add the player's whole pool
+- pass: 41 (commit 8e8b4a3)
+- viewport: desktop
+- category: comprehension
+- observation: The home page says "each player looks at 2 Skills and keeps 1 for free". Under the default `draft.unpicked: "pool"`, each later draft offers the 2 new Skills plus that player's whole pool, so after the first draft a player sees more than 2. The /config "Skills revealed" help says "Skills each player looks at in a draft", with the same gap. The /config "Skills you do not keep" help already says "the new Skills plus your whole pool".
+- evidence: "in rounds 2, 4, 6 and so on, each player looks at 2 Skills and keeps 1 for free." (`packages/content/src/ruleText.ts:157`, live /); engine `packages/engine/src/progression/draft.ts:82` `const options = [...fresh, ...pool]`; `packages/content/data/config.meta.json:258` (Skills revealed help), `:277` (pool help).
+- suggested fix: In `trainingText`, say "each player looks at 2 new Skills plus their own pool and keeps 1 for free"; make the "Skills revealed" help "New Skills each player looks at in a draft".
+- source: web-fetch
+
+### [MED] /config — the Draft Skill slots line states a game moment, and does not say which Skill is replaced or where it goes
+- pass: 41 (commit 8e8b4a3)
+- viewport: desktop
+- category: comprehension
+- observation: Under Draft Skill slots, the "With these values" line reads "Your 6 draft slots are full: the new Skill replaces a Skill.", a game moment, not a rule. Only a drafted Skill can be replaced (not a starter Skill), and the replaced Skill goes to the bottom of its supply even under the pool default. The /play replace dialog uses the same text and does not say where the old Skill goes.
+- evidence: `packages/content/src/ruleText.ts:715` calls `draftFullText(config, 'the new Skill')` (`:453`); `packages/engine/src/api/legalActions.ts:37` offers `replaceSkill` only for `draftedSkills(...)`; `packages/engine/src/progression/draft.ts:169` sends the old Skill `toBottom` of its supply.
+- suggested fix: For the /config line, write the rule: "With all 6 draft slots full, a newly kept Skill replaces one of your drafted Skills, which goes to the bottom of its supply."; add "it goes to the bottom of its supply" to the /play dialog text.
+- source: web-fetch
+
+### [LOW] /play — in co-op, the Skill draft and Return a starter card help says "you" under a dialog that names the seat
+- pass: 41 (commit 8e8b4a3)
+- viewport: desktop
+- category: voice
+- observation: The dialog names the seat ("Player 2") and its buttons say "(from Player 2's pool)" and "(Player 2 has 2)", but the help paragraph under the title says "you" and "your".
+- evidence: `apps/web/src/play/DecisionDialog.tsx:57` draftPoolText "The Skills you do not keep go to your pool. Later drafts offer them again."; `:58` returnStarterText "You bought a card, so a starter card leaves your deck for good." (`packages/content/src/ruleText.ts:379`); `:66`, `:83` name the seat.
+- suggested fix: Pass the seat name to `draftPoolText` and `returnStarterText` in co-op, so the help reads "The Skills Player 2 does not keep go to Player 2's pool."
+- source: web-fetch
+
+### [LOW] /play — two Skill draft log lines do not name the player
+- pass: 41 (commit 8e8b4a3)
+- viewport: desktop
+- category: voice
+- observation: In co-op, the draft opening line and the skip line have no subject; the lines next to them name the player.
+- evidence: `apps/web/src/play/describeEvent.ts:212` "Skill draft: <a> or <b>." and `:216` "No Skills left to draft."; `:214` "Player 2 keeps Mend.", `:218` "Shot goes to Player 2's draft pool."
+- suggested fix: "Player 2's Skill draft: Strike or Shot." and "No Skills left for Player 2 to draft." (solo: "Your Skill draft: ...").
+- source: web-fetch
+
+### [LOW] /play — the event log drops lines past 60 without saying so, and numbers the newest line 1
+- pass: 41 (commit 8e8b4a3)
+- viewport: desktop
+- category: a11y
+- observation: The log shows the 60 newest lines, newest first, in a plain `<ol>`. Nothing says older lines are hidden, and a screen reader numbers the newest line 1. The /debug log shows a count in its heading.
+- evidence: `apps/web/src/play/PlayLog.tsx:6` `const SHOWN = 60`, `:22` `slice(-SHOWN).reverse()`, `:25` "What happened (newest first)", `:26` `<ol>` with no `reversed`; `apps/web/src/debug/EventLog.tsx:41` "Event log (N)".
+- suggested fix: Add `reversed` to the `<ol>` and, past 60 lines, a muted "Showing the 60 newest of N lines" under the heading.
+- source: web-fetch
+
+### [LOW] /config — the "Draft every N rounds" help example reads as if drafts stop at round 6
+- pass: 41 (commit 8e8b4a3)
+- viewport: desktop
+- category: comprehension
+- observation: The help says "at 2, in rounds 2, 4 and 6"; the home page says "2, 4, 6 and so on". The field also has no "With these values" line, unlike its neighbours.
+- evidence: `packages/content/data/config.meta.json:271`; home `packages/content/src/ruleText.ts:156`; `ruleLineFor` (`ruleText.ts:702-741`) has no `draft.everyNRounds` branch.
+- suggested fix: Help: "With the Training Ground open, a draft happens every N rounds. At 2: rounds 2, 4, 6 and so on."; add a `ruleLineFor` branch that prints `trainingText`.
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
