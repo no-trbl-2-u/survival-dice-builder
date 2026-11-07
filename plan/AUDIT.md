@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-07 (pass 273, cloud tick)
+
+Pass 272 labelled the Engine console Skill draft option "Keep <Skill>" (bfbd11e). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 9 commits ago, about 19 hours) and so is the expand gate (pass 28 ran 2 commits ago, about 2 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). This pass looked again for web modules with no test: `play/PlayLog.tsx` draws the /play event log, and only its `logRuleNote` helper is tested. A change that showed the oldest line first, dropped the 60-line cap, or lost the rule note after a line would go unnoticed outside the e2e tests. Scored 2.7 (tests: impact 3, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. A new component test checks the labelled region and heading, the newest line first with its rule note, only the 60 newest lines in a long run, and "not in the written rules" for a tag with no section. Checked this pass: /decisions links every lower-case "row N" and "rows N, M and K" in the rendered readings and checks; the capitalised "Row N" in `OPEN-QUESTIONS.md` and `plan/AUDIT.md` sits in prose the page does not render. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /play event log: no component test for order, cap and rule notes (tests)
+- category: tests
+- impact: 3
+- ease: 9
+- next: add `play/PlayLog.test.tsx`
+- issue: #326
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-07 (pass 272, cloud tick)
 
 Pass 271 handed to `/expand` (pass 28, 4961141). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 8 commits ago, about 18 hours) and so is the expand gate (pass 28 ran 0 commits ago, about 1 hour); a second expand pass with nothing moved would be churn. Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top: the Engine console still labels a Skill draft option "Draft <Skill>" and its state row "Draft", while /play (b0967f1) and the shared event log say "keep". Pass 271's "no Draft <Skill> left" check did not cover the Engine console's `describeAction`. Scored 1.8 (voice: impact 2, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. The action now reads "Keep <Skill>" and the state row "Skill draft"; a describeAction test pins the label. Next in line: the /oversight-owned /decisions rows; the next tick hands to /critique or /expand as their gates open.
