@@ -160,8 +160,15 @@ describe('rule text from config', () => {
       'the players defend it; stand on the Base tile to buy upgrades, and cards once Shop I is built',
     )
     expect(siteText('gathering-node', base, defaultContent)).toBe(
-      "a card's Gather option here gets its materials once; then the node is spent for the rest of the run",
+      "a card's Gather option played here with no enemy on the node gets its materials once; then the node is spent for the rest of the run",
     )
+    expect(
+      siteText(
+        'gathering-node',
+        With((c) => ({ ...c, rulings: { ...c.rulings, gatherNeedsNode: false } })),
+        defaultContent,
+      ),
+    ).toBe('the first Gather option played here with no enemy on the node spends it')
     expect(siteText('spawn-node', base, defaultContent)).toBe('gets 1 grunt at each Combat')
     expect(siteText('elite-spawn-node', base, defaultContent)).toBe('gets 1 elite at each Combat')
     const varied = With((c) => ({
@@ -173,12 +180,23 @@ describe('rule text from config', () => {
     )
   })
 
-  it('Gather: node rule and off-node amount follow config (rows 59, 67)', () => {
-    expect(gatherText(2, base)).toBe('Gather 2 on an unspent gathering node (the node is spent)')
+  it('Gather: node rule and off-node amount follow config, and an enemy on the hex blocks it (6.9, rows 59, 67)', () => {
+    expect(gatherText(2, base)).toBe(
+      'Gather 2 on an unspent gathering node with no enemy on it (the node is spent)',
+    )
     const off = With((c) => ({ ...c, gather: { offNodeAmount: 1 } }))
-    expect(gatherText(2, off)).toMatch(/; 1 anywhere else$/)
+    expect(gatherText(2, off)).toMatch(/; 1 on any other hex with no enemy on it$/)
     const free = With((c) => ({ ...c, rulings: { ...c.rulings, gatherNeedsNode: false } }))
-    expect(gatherText(2, free)).toMatch(/^Gather 2 anywhere/)
+    expect(gatherText(2, free)).toBe(
+      'Gather 2 on any hex with no enemy on it (an unspent gathering node is spent)',
+    )
+    for (const config of [base, off, free]) {
+      expect(gatherText(2, config)).toContain('with no enemy on it')
+      expect(materialsText(config, defaultContent)).toContain('with no enemy on it')
+      expect(siteText('gathering-node', config, defaultContent)).toContain(
+        'with no enemy on the node',
+      )
+    }
   })
 
   it('Combat: each model has its own text; enemy dice come from each record (Spec v2 9.6)', () => {
@@ -236,7 +254,7 @@ describe('rule text from config', () => {
 
   it('materials: any card gathers, the starter Gather amount as the example, where Gather works, and a node giving its materials once (6.7, rows 59, 67)', () => {
     expect(materialsText(base, defaultContent)).toBe(
-      "Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card); each node gives its materials once, then it is spent for the rest of the run.",
+      "Play a card's Gather option on a gathering node with no enemy on it to get its materials (2 materials for the starter Gather card); each node gives its materials once, then it is spent for the rest of the run.",
     )
     expect(
       materialsText(
@@ -244,7 +262,7 @@ describe('rule text from config', () => {
         defaultContent,
       ),
     ).toBe(
-      "Play a card's Gather option on a gathering node to get its materials (2 materials for the starter Gather card); each node gives its materials once, then it is spent for the rest of the run. Anywhere else, a Gather option gets 1 material.",
+      "Play a card's Gather option on a gathering node with no enemy on it to get its materials (2 materials for the starter Gather card); each node gives its materials once, then it is spent for the rest of the run. On any other hex with no enemy on it, a Gather option gets 1 material.",
     )
     expect(
       materialsText(
@@ -252,7 +270,7 @@ describe('rule text from config', () => {
         defaultContent,
       ),
     ).toBe(
-      "Play a card's Gather option anywhere to get its materials (2 materials for the starter Gather card); a gathering node it is played on gives materials once.",
+      "Play a card's Gather option on any hex with no enemy on it to get its materials (2 materials for the starter Gather card); a gathering node it is played on gives materials once.",
     )
     const one = {
       cards: defaultContent.cards.map((c) =>

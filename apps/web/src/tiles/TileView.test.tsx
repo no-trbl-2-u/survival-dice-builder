@@ -156,7 +156,7 @@ describe('TileSheet site legend', () => {
     expect(legend.querySelectorAll('svg[data-icon]')).toHaveLength(4)
     expect([...legend.querySelectorAll('li')].map((li) => li.textContent)).toEqual([
       'Base (the players defend it; stand on the Base tile to buy upgrades, and cards once Shop I is built)',
-      "Gathering node (a card's Gather option here gets its materials once; then the node is spent for the rest of the run)",
+      "Gathering node (a card's Gather option played here with no enemy on the node gets its materials once; then the node is spent for the rest of the run)",
       'Spawn node (gets 1 grunt at each Combat)',
       'Elite spawn node (gets 1 elite at each Combat)',
     ])

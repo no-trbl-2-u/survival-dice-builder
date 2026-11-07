@@ -68,7 +68,7 @@ const firstUpgrade = (track: string, content: Upgrades) =>
 /**
  * What a printed site does, for the site legend: "gets 1 grunt at each Combat".
  *
- * @rule Table 1, 6.7, 7.3, 11.2, OPEN-QUESTIONS rows 59, 64, 66, 68, 70
+ * @rule Table 1, 6.7, 6.9, 7.3, 11.2, OPEN-QUESTIONS rows 59, 64, 66, 68, 70
  */
 export function siteText(site: Site, config: GameConfig, content: Upgrades): string {
   if (site === 'base') {
@@ -80,8 +80,8 @@ export function siteText(site: Site, config: GameConfig, content: Upgrades): str
   }
   if (site === 'gathering-node')
     return config.rulings.gatherNeedsNode
-      ? "a card's Gather option here gets its materials once; then the node is spent for the rest of the run"
-      : 'the first Gather option played here spends it'
+      ? "a card's Gather option played here with no enemy on the node gets its materials once; then the node is spent for the rest of the run"
+      : 'the first Gather option played here with no enemy on the node spends it'
   const s = config.spawn
   const one = s.rampEvery === null && !s.perSeat
   const enemy = site === 'spawn-node' ? 'grunt' : 'elite'
@@ -158,25 +158,27 @@ export function trainingText(config: GameConfig, content: Upgrades): string {
 }
 
 /**
- * A Gather card's top half: where it gathers, and what it spends.
+ * A Gather card's top half: where it gathers, what it spends, and that an enemy on the hex blocks
+ * it (6.9).
  *
  * @param amount - the card's materials.
- * @rule 6.7, Table 1, OPEN-QUESTIONS rows 20, 59, 67
+ * @rule 6.7, 6.9, Table 1, OPEN-QUESTIONS rows 20, 59, 67
  */
 export function gatherText(amount: number, config: GameConfig): string {
   const off = config.gather.offNodeAmount
   if (!config.rulings.gatherNeedsNode)
-    return `Gather ${amount} anywhere (an unspent gathering node is spent)`
-  const elsewhere = off > 0 ? `; ${off} anywhere else` : ''
-  return `Gather ${amount} on an unspent gathering node (the node is spent)${elsewhere}`
+    return `Gather ${amount} on any hex with no enemy on it (an unspent gathering node is spent)`
+  const elsewhere = off > 0 ? `; ${off} on any other hex with no enemy on it` : ''
+  return `Gather ${amount} on an unspent gathering node with no enemy on it (the node is spent)${elsewhere}`
 }
 
 /**
  * Where materials come from, for the Materials line on /: any card's Gather option (Shop cards
  * gather too), the starter deck's Gather card and its amount as the example, where a Gather
- * option works, and that a node gives its materials once and is then spent for the rest of the run.
+ * option works (never with an enemy on the hex, 6.9), and that a node gives its materials once
+ * and is then spent for the rest of the run.
  *
- * @rule 6.7, Table 1, OPEN-QUESTIONS rows 20, 59, 67
+ * @rule 6.7, 6.9, Table 1, OPEN-QUESTIONS rows 20, 59, 67
  */
 export function materialsText(config: GameConfig, content: Pick<Content, 'cards'>): string {
   const preset = config.deck.presets.find((p) => p.id === config.deck.preset)
@@ -201,11 +203,13 @@ export function materialsText(config: GameConfig, content: Pick<Content, 'cards'
       ? ` (${plural(only.amount, 'material', 'materials')} for the starter ${only.name} card)`
       : ''
   if (!config.rulings.gatherNeedsNode)
-    return `Play a card's Gather option anywhere to get its materials${example}; a gathering node it is played on gives materials once.`
+    return `Play a card's Gather option on any hex with no enemy on it to get its materials${example}; a gathering node it is played on gives materials once.`
   const off = config.gather.offNodeAmount
   const elsewhere =
-    off > 0 ? ` Anywhere else, a Gather option gets ${plural(off, 'material', 'materials')}.` : ''
-  return `Play a card's Gather option on a gathering node to get its materials${example}; each node gives its materials once, then it is spent for the rest of the run.${elsewhere}`
+    off > 0
+      ? ` On any other hex with no enemy on it, a Gather option gets ${plural(off, 'material', 'materials')}.`
+      : ''
+  return `Play a card's Gather option on a gathering node with no enemy on it to get its materials${example}; each node gives its materials once, then it is spent for the rest of the run.${elsewhere}`
 }
 
 /** "a grunt rolls 1, an elite 2": each enemy's enemy dice, from the enemy content. */

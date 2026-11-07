@@ -27,15 +27,6 @@
 - suggested fix: "the players defend it; stand on the Base tile and play a Build card to buy upgrades, and buy cards once Shop I is built".
 - source: web-fetch
 
-### [LOW] /play — the Gather card text never says an enemy on the node blocks it
-- pass: 40 (commit 0094d97)
-- viewport: desktop
-- category: comprehension
-- observation: A Gather on a node with an enemy on it gives nothing, and only the log line after the card is spent says so. The card text, the /tiles node legend and the / Materials line all say an unspent node is enough.
-- evidence: `packages/engine/src/gather/gather.ts:22-25` (`blocked` gives 0); log "gather on an unspent gathering node with no enemy on it" (`apps/web/src/play/describeEvent.ts:165`); card "Gather 2 on an unspent gathering node (the node is spent)" (`packages/content/src/ruleText.ts:171`); legend `:83`.
-- suggested fix: Add "with no enemy on it" to the Gather card text, the node legend and the Materials line, as the log line says.
-- source: web-fetch
-
 ### [LOW] /play — the Skill draft buttons say "Draft" under a banner and title that say "keep"
 - pass: 40 (commit 0094d97)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the Gather card text never says an enemy on the node blocks it
+- pass: 40 (commit 0094d97)
+- viewport: desktop
+- category: comprehension
+- observation: A Gather on a node with an enemy on it gives nothing, and only the log line after the card is spent says so. The card text, the /tiles node legend and the / Materials line all say an unspent node is enough.
+- evidence: `packages/engine/src/gather/gather.ts:22-25` (`blocked` gives 0); log "gather on an unspent gathering node with no enemy on it" (`apps/web/src/play/describeEvent.ts:165`); card "Gather 2 on an unspent gathering node (the node is spent)" (`packages/content/src/ruleText.ts:171`); legend `:83`.
+- suggested fix: Add "with no enemy on it" to the Gather card text, the node legend and the Materials line, as the log line says.
+- source: web-fetch
+- issue: #321
+- fixed: (this commit) — the card reads "Gather 2 on an unspent gathering node with no enemy on it (the node is spent)", the /tiles node legend "a card's Gather option played here with no enemy on the node gets its materials once; ...", and the / Materials line "on a gathering node with no enemy on it"; the off-node and anywhere readings say the same; a ruleText test checks every reading names the enemy
 
 ### [x] [MED] /play — the Build banner says "not enough materials" when the only upgrades left are out of reach for a Build card
 - pass: 40 (commit 0094d97)
