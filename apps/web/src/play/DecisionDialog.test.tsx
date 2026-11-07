@@ -122,4 +122,30 @@ describe('DecisionDialog', () => {
     expect(label.startsWith(`Keep ${def.name} (${def.faces.join(' + ')})`)).toBe(true)
     expect(label).not.toMatch(/^Draft/)
   })
+
+  it('says where a replaced Skill goes, only when the kept Skill needs a slot (11.9)', () => {
+    const [old, kept] = defaultContent.skills
+    const state = createGame(defaultContent.config, 1)
+    const { unmount } = render(
+      <DecisionDialog
+        state={{
+          ...state,
+          draft: { player: state.players[0]!.id, level: '1', options: [], kept: kept!.id },
+        }}
+        legal={[{ type: 'replaceSkill', skill: old!.id }]}
+        act={() => {}}
+      />,
+    )
+    expect(screen.getByText('The Skill you replace goes to the bottom of its supply.')).toBeTruthy()
+    expect(screen.getByRole('button').textContent).toContain(`Replace ${old!.name}`)
+    unmount()
+    render(
+      <DecisionDialog
+        state={state}
+        legal={[{ type: 'draftSkill', skill: kept!.id }]}
+        act={() => {}}
+      />,
+    )
+    expect(screen.queryByText(/bottom of its supply/)).toBeNull()
+  })
 })

@@ -1,4 +1,10 @@
-import { draftFullText, draftPoolText, draftTitle, returnStarterText } from '@survival/content'
+import {
+  draftFullText,
+  draftPoolText,
+  draftTitle,
+  replaceSkillText,
+  returnStarterText,
+} from '@survival/content'
 import type { Action, GameState } from '@survival/engine'
 import { useEffect, useRef } from 'react'
 import { cardText, skillText } from './effectText.ts'
@@ -55,6 +61,7 @@ export function DecisionDialog({ state, legal, act }: Props) {
           {title}
         </h2>
         {drafts.length > 0 && <p className={styles.muted}>{draftPoolText(state.config)}</p>}
+        {replaces.length > 0 && <p className={styles.muted}>{replaceSkillText()}</p>}
         {returns.length > 0 && <p className={styles.muted}>{returnStarterText()}</p>}
         <ul className={styles.choices}>
           {drafts.map((a, i) => (

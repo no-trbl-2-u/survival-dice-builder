@@ -10,6 +10,7 @@ import {
   defenseText,
   enemyHitText,
   draftFullText,
+  draftSlotsText,
   draftPoolText,
   draftTitle,
   gatherText,
@@ -26,6 +27,7 @@ import {
   roundText,
   configRuleNote,
   ruleCitation,
+  replaceSkillText,
   ruleLineFor,
   shopText,
   siegeText,
@@ -365,6 +367,21 @@ describe('rule text from config', () => {
     )
     expect(draftPoolText(base)).toMatch(/go to your pool/)
     expect(draftPoolText(two)).toMatch(/back to the supply/)
+  })
+
+  it('draft slots: the /config line states the full-slots rule (11.9)', () => {
+    const n = base.player.draftSlots
+    const swap = `With all ${n} draft slots full, a newly kept Skill replaces one of your drafted Skills, which goes to the bottom of its supply.`
+    expect(draftSlotsText(base)).toBe(swap)
+    expect(ruleLineFor('player.draftSlots', base, defaultContent)).toBe(swap)
+    const skip = With((c) => ({ ...c, rulings: { ...c.rulings, fullBoardDraft: 'skip' } }))
+    expect(ruleLineFor('rulings.fullBoardDraft', skip, defaultContent)).toBe(
+      `With all ${n} draft slots full, a player has no Skill draft.`,
+    )
+    const slots = (k: number) => With((c) => ({ ...c, player: { ...c.player, draftSlots: k } }))
+    expect(draftSlotsText(slots(1))).toMatch(/^With the 1 draft slot full, /)
+    expect(draftSlotsText(slots(0))).toBe('With 0 draft slots, no player drafts a Skill.')
+    expect(replaceSkillText()).toBe('The Skill you replace goes to the bottom of its supply.')
   })
 
   it('miniature limit and players follow config', () => {

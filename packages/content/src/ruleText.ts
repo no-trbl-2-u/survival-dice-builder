@@ -458,6 +458,30 @@ export function draftFullText(config: GameConfig, kept: string): string {
 }
 
 /**
+ * The draft dialog's help line when a kept Skill must replace a drafted Skill.
+ *
+ * @rule 11.9
+ */
+export function replaceSkillText(): string {
+  return 'The Skill you replace goes to the bottom of its supply.'
+}
+
+/**
+ * The /config Draft Skill slots rule: what a draft does once every draft slot holds a Skill.
+ * Only drafted Skills are replaced, never starter Skills; with 0 slots there is no draft.
+ *
+ * @rule 11.9, OPEN-QUESTIONS row 46
+ */
+export function draftSlotsText(config: GameConfig): string {
+  const n = config.player.draftSlots
+  if (n === 0) return 'With 0 draft slots, no player drafts a Skill.'
+  const full = `With ${n === 1 ? 'the 1 draft slot' : `all ${n} draft slots`} full`
+  return config.rulings.fullBoardDraft === 'skip'
+    ? `${full}, a player has no Skill draft.`
+    : `${full}, a newly kept Skill replaces one of your drafted Skills, which goes to the bottom of its supply.`
+}
+
+/**
  * Where the Skills a player does not keep go.
  *
  * @rule 11.8 (designer 2026-10-09)
@@ -716,7 +740,8 @@ export function ruleLineFor(
   if (group === 'knockout') return knockoutText(config)
   if (path === 'gather.offNodeAmount' || path === 'rulings.gatherNeedsNode')
     return `${gatherText(2, config)}.`
-  if (path === 'player.draftSlots') return `${draftFullText(config, 'the new Skill')}.`
+  if (path === 'player.draftSlots' || path === 'rulings.fullBoardDraft')
+    return draftSlotsText(config)
   if (path === 'draft.unpicked') return draftPoolText(config)
   if (path === 'combat.model')
     return `${combatText(config, config.combat.model, content)} ${siegeText(content)}`

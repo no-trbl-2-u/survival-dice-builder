@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — the Draft Skill slots line states a game moment, and does not say which Skill is replaced or where it goes
-- pass: 41 (commit 8e8b4a3)
-- viewport: desktop
-- category: comprehension
-- observation: Under Draft Skill slots, the "With these values" line reads "Your 6 draft slots are full: the new Skill replaces a Skill.", a game moment, not a rule. Only a drafted Skill can be replaced (not a starter Skill), and the replaced Skill goes to the bottom of its supply even under the pool default. The /play replace dialog uses the same text and does not say where the old Skill goes.
-- evidence: `packages/content/src/ruleText.ts:715` calls `draftFullText(config, 'the new Skill')` (`:453`); `packages/engine/src/api/legalActions.ts:37` offers `replaceSkill` only for `draftedSkills(...)`; `packages/engine/src/progression/draft.ts:169` sends the old Skill `toBottom` of its supply.
-- suggested fix: For the /config line, write the rule: "With all 6 draft slots full, a newly kept Skill replaces one of your drafted Skills, which goes to the bottom of its supply."; add "it goes to the bottom of its supply" to the /play dialog text.
-- source: web-fetch
-
 ### [LOW] /play — in co-op, the Skill draft and Return a starter card help says "you" under a dialog that names the seat
 - pass: 41 (commit 8e8b4a3)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /config — the Draft Skill slots line states a game moment, and does not say which Skill is replaced or where it goes
+- pass: 41 (commit 8e8b4a3)
+- viewport: desktop
+- category: comprehension
+- observation: Under Draft Skill slots, the "With these values" line reads "Your 6 draft slots are full: the new Skill replaces a Skill.", a game moment, not a rule. Only a drafted Skill can be replaced (not a starter Skill), and the replaced Skill goes to the bottom of its supply even under the pool default. The /play replace dialog uses the same text and does not say where the old Skill goes.
+- evidence: `packages/content/src/ruleText.ts:715` calls `draftFullText(config, 'the new Skill')` (`:453`); `packages/engine/src/api/legalActions.ts:37` offers `replaceSkill` only for `draftedSkills(...)`; `packages/engine/src/progression/draft.ts:169` sends the old Skill `toBottom` of its supply.
+- suggested fix: For the /config line, write the rule: "With all 6 draft slots full, a newly kept Skill replaces one of your drafted Skills, which goes to the bottom of its supply."; add "it goes to the bottom of its supply" to the /play dialog text.
+- source: web-fetch
+- issue: #329
+- fixed: (this commit) — the /config Draft Skill slots line (and the Draft with full slots line) now states the rule: "With all 6 draft slots full, a newly kept Skill replaces one of your drafted Skills, which goes to the bottom of its supply." ("a player has no Skill draft" under skip; "no player drafts a Skill" at 0 slots); the /play replace dialog adds "The Skill you replace goes to the bottom of its supply."; ruleText and DecisionDialog tests pin both
 
 ### [x] [MED] / — the Skills line says a draft shows 2 Skills, but later drafts add the player's whole pool
 - pass: 41 (commit 8e8b4a3)

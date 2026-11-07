@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-07 (pass 276, cloud tick)
+
+Pass 275 reworded the / Skills line for the draft pool (d92b945). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 2 commits ago) and so is the expand gate (pass 28 ran 6 commits ago, about 4 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 41: the /config Draft Skill slots line read "Your 6 draft slots are full: the new Skill replaces a Skill.", a game moment that does not say only drafted Skills are replaced or where the old one goes (11.9). Scored 8.1 (critique MED: impact 6, ease 9, bias x1.5). A new `draftSlotsText` states the rule for the Draft Skill slots and Draft with full slots fields: "With all 6 draft slots full, a newly kept Skill replaces one of your drafted Skills, which goes to the bottom of its supply." (skip: "a player has no Skill draft"; 0 slots: "no player drafts a Skill"). The /play replace dialog adds "The Skill you replace goes to the bottom of its supply." Next in line: the pass 41 LOW rows (co-op seat voice in the draft help, draft log subjects, log cap, draft cadence help).
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /config: the Draft Skill slots line states a game moment and does not say which Skill is replaced or where it goes (critique MED, pass 41, bias x1.5)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: `draftSlotsText` in `ruleLineFor`; replace help line in the /play dialog
+- issue: #329
+- fixed: (this commit)
+
+### [ ] [3.6] /play: in co-op the draft and starter-return help says "you" under a dialog that names the seat (critique LOW, pass 41)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: pass the seat name to `draftPoolText`, `returnStarterText` and `replaceSkillText`
+
 # Site audit — 2026-11-07 (pass 275, cloud tick)
 
 Pass 274 added the /decisions inline markdown unit test (8e8b4a3), and critique pass 41 filed 6 findings (290d32f). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 just ran) and so is the expand gate (pass 28 ran 5 commits ago, about 3 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 41: the / Skills line says each player looks at 2 Skills, but under the default pool rule (11.6) every later draft also offers that player's pool, and the /config "Skills revealed" help has the same gap. Scored 9.0 (critique MED: impact 6, ease 10, bias x1.5, capped). `trainingText` now says "looks at 2 new Skills plus their own pool" under the pool rule and keeps "looks at 2 Skills" under the supply rule; the "Skills revealed" help says "New Skills each player looks at in a draft, from the top of the supply." Next in line: the pass 41 MED Draft Skill slots line, then the pass 41 LOW rows.
