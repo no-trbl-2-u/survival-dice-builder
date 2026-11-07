@@ -107,4 +107,19 @@ describe('DecisionDialog', () => {
     render(<DecisionDialog state={state} legal={[{ type: 'draftSkill', skill }]} act={() => {}} />)
     expect(screen.getByRole('button').textContent).toContain("(from Player 2's pool)")
   })
+
+  it('labels each draft option "Keep <Skill>", as the title and banner say', () => {
+    const def = defaultContent.skills[0]!
+    const state = createGame(defaultContent.config, 1)
+    render(
+      <DecisionDialog
+        state={state}
+        legal={[{ type: 'draftSkill', skill: def.id }]}
+        act={() => {}}
+      />,
+    )
+    const label = screen.getByRole('button').textContent ?? ''
+    expect(label.startsWith(`Keep ${def.name} (${def.faces.join(' + ')})`)).toBe(true)
+    expect(label).not.toMatch(/^Draft/)
+  })
 })

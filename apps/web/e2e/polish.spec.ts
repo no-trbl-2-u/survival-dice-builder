@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 
 /** The same weak policy as play-full: the first visible button that matches, in order. */
 const PREFERENCES: readonly RegExp[] = [
-  /^Draft /,
+  /^Keep (?!the card)/,
   /^Place /,
   /^Step off the map edge/,
   /^Move to [^:]+$/,

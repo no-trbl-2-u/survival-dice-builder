@@ -18,15 +18,6 @@
 - suggested fix: "Your pool (default, written rules): they go to your own pool, ... Back to the supply (older rule): they go to the bottom of their supply, kept for playtests."
 - source: web-fetch
 
-### [LOW] /play — the Skill draft buttons say "Draft" under a banner and title that say "keep"
-- pass: 40 (commit 0094d97)
-- viewport: desktop
-- category: voice
-- observation: Banner "Choose a Skill to keep" and dialog title "Skill draft: keep a Skill"; the buttons say "Draft <name>" and the log says "draft".
-- evidence: `apps/web/src/play/nextStep.ts:28`; `packages/content/src/ruleText.ts:439`; `apps/web/src/play/DecisionDialog.tsx:63`; `describeEvent.ts:214`.
-- suggested fix: Label the buttons "Keep <name> (<faces>)" and the log line "<who> keep(s) <Skill>"; keep "Skill draft" as the event name.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the Skill draft buttons say "Draft" under a banner and title that say "keep"
+- pass: 40 (commit 0094d97)
+- viewport: desktop
+- category: voice
+- observation: Banner "Choose a Skill to keep" and dialog title "Skill draft: keep a Skill"; the buttons say "Draft <name>" and the log says "draft".
+- evidence: `apps/web/src/play/nextStep.ts:28`; `packages/content/src/ruleText.ts:439`; `apps/web/src/play/DecisionDialog.tsx:63`; `describeEvent.ts:214`.
+- suggested fix: Label the buttons "Keep <name> (<faces>)" and the log line "<who> keep(s) <Skill>"; keep "Skill draft" as the event name.
+- source: web-fetch
+- issue: #323
+- fixed: (this commit) — the draft buttons read "Keep <Skill> (<faces>)" and the log line reads "<who> keep(s) <Skill>", as the banner and title say; "Skill draft" stays the event name; a DecisionDialog test and the tenseLog test pin the words
 
 ### [x] [LOW] /tiles — the Base legend does not say a Build card is needed to buy upgrades
 - pass: 40 (commit 0094d97)

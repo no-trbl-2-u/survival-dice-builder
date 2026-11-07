@@ -60,7 +60,7 @@ export function DecisionDialog({ state, legal, act }: Props) {
           {drafts.map((a, i) => (
             <li key={a.skill} className={styles.reveal} style={{ animationDelay: `${i * 120}ms` }}>
               <button type="button" onClick={() => act(a)}>
-                Draft {skill(a.skill)?.name} ({skill(a.skill)?.faces.join(' + ')})
+                Keep {skill(a.skill)?.name} ({skill(a.skill)?.faces.join(' + ')})
                 <span className={styles.muted}>{effectOf(a.skill)}</span>
                 {state.draft?.fromPool?.includes(a.skill) ? (
                   <span className={styles.muted}> (from {seat ? `${seat}'s` : 'your'} pool)</span>

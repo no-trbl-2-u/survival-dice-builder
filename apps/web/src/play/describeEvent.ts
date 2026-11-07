@@ -211,7 +211,7 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'draftStarted':
       return `Skill draft: ${event.options.map((s) => skillName(names, s)).join(' or ')}.`
     case 'skillDrafted':
-      return `${who(event.player)} ${s('draft')} ${skillName(names, event.skill)}.`
+      return `${who(event.player)} ${s('keep')} ${skillName(names, event.skill)}.`
     case 'draftSkipped':
       return 'No Skills left to draft.'
     case 'skillPooled':

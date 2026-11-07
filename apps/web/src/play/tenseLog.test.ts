@@ -61,7 +61,7 @@ describe('player actions in the log', () => {
       'You gain',
       'You buy',
       'You buy',
-      'You draft',
+      'You keep',
       'You gain',
     ])
   })
@@ -79,7 +79,7 @@ describe('player actions in the log', () => {
       'Player 1 gains',
       'Player 1 buys',
       'Player 1 buys',
-      'Player 1 drafts',
+      'Player 1 keeps',
       'All players gain',
     ])
   })

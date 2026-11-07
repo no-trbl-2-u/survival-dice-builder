@@ -6,7 +6,7 @@ import fs from 'node:fs'
  * policy; buying is skipped. Each step clicks the first visible button that matches.
  */
 const PREFERENCES: readonly RegExp[] = [
-  /^Draft /,
+  /^Keep (?!the card)/,
   /^Replace /,
   /^Return /,
   /^Place /,
