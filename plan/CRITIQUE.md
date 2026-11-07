@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the "Skills you do not keep" help does not start each choice with its list label
-- pass: 40 (commit 0094d97)
-- viewport: desktop
-- category: voice
-- observation: The help writes "Your pool (default):" and "Back to the supply:" and puts "the older rule" at the end; the list says "Your pool (default, written rules)" and "Back to the supply (older rule)". The Combat model and Defeated enemies' dice helps already start each choice with its exact label.
-- evidence: `packages/content/data/config.meta.json:277` (help), `:280-281` (option labels).
-- suggested fix: "Your pool (default, written rules): they go to your own pool, ... Back to the supply (older rule): they go to the bottom of their supply, kept for playtests."
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -64,6 +55,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the "Skills you do not keep" help does not start each choice with its list label
+- pass: 40 (commit 0094d97)
+- viewport: desktop
+- category: voice
+- observation: The help writes "Your pool (default):" and "Back to the supply:" and puts "the older rule" at the end; the list says "Your pool (default, written rules)" and "Back to the supply (older rule)". The Combat model and Defeated enemies' dice helps already start each choice with its exact label.
+- evidence: `packages/content/data/config.meta.json:277` (help), `:280-281` (option labels).
+- suggested fix: "Your pool (default, written rules): they go to your own pool, ... Back to the supply (older rule): they go to the bottom of their supply, kept for playtests."
+- source: web-fetch
+- issue: #324
+- fixed: (this commit) — the help now opens each choice with its exact list label, "Your pool (default, written rules):" and "Back to the supply (older rule):", as the Combat model and Defeated enemies' dice helps do; the configMetaText 11.7 test pins both labels
 
 ### [x] [LOW] /play — the Skill draft buttons say "Draft" under a banner and title that say "keep"
 - pass: 40 (commit 0094d97)

@@ -274,7 +274,7 @@
   },
   "draft.unpicked": {
     "label": "Skills you do not keep",
-    "help": "Your pool (default): they go to your own pool, and each later draft offers the new Skills plus your whole pool, so the choice grows and is not tied to one training level. Back to the supply: they go to the bottom of their supply (the older rule, kept for playtests).",
+    "help": "Your pool (default, written rules): they go to your own pool, and each later draft offers the new Skills plus your whole pool, so the choice grows and is not tied to one training level. Back to the supply (older rule): they go to the bottom of their supply, kept for playtests.",
     "rule": "11.7",
     "options": {
       "pool": "Your pool (default, written rules)",

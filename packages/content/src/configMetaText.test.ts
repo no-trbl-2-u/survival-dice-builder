@@ -183,12 +183,12 @@ describe('config.meta.json placeholders and help read as player text (critique p
 
   it('11.7: the unpicked Skills help names each choice as the list labels it', () => {
     const entry = defaultConfigMeta['draft.unpicked']
-    const labels = Object.values(entry?.options ?? {}).map((o) => o.replace(/\s*\(.*\)$/, ''))
+    const options = Object.values(entry?.options ?? {})
+    const labels = options.map((o) => o.replace(/\s*\(.*\)$/, ''))
     expect(labels).toEqual(['Your pool', 'Back to the supply'])
-    for (const label of labels) {
-      expect(entry?.help).toMatch(new RegExp(`(^|\\. )${label}( \\(default\\))?: `))
-    }
-    expect(entry?.help).not.toMatch(/^Pool\b|\. Supply:/)
+    expect(entry?.help).toMatch(/^Your pool \(default, written rules\): /)
+    for (const option of options) expect(entry?.help).toContain(`${option}: `)
+    expect(entry?.help).not.toMatch(/^Pool\b|\. Supply:|\(the older rule/)
   })
 
   it('every list marks its default choice, as the Combat model list does', () => {

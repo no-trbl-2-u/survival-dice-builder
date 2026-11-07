@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-07 (pass 270, cloud tick)
+
+Pass 269 said "keep" on the /play Skill draft buttons and log (b0967f1). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 6 commits ago, about 16 hours) and so is the expand gate (pass 27 ran 8 commits ago, about 22 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top: the /config "Skills you do not keep" help writes "Your pool (default):" and "Back to the supply:" while the list says "Your pool (default, written rules)" and "Back to the supply (older rule)". Scored 2.4 (critique LOW: impact 2, ease 9). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. The help now opens each choice with its exact list label, and the configMetaText 11.7 test pins both. Next in line: the /oversight-owned /decisions rows; with the critique queue otherwise drained, the next tick hands to /critique or /expand as their gates open.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /config: the "Skills you do not keep" help does not start each choice with its list label (external-critique LOW, pass 40)
+- category: external-critique (voice)
+- impact: 2
+- ease: 9
+- next: start each choice with its exact list label
+- issue: #324
+- fixed: (this commit)
+
+### [ ] [8.1] /decisions: three balance checks give three different bot results (critique MED, pass 21, bias x1.5; waits for /oversight)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: /oversight closes the 2026-10-03 and first 2026-10-04 balance items and keeps the latest batch
+
 # Site audit — 2026-11-07 (pass 269, cloud tick)
 
 Pass 268 named the Build card in the /tiles Base legend (da2f86d). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 40 ran 5 commits ago, about 15 hours) and so is the expand gate (pass 27 ran 8 commits ago, about 21 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top: the /play Skill draft buttons say "Draft <Skill>" and the log says "drafts" under a banner ("Choose a Skill to keep") and title ("Skill draft: keep a Skill") that say keep. Scored 2.4 (critique LOW: impact 3, ease 8). It ships ahead of a hand-off to /expand, as earlier sub-3.0 rows did, because the expand gate is closed. The buttons now read "Keep <Skill> (<faces>)" and the log "<who> keep(s) <Skill>"; a DecisionDialog test and the tenseLog test pin them, and the e2e click policies match "Keep" (not the card strip's "Keep the card"). Next in line: the /config Skills help labels row, then the /oversight-owned /decisions rows.
