@@ -5,6 +5,27 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-07 (pass 277, cloud tick)
+
+Pass 276 stated the full-slots rule on the /config Draft Skill slots line (bbddbbd). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 3 commits ago) and so is the expand gate (pass 28 ran 7 commits ago, about 11 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 41: in co-op the /play draft, replace and starter-return dialogs name the seat ("Player 2") above the title, but the title and help lines say "you" and "your". Scored 3.6 (critique LOW voice: impact 4, ease 9). `draftPoolText`, `replaceSkillText`, `returnStarterText` and `draftFullText` take an optional seat name; the dialog passes it in co-op, so the lines read "The Skills Player 2 does not keep go to Player 2's pool.", "The Skill Player 2 replaces goes to the bottom of its supply.", "Player 2 bought a card, so a starter card leaves Player 2's deck for good." and "Player 2's 6 draft slots are full: ...". Solo, /config, / and the playtest kit keep "you". Next in line: the pass 41 LOW rows (the draft log subjects, the log cap, already mirrored as #330, and the draft cadence help).
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play: in co-op the draft and starter-return help says "you" under a dialog that names the seat (critique LOW, pass 41)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: pass the seat name to `draftPoolText`, `returnStarterText`, `replaceSkillText` and `draftFullText`
+- issue: #331
+- fixed: (this commit)
+
+### [ ] [2.7] /play: the event log hides lines past 60 without saying so, and numbers the newest line 1 (critique LOW, pass 41)
+- category: external-critique (a11y)
+- impact: 3
+- ease: 9
+- next: `reversed` on the log `<ol>`, and a muted "Showing the 60 newest of N lines" past 60
+- issue: #330
+
 # Site audit — 2026-11-07 (pass 276, cloud tick)
 
 Pass 275 reworded the / Skills line for the draft pool (d92b945). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 2 commits ago) and so is the expand gate (pass 28 ran 6 commits ago, about 4 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 41: the /config Draft Skill slots line read "Your 6 draft slots are full: the new Skill replaces a Skill.", a game moment that does not say only drafted Skills are replaced or where the old one goes (11.9). Scored 8.1 (critique MED: impact 6, ease 9, bias x1.5). A new `draftSlotsText` states the rule for the Draft Skill slots and Draft with full slots fields: "With all 6 draft slots full, a newly kept Skill replaces one of your drafted Skills, which goes to the bottom of its supply." (skip: "a player has no Skill draft"; 0 slots: "no player drafts a Skill"). The /play replace dialog adds "The Skill you replace goes to the bottom of its supply." Next in line: the pass 41 LOW rows (co-op seat voice in the draft help, draft log subjects, log cap, draft cadence help).

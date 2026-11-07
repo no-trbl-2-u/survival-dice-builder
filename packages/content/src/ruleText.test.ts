@@ -327,6 +327,9 @@ describe('rule text from config', () => {
 
   it('starter return: one fixed line, read by the dialog', () => {
     expect(returnStarterText()).toMatch(/starter card leaves your deck/)
+    expect(returnStarterText('Player 2')).toBe(
+      "Player 2 bought a card, so a starter card leaves Player 2's deck for good.",
+    )
   })
 
   it('rule citations: design-document tags become plain words; sections pass through', () => {
@@ -365,8 +368,17 @@ describe('rule text from config', () => {
     expect(draftFullText(base, 'Fireball')).toBe(
       `Your ${base.player.draftSlots} draft slots are full: Fireball replaces a Skill`,
     )
+    expect(draftFullText(base, 'Fireball', 'Player 2')).toBe(
+      `Player 2's ${base.player.draftSlots} draft slots are full: Fireball replaces a Skill`,
+    )
     expect(draftPoolText(base)).toMatch(/go to your pool/)
     expect(draftPoolText(two)).toMatch(/back to the supply/)
+    expect(draftPoolText(base, 'Player 2')).toBe(
+      "The Skills Player 2 does not keep go to Player 2's pool. Later drafts offer them again.",
+    )
+    expect(draftPoolText(two, 'Player 2')).toBe(
+      'The Skills Player 2 does not keep go back to the supply.',
+    )
   })
 
   it('draft slots: the /config line states the full-slots rule (11.9)', () => {
@@ -382,6 +394,9 @@ describe('rule text from config', () => {
     expect(draftSlotsText(slots(1))).toMatch(/^With the 1 draft slot full, /)
     expect(draftSlotsText(slots(0))).toBe('With 0 draft slots, no player drafts a Skill.')
     expect(replaceSkillText()).toBe('The Skill you replace goes to the bottom of its supply.')
+    expect(replaceSkillText('Player 3')).toBe(
+      'The Skill Player 3 replaces goes to the bottom of its supply.',
+    )
   })
 
   it('miniature limit and players follow config', () => {

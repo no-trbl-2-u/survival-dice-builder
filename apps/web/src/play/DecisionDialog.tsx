@@ -37,12 +37,12 @@ export function DecisionDialog({ state, legal, act }: Props) {
     const def = skill(id)
     return def ? `: ${skillText(def.effect, state.config.combat.model)}` : ''
   }
+  const seat = state.players.length > 1 ? seatName(state, state.current) : null
   const title = drafts.length
     ? draftTitle()
     : replaces.length
-      ? draftFullText(state.config, skill(state.draft?.kept ?? '')?.name ?? '')
+      ? draftFullText(state.config, skill(state.draft?.kept ?? '')?.name ?? '', seat ?? undefined)
       : 'Return a starter card'
-  const seat = state.players.length > 1 ? seatName(state, state.current) : null
   return (
     <div className={styles.backdrop}>
       <div
@@ -60,9 +60,15 @@ export function DecisionDialog({ state, legal, act }: Props) {
         <h2 id="decision-title" className={styles.panelTitle}>
           {title}
         </h2>
-        {drafts.length > 0 && <p className={styles.muted}>{draftPoolText(state.config)}</p>}
-        {replaces.length > 0 && <p className={styles.muted}>{replaceSkillText()}</p>}
-        {returns.length > 0 && <p className={styles.muted}>{returnStarterText()}</p>}
+        {drafts.length > 0 && (
+          <p className={styles.muted}>{draftPoolText(state.config, seat ?? undefined)}</p>
+        )}
+        {replaces.length > 0 && (
+          <p className={styles.muted}>{replaceSkillText(seat ?? undefined)}</p>
+        )}
+        {returns.length > 0 && (
+          <p className={styles.muted}>{returnStarterText(seat ?? undefined)}</p>
+        )}
         <ul className={styles.choices}>
           {drafts.map((a, i) => (
             <li key={a.skill} className={styles.reveal} style={{ animationDelay: `${i * 120}ms` }}>

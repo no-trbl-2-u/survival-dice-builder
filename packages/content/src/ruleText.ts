@@ -375,12 +375,15 @@ export function targetOrderText(config: GameConfig): string {
 }
 
 /**
- * The starter-return dialog's line: a bought card sends a starter card away.
+ * The starter-return dialog's line: a bought card sends a starter card away. In co-op the dialog
+ * passes the seat name ("Player 2"), so the line names the player the dialog names.
  *
  * @rule 18.1 (bought cards replace a starter)
  */
-export function returnStarterText(): string {
-  return 'You bought a card, so a starter card leaves your deck for good.'
+export function returnStarterText(seat?: string): string {
+  return seat
+    ? `${seat} bought a card, so a starter card leaves ${seat}'s deck for good.`
+    : 'You bought a card, so a starter card leaves your deck for good.'
 }
 
 /** Design-document tags in player words: the documents are build history, not rules names. */
@@ -453,17 +456,18 @@ export function draftTitle(): string {
  * @param kept - the name of the Skill just kept.
  * @rule 11.8, OPEN-QUESTIONS row 15
  */
-export function draftFullText(config: GameConfig, kept: string): string {
-  return `Your ${plural(config.player.draftSlots, 'draft slot is', 'draft slots are')} full: ${kept} replaces a Skill`
+export function draftFullText(config: GameConfig, kept: string, seat?: string): string {
+  return `${seat ? `${seat}'s` : 'Your'} ${plural(config.player.draftSlots, 'draft slot is', 'draft slots are')} full: ${kept} replaces a Skill`
 }
 
 /**
- * The draft dialog's help line when a kept Skill must replace a drafted Skill.
+ * The draft dialog's help line when a kept Skill must replace a drafted Skill. In co-op the
+ * dialog passes the seat name, so the line names the player the dialog names.
  *
  * @rule 11.9
  */
-export function replaceSkillText(): string {
-  return 'The Skill you replace goes to the bottom of its supply.'
+export function replaceSkillText(seat?: string): string {
+  return `The Skill ${seat ? `${seat} replaces` : 'you replace'} goes to the bottom of its supply.`
 }
 
 /**
@@ -482,14 +486,16 @@ export function draftSlotsText(config: GameConfig): string {
 }
 
 /**
- * Where the Skills a player does not keep go.
+ * Where the Skills a player does not keep go. The co-op draft dialog passes the seat name
+ * ("Player 2"), so the line names the player the dialog names; every other reader speaks to "you".
  *
  * @rule 11.8 (designer 2026-10-09)
  */
-export function draftPoolText(config: GameConfig): string {
+export function draftPoolText(config: GameConfig, seat?: string): string {
+  const who = seat ? `${seat} does` : 'you do'
   return config.draft.unpicked === 'pool'
-    ? 'The Skills you do not keep go to your pool. Later drafts offer them again.'
-    : 'The Skills you do not keep go back to the supply.'
+    ? `The Skills ${who} not keep go to ${seat ? `${seat}'s` : 'your'} pool. Later drafts offer them again.`
+    : `The Skills ${who} not keep go back to the supply.`
 }
 
 /**

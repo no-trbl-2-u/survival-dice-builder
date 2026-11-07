@@ -71,6 +71,12 @@ describe('DecisionDialog', () => {
     const { unmount } = render(<DecisionDialog state={coop} legal={legal} act={() => {}} />)
     expect(screen.getByRole('dialog', { name: /^Player 2 Return a starter card$/ })).toBeTruthy()
     expect(screen.getByRole('button').textContent).toContain(`(Player 2 has ${copies.length})`)
+    expect(
+      screen.getByText(
+        "Player 2 bought a card, so a starter card leaves Player 2's deck for good.",
+      ),
+    ).toBeTruthy()
+    expect(screen.queryByText(/\byou(r)?\b/i)).toBeNull()
     unmount()
     const solo = createGame(defaultContent.config, 1)
     const own = [...solo.players[0]!.deck, ...solo.players[0]!.discard]
@@ -86,6 +92,7 @@ describe('DecisionDialog', () => {
     )
     expect(screen.getByRole('dialog', { name: /^Return a starter card$/ })).toBeTruthy()
     expect(screen.getByRole('button').textContent).toContain('(you have')
+    expect(screen.getByText(/leaves your deck for good/)).toBeTruthy()
   })
 
   it("marks a co-op seat's pooled draft options as theirs", () => {
@@ -106,6 +113,36 @@ describe('DecisionDialog', () => {
     }
     render(<DecisionDialog state={state} legal={[{ type: 'draftSkill', skill }]} act={() => {}} />)
     expect(screen.getByRole('button').textContent).toContain("(from Player 2's pool)")
+    expect(
+      screen.getByText(
+        "The Skills Player 2 does not keep go to Player 2's pool. Later drafts offer them again.",
+      ),
+    ).toBeTruthy()
+  })
+
+  it('names the seat in the co-op replace help line (11.9)', () => {
+    const [old, kept] = defaultContent.skills
+    const coop = {
+      ...createGame(defaultContent.config, 1, defaultContent, { players: 2 }),
+      current: 1,
+    }
+    render(
+      <DecisionDialog
+        state={{
+          ...coop,
+          draft: { player: coop.players[1]!.id, level: '1', options: [], kept: kept!.id },
+        }}
+        legal={[{ type: 'replaceSkill', skill: old!.id }]}
+        act={() => {}}
+      />,
+    )
+    expect(
+      screen.getByText('The Skill Player 2 replaces goes to the bottom of its supply.'),
+    ).toBeTruthy()
+    expect(screen.getByRole('heading').textContent).toMatch(
+      /^Player 2's \d+ draft slots are full: /,
+    )
+    expect(screen.queryByText(/\byou(r)?\b/i)).toBeNull()
   })
 
   it('labels each draft option "Keep <Skill>", as the title and banner say', () => {

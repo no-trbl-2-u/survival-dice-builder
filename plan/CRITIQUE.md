@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — in co-op, the Skill draft and Return a starter card help says "you" under a dialog that names the seat
-- pass: 41 (commit 8e8b4a3)
-- viewport: desktop
-- category: voice
-- observation: The dialog names the seat ("Player 2") and its buttons say "(from Player 2's pool)" and "(Player 2 has 2)", but the help paragraph under the title says "you" and "your".
-- evidence: `apps/web/src/play/DecisionDialog.tsx:57` draftPoolText "The Skills you do not keep go to your pool. Later drafts offer them again."; `:58` returnStarterText "You bought a card, so a starter card leaves your deck for good." (`packages/content/src/ruleText.ts:379`); `:66`, `:83` name the seat.
-- suggested fix: Pass the seat name to `draftPoolText` and `returnStarterText` in co-op, so the help reads "The Skills Player 2 does not keep go to Player 2's pool."
-- source: web-fetch
-
 ### [LOW] /play — two Skill draft log lines do not name the player
 - pass: 41 (commit 8e8b4a3)
 - viewport: desktop
@@ -35,6 +26,7 @@
 - evidence: `apps/web/src/play/PlayLog.tsx:6` `const SHOWN = 60`, `:22` `slice(-SHOWN).reverse()`, `:25` "What happened (newest first)", `:26` `<ol>` with no `reversed`; `apps/web/src/debug/EventLog.tsx:41` "Event log (N)".
 - suggested fix: Add `reversed` to the `<ol>` and, past 60 lines, a muted "Showing the 60 newest of N lines" under the heading.
 - source: web-fetch
+- issue: #330
 
 ### [LOW] /config — the "Draft every N rounds" help example reads as if drafts stop at round 6
 - pass: 41 (commit 8e8b4a3)
@@ -91,6 +83,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — in co-op, the Skill draft and Return a starter card help says "you" under a dialog that names the seat
+- pass: 41 (commit 8e8b4a3)
+- viewport: desktop
+- category: voice
+- observation: The dialog names the seat ("Player 2") and its buttons say "(from Player 2's pool)" and "(Player 2 has 2)", but the help paragraph under the title says "you" and "your".
+- evidence: `apps/web/src/play/DecisionDialog.tsx:57` draftPoolText "The Skills you do not keep go to your pool. Later drafts offer them again."; `:58` returnStarterText "You bought a card, so a starter card leaves your deck for good." (`packages/content/src/ruleText.ts:379`); `:66`, `:83` name the seat.
+- suggested fix: Pass the seat name to `draftPoolText` and `returnStarterText` in co-op, so the help reads "The Skills Player 2 does not keep go to Player 2's pool."
+- source: web-fetch
+- issue: #331
+- fixed: (this commit) — `draftPoolText`, `replaceSkillText`, `returnStarterText` and `draftFullText` take an optional seat name; in co-op the /play dialog passes it, so the title and help name the seat ("The Skills Player 2 does not keep go to Player 2's pool.", "Player 2 bought a card, so a starter card leaves Player 2's deck for good."); solo and the /config, / and playtest-kit lines keep "you"; ruleText and DecisionDialog tests pin both
 
 ### [x] [MED] /config — the Draft Skill slots line states a game moment, and does not say which Skill is replaced or where it goes
 - pass: 41 (commit 8e8b4a3)
