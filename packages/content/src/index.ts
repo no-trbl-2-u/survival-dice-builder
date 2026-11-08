@@ -78,6 +78,7 @@ export {
   combatEndText,
   combatText,
   defenseText,
+  enemyDieText,
   enemyHitText,
   draftFullText,
   draftSlotsText,

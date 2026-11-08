@@ -259,6 +259,26 @@ export function enemyHitText(config: GameConfig): string {
   return `When you choose End engagement or no dice are left, every enemy die hits you at once, ${defeated}. Your guard takes the damage first, then your health.`
 }
 
+/** Each enemy die face as the die line names it. */
+const FACE_NAME = { hit: 'Hit', miss: 'Miss', special: 'Special' } as const
+
+/**
+ * The faces of an enemy die and the damage of each: "An enemy die has 2 Hit faces, 3 Miss faces
+ * and 1 Special face. A Hit deals 1 damage, a Special 2, a Miss none."
+ *
+ * @rule Spec v2 Table 4
+ */
+export function enemyDieText(config: GameConfig): string {
+  const { enemyDie, hitDamage, specialDamage } = config.combat.engage
+  const faces = (['hit', 'miss', 'special'] as const)
+    .map((face) => [face, enemyDie.filter((f) => f === face).length] as const)
+    .filter(([, n]) => n > 0)
+    .map(([face, n]) => plural(n, `${FACE_NAME[face]} face`, `${FACE_NAME[face]} faces`))
+  const list =
+    faces.length > 1 ? `${faces.slice(0, -1).join(', ')} and ${faces[faces.length - 1]}` : faces[0]
+  return `An enemy die has ${list}. A Hit deals ${hitDamage} damage, a Special ${specialDamage}, a Miss none.`
+}
+
 type Enemies = Pick<Content, 'enemies'>
 
 /**
@@ -764,8 +784,13 @@ export function ruleLineFor(
   if (path === 'draft.unpicked') return draftPoolText(config)
   if (path === 'combat.model')
     return `${combatText(config, config.combat.model, content)} ${siegeText(content)}`
-  if (path === 'combat.engage.hitDamage' || path === 'combat.engage.defeatedDice')
-    return enemyHitText(config)
+  if (
+    path === 'combat.engage.enemyDie' ||
+    path === 'combat.engage.hitDamage' ||
+    path === 'combat.engage.specialDamage'
+  )
+    return `${enemyDieText(config)} ${enemyHitText(config)}`
+  if (path === 'combat.engage.defeatedDice') return enemyHitText(config)
   if (path === 'rulings.mandatoryPlays') return combatEndText(config)
   if (path === 'rulings.targetTieBreak' || path === 'rulings.playerPullDistance')
     return targetOrderText(config)

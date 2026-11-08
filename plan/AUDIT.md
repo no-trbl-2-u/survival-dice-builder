@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-08 (pass 284, cloud tick)
+
+Pass 283 gave the /config spawn ramp, seats, range and maximum level fields their rule line (71630e8). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 10 commits ago, just under 24 hours) and so is the expand gate (pass 28 ran 14 commits ago, about 28 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass listed every /config field `ruleLineFor` still gives no line. No existing phrase reads the rest, so this pass added one for the closest group: Enemy die faces and Special damage show no line, and the Hit damage field's line (`enemyHitText`) never names the damage it sets. Scored 3.6 (comprehension: impact 4, ease 9). The new `enemyDieText` (Spec v2 Table 4) reads "An enemy die has 2 Hit faces, 3 Miss faces and 1 Special face. A Hit deals 1 damage, a Special 2, a Miss none." from config, and `ruleLineFor` maps the three fields to it plus `enemyHitText`; ruleText tests pin it at default and changed values. Still without a line: Rolls per engagement, Enemy move, Move cost next to an enemy, Health per upgrade, Smallest deck, the supply copies, the tile counts, Bought cards, Figures per hex, Blocked enemy, Forced reveal, Defenses on gathering nodes and Build levels (each needs a new phrase), plus the unused and retired fields. The critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: Enemy die faces, Hit damage and Special damage show no die line (audit)
+- category: content-gaps (comprehension)
+- impact: 4
+- ease: 9
+- next: add `enemyDieText` (Table 4) and map `combat.engage.enemyDie`, `hitDamage`, `specialDamage` to it plus `enemyHitText` in `ruleLineFor`
+- issue: #337
+- fixed: (this commit)
+
 # Site audit — 2026-11-08 (pass 283, cloud tick)
 
 Pass 282 gave the /config start and base health fields their rule line (3d0184d). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 9 commits ago, about 23 hours) and so is the expand gate (pass 28 ran 13 commits ago, about 27 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass went on down the list of /config fields `ruleLineFor` gives no line. Four more are fields an existing phrase already reads: Spawn ramp every, Spawns scale with seats and Spawn range (the tile sheet's spawn node phrase, `siteText`), and Maximum level (`levelText`, "The level stops at N."). A playtester who changes one of them sees no "With these values" line. Scored 3.6 (comprehension: impact 4, ease 9). `ruleLineFor` now maps the three spawn fields to "A spawn node ...; an elite spawn node ..." built from `siteText`, and `options.maxLevel` to `levelText`; ruleText tests pin each. Next in line: the /oversight-owned /decisions rows. The critique gate opens after 12 commits or 24 hours.

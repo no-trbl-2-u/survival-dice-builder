@@ -8,6 +8,7 @@ import {
   combatEndText,
   combatText,
   defenseText,
+  enemyDieText,
   enemyHitText,
   draftFullText,
   draftSlotsText,
@@ -265,10 +266,38 @@ describe('rule text from config', () => {
     }))
     expect(enemyHitText(cancelled)).toMatch(/except the dice of an enemy you defeated/)
     expect(combatText(base, 'engage', defaultContent)).toContain(enemyHitText(base))
-    expect(ruleLineFor('combat.engage.hitDamage', base, defaultContent)).toBe(enemyHitText(base))
     expect(ruleLineFor('combat.engage.defeatedDice', cancelled, defaultContent)).toBe(
       enemyHitText(cancelled),
     )
+  })
+
+  it('enemy die: the faces and the damage of each follow config (Table 4)', () => {
+    expect(enemyDieText(base)).toBe(
+      'An enemy die has 2 Hit faces, 3 Miss faces and 1 Special face. A Hit deals 1 damage, a Special 2, a Miss none.',
+    )
+    const harsh = With((c) => ({
+      ...c,
+      combat: {
+        ...c.combat,
+        engage: {
+          ...c.combat.engage,
+          enemyDie: ['hit', 'hit', 'hit', 'special', 'special', 'special'],
+          hitDamage: 2,
+          specialDamage: 3,
+        },
+      },
+    }))
+    expect(enemyDieText(harsh)).toBe(
+      'An enemy die has 3 Hit faces and 3 Special faces. A Hit deals 2 damage, a Special 3, a Miss none.',
+    )
+    for (const path of [
+      'combat.engage.enemyDie',
+      'combat.engage.hitDamage',
+      'combat.engage.specialDamage',
+    ])
+      expect(ruleLineFor(path, harsh, defaultContent)).toBe(
+        `${enemyDieText(harsh)} ${enemyHitText(harsh)}`,
+      )
   })
 
   it("siege: when Combat ends, structures take each enemy record's siege damage (7.10-7.12)", () => {
