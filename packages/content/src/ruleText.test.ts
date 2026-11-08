@@ -145,6 +145,21 @@ describe('rule text from config', () => {
     expect(startText(exchange, defaultContent)).toMatch(
       /Guard comes from the Guard Skill and your cards' bottom halves; it takes enemy damage before your health\./,
     )
+    for (const path of [
+      'player.maxHealth',
+      'player.startingDice',
+      'player.starterSkills',
+      'deck.preset',
+    ])
+      expect(ruleLineFor(path, base, defaultContent)).toBe(startText(base, defaultContent))
+    expect(ruleLineFor('player.startingDice', two, defaultContent)).toMatch(/2 action dice/)
+    const weak = With((c) => ({ ...c, base: { ...c.base, startingHealth: 9 } }))
+    expect(ruleLineFor('base.startingHealth', weak, defaultContent)).toBe(
+      defenseText(weak, defaultContent),
+    )
+    expect(ruleLineFor('base.startingHealth', weak, defaultContent)).toMatch(
+      /The base starts with 9 health\.$/,
+    )
   })
 
   it('round: Prepare then Combat, and the co-op turn order follows rulings (5.1, 16.4, 16.8)', () => {
@@ -539,7 +554,8 @@ describe('rule text from config', () => {
     expect(line('rulings.mandatoryPlays')).toBe(combatEndText(base))
     expect(line('rulings.targetTieBreak')).toBe(targetOrderText(base))
     expect(line('rulings.playerPullDistance')).toBe(targetOrderText(base))
-    expect(line('player.maxHealth')).toBeNull()
+    expect(line('player.maxHealth')).toBe(startText(base, defaultContent))
+    expect(line('supplies.copiesPerCard')).toBeNull()
   })
 })
 

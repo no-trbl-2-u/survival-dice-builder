@@ -736,10 +736,18 @@ export function milestoneOutOfReach(
 export function ruleLineFor(
   path: string,
   config: GameConfig,
-  content: Pick<Content, 'skills' | 'enemies' | 'cards' | 'upgrades' | 'tiles'>,
+  content: Pick<Content, 'skills' | 'enemies' | 'cards' | 'upgrades' | 'tiles' | 'defenses'>,
 ): string | null {
   const [group, key] = path.split('.')
   if (path === 'miniatureLimit') return miniatureLimitText(config)
+  if (
+    path === 'player.maxHealth' ||
+    path === 'player.startingDice' ||
+    path === 'player.starterSkills' ||
+    path === 'deck.preset'
+  )
+    return startText(config, content)
+  if (path === 'base.startingHealth') return defenseText(config, content)
   if (path === 'tiles.revealMoveCost') return revealText(config)
   if (path === 'spawn.newTileDelay') return spawnText(config)
   if (group === 'experience') return levelText(config, content)
