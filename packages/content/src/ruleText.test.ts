@@ -82,6 +82,10 @@ describe('rule text from config', () => {
       },
     }
     expect(shopText(base, rich)).toMatch(/\(a grunt 2, an elite 5\)/)
+    expect(ruleLineFor('shop.offers', base, defaultContent)).toBe(shopText(base, defaultContent))
+    expect(ruleLineFor('rulings.shopTiming', prepare, defaultContent)).toMatch(
+      /in the Prepare phase\.$/,
+    )
   })
 
   it('training: the draft round, the Skills shown and where the rest go follow config (10.8, 11.6, 11.7)', () => {
@@ -103,6 +107,9 @@ describe('rule text from config', () => {
     )
     expect(ruleLineFor('draft.everyNRounds', rarely, defaultContent)).toMatch(
       /in rounds 3, 6, 9 and so on,/,
+    )
+    expect(ruleLineFor('draft.reveal', often, defaultContent)).toBe(
+      trainingText(often, defaultContent),
     )
   })
 
@@ -149,6 +156,7 @@ describe('rule text from config', () => {
     expect(roundText(full)).toMatch(/each player plays a whole deck in turn/)
     const solo = With((c) => ({ ...c, players: { min: 1, max: 1 } }))
     expect(roundText(solo)).not.toMatch(/take turns/)
+    expect(ruleLineFor('rulings.coopPrepareOrder', full, defaultContent)).toBe(roundText(full))
   })
 
   it('reveal: the step cost follows tiles.revealMoveCost', () => {

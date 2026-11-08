@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-08 (pass 281, cloud tick)
+
+Pass 280 reworded the /config draft cadence help and gave it a rule line (b8e6e1b). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 7 commits ago, about 21 hours) and so is the expand gate (pass 28 ran 11 commits ago, about 25 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass listed every /config field `ruleLineFor` gives no line, and found four the home page lines already read: Skills revealed (`trainingText`), Shop offers and Shop timing (`shopText`), and Co-op Prepare order (`roundText`). A playtester who changes one sees no "With these values" line, while Draft every N rounds, beside Skills revealed, shows one. Scored 3.6 (comprehension: impact 4, ease 9). `ruleLineFor` now maps the four fields to those lines, and ruleText tests pin each. Next in line: the /oversight-owned /decisions rows; the critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: Skills revealed, Shop offers, Shop timing and Co-op Prepare order show no rule line (audit)
+- category: content-gaps (comprehension)
+- impact: 4
+- ease: 9
+- next: map `draft.reveal`, `shop.offers`, `rulings.shopTiming` and `rulings.coopPrepareOrder` in `ruleLineFor`
+- issue: #334
+- fixed: (this commit)
+
 # Site audit — 2026-11-08 (pass 280, cloud tick)
 
 Pass 279 named the player in the /play Skill draft opening and skip log lines (56ff19b). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 6 commits ago, about 20 hours) and so is the expand gate (pass 28 ran 10 commits ago, about 24 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 41: the /config "Draft every N rounds" help reads "at 2, in rounds 2, 4 and 6", as if drafts stop at round 6, and the field has no "With these values" line. Scored 3.6 (critique LOW comprehension: impact 4, ease 9). The help now reads "With the Training Ground open, a draft happens every N rounds. At 2: rounds 2, 4, 6 and so on.", and `ruleLineFor` prints `trainingText` for `draft.everyNRounds`, so the line follows the draft's value. Next in line: the remaining Pending critique rows edit durable `[needs-user-call]` items and wait for /oversight; the next tick audits afresh.

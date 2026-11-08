@@ -748,7 +748,9 @@ export function ruleLineFor(
     return `${gatherText(2, config)}.`
   if (path === 'player.draftSlots' || path === 'rulings.fullBoardDraft')
     return draftSlotsText(config)
-  if (path === 'draft.everyNRounds') return trainingText(config, content)
+  if (path === 'draft.everyNRounds' || path === 'draft.reveal') return trainingText(config, content)
+  if (path === 'shop.offers' || path === 'rulings.shopTiming') return shopText(config, content)
+  if (path === 'rulings.coopPrepareOrder') return roundText(config)
   if (path === 'draft.unpicked') return draftPoolText(config)
   if (path === 'combat.model')
     return `${combatText(config, config.combat.model, content)} ${siegeText(content)}`
