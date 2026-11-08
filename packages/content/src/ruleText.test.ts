@@ -98,6 +98,12 @@ describe('rule text from config', () => {
     )
     const rarely = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 3 } }))
     expect(trainingText(rarely, defaultContent)).toMatch(/in rounds 3, 6, 9 and so on,/)
+    expect(ruleLineFor('draft.everyNRounds', base, defaultContent)).toBe(
+      trainingText(base, defaultContent),
+    )
+    expect(ruleLineFor('draft.everyNRounds', rarely, defaultContent)).toMatch(
+      /in rounds 3, 6, 9 and so on,/,
+    )
   })
 
   it('knockout: the return share and the losses follow config (Spec v2 14.2, 14.4)', () => {
@@ -571,7 +577,7 @@ describe('player copy drops the serial comma', () => {
     expect(defaultConfigMeta['deck.presets']?.help).toContain(
       'an id, a hand size and its starter cards',
     )
-    expect(defaultConfigMeta['draft.everyNRounds']?.help).toContain('in rounds 2, 4 and 6.')
+    expect(defaultConfigMeta['draft.everyNRounds']?.help).toContain('rounds 2, 4, 6 and so on.')
     const lists = Object.values(defaultConfigMeta)
       .map((e) => e.help ?? '')
       .filter((text) => /\w+, \w+, and \w+\b/.test(text))

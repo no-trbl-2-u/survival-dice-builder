@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the "Draft every N rounds" help example reads as if drafts stop at round 6
-- pass: 41 (commit 8e8b4a3)
-- viewport: desktop
-- category: comprehension
-- observation: The help says "at 2, in rounds 2, 4 and 6"; the home page says "2, 4, 6 and so on". The field also has no "With these values" line, unlike its neighbours.
-- evidence: `packages/content/data/config.meta.json:271`; home `packages/content/src/ruleText.ts:156`; `ruleLineFor` (`ruleText.ts:702-741`) has no `draft.everyNRounds` branch.
-- suggested fix: Help: "With the Training Ground open, a draft happens every N rounds. At 2: rounds 2, 4, 6 and so on."; add a `ruleLineFor` branch that prints `trainingText`.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -64,6 +55,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the "Draft every N rounds" help example reads as if drafts stop at round 6
+- pass: 41 (commit 8e8b4a3)
+- viewport: desktop
+- category: comprehension
+- observation: The help says "at 2, in rounds 2, 4 and 6"; the home page says "2, 4, 6 and so on". The field also has no "With these values" line, unlike its neighbours.
+- evidence: `packages/content/data/config.meta.json:271`; home `packages/content/src/ruleText.ts:156`; `ruleLineFor` (`ruleText.ts:702-741`) has no `draft.everyNRounds` branch.
+- suggested fix: Help: "With the Training Ground open, a draft happens every N rounds. At 2: rounds 2, 4, 6 and so on."; add a `ruleLineFor` branch that prints `trainingText`.
+- source: web-fetch
+- issue: #333
+- fixed: (this commit) — the help reads "With the Training Ground open, a draft happens every N rounds. At 2: rounds 2, 4, 6 and so on."; `ruleLineFor` gains a `draft.everyNRounds` branch, so the field shows the `trainingText` line under "With these values"; `ruleText.test.ts` and `configMetaText.test.ts` pin both
 
 ### [x] [LOW] /play — two Skill draft log lines do not name the player
 - pass: 41 (commit 8e8b4a3)

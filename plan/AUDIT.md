@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-08 (pass 280, cloud tick)
+
+Pass 279 named the player in the /play Skill draft opening and skip log lines (56ff19b). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 6 commits ago, about 20 hours) and so is the expand gate (pass 28 ran 10 commits ago, about 24 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 41: the /config "Draft every N rounds" help reads "at 2, in rounds 2, 4 and 6", as if drafts stop at round 6, and the field has no "With these values" line. Scored 3.6 (critique LOW comprehension: impact 4, ease 9). The help now reads "With the Training Ground open, a draft happens every N rounds. At 2: rounds 2, 4, 6 and so on.", and `ruleLineFor` prints `trainingText` for `draft.everyNRounds`, so the line follows the draft's value. Next in line: the remaining Pending critique rows edit durable `[needs-user-call]` items and wait for /oversight; the next tick audits afresh.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the "Draft every N rounds" help example reads as if drafts stop at round 6 (critique LOW, pass 41)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 9
+- next: reword the `draft.everyNRounds` help ("At 2: rounds 2, 4, 6 and so on.") and add a `ruleLineFor` branch printing `trainingText`
+- issue: #333
+- fixed: (this commit)
+
 # Site audit — 2026-11-08 (pass 279, cloud tick)
 
 Pass 278 numbered the /play event log newest-highest and noted hidden lines (1ac7823). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 5 commits ago, about 19 hours) and so is the expand gate (pass 28 ran 9 commits ago, about 23 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The pending /decisions MED rows edit durable `[needs-user-call]` items and wait for /oversight. Top finding, from critique pass 41: the /play Skill draft opening and skip log lines have no subject, while the lines beside them name the player. Scored 3.6 (critique LOW voice: impact 4, ease 9). The lines now read "Player 2's Skill draft: <a> or <b>." and "No Skills left for Player 2 to draft." in co-op, and "Your Skill draft: ..." and "No Skills left for you to draft." solo; `draftLog.test.ts` pins both. Next in line: the pass 41 LOW draft cadence help row.

@@ -136,7 +136,8 @@ describe('config.meta.json names the baseline one way', () => {
 describe('config.meta.json says when things happen in plain words', () => {
   it('10.8: the draft help names the rounds, not a divisor', () => {
     const help = defaultConfigMeta['draft.everyNRounds']?.help ?? ''
-    expect(help).toContain('every N rounds: at 2, in rounds 2, 4 and 6.')
+    expect(help).toContain('every N rounds. At 2: rounds 2, 4, 6 and so on.')
+    expect(help).not.toMatch(/2, 4 and 6\./)
     expect(help).not.toMatch(/divides/)
   })
 })
