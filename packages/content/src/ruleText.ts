@@ -224,9 +224,10 @@ const enemyDiceText = (content: Enemies) =>
     .join(', ')
 
 /**
- * How a Combat plays under a Combat model, and when it ends, with each enemy's enemy dice.
+ * How a Combat plays under a Combat model, and when it ends, with each enemy's enemy dice. The
+ * Engage line names the enemy die faces and their damage before it says when the dice hit.
  *
- * @rule 7, 7.8, 9.5, 9.6, Table 5 (Spec v2)
+ * @rule 7, 7.8, 9.5, 9.6, Table 4, Table 5 (Spec v2)
  */
 export function combatText(
   config: GameConfig,
@@ -241,7 +242,7 @@ export function combatText(
   return (
     `Play a card's Engage option${holders ? ` (on ${holders})` : ''} to roll your dice from where you stand, plus the enemy dice of each enemy next to you${dice ? ` (${dice})` : ''}. ` +
     'Put your dice on your Skills one at a time. ' +
-    `${enemyHitText(config)} ` +
+    `${enemyDieText(config)} ${enemyHitText(config)} ` +
     combatEndText(config)
   )
 }

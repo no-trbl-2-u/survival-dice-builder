@@ -18,15 +18,6 @@
 - suggested fix: Give `siteText` the ramp and seat values, e.g. "gets 1 grunt at each Combat, and 1 more every 3 rounds" and "gets 1 grunt for each 2 seats, rounded up".
 - source: web-fetch
 
-### [MED] / — the home page says every enemy die hits you, but never names the die faces or their damage
-- pass: 42 (commit 23d4b52)
-- viewport: desktop
-- category: comprehension
-- observation: The Combat line on / says every enemy die hits you. It does not say that 3 of the 6 faces are Miss and do no damage. /config now shows this in `enemyDieText`, but no page in `apps/web` uses it.
-- evidence: / : "every enemy die hits you at once, even the dice of an enemy you defeated." /config: "An enemy die has 2 Hit faces, 3 Miss faces and 1 Special face. A Hit deals 1 damage, a Special 2, a Miss none." (no `enemyDieText` use in `apps/web/src`)
-- suggested fix: Put `enemyDieText` after the Combat sentence on /, the same as the /config Enemy die faces field.
-- source: web-fetch
-
 ### [LOW] /config — the enemy die line says a Miss does no damage, then says every enemy die hits you
 - pass: 42 (commit 23d4b52)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — the home page says every enemy die hits you, but never names the die faces or their damage
+- pass: 42 (commit 23d4b52)
+- viewport: desktop
+- category: comprehension
+- observation: The Combat line on / says every enemy die hits you. It does not say that 3 of the 6 faces are Miss and do no damage. /config now shows this in `enemyDieText`, but no page in `apps/web` uses it.
+- evidence: / : "every enemy die hits you at once, even the dice of an enemy you defeated." /config: "An enemy die has 2 Hit faces, 3 Miss faces and 1 Special face. A Hit deals 1 damage, a Special 2, a Miss none." (no `enemyDieText` use in `apps/web/src`)
+- suggested fix: Put `enemyDieText` after the Combat sentence on /, the same as the /config Enemy die faces field.
+- source: web-fetch
+- issue: #338
+- fixed: (this commit) — `combatText`'s Engage line now puts `enemyDieText` before `enemyHitText`, so / and the /play start panel name the 2 Hit, 3 Miss and 1 Special faces and their damage before saying the dice hit; `ruleText.test.ts` pins the order
 
 ### [x] [LOW] /config — the "Draft every N rounds" help example reads as if drafts stop at round 6
 - pass: 41 (commit 8e8b4a3)

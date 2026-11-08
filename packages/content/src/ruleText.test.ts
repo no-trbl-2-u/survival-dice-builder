@@ -300,6 +300,13 @@ describe('rule text from config', () => {
       )
   })
 
+  it('Combat: the Engage line names the enemy die faces before the dice hit (Table 4, 7.8)', () => {
+    expect(combatText(base, 'engage', defaultContent)).toContain(
+      `one at a time. ${enemyDieText(base)} ${enemyHitText(base)} `,
+    )
+    expect(combatText(base, 'exchange', defaultContent)).not.toContain(enemyDieText(base))
+  })
+
   it("siege: when Combat ends, structures take each enemy record's siege damage (7.10-7.12)", () => {
     expect(siegeText(defaultContent)).toBe(
       'When Combat ends, each enemy next to a Barricade, a Tower or the base hits one of them (a Barricade first, then a Tower, then the base), even when it is next to a player too: a grunt deals 1 damage, an elite 3.',
