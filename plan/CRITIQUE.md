@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the enemy die line says a Miss does no damage, then says every enemy die hits you
-- pass: 42 (commit 23d4b52)
-- viewport: desktop
-- category: voice
-- observation: The Enemy die faces, Hit damage and Special damage fields show one line where a Miss face both hits and does not hit.
-- evidence: "A Hit deals 1 damage, a Special 2, a Miss none. When you choose End engagement or no dice are left, every enemy die hits you at once, even the dice of an enemy you defeated." (`ruleText.ts:259`)
-- suggested fix: Use the rules' words in `enemyHitText`: "the enemy dice hit you at once" (Spec v2 7.8 step 7).
-- source: web-fetch
-
 ### [LOW] /config — Starting base health shows the whole Defenses line; Health per upgrade shows none
 - pass: 42 (commit 23d4b52)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the enemy die line says a Miss does no damage, then says every enemy die hits you
+- pass: 42 (commit 23d4b52)
+- viewport: desktop
+- category: voice
+- observation: The Enemy die faces, Hit damage and Special damage fields show one line where a Miss face both hits and does not hit.
+- evidence: "A Hit deals 1 damage, a Special 2, a Miss none. When you choose End engagement or no dice are left, every enemy die hits you at once, even the dice of an enemy you defeated." (`ruleText.ts:259`)
+- suggested fix: Use the rules' words in `enemyHitText`: "the enemy dice hit you at once" (Spec v2 7.8 step 7).
+- source: web-fetch
+- issue: #340
+- fixed: (this commit) — `enemyHitText` now says "the enemy dice hit you at once" (Spec v2 7.8 step 7), so the /config enemy die line, the Engage Combat line and the playtest protocol no longer say every die hits right after a Miss does none; `ruleText.test.ts` and `engageLabels.test.ts` pin it
 
 ### [x] [MED] /config — the spawn fields' rule line says only "grunts" when the ramp or seat scaling is on
 - pass: 42 (commit 23d4b52)

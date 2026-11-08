@@ -266,7 +266,7 @@ describe('rule text from config', () => {
 
   it('enemy dice: one phrase for when they hit, whose dice, and guard first (7.8 steps 7-8, row 72)', () => {
     expect(enemyHitText(base)).toBe(
-      'When you choose End engagement or no dice are left, every enemy die hits you at once, even the dice of an enemy you defeated. Your guard takes the damage first, then your health.',
+      'When you choose End engagement or no dice are left, the enemy dice hit you at once, even the dice of an enemy you defeated. Your guard takes the damage first, then your health.',
     )
     const cancelled = With((c) => ({
       ...c,

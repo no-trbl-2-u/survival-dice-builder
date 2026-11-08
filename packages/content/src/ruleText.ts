@@ -263,7 +263,7 @@ export function enemyHitText(config: GameConfig): string {
     config.combat.engage.defeatedDice === 'hit'
       ? 'even the dice of an enemy you defeated'
       : 'except the dice of an enemy you defeated'
-  return `When you choose End engagement or no dice are left, every enemy die hits you at once, ${defeated}. Your guard takes the damage first, then your health.`
+  return `When you choose End engagement or no dice are left, the enemy dice hit you at once, ${defeated}. Your guard takes the damage first, then your health.`
 }
 
 /** Each enemy die face as the die line names it. */

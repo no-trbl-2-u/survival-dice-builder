@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-08 (pass 286, cloud tick)
+
+Pass 285 named the seat scaling and the spawn ramp in the /config spawn fields' line (2612c69). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 3 commits ago) and so is the expand gate (pass 28 ran 18 commits ago, about 30 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The Pending MED critique rows edit `[needs-user-call]` items, which /oversight owns. The top open row is pass 42's [LOW]: the enemy die line says a Miss does no damage, then "every enemy die hits you at once". Scored 3.6 (external-critique LOW: impact 4, ease 9). `enemyHitText` now uses the rules' words, "the enemy dice hit you at once" (Spec v2 7.8 step 7); the playtest protocol is regenerated. Next in line: the three other pass 42 [LOW] /config rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the enemy die line says a Miss does no damage, then that every die hits (critique pass 42)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: use the rules' words in `enemyHitText`
+- issue: #340
+- fixed: (this commit)
+
 # Site audit — 2026-11-08 (pass 285, cloud tick)
 
 Pass 284 gave the /config enemy die fields their line (23d4b52); critique pass 42 filed 6 rows and its home Combat row shipped (42279ab). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 2 commits ago) and so is the expand gate (pass 28 ran 17 commits ago, about 34 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The top Pending critique row is pass 42's [MED]: with the spawn ramp or seat scaling on, `siteText` drops the count and says "gets grunts at each Combat", so the /config spawn fields' line says less than the help. Scored 6.3 (external-critique MED: impact 6, ease 7, bias 1.5). `siteText` now reads `spawnCount`'s two terms: "gets 1 grunt for each 2 seats, rounded up, at each Combat" and ", and 1 more for every N rounds after round 1" (or "each round" at 1); ruleText tests pin ramp, seats and both. Next in line: the four pass 42 [LOW] /config rows, then the /oversight-owned /decisions rows.
