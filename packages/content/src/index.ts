@@ -74,6 +74,7 @@ export {
 } from './configMeta.ts'
 export { ConfigMetaSchema, type ConfigMeta, type ConfigMetaEntry } from './schemas/configMeta.ts'
 export {
+  baseText,
   cardStepText,
   combatEndText,
   combatText,

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — Starting base health shows the whole Defenses line; Health per upgrade shows none
-- pass: 42 (commit 23d4b52)
-- viewport: desktop
-- category: comprehension
-- observation: The Starting base health field shows the Barricade and Tower costs, health and attack, and the base health comes last. Health per upgrade, the next field in the Base group, shows no rule line.
-- evidence: line opens "A Barricade costs 2 materials and has 4 health; ..." and ends "The base starts with 20 health." (`ruleText.ts:770` `if (path === 'base.startingHealth') return defenseText(...)`; no `base.healthPerUpgrade` branch)
-- suggested fix: Give both Base fields a base-only line: "The base starts with 20 health. Each base upgrade adds 5 to its maximum health and to its health."
-- source: web-fetch
-
 ### [LOW] /config — the Spawn pressure fields give one behaviour three verbs, and the Spawn range help is hard to parse
 - pass: 42 (commit 23d4b52)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — Starting base health shows the whole Defenses line; Health per upgrade shows none
+- pass: 42 (commit 23d4b52)
+- viewport: desktop
+- category: comprehension
+- observation: The Starting base health field shows the Barricade and Tower costs, health and attack, and the base health comes last. Health per upgrade, the next field in the Base group, shows no rule line.
+- evidence: line opens "A Barricade costs 2 materials and has 4 health; ..." and ends "The base starts with 20 health." (`ruleText.ts:770` `if (path === 'base.startingHealth') return defenseText(...)`; no `base.healthPerUpgrade` branch)
+- suggested fix: Give both Base fields a base-only line: "The base starts with 20 health. Each base upgrade adds 5 to its maximum health and to its health."
+- source: web-fetch
+- issue: #341
+- fixed: (this commit) — the new `baseText` reads "The base starts with 20 health. Each base upgrade adds 5 to its maximum health and to its health." (Spec v2 8.2, 11.3) from config, and `ruleLineFor` maps both Base fields to it; the / Defenses line keeps `defenseText`; `ruleText.test.ts` pins both fields at default and changed values
 
 ### [x] [LOW] /config — the enemy die line says a Miss does no damage, then says every enemy die hits you
 - pass: 42 (commit 23d4b52)

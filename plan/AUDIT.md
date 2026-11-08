@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-08 (pass 287, cloud tick)
+
+Pass 286 made the enemy die line say the enemy dice hit you (8cb7ef3). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 4 commits ago) and so is the expand gate (pass 28 ran 19 commits ago, about 36 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The Pending MED critique rows edit `[needs-user-call]` items, which /oversight owns. The top open row is pass 42's [LOW]: the Starting base health field shows the whole Defenses line, and Health per upgrade shows none. Scored 3.6 (external-critique LOW: impact 4, ease 9). The new `baseText` (Spec v2 8.2, 11.3) reads "The base starts with 20 health. Each base upgrade adds 5 to its maximum health and to its health." from config, and `ruleLineFor` maps both Base fields to it; ruleText tests pin both at default and changed values. Next in line: the two other pass 42 [LOW] /config rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the Base fields show the whole Defenses line, or none (critique pass 42)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 9
+- next: add `baseText` and map `base.startingHealth` and `base.healthPerUpgrade` to it in `ruleLineFor`
+- issue: #341
+- fixed: (this commit)
+
 # Site audit — 2026-11-08 (pass 286, cloud tick)
 
 Pass 285 named the seat scaling and the spawn ramp in the /config spawn fields' line (2612c69). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 3 commits ago) and so is the expand gate (pass 28 ran 18 commits ago, about 30 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The Pending MED critique rows edit `[needs-user-call]` items, which /oversight owns. The top open row is pass 42's [LOW]: the enemy die line says a Miss does no damage, then "every enemy die hits you at once". Scored 3.6 (external-critique LOW: impact 4, ease 9). `enemyHitText` now uses the rules' words, "the enemy dice hit you at once" (Spec v2 7.8 step 7); the playtest protocol is regenerated. Next in line: the three other pass 42 [LOW] /config rows.

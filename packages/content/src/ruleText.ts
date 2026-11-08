@@ -754,6 +754,16 @@ export function milestoneOutOfReach(
 }
 
 /**
+ * The base's starting health and what each base upgrade adds: the /config Base fields' line.
+ *
+ * @rule 8.2, 11.3
+ */
+export function baseText(config: GameConfig): string {
+  const { startingHealth, healthPerUpgrade } = config.base
+  return `The base starts with ${startingHealth} health. Each base upgrade adds ${healthPerUpgrade} to its maximum health and to its health.`
+}
+
+/**
  * The rule phrase a /config field sets, with the draft's values, or null when no phrase reads
  * that field.
  *
@@ -774,7 +784,7 @@ export function ruleLineFor(
     path === 'deck.preset'
   )
     return startText(config, content)
-  if (path === 'base.startingHealth') return defenseText(config, content)
+  if (group === 'base') return baseText(config)
   if (path === 'tiles.revealMoveCost') return revealText(config)
   if (path === 'spawn.newTileDelay') return spawnText(config)
   if (group === 'experience' || path === 'options.maxLevel') return levelText(config, content)

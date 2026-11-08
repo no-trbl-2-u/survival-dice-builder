@@ -154,13 +154,14 @@ describe('rule text from config', () => {
     ])
       expect(ruleLineFor(path, base, defaultContent)).toBe(startText(base, defaultContent))
     expect(ruleLineFor('player.startingDice', two, defaultContent)).toMatch(/2 action dice/)
-    const weak = With((c) => ({ ...c, base: { ...c.base, startingHealth: 9 } }))
-    expect(ruleLineFor('base.startingHealth', weak, defaultContent)).toBe(
-      defenseText(weak, defaultContent),
+    expect(ruleLineFor('base.startingHealth', base, defaultContent)).toBe(
+      'The base starts with 20 health. Each base upgrade adds 5 to its maximum health and to its health.',
     )
-    expect(ruleLineFor('base.startingHealth', weak, defaultContent)).toMatch(
-      /The base starts with 9 health\.$/,
-    )
+    const weak = With((c) => ({ ...c, base: { startingHealth: 9, healthPerUpgrade: 3 } }))
+    for (const path of ['base.startingHealth', 'base.healthPerUpgrade'])
+      expect(ruleLineFor(path, weak, defaultContent)).toBe(
+        'The base starts with 9 health. Each base upgrade adds 3 to its maximum health and to its health.',
+      )
   })
 
   it('round: Prepare then Combat, and the co-op turn order follows rulings (5.1, 16.4, 16.8)', () => {
