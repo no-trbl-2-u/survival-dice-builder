@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — two Skill draft log lines do not name the player
-- pass: 41 (commit 8e8b4a3)
-- viewport: desktop
-- category: voice
-- observation: In co-op, the draft opening line and the skip line have no subject; the lines next to them name the player.
-- evidence: `apps/web/src/play/describeEvent.ts:212` "Skill draft: <a> or <b>." and `:216` "No Skills left to draft."; `:214` "Player 2 keeps Mend.", `:218` "Shot goes to Player 2's draft pool."
-- suggested fix: "Player 2's Skill draft: Strike or Shot." and "No Skills left for Player 2 to draft." (solo: "Your Skill draft: ...").
-- source: web-fetch
-
 ### [LOW] /config — the "Draft every N rounds" help example reads as if drafts stop at round 6
 - pass: 41 (commit 8e8b4a3)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — two Skill draft log lines do not name the player
+- pass: 41 (commit 8e8b4a3)
+- viewport: desktop
+- category: voice
+- observation: In co-op, the draft opening line and the skip line have no subject; the lines next to them name the player.
+- evidence: `apps/web/src/play/describeEvent.ts:212` "Skill draft: <a> or <b>." and `:216` "No Skills left to draft."; `:214` "Player 2 keeps Mend.", `:218` "Shot goes to Player 2's draft pool."
+- suggested fix: "Player 2's Skill draft: Strike or Shot." and "No Skills left for Player 2 to draft." (solo: "Your Skill draft: ...").
+- source: web-fetch
+- issue: #332
+- fixed: (this commit) — the draft opening line reads "Player 2's Skill draft: <a> or <b>." in co-op and "Your Skill draft: ..." solo; the skip line reads "No Skills left for Player 2 to draft." ("... for you to draft." solo); `draftLog.test.ts` pins both voices
 
 ### [x] [LOW] /play — the event log drops lines past 60 without saying so, and numbers the newest line 1
 - pass: 41 (commit 8e8b4a3)

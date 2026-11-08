@@ -209,11 +209,11 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'starterReturned':
       return `${who(event.player)} ${s('return')} ${cardName(names, event.def)}: it leaves the game.`
     case 'draftStarted':
-      return `Skill draft: ${event.options.map((s) => skillName(names, s)).join(' or ')}.`
+      return `${whose(event.player)} Skill draft: ${event.options.map((s) => skillName(names, s)).join(' or ')}.`
     case 'skillDrafted':
       return `${who(event.player)} ${s('keep')} ${skillName(names, event.skill)}.`
     case 'draftSkipped':
-      return 'No Skills left to draft.'
+      return `No Skills left for ${whom(event.player)} to draft.`
     case 'skillPooled':
       return `${skillName(names, event.skill)} goes to ${solo(names) ? 'your' : `${seat(names, event.player)}'s`} draft pool.`
     case 'skillToSupply':

@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-08 (pass 279, cloud tick)
+
+Pass 278 numbered the /play event log newest-highest and noted hidden lines (1ac7823). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 5 commits ago, about 19 hours) and so is the expand gate (pass 28 ran 9 commits ago, about 23 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The pending /decisions MED rows edit durable `[needs-user-call]` items and wait for /oversight. Top finding, from critique pass 41: the /play Skill draft opening and skip log lines have no subject, while the lines beside them name the player. Scored 3.6 (critique LOW voice: impact 4, ease 9). The lines now read "Player 2's Skill draft: <a> or <b>." and "No Skills left for Player 2 to draft." in co-op, and "Your Skill draft: ..." and "No Skills left for you to draft." solo; `draftLog.test.ts` pins both. Next in line: the pass 41 LOW draft cadence help row.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play: the Skill draft opening and skip log lines do not name the player (critique LOW, pass 41)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: "Player 2's Skill draft: ..." and "No Skills left for Player 2 to draft." in `describeEvent.ts` (solo: "Your Skill draft: ...")
+- issue: #332
+- fixed: (this commit)
+
+### [ ] [3.6] /config: the "Draft every N rounds" help example reads as if drafts stop at round 6 (critique LOW, pass 41)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 9
+- next: reword the `draft.everyNRounds` help ("At 2: rounds 2, 4, 6 and so on.") and add a `ruleLineFor` branch printing `trainingText`
+
 # Site audit — 2026-11-08 (pass 278, cloud tick)
 
 Pass 277 named the seat in the co-op /play draft and starter-return dialogs (0b6ec28). No issues are open for triage (#223 waits for the user; #330 is this loop's own mirror). The critique gate is closed (pass 41 ran 4 commits ago, about 18 hours) and so is the expand gate (pass 28 ran 8 commits ago, about 18 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 41: the /play event log shows the 60 newest lines in a plain `<ol>`, says nothing about older lines, and a screen reader numbers the newest line 1. Rescored 3.6 (critique LOW a11y: impact 4, since every long run passes 60 lines and the numbering misleads every screen-reader user, ease 9); it ties the draft log subjects row and wins the tie-break as the row already mirrored to a public issue (#330). The log `<ol>` is now `reversed`, and past 60 lines a muted line under the heading reads "Showing the 60 newest of N lines."; component tests pin the attribute, the note at 75 lines and no note at 60. Next in line: the pass 41 LOW rows (the draft log subjects, the draft cadence help).
