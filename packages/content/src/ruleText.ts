@@ -750,7 +750,9 @@ export function ruleLineFor(
   if (path === 'base.startingHealth') return defenseText(config, content)
   if (path === 'tiles.revealMoveCost') return revealText(config)
   if (path === 'spawn.newTileDelay') return spawnText(config)
-  if (group === 'experience') return levelText(config, content)
+  if (group === 'experience' || path === 'options.maxLevel') return levelText(config, content)
+  if (path === 'spawn.rampEvery' || path === 'spawn.perSeat' || path === 'spawn.nodeRange')
+    return `A spawn node ${siteText('spawn-node', config, content)}; an elite spawn node ${siteText('elite-spawn-node', config, content)}.`
   if (group === 'knockout') return knockoutText(config)
   if (path === 'gather.offNodeAmount' || path === 'rulings.gatherNeedsNode')
     return `${gatherText(2, config)}.`

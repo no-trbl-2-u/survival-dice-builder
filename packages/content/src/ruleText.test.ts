@@ -209,6 +209,13 @@ describe('rule text from config', () => {
     expect(siteText('spawn-node', varied, defaultContent)).toBe(
       'gets grunts at each Combat, from 1 round after its tile is revealed, if a figure or structure is within 3 hexes',
     )
+    for (const path of ['spawn.rampEvery', 'spawn.perSeat', 'spawn.nodeRange'])
+      expect(ruleLineFor(path, base, defaultContent)).toBe(
+        'A spawn node gets 1 grunt at each Combat; an elite spawn node gets 1 elite at each Combat.',
+      )
+    expect(ruleLineFor('spawn.nodeRange', varied, defaultContent)).toMatch(
+      /^A spawn node gets grunts at each Combat, .* within 3 hexes; an elite spawn node gets elites /,
+    )
   })
 
   it('Gather: node rule and off-node amount follow config, and an enemy on the hex blocks it (6.9, rows 59, 67)', () => {
@@ -555,6 +562,13 @@ describe('rule text from config', () => {
     expect(line('rulings.targetTieBreak')).toBe(targetOrderText(base))
     expect(line('rulings.playerPullDistance')).toBe(targetOrderText(base))
     expect(line('player.maxHealth')).toBe(startText(base, defaultContent))
+    const capped = With((c) => ({ ...c, options: { ...c.options, maxLevel: 4 } }))
+    expect(ruleLineFor('options.maxLevel', capped, defaultContent)).toBe(
+      levelText(capped, defaultContent),
+    )
+    expect(ruleLineFor('options.maxLevel', capped, defaultContent)).toMatch(
+      /The level stops at 4\.$/,
+    )
     expect(line('supplies.copiesPerCard')).toBeNull()
   })
 })

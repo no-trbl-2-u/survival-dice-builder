@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-08 (pass 283, cloud tick)
+
+Pass 282 gave the /config start and base health fields their rule line (3d0184d). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 9 commits ago, about 23 hours) and so is the expand gate (pass 28 ran 13 commits ago, about 27 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass went on down the list of /config fields `ruleLineFor` gives no line. Four more are fields an existing phrase already reads: Spawn ramp every, Spawns scale with seats and Spawn range (the tile sheet's spawn node phrase, `siteText`), and Maximum level (`levelText`, "The level stops at N."). A playtester who changes one of them sees no "With these values" line. Scored 3.6 (comprehension: impact 4, ease 9). `ruleLineFor` now maps the three spawn fields to "A spawn node ...; an elite spawn node ..." built from `siteText`, and `options.maxLevel` to `levelText`; ruleText tests pin each. Next in line: the /oversight-owned /decisions rows. The critique gate opens after 12 commits or 24 hours.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: Spawn ramp every, Spawns scale with seats, Spawn range and Maximum level show no rule line (audit)
+- category: content-gaps (comprehension)
+- impact: 4
+- ease: 9
+- next: map `spawn.rampEvery`, `spawn.perSeat`, `spawn.nodeRange` to a spawn node line from `siteText`, and `options.maxLevel` to `levelText`, in `ruleLineFor`
+- issue: #336
+- fixed: (this commit)
+
 # Site audit — 2026-11-08 (pass 282, cloud tick)
 
 Pass 281 gave the /config Skills revealed, Shop and Co-op order fields their rule line (bff296e). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 8 commits ago, about 22 hours) and so is the expand gate (pass 28 ran 12 commits ago, about 26 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass went on from pass 281's list of /config fields that `ruleLineFor` gives no line. Five more are fields the home page lines already read: Maximum health, Starting dice, Starter Skills and Deck and hand preset (`startText`), and Starting base health (`defenseText`). A playtester who changes one of them sees no "With these values" line. Scored 3.6 (comprehension: impact 4, ease 9). `ruleLineFor` now maps the four start fields to `startText` and `base.startingHealth` to `defenseText`. ruleText tests pin each, and the "others get none" check now uses Copies of each card. Next in line: the /oversight-owned /decisions rows. The critique gate opens after 12 commits or 24 hours.
