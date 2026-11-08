@@ -66,7 +66,8 @@ const firstUpgrade = (track: string, content: Upgrades) =>
   content.upgrades.find((u) => u.track === track && u.tier === 1)
 
 /**
- * What a printed site does, for the site legend: "gets 1 grunt at each Combat".
+ * What a printed site does, for the site legend: "gets 1 grunt at each Combat", with the seat
+ * scaling and the spawn ramp named when they are on (`spawnCount`).
  *
  * @rule Table 1, 6.7, 6.9, 7.3, 11.2, OPEN-QUESTIONS rows 59, 64, 66, 68, 70
  */
@@ -83,9 +84,14 @@ export function siteText(site: Site, config: GameConfig, content: Upgrades): str
       ? "a card's Gather option played here with no enemy on the node gets its materials once; then the node is spent for the rest of the run"
       : 'the first Gather option played here with no enemy on the node spends it'
   const s = config.spawn
-  const one = s.rampEvery === null && !s.perSeat
   const enemy = site === 'spawn-node' ? 'grunt' : 'elite'
-  const who = one ? `1 ${enemy}` : `${enemy}s`
+  const seats = s.perSeat ? ' for each 2 seats, rounded up,' : ''
+  const ramp =
+    s.rampEvery === null
+      ? ''
+      : s.rampEvery === 1
+        ? ', and 1 more each round after round 1'
+        : `, and 1 more for every ${s.rampEvery} rounds after round 1`
   const delay =
     s.newTileDelay > 0
       ? `, from ${plural(s.newTileDelay, 'round', 'rounds')} after its tile is revealed`
@@ -94,7 +100,7 @@ export function siteText(site: Site, config: GameConfig, content: Upgrades): str
     s.nodeRange === null
       ? ''
       : `, if a figure or structure is within ${plural(s.nodeRange, 'hex', 'hexes')}`
-  return `gets ${who} at each Combat${delay}${range}`
+  return `gets 1 ${enemy}${seats} at each Combat${ramp}${delay}${range}`
 }
 
 /**

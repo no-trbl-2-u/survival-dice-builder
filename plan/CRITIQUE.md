@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — the spawn fields' rule line says only "grunts" when the ramp or seat scaling is on
-- pass: 42 (commit 23d4b52)
-- viewport: desktop
-- category: comprehension
-- observation: Spawn ramp every, Spawns scale with seats and Spawn range share one rule line built by `siteText`. When the ramp or seat scaling is on, the line drops the count and says only "grunts". It never says how fast the ramp grows or how many seats add 1 enemy, so with those options on, the line says less than the help.
-- evidence: `packages/content/src/ruleText.ts:88` `const who = one ? \`1 ${enemy}\` : \`${enemy}s\`` gives "A spawn node gets grunts at each Combat"; help (`config.meta.json:193`): "Each spawn node spawns 1 more enemy every this many rounds."
-- suggested fix: Give `siteText` the ramp and seat values, e.g. "gets 1 grunt at each Combat, and 1 more every 3 rounds" and "gets 1 grunt for each 2 seats, rounded up".
-- source: web-fetch
-
 ### [LOW] /config — the enemy die line says a Miss does no damage, then says every enemy die hits you
 - pass: 42 (commit 23d4b52)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /config — the spawn fields' rule line says only "grunts" when the ramp or seat scaling is on
+- pass: 42 (commit 23d4b52)
+- viewport: desktop
+- category: comprehension
+- observation: Spawn ramp every, Spawns scale with seats and Spawn range share one rule line built by `siteText`. When the ramp or seat scaling is on, the line drops the count and says only "grunts". It never says how fast the ramp grows or how many seats add 1 enemy, so with those options on, the line says less than the help.
+- evidence: `packages/content/src/ruleText.ts:88` `const who = one ? \`1 ${enemy}\` : \`${enemy}s\`` gives "A spawn node gets grunts at each Combat"; help (`config.meta.json:193`): "Each spawn node spawns 1 more enemy every this many rounds."
+- suggested fix: Give `siteText` the ramp and seat values, e.g. "gets 1 grunt at each Combat, and 1 more every 3 rounds" and "gets 1 grunt for each 2 seats, rounded up".
+- source: web-fetch
+- issue: #339
+- fixed: (this commit) — `siteText` now names the seat scaling ("gets 1 grunt for each 2 seats, rounded up, at each Combat") and the spawn ramp (", and 1 more for every 3 rounds after round 1"), so the /config spawn fields and /tiles say what `spawnCount` does; `ruleText.test.ts` pins ramp, seats and both
 
 ### [x] [MED] / — the home page says every enemy die hits you, but never names the die faces or their damage
 - pass: 42 (commit 23d4b52)

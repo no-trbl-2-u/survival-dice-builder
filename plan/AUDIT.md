@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-08 (pass 285, cloud tick)
+
+Pass 284 gave the /config enemy die fields their line (23d4b52); critique pass 42 filed 6 rows and its home Combat row shipped (42279ab). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 2 commits ago) and so is the expand gate (pass 28 ran 17 commits ago, about 34 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The top Pending critique row is pass 42's [MED]: with the spawn ramp or seat scaling on, `siteText` drops the count and says "gets grunts at each Combat", so the /config spawn fields' line says less than the help. Scored 6.3 (external-critique MED: impact 6, ease 7, bias 1.5). `siteText` now reads `spawnCount`'s two terms: "gets 1 grunt for each 2 seats, rounded up, at each Combat" and ", and 1 more for every N rounds after round 1" (or "each round" at 1); ruleText tests pin ramp, seats and both. Next in line: the four pass 42 [LOW] /config rows, then the /oversight-owned /decisions rows.
+
+## Top 5 findings (scored)
+
+### [x] [6.3] /config: the spawn fields' rule line says only "grunts" with the ramp or seat scaling on (critique pass 42)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 7
+- next: name the seat scaling and the ramp in `siteText`
+- issue: #339
+- fixed: (this commit)
+
 # Site audit — 2026-11-08 (pass 284, cloud tick)
 
 Pass 283 gave the /config spawn ramp, seats, range and maximum level fields their rule line (71630e8). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 10 commits ago, just under 24 hours) and so is the expand gate (pass 28 ran 14 commits ago, about 28 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. This pass listed every /config field `ruleLineFor` still gives no line. No existing phrase reads the rest, so this pass added one for the closest group: Enemy die faces and Special damage show no line, and the Hit damage field's line (`enemyHitText`) never names the damage it sets. Scored 3.6 (comprehension: impact 4, ease 9). The new `enemyDieText` (Spec v2 Table 4) reads "An enemy die has 2 Hit faces, 3 Miss faces and 1 Special face. A Hit deals 1 damage, a Special 2, a Miss none." from config, and `ruleLineFor` maps the three fields to it plus `enemyHitText`; ruleText tests pin it at default and changed values. Still without a line: Rolls per engagement, Enemy move, Move cost next to an enemy, Health per upgrade, Smallest deck, the supply copies, the tile counts, Bought cards, Figures per hex, Blocked enemy, Forced reveal, Defenses on gathering nodes and Build levels (each needs a new phrase), plus the unused and retired fields. The critique gate opens after 12 commits or 24 hours.
