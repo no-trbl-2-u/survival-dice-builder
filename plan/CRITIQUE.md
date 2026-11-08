@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-07 at commit 8e8b4a3
-> Pass count: 41
+> Last pass: 2026-11-08 at commit 23d4b52
+> Pass count: 42
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /config — the spawn fields' rule line says only "grunts" when the ramp or seat scaling is on
+- pass: 42 (commit 23d4b52)
+- viewport: desktop
+- category: comprehension
+- observation: Spawn ramp every, Spawns scale with seats and Spawn range share one rule line built by `siteText`. When the ramp or seat scaling is on, the line drops the count and says only "grunts". It never says how fast the ramp grows or how many seats add 1 enemy, so with those options on, the line says less than the help.
+- evidence: `packages/content/src/ruleText.ts:88` `const who = one ? \`1 ${enemy}\` : \`${enemy}s\`` gives "A spawn node gets grunts at each Combat"; help (`config.meta.json:193`): "Each spawn node spawns 1 more enemy every this many rounds."
+- suggested fix: Give `siteText` the ramp and seat values, e.g. "gets 1 grunt at each Combat, and 1 more every 3 rounds" and "gets 1 grunt for each 2 seats, rounded up".
+- source: web-fetch
+
+### [MED] / — the home page says every enemy die hits you, but never names the die faces or their damage
+- pass: 42 (commit 23d4b52)
+- viewport: desktop
+- category: comprehension
+- observation: The Combat line on / says every enemy die hits you. It does not say that 3 of the 6 faces are Miss and do no damage. /config now shows this in `enemyDieText`, but no page in `apps/web` uses it.
+- evidence: / : "every enemy die hits you at once, even the dice of an enemy you defeated." /config: "An enemy die has 2 Hit faces, 3 Miss faces and 1 Special face. A Hit deals 1 damage, a Special 2, a Miss none." (no `enemyDieText` use in `apps/web/src`)
+- suggested fix: Put `enemyDieText` after the Combat sentence on /, the same as the /config Enemy die faces field.
+- source: web-fetch
+
+### [LOW] /config — the enemy die line says a Miss does no damage, then says every enemy die hits you
+- pass: 42 (commit 23d4b52)
+- viewport: desktop
+- category: voice
+- observation: The Enemy die faces, Hit damage and Special damage fields show one line where a Miss face both hits and does not hit.
+- evidence: "A Hit deals 1 damage, a Special 2, a Miss none. When you choose End engagement or no dice are left, every enemy die hits you at once, even the dice of an enemy you defeated." (`ruleText.ts:259`)
+- suggested fix: Use the rules' words in `enemyHitText`: "the enemy dice hit you at once" (Spec v2 7.8 step 7).
+- source: web-fetch
+
+### [LOW] /config — Starting base health shows the whole Defenses line; Health per upgrade shows none
+- pass: 42 (commit 23d4b52)
+- viewport: desktop
+- category: comprehension
+- observation: The Starting base health field shows the Barricade and Tower costs, health and attack, and the base health comes last. Health per upgrade, the next field in the Base group, shows no rule line.
+- evidence: line opens "A Barricade costs 2 materials and has 4 health; ..." and ends "The base starts with 20 health." (`ruleText.ts:770` `if (path === 'base.startingHealth') return defenseText(...)`; no `base.healthPerUpgrade` branch)
+- suggested fix: Give both Base fields a base-only line: "The base starts with 20 health. Each base upgrade adds 5 to its maximum health and to its health."
+- source: web-fetch
+
+### [LOW] /config — the Spawn pressure fields give one behaviour three verbs, and the Spawn range help is hard to parse
+- pass: 42 (commit 23d4b52)
+- viewport: desktop
+- category: voice
+- observation: New tile waits uses "add enemies at every Combat". The other three spawn fields, /tiles and Spec v2 7.3 use "gets 1 grunt at each Combat". The helps say "spawns". The Spawn range help puts a four-item list between its subject and its verb, and its rule line calls the same list "a figure or structure".
+- evidence: `spawnText`: "Each new tile's spawn nodes add enemies at every Combat." `siteText`: "A spawn node gets 1 grunt at each Combat". Spawn range help: "Only spawn nodes within this many hexes of a player figure, a Barricade, a Tower or the base spawn." Rule line: ", if a figure or structure is within N hexes".
+- suggested fix: Make `spawnText` say "get enemies at each Combat"; rewrite the help to "A spawn node spawns only when a player figure, a Barricade, a Tower or the base is within this many hexes." and use the same list in `siteText`.
+- source: web-fetch
+
+### [LOW] /config — the Skills revealed help says "the supply", but there is one Skill supply for each level
+- pass: 42 (commit 23d4b52)
+- viewport: desktop
+- category: comprehension
+- observation: The help does not say which Skill supply the draft draws from.
+- evidence: Help (`config.meta.json:258`): "New Skills each player looks at in a draft, from the top of the supply." Spec v2 11.6: "Each player looks at the top 2 Skills of the highest open level Skill supply."
+- suggested fix: "New Skills each player looks at in a draft, from the top of the highest open level Skill supply."
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
