@@ -18,16 +18,6 @@
 - suggested fix: "Player 2's Skill draft: Strike or Shot." and "No Skills left for Player 2 to draft." (solo: "Your Skill draft: ...").
 - source: web-fetch
 
-### [LOW] /play — the event log drops lines past 60 without saying so, and numbers the newest line 1
-- pass: 41 (commit 8e8b4a3)
-- viewport: desktop
-- category: a11y
-- observation: The log shows the 60 newest lines, newest first, in a plain `<ol>`. Nothing says older lines are hidden, and a screen reader numbers the newest line 1. The /debug log shows a count in its heading.
-- evidence: `apps/web/src/play/PlayLog.tsx:6` `const SHOWN = 60`, `:22` `slice(-SHOWN).reverse()`, `:25` "What happened (newest first)", `:26` `<ol>` with no `reversed`; `apps/web/src/debug/EventLog.tsx:41` "Event log (N)".
-- suggested fix: Add `reversed` to the `<ol>` and, past 60 lines, a muted "Showing the 60 newest of N lines" under the heading.
-- source: web-fetch
-- issue: #330
-
 ### [LOW] /config — the "Draft every N rounds" help example reads as if drafts stop at round 6
 - pass: 41 (commit 8e8b4a3)
 - viewport: desktop
@@ -83,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the event log drops lines past 60 without saying so, and numbers the newest line 1
+- pass: 41 (commit 8e8b4a3)
+- viewport: desktop
+- category: a11y
+- observation: The log shows the 60 newest lines, newest first, in a plain `<ol>`. Nothing says older lines are hidden, and a screen reader numbers the newest line 1. The /debug log shows a count in its heading.
+- evidence: `apps/web/src/play/PlayLog.tsx:6` `const SHOWN = 60`, `:22` `slice(-SHOWN).reverse()`, `:25` "What happened (newest first)", `:26` `<ol>` with no `reversed`; `apps/web/src/debug/EventLog.tsx:41` "Event log (N)".
+- suggested fix: Add `reversed` to the `<ol>` and, past 60 lines, a muted "Showing the 60 newest of N lines" under the heading.
+- source: web-fetch
+- issue: #330
+- fixed: (this commit) — the /play log `<ol>` is `reversed`, so the newest line carries the highest number; past 60 lines a muted line under the heading reads "Showing the 60 newest of N lines."; PlayLog component tests pin the attribute, the note at 75 lines and no note at 60
 
 ### [x] [LOW] /play — in co-op, the Skill draft and Return a starter card help says "you" under a dialog that names the seat
 - pass: 41 (commit 8e8b4a3)

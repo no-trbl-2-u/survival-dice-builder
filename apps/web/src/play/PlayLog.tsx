@@ -17,13 +17,23 @@ export function logRuleNote(rule: string): string {
   return /^\d/.test(cited) ? `rule ${cited}` : 'not in the written rules'
 }
 
-/** The event log: newest first, each line followed by a muted note of the rule behind it. */
+/**
+ * The event log: newest first, each line followed by a muted note of the rule behind it. The list
+ * is `reversed`, so the newest line carries the highest number; past the 60 newest lines a muted
+ * note says how many lines the log holds in all, so the cut is never silent.
+ */
 export function PlayLog({ state }: Props) {
   const events = state.log.slice(-SHOWN).reverse()
+  const total = state.log.length
   return (
     <section className={styles.panel} aria-label="Event log">
       <h2 className={styles.panelTitle}>What happened (newest first)</h2>
-      <ol className={styles.log} data-testid="play-log">
+      {total > SHOWN && (
+        <p className={styles.muted} data-testid="play-log-count">
+          Showing the {SHOWN} newest of {total} lines.
+        </p>
+      )}
+      <ol className={styles.log} data-testid="play-log" reversed>
         {events.map((e, i) => (
           <li key={`${state.log.length - i}`}>
             {describeEvent(e, state)} <span className={styles.rule}>{logRuleNote(e.rule)}</span>

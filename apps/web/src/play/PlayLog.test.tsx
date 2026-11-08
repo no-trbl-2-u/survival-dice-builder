@@ -28,6 +28,12 @@ describe('the /play event log', () => {
       'What happened (newest first)',
     )
     expect(lines()).toHaveLength(0)
+    expect(screen.queryByTestId('play-log-count')).toBeNull()
+  })
+
+  it('numbers the list in reverse, so the newest line carries the highest number', () => {
+    render(<PlayLog state={withShuffles(3)} />)
+    expect(screen.getByTestId('play-log').hasAttribute('reversed')).toBe(true)
   })
 
   it('shows the newest line first, each followed by the rule behind it', () => {
@@ -45,6 +51,15 @@ describe('the /play event log', () => {
     expect(shown).toHaveLength(60)
     expect(shown[0]?.textContent).toContain('(75 cards)')
     expect(shown[59]?.textContent).toContain('(16 cards)')
+    expect(screen.getByTestId('play-log-count').textContent).toBe(
+      'Showing the 60 newest of 75 lines.',
+    )
+  })
+
+  it('says nothing about hidden lines while the whole log fits', () => {
+    render(<PlayLog state={withShuffles(60)} />)
+    expect(lines()).toHaveLength(60)
+    expect(screen.queryByTestId('play-log-count')).toBeNull()
   })
 
   it('says "not in the written rules" for a tag that names no section', () => {

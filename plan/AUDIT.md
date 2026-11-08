@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-08 (pass 278, cloud tick)
+
+Pass 277 named the seat in the co-op /play draft and starter-return dialogs (0b6ec28). No issues are open for triage (#223 waits for the user; #330 is this loop's own mirror). The critique gate is closed (pass 41 ran 4 commits ago, about 18 hours) and so is the expand gate (pass 28 ran 8 commits ago, about 18 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 41: the /play event log shows the 60 newest lines in a plain `<ol>`, says nothing about older lines, and a screen reader numbers the newest line 1. Rescored 3.6 (critique LOW a11y: impact 4, since every long run passes 60 lines and the numbering misleads every screen-reader user, ease 9); it ties the draft log subjects row and wins the tie-break as the row already mirrored to a public issue (#330). The log `<ol>` is now `reversed`, and past 60 lines a muted line under the heading reads "Showing the 60 newest of N lines."; component tests pin the attribute, the note at 75 lines and no note at 60. Next in line: the pass 41 LOW rows (the draft log subjects, the draft cadence help).
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play: the event log hides lines past 60 without saying so, and numbers the newest line 1 (critique LOW, pass 41)
+- category: external-critique (a11y)
+- impact: 4
+- ease: 9
+- next: `reversed` on the log `<ol>`, and a muted "Showing the 60 newest of N lines" past 60
+- issue: #330
+- fixed: (this commit)
+
+### [ ] [3.6] /play: the Skill draft opening and skip log lines do not name the player (critique LOW, pass 41)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: "Player 2's Skill draft: ..." and "No Skills left for Player 2 to draft." in `describeEvent.ts` (solo: "Your Skill draft: ...")
+
 # Site audit — 2026-11-07 (pass 277, cloud tick)
 
 Pass 276 stated the full-slots rule on the /config Draft Skill slots line (bbddbbd). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 41 ran 3 commits ago) and so is the expand gate (pass 28 ran 7 commits ago, about 11 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Top finding, from critique pass 41: in co-op the /play draft, replace and starter-return dialogs name the seat ("Player 2") above the title, but the title and help lines say "you" and "your". Scored 3.6 (critique LOW voice: impact 4, ease 9). `draftPoolText`, `replaceSkillText`, `returnStarterText` and `draftFullText` take an optional seat name; the dialog passes it in co-op, so the lines read "The Skills Player 2 does not keep go to Player 2's pool.", "The Skill Player 2 replaces goes to the bottom of its supply.", "Player 2 bought a card, so a starter card leaves Player 2's deck for good." and "Player 2's 6 draft slots are full: ...". Solo, /config, / and the playtest kit keep "you". Next in line: the pass 41 LOW rows (the draft log subjects, the log cap, already mirrored as #330, and the draft cadence help).
