@@ -18,15 +18,6 @@
 - suggested fix: Add a read-only list of the current player's Skills (face, effect, range) to the player panel in both phases.
 - source: web-fetch
 
-### [MED] /play — the page says when Combat ends, but never when Prepare ends
-- pass: 43 (commit add46fe)
-- viewport: desktop
-- category: comprehension
-- observation: The Prepare banner gives only the next action, and the start panel's Combat hint ends with when Combat ends. The home page line that explains it ("each phase goes once through your deck") is not on /play. (Read from source.)
-- evidence: Prepare banner "Prepare: Play a card from your hand" (or "..., or buy at the base"); start panel "...Combat ends when every hand and deck is empty."
-- suggested fix: Add the round line ("Each round is Prepare, then Combat, and each phase goes once through your deck.") to the /play start panel.
-- source: web-fetch
-
 ### [LOW] /play — Shop offers and card faces show "Cost 3" with no unit, next to upgrade prices that say "materials"
 - pass: 43 (commit add46fe)
 - viewport: desktop
@@ -100,6 +91,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — the page says when Combat ends, but never when Prepare ends
+- pass: 43 (commit add46fe)
+- viewport: desktop
+- category: comprehension
+- observation: The Prepare banner gives only the next action, and the start panel's Combat hint ends with when Combat ends. The home page line that explains it ("each phase goes once through your deck") is not on /play. (Read from source.)
+- evidence: Prepare banner "Prepare: Play a card from your hand" (or "..., or buy at the base"); start panel "...Combat ends when every hand and deck is empty."
+- suggested fix: Add the round line ("Each round is Prepare, then Combat, and each phase goes once through your deck.") to the /play start panel.
+- source: web-fetch
+- issue: #348
+- fixed: (this commit) — the /play start panel intro adds `roundText` from config, between the goal and the knockout line
+
 
 ### [x] [MED] /play and / — no page a player reads before a run says that enemies move at each Combat, or how far
 - pass: 43 (commit add46fe)

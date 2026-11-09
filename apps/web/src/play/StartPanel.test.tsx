@@ -38,6 +38,18 @@ describe('StartPanel', () => {
     expect(hint()).toContain(move)
   })
 
+  it('says how a round turns over before a run, so Prepare has an end too (5.1, critique pass 43)', () => {
+    const base = defaultContent.config
+    const intro = (config: GameConfig) =>
+      panel(config).container.querySelector('p')?.textContent ?? ''
+    expect(intro(base)).toContain(
+      'Each round is Prepare, then Combat, and each phase goes once through your deck.',
+    )
+    const solo = intro({ ...base, players: { min: 1, max: 1 } })
+    expect(solo).toContain('each phase goes once through your deck.')
+    expect(solo).not.toMatch(/share one screen/)
+  })
+
   it('reads its rule lines and player counts from the saved config, not the default (7.8, 9.7)', () => {
     const base = defaultContent.config
     const view = within(

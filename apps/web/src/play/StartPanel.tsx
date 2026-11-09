@@ -6,6 +6,7 @@ import {
   enemyMoveText,
   goalText,
   knockoutText,
+  roundText,
   siegeText,
   type GameConfig,
 } from '@survival/content'
@@ -86,7 +87,7 @@ export function StartPanel({
         New run
       </h2>
       <p>
-        {goalText()} {knockoutText(config)}
+        {goalText()} {roundText(config)} {knockoutText(config)}
       </p>
       <form
         className={styles.startForm}

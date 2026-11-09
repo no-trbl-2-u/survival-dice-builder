@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-09 (pass 294, cloud tick)
+
+Pass 293 gave the /play start panel and the home page the enemy-move line (e915510). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 43 ran 2 commits ago) and so is the expand gate (pass 29 ran 8 commits ago, under 48 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). This pass takes the next pass 43 MED row: /play says when Combat ends but never when Prepare ends. Scored 8.1 (impact 6, ease 9, x1.5 bias). The start panel intro now reads the goal, then `roundText` (Spec v2 5.1, 5.3, 16.4, 16.8) from config, then the knockout line; with 2 or more players allowed it also says how players share one screen. A StartPanel test pins the round line under the default config and under a solo-only config (no shared-screen sentence), and the a11y e2e pins the intro order. Next in line: the Skills list in the player panel (MED), then the pass 43 LOW rows.
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /play: the start panel never says when Prepare ends (critique pass 43)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: add the `roundText` round line to the start panel
+- issue: #348
+- fixed: (this commit)
+
+### [ ] [5.4] /play: the player cannot see their Skills or ranges before engaging (critique pass 43)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 6
+- next: read-only Skill list in the player panel in Prepare and Combat
+
+### [ ] [4.5] /play: Shop offers and card faces show "Cost 3" with no unit (critique pass 43)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: show "Cost 3 currency" on Shop offers and card faces
+
 # Site audit — 2026-11-09 (pass 293, cloud tick)
 
 Pass 292 gave the /config Move cost next to an enemy field its line (add46fe), and critique pass 43 filed 6 rows (b44072d). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 43 ran 1 commit ago) and so is the expand gate (pass 29 ran 7 commits ago, under 48 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The new pass 43 MED rows are actionable from cloud; the bias (external-critique MED, x1.5) puts them on top. This pass takes the enemy-move row: no page a player reads before a run says that enemies move at each Combat, or how far. Scored 8.1 (impact 6, ease 9, x1.5). The /play start panel's Combat hint and the home page Enemies item now add `enemyMoveText` (Spec v2 7.5) from config, the line /config already prints; both Combat choices move enemies (`advance.ts` runs `moveEnemies` for each), so the hint names it under both. Tests pin the home item and the start panel hint at 1 hex under both choices. Next in line: the pass 43 round line on the /play start panel (MED), then the Skills list in the player panel (MED).

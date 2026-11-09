@@ -82,8 +82,9 @@ test('/play: the start panel says what a run is and what the seed does', async (
   await page.goto('/play')
   const panel = page.getByTestId('start-panel')
   await expect(panel).toContainText(
-    'Keep the base standing for as many rounds as you can. The run ends when the base falls. A player at 0 health is knocked out',
+    'Keep the base standing for as many rounds as you can. The run ends when the base falls. Each round is Prepare, then Combat, and each phase goes once through your deck.',
   )
+  await expect(panel).toContainText('A player at 0 health is knocked out')
   await expect(panel.getByRole('textbox', { name: /Seed/ })).toHaveAccessibleDescription(
     'The same seed and the same choices give the same game.',
   )
