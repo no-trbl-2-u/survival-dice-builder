@@ -9,6 +9,7 @@ import {
   combatText,
   defenseText,
   enemyDieText,
+  enemyMoveText,
   enemyHitText,
   draftFullText,
   draftSlotsText,
@@ -396,6 +397,17 @@ describe('rule text from config', () => {
     }))
     expect(targetOrderText(plain)).toBe(
       'Enemies head for the nearest structure or player. Between equally near targets they pick the base, then a Tower, then a Barricade, then a player.',
+    )
+  })
+
+  it('enemy move: the hexes each enemy moves follow config, and the field shows the target order (7.5)', () => {
+    expect(enemyMoveText(base)).toBe(
+      'At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 2 hexes toward its target and stops next to it.',
+    )
+    const slow = With((c) => ({ ...c, combat: { ...c.combat, enemyMoveHexes: 1 } }))
+    expect(enemyMoveText(slow)).toMatch(/moves up to 1 hex toward/)
+    expect(ruleLineFor('combat.enemyMoveHexes', slow, defaultContent)).toBe(
+      `${enemyMoveText(slow)} ${targetOrderText(slow)}`,
     )
   })
 

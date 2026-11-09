@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-09 (pass 290, cloud tick)
+
+Pass 289 gave the /config spawn fields one verb and made the Spawn range help read in order (c7b5f85). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 8 commits ago, about 21 hours) and so is the expand gate (pass 29 ran 3 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass goes back to the pass 284 list of /config fields `ruleLineFor` still gives no line, and takes the next one: the Enemy move field never says when enemies move, in which order, or where they stop. Scored 3.6 (comprehension: impact 4, ease 9). The new `enemyMoveText` (Spec v2 7.5) reads "At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 2 hexes toward its target and stops next to it." from config, the same order `moveEnemies` and `startCombat` play, and `ruleLineFor` maps `combat.enemyMoveHexes` to it plus `targetOrderText`; a ruleText test pins it at 2 and at 1 hex. Still without a line: Rolls per engagement, Move cost next to an enemy, Smallest deck, the supply copies, the tile counts, Bought cards, Figures per hex, Blocked enemy, Forced reveal, Defenses on gathering nodes and Build levels.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the Enemy move field shows no rule line
+- category: comprehension
+- impact: 4
+- ease: 9
+- next: add `enemyMoveText` and map `combat.enemyMoveHexes` to it plus `targetOrderText` in `ruleLineFor`
+- issue: #344
+- fixed: (this commit)
+
 # Site audit — 2026-11-09 (pass 289, cloud tick)
 
 Pass 288 named the highest open level Skill supply in the Skills revealed help (74c1915). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 7 commits ago, about 21 hours) and so is the expand gate (pass 29 ran 2 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The Pending MED critique rows edit `[needs-user-call]` items, which /oversight owns. The last open pass 42 row is the [LOW] Spawn pressure wording: New tile waits says "add enemies at every Combat" while the other spawn fields say "gets 1 grunt at each Combat", and the Spawn range help puts its list between subject and verb. Scored 3.6 (external-critique LOW: impact 4, ease 9). `spawnText` now reads "Each new tile's spawn nodes get enemies at each Combat." (Spec v2 7.3, row 66); the Spawn range help reads "A spawn node spawns only when a player figure, a Barricade, a Tower or the base is within this many hexes." and `siteText` names the same list (row 70, `nodeInRange`); the /debug reveal line and the playtest protocol follow. Next in line: the /oversight-owned /decisions rows; no other open critique row is actionable from cloud.

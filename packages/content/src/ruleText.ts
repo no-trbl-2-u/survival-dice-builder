@@ -391,6 +391,16 @@ export function targetText(config: GameConfig): string {
 }
 
 /**
+ * How far an enemy moves at each Combat: "At each Combat, before the spawn nodes spawn, each
+ * enemy, oldest first, moves up to 2 hexes toward its target and stops next to it."
+ *
+ * @rule 7.5
+ */
+export function enemyMoveText(config: GameConfig): string {
+  return `At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to ${plural(config.combat.enemyMoveHexes, 'hex', 'hexes')} toward its target and stops next to it.`
+}
+
+/**
  * Which target an enemy heads for: the nearest structure, a player only when much nearer, and
  * the tie-break order only between equally near targets.
  *
@@ -811,6 +821,7 @@ export function ruleLineFor(
   if (path === 'rulings.mandatoryPlays') return combatEndText(config)
   if (path === 'rulings.targetTieBreak' || path === 'rulings.playerPullDistance')
     return targetOrderText(config)
+  if (path === 'combat.enemyMoveHexes') return `${enemyMoveText(config)} ${targetOrderText(config)}`
   if (group === 'players') return `For ${playersText(config)}.`
   if (group === 'milestones') {
     const m = config.milestones
