@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — Shop offers and card faces show "Cost 3" with no unit, next to upgrade prices that say "materials"
-- pass: 43 (commit add46fe)
-- viewport: desktop
-- category: voice
-- observation: The game has two resources. In the Base panel, upgrades name their unit but Shop offers do not. (Read from source.)
-- evidence: Shop offer "Haul" / "Cost 3" (`BasePanel.tsx`, `CardView.tsx`); upgrade "Buy Shop I (2 materials)"; Shop note "Its cards cost currency, which you get for defeating enemies, not materials."
-- suggested fix: Show Shop offer and card prices as "Cost 3 currency".
-- source: web-fetch
-
 ### [LOW] /play — the game footer shows a "Developer: allow undo" tick box next to the player options
 - pass: 43 (commit add46fe)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — Shop offers and card faces show "Cost 3" with no unit, next to upgrade prices that say "materials"
+- pass: 43 (commit add46fe)
+- viewport: desktop
+- category: voice
+- observation: The game has two resources. In the Base panel, upgrades name their unit but Shop offers do not. (Read from source.)
+- evidence: Shop offer "Haul" / "Cost 3" (`BasePanel.tsx`, `CardView.tsx`); upgrade "Buy Shop I (2 materials)"; Shop note "Its cards cost currency, which you get for defeating enemies, not materials."
+- suggested fix: Show Shop offer and card prices as "Cost 3 currency".
+- source: web-fetch
+- issue: #350
+- fixed: (this commit) — Shop offers and card faces read "Cost 3 currency"
 
 ### [x] [MED] /play — under the default Engagements Combat, the player cannot see their Skills or their ranges before choosing where to engage
 - pass: 43 (commit add46fe)

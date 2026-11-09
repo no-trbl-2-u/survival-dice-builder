@@ -70,6 +70,15 @@ export function combatSideText(def: CardDef, engage: boolean): string {
     : def.bottom.map(bottomText).join(', ')
 }
 
+/**
+ * A card's Shop price with its unit: "Cost 3 currency". Cards are bought with currency, upgrades
+ * with materials, so the price names which one.
+ *
+ * @param cost - the card's `cost` from content.
+ * @rule Table 8
+ */
+export const cardPriceText = (cost: number): string => `Cost ${cost} currency`
+
 type Props = Readonly<{ def: CardDef; up: 'top' | 'bottom'; config: GameConfig; engage?: boolean }>
 
 /**
@@ -86,7 +95,7 @@ export function CardView({ def, up, config, engage = false }: Props) {
       </div>
       <div className={styles.cardMeta}>
         <span>{def.level === 0 ? 'Starter' : `Level ${'I'.repeat(def.level)}`}</span>
-        {def.cost > 0 ? <span>Cost {def.cost}</span> : null}
+        {def.cost > 0 ? <span>{cardPriceText(def.cost)}</span> : null}
       </div>
       <div className={`${styles.half} ${styles.bottomHalf}`}>
         <span className={styles.band}>Bottom · Combat</span>

@@ -116,4 +116,10 @@ describe('whose materials and currency the Base panel counts (16.3)', () => {
     expect(hint).toMatch(/while Player 2's figure is on the/)
     expect(hint).not.toContain('your')
   })
+
+  it('a Shop offer names its price in currency, not a bare number (Table 8)', () => {
+    const game = { ...createGame(defaultContent.config, 1), shopOffers: ['haul'] }
+    render(<BasePanel state={game} legal={[]} act={() => {}} />)
+    expect(screen.getByText('Cost 3 currency')).toBeTruthy()
+  })
 })

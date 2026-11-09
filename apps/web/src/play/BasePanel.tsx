@@ -6,6 +6,7 @@ import {
 } from '@survival/content'
 import { legalUpgrades, type Action, type GameState } from '@survival/engine'
 import { GameIcon } from '../icons/GameIcon.tsx'
+import { cardPriceText } from './CardView.tsx'
 import { cardText } from './effectText.ts'
 import { MilestoneList } from './MilestoneList.tsx'
 import styles from './Play.module.css'
@@ -127,7 +128,7 @@ export function BasePanel({ state, legal, act }: Props) {
               return (
                 <li key={`${id}-${i}`} className={styles.offer}>
                   <strong>{def?.name ?? id}</strong>
-                  <span className={styles.muted}>Cost {def?.cost ?? '?'}</span>
+                  <span className={styles.muted}>{def ? cardPriceText(def.cost) : 'Cost ?'}</span>
                   {def ? <span>{cardText(def, state.config)}</span> : null}
                   {buy ? (
                     <button type="button" onClick={() => act(buy)}>

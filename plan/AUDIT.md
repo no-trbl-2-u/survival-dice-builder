@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-09 (pass 296, cloud tick)
+
+Pass 295 gave the /play player panel each player's Skills list (d2fa477). No issues are open for triage. The critique gate is closed (pass 43 ran 4 commits ago) and so is the expand gate (pass 29 ran 10 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every pass 43 MED row has shipped, so this pass takes the top LOW row: Shop offers and card faces print "Cost 3" with no unit, next to upgrade prices that say "materials". Scored 4.5 (impact 3, ease 9; voice, no bias). `cardPriceText` in `CardView.tsx` (Table 8, card supplies cost in currency) now prints "Cost 3 currency" on Shop offers and card faces. A CardView test and a BasePanel test pin it. Next in line: the developer undo tick box in the /play footer (LOW), then the /tiles reveal line (LOW).
+
+## Top 5 findings (scored)
+
+### [x] [4.5] /play: Shop offers and card faces show "Cost 3" with no unit (critique pass 43)
+- category: external-critique (voice)
+- impact: 3
+- ease: 9
+- next: show "Cost 3 currency" on Shop offers and card faces
+- issue: #350
+- fixed: (this commit)
+
+### [ ] [4.0] /play: the footer shows a "Developer: allow undo" tick box beside the player options (critique pass 43)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: label it "Allow undo" or move it to the dev tools
+
 # Site audit — 2026-11-09 (pass 295, cloud tick)
 
 Pass 294 gave the /play start panel the round line (2ab93b8). No issues are open for triage. The critique gate is closed (pass 43 ran 3 commits ago) and so is the expand gate (pass 29 ran 8 commits ago, under 48 hours). Every build plan phase is shipped or blocked. This pass takes the last pass 43 MED row: under Engagements Combat the player cannot see their Skills or ranges before choosing where to engage. Scored 7.2 (impact 6, ease 8, x1.5 bias). The player panel now lists each player's Skills read-only under their tracks (name, the faces it needs, `skillText` with its range from content), in every phase and for every seat. Two PlayerPanel tests pin the list solo and in co-op. Next in line: the pass 43 LOW rows (Shop "Cost" unit, the developer undo tick box).

@@ -1,7 +1,7 @@
 import { defaultContent } from '@survival/content'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { bottomText, CardView, topText } from './CardView.tsx'
+import { bottomText, cardPriceText, CardView, topText } from './CardView.tsx'
 
 const config = defaultContent.config
 const card = (id: string) => defaultContent.cards.find((c) => c.id === id)!
@@ -12,6 +12,12 @@ describe('CardView', () => {
     expect(screen.getByText('Top · Prepare')).toBeTruthy()
     expect(screen.getByText('Bottom · Combat')).toBeTruthy()
     expect(screen.getByText(/Active half: Combat, Reroll 2 dice/)).toBeTruthy()
+  })
+
+  it('names the price unit, currency, on a bought card (Table 8)', () => {
+    const { container } = render(<CardView def={card('haul')} up="top" config={config} />)
+    expect(container.textContent).toContain('Cost 3 currency')
+    expect(cardPriceText(8)).toBe('Cost 8 currency')
   })
 
   it('writes effects in plain text', () => {
