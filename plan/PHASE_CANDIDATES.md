@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-11-07 at commit 7ec021c
-> Pass count: 28
+> Last pass: 2026-11-09 at commit 23e3a42
+> Pass count: 29
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -33,7 +33,8 @@
 - re-evidence (expand pass 22): critique pass 33 (914aacb) filed one more /decisions row: a "row N" link to a reading under Decided recently left the page for GitHub, and "rows 65 and 69" linked nothing. d29b03d gave Decided recently items ids and linked each number after "rows". The same five older rows still wait for `/oversight`, three MED at 8.1 and two LOW. Score held at 3.5.
 - re-evidence (expand pass 23): critique passes 34 (32a483b) and 35 (2f8713b) filed no /decisions row, and `/iterate` shipped one /decisions fix this window (7418ddf, the two file links say they open GitHub). The same five older rows still head the queue, three MED at 8.1 and two LOW, all in `[needs-user-call]` items that only `/oversight` may edit; audit pass 225 names them "next in line" again. Score held at 3.5.
 - re-evidence (expand pass 27): critique pass 38 (e356f80) filed two MED rows on /decisions with the same root, text that reaches the page from a plan file and goes stale without a red test: rule reading 68 gave an older bot report (4-seat median 5 to 4) next to its measured block (5 to 3), and rows 63, 64, 66 and 70 carried the same older "Bot report:" sentence (d0e124f, fixed by hand with a DecisionsPage test that bars a "Bot report" next to a measured block). That is the proposal-row twin of the Pending "three balance checks" row: dated bot numbers that no batch keeps current. The five `[needs-user-call]` rows from passes 20, 21 and 25 are still Pending, 15 to 17 days on, and still head every audit block at 8.1. Score held at 3.5: the citation guard holds, the balance check built from the latest batch is still the open half, and the stale lines still need an `/oversight` edit.
-- last re-evidenced: 2026-11-06
+- re-evidence (expand pass 29): after critique pass 42 (c60059c) the same five /decisions rows are still pending (three MED, two LOW, the Event Calendar check among them), all in `[needs-user-call]` items that only `/oversight` may edit. None of the 20 commits since pass 28 touched /decisions. Score held at 3.5.
+- last re-evidenced: 2026-11-09
 
 ### [ ] [score 1.0] Milestones a default run can reach: every milestone reachable, or marked out of reach with its reason
 - proposed: 2026-10-17, expand pass 13
@@ -331,6 +332,21 @@
 - ruling audit: no rule rows. Loop scope: in (tests, UI copy, engine event types).
 - progress (expand pass 21): 66e0753 fixed the critique pass 31 MED row. The enemy move line now names the enemy from `event.from` and stays the same after later moves, pinned by a moveLog test. That is the fourth event type fixed one at a time for this cause. The test that renders each line when it is appended and again at the end, which would find the fifth, is still missing. Score held at 4.0.
 - last re-evidenced: 2026-10-30
+
+### [ ] [score 3.5] Every /config field shows its rule line: a test fails when a field has none and no pinned reason
+- proposed: 2026-11-09, expand pass 29
+- source signals:
+  - Audit passes 280 to 284 found the same gap five times in a row and `/iterate` filled it one field group per tick: bff296e (Skills revealed, Shop, Co-op order), 3d0184d (start and base health), 71630e8 (spawn ramp, seats, range, maximum level), 23d4b52 (enemy die faces, Hit and Special damage), b8e6e1b (draft cadence).
+  - Critique pass 42 (c60059c) filed three rows on lines those ticks had just added (Base fields showed the Defenses line, the enemy die line said every die hits, the spawn line named only grunts), fixed as 23e3a42, 8cb7ef3 and 2612c69. Two more /config LOW rows on these lines are still pending (the spawn fields' verbs, and "the supply" in the Skills revealed help).
+  - A probe of `ruleLineFor` (`packages/content/src/ruleText.ts:773`) over `configMetaPaths(defaultContent.config)` at 23e3a42: 85 paths, 36 return null. 13 are group headers; the other 23 are fields, among them `combat.maxRolls`, `combat.enemyMoveHexes`, `combat.moveCostNextToEnemy`, `clock.forcedRevealEvery`, `draft.keep`, `supplies.copiesPerCard`, `supplies.copiesPerSkill`, `deck.minimumSize`, `options.boughtCards` and nine `rulings.*` options. No test lists which fields may have no line.
+- rationale: the audit finds the next field with no line each tick, so this gap costs about 8 more single-group ticks, and each new line is checked only by the critique pass that reads it later. One pass that gives every field a line built from config and content (or a pinned reason it has none, for example a retired option), with one coverage test, closes the gap and keeps new config fields from adding to it.
+- proposed scope: 1 phase.
+  - A content test runs `ruleLineFor` over every `configMetaPaths` field and fails on null unless the path is on a pinned list with a reason (group headers, `combat.exchangeRange` retired).
+  - Rule lines for the 23 fields, each built from existing `ruleText` helpers where one already states that rule, so /play, /config and the rulebook keep one wording.
+  - A test per new line at the default config and at one changed value, as the five shipped ticks did.
+- estimated phases: 1
+- conflicts: none. Copy built from config and content plus tests; no rule changes. Fields whose rule is an open reading cite their OPEN-QUESTIONS row and do not decide it.
+- ruling audit: rule text only; Spec v2 untouched. Loop scope: in (content, tests).
 
 ## Considered (below threshold)
 
