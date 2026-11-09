@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-09 (pass 295, cloud tick)
+
+Pass 294 gave the /play start panel the round line (2ab93b8). No issues are open for triage. The critique gate is closed (pass 43 ran 3 commits ago) and so is the expand gate (pass 29 ran 8 commits ago, under 48 hours). Every build plan phase is shipped or blocked. This pass takes the last pass 43 MED row: under Engagements Combat the player cannot see their Skills or ranges before choosing where to engage. Scored 7.2 (impact 6, ease 8, x1.5 bias). The player panel now lists each player's Skills read-only under their tracks (name, the faces it needs, `skillText` with its range from content), in every phase and for every seat. Two PlayerPanel tests pin the list solo and in co-op. Next in line: the pass 43 LOW rows (Shop "Cost" unit, the developer undo tick box).
+
+## Top 5 findings (scored)
+
+### [x] [7.2] /play: no Skills or ranges in view before engaging (critique pass 43)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 8
+- next: list the player's Skills read-only in the player panel
+- issue: #349
+- fixed: (this commit)
+
 # Site audit — 2026-11-09 (pass 294, cloud tick)
 
 Pass 293 gave the /play start panel and the home page the enemy-move line (e915510). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 43 ran 2 commits ago) and so is the expand gate (pass 29 ran 8 commits ago, under 48 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). This pass takes the next pass 43 MED row: /play says when Combat ends but never when Prepare ends. Scored 8.1 (impact 6, ease 9, x1.5 bias). The start panel intro now reads the goal, then `roundText` (Spec v2 5.1, 5.3, 16.4, 16.8) from config, then the knockout line; with 2 or more players allowed it also says how players share one screen. A StartPanel test pins the round line under the default config and under a solo-only config (no shared-screen sentence), and the a11y e2e pins the intro order. Next in line: the Skills list in the player panel (MED), then the pass 43 LOW rows.

@@ -375,6 +375,30 @@
   margin: 0;
 }
 
+.ownSkills {
+  margin-top: 8px;
+}
+
+.ownSkillsLabel {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.ownSkillList {
+  display: grid;
+  gap: 4px;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+}
+
+.ownSkillList li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
 .stat dt {
   font-size: var(--text-sm);
   color: var(--color-text-muted);

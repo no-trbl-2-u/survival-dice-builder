@@ -42,3 +42,31 @@ describe('PlayerPanel', () => {
     expect(heading()).not.toContain('(maximum)')
   })
 })
+
+describe('PlayerPanel Skills', () => {
+  it('7.8 lists each player Skill with its faces and its range, outside an exchange', () => {
+    const state = createGame(defaultContent.config, 1)
+    expect(state.exchange).toBeFalsy()
+    render(<PlayerPanel state={state} />)
+    const panel = screen.getByTestId('player-panel')
+    const items = panel.querySelectorAll('li')
+    const skills = state.players[0]?.skills ?? []
+    expect(skills.length).toBeGreaterThan(0)
+    expect(items).toHaveLength(skills.length)
+    const first = defaultContent.skills.find((s) => s.id === skills[0])
+    expect(first).toBeDefined()
+    expect(items[0]?.textContent).toContain(`${first?.name}:`)
+    expect(items[0]?.querySelectorAll('[role="img"]')).toHaveLength(first?.faces.length ?? -1)
+    const attack = skills
+      .map((id) => defaultContent.skills.find((s) => s.id === id))
+      .find((s) => s?.effect.kind === 'damage')
+    if (attack) expect(panel.textContent).toMatch(/within \d+ hex/)
+  })
+
+  it('16.3 shows every seat its own Skills in co-op', () => {
+    const state = createGame(defaultContent.config, 2)
+    render(<PlayerPanel state={state} />)
+    const total = state.players.reduce((n, p) => n + p.skills.length, 0)
+    expect(screen.getByTestId('player-panel').querySelectorAll('li')).toHaveLength(total)
+  })
+})

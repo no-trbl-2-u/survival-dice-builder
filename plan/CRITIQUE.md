@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — under the default Engagements Combat, the player cannot see their Skills or their ranges before choosing where to engage
-- pass: 43 (commit add46fe)
-- viewport: desktop
-- category: comprehension
-- observation: The Skill board renders only for Exchanges or inside the engagement window. In Prepare and Combat the player panel lists Health, Guard, Action dice, Materials and Currency, but no Skills. The Combat banner asks the player to engage "from where you stand", but how far a Skill reaches shows only after the dice are rolled. (Read from source; /play is a client-rendered shell.)
-- evidence: Combat banner "Play each card: Engage (roll to attack from where you stand), another option or discard it"; Skill effect text such as "2 damage to 1 enemy within 1 hex" appears only on the Skill board (`apps/web/src/play/PlayPage.tsx`, `apps/web/src/play/PlayerPanel.tsx`).
-- suggested fix: Add a read-only list of the current player's Skills (face, effect, range) to the player panel in both phases.
-- source: web-fetch
-
 ### [LOW] /play — Shop offers and card faces show "Cost 3" with no unit, next to upgrade prices that say "materials"
 - pass: 43 (commit add46fe)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — under the default Engagements Combat, the player cannot see their Skills or their ranges before choosing where to engage
+- pass: 43 (commit add46fe)
+- viewport: desktop
+- category: comprehension
+- observation: The Skill board renders only for Exchanges or inside the engagement window. In Prepare and Combat the player panel lists Health, Guard, Action dice, Materials and Currency, but no Skills. The Combat banner asks the player to engage "from where you stand", but how far a Skill reaches shows only after the dice are rolled. (Read from source; /play is a client-rendered shell.)
+- evidence: Combat banner "Play each card: Engage (roll to attack from where you stand), another option or discard it"; Skill effect text such as "2 damage to 1 enemy within 1 hex" appears only on the Skill board (`apps/web/src/play/PlayPage.tsx`, `apps/web/src/play/PlayerPanel.tsx`).
+- suggested fix: Add a read-only list of the current player's Skills (face, effect, range) to the player panel in both phases.
+- source: web-fetch
+- issue: #349
+- fixed: (this commit) — the player panel lists each player's Skills read-only (name, faces, effect with its range) in every phase
 
 ### [x] [MED] /play — the page says when Combat ends, but never when Prepare ends
 - pass: 43 (commit add46fe)
