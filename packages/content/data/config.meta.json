@@ -255,7 +255,7 @@
   },
   "draft.reveal": {
     "label": "Skills revealed",
-    "help": "New Skills each player looks at in a draft, from the top of the supply.",
+    "help": "New Skills each player looks at in a draft, from the top of the highest open level Skill supply.",
     "rule": "11.6",
     "range": [1, 6]
   },

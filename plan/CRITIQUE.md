@@ -18,15 +18,6 @@
 - suggested fix: Make `spawnText` say "get enemies at each Combat"; rewrite the help to "A spawn node spawns only when a player figure, a Barricade, a Tower or the base is within this many hexes." and use the same list in `siteText`.
 - source: web-fetch
 
-### [LOW] /config — the Skills revealed help says "the supply", but there is one Skill supply for each level
-- pass: 42 (commit 23d4b52)
-- viewport: desktop
-- category: comprehension
-- observation: The help does not say which Skill supply the draft draws from.
-- evidence: Help (`config.meta.json:258`): "New Skills each player looks at in a draft, from the top of the supply." Spec v2 11.6: "Each player looks at the top 2 Skills of the highest open level Skill supply."
-- suggested fix: "New Skills each player looks at in a draft, from the top of the highest open level Skill supply."
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the Skills revealed help says "the supply", but there is one Skill supply for each level
+- pass: 42 (commit 23d4b52)
+- viewport: desktop
+- category: comprehension
+- observation: The help does not say which Skill supply the draft draws from.
+- evidence: Help (`config.meta.json:258`): "New Skills each player looks at in a draft, from the top of the supply." Spec v2 11.6: "Each player looks at the top 2 Skills of the highest open level Skill supply."
+- suggested fix: "New Skills each player looks at in a draft, from the top of the highest open level Skill supply."
+- source: web-fetch
+- issue: #342
+- fixed: (this commit) — the help reads "New Skills each player looks at in a draft, from the top of the highest open level Skill supply."
 
 ### [x] [LOW] /config — Starting base health shows the whole Defenses line; Health per upgrade shows none
 - pass: 42 (commit 23d4b52)

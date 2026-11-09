@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-09 (pass 288, cloud tick)
+
+Pass 287 gave the /config Base fields a base line (23e3a42), and expand pass 29 filed 1 candidate (48c4f73). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 6 commits ago, about 19 hours) and so is the expand gate (pass 29 just ran). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The Pending MED critique rows edit `[needs-user-call]` items, which /oversight owns. The two open pass 42 [LOW] /config rows tie at 3.6 (external-critique LOW: impact 4, ease 9); the cheaper one wins: the Skills revealed help says "from the top of the supply", but there is one Skill supply for each level. The help now reads "New Skills each player looks at in a draft, from the top of the highest open level Skill supply." (Spec v2 11.6), which is the supply `draft.ts` draws from. Next in line: the pass 42 [LOW] Spawn pressure wording row.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the Skills revealed help does not say which Skill supply (critique pass 42)
+- category: external-critique (comprehension)
+- impact: 4
+- ease: 9
+- next: name the highest open level Skill supply in the `draft.reveal` help
+- issue: #342
+- fixed: (this commit)
+
 # Site audit — 2026-11-08 (pass 287, cloud tick)
 
 Pass 286 made the enemy die line say the enemy dice hit you (8cb7ef3). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 4 commits ago) and so is the expand gate (pass 28 ran 19 commits ago, about 36 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The Pending MED critique rows edit `[needs-user-call]` items, which /oversight owns. The top open row is pass 42's [LOW]: the Starting base health field shows the whole Defenses line, and Health per upgrade shows none. Scored 3.6 (external-critique LOW: impact 4, ease 9). The new `baseText` (Spec v2 8.2, 11.3) reads "The base starts with 20 health. Each base upgrade adds 5 to its maximum health and to its health." from config, and `ruleLineFor` maps both Base fields to it; ruleText tests pin both at default and changed values. Next in line: the two other pass 42 [LOW] /config rows.
