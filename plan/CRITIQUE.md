@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the game footer shows a "Developer: allow undo" tick box next to the player options
-- pass: 43 (commit add46fe)
-- viewport: desktop
-- category: comprehension
-- observation: The production footer puts a developer-labelled control beside Sound and 3D dice. A first-time player cannot tell if undo is meant for them. (Read from source.)
-- evidence: Footer: "Save run (file)", "New run", "Sound", "3D dice", "Developer: allow undo" (`PlayPage.tsx`).
-- suggested fix: Label it "Allow undo", or show it only with the other dev tools.
-- source: web-fetch
-
 ### [LOW] /tiles — the lede says tiles are "drawn", but not when a tile joins the map
 - pass: 43 (commit add46fe)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the game footer shows a "Developer: allow undo" tick box next to the player options
+- pass: 43 (commit add46fe)
+- viewport: desktop
+- category: comprehension
+- observation: The production footer puts a developer-labelled control beside Sound and 3D dice. A first-time player cannot tell if undo is meant for them. (Read from source.)
+- evidence: Footer: "Save run (file)", "New run", "Sound", "3D dice", "Developer: allow undo" (`PlayPage.tsx`).
+- suggested fix: Label it "Allow undo", or show it only with the other dev tools.
+- source: web-fetch
+- issue: #351
+- fixed: (this commit)
 
 ### [x] [LOW] /play — Shop offers and card faces show "Cost 3" with no unit, next to upgrade prices that say "materials"
 - pass: 43 (commit add46fe)

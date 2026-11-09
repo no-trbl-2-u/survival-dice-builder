@@ -103,5 +103,9 @@ test('/play: 3D dice and sound are presentation only (same actions, same state)'
   await expect(page.getByRole('checkbox', { name: '3D dice' })).toBeChecked()
   await page.getByRole('checkbox', { name: 'Sound' }).uncheck()
   await expect(page.getByRole('checkbox', { name: 'Sound' })).not.toBeChecked()
+  // Undo is a player option beside Sound and 3D dice, not a developer tool (critique pass 43).
+  await expect(page.getByText('Developer: allow undo')).toHaveCount(0)
+  await page.getByRole('checkbox', { name: 'Allow undo' }).check()
+  await expect(page.getByRole('button', { name: 'Undo last decision' })).toBeVisible()
   expect(errors).toEqual([])
 })

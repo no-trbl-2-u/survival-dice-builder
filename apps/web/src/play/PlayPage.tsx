@@ -347,7 +347,7 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
         </label>
         <label>
           <input type="checkbox" checked={undoOn} onChange={(e) => setUndoOn(e.target.checked)} />{' '}
-          Developer: allow undo
+          Allow undo
         </label>
         {devTools ? (
           <button

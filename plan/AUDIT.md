@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-09 (pass 297, cloud tick)
+
+Pass 296 gave Shop offers and card faces the "currency" unit (805b259). No issues are open for triage. The critique gate is closed (pass 43 ran 5 commits ago) and so is the expand gate (pass 29 ran 12 commits ago, under 48 hours). Every build plan phase is shipped or blocked. This pass takes the next pass 43 LOW row: the /play footer labels the undo tick box "Developer: allow undo", beside Sound and 3D dice. Undo shipped as a player option in phase 13 and shows in production, unlike the real dev tools (`import.meta.env.DEV` only). Scored 4.0 (impact 3, ease 8; comprehension, no bias). The tick box now reads "Allow undo". The polish e2e pins the label and that ticking it shows "Undo last decision". Next in line: the /tiles reveal line (LOW).
+
+## Top 5 findings (scored)
+
+### [x] [4.0] /play: the footer shows a "Developer: allow undo" tick box beside the player options (critique pass 43)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: label it "Allow undo"
+- issue: #351
+- fixed: (this commit)
+
+### [ ] [3.6] /tiles: the lede says tiles are "drawn", but not when a tile joins the map (critique pass 43)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: add the reveal rule line after the lede, from the rule text
+
 # Site audit — 2026-11-09 (pass 296, cloud tick)
 
 Pass 295 gave the /play player panel each player's Skills list (d2fa477). No issues are open for triage. The critique gate is closed (pass 43 ran 4 commits ago) and so is the expand gate (pass 29 ran 10 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every pass 43 MED row has shipped, so this pass takes the top LOW row: Shop offers and card faces print "Cost 3" with no unit, next to upgrade prices that say "materials". Scored 4.5 (impact 3, ease 9; voice, no bias). `cardPriceText` in `CardView.tsx` (Table 8, card supplies cost in currency) now prints "Cost 3 currency" on Shop offers and card faces. A CardView test and a BasePanel test pin it. Next in line: the developer undo tick box in the /play footer (LOW), then the /tiles reveal line (LOW).
