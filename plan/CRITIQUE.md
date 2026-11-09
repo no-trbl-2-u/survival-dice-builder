@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-08 at commit 23d4b52
-> Pass count: 42
+> Last pass: 2026-11-09 at commit add46fe
+> Pass count: 43
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /play — under the default Engagements Combat, the player cannot see their Skills or their ranges before choosing where to engage
+- pass: 43 (commit add46fe)
+- viewport: desktop
+- category: comprehension
+- observation: The Skill board renders only for Exchanges or inside the engagement window. In Prepare and Combat the player panel lists Health, Guard, Action dice, Materials and Currency, but no Skills. The Combat banner asks the player to engage "from where you stand", but how far a Skill reaches shows only after the dice are rolled. (Read from source; /play is a client-rendered shell.)
+- evidence: Combat banner "Play each card: Engage (roll to attack from where you stand), another option or discard it"; Skill effect text such as "2 damage to 1 enemy within 1 hex" appears only on the Skill board (`apps/web/src/play/PlayPage.tsx`, `apps/web/src/play/PlayerPanel.tsx`).
+- suggested fix: Add a read-only list of the current player's Skills (face, effect, range) to the player panel in both phases.
+- source: web-fetch
+
+### [MED] /play and / — no page a player reads before a run says that enemies move at each Combat, or how far
+- pass: 43 (commit add46fe)
+- viewport: desktop
+- category: comprehension
+- observation: The /play start panel gives the goal, knockout, Combat and siege, but not enemy movement. The home page "Enemies:" item says where enemies appear and what they head for, but not when they move or how far. The enemy-move line exists in the rule text, but only /config prints it.
+- evidence: Home: "Enemies: Each new tile's spawn nodes get enemies at each Combat. Enemies head for the nearest structure, and turn to a player only when the player is at least N hexes nearer." Rule text shown only on /config: "At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 2 hexes toward its target and stops next to it."
+- suggested fix: Add the existing enemy-move sentence to the /play start panel (next to the Combat hint) and to the home page Enemies item.
+- source: web-fetch
+
+### [MED] /play — the page says when Combat ends, but never when Prepare ends
+- pass: 43 (commit add46fe)
+- viewport: desktop
+- category: comprehension
+- observation: The Prepare banner gives only the next action, and the start panel's Combat hint ends with when Combat ends. The home page line that explains it ("each phase goes once through your deck") is not on /play. (Read from source.)
+- evidence: Prepare banner "Prepare: Play a card from your hand" (or "..., or buy at the base"); start panel "...Combat ends when every hand and deck is empty."
+- suggested fix: Add the round line ("Each round is Prepare, then Combat, and each phase goes once through your deck.") to the /play start panel.
+- source: web-fetch
+
+### [LOW] /play — Shop offers and card faces show "Cost 3" with no unit, next to upgrade prices that say "materials"
+- pass: 43 (commit add46fe)
+- viewport: desktop
+- category: voice
+- observation: The game has two resources. In the Base panel, upgrades name their unit but Shop offers do not. (Read from source.)
+- evidence: Shop offer "Haul" / "Cost 3" (`BasePanel.tsx`, `CardView.tsx`); upgrade "Buy Shop I (2 materials)"; Shop note "Its cards cost currency, which you get for defeating enemies, not materials."
+- suggested fix: Show Shop offer and card prices as "Cost 3 currency".
+- source: web-fetch
+
+### [LOW] /play — the game footer shows a "Developer: allow undo" tick box next to the player options
+- pass: 43 (commit add46fe)
+- viewport: desktop
+- category: comprehension
+- observation: The production footer puts a developer-labelled control beside Sound and 3D dice. A first-time player cannot tell if undo is meant for them. (Read from source.)
+- evidence: Footer: "Save run (file)", "New run", "Sound", "3D dice", "Developer: allow undo" (`PlayPage.tsx`).
+- suggested fix: Label it "Allow undo", or show it only with the other dev tools.
+- source: web-fetch
+
+### [LOW] /tiles — the lede says tiles are "drawn", but not when a tile joins the map
+- pass: 43 (commit add46fe)
+- viewport: desktop
+- category: comprehension
+- observation: A newcomer cannot connect the sheet to play: a player steps off the map edge to reveal a tile, and that step costs movement. (Seen live.)
+- evidence: "The game on the Play page builds its map from these 9 tiles: 1 Base tile, 3 Countryside tiles and 5 Core tiles. The Base tile starts in the center; the Countryside tiles are drawn before the Core tiles."
+- suggested fix: Add the existing reveal rule line after the lede, from the rule text, not hardcoded.
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
