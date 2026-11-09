@@ -391,6 +391,22 @@ export function targetText(config: GameConfig): string {
 }
 
 /**
+ * How many times a player rolls dice in one engagement: "In an engagement you roll all your
+ * dice, then keep the dice you want and roll the others again, up to 3 rolls in all. The enemy
+ * dice roll only once, and a card's Reroll does not count as a roll."
+ *
+ * @rule 7.8 steps 2-3, 7.8 step 6 (Spec v2)
+ */
+export function rollsText(config: GameConfig): string {
+  const n = config.combat.maxRolls
+  const own =
+    n === 1
+      ? 'In an engagement you roll all your dice once and do not roll them again.'
+      : `In an engagement you roll all your dice, then keep the dice you want and roll the others again, up to ${n} rolls in all.`
+  return `${own} The enemy dice roll only once, and a card's Reroll does not count as a roll.`
+}
+
+/**
  * How far an enemy moves at each Combat: "At each Combat, before the spawn nodes spawn, each
  * enemy, oldest first, moves up to 2 hexes toward its target and stops next to it."
  *
@@ -821,6 +837,7 @@ export function ruleLineFor(
   if (path === 'rulings.mandatoryPlays') return combatEndText(config)
   if (path === 'rulings.targetTieBreak' || path === 'rulings.playerPullDistance')
     return targetOrderText(config)
+  if (path === 'combat.maxRolls') return rollsText(config)
   if (path === 'combat.enemyMoveHexes') return `${enemyMoveText(config)} ${targetOrderText(config)}`
   if (group === 'players') return `For ${playersText(config)}.`
   if (group === 'milestones') {

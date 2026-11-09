@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-09 (pass 291, cloud tick)
+
+Pass 290 gave the /config Enemy move field its line (fb9904e). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 9 commits ago, about 23 hours) and so is the expand gate (pass 29 ran 4 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass takes the next field on the pass 284 list: Rolls per engagement shows no line, so a playtester who changes it is not told that the first roll counts, that you keep dice between rolls, or that the enemy dice and a card's Reroll sit outside the limit. Scored 3.6 (comprehension: impact 4, ease 9). The new `rollsText` (Spec v2 7.8 steps 2, 3 and 6) reads "In an engagement you roll all your dice, then keep the dice you want and roll the others again, up to 3 rolls in all. The enemy dice roll only once, and a card's Reroll does not count as a roll." from config, the count `rollsUsed` keeps (the first roll is 1), and `ruleLineFor` maps `combat.maxRolls` to it; a ruleText test pins it at 3, 2 and 1. Still without a line: Move cost next to an enemy, Smallest deck, the supply copies, the tile counts, Bought cards, Figures per hex, Blocked enemy, Forced reveal, Defenses on gathering nodes and Build levels.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the Rolls per engagement field shows no rule line
+- category: comprehension
+- impact: 4
+- ease: 9
+- next: add `rollsText` and map `combat.maxRolls` to it in `ruleLineFor`
+- issue: #345
+- fixed: (this commit)
+
 # Site audit — 2026-11-09 (pass 290, cloud tick)
 
 Pass 289 gave the /config spawn fields one verb and made the Spawn range help read in order (c7b5f85). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 8 commits ago, about 21 hours) and so is the expand gate (pass 29 ran 3 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass goes back to the pass 284 list of /config fields `ruleLineFor` still gives no line, and takes the next one: the Enemy move field never says when enemies move, in which order, or where they stop. Scored 3.6 (comprehension: impact 4, ease 9). The new `enemyMoveText` (Spec v2 7.5) reads "At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 2 hexes toward its target and stops next to it." from config, the same order `moveEnemies` and `startCombat` play, and `ruleLineFor` maps `combat.enemyMoveHexes` to it plus `targetOrderText`; a ruleText test pins it at 2 and at 1 hex. Still without a line: Rolls per engagement, Move cost next to an enemy, Smallest deck, the supply copies, the tile counts, Bought cards, Figures per hex, Blocked enemy, Forced reveal, Defenses on gathering nodes and Build levels.

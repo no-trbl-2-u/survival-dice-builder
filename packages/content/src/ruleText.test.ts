@@ -10,6 +10,7 @@ import {
   defenseText,
   enemyDieText,
   enemyMoveText,
+  rollsText,
   enemyHitText,
   draftFullText,
   draftSlotsText,
@@ -409,6 +410,19 @@ describe('rule text from config', () => {
     expect(ruleLineFor('combat.enemyMoveHexes', slow, defaultContent)).toBe(
       `${enemyMoveText(slow)} ${targetOrderText(slow)}`,
     )
+  })
+
+  it('rolls: the rolls per engagement follow config, and the field shows the line (7.8 steps 3, 6)', () => {
+    expect(rollsText(base)).toBe(
+      "In an engagement you roll all your dice, then keep the dice you want and roll the others again, up to 3 rolls in all. The enemy dice roll only once, and a card's Reroll does not count as a roll.",
+    )
+    const two = With((c) => ({ ...c, combat: { ...c.combat, maxRolls: 2 } }))
+    expect(rollsText(two)).toMatch(/up to 2 rolls in all/)
+    const one = With((c) => ({ ...c, combat: { ...c.combat, maxRolls: 1 } }))
+    expect(rollsText(one)).toMatch(
+      /^In an engagement you roll all your dice once and do not roll them again\./,
+    )
+    expect(ruleLineFor('combat.maxRolls', two, defaultContent)).toBe(rollsText(two))
   })
 
   it('target: the short form / prints names the player pull (9.3, row 56)', () => {
