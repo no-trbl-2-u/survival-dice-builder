@@ -11,6 +11,7 @@ import {
   enemyDieText,
   enemyMoveText,
   rollsText,
+  moveCostText,
   enemyHitText,
   draftFullText,
   draftSlotsText,
@@ -423,6 +424,19 @@ describe('rule text from config', () => {
       /^In an engagement you roll all your dice once and do not roll them again\./,
     )
     expect(ruleLineFor('combat.maxRolls', two, defaultContent)).toBe(rollsText(two))
+  })
+
+  it('move cost: a step next to an enemy follows config, and the field shows the line (6.9, row 76)', () => {
+    expect(moveCostText(base, defaultContent)).toBe(
+      'You cannot move into a hex that has an enemy, and a step onto a hex next to an enemy costs 1, the same as each step.',
+    )
+    const two = With((c) => ({ ...c, combat: { ...c.combat, moveCostNextToEnemy: 2 } }))
+    expect(moveCostText(two, defaultContent)).toBe(
+      'You cannot move into a hex that has an enemy, and a step onto a hex next to an enemy costs 2 movement instead of 1; Blink ignores that cost.',
+    )
+    expect(ruleLineFor('combat.moveCostNextToEnemy', two, defaultContent)).toBe(
+      moveCostText(two, defaultContent),
+    )
   })
 
   it('target: the short form / prints names the player pull (9.3, row 56)', () => {

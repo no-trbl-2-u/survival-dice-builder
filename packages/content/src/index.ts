@@ -83,6 +83,7 @@ export {
   enemyHitText,
   enemyMoveText,
   rollsText,
+  moveCostText,
   draftFullText,
   draftSlotsText,
   draftPoolText,

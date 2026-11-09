@@ -391,6 +391,28 @@ export function targetText(config: GameConfig): string {
 }
 
 /**
+ * What a step next to an enemy costs, and that no step enters an enemy's hex: "You cannot move
+ * into a hex that has an enemy, and a step onto a hex next to an enemy costs 1, the same as each
+ * step." Above 1 it names the cost and the cards that ignore it (Blink).
+ *
+ * @rule 6.9 (Spec v2), Table 8 (Blink), OPEN-QUESTIONS row 76
+ */
+export function moveCostText(config: GameConfig, content: Pick<Content, 'cards'>): string {
+  const cost = config.combat.moveCostNextToEnemy
+  const head =
+    'You cannot move into a hex that has an enemy, and a step onto a hex next to an enemy costs'
+  if (cost === 1) return `${head} 1, the same as each step.`
+  const ignore = content.cards
+    .filter((c) => c.top.kind === 'move' && c.top.ignoreEnemyCost)
+    .map((c) => c.name)
+  const skip =
+    ignore.length > 0
+      ? `; ${ignore.join(' and ')} ${ignore.length === 1 ? 'ignores' : 'ignore'} that cost`
+      : ''
+  return `${head} ${cost} movement instead of 1${skip}.`
+}
+
+/**
  * How many times a player rolls dice in one engagement: "In an engagement you roll all your
  * dice, then keep the dice you want and roll the others again, up to 3 rolls in all. The enemy
  * dice roll only once, and a card's Reroll does not count as a roll."
@@ -838,6 +860,7 @@ export function ruleLineFor(
   if (path === 'rulings.targetTieBreak' || path === 'rulings.playerPullDistance')
     return targetOrderText(config)
   if (path === 'combat.maxRolls') return rollsText(config)
+  if (path === 'combat.moveCostNextToEnemy') return moveCostText(config, content)
   if (path === 'combat.enemyMoveHexes') return `${enemyMoveText(config)} ${targetOrderText(config)}`
   if (group === 'players') return `For ${playersText(config)}.`
   if (group === 'milestones') {

@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-09 (pass 292, cloud tick)
+
+Pass 291 gave the /config Rolls per engagement field its line (fc1932a). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 10 commits ago, just under 24 hours) and so is the expand gate (pass 29 ran 5 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass takes the next field on the pass 284 list: Move cost next to an enemy shows no line, so a playtester who sets it to 2 is not told that no step enters an enemy's hex or that Blink ignores the extra cost. Scored 3.6 (comprehension: impact 4, ease 9). The new `moveCostText` (Spec v2 6.9, row 76) reads "You cannot move into a hex that has an enemy, and a step onto a hex next to an enemy costs 1, the same as each step." from config; above 1 it reads "costs 2 movement instead of 1; Blink ignores that cost.", naming the cards whose Move has `ignoreEnemyCost` from content, as `moveCost` plays it. `ruleLineFor` maps `combat.moveCostNextToEnemy` to it; a ruleText test pins it at 1 and 2. Still without a line: Smallest deck, the supply copies, the tile counts, Bought cards, Figures per hex, Blocked enemy, Forced reveal, Defenses on gathering nodes and Build levels.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the Move cost next to an enemy field shows no rule line
+- category: comprehension
+- impact: 4
+- ease: 9
+- next: add `moveCostText` and map `combat.moveCostNextToEnemy` to it in `ruleLineFor`
+- issue: #346
+- fixed: (this commit)
+
 # Site audit — 2026-11-09 (pass 291, cloud tick)
 
 Pass 290 gave the /config Enemy move field its line (fb9904e). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 9 commits ago, about 23 hours) and so is the expand gate (pass 29 ran 4 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass takes the next field on the pass 284 list: Rolls per engagement shows no line, so a playtester who changes it is not told that the first roll counts, that you keep dice between rolls, or that the enemy dice and a card's Reroll sit outside the limit. Scored 3.6 (comprehension: impact 4, ease 9). The new `rollsText` (Spec v2 7.8 steps 2, 3 and 6) reads "In an engagement you roll all your dice, then keep the dice you want and roll the others again, up to 3 rolls in all. The enemy dice roll only once, and a card's Reroll does not count as a roll." from config, the count `rollsUsed` keeps (the first roll is 1), and `ruleLineFor` maps `combat.maxRolls` to it; a ruleText test pins it at 3, 2 and 1. Still without a line: Move cost next to an enemy, Smallest deck, the supply copies, the tile counts, Bought cards, Figures per hex, Blocked enemy, Forced reveal, Defenses on gathering nodes and Build levels.
