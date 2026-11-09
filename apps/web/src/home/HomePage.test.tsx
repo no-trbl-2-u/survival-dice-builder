@@ -19,6 +19,14 @@ describe('HomePage', () => {
     )
   })
 
+  it('says when enemies move, in which order and how far (Spec v2 7.5, critique pass 43)', () => {
+    const { container } = render(<HomePage />)
+    const items = [...container.querySelectorAll('li')].map((li) => li.textContent ?? '')
+    expect(items.find((text) => text.startsWith('Enemies:'))).toMatch(
+      /hexes nearer\. At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 2 hexes toward its target and stops next to it\.$/,
+    )
+  })
+
   it('keeps Prepare to the card halves; defenses, the map and enemies get their own items (critique pass 28)', () => {
     render(<HomePage />)
     const items = screen.getAllByRole('listitem').map((li) => li.textContent ?? '')

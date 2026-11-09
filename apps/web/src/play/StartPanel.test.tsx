@@ -27,6 +27,17 @@ describe('StartPanel', () => {
     expect(hint()).not.toMatch(/written rules/)
   })
 
+  it('says how far enemies move at each Combat, from the saved config, under both choices (7.5, critique pass 43)', () => {
+    const base = defaultContent.config
+    const { container } = panel({ ...base, combat: { ...base.combat, enemyMoveHexes: 1 } })
+    const hint = () => container.querySelector('#combat-hint')?.textContent ?? ''
+    const move =
+      'At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 1 hex toward its target and stops next to it.'
+    expect(hint()).toContain(move)
+    fireEvent.change(within(container).getByLabelText(/Combat/), { target: { value: 'exchange' } })
+    expect(hint()).toContain(move)
+  })
+
   it('reads its rule lines and player counts from the saved config, not the default (7.8, 9.7)', () => {
     const base = defaultContent.config
     const view = within(

@@ -3,6 +3,7 @@ import {
   combatText,
   defaultConfigMeta,
   defaultContent,
+  enemyMoveText,
   goalText,
   knockoutText,
   siegeText,
@@ -27,9 +28,12 @@ const COMBAT_LEAD: Record<CombatModel, string> = {
   exchange: 'The older Combat, kept for playtests.',
 }
 
-/** One line per Combat choice: how a Combat plays under it in this config, from `ruleText`. */
+/**
+ * One line per Combat choice: how a Combat plays under it in this config, how far enemies move
+ * at each Combat (both choices move them), and the siege, from `ruleText`.
+ */
 function combatHint(config: GameConfig, combat: CombatModel): string {
-  return `${COMBAT_LEAD[combat]} ${combatText(config, combat, defaultContent)} ${siegeText(defaultContent)}`
+  return `${COMBAT_LEAD[combat]} ${combatText(config, combat, defaultContent)} ${enemyMoveText(config)} ${siegeText(defaultContent)}`
 }
 
 /** Every player count the config allows, fewest first. */

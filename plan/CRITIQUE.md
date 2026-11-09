@@ -18,15 +18,6 @@
 - suggested fix: Add a read-only list of the current player's Skills (face, effect, range) to the player panel in both phases.
 - source: web-fetch
 
-### [MED] /play and / — no page a player reads before a run says that enemies move at each Combat, or how far
-- pass: 43 (commit add46fe)
-- viewport: desktop
-- category: comprehension
-- observation: The /play start panel gives the goal, knockout, Combat and siege, but not enemy movement. The home page "Enemies:" item says where enemies appear and what they head for, but not when they move or how far. The enemy-move line exists in the rule text, but only /config prints it.
-- evidence: Home: "Enemies: Each new tile's spawn nodes get enemies at each Combat. Enemies head for the nearest structure, and turn to a player only when the player is at least N hexes nearer." Rule text shown only on /config: "At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 2 hexes toward its target and stops next to it."
-- suggested fix: Add the existing enemy-move sentence to the /play start panel (next to the Combat hint) and to the home page Enemies item.
-- source: web-fetch
-
 ### [MED] /play — the page says when Combat ends, but never when Prepare ends
 - pass: 43 (commit add46fe)
 - viewport: desktop
@@ -109,6 +100,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play and / — no page a player reads before a run says that enemies move at each Combat, or how far
+- pass: 43 (commit add46fe)
+- viewport: desktop
+- category: comprehension
+- observation: The /play start panel gives the goal, knockout, Combat and siege, but not enemy movement. The home page "Enemies:" item says where enemies appear and what they head for, but not when they move or how far. The enemy-move line exists in the rule text, but only /config prints it.
+- evidence: Home: "Enemies: Each new tile's spawn nodes get enemies at each Combat. Enemies head for the nearest structure, and turn to a player only when the player is at least N hexes nearer." Rule text shown only on /config: "At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 2 hexes toward its target and stops next to it."
+- suggested fix: Add the existing enemy-move sentence to the /play start panel (next to the Combat hint) and to the home page Enemies item.
+- source: web-fetch
+- issue: #347
+- fixed: (this commit) — the /play start panel Combat hint and the home Enemies item add `enemyMoveText` from config
+
 
 ### [x] [LOW] /config — the Spawn pressure fields give one behaviour three verbs, and the Spawn range help is hard to parse
 - pass: 42 (commit 23d4b52)

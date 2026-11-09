@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-09 (pass 293, cloud tick)
+
+Pass 292 gave the /config Move cost next to an enemy field its line (add46fe), and critique pass 43 filed 6 rows (b44072d). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 43 ran 1 commit ago) and so is the expand gate (pass 29 ran 7 commits ago, under 48 hours). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The new pass 43 MED rows are actionable from cloud; the bias (external-critique MED, x1.5) puts them on top. This pass takes the enemy-move row: no page a player reads before a run says that enemies move at each Combat, or how far. Scored 8.1 (impact 6, ease 9, x1.5). The /play start panel's Combat hint and the home page Enemies item now add `enemyMoveText` (Spec v2 7.5) from config, the line /config already prints; both Combat choices move enemies (`advance.ts` runs `moveEnemies` for each), so the hint names it under both. Tests pin the home item and the start panel hint at 1 hex under both choices. Next in line: the pass 43 round line on the /play start panel (MED), then the Skills list in the player panel (MED).
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /play and /: no page before a run says when and how far enemies move (critique pass 43)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: add `enemyMoveText` to the start panel Combat hint and the home Enemies item
+- issue: #347
+- fixed: (this commit)
+
+### [ ] [8.1] /play: the start panel never says when Prepare ends (critique pass 43)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 9
+- next: add the `roundText` round line to the start panel
+
+### [ ] [5.4] /play: the player cannot see their Skills or ranges before engaging (critique pass 43)
+- category: external-critique (comprehension)
+- impact: 6
+- ease: 6
+- next: read-only Skill list in the player panel in Prepare and Combat
+
 # Site audit — 2026-11-09 (pass 292, cloud tick)
 
 Pass 291 gave the /config Rolls per engagement field its line (fc1932a). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 10 commits ago, just under 24 hours) and so is the expand gate (pass 29 ran 5 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass takes the next field on the pass 284 list: Move cost next to an enemy shows no line, so a playtester who sets it to 2 is not told that no step enters an enemy's hex or that Blink ignores the extra cost. Scored 3.6 (comprehension: impact 4, ease 9). The new `moveCostText` (Spec v2 6.9, row 76) reads "You cannot move into a hex that has an enemy, and a step onto a hex next to an enemy costs 1, the same as each step." from config; above 1 it reads "costs 2 movement instead of 1; Blink ignores that cost.", naming the cards whose Move has `ignoreEnemyCost` from content, as `moveCost` plays it. `ruleLineFor` maps `combat.moveCostNextToEnemy` to it; a ruleText test pins it at 1 and 2. Still without a line: Smallest deck, the supply copies, the tile counts, Bought cards, Figures per hex, Blocked enemy, Forced reveal, Defenses on gathering nodes and Build levels.
