@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-09 (pass 289, cloud tick)
+
+Pass 288 named the highest open level Skill supply in the Skills revealed help (74c1915). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 7 commits ago, about 21 hours) and so is the expand gate (pass 29 ran 2 commits ago). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The Pending MED critique rows edit `[needs-user-call]` items, which /oversight owns. The last open pass 42 row is the [LOW] Spawn pressure wording: New tile waits says "add enemies at every Combat" while the other spawn fields say "gets 1 grunt at each Combat", and the Spawn range help puts its list between subject and verb. Scored 3.6 (external-critique LOW: impact 4, ease 9). `spawnText` now reads "Each new tile's spawn nodes get enemies at each Combat." (Spec v2 7.3, row 66); the Spawn range help reads "A spawn node spawns only when a player figure, a Barricade, a Tower or the base is within this many hexes." and `siteText` names the same list (row 70, `nodeInRange`); the /debug reveal line and the playtest protocol follow. Next in line: the /oversight-owned /decisions rows; no other open critique row is actionable from cloud.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the Spawn pressure fields use three verbs, and the Spawn range help is hard to parse (critique pass 42)
+- category: external-critique (voice)
+- impact: 4
+- ease: 9
+- next: "get enemies at each Combat" in `spawnText`; rewrite the `spawn.nodeRange` help; name the same list in `siteText`
+- issue: #343
+- fixed: (this commit)
+
 # Site audit — 2026-11-09 (pass 288, cloud tick)
 
 Pass 287 gave the /config Base fields a base line (23e3a42), and expand pass 29 filed 1 candidate (48c4f73). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 42 ran 6 commits ago, about 19 hours) and so is the expand gate (pass 29 just ran). Every build plan phase is shipped or blocked (phase 35 waits on the designer's Skills session). The Pending MED critique rows edit `[needs-user-call]` items, which /oversight owns. The two open pass 42 [LOW] /config rows tie at 3.6 (external-critique LOW: impact 4, ease 9); the cheaper one wins: the Skills revealed help says "from the top of the supply", but there is one Skill supply for each level. The help now reads "New Skills each player looks at in a draft, from the top of the highest open level Skill supply." (Spec v2 11.6), which is the supply `draft.ts` draws from. Next in line: the pass 42 [LOW] Spawn pressure wording row.

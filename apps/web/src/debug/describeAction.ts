@@ -96,7 +96,7 @@ function label(action: Action, state: GameState): string {
     }
     case 'moveTo': {
       if (!state.map.hexes[hexKey(action)]) {
-        return `Step off the map edge, ${stepsAway(here(state), action)}: reveal a tile; its spawn nodes add enemies at every Combat`
+        return `Step off the map edge, ${stepsAway(here(state), action)}: reveal a tile; its spawn nodes get enemies at each Combat`
       }
       return `Move to ${hexName(state, action)}, ${stepsAway(here(state), action)}`
     }

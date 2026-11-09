@@ -183,7 +183,7 @@ describe('rule text from config', () => {
   })
 
   it('spawning: a new tile delay is named (row 66)', () => {
-    expect(spawnText(base)).toBe("Each new tile's spawn nodes add enemies at every Combat.")
+    expect(spawnText(base)).toBe("Each new tile's spawn nodes get enemies at each Combat.")
     const late = With((c) => ({ ...c, spawn: { ...c.spawn, newTileDelay: 2 } }))
     expect(spawnText(late)).toMatch(/from 2 rounds after it is revealed/)
   })
@@ -209,7 +209,7 @@ describe('rule text from config', () => {
       spawn: { ...c.spawn, perSeat: true, newTileDelay: 1, nodeRange: 3 },
     }))
     expect(siteText('spawn-node', varied, defaultContent)).toBe(
-      'gets 1 grunt for each 2 seats, rounded up, at each Combat, from 1 round after its tile is revealed, if a figure or structure is within 3 hexes',
+      'gets 1 grunt for each 2 seats, rounded up, at each Combat, from 1 round after its tile is revealed, if a player figure, a Barricade, a Tower or the base is within 3 hexes',
     )
     const ramped = With((c) => ({ ...c, spawn: { ...c.spawn, rampEvery: 3 } }))
     expect(siteText('elite-spawn-node', ramped, defaultContent)).toBe(

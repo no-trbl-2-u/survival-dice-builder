@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Spawn pressure fields give one behaviour three verbs, and the Spawn range help is hard to parse
-- pass: 42 (commit 23d4b52)
-- viewport: desktop
-- category: voice
-- observation: New tile waits uses "add enemies at every Combat". The other three spawn fields, /tiles and Spec v2 7.3 use "gets 1 grunt at each Combat". The helps say "spawns". The Spawn range help puts a four-item list between its subject and its verb, and its rule line calls the same list "a figure or structure".
-- evidence: `spawnText`: "Each new tile's spawn nodes add enemies at every Combat." `siteText`: "A spawn node gets 1 grunt at each Combat". Spawn range help: "Only spawn nodes within this many hexes of a player figure, a Barricade, a Tower or the base spawn." Rule line: ", if a figure or structure is within N hexes".
-- suggested fix: Make `spawnText` say "get enemies at each Combat"; rewrite the help to "A spawn node spawns only when a player figure, a Barricade, a Tower or the base is within this many hexes." and use the same list in `siteText`.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -64,6 +55,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the Spawn pressure fields give one behaviour three verbs, and the Spawn range help is hard to parse
+- pass: 42 (commit 23d4b52)
+- viewport: desktop
+- category: voice
+- observation: New tile waits uses "add enemies at every Combat". The other three spawn fields, /tiles and Spec v2 7.3 use "gets 1 grunt at each Combat". The helps say "spawns". The Spawn range help puts a four-item list between its subject and its verb, and its rule line calls the same list "a figure or structure".
+- evidence: `spawnText`: "Each new tile's spawn nodes add enemies at every Combat." `siteText`: "A spawn node gets 1 grunt at each Combat". Spawn range help: "Only spawn nodes within this many hexes of a player figure, a Barricade, a Tower or the base spawn." Rule line: ", if a figure or structure is within N hexes".
+- suggested fix: Make `spawnText` say "get enemies at each Combat"; rewrite the help to "A spawn node spawns only when a player figure, a Barricade, a Tower or the base is within this many hexes." and use the same list in `siteText`.
+- source: web-fetch
+- issue: #343
+- fixed: (this commit) — New tile waits reads "Each new tile's spawn nodes get enemies at each Combat."; the Spawn range help reads "A spawn node spawns only when a player figure, a Barricade, a Tower or the base is within this many hexes."; the rule line names the same list.
 
 ### [x] [LOW] /config — the Skills revealed help says "the supply", but there is one Skill supply for each level
 - pass: 42 (commit 23d4b52)

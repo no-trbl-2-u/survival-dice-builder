@@ -208,7 +208,7 @@
   },
   "spawn.nodeRange": {
     "label": "Spawn range",
-    "help": "Only spawn nodes within this many hexes of a player figure, a Barricade, a Tower or the base spawn. Off (default): as in the written rules.",
+    "help": "A spawn node spawns only when a player figure, a Barricade, a Tower or the base is within this many hexes. Off (default): as in the written rules.",
     "rule": "7.3 (open question 70)",
     "empty": "Off",
     "range": [1, 10]

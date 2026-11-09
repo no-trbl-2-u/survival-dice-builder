@@ -12,7 +12,7 @@ import { HomePage } from './HomePage.tsx'
 describe('HomePage', () => {
   it('says that a revealed tile adds enemies at every Combat, and whom enemies head for', () => {
     render(<HomePage />)
-    const enemies = screen.getByText(/new tile's spawn nodes add enemies at every Combat\./)
+    const enemies = screen.getByText(/new tile's spawn nodes get enemies at each Combat\./)
     expect(enemies.textContent).toMatch(/^Enemies: Each new tile's spawn nodes/)
     expect(enemies.textContent).toMatch(
       /Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer\./,

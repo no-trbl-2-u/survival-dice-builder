@@ -46,7 +46,7 @@ export function revealText(config: GameConfig): string {
 }
 
 /**
- * When a revealed tile's spawn nodes start adding enemies.
+ * When a revealed tile's spawn nodes start getting enemies.
  *
  * @rule core loop v2 (spawning), OPEN-QUESTIONS row 66
  */
@@ -54,9 +54,9 @@ export function spawnText(config: GameConfig): string {
   const delay = config.spawn.newTileDelay
   const when =
     delay === 0
-      ? 'at every Combat'
-      : `at every Combat from ${plural(delay, 'round', 'rounds')} after it is revealed`
-  return `Each new tile's spawn nodes add enemies ${when}.`
+      ? 'at each Combat'
+      : `at each Combat from ${plural(delay, 'round', 'rounds')} after it is revealed`
+  return `Each new tile's spawn nodes get enemies ${when}.`
 }
 
 type Upgrades = Pick<Content, 'upgrades'>
@@ -99,7 +99,7 @@ export function siteText(site: Site, config: GameConfig, content: Upgrades): str
   const range =
     s.nodeRange === null
       ? ''
-      : `, if a figure or structure is within ${plural(s.nodeRange, 'hex', 'hexes')}`
+      : `, if a player figure, a Barricade, a Tower or the base is within ${plural(s.nodeRange, 'hex', 'hexes')}`
   return `gets 1 ${enemy}${seats} at each Combat${ramp}${delay}${range}`
 }
 
