@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-10 (pass 303, cloud tick)
+
+Pass 302 gave the /config Forced reveal every field its line (ea2b332), and critique pass 44 (25c7d0c) filed 6 findings. No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 1 commit ago) and so is the expand gate (pass 29 ran 18 commits ago, under 48 hours). Every build plan phase is shipped or blocked. The top row is the pass 44 MED finding: the knockout line on the home page and the /play start panel says a knocked-out player comes back next round, but not where, or that a full base keeps them out 1 more round (Spec v2 14.4). Scored 5.4 (external-critique MED: impact 4, ease 9, x1.5 bias). `knockoutText` now reads "A player at 0 health is knocked out and comes back at the start of the next round on a free base hex, with half of their maximum health, rounded up. If no base hex is free, they stay out 1 more round." then the losses, as `returnKnockedOut` and `freeFigurePlaces` play it (a free base hex has no enemy and room under the figure limit). The ruleText and HomePage tests pin it; the playtest kit was regenerated.
+
+## Top 5 findings (scored)
+
+### [x] [5.4] /: the knockout line does not say where a player comes back, or that a full base delays it
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: extend `knockoutText` with the round start, the free base hex and the 1-round delay
+- issue: #357
+- fixed: (this commit)
+
 # Site audit — 2026-11-10 (pass 302, cloud tick)
 
 Pass 301 gave the /config Blocked enemy field its line (ed35cf9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 43 ran 10 commits ago, just under 24 hours) and so is the expand gate (pass 29 ran 16 commits ago, about 40 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass takes the next field on the pass 284 list: Forced reveal every shows no line, so a playtester who turns it on sees no line saying when a tile is revealed without a step. Scored 3.6 (comprehension: impact 4, ease 9). The new `forcedRevealText` (Spec v2 6.7, row 63) reads "A tile is revealed only when a player steps off the edge of the map." while it is off (the default); set to N it reads "At round end, if no tile was revealed in the last N rounds and the tile deck is not empty, the top tile is revealed in the open slot nearest the base.", as `forcedRevealDue` and `forcedReveal` play it. `ruleLineFor` maps `clock.forcedRevealEvery` to it; a ruleText test pins off, 3 and 1. Still without a line: the supply copies, the tile counts, Defenses on gathering nodes and Build levels.

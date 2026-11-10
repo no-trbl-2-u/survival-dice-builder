@@ -113,7 +113,11 @@ describe('HomePage', () => {
 
   it('states the player count and knockout from config', () => {
     render(<HomePage />)
-    expect(screen.getAllByText(/knocked out and comes back next round with half/)[0]).toBeTruthy()
+    expect(
+      screen.getAllByText(
+        /knocked out and comes back at the start of the next round on a free base hex, with half/,
+      )[0],
+    ).toBeTruthy()
     expect(screen.getAllByText(/for 1 to 4 players/)[0]).toBeTruthy()
   })
 

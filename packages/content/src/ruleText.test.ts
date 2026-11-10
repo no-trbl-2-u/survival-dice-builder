@@ -123,14 +123,14 @@ describe('rule text from config', () => {
 
   it('knockout: the return share and the losses follow config (Spec v2 14.2, 14.4)', () => {
     expect(knockoutText(base)).toBe(
-      'A player at 0 health is knocked out and comes back next round with half of their maximum health, rounded up. They lose all their materials and currency.',
+      'A player at 0 health is knocked out and comes back at the start of the next round on a free base hex, with half of their maximum health, rounded up. If no base hex is free, they stay out 1 more round. They lose all their materials and currency.',
     )
     const kept = With((c) => ({
       ...c,
       knockout: { returnHealthDivisor: 3, loseMaterials: false, loseCurrency: false },
     }))
     expect(knockoutText(kept)).toBe(
-      'A player at 0 health is knocked out and comes back next round with 1/3 of their maximum health, rounded up.',
+      'A player at 0 health is knocked out and comes back at the start of the next round on a free base hex, with 1/3 of their maximum health, rounded up. If no base hex is free, they stay out 1 more round.',
     )
   })
 

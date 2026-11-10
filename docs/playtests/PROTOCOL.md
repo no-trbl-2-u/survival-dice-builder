@@ -23,7 +23,7 @@ Teach these rules (generated from the game's config: `pnpm sim -- kit`):
 - Step off the edge of the map to reveal a new tile; the step costs 1 movement. Each new tile's spawn nodes get enemies at each Combat. Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer.
 - Gather 2 on an unspent gathering node with no enemy on it (the node is spent). Each node gives materials once.
 - Combat: Play a card's Engage option (on Move and Gather) to roll your dice from where you stand, plus the enemy dice of each enemy next to you (a grunt rolls 1, an elite 2). Put your dice on your Skills one at a time. An enemy die has 2 Hit faces, 3 Miss faces and 1 Special face. A Hit deals 1 damage, a Special 2, a Miss none. When you choose End engagement or no dice are left, the enemy dice hit you at once, even the dice of an enemy you defeated. Your guard takes the damage first, then your health. Play or discard each card. Cards you do not play yet stay in your hand between engagements, and Combat ends when every hand and deck is empty.
-- A player at 0 health is knocked out and comes back next round with half of their maximum health, rounded up. They lose all their materials and currency.
+- A player at 0 health is knocked out and comes back at the start of the next round on a free base hex, with half of their maximum health, rounded up. If no base hex is free, they stay out 1 more round. They lose all their materials and currency.
 - Every 2 rounds, once the Training Ground is open, each player drafts a Skill. The Skills you do not keep go to your pool. Later drafts offer them again.
 <!-- /kit:teach -->
 

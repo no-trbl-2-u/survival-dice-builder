@@ -24,16 +24,18 @@ export function goalText(): string {
 }
 
 /**
- * What happens to a player at 0 health.
+ * What happens to a player at 0 health: when and where they come back, with what health, and
+ * what they lose. A player who finds no free base hex stays out 1 more round, as
+ * `returnKnockedOut` plays it.
  *
- * @rule core loop v2 (knockout), OPEN-QUESTIONS row 55
+ * @rule 14.2, 14.4, core loop v2 (knockout), OPEN-QUESTIONS row 55
  */
 export function knockoutText(config: GameConfig): string {
   const k = config.knockout
   const health = `${share(k.returnHealthDivisor)} of their maximum health, rounded up`
   const items = [k.loseMaterials && 'materials', k.loseCurrency && 'currency'].filter(Boolean)
   const lost = items.length > 0 ? ` They lose all their ${items.join(' and ')}.` : ''
-  return `A player at 0 health is knocked out and comes back next round with ${health}.${lost}`
+  return `A player at 0 health is knocked out and comes back at the start of the next round on a free base hex, with ${health}. If no base hex is free, they stay out 1 more round.${lost}`
 }
 
 /**

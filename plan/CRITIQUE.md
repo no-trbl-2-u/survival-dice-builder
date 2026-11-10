@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — the knockout line does not say where a knocked-out player comes back, or that a full base delays it
-- pass: 44 (commit ea2b332)
-- viewport: desktop
-- category: comprehension
-- observation: The home page says a knocked-out player comes back next round with half health. It does not say the figure comes back on an empty base hex, or that the player stays out 1 more round when no base hex is empty (Spec v2 14.4). The engine does both.
-- evidence: "A player at 0 health is knocked out and comes back next round with half of their maximum health, rounded up." against Spec v2 14.4: "At the start of the next round, put the figure on an empty base hex. ... If no base hex is empty, the player stays out for 1 more round."
-- suggested fix: Extend the knockout text: "...comes back at the start of the next round on an empty base hex, with half of their maximum health, rounded up. If no base hex is empty, they stay out 1 more round."
-- source: web-fetch
-
 ### [LOW] / — the closing "Also:" line glosses only the Decisions page
 - pass: 44 (commit ea2b332)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — the knockout line does not say where a knocked-out player comes back, or that a full base delays it
+- pass: 44 (commit ea2b332)
+- viewport: desktop
+- category: comprehension
+- observation: The home page says a knocked-out player comes back next round with half health. It does not say the figure comes back on an empty base hex, or that the player stays out 1 more round when no base hex is empty (Spec v2 14.4). The engine does both.
+- evidence: "A player at 0 health is knocked out and comes back next round with half of their maximum health, rounded up." against Spec v2 14.4: "At the start of the next round, put the figure on an empty base hex. ... If no base hex is empty, the player stays out for 1 more round."
+- suggested fix: Extend the knockout text: "...comes back at the start of the next round on an empty base hex, with half of their maximum health, rounded up. If no base hex is empty, they stay out 1 more round."
+- source: web-fetch
+- issue: #357
+- fixed: (this commit)
 
 ### [x] [LOW] /tiles — the lede says tiles are "drawn", but not when a tile joins the map
 - pass: 43 (commit add46fe)
