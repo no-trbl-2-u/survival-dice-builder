@@ -461,6 +461,21 @@ export function returnStarterText(seat?: string): string {
     : 'You bought a card, so a starter card leaves your deck for good.'
 }
 
+/**
+ * What a bought card does to the deck, and the smallest deck: "A card you buy goes to your discard
+ * pile and adds to your deck; no starter card leaves it." In replace-starter mode a starter card
+ * from the deck or discard pile then leaves the game, while the player has more than
+ * `deck.minimumSize` cards, as `returnableStarters` plays it.
+ *
+ * @rule 13.1, 18.1, core loop v2 (minimum deck), OPEN-QUESTIONS row 44
+ */
+export function boughtCardsText(config: GameConfig): string {
+  const head = 'A card you buy goes to your discard pile'
+  if (config.options.boughtCards === 'add')
+    return `${head} and adds to your deck; no starter card leaves it.`
+  return `${head}; then, if you have more than ${plural(config.deck.minimumSize, 'card', 'cards')}, you return a starter card from your deck or discard pile and it leaves the game.`
+}
+
 /** Design-document tags in player words: the documents are build history, not rules names. */
 const CITATIONS: readonly (readonly [RegExp, string])[] = [
   [/Combat v3/g, 'engagements'],
@@ -860,6 +875,7 @@ export function ruleLineFor(
   if (path === 'rulings.targetTieBreak' || path === 'rulings.playerPullDistance')
     return targetOrderText(config)
   if (path === 'combat.maxRolls') return rollsText(config)
+  if (path === 'deck.minimumSize' || path === 'options.boughtCards') return boughtCardsText(config)
   if (path === 'combat.moveCostNextToEnemy') return moveCostText(config, content)
   if (path === 'combat.enemyMoveHexes') return `${enemyMoveText(config)} ${targetOrderText(config)}`
   if (group === 'players') return `For ${playersText(config)}.`

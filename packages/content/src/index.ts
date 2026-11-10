@@ -100,6 +100,7 @@ export {
   miniatureLimitText,
   playersText,
   returnStarterText,
+  boughtCardsText,
   revealText,
   roundText,
   configRuleNote,

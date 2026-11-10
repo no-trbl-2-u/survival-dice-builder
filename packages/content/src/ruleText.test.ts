@@ -27,6 +27,7 @@ import {
   miniatureLimitText,
   playersText,
   returnStarterText,
+  boughtCardsText,
   revealText,
   roundText,
   configRuleNote,
@@ -444,6 +445,22 @@ describe('rule text from config', () => {
       'Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer.',
     )
     expect(targetOrderText(base).startsWith(targetText(base))).toBe(true)
+  })
+
+  it('bought cards: the line names the smallest deck in replace-starter mode (13.1, 18.1)', () => {
+    expect(boughtCardsText(base)).toBe(
+      'A card you buy goes to your discard pile and adds to your deck; no starter card leaves it.',
+    )
+    const replace = With((c) => ({
+      ...c,
+      options: { ...c.options, boughtCards: 'replace-starter' as const },
+      deck: { ...c.deck, minimumSize: 8 },
+    }))
+    expect(boughtCardsText(replace)).toBe(
+      'A card you buy goes to your discard pile; then, if you have more than 8 cards, you return a starter card from your deck or discard pile and it leaves the game.',
+    )
+    expect(ruleLineFor('deck.minimumSize', replace, defaultContent)).toBe(boughtCardsText(replace))
+    expect(ruleLineFor('options.boughtCards', base, defaultContent)).toBe(boughtCardsText(base))
   })
 
   it('starter return: one fixed line, read by the dialog', () => {

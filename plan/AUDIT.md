@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-10 (pass 299, cloud tick)
+
+Pass 298 gave the /tiles lede the reveal line (64cb599). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 43 ran 7 commits ago, under 24 hours) and so is the expand gate (pass 29 ran 13 commits ago, about 37 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass goes back to the pass 284 list of /config fields `ruleLineFor` still gives no line, and takes Smallest deck with Bought cards, which only together say when a starter card leaves. Scored 3.6 (comprehension: impact 4, ease 9). The new `boughtCardsText` (Spec v2 13.1, 18.1, row 44) reads "A card you buy goes to your discard pile and adds to your deck; no starter card leaves it." from config; in replace-starter mode it reads "then, if you have more than 10 cards, you return a starter card from your deck or discard pile and it leaves the game.", as `returnableStarters` plays it. `ruleLineFor` maps `deck.minimumSize` and `options.boughtCards` to it; a ruleText test pins both modes. Still without a line: the supply copies, the tile counts, Figures per hex, Blocked enemy, Forced reveal, Defenses on gathering nodes and Build levels.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the Smallest deck and Bought cards fields show no rule line
+- category: comprehension
+- impact: 4
+- ease: 9
+- next: add `boughtCardsText` and map `deck.minimumSize` and `options.boughtCards` to it in `ruleLineFor`
+- issue: #353
+- fixed: (this commit)
+
 # Site audit — 2026-11-10 (pass 298, cloud tick)
 
 Pass 297 labelled the /play undo tick box "Allow undo" (87e4658). No issues are open for triage. The critique gate is closed (pass 43 ran 6 commits ago, under 24 hours) and so is the expand gate (pass 29 ran 13 commits ago, under 48 hours). Every build plan phase is shipped or blocked. This pass takes the last open pass 43 row: the /tiles lede says tiles are "drawn" but not when a tile joins the map. Scored 3.6 (impact 3, ease 8; comprehension, no bias). The lede now prints `revealText` from content after the draw order: "Step off the edge of the map to reveal a new tile; the step costs N movement." A TileSheet test pins the line and its cost from config. The remaining Pending critique rows are /decisions items that edit `[needs-user-call]` AUDIT items, which wait for /oversight.
