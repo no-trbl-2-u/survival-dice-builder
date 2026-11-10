@@ -493,6 +493,22 @@ export function figuresPerHexText(config: GameConfig): string {
   return `A hex holds at most ${limit} player figures, on the base too: you cannot move into a hex where ${limit} other figures stand, ${tail}`
 }
 
+/**
+ * What an enemy does when its path is blocked: "Enemies, player figures, Barricades, Towers,
+ * lakes and mountains block an enemy. If every path to its target is blocked, the enemy moves
+ * toward the next nearest target; if no path reaches any target, it does not move." With
+ * `"wait"` it waits where it is, as `chooseRoute` and `pathNextTo` play it.
+ *
+ * @rule 9.7, OPEN-QUESTIONS rows 2, 39
+ */
+export function blockedPathText(config: GameConfig): string {
+  const head =
+    'Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy. If every path to its target is blocked,'
+  return config.rulings.blockedPathRule === 'wait'
+    ? `${head} the enemy waits where it is.`
+    : `${head} the enemy moves toward the next nearest target; if no path reaches any target, it does not move.`
+}
+
 /** Design-document tags in player words: the documents are build history, not rules names. */
 const CITATIONS: readonly (readonly [RegExp, string])[] = [
   [/Combat v3/g, 'engagements'],
@@ -895,6 +911,7 @@ export function ruleLineFor(
   if (path === 'deck.minimumSize' || path === 'options.boughtCards') return boughtCardsText(config)
   if (path === 'combat.moveCostNextToEnemy') return moveCostText(config, content)
   if (path === 'rulings.figuresPerHex') return figuresPerHexText(config)
+  if (path === 'rulings.blockedPathRule') return blockedPathText(config)
   if (path === 'combat.enemyMoveHexes') return `${enemyMoveText(config)} ${targetOrderText(config)}`
   if (group === 'players') return `For ${playersText(config)}.`
   if (group === 'milestones') {

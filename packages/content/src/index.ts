@@ -102,6 +102,7 @@ export {
   returnStarterText,
   boughtCardsText,
   figuresPerHexText,
+  blockedPathText,
   revealText,
   roundText,
   configRuleNote,

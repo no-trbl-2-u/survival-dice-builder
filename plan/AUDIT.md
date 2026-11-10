@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-10 (pass 301, cloud tick)
+
+Pass 300 gave the /config Figures per hex field its line (63b5033). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 43 ran 9 commits ago, about 22 hours) and so is the expand gate (pass 29 ran 15 commits ago, about 39 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass takes the next field on the pass 284 list: Blocked enemy shows no line, so a playtester who changes it is not told what blocks an enemy or what a blocked enemy does. Scored 3.6 (comprehension: impact 4, ease 9). The new `blockedPathText` (Spec v2 9.7, rows 2, 39) reads "Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy. If every path to its target is blocked, the enemy moves toward the next nearest target; if no path reaches any target, it does not move." from config; in wait mode the enemy "waits where it is", as `chooseRoute` and `pathNextTo` play it. `ruleLineFor` maps `rulings.blockedPathRule` to it; a ruleText test pins both modes. Still without a line: the supply copies, the tile counts, Forced reveal, Defenses on gathering nodes and Build levels.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the Blocked enemy field shows no rule line
+- category: comprehension
+- impact: 4
+- ease: 9
+- next: add `blockedPathText` and map `rulings.blockedPathRule` to it in `ruleLineFor`
+- issue: #355
+- fixed: (this commit)
+
 # Site audit — 2026-11-10 (pass 300, cloud tick)
 
 Pass 299 gave the /config Smallest deck and Bought cards fields their line (b0a3361). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 43 ran 8 commits ago, about 22 hours) and so is the expand gate (pass 29 ran 14 commits ago, about 38 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass takes the next field on the pass 284 list: Figures per hex shows no line, so a playtester who changes it is not told that the limit holds on the base too, that a figure cannot move into a full hex, or that a knocked-out player with no free base hex stays out. Scored 3.6 (comprehension: impact 4, ease 9). The new `figuresPerHexText` (Spec v2 3.8, 4.6, 14.4, row 16) reads "A hex holds at most 1 player figure, on the base too: you cannot move into a hex where another figure stands, and a knocked-out player who finds no free base hex stays out until the next round start." from config, as `blockedByFigure` and `returnKnockedOut` play it; `ruleLineFor` maps `rulings.figuresPerHex` to it; a ruleText test pins it at 1 and 2. Still without a line: the supply copies, the tile counts, Blocked enemy, Forced reveal, Defenses on gathering nodes and Build levels.
