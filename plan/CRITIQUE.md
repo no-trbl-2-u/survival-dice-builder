@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-09 at commit add46fe
-> Pass count: 43
+> Last pass: 2026-11-10 at commit ea2b332
+> Pass count: 44
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — the knockout line does not say where a knocked-out player comes back, or that a full base delays it
+- pass: 44 (commit ea2b332)
+- viewport: desktop
+- category: comprehension
+- observation: The home page says a knocked-out player comes back next round with half health. It does not say the figure comes back on an empty base hex, or that the player stays out 1 more round when no base hex is empty (Spec v2 14.4). The engine does both.
+- evidence: "A player at 0 health is knocked out and comes back next round with half of their maximum health, rounded up." against Spec v2 14.4: "At the start of the next round, put the figure on an empty base hex. ... If no base hex is empty, the player stays out for 1 more round."
+- suggested fix: Extend the knockout text: "...comes back at the start of the next round on an empty base hex, with half of their maximum health, rounded up. If no base hex is empty, they stay out 1 more round."
+- source: web-fetch
+
+### [LOW] / — the closing "Also:" line glosses only the Decisions page
+- pass: 44 (commit ea2b332)
+- viewport: desktop
+- category: comprehension
+- observation: In the closing "Also:" line only the Decisions page says what it is. A new visitor is not told that Config changes the rules for new runs, or what the Tile sheet shows.
+- evidence: "Also: the Tile sheet, the Config page, the Decisions page (rule readings that wait on the designer) and Credits." (`apps/web/src/home/HomePage.tsx:91`)
+- suggested fix: Give each link a short gloss from its route description, e.g. "the Config page (change a rule for your next runs)" and "the Tile sheet (every map tile, hex by hex)".
+- source: web-fetch
+
+### [LOW] /credits — the Software and Fonts lists repeat the same link text and give no source or role
+- pass: 44 (commit ea2b332)
+- viewport: desktop
+- category: a11y
+- observation: Three Software links are all named "MIT" and two Fonts links are both "SIL OFL 1.1", each to a different file; a screen-reader links list cannot tell them apart. Only three.js says what it does. The Icons and Textures lists link each name to its source and name the artist; fonts and software do not.
+- evidence: "React: MIT"; "three.js (3D dice): MIT"; "Zod: MIT"; "Alfa Slab One (display): SIL OFL 1.1"; "Bitter (body and numbers): SIL OFL 1.1"
+- suggested fix: Link each library and font name to its source, give each library a role ("React (page interface)", "Zod (checks rules data and saved configs)"), name the font designers, and make each licence link text unique (e.g. "React licence (MIT)").
+- source: web-fetch
+
+### [LOW] /credits — the enemy die face names are lower case; the action die faces and every other page capitalise them
+- pass: 44 (commit ea2b332)
+- viewport: desktop
+- category: voice
+- observation: Play, Config and the home page write Hit, Miss and Special. The action die faces on this same page (Sword, Wand, Bow, Shield, Star, Blank) are capitalised. The enemy faces are not.
+- evidence: "Enemy die face: hit (claw marks)"; "Enemy die face: miss (empty)"; "Enemy die face: special (skull)" (`ASSETS.md:24-26`)
+- suggested fix: Rename the ASSETS.md rows to "Enemy die face: Hit (claw marks)", "Enemy die face: Miss (empty)" and "Enemy die face: Special (skull)".
+- source: web-fetch
+
+### [LOW] /debug — "Copy replay" does not say what the copied replay is for
+- pass: 44 (commit ea2b332)
+- viewport: desktop
+- category: comprehension
+- observation: The button copies the run's seed and action list as JSON. No page can load it back, and the page does not say what to do with it.
+- evidence: Button "Copy replay" (`apps/web/src/debug/DebugPage.tsx:164`); it copies `{ seed, actions }`; no replay import exists in `apps/web/src`.
+- suggested fix: Add one intro line: "Copy replay copies the seed and every action, to paste into a bug report."
+- source: web-fetch
+
+### [LOW] /debug — the intro does not explain Bot step or Autoplay, and the heading says "Legal actions"
+- pass: 44 (commit ea2b332)
+- viewport: desktop
+- category: voice
+- observation: The intro explains the log tags but not the controls. It does not say Bot step plays one bot action or that Autoplay plays up to 5000 actions (usually to the end of the run). "Legal" is an engine word.
+- evidence: "Play the rules engine one action at a time. Each log line starts with the section of the written rules (on GitHub) it follows, in [brackets]." Buttons "Bot step", "Autoplay"; heading "Legal actions ({n})" (`DebugPage.tsx:176`); `AUTOPLAY_LIMIT = 5000` (`:33`).
+- suggested fix: Add to the intro: "Bot step lets the bot choose the next action. Autoplay lets the bot play up to 5000 actions." Rename the heading to "Actions you can take ({n})".
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
