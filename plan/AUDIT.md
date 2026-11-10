@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-10 (pass 304, cloud tick)
+
+Pass 303 gave the home page knockout line the free base hex and the 1-round delay (6aacbc9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 2 commits ago) and so is the expand gate (pass 29 ran 19 commits ago, about 43 hours). Every build plan phase is shipped or blocked. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 44 LOW row on /, where the closing "Also:" line said what only the Decisions page is for. Scored 2.7 (comprehension: impact 3, ease 9). The line now glosses the Tile sheet (every map tile, hex by hex), the Config page (change a rule for your next runs) and Credits (every asset and its license), from their route descriptions; a HomePage test pins the three glosses. Next in line: the /credits link text and enemy face case rows, then the /debug intro rows.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /: the closing Also line glosses only the Decisions page
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: add a short gloss after the Tile sheet, Config and Credits links
+- issue: #358
+- fixed: 6aacbc9
+
 # Site audit — 2026-11-10 (pass 303, cloud tick)
 
 Pass 302 gave the /config Forced reveal every field its line (ea2b332), and critique pass 44 (25c7d0c) filed 6 findings. No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 1 commit ago) and so is the expand gate (pass 29 ran 18 commits ago, under 48 hours). Every build plan phase is shipped or blocked. The top row is the pass 44 MED finding: the knockout line on the home page and the /play start panel says a knocked-out player comes back next round, but not where, or that a full base keeps them out 1 more round (Spec v2 14.4). Scored 5.4 (external-critique MED: impact 4, ease 9, x1.5 bias). `knockoutText` now reads "A player at 0 health is knocked out and comes back at the start of the next round on a free base hex, with half of their maximum health, rounded up. If no base hex is free, they stay out 1 more round." then the losses, as `returnKnockedOut` and `freeFigurePlaces` play it (a free base hex has no enemy and room under the figure limit). The ruleText and HomePage tests pin it; the playtest kit was regenerated.

@@ -153,6 +153,14 @@ describe('HomePage', () => {
     expect(screen.queryByText(/wait on you/)).toBeNull()
   })
 
+  it('says what each page on the Also line is for (critique pass 44)', () => {
+    const { container } = render(<HomePage />)
+    const text = container.textContent ?? ''
+    expect(text).toContain('Tile sheet (every map tile, hex by hex)')
+    expect(text).toContain('Config page (change a rule for your next runs)')
+    expect(text).toContain('Credits (every asset and its license).')
+  })
+
   it('names the pages on the Also line by their nav labels and headings', () => {
     render(<HomePage />)
     for (const [path, label] of NAV) {

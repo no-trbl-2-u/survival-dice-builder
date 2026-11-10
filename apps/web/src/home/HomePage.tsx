@@ -88,9 +88,10 @@ export function HomePage() {
           </li>
         </ul>
         <p className={styles.more}>
-          Also: the <a href="/tiles">Tile sheet</a>, the <a href="/config">Config</a> page,{' '}
+          Also: the <a href="/tiles">Tile sheet</a> (every map tile, hex by hex), the{' '}
+          <a href="/config">Config</a> page (change a rule for your next runs),{' '}
           <a href="/decisions">the Decisions page</a> (rule readings that wait on the designer) and{' '}
-          <a href="/credits">Credits</a>.
+          <a href="/credits">Credits</a> (every asset and its license).
         </p>
       </div>
       <div className={styles.art} aria-hidden="true">

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the closing "Also:" line glosses only the Decisions page
-- pass: 44 (commit ea2b332)
-- viewport: desktop
-- category: comprehension
-- observation: In the closing "Also:" line only the Decisions page says what it is. A new visitor is not told that Config changes the rules for new runs, or what the Tile sheet shows.
-- evidence: "Also: the Tile sheet, the Config page, the Decisions page (rule readings that wait on the designer) and Credits." (`apps/web/src/home/HomePage.tsx:91`)
-- suggested fix: Give each link a short gloss from its route description, e.g. "the Config page (change a rule for your next runs)" and "the Tile sheet (every map tile, hex by hex)".
-- source: web-fetch
-
 ### [LOW] /credits — the Software and Fonts lists repeat the same link text and give no source or role
 - pass: 44 (commit ea2b332)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the closing "Also:" line glosses only the Decisions page
+- pass: 44 (commit ea2b332)
+- viewport: desktop
+- category: comprehension
+- observation: In the closing "Also:" line only the Decisions page says what it is. A new visitor is not told that Config changes the rules for new runs, or what the Tile sheet shows.
+- evidence: "Also: the Tile sheet, the Config page, the Decisions page (rule readings that wait on the designer) and Credits." (`apps/web/src/home/HomePage.tsx:91`)
+- suggested fix: Give each link a short gloss from its route description, e.g. "the Config page (change a rule for your next runs)" and "the Tile sheet (every map tile, hex by hex)".
+- source: web-fetch
+- issue: #358
+- fixed: (this commit)
 
 ### [x] [MED] / — the knockout line does not say where a knocked-out player comes back, or that a full base delays it
 - pass: 44 (commit ea2b332)
