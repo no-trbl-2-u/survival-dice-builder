@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-11-09 at commit 23e3a42
-> Pass count: 29
+> Last pass: 2026-11-10 at commit 935724e
+> Pass count: 30
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -192,7 +192,8 @@
 - estimated phases: 1
 - conflicts: the locked URL contract text must change; routes do not. Overlaps phase 40's (was 38) route table; ship after it.
 - re-evidence (expand pass 19): critique passes 28 and 29 filed 5 rows on /debug, the Engine console (Autoplay flooding screen readers, "[Combat v3]" tags, colour-only terrain, "1 tiles" with raw ids, raw ids again), and 6 of the 18 shipping commits since pass 18 went there (0203e31, 6948e73, d5c1206, 4532a9b, 6b0d89c, 29e9061). One more /debug LOW (raw ids in the State panel) is pending. A stranger reads the engine console as a player page because the nav offers it as one, so loop ticks go to polishing a workbench. Score held at 4.5; the nav decision still needs the designer.
-- last re-evidenced: 2026-10-27
+- re-evidence (expand pass 30): critique pass 44 (25c7d0c) filed two more /debug LOW rows, both a stranger asking what the engine console's controls are for: "Copy replay" copies a seed and action list no page can load back, and the intro does not explain Bot step or Autoplay and heads the list "Legal actions". A player path would not have sent a stranger there; a design area could say once that these are tools for bug reports and bot runs. Score held at 4.5; the nav decision still needs the designer.
+- last re-evidenced: 2026-11-10
 - ruling audit: no rule rows; bearings URL contract checked (locked, out of date on 3 points). Loop scope: outside (navigation); needs the designer's yes.
 
 ### [ ] [score 4.5] Co-op at 2, 3 and 4 seats, proven: engine, bot batch and browser
@@ -333,7 +334,7 @@
 - progress (expand pass 21): 66e0753 fixed the critique pass 31 MED row. The enemy move line now names the enemy from `event.from` and stays the same after later moves, pinned by a moveLog test. That is the fourth event type fixed one at a time for this cause. The test that renders each line when it is appended and again at the end, which would find the fifth, is still missing. Score held at 4.0.
 - last re-evidenced: 2026-10-30
 
-### [ ] [score 3.5] Every /config field shows its rule line: a test fails when a field has none and no pinned reason
+### [ ] [score 4.5] Every /config field shows its rule line: a test fails when a field has none and no pinned reason
 - proposed: 2026-11-09, expand pass 29
 - source signals:
   - Audit passes 280 to 284 found the same gap five times in a row and `/iterate` filled it one field group per tick: bff296e (Skills revealed, Shop, Co-op order), 3d0184d (start and base health), 71630e8 (spawn ramp, seats, range, maximum level), 23d4b52 (enemy die faces, Hit and Special damage), b8e6e1b (draft cadence).
@@ -347,9 +348,12 @@
 - estimated phases: 1
 - conflicts: none. Copy built from config and content plus tests; no rule changes. Fields whose rule is an open reading cite their OPEN-QUESTIONS row and do not decide it.
 - ruling audit: rule text only; Spec v2 untouched. Loop scope: in (content, tests).
+- re-evidence (expand pass 30): 9 of the 20 commits since pass 29 filled this gap one field group per tick: 74c1915 (Skills revealed help), c7b5f85 (spawn fields), fb9904e (Enemy move), fc1932a (Rolls per engagement), add46fe (Move cost next to an enemy), b0a3361 (Smallest deck, Bought cards), 63b5033 (Figures per hex), ed35cf9 (Blocked enemy), ea2b332 (Forced reveal every). The same probe of `ruleLineFor` over `configMetaPaths(defaultContent.config)` at 935724e: 85 paths, 28 return null, 14 of them group headers. The 14 fields left: `deck.presets`, `combat.exchangeRange`, `draft.keep`, `supplies.copiesPerCard`, `supplies.copiesPerSkill`, `tiles.countryside`, `tiles.core` and seven `rulings.*` options (enemiesPerHex, tileRotation, shopRefill, healTargets, eliteReplacement, buildOnNode, buildLevels). Still no test lists which fields may have no line, so the drip is about 6 more ticks and nothing stops a new field from joining it. Score raised from 3.5 to 4.5: nearly half of this window went to the drip the phase would close in one pass.
+- last re-evidenced: 2026-11-10
 
 ## Considered (below threshold)
 
+- [score 2.0] **What a player learns before the first round** (pass 30). Signals: critique pass 43 (b44072d) filed 4 /play and / rows on rules a player meets before any text says them (enemies move at each Combat and how far, when Prepare ends, Skills and ranges hidden before choosing an engagement, where a knocked-out player comes back); `/iterate` shipped all 4 as single rows (e915510, 2ab93b8, d2fa477, 6aacbc9). The rows are closed and each fix carries a test, so there is nothing left for a phase. Not filed; re-evaluate if the next critique pass finds another round rule the start panel or home page leaves out.
 - [score 1.5] **Share card and home-screen install metadata as one head contract** (pass 27). Signals: 9 of the 20 commits since pass 26 were one-tag shell fixes found by audit passes 251-262 (566d865 og:image, 5c352a8 twitter:card, 1276380 iOS icon, 1d74198 theme-color, fcf9708 WebSite data, 0bc9e92 manifest, 516c4f4 iOS title, a245cec sitemap, e39aed3 asset cache). Each added its own unit or static e2e check (`apps/web/src/head.test.ts`, `sitemap.test.ts`, `static.spec.ts`), and critique pass 39 found only the sitemap row on the shell. The class is guarded and the drip has stopped (the last 5 commits went elsewhere). Not filed; re-evaluate if a critique pass finds a shell tag the tests let through.
 - [score 1.5] **/config choice helps from the schema** (pass 23). Signals: 7 of the 15 `fix:` commits since pass 22 went to /config help markers (e655e40, 62a3e23, 95d7426, 6a8354f, 6abf961, 4144937, 3c0624a): choice names that differ from the list labels, defaults left unmarked, "Off (default)" on a tick box. Unlike the earlier drips, each of these added a schema-wide check in `packages/content/src/configMetaText.test.ts` (every list marks its default, every tick box and optional limit names its default, each choice in a help reads as its list label, no tick box says "Off"), so the class is now guarded. Generating the helps from the schema would be a rewrite for no visible gain. Not filed; re-evaluate if a critique pass finds a /config help row the tests let through.
 - [score 2.5] **Count words from one helper** (pass 18; pass 20: 3 more "1 card" fixes, cbc36d2 and 2298840 on /config, 418b03c in the log; inline `=== 1 ? '` ternaries in non-test web and content source now 41, up from 35. Still one helper's worth of work; belongs in the log table candidate if promoted). Signals: 2 "1 material" fixes in this window (a3ab1b5 for the log, d274490 for the upgrade hint), each adding its own `materials` helper (`apps/web/src/play/describeEvent.ts:22`, `apps/web/src/play/BasePanel.tsx:17`); 35 inline `n === 1 ? '...'` ternaries across `apps/web/src` and `packages/content/src` (non-test). 5 of the 13 `fix:` commits this window went to /play log and Base panel copy, and each shipped with its own test. One shared plural helper in content, used by the log, the Base panel and ruleText, is one `/iterate` tick, not a phase. Not filed.
