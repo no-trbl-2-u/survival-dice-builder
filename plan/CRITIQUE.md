@@ -18,15 +18,6 @@
 - suggested fix: Add one intro line: "Copy replay copies the seed and every action, to paste into a bug report."
 - source: web-fetch
 
-### [LOW] /debug — the intro does not explain Bot step or Autoplay, and the heading says "Legal actions"
-- pass: 44 (commit ea2b332)
-- viewport: desktop
-- category: voice
-- observation: The intro explains the log tags but not the controls. It does not say Bot step plays one bot action or that Autoplay plays up to 5000 actions (usually to the end of the run). "Legal" is an engine word.
-- evidence: "Play the rules engine one action at a time. Each log line starts with the section of the written rules (on GitHub) it follows, in [brackets]." Buttons "Bot step", "Autoplay"; heading "Legal actions ({n})" (`DebugPage.tsx:176`); `AUTOPLAY_LIMIT = 5000` (`:33`).
-- suggested fix: Add to the intro: "Bot step lets the bot choose the next action. Autoplay lets the bot play up to 5000 actions." Rename the heading to "Actions you can take ({n})".
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -74,6 +65,17 @@
 
 ## Done
 
+### [x] [LOW] /debug — the intro does not explain Bot step or Autoplay, and the heading says "Legal actions"
+- pass: 44 (commit ea2b332)
+- viewport: desktop
+- category: voice
+- observation: The intro explains the log tags but not the controls. It does not say Bot step plays one bot action or that Autoplay plays up to 5000 actions (usually to the end of the run). "Legal" is an engine word.
+- evidence: "Play the rules engine one action at a time. Each log line starts with the section of the written rules (on GitHub) it follows, in [brackets]." Buttons "Bot step", "Autoplay"; heading "Legal actions ({n})" (`DebugPage.tsx:176`); `AUTOPLAY_LIMIT = 5000` (`:33`).
+- suggested fix: Add to the intro: "Bot step lets the bot choose the next action. Autoplay lets the bot play up to 5000 actions." Rename the heading to "Actions you can take ({n})".
+- source: web-fetch
+- issue: #361
+- fixed: (this commit) — the intro adds "Bot step lets the bot choose the next action. Autoplay lets the bot play up to 5000 actions, usually to the end of the run." (the number comes from AUTOPLAY_LIMIT), and the heading reads "Actions you can take (n)"; a debug e2e test pins both
+
 ### [x] [LOW] /credits — the enemy die face names are lower case; the action die faces and every other page capitalise them
 - pass: 44 (commit ea2b332)
 - viewport: desktop
@@ -83,7 +85,7 @@
 - suggested fix: Rename the ASSETS.md rows to "Enemy die face: Hit (claw marks)", "Enemy die face: Miss (empty)" and "Enemy die face: Special (skull)".
 - source: web-fetch
 - issue: #360
-- addressed: (this commit); the three ASSETS.md rows read "Enemy die face: Hit (claw marks)", "Enemy die face: Miss (empty)" and "Enemy die face: Special (skull)". A CreditsPage test pins the capitals.
+- addressed: 00f4b35; the three ASSETS.md rows read "Enemy die face: Hit (claw marks)", "Enemy die face: Miss (empty)" and "Enemy die face: Special (skull)". A CreditsPage test pins the capitals.
 
 ### [x] [LOW] /credits — the Software and Fonts lists repeat the same link text and give no source or role
 - pass: 44 (commit ea2b332)

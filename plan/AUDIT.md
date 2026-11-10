@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-10 (pass 307, cloud tick)
+
+Pass 306 capitalised the /credits enemy die faces (00f4b35). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 6 commits ago, today) and so is the expand gate (pass 30 ran 2 commits ago). Every build plan phase is shipped or blocked. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 44 LOW row on /debug, where the intro explains the log tags but not Bot step or Autoplay, and the actions heading says "Legal actions". Scored 2.7 (voice: impact 3, ease 9). The intro now says "Bot step lets the bot choose the next action. Autoplay lets the bot play up to 5000 actions, usually to the end of the run.", reading the number from AUTOPLAY_LIMIT, and the heading reads "Actions you can take (n)". A debug e2e test pins both; the a11y focus test follows the new heading. Next in line: the /debug "Copy replay" row.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /debug: the intro does not explain Bot step or Autoplay
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: add the Bot step and Autoplay sentences to the intro; rename the actions heading
+- issue: #361
+- fixed: (this commit)
+
 # Site audit — 2026-11-10 (pass 306, cloud tick)
 
 Pass 305 gave the /credits Fonts and Software links their own text (5242a2e). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 5 commits ago, today) and so is the expand gate (pass 30 ran 2 commits ago). Every build plan phase is shipped or blocked. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 44 LOW row on /credits, where the enemy die faces read "hit", "miss" and "special" while the action faces on the same page and the rules, /play, /config and the home page write Hit, Miss and Special. Scored 1.8 (voice: impact 2, ease 9). The three ASSETS.md rows now read "Enemy die face: Hit (claw marks)", "Enemy die face: Miss (empty)" and "Enemy die face: Special (skull)"; a CreditsPage test pins the capitals. Next in line: the two /debug intro rows.
@@ -17,7 +31,7 @@ Pass 305 gave the /credits Fonts and Software links their own text (5242a2e). No
 - ease: 9
 - next: capitalise Hit, Miss and Special in the three ASSETS.md rows
 - issue: #360
-- fixed: (this commit)
+- fixed: 00f4b35
 
 # Site audit — 2026-11-10 (pass 305, cloud tick)
 

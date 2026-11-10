@@ -112,7 +112,9 @@ export function DebugPage() {
       <p>
         Play the rules engine one action at a time. Each log line starts with the section of the{' '}
         <a href={rulesUrl}>written rules</a> (on GitHub) it follows, in [brackets]. It always plays
-        the standard rules, not a config saved on <a href="/config">Config</a>.
+        the standard rules, not a config saved on <a href="/config">Config</a>. Bot step lets the
+        bot choose the next action. Autoplay lets the bot play up to {AUTOPLAY_LIMIT} actions,
+        usually to the end of the run.
       </p>
       <form
         className={styles.controls}
@@ -173,7 +175,7 @@ export function DebugPage() {
 
       <section aria-labelledby="actions-heading">
         <h2 id="actions-heading" ref={heading} tabIndex={-1}>
-          Legal actions ({actions.length})
+          Actions you can take ({actions.length})
         </h2>
         {actions.length === 0 ? (
           <p>The run has ended.</p>

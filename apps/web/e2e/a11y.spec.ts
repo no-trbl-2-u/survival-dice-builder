@@ -59,7 +59,7 @@ test('/debug: after an action, focus returns to the action list heading', async 
   const first = page.getByTestId('actions').getByRole('button').first()
   await first.focus()
   await page.keyboard.press('Enter')
-  await expect(page.getByRole('heading', { name: /^Legal actions/ })).toBeFocused()
+  await expect(page.getByRole('heading', { name: /^Actions you can take/ })).toBeFocused()
   await expect(page.getByRole('status')).toHaveText(/^Action: \d+ new events?\. Round \d+, \w+\.$/)
   await expect(page.getByRole('log')).toHaveCount(0)
 })

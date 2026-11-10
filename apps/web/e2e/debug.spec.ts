@@ -33,7 +33,7 @@ test('/debug: a new seed starts a new run', async ({ page }) => {
   await expect(page.getByText('It always plays the standard rules')).toBeVisible()
   await page.getByLabel('Seed').fill('42')
   await page.getByRole('button', { name: 'New run' }).click()
-  await expect(page.getByText('0 actions')).toBeVisible()
+  await expect(page.getByText('0 actions', { exact: true })).toBeVisible()
   await expect(page.getByTestId('state')).toContainText('1 / Setup')
 })
 
@@ -89,4 +89,15 @@ test('/debug: the written rules link says it opens GitHub, as on / and /config',
     'href',
     /\/blob\/main\/spec\/01-spec-v2-rules\.md$/,
   )
+})
+
+test('/debug: the intro explains Bot step and Autoplay, and the heading names the actions', async ({
+  page,
+}) => {
+  await page.goto('/debug')
+  const intro = page.getByText(/^Play the rules engine one action at a time\./)
+  await expect(intro).toContainText('Bot step lets the bot choose the next action.')
+  await expect(intro).toContainText('Autoplay lets the bot play up to 5000 actions')
+  await expect(page.getByRole('heading', { name: /^Actions you can take \(\d+\)$/ })).toBeVisible()
+  await expect(page.getByText(/Legal actions/)).toHaveCount(0)
 })
