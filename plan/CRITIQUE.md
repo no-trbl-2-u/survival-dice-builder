@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /tiles — the lede says tiles are "drawn", but not when a tile joins the map
-- pass: 43 (commit add46fe)
-- viewport: desktop
-- category: comprehension
-- observation: A newcomer cannot connect the sheet to play: a player steps off the map edge to reveal a tile, and that step costs movement. (Seen live.)
-- evidence: "The game on the Play page builds its map from these 9 tiles: 1 Base tile, 3 Countryside tiles and 5 Core tiles. The Base tile starts in the center; the Countryside tiles are drawn before the Core tiles."
-- suggested fix: Add the existing reveal rule line after the lede, from the rule text, not hardcoded.
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -64,6 +55,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /tiles — the lede says tiles are "drawn", but not when a tile joins the map
+- pass: 43 (commit add46fe)
+- viewport: desktop
+- category: comprehension
+- observation: A newcomer cannot connect the sheet to play: a player steps off the map edge to reveal a tile, and that step costs movement. (Seen live.)
+- evidence: "The game on the Play page builds its map from these 9 tiles: 1 Base tile, 3 Countryside tiles and 5 Core tiles. The Base tile starts in the center; the Countryside tiles are drawn before the Core tiles."
+- suggested fix: Add the existing reveal rule line after the lede, from the rule text, not hardcoded.
+- source: web-fetch
+- issue: #352
+- fixed: (this commit)
 
 ### [x] [LOW] /play — the game footer shows a "Developer: allow undo" tick box next to the player options
 - pass: 43 (commit add46fe)

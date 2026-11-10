@@ -1,6 +1,7 @@
 import {
   defaultContent,
   IMPASSABLE,
+  revealText,
   siteText,
   type Site,
   type Terrain,
@@ -66,7 +67,8 @@ function tileSummary(tile: TileDef): string {
 
 /**
  * The tile layouts (spec phase 1) the game on the Play page builds its map from: every tile
- * in `tiles.json`, grouped by kind, with a terrain and site legend. Terrain only matters for
+ * in `tiles.json`, grouped by kind, with a terrain and site legend. The lede says when a tile
+ * joins the map (`revealText`, the step off the edge and its movement cost). Terrain only matters for
  * entering a hex (rule 3.4), so the legend says which terrains block moves and that the rest do not.
  */
 export function TileSheet() {
@@ -76,8 +78,8 @@ export function TileSheet() {
       <p id="tiles-intro">
         The game on the Play page builds its map from these {tiles.length} tiles:{' '}
         {kindSummary(tiles)}. The Base tile starts in the center; the Countryside tiles are drawn
-        before the Core tiles. Under each tile, its 7 hexes are listed by position with their
-        terrain and site.
+        before the Core tiles. {revealText(defaultContent.config)} Under each tile, its 7 hexes are
+        listed by position with their terrain and site.
       </p>
       <ul className={styles.legend} aria-label="Terrain legend">
         {TERRAINS.map((t) => (

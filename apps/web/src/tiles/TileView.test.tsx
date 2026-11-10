@@ -1,4 +1,4 @@
-import { defaultContent } from '@survival/content'
+import { defaultContent, revealText } from '@survival/content'
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { TileSheet } from './TileSheet.tsx'
@@ -35,6 +35,15 @@ describe('TileSheet', () => {
     expect(container.querySelector('#tiles-intro')!.textContent).toMatch(
       /^The game on the Play page builds its map from these 9 tiles: 1 Base tile, 3 Countryside tiles and 5 Core tiles\. The Base tile starts in the center; the Countryside tiles are drawn before the Core tiles\./,
     )
+  })
+
+  it('says a tile joins the map when a player steps off the edge, and what the step costs', () => {
+    const { container } = render(<TileSheet />)
+    const lede = container.querySelector('#tiles-intro')!.textContent
+    expect(lede).toContain(
+      `drawn before the Core tiles. ${revealText(defaultContent.config)} Under each tile`,
+    )
+    expect(lede).toContain(`the step costs ${defaultContent.config.tiles.revealMoveCost} movement.`)
   })
 
   it('groups the tiles under an H2 per kind, each tile name an H3', () => {

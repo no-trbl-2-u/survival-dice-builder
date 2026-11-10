@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-10 (pass 298, cloud tick)
+
+Pass 297 labelled the /play undo tick box "Allow undo" (87e4658). No issues are open for triage. The critique gate is closed (pass 43 ran 6 commits ago, under 24 hours) and so is the expand gate (pass 29 ran 13 commits ago, under 48 hours). Every build plan phase is shipped or blocked. This pass takes the last open pass 43 row: the /tiles lede says tiles are "drawn" but not when a tile joins the map. Scored 3.6 (impact 3, ease 8; comprehension, no bias). The lede now prints `revealText` from content after the draw order: "Step off the edge of the map to reveal a new tile; the step costs N movement." A TileSheet test pins the line and its cost from config. The remaining Pending critique rows are /decisions items that edit `[needs-user-call]` AUDIT items, which wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /tiles: the lede says tiles are "drawn", but not when a tile joins the map (critique pass 43)
+- category: external-critique (comprehension)
+- impact: 3
+- ease: 8
+- next: add the reveal rule line after the lede, from the rule text
+- issue: #352
+- fixed: (this commit)
+
 # Site audit — 2026-11-09 (pass 297, cloud tick)
 
 Pass 296 gave Shop offers and card faces the "currency" unit (805b259). No issues are open for triage. The critique gate is closed (pass 43 ran 5 commits ago) and so is the expand gate (pass 29 ran 12 commits ago, under 48 hours). Every build plan phase is shipped or blocked. This pass takes the next pass 43 LOW row: the /play footer labels the undo tick box "Developer: allow undo", beside Sound and 3D dice. Undo shipped as a player option in phase 13 and shows in production, unlike the real dev tools (`import.meta.env.DEV` only). Scored 4.0 (impact 3, ease 8; comprehension, no bias). The tick box now reads "Allow undo". The polish e2e pins the label and that ticking it shows "Undo last decision". Next in line: the /tiles reveal line (LOW).
