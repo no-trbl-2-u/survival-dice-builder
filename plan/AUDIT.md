@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-10 (pass 300, cloud tick)
+
+Pass 299 gave the /config Smallest deck and Bought cards fields their line (b0a3361). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 43 ran 8 commits ago, about 22 hours) and so is the expand gate (pass 29 ran 14 commits ago, about 38 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass takes the next field on the pass 284 list: Figures per hex shows no line, so a playtester who changes it is not told that the limit holds on the base too, that a figure cannot move into a full hex, or that a knocked-out player with no free base hex stays out. Scored 3.6 (comprehension: impact 4, ease 9). The new `figuresPerHexText` (Spec v2 3.8, 4.6, 14.4, row 16) reads "A hex holds at most 1 player figure, on the base too: you cannot move into a hex where another figure stands, and a knocked-out player who finds no free base hex stays out until the next round start." from config, as `blockedByFigure` and `returnKnockedOut` play it; `ruleLineFor` maps `rulings.figuresPerHex` to it; a ruleText test pins it at 1 and 2. Still without a line: the supply copies, the tile counts, Blocked enemy, Forced reveal, Defenses on gathering nodes and Build levels.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the Figures per hex field shows no rule line
+- category: comprehension
+- impact: 4
+- ease: 9
+- next: add `figuresPerHexText` and map `rulings.figuresPerHex` to it in `ruleLineFor`
+- issue: #354
+- fixed: (this commit)
+
 # Site audit — 2026-11-10 (pass 299, cloud tick)
 
 Pass 298 gave the /tiles lede the reveal line (64cb599). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 43 ran 7 commits ago, under 24 hours) and so is the expand gate (pass 29 ran 13 commits ago, about 37 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass goes back to the pass 284 list of /config fields `ruleLineFor` still gives no line, and takes Smallest deck with Bought cards, which only together say when a starter card leaves. Scored 3.6 (comprehension: impact 4, ease 9). The new `boughtCardsText` (Spec v2 13.1, 18.1, row 44) reads "A card you buy goes to your discard pile and adds to your deck; no starter card leaves it." from config; in replace-starter mode it reads "then, if you have more than 10 cards, you return a starter card from your deck or discard pile and it leaves the game.", as `returnableStarters` plays it. `ruleLineFor` maps `deck.minimumSize` and `options.boughtCards` to it; a ruleText test pins both modes. Still without a line: the supply copies, the tile counts, Figures per hex, Blocked enemy, Forced reveal, Defenses on gathering nodes and Build levels.

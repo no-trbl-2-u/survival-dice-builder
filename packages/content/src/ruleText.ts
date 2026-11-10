@@ -476,6 +476,23 @@ export function boughtCardsText(config: GameConfig): string {
   return `${head}; then, if you have more than ${plural(config.deck.minimumSize, 'card', 'cards')}, you return a starter card from your deck or discard pile and it leaves the game.`
 }
 
+/**
+ * How many player figures share a hex: "A hex holds at most 1 player figure, on the base too:
+ * you cannot move into a hex where another figure stands, and a knocked-out player who finds no
+ * free base hex stays out until the next round start." Above 1 it names the limit, as
+ * `blockedByFigure` and `returnKnockedOut` play it.
+ *
+ * @rule 3.8, 4.6, 14.4, OPEN-QUESTIONS row 16
+ */
+export function figuresPerHexText(config: GameConfig): string {
+  const limit = config.rulings.figuresPerHex
+  const tail =
+    'and a knocked-out player who finds no free base hex stays out until the next round start.'
+  if (limit === 1)
+    return `A hex holds at most 1 player figure, on the base too: you cannot move into a hex where another figure stands, ${tail}`
+  return `A hex holds at most ${limit} player figures, on the base too: you cannot move into a hex where ${limit} other figures stand, ${tail}`
+}
+
 /** Design-document tags in player words: the documents are build history, not rules names. */
 const CITATIONS: readonly (readonly [RegExp, string])[] = [
   [/Combat v3/g, 'engagements'],
@@ -877,6 +894,7 @@ export function ruleLineFor(
   if (path === 'combat.maxRolls') return rollsText(config)
   if (path === 'deck.minimumSize' || path === 'options.boughtCards') return boughtCardsText(config)
   if (path === 'combat.moveCostNextToEnemy') return moveCostText(config, content)
+  if (path === 'rulings.figuresPerHex') return figuresPerHexText(config)
   if (path === 'combat.enemyMoveHexes') return `${enemyMoveText(config)} ${targetOrderText(config)}`
   if (group === 'players') return `For ${playersText(config)}.`
   if (group === 'milestones') {

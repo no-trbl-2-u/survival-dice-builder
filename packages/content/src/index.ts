@@ -101,6 +101,7 @@ export {
   playersText,
   returnStarterText,
   boughtCardsText,
+  figuresPerHexText,
   revealText,
   roundText,
   configRuleNote,
