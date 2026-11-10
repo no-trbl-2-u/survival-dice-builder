@@ -509,6 +509,21 @@ export function blockedPathText(config: GameConfig): string {
     : `${head} the enemy moves toward the next nearest target; if no path reaches any target, it does not move.`
 }
 
+/**
+ * When a tile is revealed without a step: off (the default), "A tile is revealed only when a
+ * player steps off the edge of the map."; with `clock.forcedRevealEvery` N, "At round end, if no
+ * tile was revealed in the last N rounds and the tile deck is not empty, the top tile is revealed
+ * in the open slot nearest the base.", as `forcedRevealDue` and `forcedReveal` play it.
+ *
+ * @rule 6.7, OPEN-QUESTIONS row 63
+ */
+export function forcedRevealText(config: GameConfig): string {
+  const every = config.clock.forcedRevealEvery
+  return every === null
+    ? 'A tile is revealed only when a player steps off the edge of the map.'
+    : `At round end, if no tile was revealed in the last ${plural(every, 'round', 'rounds')} and the tile deck is not empty, the top tile is revealed in the open slot nearest the base.`
+}
+
 /** Design-document tags in player words: the documents are build history, not rules names. */
 const CITATIONS: readonly (readonly [RegExp, string])[] = [
   [/Combat v3/g, 'engagements'],
@@ -912,6 +927,7 @@ export function ruleLineFor(
   if (path === 'combat.moveCostNextToEnemy') return moveCostText(config, content)
   if (path === 'rulings.figuresPerHex') return figuresPerHexText(config)
   if (path === 'rulings.blockedPathRule') return blockedPathText(config)
+  if (path === 'clock.forcedRevealEvery') return forcedRevealText(config)
   if (path === 'combat.enemyMoveHexes') return `${enemyMoveText(config)} ${targetOrderText(config)}`
   if (group === 'players') return `For ${playersText(config)}.`
   if (group === 'milestones') {

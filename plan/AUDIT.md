@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-10 (pass 302, cloud tick)
+
+Pass 301 gave the /config Blocked enemy field its line (ed35cf9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 43 ran 10 commits ago, just under 24 hours) and so is the expand gate (pass 29 ran 16 commits ago, about 40 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass takes the next field on the pass 284 list: Forced reveal every shows no line, so a playtester who turns it on sees no line saying when a tile is revealed without a step. Scored 3.6 (comprehension: impact 4, ease 9). The new `forcedRevealText` (Spec v2 6.7, row 63) reads "A tile is revealed only when a player steps off the edge of the map." while it is off (the default); set to N it reads "At round end, if no tile was revealed in the last N rounds and the tile deck is not empty, the top tile is revealed in the open slot nearest the base.", as `forcedRevealDue` and `forcedReveal` play it. `ruleLineFor` maps `clock.forcedRevealEvery` to it; a ruleText test pins off, 3 and 1. Still without a line: the supply copies, the tile counts, Defenses on gathering nodes and Build levels.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the Forced reveal every field shows no rule line
+- category: comprehension
+- impact: 4
+- ease: 9
+- next: add `forcedRevealText` and map `clock.forcedRevealEvery` to it in `ruleLineFor`
+- issue: #356
+- fixed: (this commit)
+
 # Site audit — 2026-11-10 (pass 301, cloud tick)
 
 Pass 300 gave the /config Figures per hex field its line (63b5033). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 43 ran 9 commits ago, about 22 hours) and so is the expand gate (pass 29 ran 15 commits ago, about 39 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which /oversight owns. So this pass takes the next field on the pass 284 list: Blocked enemy shows no line, so a playtester who changes it is not told what blocks an enemy or what a blocked enemy does. Scored 3.6 (comprehension: impact 4, ease 9). The new `blockedPathText` (Spec v2 9.7, rows 2, 39) reads "Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy. If every path to its target is blocked, the enemy moves toward the next nearest target; if no path reaches any target, it does not move." from config; in wait mode the enemy "waits where it is", as `chooseRoute` and `pathNextTo` play it. `ruleLineFor` maps `rulings.blockedPathRule` to it; a ruleText test pins both modes. Still without a line: the supply copies, the tile counts, Forced reveal, Defenses on gathering nodes and Build levels.

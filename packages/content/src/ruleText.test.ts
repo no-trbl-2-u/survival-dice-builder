@@ -30,6 +30,7 @@ import {
   boughtCardsText,
   figuresPerHexText,
   blockedPathText,
+  forcedRevealText,
   revealText,
   roundText,
   configRuleNote,
@@ -488,6 +489,21 @@ describe('rule text from config', () => {
       'Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy. If every path to its target is blocked, the enemy waits where it is.',
     )
     expect(ruleLineFor('rulings.blockedPathRule', wait, defaultContent)).toBe(blockedPathText(wait))
+  })
+
+  it('forced reveal: off reveals only on a step; on names the round-end reveal (6.7, row 63)', () => {
+    expect(forcedRevealText(base)).toBe(
+      'A tile is revealed only when a player steps off the edge of the map.',
+    )
+    const three = With((c) => ({ ...c, clock: { forcedRevealEvery: 3 } }))
+    expect(forcedRevealText(three)).toBe(
+      'At round end, if no tile was revealed in the last 3 rounds and the tile deck is not empty, the top tile is revealed in the open slot nearest the base.',
+    )
+    const one = With((c) => ({ ...c, clock: { forcedRevealEvery: 1 } }))
+    expect(forcedRevealText(one)).toMatch(/in the last 1 round and/)
+    expect(ruleLineFor('clock.forcedRevealEvery', three, defaultContent)).toBe(
+      forcedRevealText(three),
+    )
   })
 
   it('starter return: one fixed line, read by the dialog', () => {

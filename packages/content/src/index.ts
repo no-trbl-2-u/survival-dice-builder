@@ -103,6 +103,7 @@ export {
   boughtCardsText,
   figuresPerHexText,
   blockedPathText,
+  forcedRevealText,
   revealText,
   roundText,
   configRuleNote,
