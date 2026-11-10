@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-10 (pass 306, cloud tick)
+
+Pass 305 gave the /credits Fonts and Software links their own text (5242a2e). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 5 commits ago, today) and so is the expand gate (pass 30 ran 2 commits ago). Every build plan phase is shipped or blocked. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 44 LOW row on /credits, where the enemy die faces read "hit", "miss" and "special" while the action faces on the same page and the rules, /play, /config and the home page write Hit, Miss and Special. Scored 1.8 (voice: impact 2, ease 9). The three ASSETS.md rows now read "Enemy die face: Hit (claw marks)", "Enemy die face: Miss (empty)" and "Enemy die face: Special (skull)"; a CreditsPage test pins the capitals. Next in line: the two /debug intro rows.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] /credits: the enemy die face names are lower case
+- category: external-critique
+- impact: 2
+- ease: 9
+- next: capitalise Hit, Miss and Special in the three ASSETS.md rows
+- issue: #360
+- fixed: (this commit)
+
 # Site audit — 2026-11-10 (pass 305, cloud tick)
 
 Pass 304 gave the home page Also line its glosses (935724e), and expand pass 30 (d1664ac) filed no candidates. No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 4 commits ago, today) and the expand gate too (pass 30 ran 1 commit ago). Every build plan phase is shipped or blocked. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 44 LOW row on /credits, where three Software links read "MIT" and two Fonts links read "SIL OFL 1.1", so a screen-reader links list cannot tell them apart. Scored 2.8 (a11y: impact 4, ease 7). Each font and library name now links to its source (a new Source column in the ASSETS.md fonts table; a role and source on each SOFTWARE entry), and each license link reads "<name> license (<license>)". A CreditsPage test pins the roles, the source links and that no Fonts or Software link name repeats. Font designers are not named yet. Next in line: the enemy face case row, then the /debug intro rows.
@@ -17,7 +31,7 @@ Pass 304 gave the home page Also line its glosses (935724e), and expand pass 30 
 - ease: 7
 - next: link names to sources, give libraries a role, make license link text unique
 - issue: #359
-- fixed: (this commit)
+- fixed: 5242a2e
 
 # Site audit — 2026-11-10 (pass 304, cloud tick)
 

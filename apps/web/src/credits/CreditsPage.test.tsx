@@ -9,9 +9,16 @@ describe('CreditsPage', () => {
     render(<CreditsPage />)
     const list = screen.getByTestId('credits-assets').textContent
     expect(list).toContain('Blank die face (empty): drawn for this game')
-    expect(list).toContain('Enemy die face: miss (empty): drawn for this game')
+    expect(list).toContain('Enemy die face: Miss (empty): drawn for this game')
     expect(list).not.toContain('Project-owned')
     expect(list).not.toMatch(/shows nothing/)
+  })
+  it('capitalises the enemy die faces as the rules and /play do', () => {
+    render(<CreditsPage />)
+    const list = screen.getByTestId('credits-assets').textContent
+    expect(list).toContain('Enemy die face: Hit (claw marks)')
+    expect(list).toContain('Enemy die face: Special (skull)')
+    expect(list).not.toMatch(/Enemy die face: (hit|miss|special)/)
   })
   it('excludes the icons drawn for this game from the icon license sentence', () => {
     render(<CreditsPage />)

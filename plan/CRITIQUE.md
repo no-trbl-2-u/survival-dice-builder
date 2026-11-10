@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /credits — the enemy die face names are lower case; the action die faces and every other page capitalise them
-- pass: 44 (commit ea2b332)
-- viewport: desktop
-- category: voice
-- observation: Play, Config and the home page write Hit, Miss and Special. The action die faces on this same page (Sword, Wand, Bow, Shield, Star, Blank) are capitalised. The enemy faces are not.
-- evidence: "Enemy die face: hit (claw marks)"; "Enemy die face: miss (empty)"; "Enemy die face: special (skull)" (`ASSETS.md:24-26`)
-- suggested fix: Rename the ASSETS.md rows to "Enemy die face: Hit (claw marks)", "Enemy die face: Miss (empty)" and "Enemy die face: Special (skull)".
-- source: web-fetch
-
 ### [LOW] /debug — "Copy replay" does not say what the copied replay is for
 - pass: 44 (commit ea2b332)
 - viewport: desktop
@@ -83,6 +74,17 @@
 
 ## Done
 
+### [x] [LOW] /credits — the enemy die face names are lower case; the action die faces and every other page capitalise them
+- pass: 44 (commit ea2b332)
+- viewport: desktop
+- category: voice
+- observation: Play, Config and the home page write Hit, Miss and Special. The action die faces on this same page (Sword, Wand, Bow, Shield, Star, Blank) are capitalised. The enemy faces are not.
+- evidence: "Enemy die face: hit (claw marks)"; "Enemy die face: miss (empty)"; "Enemy die face: special (skull)" (`ASSETS.md:24-26`)
+- suggested fix: Rename the ASSETS.md rows to "Enemy die face: Hit (claw marks)", "Enemy die face: Miss (empty)" and "Enemy die face: Special (skull)".
+- source: web-fetch
+- issue: #360
+- addressed: (this commit); the three ASSETS.md rows read "Enemy die face: Hit (claw marks)", "Enemy die face: Miss (empty)" and "Enemy die face: Special (skull)". A CreditsPage test pins the capitals.
+
 ### [x] [LOW] /credits — the Software and Fonts lists repeat the same link text and give no source or role
 - pass: 44 (commit ea2b332)
 - viewport: desktop
@@ -92,7 +94,7 @@
 - suggested fix: Link each library and font name to its source, give each library a role ("React (page interface)", "Zod (checks rules data and saved configs)"), name the font designers, and make each licence link text unique (e.g. "React licence (MIT)").
 - source: web-fetch
 - issue: #359
-- fixed: (this commit) — each font and library name links to its source, each library names its role, and each license link reads "<name> license (<license>)"; font designers not added (not verified this tick)
+- fixed: 5242a2e — each font and library name links to its source, each library names its role, and each license link reads "<name> license (<license>)"; font designers not added (not verified this tick)
 
 ### [x] [LOW] / — the closing "Also:" line glosses only the Decisions page
 - pass: 44 (commit ea2b332)
