@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /credits — the Software and Fonts lists repeat the same link text and give no source or role
-- pass: 44 (commit ea2b332)
-- viewport: desktop
-- category: a11y
-- observation: Three Software links are all named "MIT" and two Fonts links are both "SIL OFL 1.1", each to a different file; a screen-reader links list cannot tell them apart. Only three.js says what it does. The Icons and Textures lists link each name to its source and name the artist; fonts and software do not.
-- evidence: "React: MIT"; "three.js (3D dice): MIT"; "Zod: MIT"; "Alfa Slab One (display): SIL OFL 1.1"; "Bitter (body and numbers): SIL OFL 1.1"
-- suggested fix: Link each library and font name to its source, give each library a role ("React (page interface)", "Zod (checks rules data and saved configs)"), name the font designers, and make each licence link text unique (e.g. "React licence (MIT)").
-- source: web-fetch
-
 ### [LOW] /credits — the enemy die face names are lower case; the action die faces and every other page capitalise them
 - pass: 44 (commit ea2b332)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /credits — the Software and Fonts lists repeat the same link text and give no source or role
+- pass: 44 (commit ea2b332)
+- viewport: desktop
+- category: a11y
+- observation: Three Software links are all named "MIT" and two Fonts links are both "SIL OFL 1.1", each to a different file; a screen-reader links list cannot tell them apart. Only three.js says what it does. The Icons and Textures lists link each name to its source and name the artist; fonts and software do not.
+- evidence: "React: MIT"; "three.js (3D dice): MIT"; "Zod: MIT"; "Alfa Slab One (display): SIL OFL 1.1"; "Bitter (body and numbers): SIL OFL 1.1"
+- suggested fix: Link each library and font name to its source, give each library a role ("React (page interface)", "Zod (checks rules data and saved configs)"), name the font designers, and make each licence link text unique (e.g. "React licence (MIT)").
+- source: web-fetch
+- issue: #359
+- fixed: (this commit) — each font and library name links to its source, each library names its role, and each license link reads "<name> license (<license>)"; font designers not added (not verified this tick)
 
 ### [x] [LOW] / — the closing "Also:" line glosses only the Decisions page
 - pass: 44 (commit ea2b332)

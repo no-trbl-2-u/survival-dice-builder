@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-10 (pass 305, cloud tick)
+
+Pass 304 gave the home page Also line its glosses (935724e), and expand pass 30 (d1664ac) filed no candidates. No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 4 commits ago, today) and the expand gate too (pass 30 ran 1 commit ago). Every build plan phase is shipped or blocked. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 44 LOW row on /credits, where three Software links read "MIT" and two Fonts links read "SIL OFL 1.1", so a screen-reader links list cannot tell them apart. Scored 2.8 (a11y: impact 4, ease 7). Each font and library name now links to its source (a new Source column in the ASSETS.md fonts table; a role and source on each SOFTWARE entry), and each license link reads "<name> license (<license>)". A CreditsPage test pins the roles, the source links and that no Fonts or Software link name repeats. Font designers are not named yet. Next in line: the enemy face case row, then the /debug intro rows.
+
+## Top 5 findings (scored)
+
+### [x] [2.8] /credits: the Software and Fonts links repeat the same link text
+- category: external-critique
+- impact: 4
+- ease: 7
+- next: link names to sources, give libraries a role, make license link text unique
+- issue: #359
+- fixed: (this commit)
+
 # Site audit — 2026-11-10 (pass 304, cloud tick)
 
 Pass 303 gave the home page knockout line the free base hex and the 1-round delay (6aacbc9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 2 commits ago) and so is the expand gate (pass 29 ran 19 commits ago, about 43 hours). Every build plan phase is shipped or blocked. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 44 LOW row on /, where the closing "Also:" line said what only the Decisions page is for. Scored 2.7 (comprehension: impact 3, ease 9). The line now glosses the Tile sheet (every map tile, hex by hex), the Config page (change a rule for your next runs) and Credits (every asset and its license), from their route descriptions; a HomePage test pins the three glosses. Next in line: the /credits link text and enemy face case rows, then the /debug intro rows.

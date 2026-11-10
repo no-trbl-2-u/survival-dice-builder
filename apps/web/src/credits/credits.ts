@@ -12,6 +12,7 @@ export type Credit = Readonly<{
 export type FontCredit = Readonly<{
   font: string
   role: string
+  source: string
   license: string
   licenseUrl: string
 }>
@@ -83,26 +84,55 @@ export function commonLicense(
   return found ? { license: found.license, licenseUrl: found.licenseUrl } : null
 }
 
-/** The fonts table: `| Font | Role | License | License URL |`. */
+/** The fonts table: `| Font | Role | Source | License | License URL |`. */
 export function fontCredits(text: string): FontCredit[] {
   const section = text.split(/^## Fonts/m)[1]?.split(/^## /m)[0] ?? ''
   return tableRows(section)
-    .filter((c) => c.length === 4 && c[0] !== 'Font')
-    .map(([font = '', role = '', license = '', licenseUrl = '']) => ({
+    .filter((c) => c.length === 5 && c[0] !== 'Font')
+    .map(([font = '', role = '', source = '', license = '', licenseUrl = '']) => ({
       font,
       role,
+      source,
       license,
       licenseUrl,
     }))
 }
 
+/** One library shipped to the browser: what it does here, where it lives, and its license. */
+export type SoftwareCredit = Readonly<{
+  name: string
+  role: string
+  source: string
+  license: string
+  url: string
+}>
+
 /** Libraries shipped to the browser (package.json dependencies), with their licenses. */
-export const SOFTWARE: readonly Readonly<{ name: string; license: string; url: string }>[] = [
-  { name: 'React', license: 'MIT', url: 'https://github.com/facebook/react/blob/main/LICENSE' },
+export const SOFTWARE: readonly SoftwareCredit[] = [
   {
-    name: 'three.js (3D dice)',
+    name: 'React',
+    role: 'page interface',
+    source: 'https://react.dev/',
+    license: 'MIT',
+    url: 'https://github.com/facebook/react/blob/main/LICENSE',
+  },
+  {
+    name: 'three.js',
+    role: '3D dice',
+    source: 'https://threejs.org/',
     license: 'MIT',
     url: 'https://github.com/mrdoob/three.js/blob/dev/LICENSE',
   },
-  { name: 'Zod', license: 'MIT', url: 'https://github.com/colinhacks/zod/blob/main/LICENSE' },
+  {
+    name: 'Zod',
+    role: 'checks rules data and saved configs',
+    source: 'https://zod.dev/',
+    license: 'MIT',
+    url: 'https://github.com/colinhacks/zod/blob/main/LICENSE',
+  },
 ]
+
+/** A license link text unique on the page: "React license (MIT)". */
+export function licenseLinkText(name: string, license: string): string {
+  return `${name} license (${license})`
+}

@@ -23,4 +23,25 @@ describe('CreditsPage', () => {
       'Every texture is under CC0. Each name links to its source.',
     )
   })
+  it('gives every font and library a role, a source link and a unique license link', () => {
+    render(<CreditsPage />)
+    expect(screen.getByTestId('credits-fonts').textContent).toContain(
+      'Bitter (body and numbers): Bitter license (SIL OFL 1.1)',
+    )
+    expect(screen.getByTestId('credits-software').textContent).toContain(
+      'Zod (checks rules data and saved configs): Zod license (MIT)',
+    )
+    expect(screen.getByRole('link', { name: 'React' }).getAttribute('href')).toBe(
+      'https://react.dev/',
+    )
+    expect(screen.getByRole('link', { name: 'Alfa Slab One' }).getAttribute('href')).toBe(
+      'https://fonts.google.com/specimen/Alfa+Slab+One',
+    )
+    // No two Fonts or Software links share a name.
+    const names = [screen.getByTestId('credits-fonts'), screen.getByTestId('credits-software')]
+      .flatMap((ul) => [...ul.querySelectorAll('a')])
+      .map((a) => a.textContent)
+    expect(new Set(names).size).toBe(names.length)
+    expect(names).not.toContain('MIT')
+  })
 })

@@ -7,6 +7,7 @@ import {
   commonLicense,
   creditGroups,
   fontCredits,
+  licenseLinkText,
   parseAttribution,
   SOFTWARE,
   type Credit,
@@ -118,21 +119,27 @@ export function CreditsPage() {
       <h2>Textures</h2>
       <CreditList credits={textures} noun="texture" testId="credits-textures" />
       <h2>Fonts</h2>
-      <ul className={styles.list}>
+      <ul className={styles.list} data-testid="credits-fonts">
         {fonts.map((f) => (
           <li key={f.font}>
             <span>
-              <strong>{f.font}</strong> ({f.role}): <a href={f.licenseUrl}>{f.license}</a>
+              <a href={f.source}>
+                <strong>{f.font}</strong>
+              </a>{' '}
+              ({f.role}): <a href={f.licenseUrl}>{licenseLinkText(f.font, f.license)}</a>
             </span>
           </li>
         ))}
       </ul>
       <h2>Software</h2>
-      <ul className={styles.list}>
+      <ul className={styles.list} data-testid="credits-software">
         {SOFTWARE.map((s) => (
           <li key={s.name}>
             <span>
-              <strong>{s.name}</strong>: <a href={s.url}>{s.license}</a>
+              <a href={s.source}>
+                <strong>{s.name}</strong>
+              </a>{' '}
+              ({s.role}): <a href={s.url}>{licenseLinkText(s.name, s.license)}</a>
             </span>
           </li>
         ))}
