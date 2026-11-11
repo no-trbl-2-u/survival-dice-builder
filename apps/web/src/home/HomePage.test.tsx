@@ -76,6 +76,14 @@ describe('HomePage', () => {
     )
   })
 
+  it('says what a Repair option heals, in the Combat step (critique pass 45)', () => {
+    const { container } = render(<HomePage />)
+    const items = [...container.querySelectorAll('li')].map((li) => li.textContent ?? '')
+    expect(items.find((text) => text.startsWith('Combat:'))).toMatch(
+      /A card's Repair option gives the base that much health when you stand on the Base tile; anywhere else it goes to the most damaged defense on or next to your hex\. Nothing heals above full health\.$/,
+    )
+  })
+
   it('drops the serial comma, as the rest of the site does (critique pass 25)', () => {
     /** A comma before the "and" or "or" that ends a list: "move, gather materials, and build". */
     const SERIAL = /,[^,;:.()]*, (?:and|or)\b/

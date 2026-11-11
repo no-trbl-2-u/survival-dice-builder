@@ -106,6 +106,7 @@ export {
   forcedRevealText,
   buildLevelsText,
   buildOnNodeText,
+  repairText,
   revealText,
   roundText,
   configRuleNote,

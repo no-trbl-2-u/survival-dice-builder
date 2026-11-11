@@ -59,7 +59,7 @@ export function optionText(o: CombatOption): string {
     case 'heal':
       return `Heal ${o.amount}`
     case 'repair':
-      return `Repair ${o.amount}`
+      return `Repair ${o.amount} health`
   }
 }
 

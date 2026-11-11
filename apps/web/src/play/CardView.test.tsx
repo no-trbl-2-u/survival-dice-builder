@@ -1,7 +1,7 @@
 import { defaultContent } from '@survival/content'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { bottomText, cardPriceText, CardView, topText } from './CardView.tsx'
+import { bottomText, cardPriceText, CardView, optionText, topText } from './CardView.tsx'
 
 const config = defaultContent.config
 const card = (id: string) => defaultContent.cards.find((c) => c.id === id)!
@@ -28,5 +28,11 @@ describe('CardView', () => {
     )
     expect(bottomText({ kind: 'reroll', dice: 'all' })).toBe('Reroll all dice')
     expect(bottomText({ kind: 'reroll', dice: 1 })).toBe('Reroll 1 die')
+  })
+})
+
+describe('optionText', () => {
+  it('names what a Repair option gives: health (critique pass 45)', () => {
+    expect(optionText({ kind: 'repair', amount: 2 })).toBe('Repair 2 health')
   })
 })

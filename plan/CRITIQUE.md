@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the starter Build card's Combat option reads "Repair 2" and does not say what it repairs
-- pass: 45 (commit 551d569)
-- viewport: desktop
-- category: comprehension
-- observation: The only Combat option on the starter Build card is "Repair 2", with no target and no unit. No page a player reads before a run mentions repair.
-- evidence: `apps/web/src/play/CardView.tsx:61-62` renders `Repair ${o.amount}`; the engine repairs the base, or the most damaged defense on or next to the player's hex (`packages/engine/src/combat/engage.ts:217-221`).
-- suggested fix: Render the option as "Repair 2 health" and add one plain line to the Combat text on / that says what a repair heals, built from the engine's reading.
-- source: web-fetch
-
 ### [LOW] / — the Enemies line gives each enemy's dice, siege damage and rewards, but never its health
 - pass: 45 (commit 551d569)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the starter Build card's Combat option reads "Repair 2" and does not say what it repairs
+- pass: 45 (commit 551d569)
+- viewport: desktop
+- category: comprehension
+- observation: The only Combat option on the starter Build card is "Repair 2", with no target and no unit. No page a player reads before a run mentions repair.
+- evidence: `apps/web/src/play/CardView.tsx:61-62` renders `Repair ${o.amount}`; the engine repairs the base, or the most damaged defense on or next to the player's hex (`packages/engine/src/combat/engage.ts:217-221`).
+- suggested fix: Render the option as "Repair 2 health" and add one plain line to the Combat text on / that says what a repair heals, built from the engine's reading.
+- source: web-fetch
+- issue: #368
+- fixed: (this commit) — the option reads "Repair 2 health", and the Combat step on / adds `repairText`: the base gets the health when you stand on the Base tile, otherwise the most damaged defense on or next to your hex, never above full health
 
 ### [x] [LOW] / — the Tower attack and the enemy move both happen "at the start of each Combat", with no order given
 - pass: 45 (commit 551d569)

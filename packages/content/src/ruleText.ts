@@ -256,6 +256,17 @@ export function combatText(
 }
 
 /**
+ * What a card's Repair option heals, as `repair` plays it: the base when the player stands on
+ * the Base tile, otherwise the most damaged defense on or next to the player's hex, never above
+ * full health. The Combat line on /.
+ *
+ * @rule 12.5, 7.7 (Spec v2)
+ */
+export function repairText(): string {
+  return "A card's Repair option gives the base that much health when you stand on the Base tile; anywhere else it goes to the most damaged defense on or next to your hex. Nothing heals above full health."
+}
+
+/**
  * When the enemy dice of an engagement hit, whose dice hit, and what takes the damage.
  *
  * @rule 7.8 steps 7-8 (Spec v2), OPEN-QUESTIONS row 72

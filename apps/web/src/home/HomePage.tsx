@@ -8,6 +8,7 @@ import {
   levelText,
   materialsText,
   playersText,
+  repairText,
   revealText,
   roundText,
   shopText,
@@ -53,7 +54,7 @@ export function HomePage() {
             Combat in the <a href={rulesUrl}>written rules</a> (on GitHub). Before a run, you can
             choose Exchanges instead, the older Combat kept for playtests.{' '}
             {combatText(config, 'exchange', defaultContent)} Either way,{' '}
-            {lower(siegeText(defaultContent))}
+            {lower(siegeText(defaultContent))} {repairText()}
           </li>
         </ol>
         <p id="home-board">On the board, every round:</p>

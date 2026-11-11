@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-11 (pass 314, cloud tick)
+
+Pass 313 gave the / Tower clause its order after the enemy move and spawn (2ab35f5). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 45 ran 3 commits ago, same day) and so is the expand gate (pass 30 ran 11 commits ago, about 26 hours, under 48). Every build plan phase is shipped or blocked. The MED /decisions rows edit `[needs-user-call]` items and wait for /oversight. Top of the queue: the pass 45 LOW row, the starter Build card's Combat option reading "Repair 2" with no unit and no page saying what a repair heals. Scored 2.7 (external-critique LOW: impact 3, ease 9). `optionText` now prints "Repair 2 health", and the Combat step on / ends with `repairText`, built from `repair`: the base gets the health on the Base tile, anywhere else the most damaged defense on or next to your hex, never above full health. Tests pin the option text, `repairText`, and the / Combat item. Next in line: the other pass 45 LOW rows (enemy health, Lake and Mountain case, Level II on card faces).
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /play: the Repair 2 card option does not say what it repairs
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: unit on `optionText`, `repairText` on the / Combat step, pinned in tests
+- issue: #368
+- fixed: (this commit)
+
 # Site audit — 2026-11-11 (pass 313, cloud tick)
 
 Pass 312 made the / Defenses line say no enemy can enter any defense hex (22440d9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 45 ran 2 commits ago) and so is the expand gate (pass 30 ran 10 commits ago, about 25 hours, under 48). Every build plan phase is shipped or blocked. Top of the queue: the first pass 45 LOW row, the / Defenses line saying a Tower fires "at the start of each Combat" while the Enemies line says enemies move and spawn then, with no order between them. Scored 2.7 (external-critique LOW: impact 3, ease 9). `defenseText` now reads "at each Combat, after the enemies move and spawn, it deals 2 damage to the nearest enemy within 2 hexes", as `startCombat` chains `moveEnemies`, `spawnAtNodes`, `towerAttacks`; the ruleText test pins the default and a changed defense. Next in line: the other pass 45 LOW rows (Repair 2, enemy health, Lake and Mountain case, Level II on card faces).

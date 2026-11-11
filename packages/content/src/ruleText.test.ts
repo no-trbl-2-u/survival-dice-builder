@@ -34,6 +34,7 @@ import {
   buildLevelsText,
   buildOnNodeText,
   suppliesText,
+  repairText,
   revealText,
   roundText,
   configRuleNote,
@@ -834,5 +835,13 @@ describe('player copy speaks of the screen, not a tabletop', () => {
       .flatMap((e) => [e.label, e.help ?? '', e.empty ?? '', ...Object.values(e.options ?? {})])
       .filter((text) => TABLETOP.test(text))
     expect([...proposals, ...meta]).toEqual([])
+  })
+})
+
+describe('repairText', () => {
+  it('says what a Repair option heals, as `repair` plays it (critique pass 45)', () => {
+    expect(repairText()).toBe(
+      "A card's Repair option gives the base that much health when you stand on the Base tile; anywhere else it goes to the most damaged defense on or next to your hex. Nothing heals above full health.",
+    )
   })
 })
