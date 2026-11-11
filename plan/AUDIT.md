@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-11 (pass 315, cloud tick)
+
+Pass 314 gave the Repair card option its unit and the / Combat step its repair line (9d37532). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 45 ran 4 commits ago, same day) and so is the expand gate (pass 30 ran 12 commits ago, about 32 hours, under 48). Every build plan phase is shipped or blocked. The MED /decisions rows edit `[needs-user-call]` items and wait for /oversight. Top of the queue: the pass 45 LOW row, the / Enemies line giving no enemy's health, so a reader cannot tell a grunt falls to one Strike while an elite takes several. Scored 2.7 (external-critique LOW: impact 3, ease 9). New `enemyHealthText`, built from `enemies.json`, ends the Enemies line: "A grunt has 2 health, an elite 14." Tests pin the default, a changed record, an empty list, and the / Enemies item. Next in line: the other pass 45 LOW rows (Lake and Mountain case, Level II on card faces).
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /: the Enemies line never gives each enemy's health
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: `enemyHealthText` from `enemies.json` on the / Enemies line, pinned in tests
+- issue: #370
+- fixed: (this commit)
+
 # Site audit — 2026-11-11 (pass 314, cloud tick)
 
 Pass 313 gave the / Tower clause its order after the enemy move and spawn (2ab35f5). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 45 ran 3 commits ago, same day) and so is the expand gate (pass 30 ran 11 commits ago, about 26 hours, under 48). Every build plan phase is shipped or blocked. The MED /decisions rows edit `[needs-user-call]` items and wait for /oversight. Top of the queue: the pass 45 LOW row, the starter Build card's Combat option reading "Repair 2" with no unit and no page saying what a repair heals. Scored 2.7 (external-critique LOW: impact 3, ease 9). `optionText` now prints "Repair 2 health", and the Combat step on / ends with `repairText`, built from `repair`: the base gets the health on the Base tile, anywhere else the most damaged defense on or next to your hex, never above full health. Tests pin the option text, `repairText`, and the / Combat item. Next in line: the other pass 45 LOW rows (enemy health, Lake and Mountain case, Level II on card faces).

@@ -2,6 +2,7 @@ import {
   combatText,
   defaultContent,
   defenseText,
+  enemyHealthText,
   enemyMoveText,
   goalText,
   knockoutText,
@@ -70,7 +71,7 @@ export function HomePage() {
           </li>
           <li>
             <strong>Enemies:</strong> {spawnText(config)} {targetText(config)}{' '}
-            {enemyMoveText(config)}
+            {enemyMoveText(config)} {enemyHealthText(defaultContent)}
           </li>
         </ul>
         <p>

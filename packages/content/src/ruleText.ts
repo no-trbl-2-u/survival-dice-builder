@@ -394,6 +394,21 @@ const TARGET_NAME: Record<GameConfig['rulings']['targetTieBreak'][number], strin
 }
 
 /**
+ * Each enemy's health, from the enemy content: "A grunt has 2 health, an elite 14."
+ *
+ * @rule Table 5 (Spec v2)
+ */
+export function enemyHealthText(content: Enemies): string {
+  const list = content.enemies.enemies
+    .map(
+      (e, i) =>
+        `${withArticle(e.name.toLowerCase())}${i === 0 ? ' has' : ''} ${e.health}${i === 0 ? ' health' : ''}`,
+    )
+    .join(', ')
+  return list === '' ? '' : `${list.charAt(0).toUpperCase()}${list.slice(1)}.`
+}
+
+/**
  * Which target an enemy heads for: the nearest structure, or a player only when much nearer.
  * The short form / prints; {@link targetOrderText} adds the tie-break order.
  *

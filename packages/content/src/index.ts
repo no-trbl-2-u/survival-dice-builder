@@ -81,6 +81,7 @@ export {
   defenseText,
   enemyDieText,
   enemyHitText,
+  enemyHealthText,
   enemyMoveText,
   rollsText,
   moveCostText,

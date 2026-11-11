@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Enemies line gives each enemy's dice, siege damage and rewards, but never its health
-- pass: 45 (commit 551d569)
-- viewport: desktop
-- category: comprehension
-- observation: A first-time reader cannot tell that a Strike defeats a grunt in one hit while an elite takes several, the main difference between the two.
-- evidence: `packages/content/data/enemies.json:6` grunt `"health": 2`, `:15` elite `"health": 14`; neither number appears in `HomePage.tsx` or the `ruleText.ts` functions it calls.
-- suggested fix: Add "A grunt has 2 health, an elite 14." to the Enemies line, built from `enemies.json`.
-- source: web-fetch
-
 ### [LOW] /config — the Blocked enemy line writes "lakes and mountains" in lower case
 - pass: 45 (commit 551d569)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Enemies line gives each enemy's dice, siege damage and rewards, but never its health
+- pass: 45 (commit 551d569)
+- viewport: desktop
+- category: comprehension
+- observation: A first-time reader cannot tell that a Strike defeats a grunt in one hit while an elite takes several, the main difference between the two.
+- evidence: `packages/content/data/enemies.json:6` grunt `"health": 2`, `:15` elite `"health": 14`; neither number appears in `HomePage.tsx` or the `ruleText.ts` functions it calls.
+- suggested fix: Add "A grunt has 2 health, an elite 14." to the Enemies line, built from `enemies.json`.
+- source: web-fetch
+- issue: #370
+- fixed: (this commit) — `enemyHealthText`, built from `enemies.json`, ends the / Enemies line: "A grunt has 2 health, an elite 14."
 
 ### [x] [LOW] /play — the starter Build card's Combat option reads "Repair 2" and does not say what it repairs
 - pass: 45 (commit 551d569)

@@ -19,11 +19,11 @@ describe('HomePage', () => {
     )
   })
 
-  it('says when enemies move, in which order and how far (Spec v2 7.5, critique pass 43)', () => {
+  it("says when enemies move, in which order and how far, and each enemy's health (Spec v2 7.5, critique passes 43, 45)", () => {
     const { container } = render(<HomePage />)
     const items = [...container.querySelectorAll('li')].map((li) => li.textContent ?? '')
     expect(items.find((text) => text.startsWith('Enemies:'))).toMatch(
-      /hexes nearer\. At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 2 hexes toward its target and stops next to it\.$/,
+      /hexes nearer\. At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 2 hexes toward its target and stops next to it\. A grunt has 2 health, an elite 14\.$/,
     )
   })
 

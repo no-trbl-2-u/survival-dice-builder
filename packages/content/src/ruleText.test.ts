@@ -9,6 +9,7 @@ import {
   combatText,
   defenseText,
   enemyDieText,
+  enemyHealthText,
   enemyMoveText,
   rollsText,
   moveCostText,
@@ -423,6 +424,13 @@ describe('rule text from config', () => {
     expect(ruleLineFor('combat.enemyMoveHexes', slow, defaultContent)).toBe(
       `${enemyMoveText(slow)} ${targetOrderText(slow)}`,
     )
+  })
+
+  it("enemy health: each enemy record's health, from enemies.json (Table 5)", () => {
+    expect(enemyHealthText(defaultContent)).toBe('A grunt has 2 health, an elite 14.')
+    const elite = { enemies: { enemies: [{ ...defaultContent.enemies.enemies[1]!, health: 9 }] } }
+    expect(enemyHealthText(elite)).toBe('An elite has 9 health.')
+    expect(enemyHealthText({ enemies: { enemies: [] } })).toBe('')
   })
 
   it('rolls: the rolls per engagement follow config, and the field shows the line (7.8 steps 3, 6)', () => {
