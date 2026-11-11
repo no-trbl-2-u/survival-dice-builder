@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-10 at commit ea2b332
-> Pass count: 44
+> Last pass: 2026-11-11 at commit 551d569
+> Pass count: 45
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — the Defenses line says only a Barricade stops enemies, but no enemy can enter a Tower hex either
+- pass: 45 (commit 551d569)
+- viewport: desktop
+- category: comprehension
+- observation: The / Defenses line gives "enemies cannot enter its hex" for the Barricade only. The /config Blocked enemy line says Towers block an enemy, and the engine lets no enemy enter any defense hex. A reader of / will think enemies can walk through a Tower.
+- evidence: `packages/content/src/ruleText.ts:339` builds the clause from `blocksEnemies`, which is `true` for the Barricade and `false` for the Tower (`packages/content/data/defenses.json:9`, `:18`); `packages/engine/src/map/spawn.ts:20` `enemyCanEnter` returns false on any defense hex; /config: "Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy." (`ruleText.ts:508`). In the engine `blocksEnemies` only picks the siege target kind (`packages/engine/src/enemies/targets.ts:16`).
+- suggested fix: Make `defenseText` say that no enemy can enter a defense hex (one sentence for both defenses, not tied to `blocksEnemies`), and pin it in `ruleText.test.ts`.
+- source: web-fetch
+
+### [LOW] / — the Tower attack and the enemy move both happen "at the start of each Combat", with no order given
+- pass: 45 (commit 551d569)
+- viewport: desktop
+- category: comprehension
+- observation: The Enemies line says enemies move before the spawn nodes spawn; the Defenses line says a Tower fires "at the start of each Combat". The engine moves enemies, then spawns, then fires the Towers, so a Tower can hit a new enemy, but no page says so.
+- evidence: / Defenses: "at the start of each Combat it deals 2 damage to the nearest enemy within 2 hexes" (`packages/content/src/ruleText.ts:340`); `packages/engine/src/phases/advance.ts:168-172` chains `moveEnemies`, `spawnAtNodes`, `towerAttacks`.
+- suggested fix: Change the Tower clause to "at each Combat, after the enemies move and spawn, it deals 2 damage to the nearest enemy within 2 hexes".
+- source: web-fetch
+
+### [LOW] /play — the starter Build card's Combat option reads "Repair 2" and does not say what it repairs
+- pass: 45 (commit 551d569)
+- viewport: desktop
+- category: comprehension
+- observation: The only Combat option on the starter Build card is "Repair 2", with no target and no unit. No page a player reads before a run mentions repair.
+- evidence: `apps/web/src/play/CardView.tsx:61-62` renders `Repair ${o.amount}`; the engine repairs the base, or the most damaged defense on or next to the player's hex (`packages/engine/src/combat/engage.ts:217-221`).
+- suggested fix: Render the option as "Repair 2 health" and add one plain line to the Combat text on / that says what a repair heals, built from the engine's reading.
+- source: web-fetch
+
+### [LOW] / — the Enemies line gives each enemy's dice, siege damage and rewards, but never its health
+- pass: 45 (commit 551d569)
+- viewport: desktop
+- category: comprehension
+- observation: A first-time reader cannot tell that a Strike defeats a grunt in one hit while an elite takes several, the main difference between the two.
+- evidence: `packages/content/data/enemies.json:6` grunt `"health": 2`, `:15` elite `"health": 14`; neither number appears in `HomePage.tsx` or the `ruleText.ts` functions it calls.
+- suggested fix: Add "A grunt has 2 health, an elite 14." to the Enemies line, built from `enemies.json`.
+- source: web-fetch
+
+### [LOW] /config — the Blocked enemy line writes "lakes and mountains" in lower case
+- pass: 45 (commit 551d569)
+- viewport: desktop
+- category: voice
+- observation: /tiles and the /play log capitalise Lake and Mountain (the log was fixed for this in an earlier pass); the /config Blocked enemy line does not.
+- evidence: `packages/content/src/ruleText.ts:508` "Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy."; `apps/web/src/tiles/TileSheet.tsx:88` "Lake (impassable)", "Mountain (impassable)".
+- suggested fix: Change "lakes and mountains" to "Lake and Mountain hexes" in `blockedPathText`.
+- source: web-fetch
+
+### [LOW] /play — card faces give a level as "Level II", while /config gives card and Skill levels as numbers
+- pass: 45 (commit 551d569)
+- viewport: desktop
+- category: voice
+- observation: A Shop card reads "Level II"; the /config supplies line says "each level 1 to 3 card" and the milestones line "a level 3 Skill". A reader cannot easily match the two.
+- evidence: `apps/web/src/play/CardView.tsx:97` `Level ${'I'.repeat(def.level)}`; /config Supplies (`packages/content/src/ruleText.ts:875`), Milestones (`:904`).
+- suggested fix: Print "Level 2" on card faces; keep Roman numerals for upgrade and Build names (Shop II, Build I).
+- source: web-fetch
 
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
