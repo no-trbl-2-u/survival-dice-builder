@@ -104,6 +104,7 @@ export {
   figuresPerHexText,
   blockedPathText,
   forcedRevealText,
+  buildLevelsText,
   revealText,
   roundText,
   configRuleNote,

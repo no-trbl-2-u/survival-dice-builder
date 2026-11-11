@@ -819,6 +819,28 @@ export function upgradesReachNote(
 }
 
 /**
+ * What a Build card's level reaches, for the /config Build levels field. Levelled (the default):
+ * "A Build card buys a base upgrade or builds a defense only up to its own level: Build I buys
+ * tier I. Build cards can buy only Shop I and Training I." (the second sentence from
+ * `upgradesReachNote`, dropped when every upgrade is in reach). Any tier: "A Build card buys the
+ * next tier of an upgrade track and builds any defense, whatever its level.", as `buildReaches`
+ * plays it.
+ *
+ * @rule Spec v2 11.4, 12.1 (ruling 25), OPEN-QUESTIONS row 78
+ */
+export function buildLevelsText(
+  config: GameConfig,
+  content: Pick<Content, 'cards' | 'upgrades'>,
+): string {
+  if (config.rulings.buildLevels === 'any')
+    return 'A Build card buys the next tier of an upgrade track and builds any defense, whatever its level.'
+  const note = upgradesReachNote(config, content)
+  const head =
+    'A Build card buys a base upgrade or builds a defense only up to its own level: Build I buys tier I.'
+  return note ? `${head} ${note}.` : head
+}
+
+/**
  * Why a milestone cannot be met under this config and content, or null when it can be:
  * "out of reach: Build cards can buy only Shop I and Training I", or "out of reach: the tile
  * deck holds 8 tiles" (the Base tile starts on the map and is never revealed), or "out of
@@ -930,6 +952,7 @@ export function ruleLineFor(
   if (path === 'rulings.figuresPerHex') return figuresPerHexText(config)
   if (path === 'rulings.blockedPathRule') return blockedPathText(config)
   if (path === 'clock.forcedRevealEvery') return forcedRevealText(config)
+  if (path === 'rulings.buildLevels') return buildLevelsText(config, content)
   if (path === 'combat.enemyMoveHexes') return `${enemyMoveText(config)} ${targetOrderText(config)}`
   if (group === 'players') return `For ${playersText(config)}.`
   if (group === 'milestones') {

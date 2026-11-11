@@ -31,6 +31,7 @@ import {
   figuresPerHexText,
   blockedPathText,
   forcedRevealText,
+  buildLevelsText,
   revealText,
   roundText,
   configRuleNote,
@@ -503,6 +504,19 @@ describe('rule text from config', () => {
     expect(forcedRevealText(one)).toMatch(/in the last 1 round and/)
     expect(ruleLineFor('clock.forcedRevealEvery', three, defaultContent)).toBe(
       forcedRevealText(three),
+    )
+  })
+
+  it('build levels: levelled names what Build cards reach; any tier reaches every tier (11.4, 12.1)', () => {
+    expect(buildLevelsText(base, defaultContent)).toBe(
+      'A Build card buys a base upgrade or builds a defense only up to its own level: Build I buys tier I. Build cards can buy only Shop I and Training I.',
+    )
+    const any = With((c) => ({ ...c, rulings: { ...c.rulings, buildLevels: 'any' as const } }))
+    expect(buildLevelsText(any, defaultContent)).toBe(
+      'A Build card buys the next tier of an upgrade track and builds any defense, whatever its level.',
+    )
+    expect(ruleLineFor('rulings.buildLevels', base, defaultContent)).toBe(
+      buildLevelsText(base, defaultContent),
     )
   })
 
