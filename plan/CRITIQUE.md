@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — card faces give a level as "Level II", while /config gives card and Skill levels as numbers
-- pass: 45 (commit 551d569)
-- viewport: desktop
-- category: voice
-- observation: A Shop card reads "Level II"; the /config supplies line says "each level 1 to 3 card" and the milestones line "a level 3 Skill". A reader cannot easily match the two.
-- evidence: `apps/web/src/play/CardView.tsx:97` `Level ${'I'.repeat(def.level)}`; /config Supplies (`packages/content/src/ruleText.ts:875`), Milestones (`:904`).
-- suggested fix: Print "Level 2" on card faces; keep Roman numerals for upgrade and Build names (Shop II, Build I).
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -64,6 +55,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — card faces give a level as "Level II", while /config gives card and Skill levels as numbers
+- pass: 45 (commit 551d569)
+- viewport: desktop
+- category: voice
+- observation: A Shop card reads "Level II"; the /config supplies line says "each level 1 to 3 card" and the milestones line "a level 3 Skill". A reader cannot easily match the two.
+- evidence: `apps/web/src/play/CardView.tsx:97` `Level ${'I'.repeat(def.level)}`; /config Supplies (`packages/content/src/ruleText.ts:875`), Milestones (`:904`).
+- suggested fix: Print "Level 2" on card faces; keep Roman numerals for upgrade and Build names (Shop II, Build I).
+- source: web-fetch
+- issue: #374
+- fixed: (this commit) — new `cardLevelText` prints "Level 1" to "Level 3" on card faces ("Starter" for level 0); Roman numerals stay on upgrade and Build names.
 
 ### [x] [LOW] /config — the Blocked enemy line writes "lakes and mountains" in lower case
 - pass: 45 (commit 551d569)

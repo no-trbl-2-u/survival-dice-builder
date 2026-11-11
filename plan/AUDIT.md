@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-11 (pass 317, cloud tick)
+
+Pass 316 capitalised Lake and Mountain on the /config Blocked enemy line (9dd75be). No issues are open for triage. The critique gate is closed (pass 45 ran 10 commits ago, same day) and so is the expand gate (pass 30 ran 18 commits ago, about 35 hours, under 48). Every build plan phase is shipped or blocked. The MED /decisions rows edit `[needs-user-call]` items and wait for /oversight. Top of the queue: the last pass 45 LOW row, card faces printing "Level II" while the /config Supplies and Milestones lines give levels as numbers. Scored 2.7 (external-critique LOW: impact 3, ease 9). New `cardLevelText` prints "Level 2" on the card face ("Starter" for level 0); Roman numerals stay on upgrade and Build names (Shop II, Build I). Tests pin the helper and a rendered card. Next in line: the pass 45 rows are drained; the remaining Pending rows wait for /oversight, so the next tick re-audits.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /play: card faces print "Level II" while /config gives levels as numbers
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: `cardLevelText` on `CardView`, pinned in `CardView.test.tsx`
+- issue: #374
+- fixed: (this commit)
+
 # Site audit — 2026-11-11 (pass 316, cloud tick)
 
 Pass 315 gave the / Enemies line each enemy's health (aee21d7). No issues are open for triage. The critique gate is closed (pass 45 ran 5 commits ago, same day) and so is the expand gate (pass 30 ran 13 commits ago, about 32 hours, under 48). Every build plan phase is shipped or blocked. The MED /decisions rows edit `[needs-user-call]` items and wait for /oversight. Top of the queue: the pass 45 LOW row, the /config Blocked enemy line writing "lakes and mountains" in lower case while /tiles and the /play log capitalise Lake and Mountain. Scored 2.7 (external-critique LOW: impact 3, ease 9). `blockedPathText` now reads "Enemies, player figures, Barricades, Towers, Lake and Mountain hexes block an enemy."; the two ruling tests pin the new text. Next in line: the other pass 45 LOW row (Level II on card faces).

@@ -79,6 +79,16 @@ export function combatSideText(def: CardDef, engage: boolean): string {
  */
 export const cardPriceText = (cost: number): string => `Cost ${cost} currency`
 
+/**
+ * A card's level as printed on its face: "Starter" for level 0, else "Level 2". Numbers, not
+ * Roman numerals, so the face matches the /config Supplies and Milestones lines; Roman numerals
+ * stay on upgrade and Build names (Shop II, Build I).
+ *
+ * @param level - the card's `level` from content.
+ * @rule Table 8
+ */
+export const cardLevelText = (level: number): string => (level === 0 ? 'Starter' : `Level ${level}`)
+
 type Props = Readonly<{ def: CardDef; up: 'top' | 'bottom'; config: GameConfig; engage?: boolean }>
 
 /**
@@ -94,7 +104,7 @@ export function CardView({ def, up, config, engage = false }: Props) {
         <span>{topText(def.top, config)}</span>
       </div>
       <div className={styles.cardMeta}>
-        <span>{def.level === 0 ? 'Starter' : `Level ${'I'.repeat(def.level)}`}</span>
+        <span>{cardLevelText(def.level)}</span>
         {def.cost > 0 ? <span>{cardPriceText(def.cost)}</span> : null}
       </div>
       <div className={`${styles.half} ${styles.bottomHalf}`}>
