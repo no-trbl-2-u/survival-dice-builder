@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-11-10 at commit 935724e
-> Pass count: 30
+> Last pass: 2026-11-11 at commit fa7a233
+> Pass count: 31
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -34,7 +34,8 @@
 - re-evidence (expand pass 23): critique passes 34 (32a483b) and 35 (2f8713b) filed no /decisions row, and `/iterate` shipped one /decisions fix this window (7418ddf, the two file links say they open GitHub). The same five older rows still head the queue, three MED at 8.1 and two LOW, all in `[needs-user-call]` items that only `/oversight` may edit; audit pass 225 names them "next in line" again. Score held at 3.5.
 - re-evidence (expand pass 27): critique pass 38 (e356f80) filed two MED rows on /decisions with the same root, text that reaches the page from a plan file and goes stale without a red test: rule reading 68 gave an older bot report (4-seat median 5 to 4) next to its measured block (5 to 3), and rows 63, 64, 66 and 70 carried the same older "Bot report:" sentence (d0e124f, fixed by hand with a DecisionsPage test that bars a "Bot report" next to a measured block). That is the proposal-row twin of the Pending "three balance checks" row: dated bot numbers that no batch keeps current. The five `[needs-user-call]` rows from passes 20, 21 and 25 are still Pending, 15 to 17 days on, and still head every audit block at 8.1. Score held at 3.5: the citation guard holds, the balance check built from the latest batch is still the open half, and the stale lines still need an `/oversight` edit.
 - re-evidence (expand pass 29): after critique pass 42 (c60059c) the same five /decisions rows are still pending (three MED, two LOW, the Event Calendar check among them), all in `[needs-user-call]` items that only `/oversight` may edit. None of the 20 commits since pass 28 touched /decisions. Score held at 3.5.
-- last re-evidenced: 2026-11-09
+- re-evidence (expand pass 31): standing rule 9 (dd8b6a7, designer request on PR #371) now says a decided row's unchosen options leave the app, and that a decision must not stay around to confuse agents. The same five `[needs-user-call]` rows (three MED, two LOW) are still Pending after critique pass 45; audit pass 317 names them as waiting for /oversight, and with them the iterate queue is drained. Score held at 3.5; the new pruning candidate below covers the config half, this row keeps the /decisions half.
+- last re-evidenced: 2026-11-11
 
 ### [ ] [score 1.0] Milestones a default run can reach: every milestone reachable, or marked out of reach with its reason
 - proposed: 2026-10-17, expand pass 13
@@ -350,6 +351,23 @@
 - ruling audit: rule text only; Spec v2 untouched. Loop scope: in (content, tests).
 - re-evidence (expand pass 30): 9 of the 20 commits since pass 29 filled this gap one field group per tick: 74c1915 (Skills revealed help), c7b5f85 (spawn fields), fb9904e (Enemy move), fc1932a (Rolls per engagement), add46fe (Move cost next to an enemy), b0a3361 (Smallest deck, Bought cards), 63b5033 (Figures per hex), ed35cf9 (Blocked enemy), ea2b332 (Forced reveal every). The same probe of `ruleLineFor` over `configMetaPaths(defaultContent.config)` at 935724e: 85 paths, 28 return null, 14 of them group headers. The 14 fields left: `deck.presets`, `combat.exchangeRange`, `draft.keep`, `supplies.copiesPerCard`, `supplies.copiesPerSkill`, `tiles.countryside`, `tiles.core` and seven `rulings.*` options (enemiesPerHex, tileRotation, shopRefill, healTargets, eliteReplacement, buildOnNode, buildLevels). Still no test lists which fields may have no line, so the drip is about 6 more ticks and nothing stops a new field from joining it. Score raised from 3.5 to 4.5: nearly half of this window went to the drip the phase would close in one pass.
 - last re-evidenced: 2026-11-10
+
+### [ ] [score 6.0] Rule 9 backlog: prune the options decided before the rule, and a test that keeps them pruned
+- proposed: 2026-11-11, expand pass 31
+- source signals:
+  - Standing rule 9 (dd8b6a7, 2026-11-11, designer request on PR #371): "the options not chosen leave the app in the same change set or the next one ... Their config flag goes too when only one value remains." `/oversight` Step 5 now files a `[prune]` AUDIT row for each new decision, but nothing covers the decisions made before the rule.
+  - `OPEN-QUESTIONS.md`: 54 rows say `decided`, and 28 of them name a config key or content field. The schema still holds the losing value for at least 8 of them (`packages/content/src/schemas/config.ts:171-182`): `blockedPathRule` ("wait", row 2), `tileRotation` (row 5), `coopPrepareOrder` ("full-turn", row 6), `mandatoryPlays` (row 10), `shopTiming` ("prepare-only", rows 11, 43, 52), `shopRefill` ("end-of-turn", row 11), `eliteReplacement` ("player-choice", row 13), plus the 10/3 deck preset (row 71), `combat.moveCostNextToEnemy` 2 (row 76) and `draft.unpicked` "supply" (row 77).
+  - 3 of those flags (`tileRotation`, `shopRefill`, `eliteReplacement`) are read by no non-test file in `packages/engine/src` or `apps/web/src`: /config shows a choice that changes nothing.
+  - Critique passes 37 (adbd215) and 40 (81a84ee) filed 5 rows that exist only because older options remain (see "The exchange Combat model after Spec v2"); each was fixed by hand in a text path that pays for both values.
+- rationale: rule 9 says why: an option the designer turned down still sits in the schema, /config, the bot and the tests, and every later change pays for it. Done by hand, one flag per `/iterate` tick, it would take about 10 ticks with nothing to stop a new decided row from leaving its loser behind.
+- proposed scope: 1 phase.
+  - A table of every decided row with a config key: the chosen value, the losing values, and the files that read them.
+  - Delete the losing values, their meta, presets, tests and /config UI; drop the flag where one value remains; a config migration so saved browser configs still load.
+  - A content test that fails when a `decided` row names a config key whose schema still has more than its chosen value, unless the row says the option stays as a playtest option.
+  - Design notes for the losers move to `archive/` with `archive/INDEX.md` lines, as rule 9 says.
+- estimated phases: 1 (2 if the exchange Combat model is retired in the same sweep; that model already has its own candidate).
+- conflicts: [needs-user-call] on which rows count. Rule 9 is new; rows 71, 72, 76 and 77 say an older option "stays" or is kept as a playtest option, and those are the designer's to confirm. The rows with no such note (2, 5, 6, 10, 11, 13, 43, 52) look like plain prunes. No rule number changes; the engine already plays the chosen value by default.
+- ruling audit: agents.md standing rule 9; `OPEN-QUESTIONS.md` decided rows above; Spec v2 untouched. Loop scope: in once `/oversight` confirms the list (deleting options is the designer's call under rule 9's "never guesses one").
 
 ## Considered (below threshold)
 
