@@ -213,6 +213,13 @@ For each answer:
   brief.
 - **"Reject candidate"** → move row from `## Pending` to
   `## Rejected` with one-line reason.
+- **Any decision that picks one option over others** (agents.md
+  standing rule 9) → `git mv` the unchosen options' design notes
+  and reports to `archive/` and add a line to
+  `archive/INDEX.md`. Oversight never edits code, so file one
+  `plan/AUDIT.md` row `[prune] <decision>: remove <flags, files,
+  tests>` for the code and config removal; `/iterate` ships it
+  first.
 - **"Other" (free-form)** → interpret conservatively. If clear
   plan edit, apply. If ambiguous, write to `plan/AUDIT.md` as
   `[needs-user-call]` and tell the user.

@@ -15,3 +15,6 @@ test-results/
 
 # Design one-pagers are hand-laid print sheets, not code.
 design/one-pagers/
+
+# Options decided against (agents.md standing rule 9); agents do not read it.
+archive/

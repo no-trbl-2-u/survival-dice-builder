@@ -117,6 +117,32 @@ Before stopping on any failure-mode condition, run
 notification never becomes its own stop). Applies to every
 skill; see `nexus/playbooks/hands-off.md`.
 
+### 9. Decided means pruned. The archive is off limits.
+
+When the designer makes a decision (an OPEN-QUESTIONS row turns
+`decided`, a phase candidate is rejected, one design option is
+picked over others), the options **not** chosen leave the app in
+the same change set or the next one:
+
+- Code, config keys, config meta, presets, tests and UI for the
+  unchosen options are deleted. Their config flag goes too when
+  only one value remains.
+- Design notes, reports and models about them move to
+  `archive/` (`git mv`), and `archive/INDEX.md` gets one line:
+  date, what was archived, the decision that retired it, and
+  the commit.
+- Undecided experiments stay where they are. Pruning waits for
+  the decision; it never guesses one.
+
+Agents do not read `archive/` unless the user explicitly asks
+in that session. It is blocked mechanically: `Read(./archive/**)`
+is denied in `.claude/settings.json`, and the guard hook blocks
+Bash reads of `archive/` paths. When the user asks, prefix the
+Bash read with `ARCHIVE_READ=user-asked`. Writing into
+`archive/` goes through Bash (`git mv`, `cat >> archive/INDEX.md`):
+the Read deny also blocks the Write and Edit tools there. Git
+history keeps everything.
+
 ---
 
 ## Project
