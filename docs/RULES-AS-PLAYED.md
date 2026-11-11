@@ -7,7 +7,7 @@
 Each Spec v2 rule as written, and what the engine does with the default config. This page
 states readings; it decides none. Changing the spec is the designer's call (an `/oversight` act).
 
-- 127 rules: 105 same, 0 changed, 16 deleted, 6 open.
+- 127 rules: 103 same, 0 changed, 16 deleted, 8 open.
 - **changed**: a config field differs from the Spec v2 default.
 - **deleted**: Spec v2 deleted the rule; its id stays.
 - **open**: the spec marks the rule open, or a row filed since 2026-10-12 proposes a reading; the engine plays the reading shown.
@@ -88,7 +88,7 @@ states readings; it decides none. Changing the spec is the designer's call (an `
 | 6.4 | When your hand is empty, draw 5 cards again. | same | as written |  |
 | 6.5 | If your deck has fewer than 5 cards, draw all the cards. | same | as written |  |
 | 6.6 | When your deck is empty and your hand is empty, the Prepare phase stops. | same | as written |  |
-| 6.7 | Top-half effects: | same | as written |  |
+| 6.7 | Top-half effects: | open | Row 79 reading: **Proposed: 3 calendars behind one option** from 10 modelled systems (`docs/design/event-calendar.md`): Threat dice, Sundial, Notoriety ladder. Each replaces the 7.3 count; boons are Respite (heal and repair) and Harvest (spent nodes work again, against ruling 9). Off plays the written rule. Bot sweep in `docs/reports/event-calendar/`. Recommendation: playtest Threat dice and Notoriety. | row 79 |
 | 6.8 | If your figure is on the base and the Shop is open, you can buy cards. Buying does not use a card. | same | as written |  |
 | 6.9 | Enemies are obstacles in the Prepare phase: | same | as written |  |
 | 6.10 | Deleted in Spec v2: the skirmish. Engage is the only way to attack an enemy (7.8). | deleted |  | Spec v2 |
@@ -105,7 +105,7 @@ states readings; it decides none. Changing the spec is the designer's call (an `
 | 7.1 | Shuffle your discard pile. | same | as written |  |
 | 7.2 | Turn the deck 180 degrees. The bottom halves are now up. | same | as written |  |
 | 7.5 | Each enemy moves 2 hexes toward its target (Section 9.3). | same | as written |  |
-| 7.3 | Then each spawn node gets 1 grunt. Each elite spawn node gets 1 elite. This applies to each tile on the map. | same | as written |  |
+| 7.3 | Then each spawn node gets 1 grunt. Each elite spawn node gets 1 elite. This applies to each tile on the map. | open | Row 79 reading: **Proposed: 3 calendars behind one option** from 10 modelled systems (`docs/design/event-calendar.md`): Threat dice, Sundial, Notoriety ladder. Each replaces the 7.3 count; boons are Respite (heal and repair) and Harvest (spent nodes work again, against ruling 9). Off plays the written rule. Bot sweep in `docs/reports/event-calendar/`. Recommendation: playtest Threat dice and Notoriety. | row 79 |
 | 7.4 | Deleted in Spec v2 (the wave track). | deleted |  | Spec v2 |
 | 7.6 | Each Tower attacks (Section 12.3). | same | as written |  |
 | 7.7 | Draw 5 cards. Play 1 option of the bottom half of each card, or discard the card. A card you do not play stays in your hand. When your hand is empty, draw 5 cards again. | same | as written |  |

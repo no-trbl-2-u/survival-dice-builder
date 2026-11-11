@@ -8,6 +8,15 @@ import { IdSchema, NonNegativeInt, PositiveInt } from './primitives.ts'
  *
  * @rule 2, 4, 7, 8, 9, 10, 11, 12, 14, 16, 18 (Spec v2), OPEN-QUESTIONS rows 1-17, 63-70
  */
+/** One Sundial day: spawns per grunt node and per elite node, extra elites, and a boon. */
+const CalendarDay = z.object({
+  name: z.string().min(1),
+  grunts: NonNegativeInt,
+  elites: NonNegativeInt,
+  extraElites: NonNegativeInt,
+  boon: z.enum(['none', 'respite', 'harvest']),
+})
+
 export const GameConfigSchema = z.object({
   players: z.object({ min: PositiveInt, max: PositiveInt }),
   player: z.object({
@@ -88,6 +97,33 @@ export const GameConfigSchema = z.object({
     /** Row 70: only nodes within this many hexes of a figure or a structure spawn. */
     nodeRange: PositiveInt.nullable(),
   }),
+  /**
+   * The Event Calendar experiment (designer 2026-10-11, AUDIT; may replace 7.3 ruling 14 and
+   * 6.7 ruling 9). "off" plays the written rule. Each other system sets the spawns at each
+   * Combat start and can give a boon day. See docs/design/event-calendar.md. Optional so a
+   * config stored before the experiment (golden replays, run exports) still plays "off".
+   */
+  calendar: z
+    .object({
+      system: z.enum(['off', 'threat-dice', 'sundial', 'notoriety']),
+      /** A Respite boon: each player on the map heals this much; the base gets this much. */
+      respite: z.object({ heal: NonNegativeInt, repair: NonNegativeInt }),
+      /** Sundial: a ring of days, 1 day a round; each full lap is an era. */
+      sundial: z.object({ eraEvery: PositiveInt, days: z.array(CalendarDay).min(1) }),
+      /** Threat dice: roll this many dice, 1 more every N rounds; faces as listed. */
+      threatDice: z.object({
+        startDice: PositiveInt,
+        addDieEvery: PositiveInt,
+        faces: z.array(z.enum(['calm', 'raid', 'elite', 'boon'])).length(6),
+      }),
+      /** Notoriety: 1 rung every N rounds and 1 rung per milestone. */
+      notoriety: z.object({
+        rungEvery: PositiveInt,
+        rungsPerGrunt: PositiveInt,
+        eliteEveryRungs: PositiveInt,
+      }),
+    })
+    .optional(),
   /** Row 67: materials a Gather gives on a spent node or off any node. */
   gather: z.object({ offNodeAmount: NonNegativeInt }),
   /** A player at 0 health is knocked out and returns at the next round start (Spec v2 14.2, 14.4). */

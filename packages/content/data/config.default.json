@@ -70,6 +70,84 @@
     "perSeat": false,
     "nodeRange": null
   },
+  "calendar": {
+    "system": "off",
+    "respite": {
+      "heal": 3,
+      "repair": 3
+    },
+    "sundial": {
+      "eraEvery": 8,
+      "days": [
+        {
+          "name": "Dawn",
+          "grunts": 0,
+          "elites": 0,
+          "extraElites": 0,
+          "boon": "respite"
+        },
+        {
+          "name": "Raid",
+          "grunts": 1,
+          "elites": 1,
+          "extraElites": 0,
+          "boon": "none"
+        },
+        {
+          "name": "Raid",
+          "grunts": 1,
+          "elites": 1,
+          "extraElites": 0,
+          "boon": "none"
+        },
+        {
+          "name": "Harvest",
+          "grunts": 1,
+          "elites": 1,
+          "extraElites": 0,
+          "boon": "harvest"
+        },
+        {
+          "name": "Raid",
+          "grunts": 1,
+          "elites": 1,
+          "extraElites": 0,
+          "boon": "none"
+        },
+        {
+          "name": "Feast",
+          "grunts": 1,
+          "elites": 1,
+          "extraElites": 0,
+          "boon": "respite"
+        },
+        {
+          "name": "Blood Moon",
+          "grunts": 1,
+          "elites": 1,
+          "extraElites": 1,
+          "boon": "none"
+        },
+        {
+          "name": "Raid",
+          "grunts": 1,
+          "elites": 1,
+          "extraElites": 0,
+          "boon": "none"
+        }
+      ]
+    },
+    "threatDice": {
+      "startDice": 1,
+      "addDieEvery": 3,
+      "faces": ["calm", "raid", "raid", "raid", "elite", "boon"]
+    },
+    "notoriety": {
+      "rungEvery": 3,
+      "rungsPerGrunt": 3,
+      "eliteEveryRungs": 3
+    }
+  },
   "gather": {
     "offNodeAmount": 0
   },

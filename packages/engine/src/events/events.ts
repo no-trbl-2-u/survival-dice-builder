@@ -89,6 +89,17 @@ export type GameEvent = Readonly<
     | { type: 'skillPooled'; skill: string; player: string }
     | { type: 'skillReplaced'; player: string; skill: string }
     | { type: 'milestoneReached'; milestone: string; round: number }
+    | {
+        type: 'calendarDay'
+        system: string
+        day: string
+        grunts: number
+        elites: number
+        extraElites: number
+        boons: readonly string[]
+        faces: readonly string[]
+      }
+    | { type: 'baseRepaired'; amount: number; health: number }
     | { type: 'playerKnockedOut'; player: string; materialsLost: number; currencyLost: number }
     | { type: 'playerReturned'; player: string; health: number }
     | { type: 'returnDelayed'; player: string }
