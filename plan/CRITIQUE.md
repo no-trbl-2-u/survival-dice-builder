@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — the Defenses line says only a Barricade stops enemies, but no enemy can enter a Tower hex either
-- pass: 45 (commit 551d569)
-- viewport: desktop
-- category: comprehension
-- observation: The / Defenses line gives "enemies cannot enter its hex" for the Barricade only. The /config Blocked enemy line says Towers block an enemy, and the engine lets no enemy enter any defense hex. A reader of / will think enemies can walk through a Tower.
-- evidence: `packages/content/src/ruleText.ts:339` builds the clause from `blocksEnemies`, which is `true` for the Barricade and `false` for the Tower (`packages/content/data/defenses.json:9`, `:18`); `packages/engine/src/map/spawn.ts:20` `enemyCanEnter` returns false on any defense hex; /config: "Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy." (`ruleText.ts:508`). In the engine `blocksEnemies` only picks the siege target kind (`packages/engine/src/enemies/targets.ts:16`).
-- suggested fix: Make `defenseText` say that no enemy can enter a defense hex (one sentence for both defenses, not tied to `blocksEnemies`), and pin it in `ruleText.test.ts`.
-- source: web-fetch
-
 ### [LOW] / — the Tower attack and the enemy move both happen "at the start of each Combat", with no order given
 - pass: 45 (commit 551d569)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — the Defenses line says only a Barricade stops enemies, but no enemy can enter a Tower hex either
+- pass: 45 (commit 551d569)
+- viewport: desktop
+- category: comprehension
+- observation: The / Defenses line gives "enemies cannot enter its hex" for the Barricade only. The /config Blocked enemy line says Towers block an enemy, and the engine lets no enemy enter any defense hex. A reader of / will think enemies can walk through a Tower.
+- evidence: `packages/content/src/ruleText.ts:339` builds the clause from `blocksEnemies`, which is `true` for the Barricade and `false` for the Tower (`packages/content/data/defenses.json:9`, `:18`); `packages/engine/src/map/spawn.ts:20` `enemyCanEnter` returns false on any defense hex; /config: "Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy." (`ruleText.ts:508`). In the engine `blocksEnemies` only picks the siege target kind (`packages/engine/src/enemies/targets.ts:16`).
+- suggested fix: Make `defenseText` say that no enemy can enter a defense hex (one sentence for both defenses, not tied to `blocksEnemies`), and pin it in `ruleText.test.ts`.
+- source: web-fetch
+- issue: #366
+- fixed: (this commit) — the Defenses line on / ends its defense list with "No enemy can enter a hex with a defense on it.", for every defense, as `enemyCanEnter` plays it
 
 ### [x] [LOW] /debug — "Copy replay" does not say what the copied replay is for
 - pass: 44 (commit ea2b332)

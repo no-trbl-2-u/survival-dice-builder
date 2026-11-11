@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-11 (pass 312, cloud tick)
+
+Pass 311 gave the /config Copies of each card and Skill fields their rule line (551d569), and critique pass 45 filed 6 rows (c0e2e32). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 45 ran 1 commit ago) and so is the expand gate (pass 30 ran 9 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Top of the queue: the MED critique row from pass 45, the / Defenses line saying only a Barricade stops enemies while `enemyCanEnter` keeps every enemy off every defense hex. Scored 8.1 (external-critique MED: impact 6, ease 9, x1.5 bias). `defenseText` drops the `blocksEnemies` clause and adds one sentence after the defense list: "No enemy can enter a hex with a defense on it." A ruleText test pins the default, a changed config, an empty defense list, and a defense with `blocksEnemies` false. Next in line: the pass 45 LOW rows (Tower attack order, Repair 2, enemy health, Lake and Mountain case, Level II on card faces).
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /: the Defenses line says only a Barricade stops enemies
+- category: external-critique
+- impact: 6
+- ease: 9
+- next: one sentence for every defense in `defenseText`, pinned in `ruleText.test.ts`
+- issue: #366
+- fixed: (this commit)
+
 # Site audit — 2026-11-11 (pass 311, cloud tick)
 
 Pass 310 gave the /config Defenses on gathering nodes field its rule line (d446740). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 10 commits ago, a few minutes under 24 hours) and so is the expand gate (pass 30 ran 7 commits ago). Every build plan phase is shipped or blocked. The Pending critique rows all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the /config Copies of each card and Copies of each Skill fields, which show no rule line. Scored 2.7 (comprehension: impact 3, ease 9). New `suppliesText` reads from config and content: "The Shop offers cards from a supply of 2 copies of each level 1 to 3 card (28 cards), and the Training Ground draft offers Skills from a supply of 1 copy of each level 1 to 3 Skill (14 Skills). Each draws from the highest level opened, or from a lower level when that one runs out.", as `buildSupplies` and `drawLevel` play it. Both fields map to it; a ruleText test pins the default and a changed config. Next in line: the Countryside and Core tiles fields.

@@ -334,15 +334,19 @@ describe('rule text from config', () => {
     expect(siegeText(elite)).toMatch(/: an elite deals 5 damage\.$/)
   })
 
-  it('defenses: each cost, health, and effect from defenses.json, a Tower kill paying its builder, and the base health (Table 7, 12.3, 8.2)', () => {
+  it('defenses: each cost, health, and effect from defenses.json, a Tower kill paying its builder, and the no enemy entering any defense hex, and the base health (Table 7, 12.3, 8.2, 9.8)', () => {
     expect(defenseText(base, defaultContent)).toBe(
-      'A Barricade costs 2 materials and has 4 health; enemies cannot enter its hex. A Tower costs 4 materials and has 3 health; at the start of each Combat it deals 2 damage to the nearest enemy within 2 hexes. When a Tower defeats an enemy, the player who built it gets the currency. The base starts with 20 health.',
+      'A Barricade costs 2 materials and has 4 health. A Tower costs 4 materials and has 3 health; at the start of each Combat it deals 2 damage to the nearest enemy within 2 hexes. When a Tower defeats an enemy, the player who built it gets the currency. No enemy can enter a hex with a defense on it. The base starts with 20 health.',
     )
     const tower = defaultContent.defenses[1]!
     const cheap = { defenses: [{ ...tower, cost: 1, attack: { damage: 3, range: 1 } }] }
     expect(defenseText({ ...base, base: { ...base.base, startingHealth: 9 } }, cheap)).toBe(
-      'A Tower costs 1 material and has 3 health; at the start of each Combat it deals 3 damage to the nearest enemy within 1 hex. When a Tower defeats an enemy, the player who built it gets the currency. The base starts with 9 health.',
+      'A Tower costs 1 material and has 3 health; at the start of each Combat it deals 3 damage to the nearest enemy within 1 hex. When a Tower defeats an enemy, the player who built it gets the currency. No enemy can enter a hex with a defense on it. The base starts with 9 health.',
     )
+    expect(defenseText(base, { defenses: [] })).toBe('The base starts with 20 health.')
+    expect(
+      defenseText(base, { defenses: [{ ...defaultContent.defenses[0]!, blocksEnemies: false }] }),
+    ).toContain('No enemy can enter a hex with a defense on it.')
   })
 
   it('materials: any card gathers, the starter Gather amount as the example, where Gather works, and a node giving its materials once (6.7, rows 59, 67)', () => {
