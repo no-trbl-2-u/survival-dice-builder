@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-11 (pass 310, cloud tick)
+
+Pass 309 gave the /config Build levels field its rule line (99e0b5e). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 9 commits ago, a few minutes under 24 hours) and so is the expand gate (pass 30 ran 6 commits ago). Every build plan phase is shipped or blocked. The Pending critique rows all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the next /config field with no rule line, Defenses on gathering nodes (`rulings.buildOnNode`, row 14). Scored 2.7 (comprehension: impact 3, ease 9). New `buildOnNodeText` reads from config: ticked (the default), "A defense is built on your hex or a hex next to it, one per hex. It may stand on a gathering node hex, and the node still works for Gather."; not ticked, the second sentence reads "It may not stand on a gathering node hex.", as `canBuildOn` plays it. A ruleText test pins both. Next in line: the Copies of each card and Copies of each Skill fields, and Countryside and Core tiles.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /config: the Defenses on gathering nodes field shows no rule line
+- category: comprehension
+- impact: 3
+- ease: 9
+- next: add `buildOnNodeText` and map `rulings.buildOnNode` to it in `ruleLineFor`
+- issue: #364
+- fixed: (this commit)
+
 # Site audit — 2026-11-11 (pass 309, cloud tick)
 
 Pass 308 gave the /debug intro its Copy replay sentence (55b76cf). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 8 commits ago, under 24 hours) and so is the expand gate (pass 30 ran 4 commits ago). Every build plan phase is shipped or blocked. The Pending critique rows all edit `[needs-user-call]` items, which /oversight owns. Checked this pass: which /config fields `ruleLineFor` answers. 14 of the 67 fields have no rule line; 7 are retired or unused, and of the 7 left the Build levels field matters most, since it decides why "Buy 3 base upgrades" and "Fire Arcane Rain" are out of reach (row 78). Scored 3.6 (comprehension: impact 4, ease 9). New `buildLevelsText` reads from config: levelled (the default), "A Build card buys a base upgrade or builds a defense only up to its own level: Build I buys tier I. Build cards can buy only Shop I and Training I.", the second sentence from `upgradesReachNote`; any tier, "A Build card buys the next tier of an upgrade track and builds any defense, whatever its level.". A ruleText test pins both. Next in line: the Defenses on gathering nodes, Copies of each card and Skill, and Countryside and Core tiles fields, which also show no rule line.
@@ -17,7 +31,7 @@ Pass 308 gave the /debug intro its Copy replay sentence (55b76cf). No issues are
 - ease: 9
 - next: add `buildLevelsText` and map `rulings.buildLevels` to it in `ruleLineFor`
 - issue: #363
-- fixed: (this commit)
+- fixed: 99e0b5e
 
 # Site audit — 2026-11-11 (pass 308, cloud tick)
 

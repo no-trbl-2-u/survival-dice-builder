@@ -841,6 +841,21 @@ export function buildLevelsText(
 }
 
 /**
+ * Where a defense may stand, for the /config Defenses on gathering nodes field. Ticked (the
+ * default): "A defense is built on your hex or a hex next to it, one per hex. It may stand on a
+ * gathering node hex, and the node still works for Gather." Not ticked: the second sentence reads
+ * "It may not stand on a gathering node hex.", as `canBuildOn` plays it.
+ *
+ * @rule 12.1, 12.2, OPEN-QUESTIONS row 14
+ */
+export function buildOnNodeText(config: GameConfig): string {
+  const node = config.rulings.buildOnNode
+    ? 'It may stand on a gathering node hex, and the node still works for Gather.'
+    : 'It may not stand on a gathering node hex.'
+  return `A defense is built on your hex or a hex next to it, one per hex. ${node}`
+}
+
+/**
  * Why a milestone cannot be met under this config and content, or null when it can be:
  * "out of reach: Build cards can buy only Shop I and Training I", or "out of reach: the tile
  * deck holds 8 tiles" (the Base tile starts on the map and is never revealed), or "out of
@@ -953,6 +968,7 @@ export function ruleLineFor(
   if (path === 'rulings.blockedPathRule') return blockedPathText(config)
   if (path === 'clock.forcedRevealEvery') return forcedRevealText(config)
   if (path === 'rulings.buildLevels') return buildLevelsText(config, content)
+  if (path === 'rulings.buildOnNode') return buildOnNodeText(config)
   if (path === 'combat.enemyMoveHexes') return `${enemyMoveText(config)} ${targetOrderText(config)}`
   if (group === 'players') return `For ${playersText(config)}.`
   if (group === 'milestones') {

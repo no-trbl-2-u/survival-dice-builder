@@ -32,6 +32,7 @@ import {
   blockedPathText,
   forcedRevealText,
   buildLevelsText,
+  buildOnNodeText,
   revealText,
   roundText,
   configRuleNote,
@@ -518,6 +519,17 @@ describe('rule text from config', () => {
     expect(ruleLineFor('rulings.buildLevels', base, defaultContent)).toBe(
       buildLevelsText(base, defaultContent),
     )
+  })
+
+  it('defenses on gathering nodes: ticked allows a node hex, unticked forbids it (12.2, row 14)', () => {
+    expect(buildOnNodeText(base)).toBe(
+      'A defense is built on your hex or a hex next to it, one per hex. It may stand on a gathering node hex, and the node still works for Gather.',
+    )
+    const off = With((c) => ({ ...c, rulings: { ...c.rulings, buildOnNode: false } }))
+    expect(buildOnNodeText(off)).toBe(
+      'A defense is built on your hex or a hex next to it, one per hex. It may not stand on a gathering node hex.',
+    )
+    expect(ruleLineFor('rulings.buildOnNode', off, defaultContent)).toBe(buildOnNodeText(off))
   })
 
   it('starter return: one fixed line, read by the dialog', () => {

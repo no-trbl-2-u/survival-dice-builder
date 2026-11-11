@@ -105,6 +105,7 @@ export {
   blockedPathText,
   forcedRevealText,
   buildLevelsText,
+  buildOnNodeText,
   revealText,
   roundText,
   configRuleNote,
