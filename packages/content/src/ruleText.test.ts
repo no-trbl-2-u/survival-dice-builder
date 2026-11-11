@@ -33,6 +33,7 @@ import {
   forcedRevealText,
   buildLevelsText,
   buildOnNodeText,
+  suppliesText,
   revealText,
   roundText,
   configRuleNote,
@@ -532,6 +533,22 @@ describe('rule text from config', () => {
     expect(ruleLineFor('rulings.buildOnNode', off, defaultContent)).toBe(buildOnNodeText(off))
   })
 
+  it('supplies: copies per card and Skill, and the level fallback (Tables 8-9, row 18)', () => {
+    expect(suppliesText(base, defaultContent)).toBe(
+      'The Shop offers cards from a supply of 2 copies of each level 1 to 3 card (28 cards), and the Training Ground draft offers Skills from a supply of 1 copy of each level 1 to 3 Skill (14 Skills). Each draws from the highest level opened, or from a lower level when that one runs out.',
+    )
+    const one = With((c) => ({ ...c, supplies: { copiesPerCard: 1, copiesPerSkill: 3 } }))
+    expect(suppliesText(one, defaultContent)).toMatch(
+      /1 copy of each level 1 to 3 card \(14 cards\)/,
+    )
+    expect(suppliesText(one, defaultContent)).toMatch(
+      /3 copies of each level 1 to 3 Skill \(42 Skills\)/,
+    )
+    expect(ruleLineFor('supplies.copiesPerSkill', one, defaultContent)).toBe(
+      suppliesText(one, defaultContent),
+    )
+  })
+
   it('starter return: one fixed line, read by the dialog', () => {
     expect(returnStarterText()).toMatch(/starter card leaves your deck/)
     expect(returnStarterText('Player 2')).toBe(
@@ -740,7 +757,8 @@ describe('rule text from config', () => {
     expect(ruleLineFor('options.maxLevel', capped, defaultContent)).toMatch(
       /The level stops at 4\.$/,
     )
-    expect(line('supplies.copiesPerCard')).toBeNull()
+    expect(line('supplies.copiesPerCard')).toBe(suppliesText(base, defaultContent))
+    expect(line('supplies.copiesPerSkill')).toBe(suppliesText(base, defaultContent))
   })
 })
 

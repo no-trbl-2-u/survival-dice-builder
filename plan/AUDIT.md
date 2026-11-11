@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-11 (pass 311, cloud tick)
+
+Pass 310 gave the /config Defenses on gathering nodes field its rule line (d446740). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 10 commits ago, a few minutes under 24 hours) and so is the expand gate (pass 30 ran 7 commits ago). Every build plan phase is shipped or blocked. The Pending critique rows all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the /config Copies of each card and Copies of each Skill fields, which show no rule line. Scored 2.7 (comprehension: impact 3, ease 9). New `suppliesText` reads from config and content: "The Shop offers cards from a supply of 2 copies of each level 1 to 3 card (28 cards), and the Training Ground draft offers Skills from a supply of 1 copy of each level 1 to 3 Skill (14 Skills). Each draws from the highest level opened, or from a lower level when that one runs out.", as `buildSupplies` and `drawLevel` play it. Both fields map to it; a ruleText test pins the default and a changed config. Next in line: the Countryside and Core tiles fields.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /config: the Copies of each card and Copies of each Skill fields show no rule line
+- category: comprehension
+- impact: 3
+- ease: 9
+- next: add `suppliesText` and map the `supplies` group to it in `ruleLineFor`
+- issue: #365
+- fixed: (this commit)
+
 # Site audit — 2026-11-11 (pass 310, cloud tick)
 
 Pass 309 gave the /config Build levels field its rule line (99e0b5e). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 9 commits ago, a few minutes under 24 hours) and so is the expand gate (pass 30 ran 6 commits ago). Every build plan phase is shipped or blocked. The Pending critique rows all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the next /config field with no rule line, Defenses on gathering nodes (`rulings.buildOnNode`, row 14). Scored 2.7 (comprehension: impact 3, ease 9). New `buildOnNodeText` reads from config: ticked (the default), "A defense is built on your hex or a hex next to it, one per hex. It may stand on a gathering node hex, and the node still works for Gather."; not ticked, the second sentence reads "It may not stand on a gathering node hex.", as `canBuildOn` plays it. A ruleText test pins both. Next in line: the Copies of each card and Copies of each Skill fields, and Countryside and Core tiles.
@@ -17,7 +31,7 @@ Pass 309 gave the /config Build levels field its rule line (99e0b5e). No issues 
 - ease: 9
 - next: add `buildOnNodeText` and map `rulings.buildOnNode` to it in `ruleLineFor`
 - issue: #364
-- fixed: (this commit)
+- fixed: d446740
 
 # Site audit — 2026-11-11 (pass 309, cloud tick)
 

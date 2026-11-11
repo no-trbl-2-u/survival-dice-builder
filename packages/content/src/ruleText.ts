@@ -856,6 +856,26 @@ export function buildOnNodeText(config: GameConfig): string {
 }
 
 /**
+ * Where the Shop offers and the Training Ground draft come from, for the /config Copies of each
+ * card and Copies of each Skill fields. Default: "The Shop offers cards from a supply of 2 copies
+ * of each level 1 to 3 card (28 cards), and the Training Ground draft offers Skills from a supply
+ * of 1 copy of each level 1 to 3 Skill (14 Skills). Each draws from the highest level opened, or
+ * from a lower level when that one runs out.", as `buildSupplies` and `drawLevel` play it.
+ *
+ * @rule 2.2, 11.5, 11.8, Table 8, Table 9, OPEN-QUESTIONS row 18
+ */
+export function suppliesText(
+  config: GameConfig,
+  content: Pick<Content, 'cards' | 'skills'>,
+): string {
+  const supplied = (items: readonly { level: number }[]) =>
+    items.filter((x) => x.level >= 1 && x.level <= 3).length
+  const cards = config.supplies.copiesPerCard
+  const skills = config.supplies.copiesPerSkill
+  return `The Shop offers cards from a supply of ${plural(cards, 'copy', 'copies')} of each level 1 to 3 card (${plural(cards * supplied(content.cards), 'card', 'cards')}), and the Training Ground draft offers Skills from a supply of ${plural(skills, 'copy', 'copies')} of each level 1 to 3 Skill (${plural(skills * supplied(content.skills), 'Skill', 'Skills')}). Each draws from the highest level opened, or from a lower level when that one runs out.`
+}
+
+/**
  * Why a milestone cannot be met under this config and content, or null when it can be:
  * "out of reach: Build cards can buy only Shop I and Training I", or "out of reach: the tile
  * deck holds 8 tiles" (the Base tile starts on the map and is never revealed), or "out of
@@ -969,6 +989,7 @@ export function ruleLineFor(
   if (path === 'clock.forcedRevealEvery') return forcedRevealText(config)
   if (path === 'rulings.buildLevels') return buildLevelsText(config, content)
   if (path === 'rulings.buildOnNode') return buildOnNodeText(config)
+  if (group === 'supplies') return suppliesText(config, content)
   if (path === 'combat.enemyMoveHexes') return `${enemyMoveText(config)} ${targetOrderText(config)}`
   if (group === 'players') return `For ${playersText(config)}.`
   if (group === 'milestones') {
