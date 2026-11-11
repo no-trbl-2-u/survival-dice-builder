@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /debug — "Copy replay" does not say what the copied replay is for
-- pass: 44 (commit ea2b332)
-- viewport: desktop
-- category: comprehension
-- observation: The button copies the run's seed and action list as JSON. No page can load it back, and the page does not say what to do with it.
-- evidence: Button "Copy replay" (`apps/web/src/debug/DebugPage.tsx:164`); it copies `{ seed, actions }`; no replay import exists in `apps/web/src`.
-- suggested fix: Add one intro line: "Copy replay copies the seed and every action, to paste into a bug report."
-- source: web-fetch
-
 ### [LOW] /decisions — the Event Calendar check still cites ruling numbers the visitor cannot look up (waits for /oversight)
 - pass: 25 (commit 690f48e)
 - viewport: desktop
@@ -64,6 +55,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /debug — "Copy replay" does not say what the copied replay is for
+- pass: 44 (commit ea2b332)
+- viewport: desktop
+- category: comprehension
+- observation: The button copies the run's seed and action list as JSON. No page can load it back, and the page does not say what to do with it.
+- evidence: Button "Copy replay" (`apps/web/src/debug/DebugPage.tsx:164`); it copies `{ seed, actions }`; no replay import exists in `apps/web/src`.
+- suggested fix: Add one intro line: "Copy replay copies the seed and every action, to paste into a bug report."
+- source: web-fetch
+- issue: #362
+- fixed: (this commit) — the intro ends "Copy replay copies the seed and every action, to paste into a bug report."; the debug e2e intro test pins it
 
 ### [x] [LOW] /debug — the intro does not explain Bot step or Autoplay, and the heading says "Legal actions"
 - pass: 44 (commit ea2b332)

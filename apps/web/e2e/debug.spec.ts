@@ -91,13 +91,16 @@ test('/debug: the written rules link says it opens GitHub, as on / and /config',
   )
 })
 
-test('/debug: the intro explains Bot step and Autoplay, and the heading names the actions', async ({
+test('/debug: the intro explains Bot step, Autoplay and Copy replay, and the heading names the actions', async ({
   page,
 }) => {
   await page.goto('/debug')
   const intro = page.getByText(/^Play the rules engine one action at a time\./)
   await expect(intro).toContainText('Bot step lets the bot choose the next action.')
   await expect(intro).toContainText('Autoplay lets the bot play up to 5000 actions')
+  await expect(intro).toContainText(
+    'Copy replay copies the seed and every action, to paste into a bug report.',
+  )
   await expect(page.getByRole('heading', { name: /^Actions you can take \(\d+\)$/ })).toBeVisible()
   await expect(page.getByText(/Legal actions/)).toHaveCount(0)
 })

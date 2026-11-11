@@ -114,7 +114,8 @@ export function DebugPage() {
         <a href={rulesUrl}>written rules</a> (on GitHub) it follows, in [brackets]. It always plays
         the standard rules, not a config saved on <a href="/config">Config</a>. Bot step lets the
         bot choose the next action. Autoplay lets the bot play up to {AUTOPLAY_LIMIT} actions,
-        usually to the end of the run.
+        usually to the end of the run. Copy replay copies the seed and every action, to paste into a
+        bug report.
       </p>
       <form
         className={styles.controls}

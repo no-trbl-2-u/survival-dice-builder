@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-11 (pass 308, cloud tick)
+
+Pass 307 gave the /debug intro its Bot step and Autoplay sentences (7a870b6). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 7 commits ago, under 24 hours) and so is the expand gate (pass 30 ran 3 commits ago). Every build plan phase is shipped or blocked. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 44 LOW row on /debug, where "Copy replay" copies the seed and every action as JSON but the page does not say what the copy is for, and no page loads it back. Scored 2.7 (comprehension: impact 3, ease 9). The intro now ends "Copy replay copies the seed and every action, to paste into a bug report."; the debug e2e intro test pins it. Next in line: no LOW rows remain outside the /oversight-owned /decisions items, so the next tick likely waits for the critique gate or hands to /expand.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /debug: Copy replay does not say what the copied replay is for
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: add the Copy replay sentence to the intro
+- issue: #362
+- fixed: (this commit)
+
 # Site audit — 2026-11-10 (pass 307, cloud tick)
 
 Pass 306 capitalised the /credits enemy die faces (00f4b35). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 44 ran 6 commits ago, today) and so is the expand gate (pass 30 ran 2 commits ago). Every build plan phase is shipped or blocked. The MED critique rows left all edit `[needs-user-call]` items, which /oversight owns. Top of the queue: the critique pass 44 LOW row on /debug, where the intro explains the log tags but not Bot step or Autoplay, and the actions heading says "Legal actions". Scored 2.7 (voice: impact 3, ease 9). The intro now says "Bot step lets the bot choose the next action. Autoplay lets the bot play up to 5000 actions, usually to the end of the run.", reading the number from AUTOPLAY_LIMIT, and the heading reads "Actions you can take (n)". A debug e2e test pins both; the a11y focus test follows the new heading. Next in line: the /debug "Copy replay" row.
@@ -17,7 +31,7 @@ Pass 306 capitalised the /credits enemy die faces (00f4b35). No issues are open 
 - ease: 9
 - next: add the Bot step and Autoplay sentences to the intro; rename the actions heading
 - issue: #361
-- fixed: (this commit)
+- fixed: 7a870b6
 
 # Site audit — 2026-11-10 (pass 306, cloud tick)
 
