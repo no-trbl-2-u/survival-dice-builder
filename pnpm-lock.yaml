@@ -126,6 +126,9 @@ importers:
       '@survival/engine':
         specifier: workspace:*
         version: link:../../packages/engine
+      zod:
+        specifier: 4.6.5
+        version: 4.6.5
 
 packages:
 
