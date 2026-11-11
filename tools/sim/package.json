@@ -10,6 +10,7 @@
   "dependencies": {
     "@survival/bot": "workspace:*",
     "@survival/content": "workspace:*",
-    "@survival/engine": "workspace:*"
+    "@survival/engine": "workspace:*",
+    "zod": "4.6.5"
   }
 }

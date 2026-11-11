@@ -71,7 +71,8 @@
       "Bash(git branch -D:*)",
       "Read(.env)",
       "Read(.env.*)",
-      "Read(setup/bootstrap.local.json)"
+      "Read(setup/bootstrap.local.json)",
+      "Read(./archive/**)"
     ]
   },
   "hooks": {

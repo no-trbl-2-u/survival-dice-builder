@@ -277,6 +277,11 @@ export type GameState = Readonly<{
   roundEnding: boolean
   /** The current player has not drawn yet in this Prepare turn or Combat exchange. @rule 16.4, 16.8 */
   turnFresh: boolean
+  /**
+   * The Event Calendar's memory (experiment, 7.3): milestones counted at the last threat-dice
+   * roll, or the last Notoriety rung. Absent while the calendar is off.
+   */
+  calendarMark?: number
   /** Counters the milestones read. @rule 17 */
   progress: Progress
   /** Milestones reached, in order. @rule 10.10, 14.3, 17 */

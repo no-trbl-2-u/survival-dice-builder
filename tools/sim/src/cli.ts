@@ -20,6 +20,7 @@ import { compareTable, timingReport, type TimedExport } from './report.ts'
 import { applyOptions, optionSet, OPTION_SETS, setPath } from './optionSets.ts'
 import { runBatch, summarize, type RunOptions } from './run.ts'
 import { parseSet, sweepCells, sweepTable } from './sweep.ts'
+import { oddsTable, SkillProposalSchema } from './skillOdds.ts'
 import type { BotPolicy } from '@survival/bot'
 
 /** The median end-round band the spec targets (spec phase 7 acceptance). */
@@ -35,6 +36,7 @@ const usage = `Usage:
   pnpm sim -- decisions [--out docs/DECISIONS.md]
   pnpm sim -- rules [--out docs/RULES-AS-PLAYED.md]
   pnpm sim -- kit
+  pnpm sim -- odds [--file docs/design/skills-v1/skills.proposal.json] [--json <file>] [--out report.md]
 
 Plays <n> bot runs (default 200) and prints a summary. --config reads a config JSON: keys it
 leaves out take the default (a partial config works). --seats plays 1-4 seats (default 1);
@@ -51,7 +53,9 @@ timing: minutes per round and time shares per phase and decision, from real run 
 playtests: every run export in a folder, against the 8-9 minutes-per-round estimate.
 decisions: the designer decision digest from OPEN-QUESTIONS.md and plan/AUDIT.md.
 rules: each Spec v2 rule as written beside what the engine does (the rules as played).
-kit: rewrites the generated rule blocks of docs/playtests/PROTOCOL.md, SURVEY.md and REPORT.md.`
+kit: rewrites the generated rule blocks of docs/playtests/PROTOCOL.md, SURVEY.md and REPORT.md.
+odds: checks a Skill proposal file and prints each Skill's exact fire chance with 1-6 dice and 3
+rolls, its value per firing, and the expected value at its tier's dice (I: 2, II: 3, III: 4).`
 
 /** Reads `--name value` pairs. */
 function parse(argv: readonly string[]): Map<string, string> {
@@ -117,7 +121,16 @@ function report(md: string, out: string | undefined): void {
 }
 
 const argv = process.argv.slice(2).filter((a) => a !== '--')
-const COMMANDS = ['compare', 'sweep', 'timing', 'playtests', 'decisions', 'rules', 'kit'] as const
+const COMMANDS = [
+  'compare',
+  'sweep',
+  'timing',
+  'playtests',
+  'decisions',
+  'rules',
+  'kit',
+  'odds',
+] as const
 const command = COMMANDS.find((c) => c === argv[0]) ?? 'batch'
 const args = parse(argv)
 if (args.has('help')) {
@@ -229,6 +242,35 @@ if (command === 'rules') {
     fs.writeFileSync(here(out), md)
     console.log(`wrote ${out}`)
   } else console.log(md)
+  process.exit(0)
+}
+
+if (command === 'odds') {
+  const file = args.get('file') ?? 'docs/design/skills-v1/skills.proposal.json'
+  const raw = JSON.parse(fs.readFileSync(here(file), 'utf-8')) as { skills: unknown[] }
+  const rows = oddsTable(raw.skills.map((s) => SkillProposalSchema.parse(s)))
+  const pct = (p: number) => `${Math.round(p * 100)}%`
+  const md = [
+    `${rows.length} Skills from ${file}, each valid under the proposal schema.`,
+    '',
+    '| Skill | Family | Tier | Faces | 1 die | 2 dice | 3 dice | 4 dice | 5 dice | 6 dice | Value | Expected at tier |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+    ...rows.map(
+      (r) =>
+        `| ${r.skill.name} | ${r.skill.family} | ${r.skill.tier} | ${r.skill.faces.join(' ')} | ${r.chance.map(pct).join(' | ')} | ${r.value} | ${r.expected} |`,
+    ),
+  ].join('\n')
+  const json = args.get('json')
+  if (json) {
+    const out = rows.map((r) => ({
+      ...r.skill,
+      chance: r.chance,
+      value: r.value,
+      expected: r.expected,
+    }))
+    fs.writeFileSync(here(json), `${JSON.stringify(out, null, 2)}\n`)
+  }
+  report(md, args.get('out'))
   process.exit(0)
 }
 

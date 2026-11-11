@@ -213,6 +213,90 @@
     "empty": "Off",
     "range": [1, 10]
   },
+  "calendar": {
+    "label": "Event Calendar (experiment)"
+  },
+  "calendar.system": {
+    "label": "Event Calendar",
+    "help": "What sets the spawns at each Combat start. Off (default): every spawn node spawns at each Combat, as in the written rules. Threat dice: roll dice whose faces call raids, elites, calm days and boons; 1 more die every few rounds. Sundial: a ring of 8 days with a calm dawn, harvest and feast days and a Blood Moon; each lap makes every day harder. Notoriety: the threat climbs 1 rung every few rounds and 1 rung at each milestone; each new rung gives a Respite.",
+    "rule": "7.3 (Event Calendar experiment)",
+    "options": {
+      "off": "Off (default)",
+      "threat-dice": "Threat dice (experiment)",
+      "sundial": "Sundial (experiment)",
+      "notoriety": "Notoriety ladder (experiment)"
+    }
+  },
+  "calendar.respite": {
+    "label": "Respite boon"
+  },
+  "calendar.respite.heal": {
+    "label": "Respite heal",
+    "help": "On a Respite day each player who is not knocked out heals this much.",
+    "rule": "7.3 (Event Calendar experiment)",
+    "range": [0, 15]
+  },
+  "calendar.respite.repair": {
+    "label": "Respite base repair",
+    "help": "On a Respite day the base gets this much health, up to its maximum.",
+    "rule": "7.3 (Event Calendar experiment)",
+    "range": [0, 20]
+  },
+  "calendar.sundial": {
+    "label": "Sundial"
+  },
+  "calendar.sundial.eraEvery": {
+    "label": "Sundial lap",
+    "help": "Days in one lap of the Sundial. After each lap every raid day spawns 1 more enemy at each spawn node.",
+    "rule": "7.3 (Event Calendar experiment)",
+    "range": [2, 16]
+  },
+  "calendar.sundial.days": {
+    "label": "Sundial days",
+    "help": "The days of the Sundial in order: enemies at each spawn node and elite spawn node, extra elites, and a boon (Respite or Harvest).",
+    "rule": "7.3 (Event Calendar experiment)"
+  },
+  "calendar.threatDice": {
+    "label": "Threat dice"
+  },
+  "calendar.threatDice.startDice": {
+    "label": "Threat dice at the start",
+    "help": "Threat dice rolled in round 1.",
+    "rule": "7.3 (Event Calendar experiment)",
+    "range": [1, 6]
+  },
+  "calendar.threatDice.addDieEvery": {
+    "label": "Add a threat die every",
+    "help": "1 more threat die every this many rounds.",
+    "rule": "7.3 (Event Calendar experiment)",
+    "range": [1, 10]
+  },
+  "calendar.threatDice.faces": {
+    "label": "Threat die faces",
+    "help": "The 6 faces of a threat die: Raid (each spawn node gets another enemy), Elite (an elite at the spawn node nearest the base), Calm (nothing) or Boon (a Respite; 2 Boons also give a Harvest). At a new milestone, a die shows Boon without a roll.",
+    "rule": "7.3 (Event Calendar experiment)"
+  },
+  "calendar.notoriety": {
+    "label": "Notoriety ladder"
+  },
+  "calendar.notoriety.rungEvery": {
+    "label": "Notoriety climbs every",
+    "help": "The threat climbs 1 rung every this many rounds. It also climbs 1 rung at each new milestone. Each new rung gives a Respite.",
+    "rule": "7.3 (Event Calendar experiment)",
+    "range": [1, 10]
+  },
+  "calendar.notoriety.rungsPerGrunt": {
+    "label": "Rungs per extra enemy",
+    "help": "Each spawn node spawns 1 more enemy for every this many rungs.",
+    "rule": "7.3 (Event Calendar experiment)",
+    "range": [1, 10]
+  },
+  "calendar.notoriety.eliteEveryRungs": {
+    "label": "Elite every rungs",
+    "help": "Every this many rungs, 1 elite comes at the spawn node nearest the base.",
+    "rule": "7.3 (Event Calendar experiment)",
+    "range": [1, 10]
+  },
   "gather": {
     "label": "Gather (experiment)"
   },

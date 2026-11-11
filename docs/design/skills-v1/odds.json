@@ -1,0 +1,820 @@
+[
+  {
+    "id": "cleave-i",
+    "name": "Cleave",
+    "level": 1,
+    "faces": ["Sword", "Sword"],
+    "effect": {
+      "kind": "damage",
+      "amount": 5,
+      "range": 1,
+      "target": "one"
+    },
+    "family": "Cleave",
+    "tier": "I",
+    "keywords": ["Overkill"],
+    "adds": [],
+    "chance": [
+      0, 0.49519890260631017, 0.7886501041507897, 0.9190728603927815, 0.9705978998957888,
+      0.9896812478598637
+    ],
+    "value": 6,
+    "expected": 2.97
+  },
+  {
+    "id": "cleave-ii",
+    "name": "Rending Cleave",
+    "level": 2,
+    "faces": ["Sword", "Sword", "Sword"],
+    "effect": {
+      "kind": "damage",
+      "amount": 8,
+      "range": 1,
+      "target": "one"
+    },
+    "family": "Cleave",
+    "tier": "II",
+    "keywords": ["Overkill"],
+    "adds": [],
+    "chance": [
+      0, 0, 0.34847330183407005, 0.6582273479087987, 0.8417853011382674, 0.9324312039676317
+    ],
+    "value": 9,
+    "expected": 3.14
+  },
+  {
+    "id": "cleave-iii",
+    "name": "Executioner",
+    "level": 3,
+    "faces": ["Sword", "Sword", "Sword", "Sword"],
+    "effect": {
+      "kind": "damage",
+      "amount": 13,
+      "range": 1,
+      "target": "one"
+    },
+    "family": "Cleave",
+    "tier": "III",
+    "keywords": ["Overkill"],
+    "adds": [
+      {
+        "status": "Stun",
+        "stacks": 1,
+        "on": "target"
+      }
+    ],
+    "chance": [0, 0, 0, 0.2452219531424939, 0.5358553790891524, 0.7511393983089003],
+    "value": 15,
+    "expected": 3.68
+  },
+  {
+    "id": "volley-i",
+    "name": "Volley",
+    "level": 1,
+    "faces": ["Bow", "Bow"],
+    "effect": {
+      "kind": "damage",
+      "amount": 2,
+      "range": 3,
+      "target": "each"
+    },
+    "family": "Volley",
+    "tier": "I",
+    "keywords": [],
+    "adds": [],
+    "chance": [
+      0, 0.4951989026063101, 0.7886501041507898, 0.919072860392781, 0.9705978998957883,
+      0.9896812478598652
+    ],
+    "value": 5.4,
+    "expected": 2.67
+  },
+  {
+    "id": "volley-ii",
+    "name": "Arrow Storm",
+    "level": 2,
+    "faces": ["Bow", "Bow", "Bow"],
+    "effect": {
+      "kind": "damage",
+      "amount": 3,
+      "range": 3,
+      "target": "each"
+    },
+    "family": "Volley",
+    "tier": "II",
+    "keywords": [],
+    "adds": [],
+    "chance": [
+      0, 0, 0.34847330183406994, 0.6582273479087991, 0.8417853011382682, 0.9324312039676328
+    ],
+    "value": 8.1,
+    "expected": 2.82
+  },
+  {
+    "id": "volley-iii",
+    "name": "Rain of Arrows",
+    "level": 3,
+    "faces": ["Bow", "Bow", "Bow", "Bow"],
+    "effect": {
+      "kind": "damage",
+      "amount": 4,
+      "range": 3,
+      "target": "each"
+    },
+    "family": "Volley",
+    "tier": "III",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Mark",
+        "stacks": 1,
+        "on": "each"
+      }
+    ],
+    "chance": [0, 0, 0, 0.24522195314249381, 0.5358553790891528, 0.751139398308902],
+    "value": 14.8,
+    "expected": 3.63
+  },
+  {
+    "id": "bulwark-i",
+    "name": "Bulwark",
+    "level": 1,
+    "faces": ["Shield", "Shield"],
+    "effect": {
+      "kind": "guard",
+      "amount": 6
+    },
+    "family": "Bulwark",
+    "tier": "I",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Fortify",
+        "stacks": 1,
+        "on": "structure"
+      }
+    ],
+    "chance": [
+      0, 0.4951989026063101, 0.7886501041507897, 0.9190728603927812, 0.9705978998957883,
+      0.9896812478598652
+    ],
+    "value": 5.1,
+    "expected": 2.53
+  },
+  {
+    "id": "bulwark-ii",
+    "name": "Shield Wall",
+    "level": 2,
+    "faces": ["Shield", "Shield", "Shield"],
+    "effect": {
+      "kind": "guard",
+      "amount": 10
+    },
+    "family": "Bulwark",
+    "tier": "II",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Fortify",
+        "stacks": 1,
+        "on": "structure"
+      },
+      {
+        "status": "Evade",
+        "stacks": 1,
+        "on": "self"
+      }
+    ],
+    "chance": [
+      0, 0, 0.34847330183406994, 0.658227347908799, 0.8417853011382682, 0.9324312039676328
+    ],
+    "value": 8.2,
+    "expected": 2.86
+  },
+  {
+    "id": "bulwark-iii",
+    "name": "Fortress",
+    "level": 3,
+    "faces": ["Shield", "Shield", "Shield", "Shield"],
+    "effect": {
+      "kind": "guard",
+      "amount": 14
+    },
+    "family": "Bulwark",
+    "tier": "III",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Protect",
+        "stacks": 1,
+        "on": "self"
+      },
+      {
+        "status": "Fortify",
+        "stacks": 1,
+        "on": "structure"
+      },
+      {
+        "status": "Ward",
+        "stacks": 1,
+        "on": "self"
+      }
+    ],
+    "chance": [0, 0, 0, 0.24522195314249381, 0.5358553790891528, 0.751139398308902],
+    "value": 13.4,
+    "expected": 3.29
+  },
+  {
+    "id": "renewal-i",
+    "name": "Renewal",
+    "level": 1,
+    "faces": ["Wand", "Wand"],
+    "effect": {
+      "kind": "heal",
+      "amount": 4
+    },
+    "family": "Renewal",
+    "tier": "I",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Cleanse",
+        "stacks": 1,
+        "on": "healed"
+      }
+    ],
+    "healTarget": {
+      "who": "self-or-ally",
+      "within": 1
+    },
+    "chance": [
+      0, 0.4951989026063101, 0.7886501041507901, 0.9190728603927811, 0.9705978998957883,
+      0.989681247859865
+    ],
+    "value": 5,
+    "expected": 2.48
+  },
+  {
+    "id": "renewal-ii",
+    "name": "Purify",
+    "level": 2,
+    "faces": ["Wand", "Wand", "Wand"],
+    "effect": {
+      "kind": "heal",
+      "amount": 6
+    },
+    "family": "Renewal",
+    "tier": "II",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Cleanse",
+        "stacks": 1,
+        "on": "healed"
+      },
+      {
+        "status": "Ward",
+        "stacks": 1,
+        "on": "healed"
+      }
+    ],
+    "healTarget": {
+      "who": "self-or-ally",
+      "within": 2
+    },
+    "chance": [
+      0, 0, 0.3484733018340699, 0.6582273479087989, 0.8417853011382677, 0.9324312039676321
+    ],
+    "value": 8.5,
+    "expected": 2.96
+  },
+  {
+    "id": "renewal-iii",
+    "name": "Sanctum",
+    "level": 3,
+    "faces": ["Wand", "Wand", "Wand", "Wand"],
+    "effect": {
+      "kind": "heal",
+      "amount": 7
+    },
+    "family": "Renewal",
+    "tier": "III",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Ward",
+        "stacks": 1,
+        "on": "each"
+      }
+    ],
+    "healTarget": {
+      "who": "each-player",
+      "within": 2
+    },
+    "chance": [0, 0, 0, 0.24522195314249384, 0.5358553790891528, 0.7511393983089015],
+    "value": 14.2,
+    "expected": 3.48
+  },
+  {
+    "id": "spellblade-i",
+    "name": "Spellblade",
+    "level": 1,
+    "faces": ["Sword", "Wand"],
+    "effect": {
+      "kind": "damage",
+      "amount": 3,
+      "range": 1,
+      "target": "one"
+    },
+    "family": "Spellblade",
+    "tier": "I",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Burn",
+        "stacks": 1,
+        "on": "target"
+      }
+    ],
+    "chance": [
+      0, 0.6101466049382717, 0.8723994055784179, 0.9608059760551093, 0.9882909652187956,
+      0.9965471588077747
+    ],
+    "value": 5,
+    "expected": 3.05
+  },
+  {
+    "id": "spellblade-ii",
+    "name": "Flame Edge",
+    "level": 2,
+    "faces": ["Sword", "Sword", "Wand"],
+    "effect": {
+      "kind": "damage",
+      "amount": 5,
+      "range": 1,
+      "target": "one"
+    },
+    "family": "Spellblade",
+    "tier": "II",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Burn",
+        "stacks": 1,
+        "on": "target"
+      }
+    ],
+    "chance": [
+      0, 0, 0.48714616912437125, 0.7900084958241776, 0.9224151944560797, 0.9728666799140997
+    ],
+    "value": 7,
+    "expected": 3.41
+  },
+  {
+    "id": "spellblade-iii",
+    "name": "Wildfire",
+    "level": 3,
+    "faces": ["Sword", "Sword", "Wand", "Wand"],
+    "effect": {
+      "kind": "damage",
+      "amount": 6,
+      "range": 1,
+      "target": "one"
+    },
+    "family": "Spellblade",
+    "tier": "III",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Burn",
+        "stacks": 1,
+        "on": "target-and-adjacent"
+      }
+    ],
+    "chance": [0, 0, 0, 0.42696005366702866, 0.7448817135660537, 0.9002916900440225],
+    "value": 10,
+    "expected": 4.27
+  },
+  {
+    "id": "hunter-i",
+    "name": "Aimed Shot",
+    "level": 1,
+    "faces": ["Bow", "Sword"],
+    "effect": {
+      "kind": "damage",
+      "amount": 3,
+      "range": 2,
+      "target": "one"
+    },
+    "family": "Hunter",
+    "tier": "I",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Mark",
+        "stacks": 1,
+        "on": "target"
+      }
+    ],
+    "chance": [
+      0, 0.6101466049382717, 0.8723994055784178, 0.9608059760551094, 0.9882909652187956,
+      0.9965471588077749
+    ],
+    "value": 5.6,
+    "expected": 3.42
+  },
+  {
+    "id": "hunter-ii",
+    "name": "Hunter's Mark",
+    "level": 2,
+    "faces": ["Bow", "Bow", "Sword"],
+    "effect": {
+      "kind": "damage",
+      "amount": 4,
+      "range": 2,
+      "target": "one"
+    },
+    "family": "Hunter",
+    "tier": "II",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Mark",
+        "stacks": 1,
+        "on": "target"
+      }
+    ],
+    "chance": [
+      0, 0, 0.4871461691243712, 0.7900084958241773, 0.9224151944560799, 0.9728666799140988
+    ],
+    "value": 6.8,
+    "expected": 3.31
+  },
+  {
+    "id": "hunter-iii",
+    "name": "Deadeye",
+    "level": 3,
+    "faces": ["Bow", "Bow", "Sword", "Sword"],
+    "effect": {
+      "kind": "damage",
+      "amount": 5,
+      "range": 3,
+      "target": "one"
+    },
+    "family": "Hunter",
+    "tier": "III",
+    "keywords": ["Crit"],
+    "adds": [
+      {
+        "status": "Mark",
+        "stacks": 1,
+        "on": "target"
+      }
+    ],
+    "chance": [0, 0, 0, 0.4269600536670289, 0.7448817135660539, 0.9002916900440224],
+    "value": 10.3,
+    "expected": 4.4
+  },
+  {
+    "id": "snare-i",
+    "name": "Snare",
+    "level": 1,
+    "faces": ["Bow", "Shield"],
+    "effect": {
+      "kind": "damage",
+      "amount": 3,
+      "range": 2,
+      "target": "one"
+    },
+    "family": "Snare",
+    "tier": "I",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Snare",
+        "stacks": 1,
+        "on": "target"
+      }
+    ],
+    "chance": [
+      0, 0.6101466049382717, 0.8723994055784179, 0.9608059760551086, 0.988290965218796,
+      0.9965471588077754
+    ],
+    "value": 4.6,
+    "expected": 2.81
+  },
+  {
+    "id": "snare-ii",
+    "name": "Net Throw",
+    "level": 2,
+    "faces": ["Bow", "Bow", "Shield"],
+    "effect": {
+      "kind": "damage",
+      "amount": 2,
+      "range": 2,
+      "target": "each"
+    },
+    "family": "Snare",
+    "tier": "II",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Snare",
+        "stacks": 1,
+        "on": "each"
+      }
+    ],
+    "chance": [0, 0, 0.4871461691243713, 0.7900084958241771, 0.92241519445608, 0.9728666799141],
+    "value": 6.8,
+    "expected": 3.31
+  },
+  {
+    "id": "snare-iii",
+    "name": "Bramble Field",
+    "level": 3,
+    "faces": ["Bow", "Bow", "Shield", "Shield"],
+    "effect": {
+      "kind": "damage",
+      "amount": 3,
+      "range": 2,
+      "target": "each"
+    },
+    "family": "Snare",
+    "tier": "III",
+    "keywords": ["Push 1"],
+    "adds": [
+      {
+        "status": "Snare",
+        "stacks": 1,
+        "on": "each"
+      }
+    ],
+    "chance": [0, 0, 0, 0.4269600536670289, 0.7448817135660547, 0.9002916900440242],
+    "value": 9.7,
+    "expected": 4.14
+  },
+  {
+    "id": "evasion-i",
+    "name": "Dodge",
+    "level": 1,
+    "faces": ["Shield", "Wand"],
+    "effect": {
+      "kind": "ignoreHit",
+      "hits": 2
+    },
+    "family": "Evasion",
+    "tier": "I",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Evade",
+        "stacks": 2,
+        "on": "self"
+      },
+      {
+        "status": "Focus",
+        "stacks": 1,
+        "on": "self"
+      }
+    ],
+    "chance": [
+      0, 0.6101466049382717, 0.872399405578418, 0.9608059760551084, 0.9882909652187961,
+      0.996547158807775
+    ],
+    "value": 4,
+    "expected": 2.44
+  },
+  {
+    "id": "evasion-ii",
+    "name": "Sidestep",
+    "level": 2,
+    "faces": ["Shield", "Shield", "Wand"],
+    "effect": {
+      "kind": "ignoreHit",
+      "hits": 3
+    },
+    "family": "Evasion",
+    "tier": "II",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Evade",
+        "stacks": 2,
+        "on": "self"
+      },
+      {
+        "status": "Focus",
+        "stacks": 2,
+        "on": "self"
+      }
+    ],
+    "chance": [
+      0, 0, 0.4871461691243712, 0.7900084958241779, 0.9224151944560803, 0.9728666799140997
+    ],
+    "value": 5.8,
+    "expected": 2.83
+  },
+  {
+    "id": "evasion-iii",
+    "name": "Flow State",
+    "level": 3,
+    "faces": ["Sword", "Wand", "Bow", "Shield"],
+    "effect": {
+      "kind": "ignoreHit",
+      "hits": 4
+    },
+    "family": "Evasion",
+    "tier": "III",
+    "keywords": ["Spread"],
+    "adds": [
+      {
+        "status": "Evade",
+        "stacks": 2,
+        "on": "self"
+      },
+      {
+        "status": "Focus",
+        "stacks": 2,
+        "on": "self"
+      }
+    ],
+    "note": "Needs one of each face: the Spread keyword (Dice Throne's straight).",
+    "chance": [0, 0, 0, 0.5777317061984828, 0.8593104470750964, 0.9572181599903218],
+    "value": 6.6,
+    "expected": 3.81
+  },
+  {
+    "id": "toxin-i",
+    "name": "Spark Burst",
+    "level": 1,
+    "faces": ["Wand", "Bow"],
+    "effect": {
+      "kind": "damage",
+      "amount": 1,
+      "range": 2,
+      "target": "each"
+    },
+    "family": "Toxin",
+    "tier": "I",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Poison",
+        "stacks": 1,
+        "on": "each"
+      }
+    ],
+    "chance": [
+      0, 0.6101466049382717, 0.8723994055784178, 0.9608059760551085, 0.9882909652187962,
+      0.9965471588077748
+    ],
+    "value": 5.4,
+    "expected": 3.29
+  },
+  {
+    "id": "toxin-ii",
+    "name": "Miasma",
+    "level": 2,
+    "faces": ["Wand", "Wand", "Bow"],
+    "effect": {
+      "kind": "damage",
+      "amount": 1,
+      "range": 2,
+      "target": "each"
+    },
+    "family": "Toxin",
+    "tier": "II",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Poison",
+        "stacks": 1,
+        "on": "each"
+      },
+      {
+        "status": "Snare",
+        "stacks": 1,
+        "on": "target"
+      }
+    ],
+    "chance": [
+      0, 0, 0.48714616912437125, 0.7900084958241773, 0.9224151944560799, 0.9728666799140999
+    ],
+    "value": 6.4,
+    "expected": 3.12
+  },
+  {
+    "id": "arcane-rain",
+    "name": "Arcane Rain",
+    "level": 3,
+    "faces": ["Wand", "Wand", "Wand", "Bow", "Bow"],
+    "effect": {
+      "kind": "damage",
+      "amount": 4,
+      "range": 2,
+      "target": "each"
+    },
+    "family": "Toxin",
+    "tier": "III",
+    "keywords": ["Ultimate"],
+    "adds": [
+      {
+        "status": "Poison",
+        "stacks": 2,
+        "on": "each"
+      }
+    ],
+    "note": "Replaces today's Arcane Rain and keeps its id, so the 'Fire Arcane Rain' milestone still points at it.",
+    "chance": [0, 0, 0, 0, 0.354141410638955, 0.674323363649709],
+    "value": 15.6,
+    "expected": 5.52
+  },
+  {
+    "id": "warden-i",
+    "name": "Mend Wall",
+    "level": 1,
+    "faces": ["Shield", "Sword"],
+    "effect": {
+      "kind": "damage",
+      "amount": 3,
+      "range": 1,
+      "target": "one"
+    },
+    "family": "Warden",
+    "tier": "I",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Repair 3",
+        "stacks": 1,
+        "on": "structure"
+      }
+    ],
+    "chance": [
+      0, 0.6101466049382717, 0.8723994055784179, 0.9608059760551092, 0.9882909652187959,
+      0.996547158807775
+    ],
+    "value": 4.5,
+    "expected": 2.75
+  },
+  {
+    "id": "warden-ii",
+    "name": "Signal Fire",
+    "level": 2,
+    "faces": ["Shield", "Shield", "Sword"],
+    "effect": {
+      "kind": "damage",
+      "amount": 3,
+      "range": 1,
+      "target": "one"
+    },
+    "family": "Warden",
+    "tier": "II",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Signal",
+        "stacks": 1,
+        "on": "towers-within-2"
+      },
+      {
+        "status": "Fortify",
+        "stacks": 1,
+        "on": "structure"
+      }
+    ],
+    "chance": [0, 0, 0.4871461691243712, 0.790008495824177, 0.9224151944560798, 0.9728666799140988],
+    "value": 6.5,
+    "expected": 3.17
+  },
+  {
+    "id": "warden-iii",
+    "name": "Phalanx",
+    "level": 3,
+    "faces": ["Shield", "Shield", "Sword", "Sword"],
+    "effect": {
+      "kind": "damage",
+      "amount": 7,
+      "range": 1,
+      "target": "one"
+    },
+    "family": "Warden",
+    "tier": "III",
+    "keywords": [],
+    "adds": [
+      {
+        "status": "Signal",
+        "stacks": 1,
+        "on": "towers-within-3"
+      },
+      {
+        "status": "Fortify",
+        "stacks": 1,
+        "on": "structure"
+      }
+    ],
+    "chance": [0, 0, 0, 0.42696005366702877, 0.7448817135660539, 0.9002916900440227],
+    "value": 10.5,
+    "expected": 4.48
+  }
+]

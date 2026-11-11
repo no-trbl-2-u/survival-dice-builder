@@ -220,6 +220,14 @@ export function describeEvent(event: GameEvent, names: Names): string {
       return `${skillName(names, event.skill)} goes to the bottom of its supply.`
     case 'skillReplaced':
       return `${skillName(names, event.skill)} leaves the Skill board.`
+    case 'calendarDay': {
+      const boons = event.boons.length ? ` Boon: ${event.boons.join(' and ')}.` : ''
+      const faces = event.faces.length ? ` Threat dice: ${event.faces.join(', ')}.` : ''
+      const elites = event.extraElites ? ` ${event.extraElites} extra elite.` : ''
+      return `Event Calendar: ${event.day}.${faces} Each spawn node spawns ${event.grunts}.${elites}${boons}`
+    }
+    case 'baseRepaired':
+      return `The base gets ${event.amount} health (health ${event.health}).`
     case 'milestoneReached':
       return `Milestone: ${names.config ? milestoneLabel(event.milestone, names.config.milestones, names.content) : event.milestone}.`
     case 'runEnded':

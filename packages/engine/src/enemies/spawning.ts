@@ -1,4 +1,5 @@
 import type { GameEvent } from '../events/events.ts'
+import { applyBoons, calendarDay, calendarSystem, nodeNearestBase } from './calendar.ts'
 import { hexDistance, tileHexes, type Axial } from '../hex.ts'
 import { baseHexes } from '../map/base.ts'
 import { nodeKind, spawnEnemy } from '../map/spawn.ts'
@@ -69,14 +70,16 @@ export function activeSpawnNodes(state: GameState): SpawnNode[] {
 /**
  * How many enemies each active node spawns at this Combat: 1, or 1 per 2 seats rounded up with
  * `spawn.perSeat` (row 68), plus 1 for every `spawn.rampEvery` rounds after round 1 (row 64:
- * `floor((round - 1) / N)`).
+ * `floor((round - 1) / N)`). With the Event Calendar on, the ramp is the calendar's own.
  *
  * @rule core loop v2 (Combat step 3), rows 64, 68 (proposed: spawn ramp, seat scaling)
  */
 export function spawnCount(state: GameState): number {
   const { rampEvery, perSeat } = state.config.spawn
   const base = perSeat ? Math.ceil(state.players.length / 2) : 1
-  const ramp = rampEvery === null ? 0 : Math.floor((state.round - 1) / rampEvery)
+  // The Event Calendar has its own ramp (laps, dice, rungs), so `spawn.rampEvery` does not stack.
+  const calendarOn = calendarSystem(state) !== 'off'
+  const ramp = rampEvery === null || calendarOn ? 0 : Math.floor((state.round - 1) / rampEvery)
   return base + ramp
 }
 
@@ -85,20 +88,48 @@ export function spawnCount(state: GameState): number {
  * `spawnCount` grunts and every active elite spawn node `spawnCount` elites, on every revealed
  * tile, in `spawnNodes` order. An occupied node spills the enemy to the nearest empty hex (9.8);
  * past the miniature limit the grunt nearest the base becomes an elite instead (10.5, row 32).
- * There is no wave track.
+ * There is no wave track. With `calendar.system` on, the calendar day sets the enemies per node
+ * (scaled by `spawnCount`), adds elites at the active node nearest the base, and gives its boons
+ * first (Event Calendar experiment).
  *
  * @rule 7.3, 9.8, 10.5, core loop v2 (Combat step 3), rows 64, 66, 68, 70
  */
 export function spawnAtNodes(state: GameState): Step {
-  let current = state
-  const events: GameEvent[] = []
+  const [day, remembered] = calendarDay(state)
+  const calendarOn = calendarSystem(state) !== 'off'
+  const [boons, boonEvents] = applyBoons(remembered, day.boons)
+  let current = boons
+  const events: GameEvent[] = calendarOn
+    ? [
+        {
+          type: 'calendarDay',
+          rule: '7.3',
+          system: calendarSystem(state),
+          day: day.name,
+          grunts: day.grunts,
+          elites: day.elites,
+          extraElites: day.extraElites,
+          boons: day.boons,
+          faces: day.faces ?? [],
+        },
+        ...boonEvents,
+      ]
+    : []
   const count = spawnCount(state)
-  for (const node of activeSpawnNodes(state)) {
-    for (let n = 0; n < count; n++) {
+  const nodes = activeSpawnNodes(state)
+  for (const node of nodes) {
+    const perNode = (node.kind === 'grunt' ? day.grunts : day.elites) * count
+    for (let n = 0; n < perNode; n++) {
       const [next, more] = spawnEnemy(current, node.kind, node.hex, '7.3')
       current = next
       events.push(...more)
     }
+  }
+  const nearest = nodeNearestBase(state, nodes)
+  for (let n = 0; nearest && n < day.extraElites; n++) {
+    const [next, more] = spawnEnemy(current, 'elite', nearest.hex, '7.3')
+    current = next
+    events.push(...more)
   }
   return [current, events]
 }

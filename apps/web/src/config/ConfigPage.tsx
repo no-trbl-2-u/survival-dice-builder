@@ -231,7 +231,7 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
   const meta = path.length > 0 ? defaultConfigMeta[path.join('.')] : undefined
   const label = meta?.label ?? (path.length > 0 ? human(path.at(-1) ?? '') : 'Rules')
   const type = schema.def.type
-  if (type === 'default' && schema.def.innerType) {
+  if ((type === 'default' || type === 'optional') && schema.def.innerType) {
     return (
       <Field
         schema={schema.def.innerType}
@@ -531,6 +531,13 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
       true,
     )
   }
+  // The Sundial days (Event Calendar experiment): a row of fields for each day.
+  if (path.join('.') === 'calendar.sundial.days') {
+    return row(
+      <SundialDaysEditor groupA11y={groupA11y} value={list as SundialDay[]} onChange={set} />,
+      true,
+    )
+  }
   // Anything else: edit as JSON, checked on save.
   return row(
     <textarea
@@ -549,6 +556,73 @@ function Field({ schema, value, path, draft, problems, onChange }: FieldProps): 
 }
 
 type Preset = { id: string; handSize: number; cards: { card: string; quantity: number }[] }
+
+type SundialDay = {
+  name: string
+  grunts: number
+  elites: number
+  extraElites: number
+  boon: 'none' | 'respite' | 'harvest'
+}
+
+const BOONS: readonly (readonly [SundialDay['boon'], string])[] = [
+  ['none', 'No boon'],
+  ['respite', 'Respite (heal and repair)'],
+  ['harvest', 'Harvest (spent nodes work again)'],
+]
+
+/** Sundial days, in order: each day's name, enemies per node, extra elites, and boon. */
+function SundialDaysEditor(
+  props: Readonly<{
+    groupA11y: Record<string, unknown>
+    value: readonly SundialDay[]
+    onChange: (next: SundialDay[]) => void
+  }>,
+) {
+  const update = (d: number, next: Partial<SundialDay>) =>
+    props.onChange(props.value.map((day, i) => (i === d ? { ...day, ...next } : day)))
+  const asCount = (raw: string) => (raw.trim() === '' ? (raw as unknown as number) : Number(raw))
+  const counts = [
+    ['grunts', 'enemies at each spawn node'],
+    ['elites', 'elites at each elite spawn node'],
+    ['extraElites', 'extra elites'],
+  ] as const
+  return (
+    <ol {...props.groupA11y} className={styles.presets}>
+      {props.value.map((day, d) => (
+        <li key={d} className={styles.presetHead}>
+          <input
+            type="text"
+            aria-label={`Day ${d + 1}: name`}
+            value={day.name}
+            onChange={(e) => update(d, { name: e.target.value })}
+          />
+          {counts.map(([key, words]) => (
+            <input
+              key={key}
+              type="number"
+              min={0}
+              aria-label={`Day ${d + 1}: ${words}`}
+              value={String(day[key])}
+              onChange={(e) => update(d, { [key]: asCount(e.target.value) })}
+            />
+          ))}
+          <select
+            aria-label={`Day ${d + 1}: boon`}
+            value={day.boon}
+            onChange={(e) => update(d, { boon: e.target.value as SundialDay['boon'] })}
+          >
+            {BOONS.map(([id, words]) => (
+              <option key={id} value={id}>
+                {words}
+              </option>
+            ))}
+          </select>
+        </li>
+      ))}
+    </ol>
+  )
+}
 
 /** A deck size in words: "10 cards", "1 card". */
 export function cardCount(size: number): string {

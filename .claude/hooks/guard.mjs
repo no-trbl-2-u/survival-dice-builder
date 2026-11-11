@@ -73,7 +73,38 @@ function commitVerb(message) {
 // Each rule: name, test(command) → true = block, message for the
 // agent. Messages say WHY and what to do instead, so a blocked
 // call self-corrects instead of retrying.
+// Commands that print or search file contents. A segment whose
+// first word (after env assignments) is one of these and that names
+// an archive/ path reads the archive (agents.md standing rule 9).
+const READ_WORDS = new Set([
+  'cat', 'less', 'more', 'head', 'tail', 'grep', 'egrep', 'rg', 'sed', 'awk',
+  'bat', 'nl', 'strings', 'xxd', 'od', 'cut', 'sort', 'diff', 'jq', 'node', 'python3', 'python',
+])
+
+/** True when a Bash command reads a file under archive/ without the user's go-ahead. */
+function readsArchive(cmd) {
+  if (/\bARCHIVE_READ=user-asked\b/.test(cmd)) return false
+  return cmd.split(/[|;&\n]/).some((raw) => {
+    // An output redirect into archive/ (cat > archive/INDEX.md, >> archive/...) is a write.
+    const segment = raw.replace(/\d?>>?\s*\S+/g, ' ')
+    if (!/(^|[\s'"=/.:])archive\//.test(segment) && !/(^|\s)archive(\s|$)/.test(segment)) return false
+    const words = segment.trim().split(/\s+/).filter((w) => !/^[A-Z_]+=/.test(w))
+    const first = words[0] ?? ''
+    if (READ_WORDS.has(first)) return true
+    return first === 'git' && /^(show|grep|blame|cat-file)$/.test(words[1] ?? '')
+  })
+}
+
 const RULES = [
+  {
+    name: 'archive-read',
+    test: (cmd) => readsArchive(cmd),
+    message:
+      'guard: archive/ is off limits to agents (agents.md standing rule 9). ' +
+      'It holds options the designer decided against. Read it only when ' +
+      'the user explicitly asks in this session, and then prefix the ' +
+      'command with ARCHIVE_READ=user-asked.',
+  },
   {
     name: 'no-verify',
     test: (cmd) => /\bgit\b[^|;&\n]*\bcommit\b[^|;&\n]*(\s--no-verify\b|\s-n\b)/.test(cmd),
@@ -289,6 +320,18 @@ function selfTest() {
     // heredoc's own first line, not the "$(cat <<'EOF'" wrapper
     ['git commit -m "$(cat <<\'EOF\'\nfeat: ship phase 1\n\nbody line\nEOF\n)"', null],
     ['git commit -m "$(cat <<\'EOF\'\nnonsense: bad verb\n\nbody line\nEOF\n)"', 'commit-verb'],
+    // archive-read: reading archive/ is blocked; moving into it is not
+    ['cat archive/INDEX.md', 'archive-read'],
+    ['grep -rn spawn archive/', 'archive-read'],
+    ['git show HEAD:archive/old.md', 'archive-read'],
+    ['ls docs && sed -n 1,5p archive/x.md', 'archive-read'],
+    ['ARCHIVE_READ=user-asked cat archive/INDEX.md', null],
+    ['git mv docs/design/old.md archive/old.md', null],
+    ['mkdir -p archive', null],
+    ['cat > archive/INDEX.md <<\'EOF\'\n# Archive\nEOF', null],
+    ['echo "row" >> archive/INDEX.md', null],
+    ['cat archive/a.md > /tmp/x', 'archive-read'],
+    ['cat docs/archive-notes.md', null],
     // allowed commands — must NOT match any rule
     ['git push origin main', null],
     ['git commit -m "feat: ship phase 8"', null],
