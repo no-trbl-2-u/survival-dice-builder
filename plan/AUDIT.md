@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-11 (pass 313, cloud tick)
+
+Pass 312 made the / Defenses line say no enemy can enter any defense hex (22440d9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 45 ran 2 commits ago) and so is the expand gate (pass 30 ran 10 commits ago, about 25 hours, under 48). Every build plan phase is shipped or blocked. Top of the queue: the first pass 45 LOW row, the / Defenses line saying a Tower fires "at the start of each Combat" while the Enemies line says enemies move and spawn then, with no order between them. Scored 2.7 (external-critique LOW: impact 3, ease 9). `defenseText` now reads "at each Combat, after the enemies move and spawn, it deals 2 damage to the nearest enemy within 2 hexes", as `startCombat` chains `moveEnemies`, `spawnAtNodes`, `towerAttacks`; the ruleText test pins the default and a changed defense. Next in line: the other pass 45 LOW rows (Repair 2, enemy health, Lake and Mountain case, Level II on card faces).
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /: the Tower attack and the enemy move have no stated order
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: name the order in `defenseText`, pinned in `ruleText.test.ts`
+- issue: #367
+- fixed: (this commit)
+
 # Site audit — 2026-11-11 (pass 312, cloud tick)
 
 Pass 311 gave the /config Copies of each card and Skill fields their rule line (551d569), and critique pass 45 filed 6 rows (c0e2e32). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 45 ran 1 commit ago) and so is the expand gate (pass 30 ran 9 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Top of the queue: the MED critique row from pass 45, the / Defenses line saying only a Barricade stops enemies while `enemyCanEnter` keeps every enemy off every defense hex. Scored 8.1 (external-critique MED: impact 6, ease 9, x1.5 bias). `defenseText` drops the `blocksEnemies` clause and adds one sentence after the defense list: "No enemy can enter a hex with a defense on it." A ruleText test pins the default, a changed config, an empty defense list, and a defense with `blocksEnemies` false. Next in line: the pass 45 LOW rows (Tower attack order, Repair 2, enemy health, Lake and Mountain case, Level II on card faces).

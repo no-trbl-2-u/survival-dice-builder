@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Tower attack and the enemy move both happen "at the start of each Combat", with no order given
-- pass: 45 (commit 551d569)
-- viewport: desktop
-- category: comprehension
-- observation: The Enemies line says enemies move before the spawn nodes spawn; the Defenses line says a Tower fires "at the start of each Combat". The engine moves enemies, then spawns, then fires the Towers, so a Tower can hit a new enemy, but no page says so.
-- evidence: / Defenses: "at the start of each Combat it deals 2 damage to the nearest enemy within 2 hexes" (`packages/content/src/ruleText.ts:340`); `packages/engine/src/phases/advance.ts:168-172` chains `moveEnemies`, `spawnAtNodes`, `towerAttacks`.
-- suggested fix: Change the Tower clause to "at each Combat, after the enemies move and spawn, it deals 2 damage to the nearest enemy within 2 hexes".
-- source: web-fetch
-
 ### [LOW] /play — the starter Build card's Combat option reads "Repair 2" and does not say what it repairs
 - pass: 45 (commit 551d569)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Tower attack and the enemy move both happen "at the start of each Combat", with no order given
+- pass: 45 (commit 551d569)
+- viewport: desktop
+- category: comprehension
+- observation: The Enemies line says enemies move before the spawn nodes spawn; the Defenses line says a Tower fires "at the start of each Combat". The engine moves enemies, then spawns, then fires the Towers, so a Tower can hit a new enemy, but no page says so.
+- evidence: / Defenses: "at the start of each Combat it deals 2 damage to the nearest enemy within 2 hexes" (`packages/content/src/ruleText.ts:340`); `packages/engine/src/phases/advance.ts:168-172` chains `moveEnemies`, `spawnAtNodes`, `towerAttacks`.
+- suggested fix: Change the Tower clause to "at each Combat, after the enemies move and spawn, it deals 2 damage to the nearest enemy within 2 hexes".
+- source: web-fetch
+- issue: #367
+- fixed: (this commit) — the Tower clause on / reads "at each Combat, after the enemies move and spawn, it deals 2 damage to the nearest enemy within 2 hexes", as `startCombat` chains `moveEnemies`, `spawnAtNodes`, `towerAttacks`
 
 ### [x] [MED] / — the Defenses line says only a Barricade stops enemies, but no enemy can enter a Tower hex either
 - pass: 45 (commit 551d569)

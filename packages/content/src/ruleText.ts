@@ -328,7 +328,8 @@ export function siegeText(content: Enemies): string {
 }
 
 /**
- * What each defense costs and does, that no enemy can enter a defense hex (as `enemyCanEnter`
+ * What each defense costs and does (a Tower attacks after the enemies move and spawn, as
+ * `startCombat` chains them), that no enemy can enter a defense hex (as `enemyCanEnter`
  * plays it, for every defense, not only those with `blocksEnemies`), who gets the currency
  * when an attacking defense defeats an enemy, and the base's starting health: the Defenses
  * line on /.
@@ -339,7 +340,7 @@ export function defenseText(config: GameConfig, content: Pick<Content, 'defenses
   const lines = content.defenses.map((d) => {
     const effects = [
       d.attack &&
-        `at the start of each Combat it deals ${d.attack.damage} damage to the nearest enemy within ${plural(d.attack.range, 'hex', 'hexes')}`,
+        `at each Combat, after the enemies move and spawn, it deals ${d.attack.damage} damage to the nearest enemy within ${plural(d.attack.range, 'hex', 'hexes')}`,
     ].filter(Boolean)
     const effect = effects.length > 0 ? `; ${effects.join(', and ')}` : ''
     const pays = d.attack
