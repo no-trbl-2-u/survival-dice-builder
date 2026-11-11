@@ -495,14 +495,14 @@ describe('rule text from config', () => {
 
   it('blocked enemy: the line names the blockers and what a blocked enemy does (9.7)', () => {
     expect(blockedPathText(base)).toBe(
-      'Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy. If every path to its target is blocked, the enemy moves toward the next nearest target; if no path reaches any target, it does not move.',
+      'Enemies, player figures, Barricades, Towers, Lake and Mountain hexes block an enemy. If every path to its target is blocked, the enemy moves toward the next nearest target; if no path reaches any target, it does not move.',
     )
     const wait = With((c) => ({
       ...c,
       rulings: { ...c.rulings, blockedPathRule: 'wait' as const },
     }))
     expect(blockedPathText(wait)).toBe(
-      'Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy. If every path to its target is blocked, the enemy waits where it is.',
+      'Enemies, player figures, Barricades, Towers, Lake and Mountain hexes block an enemy. If every path to its target is blocked, the enemy waits where it is.',
     )
     expect(ruleLineFor('rulings.blockedPathRule', wait, defaultContent)).toBe(blockedPathText(wait))
   })

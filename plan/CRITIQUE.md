@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Blocked enemy line writes "lakes and mountains" in lower case
-- pass: 45 (commit 551d569)
-- viewport: desktop
-- category: voice
-- observation: /tiles and the /play log capitalise Lake and Mountain (the log was fixed for this in an earlier pass); the /config Blocked enemy line does not.
-- evidence: `packages/content/src/ruleText.ts:508` "Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy."; `apps/web/src/tiles/TileSheet.tsx:88` "Lake (impassable)", "Mountain (impassable)".
-- suggested fix: Change "lakes and mountains" to "Lake and Mountain hexes" in `blockedPathText`.
-- source: web-fetch
-
 ### [LOW] /play — card faces give a level as "Level II", while /config gives card and Skill levels as numbers
 - pass: 45 (commit 551d569)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the Blocked enemy line writes "lakes and mountains" in lower case
+- pass: 45 (commit 551d569)
+- viewport: desktop
+- category: voice
+- observation: /tiles and the /play log capitalise Lake and Mountain (the log was fixed for this in an earlier pass); the /config Blocked enemy line does not.
+- evidence: `packages/content/src/ruleText.ts:508` "Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy."; `apps/web/src/tiles/TileSheet.tsx:88` "Lake (impassable)", "Mountain (impassable)".
+- suggested fix: Change "lakes and mountains" to "Lake and Mountain hexes" in `blockedPathText`.
+- source: web-fetch
+- issue: #372
+- fixed: (this commit) — `blockedPathText` now reads "Enemies, player figures, Barricades, Towers, Lake and Mountain hexes block an enemy."
 
 ### [x] [LOW] / — the Enemies line gives each enemy's dice, siege damage and rewards, but never its health
 - pass: 45 (commit 551d569)

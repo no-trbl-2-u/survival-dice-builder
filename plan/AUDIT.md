@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-11 (pass 316, cloud tick)
+
+Pass 315 gave the / Enemies line each enemy's health (aee21d7). No issues are open for triage. The critique gate is closed (pass 45 ran 5 commits ago, same day) and so is the expand gate (pass 30 ran 13 commits ago, about 32 hours, under 48). Every build plan phase is shipped or blocked. The MED /decisions rows edit `[needs-user-call]` items and wait for /oversight. Top of the queue: the pass 45 LOW row, the /config Blocked enemy line writing "lakes and mountains" in lower case while /tiles and the /play log capitalise Lake and Mountain. Scored 2.7 (external-critique LOW: impact 3, ease 9). `blockedPathText` now reads "Enemies, player figures, Barricades, Towers, Lake and Mountain hexes block an enemy."; the two ruling tests pin the new text. Next in line: the other pass 45 LOW row (Level II on card faces).
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /config: the Blocked enemy line writes "lakes and mountains" in lower case
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "Lake and Mountain hexes" in `blockedPathText`, pinned in tests
+- issue: #372
+- fixed: (this commit)
+
 # Site audit — 2026-11-11 (pass 315, cloud tick)
 
 Pass 314 gave the Repair card option its unit and the / Combat step its repair line (9d37532). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 45 ran 4 commits ago, same day) and so is the expand gate (pass 30 ran 12 commits ago, about 32 hours, under 48). Every build plan phase is shipped or blocked. The MED /decisions rows edit `[needs-user-call]` items and wait for /oversight. Top of the queue: the pass 45 LOW row, the / Enemies line giving no enemy's health, so a reader cannot tell a grunt falls to one Strike while an elite takes several. Scored 2.7 (external-critique LOW: impact 3, ease 9). New `enemyHealthText`, built from `enemies.json`, ends the Enemies line: "A grunt has 2 health, an elite 14." Tests pin the default, a changed record, an empty list, and the / Enemies item. Next in line: the other pass 45 LOW rows (Lake and Mountain case, Level II on card faces).

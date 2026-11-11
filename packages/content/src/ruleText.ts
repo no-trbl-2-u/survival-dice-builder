@@ -526,7 +526,7 @@ export function figuresPerHexText(config: GameConfig): string {
 
 /**
  * What an enemy does when its path is blocked: "Enemies, player figures, Barricades, Towers,
- * lakes and mountains block an enemy. If every path to its target is blocked, the enemy moves
+ * Lake and Mountain hexes block an enemy. If every path to its target is blocked, the enemy moves
  * toward the next nearest target; if no path reaches any target, it does not move." With
  * `"wait"` it waits where it is, as `chooseRoute` and `pathNextTo` play it.
  *
@@ -534,7 +534,7 @@ export function figuresPerHexText(config: GameConfig): string {
  */
 export function blockedPathText(config: GameConfig): string {
   const head =
-    'Enemies, player figures, Barricades, Towers, lakes and mountains block an enemy. If every path to its target is blocked,'
+    'Enemies, player figures, Barricades, Towers, Lake and Mountain hexes block an enemy. If every path to its target is blocked,'
   return config.rulings.blockedPathRule === 'wait'
     ? `${head} the enemy waits where it is.`
     : `${head} the enemy moves toward the next nearest target; if no path reaches any target, it does not move.`
