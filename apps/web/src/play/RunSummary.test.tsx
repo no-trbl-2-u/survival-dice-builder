@@ -19,3 +19,23 @@ describe('run summary base health chart', () => {
     expect(items[1]?.querySelector('.visually-hidden')?.textContent).toBe('Round 2: base health 7')
   })
 })
+
+describe('run summary rules line', () => {
+  it('says a standard run played the standard rules', () => {
+    const run = newRun(defaultContent.config, 1)
+    render(<RunSummary run={run} baseCurve={[10]} onNewRun={() => {}} />)
+    expect(screen.getByTestId('config-changes').textContent).toContain(
+      'Playing with the standard rules.',
+    )
+  })
+
+  it('lists the changes the run played, with no link to edit them', () => {
+    const config = { ...defaultContent.config, miniatureLimit: 12 }
+    const run = newRun(config, 1)
+    render(<RunSummary run={run} baseCurve={[10]} onNewRun={() => {}} />)
+    const changes = screen.getByTestId('config-changes')
+    expect(changes.textContent).toContain('Playing with 1 change from the standard rules:')
+    expect(within(changes).getByRole('listitem').textContent).toMatch(/: 12$/)
+    expect(within(changes).queryByRole('link', { name: 'review or reset' })).toBeNull()
+  })
+})

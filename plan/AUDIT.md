@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-12 (pass 327, cloud tick)
+
+Pass 326 made the changes list spell out Sundial days and deck presets (522aac9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 46 ran at cf41877, 11 commits ago, under 24 hours) and so is the expand gate (pass 31 ran 14 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` /decisions item and waits for /oversight. So this pass audits afresh: the /play run summary gives cause, round, level, milestones and base health, but not the rules the run played. The start panel says "Playing with N changes from the standard rules" before the run; once the base falls, a playtester reading or screenshotting the summary cannot tell a standard run from one on a changed config (only the downloaded JSON carries `changedKeys`). Scored 3.2 (comprehension: impact 4, ease 8). The summary now shows the same `ConfigChanges` list for the run's own config, under the seed line, with no "review or reset" link; two RunSummary tests pin the standard and the changed case. Next in line: the next tick audits afresh or waits for the critique gate.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play: the run summary does not say which rules the run played
+- category: comprehension
+- impact: 4
+- ease: 8
+- next: render `ConfigChanges` for `run.config` in `RunSummary.tsx`, pinned in `RunSummary.test.tsx`
+- issue: #385
+- fixed: (this commit)
+
 # Site audit — 2026-11-12 (pass 326, cloud tick)
 
 Pass 325 made the changes list give a changed list field's items (b4661de). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 46 ran at cf41877, 10 commits ago, under 24 hours) and so is the expand gate (pass 31 ran 13 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` /decisions item and waits for /oversight. So this pass audits afresh and takes the gap pass 325 left: the "Playing with N changes from the standard rules" list still prints "Sundial days: changed" and "Deck and hand presets: changed", and an emptied list (Starter Skills with none) reads "changed" too, so a playtest on a saved config cannot say which days or starter deck it plays. Scored 3.2 (comprehension: impact 4, ease 8). New `fieldValue` spells out each Sundial day by name, spawns and boon ("Dawn: no spawns, Respite; Raid: 1 enemy, 1 elite") and each deck preset by hand size and card names ("deck-10-hand-5: hand of 5, 4 Move, 4 Gather, 1 Build, 1 Rest"); an empty list reads "none". A ConfigChanges test pins both lists and the empty case. Next in line: no field in the changes list reads "changed"; the next tick audits afresh or waits for the critique gate.

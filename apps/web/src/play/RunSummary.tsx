@@ -1,4 +1,6 @@
+import { changedFields, defaultContent } from '@survival/content'
 import { useEffect, useRef } from 'react'
+import { ConfigChanges } from '../config/ConfigChanges.tsx'
 import { downloadRun } from './exportRun.ts'
 import { MilestoneList } from './MilestoneList.tsx'
 import styles from './Play.module.css'
@@ -7,7 +9,8 @@ import type { Run } from './run.ts'
 type Props = Readonly<{ run: Run; baseCurve: readonly number[]; onNewRun: () => void }>
 
 /**
- * The end of the run: cause, round, level, milestones, base health by round, and the export.
+ * The end of the run: cause, round, level, the rules it played (the changes from the standard
+ * rules, as the start panel lists them), milestones, base health by round, and the export.
  * Each bar's short "1: 10" label is hidden from screen readers, which hear
  * "Round 1: base health 10" instead.
  */
@@ -32,6 +35,12 @@ export function RunSummary({ run, baseCurve, onNewRun }: Props) {
         Seed {run.seed} · {run.actions.length} actions · level {s.level} · {s.upgrades.length}{' '}
         {s.upgrades.length === 1 ? 'upgrade' : 'upgrades'}
       </p>
+      <div className={styles.muted}>
+        <ConfigChanges
+          config={run.config}
+          changes={changedFields(run.config, defaultContent.config)}
+        />
+      </div>
       <h3 className={styles.subTitle}>Milestones</h3>
       <MilestoneList state={s} />
       <h3 className={styles.subTitle}>Base health at the start of each round</h3>
