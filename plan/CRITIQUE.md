@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the Event Calendar log line drops units, plurals, capitals and the elite-node count
-- pass: 46 (commit cf41877)
-- viewport: desktop
-- category: comprehension
-- observation: The line prints "Each spawn node spawns 2." with no unit, "2 extra elite" with no plural, and lower-case day, face and boon names that /config capitalises (Raid, Boon, Respite, Harvest). It never gives `event.elites`, so a player cannot tell from the log why an elite appeared at an elite spawn node.
-- evidence: `apps/web/src/play/describeEvent.ts` `calendarDay`: `Event Calendar: ${event.day}.${faces} Each spawn node spawns ${event.grunts}.${elites}${boons}`; e.g. "Event Calendar: notoriety rung 3. Each spawn node spawns 2. 2 extra elite. Boon: respite."
-- suggested fix: "Each spawn node spawns 2 enemies; each elite spawn node spawns 1 elite. 2 extra elites. Boon: Respite." with capitalised names and plurals.
-- source: web-fetch
-
 ### [LOW] /config — the Event Calendar help uses Respite and Harvest without saying what they do
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] /play — the Event Calendar log line drops units, plurals, capitals and the elite-node count
+- pass: 46 (commit cf41877)
+- viewport: desktop
+- category: comprehension
+- observation: The line prints "Each spawn node spawns 2." with no unit, "2 extra elite" with no plural, and lower-case day, face and boon names that /config capitalises (Raid, Boon, Respite, Harvest). It never gives `event.elites`, so a player cannot tell from the log why an elite appeared at an elite spawn node.
+- evidence: `apps/web/src/play/describeEvent.ts` `calendarDay`: `Event Calendar: ${event.day}.${faces} Each spawn node spawns ${event.grunts}.${elites}${boons}`; e.g. "Event Calendar: notoriety rung 3. Each spawn node spawns 2. 2 extra elite. Boon: respite."
+- suggested fix: "Each spawn node spawns 2 enemies; each elite spawn node spawns 1 elite. 2 extra elites. Boon: Respite." with capitalised names and plurals.
+- source: web-fetch
+- issue: #378
+- fixed: (this commit) — the line gives units and plurals, capitalises the day, faces and boons, adds the elite spawn node count, and says where extra elites come; `calendarLog.test.ts` pins it.
+
 ### [x] [MED] /decisions — reading 79 says Sundial and Notoriety have no config field; /config has fields for both
 - pass: 46 (commit cf41877)
 - viewport: desktop

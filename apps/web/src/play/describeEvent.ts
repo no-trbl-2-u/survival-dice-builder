@@ -221,10 +221,16 @@ export function describeEvent(event: GameEvent, names: Names): string {
     case 'skillReplaced':
       return `${skillName(names, event.skill)} leaves the Skill board.`
     case 'calendarDay': {
-      const boons = event.boons.length ? ` Boon: ${event.boons.join(' and ')}.` : ''
-      const faces = event.faces.length ? ` Threat dice: ${event.faces.join(', ')}.` : ''
-      const elites = event.extraElites ? ` ${event.extraElites} extra elite.` : ''
-      return `Event Calendar: ${event.day}.${faces} Each spawn node spawns ${event.grunts}.${elites}${boons}`
+      const capital = (word: string) => word.charAt(0).toUpperCase() + word.slice(1)
+      const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
+      const boons = event.boons.length ? ` Boon: ${event.boons.map(capital).join(' and ')}.` : ''
+      const faces = event.faces.length
+        ? ` Threat dice: ${event.faces.map(capital).join(', ')}.`
+        : ''
+      const extra = event.extraElites
+        ? ` ${count(event.extraElites, 'extra elite', 'extra elites')} at the spawn node nearest the base.`
+        : ''
+      return `Event Calendar: ${capital(event.day)}.${faces} Each spawn node spawns ${count(event.grunts, 'enemy', 'enemies')}; each elite spawn node spawns ${count(event.elites, 'elite', 'elites')}.${extra}${boons}`
     }
     case 'baseRepaired':
       return `The base gets ${event.amount} health (health ${event.health}).`
