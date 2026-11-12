@@ -1,10 +1,15 @@
 import { defaultConfigMeta, proposalsIn } from '@survival/content'
 import { rowId } from '../decisions/Inline.tsx'
 
-/** The part of a value a short list can show: a number, a word, on/off, or "changed". */
-export function shortValue(value: unknown): string {
+/**
+ * The part of a value a short list can show: a number, a word, on/off, or "changed". A choice
+ * field gives its option phrase from config meta ("Threat dice (experiment)"), as its drop-down
+ * on /config does, rather than the stored key ("threat-dice").
+ */
+export function shortValue(value: unknown, options?: Readonly<Record<string, string>>): string {
   if (typeof value === 'boolean') return value ? 'on' : 'off'
-  if (typeof value === 'number' || typeof value === 'string') return String(value)
+  if (typeof value === 'string') return options?.[value] ?? value
+  if (typeof value === 'number') return String(value)
   if (value === null) return 'off'
   return 'changed'
 }
@@ -76,7 +81,7 @@ export function ConfigChanges({ config, changes, updated = [], reviewHref }: Pro
           <ul>
             {changes.map((path) => (
               <li key={path}>
-                {label(path)}: {shortValue(valueAt(config, path))}
+                {label(path)}: {shortValue(valueAt(config, path), defaultConfigMeta[path]?.options)}
               </li>
             ))}
           </ul>

@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-12 (pass 324, cloud tick)
+
+Pass 323 gave the /config Event Calendar fields their rule line (a9f8ddc). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 46 ran at cf41877, 8 commits ago, about 18 hours) and so is the expand gate (pass 31 ran 11 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` /decisions item and waits for /oversight. So this pass audits afresh: the "Playing with N changes from the standard rules" list on the /play start panel and on /config prints a changed choice field by its stored key ("Event Calendar: threat-dice", "Shop timing: prepare-only", "Combat model: exchange"), while the /config drop-down for the same field reads "Threat dice (experiment)", "Only in the Prepare phase", "Exchanges (older rule)". Scored 3.6 (comprehension: impact 4, ease 9). `shortValue` now takes the field's option phrases from config meta and the list passes them, so it reads "Event Calendar: Threat dice (experiment)"; a ConfigChanges test pins two fields. Next in line: the next tick audits afresh or waits for the critique gate.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /play and /config: the changes list prints a choice field's stored key
+- category: comprehension
+- impact: 4
+- ease: 9
+- next: give `shortValue` the option phrases from config meta, pinned in `ConfigChanges.test.tsx`
+- issue: #382
+- fixed: (this commit)
+
 # Site audit — 2026-11-12 (pass 323, cloud tick)
 
 Pass 322 gave the /config Countryside and Core tiles fields their rule line (176207c). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 46 ran at cf41877, 7 commits ago, same day) and so is the expand gate (pass 31 ran 10 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` /decisions item and waits for /oversight. So this pass audits afresh: the 11 Event Calendar fields are the last live /config settings with no rule line. Their help says "this many" without the draft's values, the Sundial lap counts rounds apart from the ring length, and nothing says a Sundial, Threat dice or Notoriety field does nothing while another system is chosen. Scored 3.2 (comprehension: impact 4, ease 8). New `calendarText` builds each system's line from config, as `sundialDay`, `threatDiceDay`, `notorietyDay` and `applyBoons` play it (default Threat dice: "Threat dice: 1 die in round 1, and 1 more every 3 rounds. The faces are Calm, Raid, Raid, Raid, Elite and Boon." then what a Respite gives); `respiteText` gives the Respite fields' line; `ruleLineFor` maps every `calendar.*` field and adds "Not in play: the Event Calendar is Off." when the field's system is not chosen. A ruleText test pins the four systems, singular values, the mapping and the not-in-play note. Next in line: no live /config field lacks a rule line; the next tick audits afresh or waits for the critique gate.

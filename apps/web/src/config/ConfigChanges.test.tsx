@@ -55,5 +55,20 @@ describe('ConfigChanges', () => {
       shortValue(null),
       shortValue([1]),
     ]).toEqual(['3', 'pool', 'on', 'off', 'changed'])
+    expect(shortValue('pool', { pool: 'Your pool' })).toBe('Your pool')
+  })
+
+  it('gives a changed choice field its option phrase, not the stored key (audit pass 324)', () => {
+    const changed = {
+      ...config,
+      calendar: { ...config.calendar, system: 'threat-dice' as const },
+      rulings: { ...config.rulings, shopTiming: 'prepare-only' as const },
+    }
+    render(<ConfigChanges config={changed} changes={['calendar.system', 'rulings.shopTiming']} />)
+    const items = screen.getAllByRole('listitem').map((li) => li.textContent)
+    expect(items).toEqual([
+      'Event Calendar: Threat dice (experiment)',
+      'Shop timing: Only in the Prepare phase',
+    ])
   })
 })
