@@ -107,6 +107,8 @@ export {
   forcedRevealText,
   buildLevelsText,
   buildOnNodeText,
+  calendarText,
+  respiteText,
   repairText,
   revealText,
   tileDeckText,

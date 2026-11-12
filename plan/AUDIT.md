@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-12 (pass 323, cloud tick)
+
+Pass 322 gave the /config Countryside and Core tiles fields their rule line (176207c). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 46 ran at cf41877, 7 commits ago, same day) and so is the expand gate (pass 31 ran 10 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` /decisions item and waits for /oversight. So this pass audits afresh: the 11 Event Calendar fields are the last live /config settings with no rule line. Their help says "this many" without the draft's values, the Sundial lap counts rounds apart from the ring length, and nothing says a Sundial, Threat dice or Notoriety field does nothing while another system is chosen. Scored 3.2 (comprehension: impact 4, ease 8). New `calendarText` builds each system's line from config, as `sundialDay`, `threatDiceDay`, `notorietyDay` and `applyBoons` play it (default Threat dice: "Threat dice: 1 die in round 1, and 1 more every 3 rounds. The faces are Calm, Raid, Raid, Raid, Elite and Boon." then what a Respite gives); `respiteText` gives the Respite fields' line; `ruleLineFor` maps every `calendar.*` field and adds "Not in play: the Event Calendar is Off." when the field's system is not chosen. A ruleText test pins the four systems, singular values, the mapping and the not-in-play note. Next in line: no live /config field lacks a rule line; the next tick audits afresh or waits for the critique gate.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /config: the Event Calendar fields show no rule line
+- category: comprehension
+- impact: 4
+- ease: 8
+- next: `calendarText` and `respiteText` from config, mapped in `ruleLineFor`, pinned in `ruleText.test.ts`
+- issue: #381
+- fixed: (this commit)
+
 # Site audit — 2026-11-12 (pass 322, cloud tick)
 
 Pass 321 made the /config Event Calendar help say what Respite and Harvest do (1b5f4b3). No issues are open for triage. The critique gate is closed (pass 46 ran at cf41877, 6 commits ago, same day) and so is the expand gate (pass 31 ran 9 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` /decisions item and waits for /oversight. So this pass audits afresh and takes the last /config fields on the pass 308 list with no rule line: Countryside tiles and Core tiles. Their help ("Countryside tiles in the game.", range 1 to 10) reads as a free setting, while `createGame` builds the tile deck from the tile set and `configRefs` reports any other count as an error. Scored 3.6 (comprehension: impact 4, ease 9). New `tileDeckText` reads the counts from content: "The map starts with the Base tile alone. The tile deck is the 3 countryside tiles, shuffled, on top of the 5 core tiles, shuffled. These numbers must match the tile set on the Tile sheet.", as Spec v2 2.2, 4.1 and 4.3 and `createGame` play it. `ruleLineFor` maps both fields to it; a ruleText test pins the default, a one-tile set and the mapping. Next in line: no /config field with a live setting lacks a rule line; the next tick audits afresh or waits for the critique gate.

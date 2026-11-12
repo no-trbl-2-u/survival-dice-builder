@@ -569,6 +569,87 @@ export function forcedRevealText(config: GameConfig): string {
     : `At round end, if no tile was revealed in the last ${plural(every, 'round', 'rounds')} and the tile deck is not empty, the top tile is revealed in the open slot nearest the base.`
 }
 
+type Calendar = NonNullable<GameConfig['calendar']>
+type CalendarSystem = Calendar['system']
+
+/** Each Event Calendar system by its /config name. */
+const CALENDAR_NAMES: Readonly<Record<CalendarSystem, string>> = {
+  off: 'Off',
+  'threat-dice': 'Threat dice',
+  sundial: 'Sundial',
+  notoriety: 'Notoriety ladder',
+}
+
+/** "every round", or "every 3 rounds". */
+const every = (n: number, one: string, many: string) =>
+  n === 1 ? `every ${one}` : `every ${n} ${many}`
+
+/** "Calm, Raid and Boon": a list in player words. */
+const listText = (items: readonly string[]) =>
+  items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`
+
+/**
+ * What a Respite boon gives, as `applyBoons` plays it.
+ *
+ * @rule 7.3 (Event Calendar experiment: boons)
+ */
+export function respiteText(calendar: Calendar): string {
+  const { heal, repair } = calendar.respite
+  return `A Respite gives each player who is not knocked out ${heal} health and the base ${repair} health, never above the maximum.`
+}
+
+/**
+ * How an Event Calendar system sets the spawns at each Combat start, with the config's values,
+ * as `sundialDay`, `threatDiceDay` and `notorietyDay` play it; a system that can give a Respite
+ * adds what a Respite gives.
+ *
+ * @param system - the system to describe; the config's own system by default.
+ * @rule 7.3 (Event Calendar experiment)
+ */
+export function calendarText(calendar: Calendar, system: CalendarSystem = calendar.system): string {
+  if (system === 'off')
+    return 'The Event Calendar is off: every spawn node spawns at each Combat, as in the written rules.'
+  const respite = ` ${respiteText(calendar)}`
+  if (system === 'sundial') {
+    const { eraEvery, days } = calendar.sundial
+    const names = listText(days.map((d) => d.name))
+    const rest = days.some((d) => d.boon === 'respite') ? respite : ''
+    return `Sundial: 1 day each round, in a ring of ${plural(days.length, 'day', 'days')} (${names}). After ${every(eraEvery, 'round', 'rounds')}, each number of enemies or elites a day spawns rises by 1, unless it is 0.${rest}`
+  }
+  if (system === 'threat-dice') {
+    const { startDice, addDieEvery, faces } = calendar.threatDice
+    const names = listText(faces.map((f) => f.charAt(0).toUpperCase() + f.slice(1)))
+    return `Threat dice: ${plural(startDice, 'die', 'dice')} in round 1, and 1 more ${every(addDieEvery, 'round', 'rounds')}. The faces are ${names}.${respite}`
+  }
+  const { rungEvery, rungsPerGrunt, eliteEveryRungs } = calendar.notoriety
+  const elite = every(eliteEveryRungs, 'rung', 'rungs')
+  return `Notoriety ladder: the threat climbs 1 rung ${every(rungEvery, 'round', 'rounds')} and 1 rung at each new milestone, and each new rung gives a Respite. Each spawn node spawns 1 enemy and each elite spawn node 1 elite, plus 1 more for ${every(rungsPerGrunt, 'rung', 'rungs')}. ${elite.charAt(0).toUpperCase() + elite.slice(1)}, 1 elite also comes to the spawn node nearest the base.${respite}`
+}
+
+/**
+ * The /config line for an Event Calendar field: the system the field belongs to (the chosen
+ * one for the system field, every system for the Respite fields), and a note when that system
+ * is not in play.
+ *
+ * @param key - the field's key under `calendar`: "system", "respite", "sundial", ...
+ * @rule 7.3 (Event Calendar experiment)
+ */
+export function calendarFieldText(calendar: Calendar, key: string): string | null {
+  const owner: Record<string, CalendarSystem> = {
+    sundial: 'sundial',
+    threatDice: 'threat-dice',
+    notoriety: 'notoriety',
+  }
+  if (key === 'system') return calendarText(calendar)
+  const off = `Not in play: the Event Calendar is ${CALENDAR_NAMES[calendar.system]}.`
+  if (key === 'respite')
+    return calendar.system === 'off' ? `${respiteText(calendar)} ${off}` : respiteText(calendar)
+  const system = owner[key]
+  if (!system) return null
+  const line = calendarText(calendar, system)
+  return calendar.system === system ? line : `${line} ${off}`
+}
+
 /** Design-document tags in player words: the documents are build history, not rules names. */
 const CITATIONS: readonly (readonly [RegExp, string])[] = [
   [/Combat v3/g, 'engagements'],
@@ -1001,6 +1082,8 @@ export function ruleLineFor(
   if (path === 'tiles.revealMoveCost') return revealText(config)
   if (path === 'tiles.countryside' || path === 'tiles.core') return tileDeckText(content)
   if (path === 'spawn.newTileDelay') return spawnText(config)
+  if (group === 'calendar')
+    return config.calendar ? calendarFieldText(config.calendar, key ?? '') : null
   if (group === 'experience' || path === 'options.maxLevel') return levelText(config, content)
   if (path === 'spawn.rampEvery' || path === 'spawn.perSeat' || path === 'spawn.nodeRange')
     return `A spawn node ${siteText('spawn-node', config, content)}; an elite spawn node ${siteText('elite-spawn-node', config, content)}.`

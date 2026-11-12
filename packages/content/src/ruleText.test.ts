@@ -34,6 +34,8 @@ import {
   forcedRevealText,
   buildLevelsText,
   buildOnNodeText,
+  calendarText,
+  respiteText,
   suppliesText,
   repairText,
   revealText,
@@ -209,6 +211,57 @@ describe('rule text from config', () => {
     expect(tileDeckText(one)).toMatch(/the 1 countryside tile, shuffled/)
     for (const path of ['tiles.countryside', 'tiles.core'])
       expect(ruleLineFor(path, base, defaultContent)).toBe(tileDeckText(defaultContent))
+  })
+
+  it('the Event Calendar fields: each system line from config, and a note when not in play', () => {
+    const calendar = base.calendar
+    if (!calendar) throw new Error('the default config has the Event Calendar group')
+    expect(calendarText(calendar)).toBe(
+      'The Event Calendar is off: every spawn node spawns at each Combat, as in the written rules.',
+    )
+    const respite =
+      'A Respite gives each player who is not knocked out 3 health and the base 3 health, never above the maximum.'
+    expect(respiteText(calendar)).toBe(respite)
+    expect(calendarText(calendar, 'sundial')).toBe(
+      `Sundial: 1 day each round, in a ring of 8 days (Dawn, Raid, Raid, Harvest, Raid, Feast, Blood Moon and Raid). After every 8 rounds, each number of enemies or elites a day spawns rises by 1, unless it is 0. ${respite}`,
+    )
+    expect(calendarText(calendar, 'threat-dice')).toBe(
+      `Threat dice: 1 die in round 1, and 1 more every 3 rounds. The faces are Calm, Raid, Raid, Raid, Elite and Boon. ${respite}`,
+    )
+    expect(calendarText(calendar, 'notoriety')).toBe(
+      `Notoriety ladder: the threat climbs 1 rung every 3 rounds and 1 rung at each new milestone, and each new rung gives a Respite. Each spawn node spawns 1 enemy and each elite spawn node 1 elite, plus 1 more for every 3 rungs. Every 3 rungs, 1 elite also comes to the spawn node nearest the base. ${respite}`,
+    )
+    const quick = {
+      ...calendar,
+      threatDice: { ...calendar.threatDice, startDice: 2, addDieEvery: 1 },
+      notoriety: { ...calendar.notoriety, eliteEveryRungs: 1 },
+      sundial: {
+        ...calendar.sundial,
+        days: calendar.sundial.days.filter((d) => d.boon !== 'respite'),
+      },
+    }
+    expect(calendarText(quick, 'threat-dice')).toMatch(
+      /^Threat dice: 2 dice in round 1, and 1 more every round\./,
+    )
+    expect(calendarText(quick, 'notoriety')).toMatch(/ Every rung, 1 elite also comes/)
+    expect(calendarText(quick, 'sundial')).not.toMatch(/Respite/)
+    expect(ruleLineFor('calendar.system', base, defaultContent)).toBe(calendarText(calendar))
+    expect(ruleLineFor('calendar.sundial.eraEvery', base, defaultContent)).toBe(
+      `${calendarText(calendar, 'sundial')} Not in play: the Event Calendar is Off.`,
+    )
+    expect(ruleLineFor('calendar.respite.heal', base, defaultContent)).toBe(
+      `${respite} Not in play: the Event Calendar is Off.`,
+    )
+    const dice: GameConfig = { ...base, calendar: { ...calendar, system: 'threat-dice' } }
+    expect(ruleLineFor('calendar.threatDice.faces', dice, defaultContent)).toBe(
+      calendarText(calendar, 'threat-dice'),
+    )
+    expect(ruleLineFor('calendar.respite.repair', dice, defaultContent)).toBe(respite)
+    expect(ruleLineFor('calendar.notoriety.rungEvery', dice, defaultContent)).toMatch(
+      / Not in play: the Event Calendar is Threat dice\.$/,
+    )
+    const before: GameConfig = { ...base, calendar: undefined }
+    expect(ruleLineFor('calendar.system', before, defaultContent)).toBeNull()
   })
 
   it('spawning: a new tile delay is named (row 66)', () => {
