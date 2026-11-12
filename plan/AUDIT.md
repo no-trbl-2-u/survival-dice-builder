@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-12 (pass 325, cloud tick)
+
+Pass 324 made the changes list name a choice field's option, not its stored key (4672694). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 46 ran at cf41877, 9 commits ago, about 19 hours) and so is the expand gate (pass 31 ran 12 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` /decisions item and waits for /oversight. So this pass audits afresh: the same "Playing with N changes from the standard rules" list prints every changed list field as "changed" ("Enemy die faces: changed", "Survive to rounds: changed", "Enemy target order: changed", "Starter Skills: changed"), so a playtest on a saved config cannot say which faces, rounds, order or Skills it plays, while /config shows them. Scored 3.2 (comprehension: impact 4, ease 8). `shortValue` now lists a list of words or numbers in order, each word by its /config phrase (option phrase, Skill or card name, or the capitalised key): "Enemy die faces: Hit, Hit, Hit, Miss, Miss, Special". Lists of records (Sundial days, deck presets) still read "changed". A ConfigChanges test pins three list fields. Next in line: the next tick audits afresh or waits for the critique gate.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play and /config: the changes list shows a changed list field as "changed"
+- category: comprehension
+- impact: 4
+- ease: 8
+- next: `shortValue` lists words and numbers by their /config phrase, pinned in `ConfigChanges.test.tsx`
+- issue: #383
+- fixed: (this commit)
+
 # Site audit — 2026-11-12 (pass 324, cloud tick)
 
 Pass 323 gave the /config Event Calendar fields their rule line (a9f8ddc). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 46 ran at cf41877, 8 commits ago, about 18 hours) and so is the expand gate (pass 31 ran 11 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` /decisions item and waits for /oversight. So this pass audits afresh: the "Playing with N changes from the standard rules" list on the /play start panel and on /config prints a changed choice field by its stored key ("Event Calendar: threat-dice", "Shop timing: prepare-only", "Combat model: exchange"), while the /config drop-down for the same field reads "Threat dice (experiment)", "Only in the Prepare phase", "Exchanges (older rule)". Scored 3.6 (comprehension: impact 4, ease 9). `shortValue` now takes the field's option phrases from config meta and the list passes them, so it reads "Event Calendar: Threat dice (experiment)"; a ConfigChanges test pins two fields. Next in line: the next tick audits afresh or waits for the critique gate.

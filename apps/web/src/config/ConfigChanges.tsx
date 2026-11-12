@@ -1,17 +1,42 @@
-import { defaultConfigMeta, proposalsIn } from '@survival/content'
+import { defaultConfigMeta, defaultContent, proposalsIn } from '@survival/content'
 import { rowId } from '../decisions/Inline.tsx'
 
+/** "hit" -> "Hit": a list item by its phrase, capitalised as the /config list shows it. */
+function itemPhrase(item: string | number, options?: Readonly<Record<string, string>>): string {
+  if (typeof item === 'number') return String(item)
+  const text = options?.[item] ?? item
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
 /**
- * The part of a value a short list can show: a number, a word, on/off, or "changed". A choice
- * field gives its option phrase from config meta ("Threat dice (experiment)"), as its drop-down
- * on /config does, rather than the stored key ("threat-dice").
+ * The part of a value a short list can show: a number, a word, on/off, a list of words or
+ * numbers in order, or "changed" (a list of records). A choice field gives its option phrase
+ * from config meta ("Threat dice (experiment)"), as its drop-down on /config does, rather than
+ * the stored key ("threat-dice"); a list gives each item the same way ("Hit, Miss, Special").
  */
 export function shortValue(value: unknown, options?: Readonly<Record<string, string>>): string {
   if (typeof value === 'boolean') return value ? 'on' : 'off'
   if (typeof value === 'string') return options?.[value] ?? value
   if (typeof value === 'number') return String(value)
   if (value === null) return 'off'
+  if (
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.every((v) => typeof v === 'string' || typeof v === 'number')
+  )
+    return value.map((v: string | number) => itemPhrase(v, options)).join(', ')
   return 'changed'
+}
+
+/** The phrases a field's values read as: its option phrases, or the names of the Skills or cards it picks. */
+function phrasesFor(path: string): Readonly<Record<string, string>> | undefined {
+  const meta = defaultConfigMeta[path]
+  if (meta?.options) return meta.options
+  if (meta?.source === 'skills')
+    return Object.fromEntries(defaultContent.skills.map((s) => [s.id, s.name]))
+  if (meta?.source === 'cards')
+    return Object.fromEntries(defaultContent.cards.map((c) => [c.id, c.name]))
+  return undefined
 }
 
 function valueAt(config: unknown, path: string): unknown {
@@ -81,7 +106,7 @@ export function ConfigChanges({ config, changes, updated = [], reviewHref }: Pro
           <ul>
             {changes.map((path) => (
               <li key={path}>
-                {label(path)}: {shortValue(valueAt(config, path), defaultConfigMeta[path]?.options)}
+                {label(path)}: {shortValue(valueAt(config, path), phrasesFor(path))}
               </li>
             ))}
           </ul>

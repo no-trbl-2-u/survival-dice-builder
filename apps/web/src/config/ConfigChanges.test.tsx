@@ -53,7 +53,7 @@ describe('ConfigChanges', () => {
       shortValue('pool'),
       shortValue(true),
       shortValue(null),
-      shortValue([1]),
+      shortValue([{ name: 'Dawn' }]),
     ]).toEqual(['3', 'pool', 'on', 'off', 'changed'])
     expect(shortValue('pool', { pool: 'Your pool' })).toBe('Your pool')
   })
@@ -69,6 +69,33 @@ describe('ConfigChanges', () => {
     expect(items).toEqual([
       'Event Calendar: Threat dice (experiment)',
       'Shop timing: Only in the Prepare phase',
+    ])
+  })
+
+  it('lists a changed list field item by item, not "changed" (audit pass 325)', () => {
+    const changed = {
+      ...config,
+      player: { ...config.player, starterSkills: ['strike', 'mend'] },
+      milestones: { ...config.milestones, surviveRounds: [4, 8] },
+      combat: {
+        ...config.combat,
+        engage: {
+          ...config.combat.engage,
+          enemyDie: ['hit', 'hit', 'hit', 'miss', 'miss', 'special'],
+        },
+      },
+    }
+    render(
+      <ConfigChanges
+        config={changed}
+        changes={['combat.engage.enemyDie', 'milestones.surviveRounds', 'player.starterSkills']}
+      />,
+    )
+    const items = screen.getAllByRole('listitem').map((li) => li.textContent)
+    expect(items).toEqual([
+      'Enemy die faces: Hit, Hit, Hit, Miss, Miss, Special',
+      'Survive to rounds: 4, 8',
+      'Starter Skills: Strike, Mend',
     ])
   })
 })
