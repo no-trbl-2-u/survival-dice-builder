@@ -18,15 +18,6 @@
 - suggested fix: Write the flag in OPEN-QUESTIONS.md row 79 as `calendar.system` only (or teach the parser to skip option values), so the Setting line names the real fields.
 - source: web-fetch
 
-### [MED] /config and /play — "up to its own level" reads as the card level, which card faces now print as a number
-- pass: 46 (commit cf41877)
-- viewport: desktop
-- category: comprehension
-- observation: Card faces print "Level 2" for Engineer and "Level 3" for Architect, but both carry Build I. The /config Build levels help says a Build card buys "only up to its own level", so a visitor expects a Level 2 card to reach tier 2.
-- evidence: /config: "a Build card buys upgrades and builds defenses only up to its own level, so Build I buys tier I upgrades only." (`config.meta.json:571`); card face corner `Level ${level}` vs effect `Build ${LEVEL_NAMES[e.level]}` (`apps/web/src/play/CardView.tsx`).
-- suggested fix: Reword to "only up to its Build level (the numeral after Build, not the card level), so Build I buys tier I upgrades only."
-- source: web-fetch
-
 ### [LOW] /play — the Event Calendar log line drops units, plurals, capitals and the elite-node count
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [MED] /config and /play — "up to its own level" reads as the card level, which card faces now print as a number
+- pass: 46 (commit cf41877)
+- viewport: desktop
+- category: comprehension
+- observation: Card faces print "Level 2" for Engineer and "Level 3" for Architect, but both carry Build I. The /config Build levels help says a Build card buys "only up to its own level", so a visitor expects a Level 2 card to reach tier 2.
+- evidence: /config: "a Build card buys upgrades and builds defenses only up to its own level, so Build I buys tier I upgrades only." (`config.meta.json:571`); card face corner `Level ${level}` vs effect `Build ${LEVEL_NAMES[e.level]}` (`apps/web/src/play/CardView.tsx`).
+- suggested fix: Reword to "only up to its Build level (the numeral after Build, not the card level), so Build I buys tier I upgrades only."
+- source: web-fetch
+- issue: #376
+- fixed: (this commit) — the /config Build levels help and the rule line read "only up to its Build level (the numeral after Build, not the card level)"; a test pins it.
+
 ### [x] [MED] /config — the Threat die faces help says a Raid gives "another" enemy; each Raid is the whole spawn count
 - pass: 46 (commit cf41877)
 - viewport: desktop

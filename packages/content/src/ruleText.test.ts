@@ -524,7 +524,7 @@ describe('rule text from config', () => {
 
   it('build levels: levelled names what Build cards reach; any tier reaches every tier (11.4, 12.1)', () => {
     expect(buildLevelsText(base, defaultContent)).toBe(
-      'A Build card buys a base upgrade or builds a defense only up to its own level: Build I buys tier I. Build cards can buy only Shop I and Training I.',
+      'A Build card buys a base upgrade or builds a defense only up to its Build level (the numeral after Build, not the card level): Build I buys tier I. Build cards can buy only Shop I and Training I.',
     )
     const any = With((c) => ({ ...c, rulings: { ...c.rulings, buildLevels: 'any' as const } }))
     expect(buildLevelsText(any, defaultContent)).toBe(

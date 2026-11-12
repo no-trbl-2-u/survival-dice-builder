@@ -849,7 +849,7 @@ export function upgradesReachNote(
 
 /**
  * What a Build card's level reaches, for the /config Build levels field. Levelled (the default):
- * "A Build card buys a base upgrade or builds a defense only up to its own level: Build I buys
+ * "A Build card buys a base upgrade or builds a defense only up to its Build level (the numeral after Build, not the card level): Build I buys
  * tier I. Build cards can buy only Shop I and Training I." (the second sentence from
  * `upgradesReachNote`, dropped when every upgrade is in reach). Any tier: "A Build card buys the
  * next tier of an upgrade track and builds any defense, whatever its level.", as `buildReaches`
@@ -865,7 +865,7 @@ export function buildLevelsText(
     return 'A Build card buys the next tier of an upgrade track and builds any defense, whatever its level.'
   const note = upgradesReachNote(config, content)
   const head =
-    'A Build card buys a base upgrade or builds a defense only up to its own level: Build I buys tier I.'
+    'A Build card buys a base upgrade or builds a defense only up to its Build level (the numeral after Build, not the card level): Build I buys tier I.'
   return note ? `${head} ${note}.` : head
 }
 

@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-12 (pass 319, cloud tick)
+
+Pass 318 made the Threat die Raid help say each Raid is the whole spawn count (e744a6c). No issues are open for triage. The critique gate is closed (pass 46 ran at cf41877, 2 commits ago, same day) and so is the expand gate (pass 31 ran 5 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Top of the queue: the pass 46 MED row, the /config Build levels help saying a Build card reaches "only up to its own level", read as the card level now printed on card faces (Engineer is Level 2 but carries Build I). Scored 8.1 (external-critique MED: impact 6, ease 9, x1.5 bias). The help and the `buildLevelsText` rule line now read "only up to its Build level (the numeral after Build, not the card level)"; tests in `configMetaText.test.ts` and `ruleText.test.ts` pin it. Next in line: the pass 46 MED row on reading 79's Setting line.
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /config and /play: "up to its own level" reads as the card level
+- category: external-critique
+- impact: 6
+- ease: 9
+- next: reword the Build levels help and `buildLevelsText` to name the Build numeral
+- issue: #376
+- fixed: (this commit)
+
+### [ ] [6.8] /decisions: reading 79's Setting line reads option values as config fields
+- category: external-critique
+- impact: 6
+- ease: 7
+- next: teach `decisions.ts` to skip option values, or write the flag as `calendar.system` only
+
 # Site audit — 2026-11-12 (pass 318, cloud tick)
 
 Pass 317 printed card levels as numbers on card faces (fa7a233). No issues are open for triage. The critique gate is closed (pass 46 ran at cf41877, 1 commit ago, same day) and so is the expand gate (pass 31 ran 4 commits ago, about 10 hours, under 48). Every build plan phase is shipped or blocked. Top of the queue: the pass 46 MED row, the /config Threat die faces help saying a Raid gives "another" enemy, while the engine makes the Raid count the whole spawn per node and adds 1 elite at each elite spawn node on any Raid day. Scored 8.1 (external-critique MED: impact 6, ease 9, x1.5 bias). The help now reads "Raid (each spawn node spawns 1 enemy per Raid, and any Raid also brings 1 elite at each elite spawn node; with no Raid, the spawn nodes spawn nothing)"; a test in `configMetaText.test.ts` pins it. Next in line: the other pass 46 MED rows (Build level wording, reading 79's Setting line).

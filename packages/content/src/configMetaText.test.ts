@@ -243,4 +243,12 @@ describe('config.meta.json placeholders and help read as player text (critique p
     expect(help).toContain('with no Raid, the spawn nodes spawn nothing')
     expect(help).not.toContain('another enemy')
   })
+
+  it('the Build levels help names the Build numeral, not the card level (critique pass 46)', () => {
+    const help = defaultConfigMeta['rulings.buildLevels']?.help ?? ''
+    expect(help).toContain(
+      'only up to its Build level (the numeral after Build, not the card level)',
+    )
+    expect(help).not.toContain('its own level')
+  })
 })

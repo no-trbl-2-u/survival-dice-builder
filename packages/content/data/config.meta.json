@@ -568,7 +568,7 @@
   },
   "rulings.buildLevels": {
     "label": "Build levels",
-    "help": "Levelled (default): a Build card buys upgrades and builds defenses only up to its own level, so Build I buys tier I upgrades only. Any tier: every Build buys the next tier of a track.",
+    "help": "Levelled (default): a Build card buys upgrades and builds defenses only up to its Build level (the numeral after Build, not the card level), so Build I buys tier I upgrades only. Any tier: every Build buys the next tier of a track.",
     "rule": "11.4, 12.1",
     "options": {
       "levelled": "Levelled (default)",
