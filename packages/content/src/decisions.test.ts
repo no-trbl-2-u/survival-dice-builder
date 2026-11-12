@@ -78,6 +78,16 @@ describe('decisions', () => {
     expect(off).toMatchObject({ named: 'empty', current: 'empty', differs: false })
     // "(future ...)" notes name no setting.
     expect(flagSettings('`structureDamage: "v1"` (future `"grunt-die"`)', config)).toHaveLength(1)
+    // "(experiment: ...)" notes list the option's other values, not config fields.
+    const calendar = flagSettings(
+      '`calendar.system: "off"` (experiment: `threat-dice`, `sundial`, `notoriety`)',
+      config,
+    )
+    expect(calendar).toHaveLength(1)
+    expect(calendar[0]).toMatchObject({ key: 'calendar.system', path: 'calendar.system' })
+    // A setting after the note still counts.
+    const range = flagSettings('`spawn.nodeRange: null` (experiment: 4), `miniatureLimit`', config)
+    expect(range.map((s) => s.key)).toEqual(['spawn.nodeRange', 'miniatureLimit'])
   })
 
   it('labels each status in plain words, with no dates or phase numbers', () => {

@@ -182,7 +182,8 @@ function namedJson(text: string): string {
 
 /**
  * The config settings a row's Flag column names, with the current value of each. A flag that
- * starts with `(engine` is a reading in engine code, not a setting, and yields none.
+ * starts with `(engine` is a reading in engine code, not a setting, and yields none; a
+ * `(future ...)` or `(experiment: ...)` note after the setting names no setting.
  *
  * @param flag - the Flag cell, for example `` `rulings.enemiesPerHex: 1` ``.
  * @param config - the config to read (normally the default config).
@@ -190,8 +191,9 @@ function namedJson(text: string): string {
 export function flagSettings(flag: string, config: GameConfig): FlagSetting[] {
   if (flag.startsWith('(engine')) return []
   const paths = leafPaths(config)
-  // Only the part before a "(future ...)" note names the setting.
-  const main = flag.split('(future')[0] ?? ''
+  // Only the part before a "(future ...)" note names the setting, and an "(experiment: ...)"
+  // note lists the option's other values, not config fields.
+  const main = (flag.split('(future')[0] ?? '').replace(/\(experiment[^)]*\)/g, '')
   return [...main.matchAll(/`([^`]+)`/g)].flatMap(([, inner = '']) => {
     const [key = '', ...rest] = inner.split(':')
     const name = key.trim()

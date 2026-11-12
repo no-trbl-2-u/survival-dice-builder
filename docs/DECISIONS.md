@@ -112,7 +112,7 @@ Combat uses Engagements by default. A reading marked "Exchanges only" changes no
 
 - Status: proposed 2026-11-11
 - Reading: **Proposed: 3 calendars behind one option** from 10 modelled systems (`docs/design/event-calendar.md`): Threat dice, Sundial, Notoriety ladder. Each replaces the 7.3 count; boons are Respite (heal and repair) and Harvest (spent nodes work again, against ruling 9). Off plays the written rule. Bot sweep in `docs/reports/event-calendar/`. Recommendation: playtest Threat dice and Notoriety.
-- Setting: `calendar.system` = `"off"`; `sundial`: no config field; `notoriety`: no config field
+- Setting: `calendar.system` = `"off"`
 
 ## Decided recently
 

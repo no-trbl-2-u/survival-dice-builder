@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-12 (pass 320, cloud tick)
+
+Pass 319 made the Build levels help name the Build numeral (7bc0336). No issues are open for triage. The critique gate is closed (pass 46 ran at cf41877, 3 commits ago, same day) and so is the expand gate (pass 31 ran 6 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Top of the queue: the pass 46 MED row, reading 79's Setting line on /decisions printing "`sundial`: no config field; `notoriety`: no config field" because the flag parser read the `(experiment: ...)` note's option values as setting keys. Scored 6.3 (external-critique MED: impact 6, ease 7, x1.5 bias). `flagSettings` now drops an `(experiment ...)` note (a setting written after it, as in row 77's `miniatureLimit`, still counts); the line reads "`calendar.system` = `\"off\"`". Tests in `decisions.test.ts` pin both. Next in line: the pass 46 LOW rows (Event Calendar log line, Respite and Harvest help).
+
+## Top 5 findings (scored)
+
+### [x] [6.3] /decisions: reading 79's Setting line reads option values as config fields
+- category: external-critique
+- impact: 6
+- ease: 7
+- next: teach `flagSettings` to skip `(experiment: ...)` notes
+- issue: #377
+- fixed: (this commit)
+
+### [ ] [3.0] /play: the Event Calendar log line drops units, plurals and capitals
+- category: external-critique
+- impact: 4
+- ease: 7
+- next: reword `calendarDay` in `describeEvent.ts`
+
 # Site audit — 2026-11-12 (pass 319, cloud tick)
 
 Pass 318 made the Threat die Raid help say each Raid is the whole spawn count (e744a6c). No issues are open for triage. The critique gate is closed (pass 46 ran at cf41877, 2 commits ago, same day) and so is the expand gate (pass 31 ran 5 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Top of the queue: the pass 46 MED row, the /config Build levels help saying a Build card reaches "only up to its own level", read as the card level now printed on card faces (Engineer is Level 2 but carries Build I). Scored 8.1 (external-critique MED: impact 6, ease 9, x1.5 bias). The help and the `buildLevelsText` rule line now read "only up to its Build level (the numeral after Build, not the card level)"; tests in `configMetaText.test.ts` and `ruleText.test.ts` pin it. Next in line: the pass 46 MED row on reading 79's Setting line.
