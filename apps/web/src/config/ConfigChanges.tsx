@@ -10,7 +10,7 @@ function itemPhrase(item: string | number, options?: Readonly<Record<string, str
 
 /**
  * The part of a value a short list can show: a number, a word, on/off, a list of words or
- * numbers in order, or "changed" (a list of records). A choice field gives its option phrase
+ * numbers in order, or "changed" (a list of records; `fieldValue` spells out the ones /config edits). A choice field gives its option phrase
  * from config meta ("Threat dice (experiment)"), as its drop-down on /config does, rather than
  * the stored key ("threat-dice"); a list gives each item the same way ("Hit, Miss, Special").
  */
@@ -49,6 +49,53 @@ function valueAt(config: unknown, path: string): unknown {
 }
 
 const label = (path: string) => defaultConfigMeta[path]?.label ?? path
+
+const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
+
+type Day = Readonly<{
+  name: string
+  grunts: number
+  elites: number
+  extraElites: number
+  boon: string
+}>
+type Preset = Readonly<{
+  id: string
+  handSize: number
+  cards: readonly { card: string; quantity: number }[]
+}>
+
+/** "Raid: 1 enemy, 1 elite": a Sundial day by its name, spawns and boon, as /config edits it. */
+function dayText(d: Day): string {
+  const parts = [
+    d.grunts > 0 ? count(d.grunts, 'enemy', 'enemies') : null,
+    d.elites > 0 ? count(d.elites, 'elite', 'elites') : null,
+    d.extraElites > 0 ? count(d.extraElites, 'extra elite', 'extra elites') : null,
+  ].filter((p): p is string => p !== null)
+  if (parts.length === 0) parts.push('no spawns')
+  if (d.boon !== 'none') parts.push(d.boon.charAt(0).toUpperCase() + d.boon.slice(1))
+  return `${d.name}: ${parts.join(', ')}`
+}
+
+/** "deck-10-hand-5: hand of 5, 4 Move, 4 Gather": a deck preset by its hand size and cards. */
+function presetText(p: Preset): string {
+  const names = new Map(defaultContent.cards.map((c) => [c.id, c.name]))
+  const cards = p.cards.map((c) => `${c.quantity} ${names.get(c.card) ?? c.card}`)
+  return `${p.id}: hand of ${p.handSize}, ${cards.join(', ')}`
+}
+
+/**
+ * A changed list of records, record by record, so the list says what changed rather than
+ * "changed": the Sundial days and the deck presets. Other values go to `shortValue`.
+ */
+export function fieldValue(path: string, value: unknown): string {
+  if (Array.isArray(value) && value.length > 0) {
+    if (path === 'calendar.sundial.days') return (value as Day[]).map(dayText).join('; ')
+    if (path === 'deck.presets') return (value as Preset[]).map(presetText).join('; ')
+  }
+  if (Array.isArray(value) && value.length === 0) return 'none'
+  return shortValue(value, phrasesFor(path))
+}
 
 type Props = Readonly<{
   /** The config in use. */
@@ -106,7 +153,7 @@ export function ConfigChanges({ config, changes, updated = [], reviewHref }: Pro
           <ul>
             {changes.map((path) => (
               <li key={path}>
-                {label(path)}: {shortValue(valueAt(config, path), phrasesFor(path))}
+                {label(path)}: {fieldValue(path, valueAt(config, path))}
               </li>
             ))}
           </ul>

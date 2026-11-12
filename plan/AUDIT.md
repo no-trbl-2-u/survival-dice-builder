@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-12 (pass 326, cloud tick)
+
+Pass 325 made the changes list give a changed list field's items (b4661de). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 46 ran at cf41877, 10 commits ago, under 24 hours) and so is the expand gate (pass 31 ran 13 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` /decisions item and waits for /oversight. So this pass audits afresh and takes the gap pass 325 left: the "Playing with N changes from the standard rules" list still prints "Sundial days: changed" and "Deck and hand presets: changed", and an emptied list (Starter Skills with none) reads "changed" too, so a playtest on a saved config cannot say which days or starter deck it plays. Scored 3.2 (comprehension: impact 4, ease 8). New `fieldValue` spells out each Sundial day by name, spawns and boon ("Dawn: no spawns, Respite; Raid: 1 enemy, 1 elite") and each deck preset by hand size and card names ("deck-10-hand-5: hand of 5, 4 Move, 4 Gather, 1 Build, 1 Rest"); an empty list reads "none". A ConfigChanges test pins both lists and the empty case. Next in line: no field in the changes list reads "changed"; the next tick audits afresh or waits for the critique gate.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /play and /config: the changes list shows Sundial days and deck presets as "changed"
+- category: comprehension
+- impact: 4
+- ease: 8
+- next: `fieldValue` spells out record lists, pinned in `ConfigChanges.test.tsx`
+- issue: #384
+- fixed: (this commit)
+
 # Site audit — 2026-11-12 (pass 325, cloud tick)
 
 Pass 324 made the changes list name a choice field's option, not its stored key (4672694). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 46 ran at cf41877, 9 commits ago, about 19 hours) and so is the expand gate (pass 31 ran 12 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` /decisions item and waits for /oversight. So this pass audits afresh: the same "Playing with N changes from the standard rules" list prints every changed list field as "changed" ("Enemy die faces: changed", "Survive to rounds: changed", "Enemy target order: changed", "Starter Skills: changed"), so a playtest on a saved config cannot say which faces, rounds, order or Skills it plays, while /config shows them. Scored 3.2 (comprehension: impact 4, ease 8). `shortValue` now lists a list of words or numbers in order, each word by its /config phrase (option phrase, Skill or card name, or the capitalised key): "Enemy die faces: Hit, Hit, Hit, Miss, Miss, Special". Lists of records (Sundial days, deck presets) still read "changed". A ConfigChanges test pins three list fields. Next in line: the next tick audits afresh or waits for the critique gate.

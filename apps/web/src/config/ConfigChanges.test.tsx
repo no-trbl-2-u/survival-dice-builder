@@ -1,7 +1,7 @@
 import { applyProposal, defaultContent, defaultProposals } from '@survival/content'
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
-import { ConfigChanges, shortValue } from './ConfigChanges.tsx'
+import { ConfigChanges, fieldValue, shortValue } from './ConfigChanges.tsx'
 
 const config = defaultContent.config
 
@@ -97,5 +97,38 @@ describe('ConfigChanges', () => {
       'Survive to rounds: 4, 8',
       'Starter Skills: Strike, Mend',
     ])
+  })
+
+  it('spells out a changed Sundial or deck preset list, record by record (audit pass 326)', () => {
+    const days = [
+      { name: 'Dawn', grunts: 0, elites: 0, extraElites: 0, boon: 'respite' as const },
+      { name: 'Blood Moon', grunts: 2, elites: 1, extraElites: 1, boon: 'none' as const },
+    ]
+    const calendar = config.calendar
+    if (!calendar) throw new Error('no calendar')
+    const changed = {
+      ...config,
+      calendar: { ...calendar, sundial: { ...calendar.sundial, days } },
+      deck: {
+        ...config.deck,
+        presets: [
+          {
+            id: 'tiny',
+            handSize: 3,
+            cards: [
+              { card: 'starter-move', quantity: 2 },
+              { card: 'starter-gather', quantity: 1 },
+            ],
+          },
+        ],
+      },
+    }
+    render(<ConfigChanges config={changed} changes={['calendar.sundial.days', 'deck.presets']} />)
+    const items = screen.getAllByRole('listitem').map((li) => li.textContent)
+    expect(items).toEqual([
+      'Sundial days: Dawn: no spawns, Respite; Blood Moon: 2 enemies, 1 elite, 1 extra elite',
+      'Deck and hand presets: tiny: hand of 3, 2 Move, 1 Gather',
+    ])
+    expect(fieldValue('player.starterSkills', [])).toBe('none')
   })
 })
