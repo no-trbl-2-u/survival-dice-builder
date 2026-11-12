@@ -273,7 +273,7 @@
   },
   "calendar.threatDice.faces": {
     "label": "Threat die faces",
-    "help": "The 6 faces of a threat die: Raid (each spawn node gets another enemy), Elite (an elite at the spawn node nearest the base), Calm (nothing) or Boon (a Respite; 2 Boons also give a Harvest). At a new milestone, a die shows Boon without a roll.",
+    "help": "The 6 faces of a threat die: Raid (each spawn node spawns 1 enemy per Raid, and any Raid also brings 1 elite at each elite spawn node; with no Raid, the spawn nodes spawn nothing), Elite (an elite at the spawn node nearest the base), Calm (nothing) or Boon (a Respite; 2 Boons also give a Harvest). At a new milestone, a die shows Boon without a roll.",
     "rule": "7.3 (Event Calendar experiment)"
   },
   "calendar.notoriety": {

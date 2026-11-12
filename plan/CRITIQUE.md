@@ -18,15 +18,6 @@
 - suggested fix: Write the flag in OPEN-QUESTIONS.md row 79 as `calendar.system` only (or teach the parser to skip option values), so the Setting line names the real fields.
 - source: web-fetch
 
-### [MED] /config — the Threat die faces help says a Raid gives "another" enemy; each Raid is the whole spawn count
-- pass: 46 (commit cf41877)
-- viewport: desktop
-- category: comprehension
-- observation: "Another enemy" reads as one more on top of the usual spawn. The engine sets the spawn count per node to the number of Raid faces, so a roll with no Raid spawns nothing at the spawn nodes, and any Raid also brings 1 elite at each elite spawn node. The help says neither.
-- evidence: "Raid (each spawn node gets another enemy), Elite (an elite at the spawn node nearest the base), Calm (nothing)" (`packages/content/data/config.meta.json:276`); engine `grunts: raids, elites: raids > 0 ? 1 : 0` (`packages/engine/src/enemies/calendar.ts:104-105`).
-- suggested fix: "Raid (each spawn node spawns 1 enemy per Raid; any Raid also brings 1 elite at each elite spawn node). With no Raid, the spawn nodes spawn nothing."
-- source: web-fetch
-
 ### [MED] /config and /play — "up to its own level" reads as the card level, which card faces now print as a number
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [MED] /config — the Threat die faces help says a Raid gives "another" enemy; each Raid is the whole spawn count
+- pass: 46 (commit cf41877)
+- viewport: desktop
+- category: comprehension
+- observation: "Another enemy" reads as one more on top of the usual spawn. The engine sets the spawn count per node to the number of Raid faces, so a roll with no Raid spawns nothing at the spawn nodes, and any Raid also brings 1 elite at each elite spawn node. The help says neither.
+- evidence: "Raid (each spawn node gets another enemy), Elite (an elite at the spawn node nearest the base), Calm (nothing)" (`packages/content/data/config.meta.json:276`); engine `grunts: raids, elites: raids > 0 ? 1 : 0` (`packages/engine/src/enemies/calendar.ts:104-105`).
+- suggested fix: "Raid (each spawn node spawns 1 enemy per Raid; any Raid also brings 1 elite at each elite spawn node). With no Raid, the spawn nodes spawn nothing."
+- source: web-fetch
+- issue: #375
+- fixed: (this commit) — the help reads "Raid (each spawn node spawns 1 enemy per Raid, and any Raid also brings 1 elite at each elite spawn node; with no Raid, the spawn nodes spawn nothing)"; a test pins it.
+
 
 ### [x] [LOW] /play — card faces give a level as "Level II", while /config gives card and Skill levels as numbers
 - pass: 45 (commit 551d569)

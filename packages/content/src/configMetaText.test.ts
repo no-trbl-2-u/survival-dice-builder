@@ -23,6 +23,7 @@ const ALLOWED: Readonly<Record<string, readonly string[]>> = {
   'experience.levelPerEliteSpawn': ['1 level'],
   'spawn.perSeat': ['1 enemy', '2 seats', '1-2 seats'],
   'rulings.structureDamage': ['1 die'],
+  'calendar.threatDice.faces': ['1 enemy'],
 }
 
 /** Every piece of player text in one entry: label, help, option phrases, and placeholder. */
@@ -233,5 +234,13 @@ describe('config.meta.json placeholders and help read as player text (critique p
     expect(defaultConfigMeta['rulings.tileRotation']?.help).toBe(
       'When ticked, the player may rotate a revealed tile. Not ticked (default): as in the written rules.',
     )
+  })
+
+  it('the Raid face says each Raid is the whole spawn count, with its elite (critique pass 46)', () => {
+    const help = defaultConfigMeta['calendar.threatDice.faces']?.help ?? ''
+    expect(help).toContain('each spawn node spawns 1 enemy per Raid')
+    expect(help).toContain('any Raid also brings 1 elite at each elite spawn node')
+    expect(help).toContain('with no Raid, the spawn nodes spawn nothing')
+    expect(help).not.toContain('another enemy')
   })
 })

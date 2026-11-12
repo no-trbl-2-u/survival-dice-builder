@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-12 (pass 318, cloud tick)
+
+Pass 317 printed card levels as numbers on card faces (fa7a233). No issues are open for triage. The critique gate is closed (pass 46 ran at cf41877, 1 commit ago, same day) and so is the expand gate (pass 31 ran 4 commits ago, about 10 hours, under 48). Every build plan phase is shipped or blocked. Top of the queue: the pass 46 MED row, the /config Threat die faces help saying a Raid gives "another" enemy, while the engine makes the Raid count the whole spawn per node and adds 1 elite at each elite spawn node on any Raid day. Scored 8.1 (external-critique MED: impact 6, ease 9, x1.5 bias). The help now reads "Raid (each spawn node spawns 1 enemy per Raid, and any Raid also brings 1 elite at each elite spawn node; with no Raid, the spawn nodes spawn nothing)"; a test in `configMetaText.test.ts` pins it. Next in line: the other pass 46 MED rows (Build level wording, reading 79's Setting line).
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /config: the Threat die Raid face says "another enemy"; each Raid is the whole spawn count
+- category: external-critique
+- impact: 6
+- ease: 9
+- next: reword `calendar.threatDice.faces` help, pinned in `configMetaText.test.ts`
+- issue: #375
+- fixed: (this commit)
+
+### [ ] [8.1] /config and /play: "up to its own level" reads as the card level
+- category: external-critique
+- impact: 6
+- ease: 9
+- next: reword the Build levels help to name the Build numeral
+
+### [ ] [6.8] /decisions: reading 79's Setting line reads option values as config fields
+- category: external-critique
+- impact: 6
+- ease: 7
+- next: teach `decisions.ts` to skip option values, or write the flag as `calendar.system` only
+
 # Site audit — 2026-11-11 (pass 317, cloud tick)
 
 Pass 316 capitalised Lake and Mountain on the /config Blocked enemy line (9dd75be). No issues are open for triage. The critique gate is closed (pass 45 ran 10 commits ago, same day) and so is the expand gate (pass 30 ran 18 commits ago, about 35 hours, under 48). Every build plan phase is shipped or blocked. The MED /decisions rows edit `[needs-user-call]` items and wait for /oversight. Top of the queue: the last pass 45 LOW row, card faces printing "Level II" while the /config Supplies and Milestones lines give levels as numbers. Scored 2.7 (external-critique LOW: impact 3, ease 9). New `cardLevelText` prints "Level 2" on the card face ("Starter" for level 0); Roman numerals stay on upgrade and Build names (Shop II, Build I). Tests pin the helper and a rendered card. Next in line: the pass 45 rows are drained; the remaining Pending rows wait for /oversight, so the next tick re-audits.
