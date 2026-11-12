@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-12 (pass 321, cloud tick)
+
+Pass 320 made the Event Calendar log line give units, plurals, capitals and the elite count (1afd780). No issues are open for triage. The critique gate is closed (pass 46 ran at cf41877, 5 commits ago, same day) and so is the expand gate (pass 31 ran 8 commits ago, under 48 hours). Every build plan phase is shipped or blocked. The pass 20/21 MED rows and the pass 25/46 /decisions LOW rows edit `[needs-user-call]` items and wait for /oversight. Top of the queue: the pass 46 LOW row, the /config Event Calendar help naming Respite and Harvest without saying what they do. Scored 3.2 (external-critique LOW: impact 4, ease 8). The `calendar.system` help now ends "Respite: each player who is not knocked out heals and the base is repaired. Harvest: every spent gathering node works again.", matching the engine's `applyBoons`; a test in `configMetaText.test.ts` pins it. Next in line: no pending critique row that a cloud tick can ship; the next tick audits afresh.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /config: the Event Calendar help uses Respite and Harvest without saying what they do
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: add one sentence defining Respite and Harvest to the `calendar.system` help
+- issue: #379
+- fixed: (this commit)
+
 # Site audit — 2026-11-12 (pass 320, cloud tick)
 
 Pass 319 made the Build levels help name the Build numeral (7bc0336). No issues are open for triage. The critique gate is closed (pass 46 ran at cf41877, 3 commits ago, same day) and so is the expand gate (pass 31 ran 6 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Top of the queue: the pass 46 MED row, reading 79's Setting line on /decisions printing "`sundial`: no config field; `notoriety`: no config field" because the flag parser read the `(experiment: ...)` note's option values as setting keys. Scored 6.3 (external-critique MED: impact 6, ease 7, x1.5 bias). `flagSettings` now drops an `(experiment ...)` note (a setting written after it, as in row 77's `miniatureLimit`, still counts); the line reads "`calendar.system` = `\"off\"`". Tests in `decisions.test.ts` pin both. Next in line: the pass 46 LOW rows (Event Calendar log line, Respite and Harvest help).

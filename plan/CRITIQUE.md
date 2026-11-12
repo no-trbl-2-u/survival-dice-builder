@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Event Calendar help uses Respite and Harvest without saying what they do
-- pass: 46 (commit cf41877)
-- viewport: desktop
-- category: comprehension
-- observation: The main Event Calendar help and the Threat die faces help name Respite and Harvest as boons. Respite is explained only in its own two fields further down; Harvest only inside the Sundial day picker.
-- evidence: "each new rung gives a Respite."; "Boon (a Respite; 2 Boons also give a Harvest)"; Harvest defined only as "Harvest (spent nodes work again)" in the Sundial day picker.
-- suggested fix: Add one sentence to the Event Calendar help: "Respite: players heal and the base is repaired. Harvest: spent gathering nodes work again." (check the engine's Respite effect for the exact words).
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] /config — the Event Calendar help uses Respite and Harvest without saying what they do
+- pass: 46 (commit cf41877)
+- viewport: desktop
+- category: comprehension
+- observation: The main Event Calendar help and the Threat die faces help name Respite and Harvest as boons. Respite is explained only in its own two fields further down; Harvest only inside the Sundial day picker.
+- evidence: "each new rung gives a Respite."; "Boon (a Respite; 2 Boons also give a Harvest)"; Harvest defined only as "Harvest (spent nodes work again)" in the Sundial day picker.
+- suggested fix: Add one sentence to the Event Calendar help: "Respite: players heal and the base is repaired. Harvest: spent gathering nodes work again." (check the engine's Respite effect for the exact words).
+- source: web-fetch
+- issue: #379
+- fixed: (this commit) — the Event Calendar help now says "Respite: each player who is not knocked out heals and the base is repaired. Harvest: every spent gathering node works again.", matching `applyBoons`; `configMetaText.test.ts` pins it.
+
 ### [x] [LOW] /play — the Event Calendar log line drops units, plurals, capitals and the elite-node count
 - pass: 46 (commit cf41877)
 - viewport: desktop

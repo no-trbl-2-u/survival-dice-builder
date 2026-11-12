@@ -236,6 +236,14 @@ describe('config.meta.json placeholders and help read as player text (critique p
     )
   })
 
+  it('the Event Calendar help says what Respite and Harvest do (critique pass 46)', () => {
+    const help = defaultConfigMeta['calendar.system']?.help ?? ''
+    expect(help).toContain(
+      'Respite: each player who is not knocked out heals and the base is repaired.',
+    )
+    expect(help).toContain('Harvest: every spent gathering node works again.')
+  })
+
   it('the Raid face says each Raid is the whole spawn count, with its elite (critique pass 46)', () => {
     const help = defaultConfigMeta['calendar.threatDice.faces']?.help ?? ''
     expect(help).toContain('each spawn node spawns 1 enemy per Raid')
