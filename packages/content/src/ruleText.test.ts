@@ -37,6 +37,7 @@ import {
   suppliesText,
   repairText,
   revealText,
+  tileDeckText,
   roundText,
   configRuleNote,
   ruleCitation,
@@ -192,6 +193,22 @@ describe('rule text from config', () => {
     expect(revealText(base)).toMatch(/costs 1 movement\./)
     const two = With((c) => ({ ...c, tiles: { ...c.tiles, revealMoveCost: 2 } }))
     expect(revealText(two)).toMatch(/costs 2 movement\./)
+  })
+
+  it('tile deck: the countryside and core counts come from the tile set (2.2, 4.3)', () => {
+    expect(tileDeckText(defaultContent)).toBe(
+      'The map starts with the Base tile alone. The tile deck is the 3 countryside tiles, shuffled, on top of the 5 core tiles, shuffled. These numbers must match the tile set on the Tile sheet.',
+    )
+    const one = {
+      tiles: defaultContent.tiles.filter(
+        (t) =>
+          t.kind !== 'countryside' ||
+          t.id === defaultContent.tiles.find((u) => u.kind === 'countryside')?.id,
+      ),
+    }
+    expect(tileDeckText(one)).toMatch(/the 1 countryside tile, shuffled/)
+    for (const path of ['tiles.countryside', 'tiles.core'])
+      expect(ruleLineFor(path, base, defaultContent)).toBe(tileDeckText(defaultContent))
   })
 
   it('spawning: a new tile delay is named (row 66)', () => {

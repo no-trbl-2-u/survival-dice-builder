@@ -109,6 +109,7 @@ export {
   buildOnNodeText,
   repairText,
   revealText,
+  tileDeckText,
   roundText,
   configRuleNote,
   READING_REF,

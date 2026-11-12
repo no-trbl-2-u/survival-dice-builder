@@ -48,6 +48,20 @@ export function revealText(config: GameConfig): string {
 }
 
 /**
+ * How the tile deck is made at setup, with the tile counts from the tile set: the /config
+ * Countryside tiles and Core tiles fields' line. The counts must match the tile set, so the
+ * line says where they come from.
+ *
+ * @rule 2.2, 4.1, 4.3
+ */
+export function tileDeckText(content: Pick<Content, 'tiles'>): string {
+  const count = (kind: string) => content.tiles.filter((t) => t.kind === kind).length
+  const countryside = plural(count('countryside'), 'countryside tile', 'countryside tiles')
+  const core = plural(count('core'), 'core tile', 'core tiles')
+  return `The map starts with the Base tile alone. The tile deck is the ${countryside}, shuffled, on top of the ${core}, shuffled. These numbers must match the tile set on the Tile sheet.`
+}
+
+/**
  * When a revealed tile's spawn nodes start getting enemies.
  *
  * @rule core loop v2 (spawning), OPEN-QUESTIONS row 66
@@ -985,6 +999,7 @@ export function ruleLineFor(
     return startText(config, content)
   if (group === 'base') return baseText(config)
   if (path === 'tiles.revealMoveCost') return revealText(config)
+  if (path === 'tiles.countryside' || path === 'tiles.core') return tileDeckText(content)
   if (path === 'spawn.newTileDelay') return spawnText(config)
   if (group === 'experience' || path === 'options.maxLevel') return levelText(config, content)
   if (path === 'spawn.rampEvery' || path === 'spawn.perSeat' || path === 'spawn.nodeRange')

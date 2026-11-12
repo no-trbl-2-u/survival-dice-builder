@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-12 (pass 322, cloud tick)
+
+Pass 321 made the /config Event Calendar help say what Respite and Harvest do (1b5f4b3). No issues are open for triage. The critique gate is closed (pass 46 ran at cf41877, 6 commits ago, same day) and so is the expand gate (pass 31 ran 9 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` /decisions item and waits for /oversight. So this pass audits afresh and takes the last /config fields on the pass 308 list with no rule line: Countryside tiles and Core tiles. Their help ("Countryside tiles in the game.", range 1 to 10) reads as a free setting, while `createGame` builds the tile deck from the tile set and `configRefs` reports any other count as an error. Scored 3.6 (comprehension: impact 4, ease 9). New `tileDeckText` reads the counts from content: "The map starts with the Base tile alone. The tile deck is the 3 countryside tiles, shuffled, on top of the 5 core tiles, shuffled. These numbers must match the tile set on the Tile sheet.", as Spec v2 2.2, 4.1 and 4.3 and `createGame` play it. `ruleLineFor` maps both fields to it; a ruleText test pins the default, a one-tile set and the mapping. Next in line: no /config field with a live setting lacks a rule line; the next tick audits afresh or waits for the critique gate.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] /config: the Countryside and Core tiles fields show no rule line
+- category: comprehension
+- impact: 4
+- ease: 9
+- next: `tileDeckText` from content, mapped in `ruleLineFor`, pinned in `ruleText.test.ts`
+- issue: #380
+- fixed: (this commit)
+
 # Site audit — 2026-11-12 (pass 321, cloud tick)
 
 Pass 320 made the Event Calendar log line give units, plurals, capitals and the elite count (1afd780). No issues are open for triage. The critique gate is closed (pass 46 ran at cf41877, 5 commits ago, same day) and so is the expand gate (pass 31 ran 8 commits ago, under 48 hours). Every build plan phase is shipped or blocked. The pass 20/21 MED rows and the pass 25/46 /decisions LOW rows edit `[needs-user-call]` items and wait for /oversight. Top of the queue: the pass 46 LOW row, the /config Event Calendar help naming Respite and Harvest without saying what they do. Scored 3.2 (external-critique LOW: impact 4, ease 8). The `calendar.system` help now ends "Respite: each player who is not knocked out heals and the base is repaired. Harvest: every spent gathering node works again.", matching the engine's `applyBoons`; a test in `configMetaText.test.ts` pins it. Next in line: no pending critique row that a cloud tick can ship; the next tick audits afresh.
