@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-11-11 at commit fa7a233
-> Pass count: 31
+> Last pass: 2026-11-13 at commit 1fdbd86
+> Pass count: 32
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -35,7 +35,8 @@
 - re-evidence (expand pass 27): critique pass 38 (e356f80) filed two MED rows on /decisions with the same root, text that reaches the page from a plan file and goes stale without a red test: rule reading 68 gave an older bot report (4-seat median 5 to 4) next to its measured block (5 to 3), and rows 63, 64, 66 and 70 carried the same older "Bot report:" sentence (d0e124f, fixed by hand with a DecisionsPage test that bars a "Bot report" next to a measured block). That is the proposal-row twin of the Pending "three balance checks" row: dated bot numbers that no batch keeps current. The five `[needs-user-call]` rows from passes 20, 21 and 25 are still Pending, 15 to 17 days on, and still head every audit block at 8.1. Score held at 3.5: the citation guard holds, the balance check built from the latest batch is still the open half, and the stale lines still need an `/oversight` edit.
 - re-evidence (expand pass 29): after critique pass 42 (c60059c) the same five /decisions rows are still pending (three MED, two LOW, the Event Calendar check among them), all in `[needs-user-call]` items that only `/oversight` may edit. None of the 20 commits since pass 28 touched /decisions. Score held at 3.5.
 - re-evidence (expand pass 31): standing rule 9 (dd8b6a7, designer request on PR #371) now says a decided row's unchosen options leave the app, and that a decision must not stay around to confuse agents. The same five `[needs-user-call]` rows (three MED, two LOW) are still Pending after critique pass 45; audit pass 317 names them as waiting for /oversight, and with them the iterate queue is drained. Score held at 3.5; the new pruning candidate below covers the config half, this row keeps the /decisions half.
-- last re-evidenced: 2026-11-11
+- re-evidence (expand pass 32): critique pass 46 (8aa86a2) filed one more `[needs-user-call]` row with this cause: the "Write the Event Calendar experiment" check still asks the designer to write it, while reading 79 on the same page says 3 calendars ship behind one option. The /decisions rows waiting for `/oversight` are now six (three MED, three LOW), the oldest 24 days old. Score held at 3.5.
+- last re-evidenced: 2026-11-13
 
 ### [ ] [score 1.0] Milestones a default run can reach: every milestone reachable, or marked out of reach with its reason
 - proposed: 2026-10-17, expand pass 13
@@ -368,6 +369,21 @@
 - estimated phases: 1 (2 if the exchange Combat model is retired in the same sweep; that model already has its own candidate).
 - conflicts: [needs-user-call] on which rows count. Rule 9 is new; rows 71, 72, 76 and 77 say an older option "stays" or is kept as a playtest option, and those are the designer's to confirm. The rows with no such note (2, 5, 6, 10, 11, 13, 43, 52) look like plain prunes. No rule number changes; the engine already plays the chosen value by default.
 - ruling audit: agents.md standing rule 9; `OPEN-QUESTIONS.md` decided rows above; Spec v2 untouched. Loop scope: in once `/oversight` confirms the list (deleting options is the designer's call under rule 9's "never guesses one").
+
+### [ ] [score 4.0] Event Calendar copy from one source: /config helps say what a field is, the rule line says what it does
+- proposed: 2026-11-13, expand pass 32
+- source signals:
+  - Commit pattern: 11 of the 20 commits since pass 31 (fa7a233..1fdbd86) fixed Event Calendar text by hand, one string per tick: e744a6c (Raid help), 1afd780 (log line), 186a4d7 (reading 79 setting), 1b5f4b3 (Respite and Harvest), a9f8ddc (rule lines), 522aac9 (changes list), 95d2e99 (Sundial lap), 334787a (Dawn, Feast and Blood Moon), 5434fc3 (Notoriety ladder help), 1fdbd86 (serial comma), plus ec54070 (run summary).
+  - Critique passes 46 (8aa86a2) and 47 (848c296): 9 of their 11 rows are on the Event Calendar, 4 of them MED. Two said the help states a rule the engine does not play (a Raid as "another" enemy; only raid days growing each lap). One LOW is still pending: face and day names in lower case in the helps and capitalised in the lists.
+  - Cause: the field rule lines are built from config (`calendarText` and `calendarFieldText`, `packages/content/src/ruleText.ts:635-676`), but the helps that restate the same rules are hand-written prose in `packages/content/data/config.meta.json:221-277`, with face meanings and counts typed in. Each fix adds a test for one phrase; nothing ties a help to the config or the engine.
+- rationale: the calendar is the experiment the designer is asked to playtest (reading 79), and its /config text is the only way a tester learns what each calendar does. Two critique passes in a row found its helps wrong or unclear, and `/iterate` fixes them one phrase per tick. If each field's rule text has one source, the helps cannot drift from the rules again.
+- proposed scope: 1 phase.
+  - Each calendar help says only what its field holds; what the calendar does comes from `calendarText` and `calendarFieldText`, already built from config.
+  - Face and day names come from one table in content, used by the helps, rule lines, days editor, log line and run summary, so they are capitalised the same way everywhere.
+  - A content test: no calendar help in `config.meta.json` names a face or day effect or a count; a log-line test at a changed config (more threat dice, a longer lap) checks that the log follows the config.
+- estimated phases: 1
+- conflicts: OPEN-QUESTIONS row 79 is still proposed. If the designer picks one calendar, rule 9 removes the other two, and the work on their text goes with them. Building the text from one source makes that removal smaller, not larger. No rule changes.
+- ruling audit: Spec v2 7.3 (spawns), OPEN-QUESTIONS row 79 (proposed) read; Spec v2 untouched. Loop scope: in (content, rule text, tests).
 
 ## Considered (below threshold)
 
