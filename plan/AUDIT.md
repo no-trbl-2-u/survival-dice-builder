@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-13 (pass 333, cloud tick)
+
+Pass 332 capitalised threat die faces and Sundial days in the Event Calendar help (beae6e1). No issues wait for triage. The critique gate is closed (pass 47 ran 7 commits ago, about 15 hours) and expand pass 32 ran 2 commits ago (4217481). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which only /oversight edits. A fresh audit found every /config field the engine reads already has its rule line (the 8 without one are retired or unused), and every route is in the a11y e2e. The gap it found is a test: `sound/sound.ts` `play()`, the only code that turns cues into audio, had none, so its silent fallback without Web Audio, the resume of a suspended context, the shared context and the note timing were unpinned. Scored 2.7 (tests: impact 3, ease 9); below 3.0, but expand ran 2 commits ago, so handing to it would repeat that pass. A new `sound.test.ts` plays cues into a recording fake AudioContext and pins all four. Next in line: the pending critique rows wait on /oversight; the next tick audits afresh or critiques when its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] web: sound `play()` has no test for its Web Audio guard and note scheduling
+- category: tests
+- impact: 3
+- ease: 9
+- next: add `apps/web/src/sound/sound.test.ts` with a fake AudioContext
+- issue: #391
+- fixed: (this commit)
+
 # Site audit — 2026-11-13 (pass 332, cloud tick)
 
 Pass 331 dropped the serial comma from the Sundial days help (1fdbd86). No issues wait for triage. The critique gate is closed (pass 47 ran 6 commits ago, today) and expand pass 32 ran last tick (4217481). Every build plan phase is shipped or blocked. The MED /decisions rows wait on `[needs-user-call]` items that only /oversight edits. So this pass takes the last open pass-47 row: the /config Event Calendar help wrote threat die faces and Sundial days in lower case ("raids, elites, calm days and boons", "a calm dawn, harvest and feast days") while the lists and Blood Moon use capitals. Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran last tick, so handing to it again would only repeat that pass. The help now reads "roll dice whose faces are Raid, Elite, Calm and Boon" and "a ring of 8 days, among them Dawn (no enemies), Harvest, Feast and Blood Moon", and a configMetaText test pins both. Next in line: the pending critique rows all wait on /oversight; the next tick audits afresh or critiques when its gate opens.
