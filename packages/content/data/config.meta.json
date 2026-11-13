@@ -253,7 +253,7 @@
   },
   "calendar.sundial.days": {
     "label": "Sundial days",
-    "help": "The days of the Sundial in order: enemies at each spawn node and elite spawn node, extra elites, and a boon (Respite or Harvest).",
+    "help": "The days of the Sundial in order: enemies at each spawn node and elite spawn node, extra elites and a boon (Respite or Harvest).",
     "rule": "7.3 (Event Calendar experiment)"
   },
   "calendar.threatDice": {

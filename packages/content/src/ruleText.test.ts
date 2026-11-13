@@ -898,11 +898,14 @@ describe('player copy drops the serial comma', () => {
     expect([...proposals, ...meta]).toEqual([])
   })
 
-  it('the /config deck preset and draft help end their "and" lists without a comma', () => {
+  it('the /config deck preset, draft and Sundial days help end their "and" lists without a comma', () => {
     expect(defaultConfigMeta['deck.presets']?.help).toContain(
       'an id, a hand size and its starter cards',
     )
     expect(defaultConfigMeta['draft.everyNRounds']?.help).toContain('rounds 2, 4, 6 and so on.')
+    expect(defaultConfigMeta['calendar.sundial.days']?.help).toContain(
+      'elite spawn node, extra elites and a boon (Respite or Harvest).',
+    )
     const lists = Object.values(defaultConfigMeta)
       .map((e) => e.help ?? '')
       .filter((text) => /\w+, \w+, and \w+\b/.test(text))

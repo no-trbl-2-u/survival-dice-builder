@@ -18,15 +18,6 @@
 - suggested fix: Capitalise face and day names wherever they name a face or day: Raid, Calm, Boon, Dawn, Harvest, Feast.
 - source: web-fetch
 
-### [LOW] /config — the Sundial days help uses the serial comma
-- pass: 47 (commit ec54070)
-- viewport: desktop
-- category: voice
-- observation: Earlier passes removed the serial comma from /, /tiles, /decisions and /config. The Sundial days help still has one before its last list item.
-- evidence: "The days of the Sundial in order: enemies at each spawn node and elite spawn node, extra elites, and a boon (Respite or Harvest)." (`config.meta.json:256`)
-- suggested fix: Remove the comma before "and a boon".
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] /config — the Sundial days help uses the serial comma
+- pass: 47 (commit ec54070)
+- viewport: desktop
+- category: voice
+- observation: Earlier passes removed the serial comma from /, /tiles, /decisions and /config. The Sundial days help still has one before its last list item.
+- evidence: "The days of the Sundial in order: enemies at each spawn node and elite spawn node, extra elites, and a boon (Respite or Harvest)." (`config.meta.json:256`)
+- suggested fix: Remove the comma before "and a boon".
+- source: web-fetch
+- issue: #389
+- fixed: (this commit)
+
 ### [x] [LOW] /config — Notoriety has two names and a vague step length in the option help
 - pass: 47 (commit ec54070)
 - viewport: desktop

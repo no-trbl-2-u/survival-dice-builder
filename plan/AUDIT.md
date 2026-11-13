@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-13 (pass 331, cloud tick)
+
+Pass 330 named the Notoriety ladder and the fields that set each step in the Event Calendar help (5434fc3). No issues wait for triage. The critique gate is closed (pass 47 ran 4 commits ago, today) and so is the expand gate (pass 31 ran 19 commits ago, about 38 hours). Every build plan phase is shipped or blocked. The MED /decisions rows wait on `[needs-user-call]` items that only /oversight edits. So this pass takes the next pass-47 row: the /config Sundial days help kept a serial comma ("extra elites, and a boon") after earlier passes removed it everywhere else. Scored 2.7 (external-critique LOW: impact 3, ease 9). The help now reads "enemies at each spawn node and elite spawn node, extra elites and a boon (Respite or Harvest).", and the existing "and lists without a comma" test pins it. Next in line: the LOW voice row on lower-case face and day names in the Event Calendar help.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] /config: the Sundial days help uses the serial comma
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: drop the comma before "and a boon" in `calendar.sundial.days` help
+- issue: #389
+- fixed: (this commit)
+
+### [ ] [2.4] /config: Event Calendar summaries write face and day names in lower case
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: capitalise Raid, Calm, Boon, Dawn, Harvest, Feast in `config.meta.json`
+
 # Site audit — 2026-11-13 (pass 330, cloud tick)
 
 Pass 329 glossed the Sundial's named days in its rule line and editor (334787a). No issues wait for triage. The critique gate is closed (pass 47 ran 4 commits ago, today) and so is the expand gate (pass 31 ran 18 commits ago, about 37 hours). Every build plan phase is shipped or blocked. So this pass takes the top remaining pass-47 row: the /config Event Calendar help called the option "Notoriety" while its label and rule line say "Notoriety ladder", and said "every few rounds" for both the ladder and the Threat dice. Scored 3.2 (external-critique LOW: impact 3, ease 7). The help cannot write the config's numbers by hand (the meta text test forbids it, and the rule line below the field already gives them), so it now names the field that sets each step: "1 more die every so many rounds, as Add a threat die every sets" and "Notoriety ladder: the threat climbs 1 rung every so many rounds, as Notoriety climbs every sets, and 1 rung at each new milestone". A configMetaText test pins both. Next in line: the two LOW voice rows from pass 47 (serial comma, lower-case face and day names).
