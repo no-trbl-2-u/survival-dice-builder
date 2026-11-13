@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-13 (pass 334, cloud tick)
+
+Pass 333 pinned the sound player's Web Audio guard, resume and note timing (c2bac57). No issues wait for triage. The critique gate is closed (pass 47 ran 8 commits ago, about 14 hours) and expand pass 32 ran 3 commits ago (4217481). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which only /oversight edits. A fresh audit of web modules found every non-page module tested except `decisions/ProposalTry.tsx`, the "Try this on the Play page" control on /decisions: its "Not saved: ..." alert when the browser blocks saving was untested anywhere, and so was the no-button branch for an unmeasured proposal (the e2e covers only the click and the already-playing note). Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 3 commits ago, so handing to it would repeat that pass. A new `ProposalTry.test.tsx` pins the button, the already-playing note and its links, the unmeasured branch, the save-blocked alert (no navigation, nothing stored) and the save-then-open path. Next in line: the pending critique rows wait on /oversight; the next tick audits afresh or critiques when its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] web: the /decisions Try button's save-blocked alert and unmeasured branch have no test
+- category: tests
+- impact: 3
+- ease: 8
+- next: add `apps/web/src/decisions/ProposalTry.test.tsx`
+- issue: #392
+- fixed: (this commit)
+
 # Site audit — 2026-11-13 (pass 333, cloud tick)
 
 Pass 332 capitalised threat die faces and Sundial days in the Event Calendar help (beae6e1). No issues wait for triage. The critique gate is closed (pass 47 ran 7 commits ago, about 15 hours) and expand pass 32 ran 2 commits ago (4217481). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which only /oversight edits. A fresh audit found every /config field the engine reads already has its rule line (the 8 without one are retired or unused), and every route is in the a11y e2e. The gap it found is a test: `sound/sound.ts` `play()`, the only code that turns cues into audio, had none, so its silent fallback without Web Audio, the resume of a suspended context, the shared context and the note timing were unpinned. Scored 2.7 (tests: impact 3, ease 9); below 3.0, but expand ran 2 commits ago, so handing to it would repeat that pass. A new `sound.test.ts` plays cues into a recording fake AudioContext and pins all four. Next in line: the pending critique rows wait on /oversight; the next tick audits afresh or critiques when its gate opens.
