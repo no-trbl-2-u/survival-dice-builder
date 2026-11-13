@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — the Sundial lap help says only raid days grow each lap; the engine grows every day's enemies and elites
-- pass: 47 (commit ec54070)
-- viewport: desktop
-- category: comprehension
-- observation: The Sundial rule line says each lap raises every non-zero enemy and elite count by 1, which is what the engine does (`packages/engine/src/enemies/calendar.ts:64` applies the era to grunts, elites and extra elites). The "Sundial lap" field help says only raid days get 1 more enemy at each spawn node, so a reader cannot tell that elites and the Blood Moon's extra elites grow too. The help also calls the lap length "days" while the engine counts rounds.
-- evidence: Rule line: "After every 8 rounds, each number of enemies or elites a day spawns rises by 1, unless it is 0." vs `calendar.sundial.eraEvery` help: "Days in one lap of the Sundial. After each lap every raid day spawns 1 more enemy at each spawn node." (`packages/content/data/config.meta.json:250`)
-- suggested fix: Make the help match the rule line: "Rounds in one lap of the Sundial. After each lap, each number of enemies or elites a day spawns rises by 1, unless it is 0."
-- source: web-fetch
-
 ### [MED] /config — the Sundial names Dawn, Feast and Blood Moon days but nothing says what they do
 - pass: 47 (commit ec54070)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [MED] /config — the Sundial lap help says only raid days grow each lap; the engine grows every day's enemies and elites
+- pass: 47 (commit ec54070)
+- viewport: desktop
+- category: comprehension
+- observation: The Sundial rule line says each lap raises every non-zero enemy and elite count by 1, which is what the engine does (`packages/engine/src/enemies/calendar.ts:64` applies the era to grunts, elites and extra elites). The "Sundial lap" field help says only raid days get 1 more enemy at each spawn node, so a reader cannot tell that elites and the Blood Moon's extra elites grow too. The help also calls the lap length "days" while the engine counts rounds.
+- evidence: Rule line: "After every 8 rounds, each number of enemies or elites a day spawns rises by 1, unless it is 0." vs `calendar.sundial.eraEvery` help: "Days in one lap of the Sundial. After each lap every raid day spawns 1 more enemy at each spawn node." (`packages/content/data/config.meta.json:250`)
+- suggested fix: Make the help match the rule line: "Rounds in one lap of the Sundial. After each lap, each number of enemies or elites a day spawns rises by 1, unless it is 0."
+- source: web-fetch
+- issue: #386
+- fixed: (this commit)
+
 ### [x] [LOW] /config — the Event Calendar help uses Respite and Harvest without saying what they do
 - pass: 46 (commit cf41877)
 - viewport: desktop

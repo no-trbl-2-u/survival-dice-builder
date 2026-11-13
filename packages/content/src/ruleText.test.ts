@@ -249,6 +249,12 @@ describe('rule text from config', () => {
     expect(ruleLineFor('calendar.sundial.eraEvery', base, defaultContent)).toBe(
       `${calendarText(calendar, 'sundial')} Not in play: the Event Calendar is Off.`,
     )
+    expect(defaultConfigMeta['calendar.sundial.eraEvery']?.help).toBe(
+      'Rounds in one lap of the Sundial. After each lap, each number of enemies or elites a day spawns rises by 1, unless it is 0.',
+    )
+    expect(calendarText(calendar, 'sundial')).toContain(
+      'each number of enemies or elites a day spawns rises by 1, unless it is 0.',
+    )
     expect(ruleLineFor('calendar.respite.heal', base, defaultContent)).toBe(
       `${respite} Not in play: the Event Calendar is Off.`,
     )

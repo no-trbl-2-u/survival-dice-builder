@@ -247,7 +247,7 @@
   },
   "calendar.sundial.eraEvery": {
     "label": "Sundial lap",
-    "help": "Days in one lap of the Sundial. After each lap every raid day spawns 1 more enemy at each spawn node.",
+    "help": "Rounds in one lap of the Sundial. After each lap, each number of enemies or elites a day spawns rises by 1, unless it is 0.",
     "rule": "7.3 (Event Calendar experiment)",
     "range": [2, 16]
   },

@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-13 (pass 328, cloud tick)
+
+Pass 327 made the run summary say which rules the run played (ec54070), and critique pass 47 filed 5 rows at 848c296. No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 47 ran 1 commit ago) and so is the expand gate (pass 31 ran 16 commits ago, about 35 hours). Every build plan phase is shipped or blocked. So this pass takes the top pass-47 row: the /config "Sundial lap" help says only raid days spawn 1 more enemy per lap and calls the lap length "days", while the rule line and the engine (`sundialDay`) raise every non-zero enemy, elite and extra-elite count, and the lap is counted in rounds. Scored 8.1 (external-critique MED: impact 6, ease 9, bias 1.5). The help now reads "Rounds in one lap of the Sundial. After each lap, each number of enemies or elites a day spawns rises by 1, unless it is 0.", matching the rule line; a ruleText test pins both. Next in line: the MED row on the Sundial's named days (Feast, Blood Moon) and the three LOW voice rows from pass 47.
+
+## Top 5 findings (scored)
+
+### [x] [8.1] /config: the Sundial lap help says only raid days grow each lap
+- category: external-critique
+- impact: 6
+- ease: 9
+- next: edit `calendar.sundial.eraEvery` help in `config.meta.json`, pinned in `ruleText.test.ts`
+- issue: #386
+- fixed: (this commit)
+
+### [ ] [6.3] /config: the Sundial names Feast and Blood Moon but nothing says what they do
+- category: external-critique
+- impact: 6
+- ease: 7
+- next: gloss special days in the Sundial rule line from day data; label Sundial days editor rows
+
+### [ ] [3.2] /config: Notoriety has two names and a vague step length in the option help
+- category: external-critique
+- impact: 3
+- ease: 7
+- next: use "Notoriety ladder" and the configured steps in `calendar.system` help
+
+### [ ] [2.7] /config: the Sundial days help uses the serial comma
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: drop the comma before "and a boon" in `calendar.sundial.days` help
+
+### [ ] [2.4] /config: Event Calendar summaries write face and day names in lower case
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: capitalise Raid, Calm, Boon, Dawn, Harvest, Feast in `config.meta.json`
+
 # Site audit — 2026-11-12 (pass 327, cloud tick)
 
 Pass 326 made the changes list spell out Sundial days and deck presets (522aac9). No issues are open for triage (#223 waits for the user). The critique gate is closed (pass 46 ran at cf41877, 11 commits ago, under 24 hours) and so is the expand gate (pass 31 ran 14 commits ago, under 48 hours). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` /decisions item and waits for /oversight. So this pass audits afresh: the /play run summary gives cause, round, level, milestones and base health, but not the rules the run played. The start panel says "Playing with N changes from the standard rules" before the run; once the base falls, a playtester reading or screenshotting the summary cannot tell a standard run from one on a changed config (only the downloaded JSON carries `changedKeys`). Scored 3.2 (comprehension: impact 4, ease 8). The summary now shows the same `ConfigChanges` list for the run's own config, under the seed line, with no "review or reset" link; two RunSummary tests pin the standard and the changed case. Next in line: the next tick audits afresh or waits for the critique gate.
