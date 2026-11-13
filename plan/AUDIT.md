@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-13 (pass 335, cloud tick)
+
+Pass 334 pinned the /decisions Try button's save-blocked alert and unmeasured branch (64e387d). No issues wait for triage. The critique gate is closed (pass 47 ran 9 commits ago, today) and expand pass 32 ran 4 commits ago (4217481). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which only /oversight edits. A fresh audit of tools/sim found `format.ts` `describe()`, the summary every `pnpm sim` batch prints (counts, end rounds, causes, tally totals and the "target band: inside / OUTSIDE" call the balance checks quote), untested, and `toJson()` (the `--out x.json` writer) untested too; only `csvField` and `toCsv` were pinned. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 4 commits ago, so handing to it would repeat that pass. A new `format.test.ts` pins the summary lines, both band edges counting as inside, a median past either edge printing OUTSIDE, and the JSON shape (indent, final newline, NaN written as null). Next in line: the pending critique rows wait on /oversight; the next tick audits afresh or critiques when its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] sim: the batch summary `describe()` and `toJson()` have no test
+- category: tests
+- impact: 3
+- ease: 8
+- next: add `tools/sim/src/format.test.ts`
+- issue: #393
+- fixed: (this commit)
+
 # Site audit — 2026-11-13 (pass 334, cloud tick)
 
 Pass 333 pinned the sound player's Web Audio guard, resume and note timing (c2bac57). No issues wait for triage. The critique gate is closed (pass 47 ran 8 commits ago, about 14 hours) and expand pass 32 ran 3 commits ago (4217481). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which only /oversight edits. A fresh audit of web modules found every non-page module tested except `decisions/ProposalTry.tsx`, the "Try this on the Play page" control on /decisions: its "Not saved: ..." alert when the browser blocks saving was untested anywhere, and so was the no-button branch for an unmeasured proposal (the e2e covers only the click and the already-playing note). Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 3 commits ago, so handing to it would repeat that pass. A new `ProposalTry.test.tsx` pins the button, the already-playing note and its links, the unmeasured branch, the save-blocked alert (no navigation, nothing stored) and the save-then-open path. Next in line: the pending critique rows wait on /oversight; the next tick audits afresh or critiques when its gate opens.
