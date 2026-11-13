@@ -244,6 +244,13 @@ describe('config.meta.json placeholders and help read as player text (critique p
     expect(help).toContain('Harvest: every spent gathering node works again.')
   })
 
+  it('the Event Calendar help capitalises threat die faces and Sundial days (critique pass 47)', () => {
+    const help = defaultConfigMeta['calendar.system']?.help ?? ''
+    expect(help).toContain('roll dice whose faces are Raid, Elite, Calm and Boon;')
+    expect(help).toContain('among them Dawn (no enemies), Harvest, Feast and Blood Moon;')
+    expect(help).not.toMatch(/\b(raids|calm days|boons|calm dawn|harvest and feast)\b/)
+  })
+
   it('the Event Calendar help names Notoriety ladder and the fields that set each step (critique pass 47)', () => {
     const help = defaultConfigMeta['calendar.system']?.help ?? ''
     expect(help).toContain('Notoriety ladder: the threat climbs 1 rung every so many rounds')

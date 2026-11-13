@@ -218,7 +218,7 @@
   },
   "calendar.system": {
     "label": "Event Calendar",
-    "help": "What sets the spawns at each Combat start. Off (default): every spawn node spawns at each Combat, as in the written rules. Threat dice: roll dice whose faces call raids, elites, calm days and boons; 1 more die every so many rounds, as Add a threat die every sets. Sundial: a ring of 8 days with a calm dawn, harvest and feast days and a Blood Moon; each lap makes every day harder. Notoriety ladder: the threat climbs 1 rung every so many rounds, as Notoriety climbs every sets, and 1 rung at each new milestone; each new rung gives a Respite. Respite: each player who is not knocked out heals and the base is repaired. Harvest: every spent gathering node works again.",
+    "help": "What sets the spawns at each Combat start. Off (default): every spawn node spawns at each Combat, as in the written rules. Threat dice: roll dice whose faces are Raid, Elite, Calm and Boon; 1 more die every so many rounds, as Add a threat die every sets. Sundial: a ring of 8 days, among them Dawn (no enemies), Harvest, Feast and Blood Moon; each lap makes every day harder. Notoriety ladder: the threat climbs 1 rung every so many rounds, as Notoriety climbs every sets, and 1 rung at each new milestone; each new rung gives a Respite. Respite: each player who is not knocked out heals and the base is repaired. Harvest: every spent gathering node works again.",
     "rule": "7.3 (Event Calendar experiment)",
     "options": {
       "off": "Off (default)",

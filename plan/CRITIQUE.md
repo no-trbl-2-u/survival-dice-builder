@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — Event Calendar summaries write face and day names in lower case; the lists capitalise them
-- pass: 47 (commit ec54070)
-- viewport: desktop
-- category: voice
-- observation: Threat die faces and Sundial days are capitalised where listed (Calm, Raid, Elite, Boon; Dawn, Harvest, Feast). The Event Calendar help and the lap help write the same names in lower case, while Blood Moon keeps its capitals in the same sentence.
-- evidence: "Threat dice: roll dice whose faces call raids, elites, calm days and boons" vs "Raid ..., Elite ..., Calm (nothing) or Boon"; "a calm dawn, harvest and feast days and a Blood Moon"; "every raid day spawns 1 more enemy" (`config.meta.json:221,250`)
-- suggested fix: Capitalise face and day names wherever they name a face or day: Raid, Calm, Boon, Dawn, Harvest, Feast.
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — Event Calendar summaries write face and day names in lower case; the lists capitalise them
+- pass: 47 (commit ec54070)
+- viewport: desktop
+- category: voice
+- observation: Threat die faces and Sundial days are capitalised where listed (Calm, Raid, Elite, Boon; Dawn, Harvest, Feast). The Event Calendar help and the lap help write the same names in lower case, while Blood Moon keeps its capitals in the same sentence.
+- evidence: "Threat dice: roll dice whose faces call raids, elites, calm days and boons" vs "Raid ..., Elite ..., Calm (nothing) or Boon"; "a calm dawn, harvest and feast days and a Blood Moon"; "every raid day spawns 1 more enemy" (`config.meta.json:221,250`)
+- suggested fix: Capitalise face and day names wherever they name a face or day: Raid, Calm, Boon, Dawn, Harvest, Feast.
+- source: web-fetch
+- issue: #390
+- fixed: (this commit)
+
 ### [x] [LOW] /config — the Sundial days help uses the serial comma
 - pass: 47 (commit ec54070)
 - viewport: desktop

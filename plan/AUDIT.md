@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-13 (pass 332, cloud tick)
+
+Pass 331 dropped the serial comma from the Sundial days help (1fdbd86). No issues wait for triage. The critique gate is closed (pass 47 ran 6 commits ago, today) and expand pass 32 ran last tick (4217481). Every build plan phase is shipped or blocked. The MED /decisions rows wait on `[needs-user-call]` items that only /oversight edits. So this pass takes the last open pass-47 row: the /config Event Calendar help wrote threat die faces and Sundial days in lower case ("raids, elites, calm days and boons", "a calm dawn, harvest and feast days") while the lists and Blood Moon use capitals. Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran last tick, so handing to it again would only repeat that pass. The help now reads "roll dice whose faces are Raid, Elite, Calm and Boon" and "a ring of 8 days, among them Dawn (no enemies), Harvest, Feast and Blood Moon", and a configMetaText test pins both. Next in line: the pending critique rows all wait on /oversight; the next tick audits afresh or critiques when its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /config: Event Calendar summaries write face and day names in lower case
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: capitalise Raid, Elite, Calm, Boon, Dawn, Harvest, Feast in `calendar.system` help
+- issue: #390
+- fixed: (this commit)
+
 # Site audit — 2026-11-13 (pass 331, cloud tick)
 
 Pass 330 named the Notoriety ladder and the fields that set each step in the Event Calendar help (5434fc3). No issues wait for triage. The critique gate is closed (pass 47 ran 4 commits ago, today) and so is the expand gate (pass 31 ran 19 commits ago, about 38 hours). Every build plan phase is shipped or blocked. The MED /decisions rows wait on `[needs-user-call]` items that only /oversight edits. So this pass takes the next pass-47 row: the /config Sundial days help kept a serial comma ("extra elites, and a boon") after earlier passes removed it everywhere else. Scored 2.7 (external-critique LOW: impact 3, ease 9). The help now reads "enemies at each spawn node and elite spawn node, extra elites and a boon (Respite or Harvest).", and the existing "and lists without a comma" test pins it. Next in line: the LOW voice row on lower-case face and day names in the Event Calendar help.
