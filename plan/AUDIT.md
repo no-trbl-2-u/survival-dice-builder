@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-13 (pass 330, cloud tick)
+
+Pass 329 glossed the Sundial's named days in its rule line and editor (334787a). No issues wait for triage. The critique gate is closed (pass 47 ran 4 commits ago, today) and so is the expand gate (pass 31 ran 18 commits ago, about 37 hours). Every build plan phase is shipped or blocked. So this pass takes the top remaining pass-47 row: the /config Event Calendar help called the option "Notoriety" while its label and rule line say "Notoriety ladder", and said "every few rounds" for both the ladder and the Threat dice. Scored 3.2 (external-critique LOW: impact 3, ease 7). The help cannot write the config's numbers by hand (the meta text test forbids it, and the rule line below the field already gives them), so it now names the field that sets each step: "1 more die every so many rounds, as Add a threat die every sets" and "Notoriety ladder: the threat climbs 1 rung every so many rounds, as Notoriety climbs every sets, and 1 rung at each new milestone". A configMetaText test pins both. Next in line: the two LOW voice rows from pass 47 (serial comma, lower-case face and day names).
+
+## Top 5 findings (scored)
+
+### [x] [3.2] /config: Notoriety has two names and a vague step length in the option help
+- category: external-critique
+- impact: 3
+- ease: 7
+- next: use "Notoriety ladder" and name the fields that set each step in `calendar.system` help
+- issue: #388
+- fixed: (this commit)
+
+### [ ] [2.7] /config: the Sundial days help uses the serial comma
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: drop the comma before "and a boon" in `calendar.sundial.days` help
+
+### [ ] [2.4] /config: Event Calendar summaries write face and day names in lower case
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: capitalise Raid, Calm, Boon, Dawn, Harvest, Feast in `config.meta.json`
+
 # Site audit — 2026-11-13 (pass 329, cloud tick)
 
 Pass 328 made the Sundial lap help match the rule line (95d2e99). No issues wait for triage. The critique gate is closed (pass 47 ran 3 commits ago, today) and so is the expand gate (pass 31 ran 17 commits ago, about 36 hours). Every build plan phase is shipped or blocked. So this pass takes the next pass-47 row: the Sundial rule line named Dawn, Feast and Blood Moon but said nothing of what they do, and the Sundial days editor rows showed no visible name. Scored 6.3 (external-critique MED: impact 6, ease 7, bias 1.5). A new `sundialDayGloss` / `sundialDayText` pair in `ruleText.ts` reads each day's data: "no enemies" for a calm day, its extra elites, and its boon unless the day is named after it. The rule line now reads "in a ring of 8 days: Dawn (no enemies, a Respite), Raid, Raid, Harvest, Raid, Feast (a Respite), Blood Moon (1 extra elite) and Raid.", and each editor row is captioned "Day 7: Blood Moon (1 extra elite)". Tests pin both. Next in line: the three LOW voice rows from pass 47.

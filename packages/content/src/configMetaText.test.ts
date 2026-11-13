@@ -244,6 +244,20 @@ describe('config.meta.json placeholders and help read as player text (critique p
     expect(help).toContain('Harvest: every spent gathering node works again.')
   })
 
+  it('the Event Calendar help names Notoriety ladder and the fields that set each step (critique pass 47)', () => {
+    const help = defaultConfigMeta['calendar.system']?.help ?? ''
+    expect(help).toContain('Notoriety ladder: the threat climbs 1 rung every so many rounds')
+    expect(help).toContain('as Notoriety climbs every sets')
+    expect(help).toContain('as Add a threat die every sets')
+    expect(help).toContain('1 rung at each new milestone')
+    expect(help).not.toContain('every few rounds')
+    expect(help).not.toMatch(/Notoriety:/)
+    expect(defaultConfigMeta['calendar.notoriety.rungEvery']?.label).toBe('Notoriety climbs every')
+    expect(defaultConfigMeta['calendar.threatDice.addDieEvery']?.label).toBe(
+      'Add a threat die every',
+    )
+  })
+
   it('the Raid face says each Raid is the whole spawn count, with its elite (critique pass 46)', () => {
     const help = defaultConfigMeta['calendar.threatDice.faces']?.help ?? ''
     expect(help).toContain('each spawn node spawns 1 enemy per Raid')

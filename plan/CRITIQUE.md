@@ -27,15 +27,6 @@
 - suggested fix: Remove the comma before "and a boon".
 - source: web-fetch
 
-### [LOW] /config — Notoriety has two names and a vague step length in the option help
-- pass: 47 (commit ec54070)
-- viewport: desktop
-- category: voice
-- observation: The Event Calendar help calls the option "Notoriety" and says the threat climbs "every few rounds"; the option label, section label and rule line say "Notoriety ladder" and "every 3 rounds". The Threat dice part of the same help also says "every few rounds" while its field gives the number.
-- evidence: Help: "Notoriety: the threat climbs 1 rung every few rounds and 1 rung at each milestone" vs rule line: "Notoriety ladder: the threat climbs 1 rung every 3 rounds and 1 rung at each new milestone" (`config.meta.json:221,227,280`; `packages/content/src/ruleText.ts:580,626`)
-- suggested fix: Use one name in all places and give the real step from config ("1 rung every 3 rounds", "1 more die every 3 rounds"), or point to the field that sets it.
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] /config — Notoriety has two names and a vague step length in the option help
+- pass: 47 (commit ec54070)
+- viewport: desktop
+- category: voice
+- observation: The Event Calendar help calls the option "Notoriety" and says the threat climbs "every few rounds"; the option label, section label and rule line say "Notoriety ladder" and "every 3 rounds". The Threat dice part of the same help also says "every few rounds" while its field gives the number.
+- evidence: Help: "Notoriety: the threat climbs 1 rung every few rounds and 1 rung at each milestone" vs rule line: "Notoriety ladder: the threat climbs 1 rung every 3 rounds and 1 rung at each new milestone" (`config.meta.json:221,227,280`; `packages/content/src/ruleText.ts:580,626`)
+- suggested fix: Use one name in all places and give the real step from config ("1 rung every 3 rounds", "1 more die every 3 rounds"), or point to the field that sets it.
+- source: web-fetch
+- issue: #388
+- fixed: (this commit)
+
 ### [x] [MED] /config — the Sundial names Dawn, Feast and Blood Moon days but nothing says what they do
 - pass: 47 (commit ec54070)
 - viewport: desktop
