@@ -1,13 +1,58 @@
 # Critique log
 
-> Last pass: 2026-11-12 at commit cf41877
-> Pass count: 46
+> Last pass: 2026-11-13 at commit ec54070
+> Pass count: 47
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /config — the Sundial lap help says only raid days grow each lap; the engine grows every day's enemies and elites
+- pass: 47 (commit ec54070)
+- viewport: desktop
+- category: comprehension
+- observation: The Sundial rule line says each lap raises every non-zero enemy and elite count by 1, which is what the engine does (`packages/engine/src/enemies/calendar.ts:64` applies the era to grunts, elites and extra elites). The "Sundial lap" field help says only raid days get 1 more enemy at each spawn node, so a reader cannot tell that elites and the Blood Moon's extra elites grow too. The help also calls the lap length "days" while the engine counts rounds.
+- evidence: Rule line: "After every 8 rounds, each number of enemies or elites a day spawns rises by 1, unless it is 0." vs `calendar.sundial.eraEvery` help: "Days in one lap of the Sundial. After each lap every raid day spawns 1 more enemy at each spawn node." (`packages/content/data/config.meta.json:250`)
+- suggested fix: Make the help match the rule line: "Rounds in one lap of the Sundial. After each lap, each number of enemies or elites a day spawns rises by 1, unless it is 0."
+- source: web-fetch
+
+### [MED] /config — the Sundial names Dawn, Feast and Blood Moon days but nothing says what they do
+- pass: 47 (commit ec54070)
+- viewport: desktop
+- category: comprehension
+- observation: The Sundial lists 8 named days. Respite and Harvest have help text and Raid days spawn enemies, but no copy says that Feast gives a Respite or that Blood Moon adds 1 extra elite. The Sundial days editor shows each day's numbers and boon picker but not its name, so a reader cannot link a name to its effect.
+- evidence: "Sundial: 1 day each round, in a ring of 8 days (Dawn, Raid, Raid, Harvest, Raid, Feast, Blood Moon and Raid)." / help: "a ring of 8 days with a calm dawn, harvest and feast days and a Blood Moon" (`config.meta.json:221`; day data in `config.default.json` `calendar.sundial.days`)
+- suggested fix: Gloss the special days in the rule line from the day data (for example "Feast (a Respite)", "Blood Moon (1 extra elite)") and label each Sundial days editor row with its day name.
+- source: web-fetch
+
+### [LOW] /config — Event Calendar summaries write face and day names in lower case; the lists capitalise them
+- pass: 47 (commit ec54070)
+- viewport: desktop
+- category: voice
+- observation: Threat die faces and Sundial days are capitalised where listed (Calm, Raid, Elite, Boon; Dawn, Harvest, Feast). The Event Calendar help and the lap help write the same names in lower case, while Blood Moon keeps its capitals in the same sentence.
+- evidence: "Threat dice: roll dice whose faces call raids, elites, calm days and boons" vs "Raid ..., Elite ..., Calm (nothing) or Boon"; "a calm dawn, harvest and feast days and a Blood Moon"; "every raid day spawns 1 more enemy" (`config.meta.json:221,250`)
+- suggested fix: Capitalise face and day names wherever they name a face or day: Raid, Calm, Boon, Dawn, Harvest, Feast.
+- source: web-fetch
+
+### [LOW] /config — the Sundial days help uses the serial comma
+- pass: 47 (commit ec54070)
+- viewport: desktop
+- category: voice
+- observation: Earlier passes removed the serial comma from /, /tiles, /decisions and /config. The Sundial days help still has one before its last list item.
+- evidence: "The days of the Sundial in order: enemies at each spawn node and elite spawn node, extra elites, and a boon (Respite or Harvest)." (`config.meta.json:256`)
+- suggested fix: Remove the comma before "and a boon".
+- source: web-fetch
+
+### [LOW] /config — Notoriety has two names and a vague step length in the option help
+- pass: 47 (commit ec54070)
+- viewport: desktop
+- category: voice
+- observation: The Event Calendar help calls the option "Notoriety" and says the threat climbs "every few rounds"; the option label, section label and rule line say "Notoriety ladder" and "every 3 rounds". The Threat dice part of the same help also says "every few rounds" while its field gives the number.
+- evidence: Help: "Notoriety: the threat climbs 1 rung every few rounds and 1 rung at each milestone" vs rule line: "Notoriety ladder: the threat climbs 1 rung every 3 rounds and 1 rung at each new milestone" (`config.meta.json:221,227,280`; `packages/content/src/ruleText.ts:580,626`)
+- suggested fix: Use one name in all places and give the real step from config ("1 rung every 3 rounds", "1 more die every 3 rounds"), or point to the field that sets it.
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
