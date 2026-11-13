@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-13 (pass 336, cloud tick)
+
+Pass 335 pinned the sim batch summary's band call and the JSON writer (4755528). No issues wait for triage. The critique gate is closed (pass 47 ran 10 commits ago, today) and expand pass 32 ran 5 commits ago (4217481). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which only /oversight edits. A fresh audit of web modules without a colocated test found `debug/MapView.tsx`, the SVG map on /debug: only its "1 tile" label and the "E" elite spawn mark were touched, through StateView tests, and the e2e only checks it draws polygons. The plural tile label, the B, g and s site letters, one polygon per hex and the order figures stack on a shared hex were unpinned. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 5 commits ago, so handing to it would repeat that pass. A new `MapView.test.tsx` pins all of them and that an empty hex draws no figure text. Next in line: the pending critique rows wait on /oversight; the next tick audits afresh or critiques when its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] web: the /debug map view has no test of its marks and label
+- category: tests
+- impact: 3
+- ease: 8
+- next: add `apps/web/src/debug/MapView.test.tsx`
+- issue: #394
+- fixed: (this commit)
+
 # Site audit — 2026-11-13 (pass 335, cloud tick)
 
 Pass 334 pinned the /decisions Try button's save-blocked alert and unmeasured branch (64e387d). No issues wait for triage. The critique gate is closed (pass 47 ran 9 commits ago, today) and expand pass 32 ran 4 commits ago (4217481). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which only /oversight edits. A fresh audit of tools/sim found `format.ts` `describe()`, the summary every `pnpm sim` batch prints (counts, end rounds, causes, tally totals and the "target band: inside / OUTSIDE" call the balance checks quote), untested, and `toJson()` (the `--out x.json` writer) untested too; only `csvField` and `toCsv` were pinned. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 4 commits ago, so handing to it would repeat that pass. A new `format.test.ts` pins the summary lines, both band edges counting as inside, a median past either edge printing OUTSIDE, and the JSON shape (indent, final newline, NaN written as null). Next in line: the pending critique rows wait on /oversight; the next tick audits afresh or critiques when its gate opens.
