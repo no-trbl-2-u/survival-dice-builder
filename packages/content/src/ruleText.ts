@@ -588,6 +588,32 @@ const every = (n: number, one: string, many: string) =>
 const listText = (items: readonly string[]) =>
   items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`
 
+/** One day of the Sundial ring, as the config stores it. */
+type SundialDayRecord = Calendar['sundial']['days'][number]
+
+/**
+ * What sets a Sundial day apart from a plain day, in player words, or null for a plain day:
+ * "no enemies, a Respite" for a calm day with a Respite, "1 extra elite" for a day with an
+ * extra elite. A boon the day is named after is not repeated ("Harvest", not "Harvest (a
+ * Harvest)").
+ *
+ * @rule 7.3 (Event Calendar experiment: Sundial)
+ */
+export function sundialDayGloss(day: SundialDayRecord): string | null {
+  const parts: string[] = []
+  if (day.grunts === 0 && day.elites === 0) parts.push('no enemies')
+  if (day.extraElites > 0) parts.push(plural(day.extraElites, 'extra elite', 'extra elites'))
+  const boon = day.boon === 'none' ? null : day.boon.charAt(0).toUpperCase() + day.boon.slice(1)
+  if (boon && boon.toLowerCase() !== day.name.trim().toLowerCase()) parts.push(`a ${boon}`)
+  return parts.length === 0 ? null : parts.join(', ')
+}
+
+/** A Sundial day by name, with its gloss when it has one: "Feast (a Respite)". */
+export function sundialDayText(day: SundialDayRecord): string {
+  const gloss = sundialDayGloss(day)
+  return gloss ? `${day.name} (${gloss})` : day.name
+}
+
 /**
  * What a Respite boon gives, as `applyBoons` plays it.
  *
@@ -612,9 +638,9 @@ export function calendarText(calendar: Calendar, system: CalendarSystem = calend
   const respite = ` ${respiteText(calendar)}`
   if (system === 'sundial') {
     const { eraEvery, days } = calendar.sundial
-    const names = listText(days.map((d) => d.name))
+    const names = listText(days.map(sundialDayText))
     const rest = days.some((d) => d.boon === 'respite') ? respite : ''
-    return `Sundial: 1 day each round, in a ring of ${plural(days.length, 'day', 'days')} (${names}). After ${every(eraEvery, 'round', 'rounds')}, each number of enemies or elites a day spawns rises by 1, unless it is 0.${rest}`
+    return `Sundial: 1 day each round, in a ring of ${plural(days.length, 'day', 'days')}: ${names}. After ${every(eraEvery, 'round', 'rounds')}, each number of enemies or elites a day spawns rises by 1, unless it is 0.${rest}`
   }
   if (system === 'threat-dice') {
     const { startDice, addDieEvery, faces } = calendar.threatDice

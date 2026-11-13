@@ -455,6 +455,12 @@ form > .group > .field {
   font-weight: 700;
 }
 
+.dayName {
+  flex-basis: 100%;
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
 .presetHead input[type='text'] {
   inline-size: 11rem;
 }

@@ -109,6 +109,8 @@ export {
   buildOnNodeText,
   calendarText,
   respiteText,
+  sundialDayGloss,
+  sundialDayText,
   repairText,
   revealText,
   tileDeckText,

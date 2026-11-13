@@ -9,6 +9,7 @@ import {
   parseQuestions,
   READING_REF,
   ruleLineFor,
+  sundialDayText,
   withProposal,
   type GameConfig,
   type Proposal,
@@ -571,8 +572,11 @@ const BOONS: readonly (readonly [SundialDay['boon'], string])[] = [
   ['harvest', 'Harvest (spent nodes work again)'],
 ]
 
-/** Sundial days, in order: each day's name, enemies per node, extra elites, and boon. */
-function SundialDaysEditor(
+/**
+ * Sundial days, in order: each day's caption (its place, name and what sets it apart), name,
+ * enemies per node, extra elites, and boon.
+ */
+export function SundialDaysEditor(
   props: Readonly<{
     groupA11y: Record<string, unknown>
     value: readonly SundialDay[]
@@ -591,6 +595,9 @@ function SundialDaysEditor(
     <ol {...props.groupA11y} className={styles.presets}>
       {props.value.map((day, d) => (
         <li key={d} className={styles.presetHead}>
+          <span className={styles.dayName}>
+            Day {d + 1}: {sundialDayText(day)}
+          </span>
           <input
             type="text"
             aria-label={`Day ${d + 1}: name`}

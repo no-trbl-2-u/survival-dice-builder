@@ -35,6 +35,8 @@ import {
   buildLevelsText,
   buildOnNodeText,
   calendarText,
+  sundialDayGloss,
+  sundialDayText,
   respiteText,
   suppliesText,
   repairText,
@@ -223,7 +225,7 @@ describe('rule text from config', () => {
       'A Respite gives each player who is not knocked out 3 health and the base 3 health, never above the maximum.'
     expect(respiteText(calendar)).toBe(respite)
     expect(calendarText(calendar, 'sundial')).toBe(
-      `Sundial: 1 day each round, in a ring of 8 days (Dawn, Raid, Raid, Harvest, Raid, Feast, Blood Moon and Raid). After every 8 rounds, each number of enemies or elites a day spawns rises by 1, unless it is 0. ${respite}`,
+      `Sundial: 1 day each round, in a ring of 8 days: Dawn (no enemies, a Respite), Raid, Raid, Harvest, Raid, Feast (a Respite), Blood Moon (1 extra elite) and Raid. After every 8 rounds, each number of enemies or elites a day spawns rises by 1, unless it is 0. ${respite}`,
     )
     expect(calendarText(calendar, 'threat-dice')).toBe(
       `Threat dice: 1 die in round 1, and 1 more every 3 rounds. The faces are Calm, Raid, Raid, Raid, Elite and Boon. ${respite}`,
@@ -245,6 +247,13 @@ describe('rule text from config', () => {
     )
     expect(calendarText(quick, 'notoriety')).toMatch(/ Every rung, 1 elite also comes/)
     expect(calendarText(quick, 'sundial')).not.toMatch(/Respite/)
+    const [dawn, raid] = calendar.sundial.days
+    expect(sundialDayGloss(raid!)).toBeNull()
+    expect(sundialDayText(dawn!)).toBe('Dawn (no enemies, a Respite)')
+    expect(sundialDayText({ ...raid!, name: 'Harvest', boon: 'harvest' })).toBe('Harvest')
+    expect(sundialDayText({ ...raid!, name: 'Fair', boon: 'harvest', extraElites: 2 })).toBe(
+      'Fair (2 extra elites, a Harvest)',
+    )
     expect(ruleLineFor('calendar.system', base, defaultContent)).toBe(calendarText(calendar))
     expect(ruleLineFor('calendar.sundial.eraEvery', base, defaultContent)).toBe(
       `${calendarText(calendar, 'sundial')} Not in play: the Event Calendar is Off.`,

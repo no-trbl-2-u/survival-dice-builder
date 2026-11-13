@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — the Sundial names Dawn, Feast and Blood Moon days but nothing says what they do
-- pass: 47 (commit ec54070)
-- viewport: desktop
-- category: comprehension
-- observation: The Sundial lists 8 named days. Respite and Harvest have help text and Raid days spawn enemies, but no copy says that Feast gives a Respite or that Blood Moon adds 1 extra elite. The Sundial days editor shows each day's numbers and boon picker but not its name, so a reader cannot link a name to its effect.
-- evidence: "Sundial: 1 day each round, in a ring of 8 days (Dawn, Raid, Raid, Harvest, Raid, Feast, Blood Moon and Raid)." / help: "a ring of 8 days with a calm dawn, harvest and feast days and a Blood Moon" (`config.meta.json:221`; day data in `config.default.json` `calendar.sundial.days`)
-- suggested fix: Gloss the special days in the rule line from the day data (for example "Feast (a Respite)", "Blood Moon (1 extra elite)") and label each Sundial days editor row with its day name.
-- source: web-fetch
-
 ### [LOW] /config — Event Calendar summaries write face and day names in lower case; the lists capitalise them
 - pass: 47 (commit ec54070)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [MED] /config — the Sundial names Dawn, Feast and Blood Moon days but nothing says what they do
+- pass: 47 (commit ec54070)
+- viewport: desktop
+- category: comprehension
+- observation: The Sundial lists 8 named days. Respite and Harvest have help text and Raid days spawn enemies, but no copy says that Feast gives a Respite or that Blood Moon adds 1 extra elite. The Sundial days editor shows each day's numbers and boon picker but not its name, so a reader cannot link a name to its effect.
+- evidence: "Sundial: 1 day each round, in a ring of 8 days (Dawn, Raid, Raid, Harvest, Raid, Feast, Blood Moon and Raid)." / help: "a ring of 8 days with a calm dawn, harvest and feast days and a Blood Moon" (`config.meta.json:221`; day data in `config.default.json` `calendar.sundial.days`)
+- suggested fix: Gloss the special days in the rule line from the day data (for example "Feast (a Respite)", "Blood Moon (1 extra elite)") and label each Sundial days editor row with its day name.
+- source: web-fetch
+- issue: #387
+- fixed: (this commit)
+
 ### [x] [MED] /config — the Sundial lap help says only raid days grow each lap; the engine grows every day's enemies and elites
 - pass: 47 (commit ec54070)
 - viewport: desktop
