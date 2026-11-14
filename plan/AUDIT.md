@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-14 (pass 346, cloud tick)
+
+Pass 345 pinned the /play run reducer (bd4f0e9). No issues wait for triage. The critique gate is closed (pass 48 ran 9 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 16 commits ago, under its 20-commit / 48-hour window. Every Pending critique row edits a `[needs-user-call]` /decisions item, which only /oversight edits. A fresh audit of web modules without a colocated test found `play/describeEvent.ts`, which writes every /play log line: the topic log tests pin most event types, but 18 lines (new run, phase, round, run end, base damage and repair, deferred effect and step, tile placed and revealed, start hex, action dice, ignored hit, return, shop offer, draft pool, supply, Skill replaced) were pinned by no test. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 16 commits ago, so handing to it would repeat that pass. A new `describeEvent.test.ts` pins those lines, with solo and co-op verb agreement where the line names a player. Next in line: the pending critique rows wait on /oversight; the next tick critiques when its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /play: 18 log lines in describeEvent have no test
+- category: tests
+- impact: 3
+- ease: 8
+- next: colocated `describeEvent.test.ts`
+- issue: #404
+- fixed: (this commit)
+
 # Site audit — 2026-11-14 (pass 345, cloud tick)
 
 Pass 344 pinned the action label's coordinate suffix and ids option (7f5f933). No issues wait for triage. The critique gate is closed (pass 48 ran 8 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 15 commits ago, under its 20-commit / 48-hour window. Every Pending critique row edits a `[needs-user-call]` /decisions item, which only /oversight edits. A fresh audit of web modules without a colocated test found `play/run.ts`, the /play reducer behind every start, action, load and undo: other tests reach it in passing, but undo's state, the `replace` message, the kept events, the player count, replay equality and the base curve growing once per round were unpinned. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 15 commits ago, so handing to it would repeat that pass. A new `run.test.ts` pins newRun, step (engine state and events, input unchanged, one base health per round), replay, undo and every reduceRun message. Next in line: the pending critique rows wait on /oversight; the next tick critiques when its gate opens.
