@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Knockout label "Return health divisor" is a math term
-- pass: 48 (commit ebd74ee)
-- viewport: desktop
-- category: voice
-- observation: The label is not plain STE. The home page says the same rule in plain words.
-- evidence: /config: "Return health divisor" (`packages/content/data/config.meta.json:313`); /: "with half of their maximum health, rounded up."
-- suggested fix: Rename to a plain label (for example "Health on return: 1 part in") and start the help with "2 (default): half their maximum health, rounded up."
-- source: web-fetch
-
 ### [LOW] /config — the Enemy move help omits "up to", the order and the stop next to the target
 - pass: 48 (commit ebd74ee)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the Knockout label "Return health divisor" is a math term
+- pass: 48 (commit ebd74ee)
+- viewport: desktop
+- category: voice
+- observation: The label is not plain STE. The home page says the same rule in plain words.
+- evidence: /config: "Return health divisor" (`packages/content/data/config.meta.json:313`); /: "with half of their maximum health, rounded up."
+- suggested fix: Rename to a plain label (for example "Health on return: 1 part in") and start the help with "2 (default): half their maximum health, rounded up."
+- source: web-fetch
+- issue: #399
+- fixed: (this commit)
 
 ### [x] [LOW] / and /config — site names are lower case; /tiles and /play capitalise them
 - pass: 48 (commit ebd74ee)

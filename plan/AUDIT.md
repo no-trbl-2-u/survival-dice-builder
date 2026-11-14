@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-14 (pass 341, cloud tick)
+
+Pass 340 wrote the site names in lower case on /tiles and /play (72ecd05). No issues wait for triage. The critique gate is closed (pass 48 ran 4 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 11 commits ago, under its 20-commit / 48-hour window. This pass takes the next pass-48 row: the /config Knockout field was labelled "Return health divisor", a math term, while / says "half of their maximum health, rounded up". Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 11 commits ago, so handing to it would repeat that pass. Fix: the label now reads "Health on return: 1 part in", so the field reads "1 part in 2", and the help starts with "2 (default): ... half their maximum health, rounded up, as in the written rules" and names what 1, 3 and 4 give. A configMetaText test pins the label and the help's start. Next in line: the LOW row on the /config Enemy move help.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /config: the Knockout label "Return health divisor" is a math term
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: plain label and help that starts with the default
+- issue: #399
+- fixed: (this commit)
+
+### [ ] [2.4] /config: the Enemy move help omits "up to", the order and the stop next to the target
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: "The most hexes each enemy moves toward its target at each Combat ..."
+
 # Site audit — 2026-11-14 (pass 340, cloud tick)
 
 Pass 339 put the compass words on the /tiles hex list (68e0314). No issues wait for triage. The critique gate is closed (pass 48 ran 3 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 10 commits ago, under its 20-commit / 48-hour window. This pass takes the next pass-48 row: /tiles and /play capitalised the site names ("2 Gathering nodes and 1 Spawn node", "Plains, Base"), while the / rule lines, the /config help and Spec v2 write them lower case. Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 10 commits ago, so handing to it would repeat that pass. Fix: `SITE_LABEL` now holds the lower-case names, so every mid-sentence use (tile site counts, hex names on /tiles, /play and /debug, map titles, the Place figure choices) reads "spawn node" and "Plains, base"; the /tiles site legend, the one place a name starts a list item, capitalizes it. A TileView test pins the lower-case names. Next in line: the LOW rows on the /config Knockout label and the Enemy move help.

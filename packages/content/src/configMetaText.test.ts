@@ -79,6 +79,13 @@ describe('config.meta.json marks the Spec v2 rule as the written one', () => {
     expect(help).toContain('2: the older rule, kept for playtests.')
   })
 
+  it('14.4: the Knockout return health has a plain label and starts with the written default', () => {
+    const entry = defaultConfigMeta['knockout.returnHealthDivisor']
+    expect(entry?.label).toBe('Health on return: 1 part in')
+    expect(entry?.label).not.toMatch(/divisor/i)
+    expect(entry?.help).toMatch(/^2 \(default\): .*half their maximum health, rounded up/)
+  })
+
   it('11.7: the pool is the written rule; the supply is the older rule', () => {
     const entry = defaultConfigMeta['draft.unpicked']
     expect(entry?.options).toEqual({
