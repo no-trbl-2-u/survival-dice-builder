@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-14 (pass 345, cloud tick)
+
+Pass 344 pinned the action label's coordinate suffix and ids option (7f5f933). No issues wait for triage. The critique gate is closed (pass 48 ran 8 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 15 commits ago, under its 20-commit / 48-hour window. Every Pending critique row edits a `[needs-user-call]` /decisions item, which only /oversight edits. A fresh audit of web modules without a colocated test found `play/run.ts`, the /play reducer behind every start, action, load and undo: other tests reach it in passing, but undo's state, the `replace` message, the kept events, the player count, replay equality and the base curve growing once per round were unpinned. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 15 commits ago, so handing to it would repeat that pass. A new `run.test.ts` pins newRun, step (engine state and events, input unchanged, one base health per round), replay, undo and every reduceRun message. Next in line: the pending critique rows wait on /oversight; the next tick critiques when its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /play: the run reducer (start, act, replay, undo) has no colocated test
+- category: tests
+- impact: 3
+- ease: 8
+- next: colocated `run.test.ts`
+- issue: #403
+- fixed: (this commit)
+
 # Site audit — 2026-11-14 (pass 344, cloud tick)
 
 Pass 343 built the noscript line from the tagline and the config player count (423bf3b). No issues wait for triage. The critique gate is closed (pass 48 ran 7 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 14 commits ago, under its 20-commit / 48-hour window. Every Pending critique row edits a `[needs-user-call]` /decisions item, which only /oversight edits. A fresh audit of web modules without a colocated test found `debug/ActionLabel.tsx`, the label on every /debug action button and on the /play banner buttons: the banner test reaches it only through Stop moving, so the map coordinate suffix in its quiet `coords` span (placements, moves, builds, negative numbers) and the `ids` option /debug passes were unpinned. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 14 commits ago, so handing to it would repeat that pass. A new `ActionLabel.test.tsx` pins the suffix for all three hex actions, no span for an action with no hex, and that engine ids show only when asked. Next in line: the pending critique rows wait on /oversight; the next tick critiques when its gate opens.
