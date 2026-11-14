@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the noscript line describes the game in a third way and hard-codes the player count
-- pass: 48 (commit ebd74ee)
-- viewport: desktop
-- category: voice
-- observation: The no-JS line on the /play shell matches neither the tagline on / nor the meta description, and writes "1 to 4 players" where other pages take the count from config.
-- evidence: `apps/web/index.html:18`: "a co-op survival dice-builder for 1 to 4 players: defend the base, build your dice and last as many rounds as you can." vs tagline "Defend the base together, build your dice, survive one more round".
-- suggested fix: Build the noscript line from the tagline and the config player count at prerender time.
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the noscript line describes the game in a third way and hard-codes the player count
+- pass: 48 (commit ebd74ee)
+- viewport: desktop
+- category: voice
+- observation: The no-JS line on the /play shell matches neither the tagline on / nor the meta description, and writes "1 to 4 players" where other pages take the count from config.
+- evidence: `apps/web/index.html:18`: "a co-op survival dice-builder for 1 to 4 players: defend the base, build your dice and last as many rounds as you can." vs tagline "Defend the base together, build your dice, survive one more round".
+- suggested fix: Build the noscript line from the tagline and the config player count at prerender time.
+- source: web-fetch
+- issue: #401
+- fixed: (this commit)
 
 ### [x] [LOW] /config — the Enemy move help omits "up to", the order and the stop next to the target
 - pass: 48 (commit ebd74ee)

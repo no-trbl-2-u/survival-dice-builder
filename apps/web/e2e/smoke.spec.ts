@@ -64,7 +64,7 @@ test('with JavaScript off the shell says what the game is and that it needs Java
   const html = await (await request.get('/play')).text()
   const noscript = /<noscript>([\s\S]*?)<\/noscript>/.exec(html)?.[1] ?? ''
   expect(noscript.replace(/\s+/g, ' ')).toContain(
-    'a co-op survival dice-builder for 1 to 4 players',
+    'Defend the base together, build your dice, survive one more round. A co-op survival dice-builder for 1 to 4 players on one screen.',
   )
   expect(noscript).toContain('Turn JavaScript on to play.')
 })

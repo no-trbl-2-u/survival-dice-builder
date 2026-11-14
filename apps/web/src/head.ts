@@ -1,3 +1,4 @@
+import { defaultContent, playersText } from '@survival/content'
 import { documentTitle, TAGLINE, type Route } from './router.tsx'
 
 /** The deployed site; canonical links and link previews name pages under it. */
@@ -88,12 +89,22 @@ export function headTags(head: Head): string {
   return tags.join('\n    ')
 }
 
+/**
+ * What every served page says with JavaScript off: the home page's pitch (the tagline and the
+ * player count from the default config), then that the game needs JavaScript.
+ */
+export const NOSCRIPT_TEXT =
+  `${TAGLINE}. A co-op survival dice-builder for ${playersText(defaultContent.config)} on one ` +
+  'screen. The game runs in the browser and needs JavaScript. Turn JavaScript on to play.'
+
 const TITLE = /<title>[^<]*<\/title>/
 const HEAD_MARK = '<!--app-head-->'
 const HTML_MARK = '<div id="root"><!--app-html--></div>'
+const NOSCRIPT_MARK = '<!--app-noscript-->'
 
 /**
- * A served page: the built `index.html` with the page's title, head tags, and prerendered body.
+ * A served page: the built `index.html` with the page's title, head tags, no-JavaScript line,
+ * and prerendered body.
  * Throws when the template lost a marker, so a changed `index.html` fails the build instead of
  * shipping pages without their head.
  *
@@ -103,7 +114,7 @@ const HTML_MARK = '<div id="root"><!--app-html--></div>'
  * @param page - the route path the body was rendered for (`data-page`, read before hydrating).
  */
 export function pageHtml(template: string, head: Head, body: string | null, page: string): string {
-  for (const mark of [HEAD_MARK, HTML_MARK]) {
+  for (const mark of [HEAD_MARK, HTML_MARK, NOSCRIPT_MARK]) {
     if (!template.includes(mark)) throw new Error(`index.html has no ${mark}`)
   }
   if (!TITLE.test(template)) throw new Error('index.html has no <title>')
@@ -114,5 +125,6 @@ export function pageHtml(template: string, head: Head, body: string | null, page
   return template
     .replace(TITLE, () => `<title>${escapeHtml(head.title)}</title>`)
     .replace(HEAD_MARK, () => headTags(head))
+    .replace(NOSCRIPT_MARK, () => `<p>${escapeHtml(NOSCRIPT_TEXT)}</p>`)
     .replace(HTML_MARK, () => root)
 }

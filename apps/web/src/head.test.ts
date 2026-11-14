@@ -2,11 +2,20 @@ import { describe, expect, it } from 'vitest'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { headFor, headTags, OG_IMAGE, pageHtml, SITE_URL, websiteJsonLd } from './head.ts'
+import {
+  headFor,
+  headTags,
+  NOSCRIPT_TEXT,
+  OG_IMAGE,
+  pageHtml,
+  SITE_URL,
+  websiteJsonLd,
+} from './head.ts'
 import { notFound, routes } from './routes.tsx'
 
 const TEMPLATE = `<html><head><title>Survival Dice-Builder</title>
-    <!--app-head--></head><body><div id="root"><!--app-html--></div></body></html>`
+    <!--app-head--></head><body><noscript><!--app-noscript--></noscript>
+    <div id="root"><!--app-html--></div></body></html>`
 
 describe('headFor', () => {
   it('gives every route its own title, description, and address', () => {
@@ -107,6 +116,16 @@ describe('pageHtml', () => {
     expect(html).toContain('<title>Play - Survival Dice-Builder</title>')
   })
 
+  it('says the home pitch with JavaScript off, with the player count from the config', () => {
+    const html = pageHtml(TEMPLATE, head, null, '/play')
+    expect(NOSCRIPT_TEXT).toBe(
+      'Defend the base together, build your dice, survive one more round. A co-op survival ' +
+        'dice-builder for 1 to 4 players on one screen. The game runs in the browser and needs ' +
+        'JavaScript. Turn JavaScript on to play.',
+    )
+    expect(html).toContain(`<noscript><p>${NOSCRIPT_TEXT}</p></noscript>`)
+  })
+
   it('does not read $ patterns in the body as replacement tokens', () => {
     expect(pageHtml(TEMPLATE, head, '<p>$& $1</p>', '/')).toContain('<p>$& $1</p>')
   })
@@ -117,6 +136,9 @@ describe('pageHtml', () => {
     )
     expect(() => pageHtml(TEMPLATE.replace('<!--app-html-->', ''), head, '', '/')).toThrow(
       'app-html',
+    )
+    expect(() => pageHtml(TEMPLATE.replace('<!--app-noscript-->', ''), head, '', '/')).toThrow(
+      'app-noscript',
     )
     expect(() => pageHtml(TEMPLATE.replace(/<title>.*<\/title>/, ''), head, '', '/')).toThrow(
       'title',

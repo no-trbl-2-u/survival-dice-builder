@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-14 (pass 343, cloud tick)
+
+Pass 342 added "up to", the order and the stop to the /config Enemy move help (aec31ad). No issues wait for triage. The critique gate is closed (pass 48 ran 6 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 13 commits ago, under its 20-commit / 48-hour window. This pass takes the next pass-48 row: the no-JavaScript line in every served page said "a co-op survival dice-builder for 1 to 4 players: defend the base, build your dice and last as many rounds as you can", a third way of describing the game, with the player count written by hand. Scored 2.1 (external-critique LOW: impact 3, ease 7); below 3.0, but expand ran 13 commits ago, so handing to it would repeat that pass. Fix: `index.html` now holds an `<!--app-noscript-->` marker, and `pageHtml` fills it with `NOSCRIPT_TEXT`, the home pitch built from `TAGLINE` and `playersText` of the default config, then the JavaScript line; a missing marker fails the build. A head test pins the text, and the smoke e2e checks the served /play shell. Next in line: the remaining Pending critique rows are /decisions items that wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.1] /play: the noscript line describes the game in a third way and hard-codes the player count
+- category: external-critique
+- impact: 3
+- ease: 7
+- next: build the noscript line from the tagline and the config player count at prerender time
+- issue: #401
+- fixed: (this commit)
+
 # Site audit — 2026-11-14 (pass 342, cloud tick)
 
 Pass 341 gave the /config Knockout field a plain label (9f2925d). No issues wait for triage. The critique gate is closed (pass 48 ran 5 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 12 commits ago, under its 20-commit / 48-hour window. This pass takes the next pass-48 row: the /config Enemy move help read "Hexes each enemy moves toward its target at the start of Combat.", as if every enemy always moves the full number, while / says each enemy, oldest first, moves up to that number before the spawn nodes spawn and stops next to its target (rules 7.5, 9.4). Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 12 commits ago, so handing to it would repeat that pass. Fix: the help now reads "The most hexes each enemy, oldest first, moves toward its target at each Combat, before the spawn nodes spawn; it stops next to its target." A configMetaText test pins it. Next in line: the LOW row on the /play noscript line.
