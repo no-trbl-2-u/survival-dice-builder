@@ -7,6 +7,7 @@ import {
   hexContents,
   hexName,
   hexTitle,
+  placeName,
   spawnsFrom,
   stepsAway,
 } from './places.ts'
@@ -36,6 +37,14 @@ describe('places', () => {
     const base = baseHex(state)
     expect(hexName(state, base)).toMatch(/, Base$/)
     expect(hexName(state, { q: 40, r: 40 })).toBe('open ground')
+  })
+
+  it('places a hex by its name and its steps from the base center', () => {
+    const state = createGame(defaultContent.config, 1)
+    const base = baseHex(state)
+    expect(placeName(state, base)).toBe(`${hexName(state, base)}, the base center`)
+    const north = { q: base.q, r: base.r - 1 }
+    expect(placeName(state, north)).toBe(`${hexName(state, north)}, 1 hex north of the base center`)
   })
 
   it('lists what stands on a hex', () => {

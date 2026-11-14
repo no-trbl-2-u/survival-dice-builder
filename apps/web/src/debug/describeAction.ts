@@ -1,5 +1,5 @@
 import { hexKey, type Action, type Axial, type GameState } from '@survival/engine'
-import { baseHex, defenseName, hexName, stepsAway } from '../map/places.ts'
+import { defenseName, hexName, placeName, stepsAway } from '../map/places.ts'
 import { enemyName as namedEnemy } from '../names/pieceNames.ts'
 import { optionText } from '../play/CardView.tsx'
 
@@ -90,9 +90,8 @@ function label(action: Action, state: GameState): string {
       return `${defenseName(state, action.tower)} shoots ${enemyName(state, action.enemy)}${enemy ? ` on ${hexName(state, enemy.hex)}, ${enemy.health} health` : ''}`
     }
     case 'placeFigure': {
-      const away = stepsAway(baseHex(state), action)
       const whose = state.players.length === 1 ? 'your' : `Player ${state.current + 1}'s`
-      return `Place ${whose} figure on ${hexName(state, action)}, ${away === 'here' ? 'the base center' : `${away} of the base center`}`
+      return `Place ${whose} figure on ${placeName(state, action)}`
     }
     case 'moveTo': {
       if (!state.map.hexes[hexKey(action)]) {

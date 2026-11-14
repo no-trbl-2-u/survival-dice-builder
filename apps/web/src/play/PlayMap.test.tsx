@@ -13,15 +13,35 @@ function placed(players: number): GameState {
 }
 
 describe('figure names on the map', () => {
-  it('a solo figure is "Your figure"', () => {
+  it('a solo figure is "Your figure", named by its place, never by coordinates', () => {
     render(<PlayMap state={placed(1)} legal={[]} act={() => {}} />)
-    expect(screen.getByLabelText(/^Your figure at /)).toBeTruthy()
+    const label = screen.getByRole('img', { name: /^Your figure on / }).getAttribute('aria-label')
+    expect(label).toMatch(/the base center$/)
+    expect(label).not.toMatch(/-?\d+,-?\d+/)
   })
 
   it('a co-op figure names the seat as "Player N", not "PN"', () => {
     render(<PlayMap state={placed(2)} legal={[]} act={() => {}} />)
-    expect(screen.getByLabelText(/^Player 1's figure at /)).toBeTruthy()
-    expect(screen.getByLabelText(/^Player 2's figure at /)).toBeTruthy()
+    expect(screen.getByRole('img', { name: /^Player 1's figure on / })).toBeTruthy()
+    expect(screen.getByRole('img', { name: /^Player 2's figure on / })).toBeTruthy()
     expect(screen.queryByLabelText(/^P2's figure/)).toBeNull()
+  })
+})
+
+describe('defense names on the map', () => {
+  it('each defense is an image named by its kind and health', () => {
+    const game = placed(1)
+    const state: GameState = {
+      ...game,
+      defenses: [
+        { id: 'd1', kind: 'barricade', hex: { q: 1, r: 0 }, health: 3, builder: 'p1' },
+        { id: 'd2', kind: 'tower', hex: { q: -1, r: 0 }, health: 2, builder: 'p1' },
+      ],
+    }
+    render(<PlayMap state={state} legal={[]} act={() => {}} />)
+    const barricade = state.content.defenses.find((d) => d.id === 'barricade')!.name
+    const tower = state.content.defenses.find((d) => d.id === 'tower')!.name
+    expect(screen.getByRole('img', { name: `${barricade}, 3 health` })).toBeTruthy()
+    expect(screen.getByRole('img', { name: `${tower}, 2 health` })).toBeTruthy()
   })
 })

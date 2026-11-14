@@ -9,7 +9,7 @@ import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } fr
 import { gameIcons, ICON_VIEWBOX, SITE_ICON } from '../icons/gameIcons.ts'
 import { describeAction } from '../debug/describeAction.ts'
 import { hexPolygonPoints, hexToPixel } from '../map/geometry.ts'
-import { hexTitle } from '../map/places.ts'
+import { hexTitle, placeName } from '../map/places.ts'
 import type { DamageFloat } from './damageFloats.ts'
 import { enemyLabel, playerHex } from './engageView.ts'
 import { placeTag } from './mapTag.ts'
@@ -236,8 +236,9 @@ export function PlayMap({
 
         {state.defenses.map((d) => {
           const c = hexToPixel(d.hex, SIZE)
+          const name = state.content.defenses.find((x) => x.id === d.kind)?.name ?? d.kind
           return (
-            <g key={d.id}>
+            <g key={d.id} role="img" aria-label={`${name}, ${d.health} health`}>
               <g key={d.health} className={styles.hit}>
                 <Icon name={d.kind} x={c.x} y={c.y} size={SIZE * 0.9} />
               </g>
@@ -258,7 +259,8 @@ export function PlayMap({
               key={p.id}
               className={styles.mover}
               style={place(c.x, c.y)}
-              aria-label={`${state.players.length === 1 ? 'Your' : `${seatName(state, seat)}'s`} figure at ${p.hex.q},${p.hex.r}`}
+              role="img"
+              aria-label={`${state.players.length === 1 ? 'Your' : `${seatName(state, seat)}'s`} figure on ${placeName(state, p.hex)}`}
             >
               <circle
                 className={`${styles.figure} ${seat === state.current ? styles.figureCurrent : ''}`}

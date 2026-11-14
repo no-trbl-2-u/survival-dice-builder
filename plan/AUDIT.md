@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-14 (pass 338, cloud tick)
+
+Pass 337 pinned the enemy pathfinder (ebd74ee); critique pass 48 then filed 6 findings (a7fb957). No issues wait for triage. The critique gate is closed (pass 48 ran at the previous commit), no build plan phase is pending (35 is blocked), and expand pass 32 ran 8 commits ago, under its 20-commit / 48-hour window. Two new MED critique rows are actionable without /oversight; the bias (external-critique MED, x1.5) lifts both to 7.2. The tie-break picks the a11y row: a screen reader user hears the figure as raw coordinates, or not at all, and hears each defense only as a number. Fix: a shared `placeName` (hex name plus steps from the base center) in `map/places.ts`, used by the figure label, `defenseName` and the Place figure choice; the figure and each defense get `role="img"`, and each defense is named "Barricade, 3 health". Next in line: the /tiles compass-word row (7.2).
+
+## Top 5 findings (scored)
+
+### [x] [7.2] /play: the figure's map label reads raw coordinates, and defenses have no name
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: role="img" and a place label on the figure; role="img" and kind plus health on each defense
+- issue: #396
+- fixed: (this commit)
+
+### [ ] [7.2] /tiles and /play: the Tile sheet names hexes by screen position; /play names directions by compass
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: use the compass words on the /tiles hex list
+
 # Site audit — 2026-11-14 (pass 337, cloud tick)
 
 Pass 336 pinned the /debug map view's site letters, tile label and stacked figures (c2e01d5). No issues wait for triage. The critique gate is closed (pass 47 ran 11 commits ago, about 18 hours) and expand pass 32 ran 6 commits ago (1fdbd86). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which only /oversight edits. A fresh audit of engine exports that no test names found `enemies/pathing.ts` `pathNextTo`, the breadth-first search behind every enemy step: it was only reached through `moveEnemies`, so its empty path when already adjacent, the detour around a lake, the direction-order tie-break, refusing other base hexes and the null result when an enemy, figure or defense fills the only way in were unpinned. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 6 commits ago, so handing to it would repeat that pass. A new `pathing.test.ts` pins all of them on hand-built maps and that the state it reads is unchanged. Next in line: the pending critique rows wait on /oversight; the next tick critiques when its gate opens (1 more commit).

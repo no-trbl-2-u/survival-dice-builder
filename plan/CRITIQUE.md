@@ -18,15 +18,6 @@
 - suggested fix: Use one set of direction words on both pages, for example "North: Hills, Spawn node" on /tiles.
 - source: web-fetch
 
-### [MED] /play — the player figure's map label reads raw coordinates, and defenses have no name
-- pass: 48 (commit ebd74ee)
-- viewport: desktop
-- category: a11y
-- observation: The figure's accessible name gives axial coordinates, which hex choices stopped using in an earlier pass. Its `<g>` has no role, so many screen readers skip the label (enemies have `role="img"`). Barricade and Tower icons have no name, so only their health number is read.
-- evidence: `apps/web/src/play/PlayMap.tsx:261`: aria-label `... figure at ${p.hex.q},${p.hex.r}` on a `<g>` with no role; enemies at `:312` use `{ role: 'img', 'aria-label': name }`.
-- suggested fix: Give the figure `role="img"` and a place label ("Your figure on Plains, 2 hexes north-east of the base"); give each defense `role="img"` and "Barricade, 3 health".
-- source: web-fetch
-
 ### [LOW] / and /config — site names are lower case; /tiles and /play capitalise them
 - pass: 48 (commit ebd74ee)
 - viewport: desktop
@@ -118,6 +109,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — the player figure's map label reads raw coordinates, and defenses have no name
+- pass: 48 (commit ebd74ee)
+- viewport: desktop
+- category: a11y
+- observation: The figure's accessible name gives axial coordinates, which hex choices stopped using in an earlier pass. Its `<g>` has no role, so many screen readers skip the label (enemies have `role="img"`). Barricade and Tower icons have no name, so only their health number is read.
+- evidence: `apps/web/src/play/PlayMap.tsx:261`: aria-label `... figure at ${p.hex.q},${p.hex.r}` on a `<g>` with no role; enemies at `:312` use `{ role: 'img', 'aria-label': name }`.
+- suggested fix: Give the figure `role="img"` and a place label ("Your figure on Plains, 2 hexes north-east of the base"); give each defense `role="img"` and "Barricade, 3 health".
+- source: web-fetch
+- issue: #396
+- fixed: (this commit)
 
 ### [x] [LOW] /config — Event Calendar summaries write face and day names in lower case; the lists capitalise them
 - pass: 47 (commit ec54070)

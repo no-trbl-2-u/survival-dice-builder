@@ -137,7 +137,19 @@ export function defenseName(state: GameState, id: string): string {
   const defense = state.defenses.find((d) => d.id === id)
   if (!defense) return id
   const name = state.content.defenses.find((x) => x.id === defense.kind)?.name ?? defense.kind
-  const away = stepsAway(baseHex(state), defense.hex)
+  return `${name} on ${placeName(state, defense.hex)}`
+}
+
+/**
+ * A hex by its name and its place from the base center, for players who cannot read
+ * coordinates: "Plains, 2 hexes north-east of the base center", or "Plains, Base, the base
+ * center" on the center itself.
+ *
+ * @param state - the game state whose map is read.
+ * @param hex - the hex to place.
+ */
+export function placeName(state: GameState, hex: Axial): string {
+  const away = stepsAway(baseHex(state), hex)
   const where = away === 'here' ? 'the base center' : `${away} of the base center`
-  return `${name} on ${hexName(state, defense.hex)}, ${where}`
+  return `${hexName(state, hex)}, ${where}`
 }
