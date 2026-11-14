@@ -17,21 +17,22 @@ export const SITE_LABEL: Record<Site, string> = {
 
 /**
  * Where hex `i` of a tile sits, in words: the center, then `AXIAL_DIRECTIONS` order as drawn
- * with flat-top hexes.
+ * with flat-top hexes. The words are the compass words /play uses for moves (`bearing` in
+ * `map/places.ts`), so a hex on /tiles matches a move choice on /play.
  */
 export const HEX_POSITION: readonly string[] = [
   'Center',
-  'Lower right',
-  'Upper right',
-  'Top',
-  'Upper left',
-  'Lower left',
-  'Bottom',
+  'South-east',
+  'North-east',
+  'North',
+  'North-west',
+  'South-west',
+  'South',
 ]
 
 /**
- * The order the hex lists read a tile in: the center, then Top and clockwise
- * (Upper right, Lower right, Bottom, Lower left, Upper left). Values are hex indices.
+ * The order the hex lists read a tile in: the center, then North and clockwise
+ * (North-east, South-east, South, South-west, North-west). Values are hex indices.
  */
 export const HEX_LIST_ORDER: readonly number[] = [0, 3, 2, 1, 6, 5, 4]
 

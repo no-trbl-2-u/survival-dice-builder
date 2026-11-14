@@ -1,8 +1,17 @@
 import { defaultContent, revealText } from '@survival/content'
+import { tileHexes } from '@survival/engine'
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { bearing } from '../map/places.ts'
 import { TileSheet } from './TileSheet.tsx'
-import { HEX_LIST_ORDER, HEX_POSITION, hexLabel, tileHexLabel, TileView } from './TileView.tsx'
+import {
+  capitalize,
+  HEX_LIST_ORDER,
+  HEX_POSITION,
+  hexLabel,
+  tileHexLabel,
+  TileView,
+} from './TileView.tsx'
 
 describe('TileView', () => {
   it('3.1 draws 7 hexes with each terrain and site from the tile', () => {
@@ -97,19 +106,27 @@ describe('TileSheet hex list', () => {
     })
   })
 
-  it('reads the center, then Top and clockwise', () => {
+  it('reads the center, then North and clockwise', () => {
     const { container } = render(<TileSheet />)
     const tile = defaultContent.tiles[0]!
     const rows = container.querySelectorAll(`[data-tile="${tile.id}"] [data-hex-row]`)
     expect([...rows].map((row) => row.textContent?.split(':')[0])).toEqual([
       'Center',
-      'Top',
-      'Upper right',
-      'Lower right',
-      'Bottom',
-      'Lower left',
-      'Upper left',
+      'North',
+      'North-east',
+      'South-east',
+      'South',
+      'South-west',
+      'North-west',
     ])
+  })
+
+  it('names each hex with the compass word /play uses for the way to it', () => {
+    const hexes = tileHexes({ q: 0, r: 0 })
+    hexes.forEach((hex, i) => {
+      const word = i === 0 ? 'Center' : capitalize(bearing(hexes[0]!, hex))
+      expect(HEX_POSITION[i]).toBe(word)
+    })
   })
 
   it('3.6 names every hex of the Base tile the base, in the list and the drawing', () => {

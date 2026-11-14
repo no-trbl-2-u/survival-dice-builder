@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /tiles and /play — the Tile sheet names hexes by screen position; /play names directions by compass
-- pass: 48 (commit ebd74ee)
-- viewport: desktop
-- category: comprehension
-- observation: The /tiles hex list uses Top, Upper right, Lower left; /play move choices and the log use north, north-east, south-west. A player who reads a tile on /tiles cannot match its hex list to a move choice on /play.
-- evidence: /tiles: "Upper right: Forest", "Top: Hills, Spawn node" (`HEX_POSITION`, `apps/web/src/tiles/TileView.tsx:22`); /play: "2 hexes north-east" (`COMPASS`, `apps/web/src/map/places.ts:6`).
-- suggested fix: Use one set of direction words on both pages, for example "North: Hills, Spawn node" on /tiles.
-- source: web-fetch
-
 ### [LOW] / and /config — site names are lower case; /tiles and /play capitalise them
 - pass: 48 (commit ebd74ee)
 - viewport: desktop
@@ -110,6 +101,17 @@
 
 ## Done
 
+### [x] [MED] /tiles and /play — the Tile sheet names hexes by screen position; /play names directions by compass
+- pass: 48 (commit ebd74ee)
+- viewport: desktop
+- category: comprehension
+- observation: The /tiles hex list uses Top, Upper right, Lower left; /play move choices and the log use north, north-east, south-west. A player who reads a tile on /tiles cannot match its hex list to a move choice on /play.
+- evidence: /tiles: "Upper right: Forest", "Top: Hills, Spawn node" (`HEX_POSITION`, `apps/web/src/tiles/TileView.tsx:22`); /play: "2 hexes north-east" (`COMPASS`, `apps/web/src/map/places.ts:6`).
+- suggested fix: Use one set of direction words on both pages, for example "North: Hills, Spawn node" on /tiles.
+- source: web-fetch
+- issue: #397
+- fixed: (this commit)
+
 ### [x] [MED] /play — the player figure's map label reads raw coordinates, and defenses have no name
 - pass: 48 (commit ebd74ee)
 - viewport: desktop
@@ -119,7 +121,7 @@
 - suggested fix: Give the figure `role="img"` and a place label ("Your figure on Plains, 2 hexes north-east of the base"); give each defense `role="img"` and "Barricade, 3 health".
 - source: web-fetch
 - issue: #396
-- fixed: (this commit)
+- fixed: 2b3c086
 
 ### [x] [LOW] /config — Event Calendar summaries write face and day names in lower case; the lists capitalise them
 - pass: 47 (commit ec54070)

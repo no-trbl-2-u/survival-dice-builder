@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-14 (pass 339, cloud tick)
+
+Pass 338 named the /play figure by its place and each defense by kind and health (2b3c086). No issues wait for triage. The critique gate is closed (pass 48 ran 2 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 9 commits ago, under its 20-commit / 48-hour window. This pass takes the next pass-48 row: the /tiles hex list named hexes Top, Upper right, Lower left, while /play names moves north, north-east, south-west. Scored 7.2 (external-critique MED with the x1.5 bias: impact 6, ease 8). `HEX_POSITION` now reads Center, then North, North-east, South-east, South, South-west, North-west, and a TileView test pins each word against `bearing` from the tile center, so the two pages cannot drift apart. Next in line: the LOW row on lower-case site names on / and /config.
+
+## Top 5 findings (scored)
+
+### [x] [7.2] /tiles and /play: the Tile sheet names hexes by screen position; /play names directions by compass
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: use the compass words on the /tiles hex list
+- issue: #397
+- fixed: (this commit)
+
+### [ ] [2.4] / and /config: site names are lower case; /tiles and /play capitalise them
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: capitalise site names in the / and /config copy
+
 # Site audit — 2026-11-14 (pass 338, cloud tick)
 
 Pass 337 pinned the enemy pathfinder (ebd74ee); critique pass 48 then filed 6 findings (a7fb957). No issues wait for triage. The critique gate is closed (pass 48 ran at the previous commit), no build plan phase is pending (35 is blocked), and expand pass 32 ran 8 commits ago, under its 20-commit / 48-hour window. Two new MED critique rows are actionable without /oversight; the bias (external-critique MED, x1.5) lifts both to 7.2. The tie-break picks the a11y row: a screen reader user hears the figure as raw coordinates, or not at all, and hears each defense only as a number. Fix: a shared `placeName` (hex name plus steps from the base center) in `map/places.ts`, used by the figure label, `defenseName` and the Place figure choice; the figure and each defense get `role="img"`, and each defense is named "Barricade, 3 health". Next in line: the /tiles compass-word row (7.2).
@@ -17,7 +37,7 @@ Pass 337 pinned the enemy pathfinder (ebd74ee); critique pass 48 then filed 6 fi
 - ease: 8
 - next: role="img" and a place label on the figure; role="img" and kind plus health on each defense
 - issue: #396
-- fixed: (this commit)
+- fixed: 2b3c086
 
 ### [ ] [7.2] /tiles and /play: the Tile sheet names hexes by screen position; /play names directions by compass
 - category: external-critique
