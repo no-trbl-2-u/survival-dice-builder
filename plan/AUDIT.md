@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-14 (pass 344, cloud tick)
+
+Pass 343 built the noscript line from the tagline and the config player count (423bf3b). No issues wait for triage. The critique gate is closed (pass 48 ran 7 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 14 commits ago, under its 20-commit / 48-hour window. Every Pending critique row edits a `[needs-user-call]` /decisions item, which only /oversight edits. A fresh audit of web modules without a colocated test found `debug/ActionLabel.tsx`, the label on every /debug action button and on the /play banner buttons: the banner test reaches it only through Stop moving, so the map coordinate suffix in its quiet `coords` span (placements, moves, builds, negative numbers) and the `ids` option /debug passes were unpinned. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 14 commits ago, so handing to it would repeat that pass. A new `ActionLabel.test.tsx` pins the suffix for all three hex actions, no span for an action with no hex, and that engine ids show only when asked. Next in line: the pending critique rows wait on /oversight; the next tick critiques when its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /debug and /play: the action label's coordinate suffix and ids option are untested
+- category: tests
+- impact: 3
+- ease: 8
+- next: colocated `ActionLabel.test.tsx`
+- issue: #402
+- fixed: (this commit)
+
 # Site audit — 2026-11-14 (pass 343, cloud tick)
 
 Pass 342 added "up to", the order and the stop to the /config Enemy move help (aec31ad). No issues wait for triage. The critique gate is closed (pass 48 ran 6 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 13 commits ago, under its 20-commit / 48-hour window. This pass takes the next pass-48 row: the no-JavaScript line in every served page said "a co-op survival dice-builder for 1 to 4 players: defend the base, build your dice and last as many rounds as you can", a third way of describing the game, with the player count written by hand. Scored 2.1 (external-critique LOW: impact 3, ease 7); below 3.0, but expand ran 13 commits ago, so handing to it would repeat that pass. Fix: `index.html` now holds an `<!--app-noscript-->` marker, and `pageHtml` fills it with `NOSCRIPT_TEXT`, the home pitch built from `TAGLINE` and `playersText` of the default config, then the JavaScript line; a missing marker fails the build. A head test pins the text, and the smoke e2e checks the served /play shell. Next in line: the remaining Pending critique rows are /decisions items that wait for /oversight.
