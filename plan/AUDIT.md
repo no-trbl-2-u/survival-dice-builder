@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-14 (pass 337, cloud tick)
+
+Pass 336 pinned the /debug map view's site letters, tile label and stacked figures (c2e01d5). No issues wait for triage. The critique gate is closed (pass 47 ran 11 commits ago, about 18 hours) and expand pass 32 ran 6 commits ago (1fdbd86). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which only /oversight edits. A fresh audit of engine exports that no test names found `enemies/pathing.ts` `pathNextTo`, the breadth-first search behind every enemy step: it was only reached through `moveEnemies`, so its empty path when already adjacent, the detour around a lake, the direction-order tie-break, refusing other base hexes and the null result when an enemy, figure or defense fills the only way in were unpinned. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 6 commits ago, so handing to it would repeat that pass. A new `pathing.test.ts` pins all of them on hand-built maps and that the state it reads is unchanged. Next in line: the pending critique rows wait on /oversight; the next tick critiques when its gate opens (1 more commit).
+
+## Top 5 findings (scored)
+
+### [x] [2.4] engine: the enemy pathfinder `pathNextTo` has no test of its own
+- category: tests
+- impact: 3
+- ease: 8
+- next: add `packages/engine/src/enemies/pathing.test.ts`
+- issue: #395
+- fixed: (this commit)
+
 # Site audit — 2026-11-13 (pass 336, cloud tick)
 
 Pass 335 pinned the sim batch summary's band call and the JSON writer (4755528). No issues wait for triage. The critique gate is closed (pass 47 ran 10 commits ago, today) and expand pass 32 ran 5 commits ago (4217481). Every build plan phase is shipped or blocked. Every Pending critique row edits a `[needs-user-call]` item, which only /oversight edits. A fresh audit of web modules without a colocated test found `debug/MapView.tsx`, the SVG map on /debug: only its "1 tile" label and the "E" elite spawn mark were touched, through StateView tests, and the e2e only checks it draws polygons. The plural tile label, the B, g and s site letters, one polygon per hex and the order figures stack on a shared hex were unpinned. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 5 commits ago, so handing to it would repeat that pass. A new `MapView.test.tsx` pins all of them and that an empty hex draws no figure text. Next in line: the pending critique rows wait on /oversight; the next tick audits afresh or critiques when its gate opens.
