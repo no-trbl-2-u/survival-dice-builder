@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Enemy move help omits "up to", the order and the stop next to the target
-- pass: 48 (commit ebd74ee)
-- viewport: desktop
-- category: comprehension
-- observation: The help reads as if every enemy always moves the full number. The home rule line says each enemy, oldest first, moves up to that number before the spawn nodes spawn, and stops next to its target.
-- evidence: /config: "Hexes each enemy moves toward its target at the start of Combat." (`config.meta.json:97`); /: "each enemy, oldest first, moves up to 2 hexes toward its target and stops next to it."
-- suggested fix: "The most hexes each enemy moves toward its target at each Combat, before the spawn nodes spawn; it stops next to its target."
-- source: web-fetch
-
 ### [LOW] /play — the noscript line describes the game in a third way and hard-codes the player count
 - pass: 48 (commit ebd74ee)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the Enemy move help omits "up to", the order and the stop next to the target
+- pass: 48 (commit ebd74ee)
+- viewport: desktop
+- category: comprehension
+- observation: The help reads as if every enemy always moves the full number. The home rule line says each enemy, oldest first, moves up to that number before the spawn nodes spawn, and stops next to its target.
+- evidence: /config: "Hexes each enemy moves toward its target at the start of Combat." (`config.meta.json:97`); /: "each enemy, oldest first, moves up to 2 hexes toward its target and stops next to it."
+- suggested fix: "The most hexes each enemy moves toward its target at each Combat, before the spawn nodes spawn; it stops next to its target."
+- source: web-fetch
+- issue: #400
+- fixed: (this commit)
 
 ### [x] [LOW] /config — the Knockout label "Return health divisor" is a math term
 - pass: 48 (commit ebd74ee)

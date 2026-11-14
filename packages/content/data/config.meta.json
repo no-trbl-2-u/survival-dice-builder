@@ -94,7 +94,7 @@
   },
   "combat.enemyMoveHexes": {
     "label": "Enemy move",
-    "help": "Hexes each enemy moves toward its target at the start of Combat.",
+    "help": "The most hexes each enemy, oldest first, moves toward its target at each Combat, before the spawn nodes spawn; it stops next to its target.",
     "rule": "7.5",
     "range": [1, 6]
   },

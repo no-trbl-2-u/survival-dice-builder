@@ -86,6 +86,13 @@ describe('config.meta.json marks the Spec v2 rule as the written one', () => {
     expect(entry?.help).toMatch(/^2 \(default\): .*half their maximum health, rounded up/)
   })
 
+  it('7.5: the Enemy move help says up to, oldest first, before the spawns, and the stop next to the target', () => {
+    const help = defaultConfigMeta['combat.enemyMoveHexes']?.help ?? ''
+    expect(help).toMatch(/^The most hexes each enemy, oldest first, moves toward its target/)
+    expect(help).toContain('before the spawn nodes spawn')
+    expect(help).toContain('stops next to its target')
+  })
+
   it('11.7: the pool is the written rule; the supply is the older rule', () => {
     const entry = defaultConfigMeta['draft.unpicked']
     expect(entry?.options).toEqual({

@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-14 (pass 342, cloud tick)
+
+Pass 341 gave the /config Knockout field a plain label (9f2925d). No issues wait for triage. The critique gate is closed (pass 48 ran 5 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 12 commits ago, under its 20-commit / 48-hour window. This pass takes the next pass-48 row: the /config Enemy move help read "Hexes each enemy moves toward its target at the start of Combat.", as if every enemy always moves the full number, while / says each enemy, oldest first, moves up to that number before the spawn nodes spawn and stops next to its target (rules 7.5, 9.4). Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 12 commits ago, so handing to it would repeat that pass. Fix: the help now reads "The most hexes each enemy, oldest first, moves toward its target at each Combat, before the spawn nodes spawn; it stops next to its target." A configMetaText test pins it. Next in line: the LOW row on the /play noscript line.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /config: the Enemy move help omits "up to", the order and the stop next to the target
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: "The most hexes each enemy, oldest first, moves ..."
+- issue: #400
+- fixed: (this commit)
+
+### [ ] [2.4] /play: the noscript line describes the game in a third way and hard-codes the player count
+- category: external-critique
+- impact: 3
+- ease: 7
+- next: build the noscript line from the tagline and the config player count at prerender time
+
 # Site audit — 2026-11-14 (pass 341, cloud tick)
 
 Pass 340 wrote the site names in lower case on /tiles and /play (72ecd05). No issues wait for triage. The critique gate is closed (pass 48 ran 4 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 11 commits ago, under its 20-commit / 48-hour window. This pass takes the next pass-48 row: the /config Knockout field was labelled "Return health divisor", a math term, while / says "half of their maximum health, rounded up". Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 11 commits ago, so handing to it would repeat that pass. Fix: the label now reads "Health on return: 1 part in", so the field reads "1 part in 2", and the help starts with "2 (default): ... half their maximum health, rounded up, as in the written rules" and names what 1, 3 and 4 give. A configMetaText test pins the label and the help's start. Next in line: the LOW row on the /config Enemy move help.
@@ -19,7 +39,7 @@ Pass 340 wrote the site names in lower case on /tiles and /play (72ecd05). No is
 - issue: #399
 - fixed: (this commit)
 
-### [ ] [2.4] /config: the Enemy move help omits "up to", the order and the stop next to the target
+### [x] [2.4] /config: the Enemy move help omits "up to", the order and the stop next to the target
 - category: external-critique
 - impact: 3
 - ease: 8
