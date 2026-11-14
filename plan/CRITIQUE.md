@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-13 at commit ec54070
-> Pass count: 47
+> Last pass: 2026-11-14 at commit ebd74ee
+> Pass count: 48
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /tiles and /play — the Tile sheet names hexes by screen position; /play names directions by compass
+- pass: 48 (commit ebd74ee)
+- viewport: desktop
+- category: comprehension
+- observation: The /tiles hex list uses Top, Upper right, Lower left; /play move choices and the log use north, north-east, south-west. A player who reads a tile on /tiles cannot match its hex list to a move choice on /play.
+- evidence: /tiles: "Upper right: Forest", "Top: Hills, Spawn node" (`HEX_POSITION`, `apps/web/src/tiles/TileView.tsx:22`); /play: "2 hexes north-east" (`COMPASS`, `apps/web/src/map/places.ts:6`).
+- suggested fix: Use one set of direction words on both pages, for example "North: Hills, Spawn node" on /tiles.
+- source: web-fetch
+
+### [MED] /play — the player figure's map label reads raw coordinates, and defenses have no name
+- pass: 48 (commit ebd74ee)
+- viewport: desktop
+- category: a11y
+- observation: The figure's accessible name gives axial coordinates, which hex choices stopped using in an earlier pass. Its `<g>` has no role, so many screen readers skip the label (enemies have `role="img"`). Barricade and Tower icons have no name, so only their health number is read.
+- evidence: `apps/web/src/play/PlayMap.tsx:261`: aria-label `... figure at ${p.hex.q},${p.hex.r}` on a `<g>` with no role; enemies at `:312` use `{ role: 'img', 'aria-label': name }`.
+- suggested fix: Give the figure `role="img"` and a place label ("Your figure on Plains, 2 hexes north-east of the base"); give each defense `role="img"` and "Barricade, 3 health".
+- source: web-fetch
+
+### [LOW] / and /config — site names are lower case; /tiles and /play capitalise them
+- pass: 48 (commit ebd74ee)
+- viewport: desktop
+- category: voice
+- observation: /tiles and /play write "Spawn node" and "Gathering node"; the home rule lines and /config help write "spawn node" and "gathering node".
+- evidence: /tiles: "2 Gathering nodes and 1 Spawn node"; /: "Each new tile's spawn nodes get enemies at each Combat." (`packages/content/src/ruleText.ts:75`); /config: "a defense may stand on a gathering node hex".
+- suggested fix: Pick one case for the site names and use it in ruleText, config.meta.json and the site labels.
+- source: web-fetch
+
+### [LOW] /config — the Knockout label "Return health divisor" is a math term
+- pass: 48 (commit ebd74ee)
+- viewport: desktop
+- category: voice
+- observation: The label is not plain STE. The home page says the same rule in plain words.
+- evidence: /config: "Return health divisor" (`packages/content/data/config.meta.json:313`); /: "with half of their maximum health, rounded up."
+- suggested fix: Rename to a plain label (for example "Health on return: 1 part in") and start the help with "2 (default): half their maximum health, rounded up."
+- source: web-fetch
+
+### [LOW] /config — the Enemy move help omits "up to", the order and the stop next to the target
+- pass: 48 (commit ebd74ee)
+- viewport: desktop
+- category: comprehension
+- observation: The help reads as if every enemy always moves the full number. The home rule line says each enemy, oldest first, moves up to that number before the spawn nodes spawn, and stops next to its target.
+- evidence: /config: "Hexes each enemy moves toward its target at the start of Combat." (`config.meta.json:97`); /: "each enemy, oldest first, moves up to 2 hexes toward its target and stops next to it."
+- suggested fix: "The most hexes each enemy moves toward its target at each Combat, before the spawn nodes spawn; it stops next to its target."
+- source: web-fetch
+
+### [LOW] /play — the noscript line describes the game in a third way and hard-codes the player count
+- pass: 48 (commit ebd74ee)
+- viewport: desktop
+- category: voice
+- observation: The no-JS line on the /play shell matches neither the tagline on / nor the meta description, and writes "1 to 4 players" where other pages take the count from config.
+- evidence: `apps/web/index.html:18`: "a co-op survival dice-builder for 1 to 4 players: defend the base, build your dice and last as many rounds as you can." vs tagline "Defend the base together, build your dice, survive one more round".
+- suggested fix: Build the noscript line from the tagline and the config player count at prerender time.
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
