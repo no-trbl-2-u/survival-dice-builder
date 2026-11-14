@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-14 (pass 340, cloud tick)
+
+Pass 339 put the compass words on the /tiles hex list (68e0314). No issues wait for triage. The critique gate is closed (pass 48 ran 3 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 10 commits ago, under its 20-commit / 48-hour window. This pass takes the next pass-48 row: /tiles and /play capitalised the site names ("2 Gathering nodes and 1 Spawn node", "Plains, Base"), while the / rule lines, the /config help and Spec v2 write them lower case. Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 10 commits ago, so handing to it would repeat that pass. Fix: `SITE_LABEL` now holds the lower-case names, so every mid-sentence use (tile site counts, hex names on /tiles, /play and /debug, map titles, the Place figure choices) reads "spawn node" and "Plains, base"; the /tiles site legend, the one place a name starts a list item, capitalizes it. A TileView test pins the lower-case names. Next in line: the LOW rows on the /config Knockout label and the Enemy move help.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /tiles and /play capitalise site names; / and /config write them lower case
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: lower-case `SITE_LABEL`, capitalize only at the start of a legend item
+- issue: #398
+- fixed: (this commit)
+
+### [ ] [2.4] /config: the Knockout label "Return health divisor" is a math term
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: plain label and help that starts with the default
+
 # Site audit — 2026-11-14 (pass 339, cloud tick)
 
 Pass 338 named the /play figure by its place and each defense by kind and health (2b3c086). No issues wait for triage. The critique gate is closed (pass 48 ran 2 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 9 commits ago, under its 20-commit / 48-hour window. This pass takes the next pass-48 row: the /tiles hex list named hexes Top, Upper right, Lower left, while /play names moves north, north-east, south-west. Scored 7.2 (external-critique MED with the x1.5 bias: impact 6, ease 8). `HEX_POSITION` now reads Center, then North, North-east, South-east, South, South-west, North-west, and a TileView test pins each word against `bearing` from the tile center, so the two pages cannot drift apart. Next in line: the LOW row on lower-case site names on / and /config.

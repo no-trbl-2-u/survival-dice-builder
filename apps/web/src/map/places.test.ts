@@ -35,7 +35,7 @@ describe('places', () => {
   it('names map hexes with their site, and open ground off the map', () => {
     const state = createGame(defaultContent.config, 1)
     const base = baseHex(state)
-    expect(hexName(state, base)).toMatch(/, Base$/)
+    expect(hexName(state, base)).toMatch(/, base$/)
     expect(hexName(state, { q: 40, r: 40 })).toBe('open ground')
   })
 
@@ -56,7 +56,7 @@ describe('places', () => {
     }
     const max = start.content.enemies.enemies.find((e) => e.id === 'grunt')!.health
     expect(hexContents(state, hex)[0]).toBe(`grunt (1 of ${max} health)`)
-    expect(hexTitle(state, hex)).toMatch(/, Base: grunt \(/)
+    expect(hexTitle(state, hex)).toMatch(/, base: grunt \(/)
   })
 
   it('row 66 names a node of a waiting tile with the round it spawns from', () => {

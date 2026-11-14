@@ -9,6 +9,7 @@ import {
   HEX_LIST_ORDER,
   HEX_POSITION,
   hexLabel,
+  SITE_LABEL,
   tileHexLabel,
   TileView,
 } from './TileView.tsx'
@@ -67,7 +68,7 @@ describe('TileSheet', () => {
     }
   })
 
-  it("counts each tile's sites under its name, written as the site legend writes them", () => {
+  it("counts each tile's sites under its name, in lower case as the / rule lines write them", () => {
     const { container } = render(<TileSheet />)
     const summaries = defaultContent.tiles.map((tile) => {
       const name = container.querySelector(`[data-tile="${tile.id}"] h3`)!
@@ -75,9 +76,9 @@ describe('TileSheet', () => {
     })
     const base = defaultContent.tiles.findIndex((t) => t.kind === 'base')
     expect(summaries[base]).toBe('All 7 hexes are the base')
-    expect(summaries.join(', ')).toMatch(/Gathering node/)
+    expect(summaries.join(', ')).toMatch(/gathering node/)
     for (const summary of summaries) {
-      expect(summary).not.toMatch(/\d (base|gathering|spawn|elite)/)
+      expect(summary).not.toMatch(/\d (Base|Gathering|Spawn|Elite)/)
     }
   })
 
@@ -85,7 +86,7 @@ describe('TileSheet', () => {
     const { container } = render(<TileSheet />)
     const meadow = defaultContent.tiles.find((t) => t.name === 'Meadowlands')!
     const name = container.querySelector(`[data-tile="${meadow.id}"] h3`)!
-    expect(name.nextSibling?.textContent).toBe('2 Gathering nodes and 1 Spawn node')
+    expect(name.nextSibling?.textContent).toBe('2 gathering nodes and 1 spawn node')
     for (const tile of defaultContent.tiles) {
       const summary = container.querySelector(`[data-tile="${tile.id}"] h3`)!.nextSibling
       const text = summary?.textContent ?? ''
@@ -134,18 +135,28 @@ describe('TileSheet hex list', () => {
     const tile = defaultContent.tiles.find((t) => t.kind === 'base')!
     const rows = container.querySelectorAll(`[data-tile="${tile.id}"] [data-hex-row]`)
     expect(rows).toHaveLength(7)
-    rows.forEach((row) => expect(row.textContent).toMatch(/, Base$/))
+    rows.forEach((row) => expect(row.textContent).toMatch(/, base$/))
     const titles = container.querySelectorAll(`[data-tile="${tile.id}"] [data-hex] title`)
     expect(titles).toHaveLength(7)
-    titles.forEach((t) => expect(t.textContent).toMatch(/, Base$/))
+    titles.forEach((t) => expect(t.textContent).toMatch(/, base$/))
     const core = defaultContent.tiles.find((t) => t.kind === 'core')!
     const plain = core.hexes.find((h) => !h.site)!
     expect(tileHexLabel(core, plain)).toBe(hexLabel(plain))
   })
 
   it('capitalises terrain and names the site', () => {
-    expect(hexLabel({ terrain: 'plains', site: 'base' })).toBe('Plains, Base')
+    expect(hexLabel({ terrain: 'plains', site: 'base' })).toBe('Plains, base')
     expect(hexLabel({ terrain: 'lake', site: null })).toBe('Lake')
+  })
+
+  it('writes site names in lower case, as the / rule lines and /config help do', () => {
+    expect(Object.values(SITE_LABEL)).toEqual([
+      'base',
+      'gathering node',
+      'spawn node',
+      'elite spawn node',
+    ])
+    expect(hexLabel({ terrain: 'forest', site: 'spawn-node' })).toBe('Forest, spawn node')
   })
 })
 

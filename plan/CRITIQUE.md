@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / and /config — site names are lower case; /tiles and /play capitalise them
-- pass: 48 (commit ebd74ee)
-- viewport: desktop
-- category: voice
-- observation: /tiles and /play write "Spawn node" and "Gathering node"; the home rule lines and /config help write "spawn node" and "gathering node".
-- evidence: /tiles: "2 Gathering nodes and 1 Spawn node"; /: "Each new tile's spawn nodes get enemies at each Combat." (`packages/content/src/ruleText.ts:75`); /config: "a defense may stand on a gathering node hex".
-- suggested fix: Pick one case for the site names and use it in ruleText, config.meta.json and the site labels.
-- source: web-fetch
-
 ### [LOW] /config — the Knockout label "Return health divisor" is a math term
 - pass: 48 (commit ebd74ee)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / and /config — site names are lower case; /tiles and /play capitalise them
+- pass: 48 (commit ebd74ee)
+- viewport: desktop
+- category: voice
+- observation: /tiles and /play write "Spawn node" and "Gathering node"; the home rule lines and /config help write "spawn node" and "gathering node".
+- evidence: /tiles: "2 Gathering nodes and 1 Spawn node"; /: "Each new tile's spawn nodes get enemies at each Combat." (`packages/content/src/ruleText.ts:75`); /config: "a defense may stand on a gathering node hex".
+- suggested fix: Pick one case for the site names and use it in ruleText, config.meta.json and the site labels.
+- source: web-fetch
+- issue: #398
+- fixed: (this commit)
 
 ### [x] [MED] /tiles and /play — the Tile sheet names hexes by screen position; /play names directions by compass
 - pass: 48 (commit ebd74ee)

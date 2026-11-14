@@ -8,7 +8,7 @@ describe('describeAction', () => {
     const state = createGame(defaultContent.config, 1)
     const labels = legalActions(state).map((a) => describeAction(a, state))
     expect(labels).toHaveLength(7)
-    expect(labels[0]).toBe('Place your figure on Plains, Base, the base center')
+    expect(labels[0]).toBe('Place your figure on Plains, base, the base center')
     expect(
       labels
         .slice(1)

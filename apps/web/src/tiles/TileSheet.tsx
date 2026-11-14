@@ -45,7 +45,7 @@ function kindSummary(tiles: readonly TileDef[]): string {
 
 /**
  * Counts each site printed on a tile, for the caption, named as the site legend names it:
- * "2 Gathering nodes and 1 Spawn node".
+ * "2 gathering nodes and 1 spawn node".
  */
 function siteSummary(sites: readonly (Site | null)[]): string {
   return andList(
@@ -94,7 +94,7 @@ export function TileSheet() {
         {SITES.map((s) => (
           <li key={s} data-site-legend={s}>
             <GameIcon name={SITE_ICON[s]} className={styles.siteIcon} size="1.25rem" />
-            {SITE_LABEL[s]} ({siteText(s, defaultContent.config, defaultContent)})
+            {capitalize(SITE_LABEL[s])} ({siteText(s, defaultContent.config, defaultContent)})
           </li>
         ))}
       </ul>

@@ -7,12 +7,15 @@ import styles from './TileView.module.css'
 const HEX_SIZE = 40
 const ICON_SIZE = 40
 
-/** Plain-language site names for labels and tooltips. */
+/**
+ * Plain-language site names for labels and tooltips, lower case as the rule lines on / and the
+ * /config help write them ("spawn node"); a list item that starts with one capitalizes it.
+ */
 export const SITE_LABEL: Record<Site, string> = {
-  base: 'Base',
-  'gathering-node': 'Gathering node',
-  'spawn-node': 'Spawn node',
-  'elite-spawn-node': 'Elite spawn node',
+  base: 'base',
+  'gathering-node': 'gathering node',
+  'spawn-node': 'spawn node',
+  'elite-spawn-node': 'elite spawn node',
 }
 
 /**
@@ -41,7 +44,7 @@ export function capitalize(id: string): string {
   return id.charAt(0).toUpperCase() + id.slice(1)
 }
 
-/** "Plains", "Plains, Base": a hex's terrain and site in words. */
+/** "Plains", "Plains, base": a hex's terrain and site in words. */
 export function hexLabel(hex: Readonly<{ terrain: string; site: Site | null }>): string {
   const terrain = capitalize(hex.terrain)
   return hex.site ? `${terrain}, ${SITE_LABEL[hex.site]}` : terrain
@@ -57,7 +60,7 @@ export function playedSite(tile: Pick<TileDef, 'kind'>, site: Site | null): Site
   return tile.kind === 'base' ? 'base' : site
 }
 
-/** "Plains, Base": a hex of a tile in words, with its site as the game plays it (3.6). */
+/** "Plains, base": a hex of a tile in words, with its site as the game plays it (3.6). */
 export function tileHexLabel(
   tile: Pick<TileDef, 'kind'>,
   hex: Readonly<{ terrain: string; site: Site | null }>,

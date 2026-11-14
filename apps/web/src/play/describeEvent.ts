@@ -25,7 +25,7 @@ type Names = Readonly<{
 const hex = (h: { q: number; r: number }) => `(${h.q},${h.r})`
 /** "1 material", "4 materials". */
 const materials = (n: number) => `${n} ${n === 1 ? 'material' : 'materials'}`
-/** "Plains, Spawn node (2,0)": a hex by name, with its coordinate; bare coordinates off the map. */
+/** "Plains, spawn node (2,0)": a hex by name, with its coordinate; bare coordinates off the map. */
 function place(n: Names, h: { q: number; r: number }): string {
   const found = n.map?.hexes[hexKey(h)]
   return found ? `${hexLabel(found)} ${hex(h)}` : hex(h)

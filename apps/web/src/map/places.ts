@@ -47,7 +47,7 @@ export function spawnsFrom(state: GameState, hex: Axial): number | null {
 }
 
 /**
- * The name of a map hex: terrain and site ("Plains, Spawn node"), with "(spent)" on a used
+ * The name of a map hex: terrain and site ("Plains, spawn node"), with "(spent)" on a used
  * gathering node, "(spawns from round N)" on a node of a tile that still waits (row 66), or
  * `open ground` off the map.
  *
@@ -142,7 +142,7 @@ export function defenseName(state: GameState, id: string): string {
 
 /**
  * A hex by its name and its place from the base center, for players who cannot read
- * coordinates: "Plains, 2 hexes north-east of the base center", or "Plains, Base, the base
+ * coordinates: "Plains, 2 hexes north-east of the base center", or "Plains, base, the base
  * center" on the center itself.
  *
  * @param state - the game state whose map is read.
