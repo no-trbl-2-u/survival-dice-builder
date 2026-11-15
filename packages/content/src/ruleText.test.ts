@@ -148,7 +148,7 @@ describe('rule text from config', () => {
     expect(startText(base, defaultContent)).toBe(
       'Each player starts with 15 health, 1 action die and 4 Skills your dice can fire: ' +
         'Strike (Sword: 2 damage to 1 enemy within 1 hex), Shot (Bow: 1 damage to 1 enemy within 2 hexes), Mend (Wand: heal 1 health) and Guard (Shield: gain 2 guard). ' +
-        'Guard comes from the Guard Skill; it takes enemy damage before your health. ' +
+        'The Guard Skill gives you guard: points that take enemy damage before your health and are lost when the engagement ends. ' +
         'Your deck holds 10 cards: 4 Move, 4 Gather, 1 Build and 1 Rest. You draw 5 at a time. ' +
         'Each card has two halves: the top half is for Prepare, the bottom half for Combat.',
     )
@@ -161,7 +161,7 @@ describe('rule text from config', () => {
     )
     const exchange = With((c) => ({ ...c, combat: { ...c.combat, model: 'exchange' as const } }))
     expect(startText(exchange, defaultContent)).toMatch(
-      /Guard comes from the Guard Skill and your cards' bottom halves; it takes enemy damage before your health\./,
+      /The Guard Skill and your cards' bottom halves give you guard: points that take enemy damage before your health and are lost at the end of each exchange, after the enemy attack\./,
     )
     for (const path of [
       'player.maxHealth',
@@ -371,7 +371,9 @@ describe('rule text from config', () => {
       combat: { ...c.combat, engage: { ...c.combat.engage, defeatedDice: 'cancelled' } },
     }))
     expect(enemyHitText(cancelled)).toMatch(/except the dice of an enemy you defeated/)
-    expect(combatText(base, 'engage', defaultContent)).toContain(enemyHitText(base))
+    expect(combatText(base, 'engage', defaultContent)).toContain(
+      `${enemyHitText(base)} Any guard you have left is lost when the engagement ends. `,
+    )
     expect(ruleLineFor('combat.engage.defeatedDice', cancelled, defaultContent)).toBe(
       enemyHitText(cancelled),
     )

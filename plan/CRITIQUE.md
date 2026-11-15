@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / and /config — guard is explained by its own Skill name, and no page says guard is lost when the engagement ends
-- pass: 49 (commit ba1eb40)
-- viewport: desktop
-- category: comprehension
-- observation: "Guard" is both a Skill and the points it gives, and the explaining sentence repeats the name. No page a player reads before a run says how long guard lasts; the engine sets it to 0 at the end of every engagement (`packages/engine/src/combat/engage.ts:334`) and after an Exchanges attack (`resolve.ts:327`).
-- evidence: / "Guard (Shield: gain 2 guard)" ... "Guard comes from the Guard Skill; it takes enemy damage before your health." (`packages/content/src/ruleText.ts:847`). /config: "Your guard takes the damage first, then your health."
-- suggested fix: In `ruleText.ts`, say guard takes enemy damage before your health and is lost when the engagement ends (Exchanges: after the attack), keyed off the Combat model.
-- source: web-fetch
-
 ### [LOW] / — the Enemies line says spawn nodes "get enemies" with no count and no elite spawn nodes; /tiles gives both
 - pass: 49 (commit ba1eb40)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / and /config — guard is explained by its own Skill name, and no page says guard is lost when the engagement ends
+- pass: 49 (commit ba1eb40)
+- viewport: desktop
+- category: comprehension
+- observation: "Guard" is both a Skill and the points it gives, and the explaining sentence repeats the name. No page a player reads before a run says how long guard lasts; the engine sets it to 0 at the end of every engagement (`packages/engine/src/combat/engage.ts:334`) and after an Exchanges attack (`resolve.ts:327`).
+- evidence: / "Guard (Shield: gain 2 guard)" ... "Guard comes from the Guard Skill; it takes enemy damage before your health." (`packages/content/src/ruleText.ts:847`). /config: "Your guard takes the damage first, then your health."
+- suggested fix: In `ruleText.ts`, say guard takes enemy damage before your health and is lost when the engagement ends (Exchanges: after the attack), keyed off the Combat model.
+- source: web-fetch
+- issue: #406
+- fixed: (this commit)
 
 ### [x] [LOW] /play — the noscript line describes the game in a third way and hard-codes the player count
 - pass: 48 (commit ebd74ee)

@@ -264,7 +264,7 @@ export function combatText(
   return (
     `Play a card's Engage option${holders ? ` (on ${holders})` : ''} to roll your dice from where you stand, plus the enemy dice of each enemy next to you${dice ? ` (${dice})` : ''}. ` +
     'Put your dice on your Skills one at a time. ' +
-    `${enemyDieText(config)} ${enemyHitText(config)} ` +
+    `${enemyDieText(config)} ${enemyHitText(config)} Any guard you have left is lost when the engagement ends. ` +
     combatEndText(config)
   )
 }
@@ -841,10 +841,15 @@ export function startText(config: GameConfig, content: Pick<Content, 'cards' | '
   const defs = starterSkills.flatMap((id) => content.skills.filter((s) => s.id === id))
   const skills = defs.map((s) => skillLine(s, config.combat.model))
   const guards = defs.filter((s) => s.effect.kind === 'guard').map((s) => s.name)
-  const cardsGuard = config.combat.model === 'exchange' ? " and your cards' bottom halves" : ''
+  const exchange = config.combat.model === 'exchange'
+  const cardsGuard = exchange ? " and your cards' bottom halves" : ''
+  const one = guards.length === 1 && !exchange
+  const lost = exchange
+    ? 'at the end of each exchange, after the enemy attack'
+    : 'when the engagement ends'
   const guard =
     guards.length > 0
-      ? ` Guard comes from the ${andList(guards)} ${guards.length === 1 ? 'Skill' : 'Skills'}${cardsGuard}; it takes enemy damage before your health.`
+      ? ` The ${andList(guards)} ${guards.length === 1 ? 'Skill' : 'Skills'}${cardsGuard} ${one ? 'gives' : 'give'} you guard: points that take enemy damage before your health and are lost ${lost}.`
       : ''
   const preset = config.deck.presets.find((p) => p.id === config.deck.preset)
   const entries = preset?.cards ?? []

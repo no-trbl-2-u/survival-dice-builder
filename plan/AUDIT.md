@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-15 (pass 348, cloud tick)
+
+Pass 347 pinned the 3D dice tray's WebGL fallback (ba1eb40); critique pass 49 then filed 5 findings (dbaa0cf). No issues wait for triage. The critique gate is closed (pass 49 ran at the last commit), no build plan phase is pending (35 is blocked), and expand pass 32 ran 19 commits ago, about 45 hours, under its 20-commit / 48-hour window. The top finding is pass 49's MED row: the start line on / explained guard by repeating the Guard Skill's name, and no page said guard is lost when the engagement ends (the engine sets it to 0 at the end of each engagement, and after the enemy attack in Exchanges). Scored 7.2 (external-critique MED: impact 6, ease 8, times 1.5 for the MED bias). The start line now says the Guard Skill gives you guard, points that take enemy damage before your health and are lost when the engagement ends (Exchanges: at the end of each exchange, after the enemy attack). The Engage Combat line on / and /config adds "Any guard you have left is lost when the engagement ends." The /play engagement prompt keeps its old text: the longer line made the 1280x800 engagement screen scroll. The playtest protocol is regenerated. Next in line: the 4 LOW pass 49 rows.
+
+## Top 5 findings (scored)
+
+### [x] [7.2] / and /config: guard is explained by its own name and nothing says it is lost when the engagement ends
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: rewrite the guard sentence in `startText` and add the guard-lost line to `combatText`
+- issue: #406
+- fixed: (this commit)
+
 # Site audit — 2026-11-15 (pass 347, cloud tick)
 
 Pass 346 pinned the /play log lines (b9f71db). No issues wait for triage. The critique gate is closed (pass 48 ran 10 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 32 ran 17 commits ago, under its 20-commit / 48-hour window. Every Pending critique row edits a `[needs-user-call]` /decisions item, which only /oversight edits. A fresh audit for modules no test imports found that the web app's components are all covered except the page shells (covered by e2e) and `dice3d/Dice3D.tsx`, the optional 3D dice tray on /play. Its only check was one e2e line that accepts either the canvas or the no-WebGL note. Engine modules with no direct test (`supplies.ts`) are pinned through `createGame` and the draft tests in RULES-COVERAGE. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 17 commits ago, so handing to it would repeat that pass. A new `Dice3D.test.tsx` pins the no-WebGL note with no canvas, the single WebGL check across rerenders, and the one canvas hidden from screen readers when WebGL is there. Next in line: the pending critique rows wait on /oversight; the next tick critiques when its gate opens.
