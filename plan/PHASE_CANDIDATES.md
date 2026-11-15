@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-11-13 at commit 1fdbd86
-> Pass count: 32
+> Last pass: 2026-11-15 at commit 0432013
+> Pass count: 33
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -385,8 +385,25 @@
 - conflicts: OPEN-QUESTIONS row 79 is still proposed. If the designer picks one calendar, rule 9 removes the other two, and the work on their text goes with them. Building the text from one source makes that removal smaller, not larger. No rule changes.
 - ruling audit: Spec v2 7.3 (spawns), OPEN-QUESTIONS row 79 (proposed) read; Spec v2 untouched. Loop scope: in (content, rule text, tests).
 
+### [ ] [score 4.0] One word per game term across pages: a term table in content that every page reads, and a test that two pages agree
+- proposed: 2026-11-15, expand pass 33
+- source signals:
+  - Critique passes 48 (a7fb957) and 49 (dbaa0cf): 6 of their 11 rows are the same fact told two ways on two pages. Fixed by hand: /tiles named hexes by screen position where /play uses compass words (68e0314); site names were lower case on / and /config and capitalised on /tiles and /play (72ecd05); the noscript line described the game a third way (423bf3b); guard was explained by its own Skill name (0432013). Still pending: the home Enemies line says spawn nodes "get enemies" where /tiles gives 1 grunt per spawn node and 1 elite per elite spawn node; the /config Shop timing choice says "on the base" where / and the Shop help say "on the Base tile".
+  - Cause: the words live in several places. Site names and compass words sit in web code (`apps/web/src/map/places.ts`, `apps/web/src/tiles/TileView.tsx`), outside `packages/content/`, which standing rule 7 says owns copy; the home spawn line (`packages/content/src/ruleText.ts:75`) and the /debug Explore label (`apps/web/src/debug/describeAction.ts:98`) restate spawns without the counts the /tiles legend reads from config; the Shop choice labels are typed into `packages/content/data/config.meta.json:511-514`. Each fix added a test for one page's phrase, and nothing compares two pages.
+  - Commit pattern: 4 of the 20 commits since pass 32 went to this class, and beae6e1 (Event Calendar face and day case) is the same class on one more surface.
+- rationale: a stranger reads the site across pages, and a term that changes between them reads as two rules. The critique pass finds about 3 such rows each time and `/iterate` fixes one string per tick, so the class keeps coming back. One table of game terms (site and tile names, compass directions, the Base tile, spawn counts from config) that /play, /tiles, /config, / and /debug all read, with one test over the prerendered pages, closes it.
+- proposed scope: 1 phase.
+  - A term table in `packages/content` for the names now typed in web code and in `config.meta.json` labels: site kinds, tile names, compass directions, the Base tile, Skill names. `places.ts`, `TileView.tsx` and `describeAction.ts` import it.
+  - Spawn lines on /, /debug and /tiles built from one `ruleText` helper that reads the spawn counts, ramp and seat scaling from config.
+  - A content test that each term has one spelling and case across `ruleText`, `config.meta.json` and the term table, and a static e2e check that the prerendered / and /tiles pages use the same term for the same thing.
+  - The two pending rows (home Enemies line, Shop "on the base") close in the same change.
+- estimated phases: 1
+- conflicts: overlaps "Event Calendar copy from one source", whose face and day name table would be one part of this term table; if both are promoted, ship them as one phase. No rule changes; copy built from content and config.
+- ruling audit: Spec v2 7.3 (spawns) and the Shop rule text read; Spec v2 untouched. Loop scope: in (content, rule text, tests).
+
 ## Considered (below threshold)
 
+- [score 2.0] **A test for every module, or a pinned reason it has none** (pass 33). Signals: 9 of the 20 commits since pass 32 were `test: pin` commits from audit passes 336 to 347, each adding one colocated test for a module no test imported (pathing, MapView, sim batch summary, Try button, sound player, ActionLabel, run reducer, describeEvent, Dice3D). The same probe at 0432013 finds 7 web modules left, all page shells or entry points covered by e2e (`main.tsx`, `App.tsx`, `useClient.ts`, `DebugPage.tsx`, `PlayPage.tsx`, `MilestoneList.tsx`, `icons/GameIcon.tsx`), and 6 content schema files checked through `load.test.ts`. The drip is near its end, so a coverage gate would guard a class that is closing. Not filed; re-evaluate if new modules land without tests.
 - [score 2.0] **What a player learns before the first round** (pass 30). Signals: critique pass 43 (b44072d) filed 4 /play and / rows on rules a player meets before any text says them (enemies move at each Combat and how far, when Prepare ends, Skills and ranges hidden before choosing an engagement, where a knocked-out player comes back); `/iterate` shipped all 4 as single rows (e915510, 2ab93b8, d2fa477, 6aacbc9). The rows are closed and each fix carries a test, so there is nothing left for a phase. Not filed; re-evaluate if the next critique pass finds another round rule the start panel or home page leaves out.
 - [score 1.5] **Share card and home-screen install metadata as one head contract** (pass 27). Signals: 9 of the 20 commits since pass 26 were one-tag shell fixes found by audit passes 251-262 (566d865 og:image, 5c352a8 twitter:card, 1276380 iOS icon, 1d74198 theme-color, fcf9708 WebSite data, 0bc9e92 manifest, 516c4f4 iOS title, a245cec sitemap, e39aed3 asset cache). Each added its own unit or static e2e check (`apps/web/src/head.test.ts`, `sitemap.test.ts`, `static.spec.ts`), and critique pass 39 found only the sitemap row on the shell. The class is guarded and the drip has stopped (the last 5 commits went elsewhere). Not filed; re-evaluate if a critique pass finds a shell tag the tests let through.
 - [score 1.5] **/config choice helps from the schema** (pass 23). Signals: 7 of the 15 `fix:` commits since pass 22 went to /config help markers (e655e40, 62a3e23, 95d7426, 6a8354f, 6abf961, 4144937, 3c0624a): choice names that differ from the list labels, defaults left unmarked, "Off (default)" on a tick box. Unlike the earlier drips, each of these added a schema-wide check in `packages/content/src/configMetaText.test.ts` (every list marks its default, every tick box and optional limit names its default, each choice in a help reads as its list label, no tick box says "Off"), so the class is now guarded. Generating the helps from the schema would be a rewrite for no visible gain. Not filed; re-evaluate if a critique pass finds a /config help row the tests let through.
