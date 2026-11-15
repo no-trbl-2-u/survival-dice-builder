@@ -32,6 +32,27 @@ describe('debug state counts', () => {
   })
 })
 
+describe('debug Build in progress', () => {
+  /** A solo run with a Build of `buildsLeft` and a cost cut of `costReduction` in progress. */
+  function building(buildsLeft: number, costReduction: number): GameState {
+    const game = createGame(defaultContent.config, 1)
+    return { ...game, active: { kind: 'build', buildsLeft, costReduction, level: 1 } }
+  }
+
+  it('says "builds left" and leaves out a cost cut of 0', () => {
+    render(<StateView state={building(2, 0)} />)
+    const text = screen.getByTestId('state').textContent ?? ''
+    expect(text).toContain('Build: 2 builds left')
+    expect(text).not.toContain('cost')
+  })
+
+  it('says "1 build left" and names a cost cut in materials', () => {
+    render(<StateView state={building(1, 1)} />)
+    const text = screen.getByTestId('state').textContent ?? ''
+    expect(text).toContain('Build: 1 build left, each costs 1 material less')
+  })
+})
+
 describe('debug map marks in text', () => {
   /** A solo run with one lake and one mountain hex added beside the start. */
   function withBlocks(): GameState {

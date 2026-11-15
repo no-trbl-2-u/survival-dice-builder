@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-15 (pass 351, cloud tick)
+
+Pass 350 gave the Enemies line on / its spawn counts (fb417a3). No issues wait for triage. The critique gate is closed (pass 49 ran 5 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 3 commits ago. This pass takes a pass-49 LOW row: the /debug State panel's In progress row printed "Build: 2 left, cost -0", with no unit and a cost cut of 0, while /play says "2 builds left". Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 3 commits ago, so handing to it would repeat that pass. Fix: the row reads "Build: 2 builds left" ("1 build left" for one) and adds ", each costs N materials less" only when the card cuts the cost; `StateView.test.tsx` pins both. Next in line: the /credits link line, the last LOW pass-49 row; the other Pending rows edit `[needs-user-call]` /decisions items, which wait on /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /debug: the In progress row prints "Build: 2 left, cost -0"
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: give the Build line a unit and drop a cost cut of 0 in `StateView.tsx`
+- issue: #409
+- fixed: (this commit)
+
 # Site audit — 2026-11-15 (pass 350, cloud tick)
 
 Pass 349 said "on the Base tile" in the Shop timing setting (3151eae). No issues wait for triage. The critique gate is closed (pass 49 ran 4 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 2 commits ago. This pass takes a pass-49 LOW row: the Enemies line on / said "Each new tile's spawn nodes get enemies at each Combat" with no count and no elite spawn nodes, while the /tiles legend gives 1 grunt and 1 elite. Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 2 commits ago, so handing to it would repeat that pass. Fix: `spawnText` now builds "A spawn node gets 1 grunt at each Combat; an elite spawn node gets 1 elite at each Combat." from the same helper the /tiles legend uses, so the seat scaling, ramp, new tile delay and range options show on / and on every spawn option on /config. The playtest protocol is regenerated. Next in line: the 2 remaining LOW pass-49 rows (the /debug Build line, the /credits link line).

@@ -108,7 +108,11 @@ export function StateView({ state }: Props) {
             <dd>
               {active.kind === 'move'
                 ? `Move: ${active.hexesLeft} movement left`
-                : `Build: ${active.buildsLeft} left, cost -${active.costReduction}`}
+                : `Build: ${count(active.buildsLeft, 'build', 'builds')} left${
+                    active.costReduction > 0
+                      ? `, each costs ${count(active.costReduction, 'material', 'materials')} less`
+                      : ''
+                  }`}
             </dd>
           </>
         ) : null}

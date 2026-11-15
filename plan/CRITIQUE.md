@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /debug — the In progress row prints "Build: 2 left, cost -0"
-- pass: 49 (commit ba1eb40)
-- viewport: desktop
-- category: voice
-- observation: During a Build card the State panel gives the count with no unit and prints "cost -0" for a card with no cost cut. /play says "builds left" for the same step. (/debug is JavaScript-only; read from source.)
-- evidence: `apps/web/src/debug/StateView.tsx:111` `Build: ${active.buildsLeft} left, cost -${active.costReduction}` vs `apps/web/src/play/nextStep.ts:80` "(2 builds left)".
-- suggested fix: Print "Build: 2 builds left" and add ", each costs N materials less" only when the cut is above 0.
-- source: web-fetch
-
 ### [LOW] /credits — "Each name links to its source", but each line has three names and only the work title links
 - pass: 49 (commit ba1eb40)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /debug — the In progress row prints "Build: 2 left, cost -0"
+- pass: 49 (commit ba1eb40)
+- viewport: desktop
+- category: voice
+- observation: During a Build card the State panel gives the count with no unit and prints "cost -0" for a card with no cost cut. /play says "builds left" for the same step. (/debug is JavaScript-only; read from source.)
+- evidence: `apps/web/src/debug/StateView.tsx:111` `Build: ${active.buildsLeft} left, cost -${active.costReduction}` vs `apps/web/src/play/nextStep.ts:80` "(2 builds left)".
+- suggested fix: Print "Build: 2 builds left" and add ", each costs N materials less" only when the cut is above 0.
+- source: web-fetch
+- issue: #409
+- fixed: (this commit) — the row reads "Build: 2 builds left" ("1 build left" for one), and adds ", each costs N materials less" only when the card cuts the cost
 
 ### [x] [LOW] / — the Enemies line says spawn nodes "get enemies" with no count and no elite spawn nodes; /tiles gives both
 - pass: 49 (commit ba1eb40)
