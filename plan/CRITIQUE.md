@@ -18,15 +18,6 @@
 - suggested fix: Build the home line from the same config the /tiles legend reads (spawn counts, ramp and seat scaling), so both pages give the same numbers.
 - source: web-fetch
 
-### [LOW] /config — the Shop timing setting says "on the base"; / and the Shop help say "on the Base tile"
-- pass: 49 (commit ba1eb40)
-- viewport: desktop
-- category: voice
-- observation: The place a player stands to shop has more than one name. "The base" is also the structure with health that enemies attack, so "on the base" can read as the structure.
-- evidence: / Shop: "buy at any time you stand on the Base tile". /config Shop timing help: "When a player on the base may buy cards."; option "At any time on the base (default)" (`packages/content/data/config.meta.json:511,514`).
-- suggested fix: Write "on the Base tile" in the Shop timing help and option label.
-- source: web-fetch
-
 ### [LOW] /debug — the In progress row prints "Build: 2 left, cost -0"
 - pass: 49 (commit ba1eb40)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the Shop timing setting says "on the base"; / and the Shop help say "on the Base tile"
+- pass: 49 (commit ba1eb40)
+- viewport: desktop
+- category: voice
+- observation: The place a player stands to shop has more than one name. "The base" is also the structure with health that enemies attack, so "on the base" can read as the structure.
+- evidence: / Shop: "buy at any time you stand on the Base tile". /config Shop timing help: "When a player on the base may buy cards."; option "At any time on the base (default)" (`packages/content/data/config.meta.json:511,514`).
+- suggested fix: Write "on the Base tile" in the Shop timing help and option label.
+- source: web-fetch
+- issue: #407
+- fixed: (this commit)
 
 ### [x] [MED] / and /config — guard is explained by its own Skill name, and no page says guard is lost when the engagement ends
 - pass: 49 (commit ba1eb40)

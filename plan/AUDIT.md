@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-15 (pass 349, cloud tick)
+
+Pass 348 said guard is lost when the engagement ends (0432013), and expand pass 33 filed 1 candidate (a1d2f91). No issues wait for triage. The critique gate is closed (pass 49 ran 3 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 1 commit ago. This pass takes a pass-49 LOW row: the /config Shop timing help and its default option said "on the base", while / says "on the Base tile"; "the base" is also the structure enemies attack. Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 1 commit ago, so handing to it would repeat that pass. Fix: `config.meta.json` now reads "When a player on the Base tile may buy cards." and "At any time on the Base tile (default)". Next in line: the 3 remaining LOW pass-49 rows (spawn counts on /, the /debug Build line, the /credits link line).
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /config: the Shop timing setting says "on the base", / says "on the Base tile"
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: write "on the Base tile" in the Shop timing help and default option in `config.meta.json`
+- issue: #407
+- fixed: (this commit)
+
 # Site audit — 2026-11-15 (pass 348, cloud tick)
 
 Pass 347 pinned the 3D dice tray's WebGL fallback (ba1eb40); critique pass 49 then filed 5 findings (dbaa0cf). No issues wait for triage. The critique gate is closed (pass 49 ran at the last commit), no build plan phase is pending (35 is blocked), and expand pass 32 ran 19 commits ago, about 45 hours, under its 20-commit / 48-hour window. The top finding is pass 49's MED row: the start line on / explained guard by repeating the Guard Skill's name, and no page said guard is lost when the engagement ends (the engine sets it to 0 at the end of each engagement, and after the enemy attack in Exchanges). Scored 7.2 (external-critique MED: impact 6, ease 8, times 1.5 for the MED bias). The start line now says the Guard Skill gives you guard, points that take enemy damage before your health and are lost when the engagement ends (Exchanges: at the end of each exchange, after the enemy attack). The Engage Combat line on / and /config adds "Any guard you have left is lost when the engagement ends." The /play engagement prompt keeps its old text: the longer line made the 1280x800 engagement screen scroll. The playtest protocol is regenerated. Next in line: the 4 LOW pass 49 rows.

@@ -508,10 +508,10 @@
   },
   "rulings.shopTiming": {
     "label": "Shop timing",
-    "help": "When a player on the base may buy cards.",
+    "help": "When a player on the Base tile may buy cards.",
     "rule": "6.8 (open questions 11, 43)",
     "options": {
-      "any-time-on-base": "At any time on the base (default)",
+      "any-time-on-base": "At any time on the Base tile (default)",
       "prepare-only": "Only in the Prepare phase"
     }
   },
