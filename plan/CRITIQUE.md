@@ -1,13 +1,58 @@
 # Critique log
 
-> Last pass: 2026-11-14 at commit ebd74ee
-> Pass count: 48
+> Last pass: 2026-11-15 at commit ba1eb40
+> Pass count: 49
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / and /config — guard is explained by its own Skill name, and no page says guard is lost when the engagement ends
+- pass: 49 (commit ba1eb40)
+- viewport: desktop
+- category: comprehension
+- observation: "Guard" is both a Skill and the points it gives, and the explaining sentence repeats the name. No page a player reads before a run says how long guard lasts; the engine sets it to 0 at the end of every engagement (`packages/engine/src/combat/engage.ts:334`) and after an Exchanges attack (`resolve.ts:327`).
+- evidence: / "Guard (Shield: gain 2 guard)" ... "Guard comes from the Guard Skill; it takes enemy damage before your health." (`packages/content/src/ruleText.ts:847`). /config: "Your guard takes the damage first, then your health."
+- suggested fix: In `ruleText.ts`, say guard takes enemy damage before your health and is lost when the engagement ends (Exchanges: after the attack), keyed off the Combat model.
+- source: web-fetch
+
+### [LOW] / — the Enemies line says spawn nodes "get enemies" with no count and no elite spawn nodes; /tiles gives both
+- pass: 49 (commit ba1eb40)
+- viewport: desktop
+- category: comprehension
+- observation: The home page does not say how many enemies a spawn node gets or that elite spawn nodes exist. The /tiles legend says 1 grunt per spawn node and 1 elite per elite spawn node at each Combat.
+- evidence: / "Each new tile's spawn nodes get enemies at each Combat." (`packages/content/src/ruleText.ts:75`) vs /tiles "Spawn node (gets 1 grunt at each Combat)", "Elite spawn node (gets 1 elite at each Combat)".
+- suggested fix: Build the home line from the same config the /tiles legend reads (spawn counts, ramp and seat scaling), so both pages give the same numbers.
+- source: web-fetch
+
+### [LOW] /config — the Shop timing setting says "on the base"; / and the Shop help say "on the Base tile"
+- pass: 49 (commit ba1eb40)
+- viewport: desktop
+- category: voice
+- observation: The place a player stands to shop has more than one name. "The base" is also the structure with health that enemies attack, so "on the base" can read as the structure.
+- evidence: / Shop: "buy at any time you stand on the Base tile". /config Shop timing help: "When a player on the base may buy cards."; option "At any time on the base (default)" (`packages/content/data/config.meta.json:511,514`).
+- suggested fix: Write "on the Base tile" in the Shop timing help and option label.
+- source: web-fetch
+
+### [LOW] /debug — the In progress row prints "Build: 2 left, cost -0"
+- pass: 49 (commit ba1eb40)
+- viewport: desktop
+- category: voice
+- observation: During a Build card the State panel gives the count with no unit and prints "cost -0" for a card with no cost cut. /play says "builds left" for the same step. (/debug is JavaScript-only; read from source.)
+- evidence: `apps/web/src/debug/StateView.tsx:111` `Build: ${active.buildsLeft} left, cost -${active.costReduction}` vs `apps/web/src/play/nextStep.ts:80` "(2 builds left)".
+- suggested fix: Print "Build: 2 builds left" and add ", each costs N materials less" only when the cut is above 0.
+- source: web-fetch
+
+### [LOW] /credits — "Each name links to its source", but each line has three names and only the work title links
+- pass: 49 (commit ba1eb40)
+- viewport: desktop
+- category: comprehension
+- observation: Icon and texture lines carry the asset label, the work title and the artist; only the title is a link, so "each name" is unclear.
+- evidence: "Each name links to its source." (`apps/web/src/credits/CreditsPage.tsx:85`); line "Sword die face: Broadsword icon by Lorc, game-icons.net", only "Broadsword icon" links.
+- suggested fix: Write "Each title links to its source."
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
