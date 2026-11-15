@@ -23,11 +23,11 @@ describe('CreditsPage', () => {
   it('excludes the icons drawn for this game from the icon license sentence', () => {
     render(<CreditsPage />)
     expect(screen.getByText(/Every icon by a named artist is under/).textContent).toBe(
-      'Every icon by a named artist is under CC BY 3.0; the icons drawn for this game are not. Each name links to its source.',
+      'Every icon by a named artist is under CC BY 3.0; the icons drawn for this game are not. Each title links to its source.',
     )
     expect(screen.queryByText(/Unless a line says otherwise/)).toBeNull()
     expect(screen.getByText(/Every texture is under/).textContent).toBe(
-      'Every texture is under CC0. Each name links to its source.',
+      'Every texture is under CC0. Each title links to its source.',
     )
   })
   it('gives every font and library a role, a source link and a unique license link', () => {

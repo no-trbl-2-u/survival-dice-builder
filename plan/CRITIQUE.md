@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /credits — "Each name links to its source", but each line has three names and only the work title links
-- pass: 49 (commit ba1eb40)
-- viewport: desktop
-- category: comprehension
-- observation: Icon and texture lines carry the asset label, the work title and the artist; only the title is a link, so "each name" is unclear.
-- evidence: "Each name links to its source." (`apps/web/src/credits/CreditsPage.tsx:85`); line "Sword die face: Broadsword icon by Lorc, game-icons.net", only "Broadsword icon" links.
-- suggested fix: Write "Each title links to its source."
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /credits — "Each name links to its source", but each line has three names and only the work title links
+- pass: 49 (commit ba1eb40)
+- viewport: desktop
+- category: comprehension
+- observation: Icon and texture lines carry the asset label, the work title and the artist; only the title is a link, so "each name" is unclear.
+- evidence: "Each name links to its source." (`apps/web/src/credits/CreditsPage.tsx:85`); line "Sword die face: Broadsword icon by Lorc, game-icons.net", only "Broadsword icon" links.
+- suggested fix: Write "Each title links to its source."
+- source: web-fetch
+- issue: #410
+- addressed: (this commit) — both /credits intros read "Each title links to its source."
 
 ### [x] [LOW] /debug — the In progress row prints "Build: 2 left, cost -0"
 - pass: 49 (commit ba1eb40)

@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-15 (pass 352, cloud tick)
+
+Pass 351 gave the /debug Build line a unit (53b44f1). No issues wait for triage. The critique gate is closed (pass 49 ran 6 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 4 commits ago. This pass takes the last LOW pass-49 row: the /credits icon and texture intros said "Each name links to its source", but each line names the asset, the work and the artist, and only the work title links. Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 4 commits ago, so handing to it would repeat that pass. Fix: both intros now read "Each title links to its source."; `CreditsPage.test.tsx` pins the new wording. Next in line: the remaining Pending rows edit `[needs-user-call]` /decisions items, which wait on /oversight; with the pass-49 rows drained, the next tick should find the critique or expand window opening, or hand to expand.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /credits: "Each name links to its source", but only the work title links
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: write "Each title links to its source." in `CreditsPage.tsx`
+- issue: #410
+- fixed: (this commit)
+
 # Site audit — 2026-11-15 (pass 351, cloud tick)
 
 Pass 350 gave the Enemies line on / its spawn counts (fb417a3). No issues wait for triage. The critique gate is closed (pass 49 ran 5 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 3 commits ago. This pass takes a pass-49 LOW row: the /debug State panel's In progress row printed "Build: 2 left, cost -0", with no unit and a cost cut of 0, while /play says "2 builds left". Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 3 commits ago, so handing to it would repeat that pass. Fix: the row reads "Build: 2 builds left" ("1 build left" for one) and adds ", each costs N materials less" only when the card cuts the cost; `StateView.test.tsx` pins both. Next in line: the /credits link line, the last LOW pass-49 row; the other Pending rows edit `[needs-user-call]` /decisions items, which wait on /oversight.

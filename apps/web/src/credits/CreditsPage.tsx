@@ -82,7 +82,7 @@ function CreditList({
         <p>
           {lead}
           <a href={shared.licenseUrl}>{shared.license}</a>
-          {own && !all ? `; the ${noun}s drawn for this game are not` : ''}. Each name links to its
+          {own && !all ? `; the ${noun}s drawn for this game are not` : ''}. Each title links to its
           source.
         </p>
       ) : null}
