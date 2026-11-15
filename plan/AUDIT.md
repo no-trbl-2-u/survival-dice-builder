@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-15 (pass 355, cloud tick)
+
+Pass 354 pinned useClient (6724dfa). No issues wait for triage. The critique gate is closed (pass 49 ran 9 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 7 commits ago. Every Pending critique row edits a `[needs-user-call]` /decisions item, which waits on /oversight. A fresh audit for web modules no test names found `DebugPage.tsx`, `TileSheet.tsx`, `PlayPage.tsx`, `App.tsx` and `main.tsx`. TileSheet is covered by `TileView.test.tsx`, PlayPage and the shell by e2e. /debug's e2e covers the action loop, a new seed, Autoplay and a successful copy, but not the Seed field's blank and invalid states or the "Copy failed" path. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 7 commits ago, so handing to it would repeat that pass. A new `DebugPage.test.tsx` pins the quiet hint for a blank seed, the alert and aria-invalid for text, New run disabled for both, a new run resetting the count to 0 and clearing the status, "1 action" after one step, and both Copy replay outcomes (the JSON copied, and "Copy failed" until the next step). Next in line: the pending critique rows wait on /oversight; the next tick critiques or expands when a window opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] tests: /debug's seed checks and Copy failed have no test
+- category: tests
+- impact: 3
+- ease: 8
+- next: add `apps/web/src/debug/DebugPage.test.tsx`
+- issue: #412
+- fixed: (this commit)
+
 # Site audit — 2026-11-15 (pass 354, cloud tick)
 
 Pass 353 pinned GameIcon (0045bf6). No issues wait for triage. The critique gate is closed (pass 49 ran 8 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 6 commits ago. Every Pending critique row edits a `[needs-user-call]` /decisions item, which waits on /oversight. This pass takes the module pass 353 named next: `useClient.ts`, which decides when /config, /decisions and the not-found page read this browser's storage, had no test. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 6 commits ago, so handing to it would repeat that pass. A new `useClient.test.tsx` pins false on the build render, true on a page rendered fresh, and false then true across hydration with no recoverable error. Next in line: the pending critique rows wait on /oversight; the next tick critiques or expands when a window opens.
