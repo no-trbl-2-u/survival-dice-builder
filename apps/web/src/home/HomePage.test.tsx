@@ -10,10 +10,10 @@ import { NAV, routes } from '../routes.tsx'
 import { HomePage } from './HomePage.tsx'
 
 describe('HomePage', () => {
-  it('says that a revealed tile adds enemies at every Combat, and whom enemies head for', () => {
+  it('says how many enemies each spawn node gets at every Combat, as /tiles does, and whom enemies head for (critique pass 49)', () => {
     render(<HomePage />)
-    const enemies = screen.getByText(/new tile's spawn nodes get enemies at each Combat\./)
-    expect(enemies.textContent).toMatch(/^Enemies: Each new tile's spawn nodes/)
+    const enemies = screen.getByText(/an elite spawn node gets 1 elite at each Combat\./)
+    expect(enemies.textContent).toMatch(/^Enemies: A spawn node gets 1 grunt at each Combat; /)
     expect(enemies.textContent).toMatch(
       /Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer\./,
     )
@@ -37,7 +37,7 @@ describe('HomePage', () => {
       /The base starts with \d+ health\.$/,
     )
     expect(items.find((text) => text.startsWith('The map: Step off the edge'))).toBeTruthy()
-    expect(items.find((text) => text.startsWith('Enemies: Each new tile'))).toBeTruthy()
+    expect(items.find((text) => text.startsWith('Enemies: A spawn node gets'))).toBeTruthy()
   })
 
   it('says where materials come from, Shop cards included, before the prices that spend them (critique passes 34, 35)', () => {

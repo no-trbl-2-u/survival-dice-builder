@@ -62,17 +62,35 @@ export function tileDeckText(content: Pick<Content, 'tiles'>): string {
 }
 
 /**
- * When a revealed tile's spawn nodes start getting enemies.
+ * What spawn nodes and elite spawn nodes get at each Combat, for the Enemies line on / and the
+ * spawn options on /config: the same counts, seat scaling, ramp, new tile delay and range the
+ * /tiles legend gives (`siteText`).
  *
- * @rule core loop v2 (spawning), OPEN-QUESTIONS row 66
+ * @rule core loop v2 (spawning), 6.7, OPEN-QUESTIONS rows 64, 66, 68, 70
  */
 export function spawnText(config: GameConfig): string {
-  const delay = config.spawn.newTileDelay
-  const when =
-    delay === 0
-      ? 'at each Combat'
-      : `at each Combat from ${plural(delay, 'round', 'rounds')} after it is revealed`
-  return `Each new tile's spawn nodes get enemies ${when}.`
+  return `A spawn node ${spawnSiteText('grunt', config)}; an elite spawn node ${spawnSiteText('elite', config)}.`
+}
+
+/** What one kind of spawn node gets: "gets 1 grunt at each Combat", with the spawn options named. */
+function spawnSiteText(enemy: 'grunt' | 'elite', config: GameConfig): string {
+  const s = config.spawn
+  const seats = s.perSeat ? ' for each 2 seats, rounded up,' : ''
+  const ramp =
+    s.rampEvery === null
+      ? ''
+      : s.rampEvery === 1
+        ? ', and 1 more each round after round 1'
+        : `, and 1 more for every ${s.rampEvery} rounds after round 1`
+  const delay =
+    s.newTileDelay > 0
+      ? `, from ${plural(s.newTileDelay, 'round', 'rounds')} after its tile is revealed`
+      : ''
+  const range =
+    s.nodeRange === null
+      ? ''
+      : `, if a player figure, a Barricade, a Tower or the base is within ${plural(s.nodeRange, 'hex', 'hexes')}`
+  return `gets 1 ${enemy}${seats} at each Combat${ramp}${delay}${range}`
 }
 
 type Upgrades = Pick<Content, 'upgrades'>
@@ -99,24 +117,7 @@ export function siteText(site: Site, config: GameConfig, content: Upgrades): str
     return config.rulings.gatherNeedsNode
       ? "a card's Gather option played here with no enemy on the node gets its materials once; then the node is spent for the rest of the run"
       : 'the first Gather option played here with no enemy on the node spends it'
-  const s = config.spawn
-  const enemy = site === 'spawn-node' ? 'grunt' : 'elite'
-  const seats = s.perSeat ? ' for each 2 seats, rounded up,' : ''
-  const ramp =
-    s.rampEvery === null
-      ? ''
-      : s.rampEvery === 1
-        ? ', and 1 more each round after round 1'
-        : `, and 1 more for every ${s.rampEvery} rounds after round 1`
-  const delay =
-    s.newTileDelay > 0
-      ? `, from ${plural(s.newTileDelay, 'round', 'rounds')} after its tile is revealed`
-      : ''
-  const range =
-    s.nodeRange === null
-      ? ''
-      : `, if a player figure, a Barricade, a Tower or the base is within ${plural(s.nodeRange, 'hex', 'hexes')}`
-  return `gets 1 ${enemy}${seats} at each Combat${ramp}${delay}${range}`
+  return spawnSiteText(site === 'spawn-node' ? 'grunt' : 'elite', config)
 }
 
 /**
@@ -1112,12 +1113,10 @@ export function ruleLineFor(
   if (group === 'base') return baseText(config)
   if (path === 'tiles.revealMoveCost') return revealText(config)
   if (path === 'tiles.countryside' || path === 'tiles.core') return tileDeckText(content)
-  if (path === 'spawn.newTileDelay') return spawnText(config)
+  if (group === 'spawn') return spawnText(config)
   if (group === 'calendar')
     return config.calendar ? calendarFieldText(config.calendar, key ?? '') : null
   if (group === 'experience' || path === 'options.maxLevel') return levelText(config, content)
-  if (path === 'spawn.rampEvery' || path === 'spawn.perSeat' || path === 'spawn.nodeRange')
-    return `A spawn node ${siteText('spawn-node', config, content)}; an elite spawn node ${siteText('elite-spawn-node', config, content)}.`
   if (group === 'knockout') return knockoutText(config)
   if (path === 'gather.offNodeAmount' || path === 'rulings.gatherNeedsNode')
     return `${gatherText(2, config)}.`

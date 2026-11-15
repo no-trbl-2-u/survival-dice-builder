@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-15 (pass 350, cloud tick)
+
+Pass 349 said "on the Base tile" in the Shop timing setting (3151eae). No issues wait for triage. The critique gate is closed (pass 49 ran 4 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 2 commits ago. This pass takes a pass-49 LOW row: the Enemies line on / said "Each new tile's spawn nodes get enemies at each Combat" with no count and no elite spawn nodes, while the /tiles legend gives 1 grunt and 1 elite. Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 2 commits ago, so handing to it would repeat that pass. Fix: `spawnText` now builds "A spawn node gets 1 grunt at each Combat; an elite spawn node gets 1 elite at each Combat." from the same helper the /tiles legend uses, so the seat scaling, ramp, new tile delay and range options show on / and on every spawn option on /config. The playtest protocol is regenerated. Next in line: the 2 remaining LOW pass-49 rows (the /debug Build line, the /credits link line).
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /: the Enemies line gives no spawn counts and no elite spawn nodes, /tiles gives both
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: build `spawnText` from the /tiles legend's spawn helper
+- issue: #408
+- fixed: (this commit)
+
 # Site audit — 2026-11-15 (pass 349, cloud tick)
 
 Pass 348 said guard is lost when the engagement ends (0432013), and expand pass 33 filed 1 candidate (a1d2f91). No issues wait for triage. The critique gate is closed (pass 49 ran 3 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 1 commit ago. This pass takes a pass-49 LOW row: the /config Shop timing help and its default option said "on the base", while / says "on the Base tile"; "the base" is also the structure enemies attack. Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 1 commit ago, so handing to it would repeat that pass. Fix: `config.meta.json` now reads "When a player on the Base tile may buy cards." and "At any time on the Base tile (default)". Next in line: the 3 remaining LOW pass-49 rows (spawn counts on /, the /debug Build line, the /credits link line).

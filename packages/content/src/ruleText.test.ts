@@ -279,10 +279,17 @@ describe('rule text from config', () => {
     expect(ruleLineFor('calendar.system', before, defaultContent)).toBeNull()
   })
 
-  it('spawning: a new tile delay is named (row 66)', () => {
-    expect(spawnText(base)).toBe("Each new tile's spawn nodes get enemies at each Combat.")
+  it('spawning: the counts the /tiles legend gives, with a new tile delay named (rows 64, 66)', () => {
+    expect(spawnText(base)).toBe(
+      'A spawn node gets 1 grunt at each Combat; an elite spawn node gets 1 elite at each Combat.',
+    )
+    expect(spawnText(base)).toBe(
+      `A spawn node ${siteText('spawn-node', base, defaultContent)}; an elite spawn node ${siteText('elite-spawn-node', base, defaultContent)}.`,
+    )
     const late = With((c) => ({ ...c, spawn: { ...c.spawn, newTileDelay: 2 } }))
-    expect(spawnText(late)).toMatch(/from 2 rounds after it is revealed/)
+    expect(spawnText(late)).toMatch(
+      /grunt at each Combat, from 2 rounds after its tile is revealed;/,
+    )
   })
 
   it('sites: Table 1 functions, with spawn options named (rows 64, 66, 68, 70)', () => {
@@ -316,7 +323,12 @@ describe('rule text from config', () => {
     expect(siteText('spawn-node', both, defaultContent)).toBe(
       'gets 1 grunt for each 2 seats, rounded up, at each Combat, and 1 more each round after round 1',
     )
-    for (const path of ['spawn.rampEvery', 'spawn.perSeat', 'spawn.nodeRange'])
+    for (const path of [
+      'spawn.rampEvery',
+      'spawn.perSeat',
+      'spawn.nodeRange',
+      'spawn.newTileDelay',
+    ])
       expect(ruleLineFor(path, base, defaultContent)).toBe(
         'A spawn node gets 1 grunt at each Combat; an elite spawn node gets 1 elite at each Combat.',
       )

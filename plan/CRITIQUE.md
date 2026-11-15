@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Enemies line says spawn nodes "get enemies" with no count and no elite spawn nodes; /tiles gives both
-- pass: 49 (commit ba1eb40)
-- viewport: desktop
-- category: comprehension
-- observation: The home page does not say how many enemies a spawn node gets or that elite spawn nodes exist. The /tiles legend says 1 grunt per spawn node and 1 elite per elite spawn node at each Combat.
-- evidence: / "Each new tile's spawn nodes get enemies at each Combat." (`packages/content/src/ruleText.ts:75`) vs /tiles "Spawn node (gets 1 grunt at each Combat)", "Elite spawn node (gets 1 elite at each Combat)".
-- suggested fix: Build the home line from the same config the /tiles legend reads (spawn counts, ramp and seat scaling), so both pages give the same numbers.
-- source: web-fetch
-
 ### [LOW] /debug — the In progress row prints "Build: 2 left, cost -0"
 - pass: 49 (commit ba1eb40)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Enemies line says spawn nodes "get enemies" with no count and no elite spawn nodes; /tiles gives both
+- pass: 49 (commit ba1eb40)
+- viewport: desktop
+- category: comprehension
+- observation: The home page does not say how many enemies a spawn node gets or that elite spawn nodes exist. The /tiles legend says 1 grunt per spawn node and 1 elite per elite spawn node at each Combat.
+- evidence: / "Each new tile's spawn nodes get enemies at each Combat." (`packages/content/src/ruleText.ts:75`) vs /tiles "Spawn node (gets 1 grunt at each Combat)", "Elite spawn node (gets 1 elite at each Combat)".
+- suggested fix: Build the home line from the same config the /tiles legend reads (spawn counts, ramp and seat scaling), so both pages give the same numbers.
+- source: web-fetch
+- issue: #408
+- fixed: (this commit) — / reads "A spawn node gets 1 grunt at each Combat; an elite spawn node gets 1 elite at each Combat.", built from the helper the /tiles legend uses, so spawn options show on both
 
 ### [x] [LOW] /config — the Shop timing setting says "on the base"; / and the Shop help say "on the Base tile"
 - pass: 49 (commit ba1eb40)
