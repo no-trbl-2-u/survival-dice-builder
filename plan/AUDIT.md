@@ -5,6 +5,19 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-15 (pass 353, cloud tick)
+
+Pass 352 reworded the /credits link intros (415870a). No issues wait for triage. The critique gate is closed (pass 49 ran 7 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 5 commits ago. Every Pending critique row edits a `[needs-user-call]` /decisions item, which waits on /oversight. A fresh audit for web modules no test names found `icons/GameIcon.tsx`, the inline icon on /play, /tiles and the panels, and `useClient.ts`. GameIcon is the larger one: its decorative contract (hidden from screen readers, out of the tab order) and its empty fallback for a missing icon had no check. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 5 commits ago, so handing to it would repeat that pass. A new `GameIcon.test.tsx` pins the 512 viewBox, the 1.1em default size, the size and class props, the icon's shapes, aria-hidden and focusable, and the empty drawing for an unknown name. Next in line: `useClient.ts` (false on the build render, true after); the pending critique rows wait on /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] tests: GameIcon's decorative attributes and missing-icon fallback have no check
+- category: tests
+- impact: 3
+- ease: 8
+- next: add `apps/web/src/icons/GameIcon.test.tsx`
+- fixed: (this commit)
+
 # Site audit — 2026-11-15 (pass 352, cloud tick)
 
 Pass 351 gave the /debug Build line a unit (53b44f1). No issues wait for triage. The critique gate is closed (pass 49 ran 6 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 4 commits ago. This pass takes the last LOW pass-49 row: the /credits icon and texture intros said "Each name links to its source", but each line names the asset, the work and the artist, and only the work title links. Scored 2.4 (external-critique LOW: impact 3, ease 8); below 3.0, but expand ran 4 commits ago, so handing to it would repeat that pass. Fix: both intros now read "Each title links to its source."; `CreditsPage.test.tsx` pins the new wording. Next in line: the remaining Pending rows edit `[needs-user-call]` /decisions items, which wait on /oversight; with the pass-49 rows drained, the next tick should find the critique or expand window opening, or hand to expand.
