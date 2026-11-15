@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-15 (pass 356, cloud tick)
+
+Pass 355 pinned /debug's seed checks and Copy replay (fcd7999). No issues wait for triage. The critique gate is closed (pass 49 ran 10 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 33 ran 8 commits ago. Every Pending critique row edits a `[needs-user-call]` /decisions item, which waits on /oversight. The web modules no test names are covered elsewhere (TileSheet by `TileView.test.tsx`, PlayPage and the shell by e2e), so this audit looked at the bot: `packages/bot/src/goals.ts`, which decides where the autoplay bot heads, had no test of its own. `goal`, `guardPost` and `threat` are reached through the policy and defender tests, but `cheapestUpgrade`'s Build level gate and its `buildLevels: "any"` branch, `buildLevel` with no Build card, `cheapestDefense` with no defenses, `edgeHex` with an empty tile deck, `onBaseTile`, `me`, the turtle goal and `atGoal` had no check. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 8 commits ago, so handing to it would repeat that pass. A new `goals.test.ts` pins those helpers. Next in line: the pending critique rows wait on /oversight; the critique window opens at 00:49 UTC on 2026-11-16 or 2 commits from now.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] tests: the bot goal helpers in goals.ts have no test of their own
+- category: tests
+- impact: 3
+- ease: 8
+- next: add `packages/bot/src/goals.test.ts`
+- issue: #413
+- fixed: (this commit)
+
 # Site audit — 2026-11-15 (pass 355, cloud tick)
 
 Pass 354 pinned useClient (6724dfa). No issues wait for triage. The critique gate is closed (pass 49 ran 9 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 7 commits ago. Every Pending critique row edits a `[needs-user-call]` /decisions item, which waits on /oversight. A fresh audit for web modules no test names found `DebugPage.tsx`, `TileSheet.tsx`, `PlayPage.tsx`, `App.tsx` and `main.tsx`. TileSheet is covered by `TileView.test.tsx`, PlayPage and the shell by e2e. /debug's e2e covers the action loop, a new seed, Autoplay and a successful copy, but not the Seed field's blank and invalid states or the "Copy failed" path. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 7 commits ago, so handing to it would repeat that pass. A new `DebugPage.test.tsx` pins the quiet hint for a blank seed, the alert and aria-invalid for text, New run disabled for both, a new run resetting the count to 0 and clearing the status, "1 action" after one step, and both Copy replay outcomes (the JSON copied, and "Copy failed" until the next step). Next in line: the pending critique rows wait on /oversight; the next tick critiques or expands when a window opens.
