@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-15 (pass 347, cloud tick)
+
+Pass 346 pinned the /play log lines (b9f71db). No issues wait for triage. The critique gate is closed (pass 48 ran 10 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 32 ran 17 commits ago, under its 20-commit / 48-hour window. Every Pending critique row edits a `[needs-user-call]` /decisions item, which only /oversight edits. A fresh audit for modules no test imports found that the web app's components are all covered except the page shells (covered by e2e) and `dice3d/Dice3D.tsx`, the optional 3D dice tray on /play. Its only check was one e2e line that accepts either the canvas or the no-WebGL note. Engine modules with no direct test (`supplies.ts`) are pinned through `createGame` and the draft tests in RULES-COVERAGE. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 17 commits ago, so handing to it would repeat that pass. A new `Dice3D.test.tsx` pins the no-WebGL note with no canvas, the single WebGL check across rerenders, and the one canvas hidden from screen readers when WebGL is there. Next in line: the pending critique rows wait on /oversight; the next tick critiques when its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] /play: the 3D dice tray's WebGL fallback and canvas are untested
+- category: tests
+- impact: 3
+- ease: 8
+- next: colocated `Dice3D.test.tsx`
+- issue: #405
+- fixed: (this commit)
+
 # Site audit — 2026-11-14 (pass 346, cloud tick)
 
 Pass 345 pinned the /play run reducer (bd4f0e9). No issues wait for triage. The critique gate is closed (pass 48 ran 9 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 32 ran 16 commits ago, under its 20-commit / 48-hour window. Every Pending critique row edits a `[needs-user-call]` /decisions item, which only /oversight edits. A fresh audit of web modules without a colocated test found `play/describeEvent.ts`, which writes every /play log line: the topic log tests pin most event types, but 18 lines (new run, phase, round, run end, base damage and repair, deferred effect and step, tile placed and revealed, start hex, action dice, ignored hit, return, shop offer, draft pool, supply, Skill replaced) were pinned by no test. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 16 commits ago, so handing to it would repeat that pass. A new `describeEvent.test.ts` pins those lines, with solo and co-op verb agreement where the line names a player. Next in line: the pending critique rows wait on /oversight; the next tick critiques when its gate opens.
