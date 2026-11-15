@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-15 (pass 354, cloud tick)
+
+Pass 353 pinned GameIcon (0045bf6). No issues wait for triage. The critique gate is closed (pass 49 ran 8 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 6 commits ago. Every Pending critique row edits a `[needs-user-call]` /decisions item, which waits on /oversight. This pass takes the module pass 353 named next: `useClient.ts`, which decides when /config, /decisions and the not-found page read this browser's storage, had no test. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 6 commits ago, so handing to it would repeat that pass. A new `useClient.test.tsx` pins false on the build render, true on a page rendered fresh, and false then true across hydration with no recoverable error. Next in line: the pending critique rows wait on /oversight; the next tick critiques or expands when a window opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] tests: useClient's build, hydration and fresh-render values have no test
+- category: tests
+- impact: 3
+- ease: 8
+- next: add `apps/web/src/useClient.test.tsx`
+- issue: #411
+- fixed: (this commit)
+
 # Site audit — 2026-11-15 (pass 353, cloud tick)
 
 Pass 352 reworded the /credits link intros (415870a). No issues wait for triage. The critique gate is closed (pass 49 ran 7 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 33 ran 5 commits ago. Every Pending critique row edits a `[needs-user-call]` /decisions item, which waits on /oversight. A fresh audit for web modules no test names found `icons/GameIcon.tsx`, the inline icon on /play, /tiles and the panels, and `useClient.ts`. GameIcon is the larger one: its decorative contract (hidden from screen readers, out of the tab order) and its empty fallback for a missing icon had no check. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 5 commits ago, so handing to it would repeat that pass. A new `GameIcon.test.tsx` pins the 512 viewBox, the 1.1em default size, the size and class props, the icon's shapes, aria-hidden and focusable, and the empty drawing for an unknown name. Next in line: `useClient.ts` (false on the build render, true after); the pending critique rows wait on /oversight.
