@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-16 (pass 365, cloud tick)
+
+Pass 364 pinned check-design (ccdf0b2). No issues wait for triage, the critique gate is closed (pass 50 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 33 ran 18 commits and about 32 hours ago (its window opens at 20 commits or 48 hours). Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass takes the next untested build script: `deploy-check.mjs`, the deploy gate every shipping skill runs after a push (impact 3, ease 7: 2.1; below 3.0, but expand's window is still shut). `scripts/__tests__/deploy-check.test.mjs` builds a 2-commit temp git repo, preloads a `fetch` stub with `node --import`, and runs the script there, scrubbing the runner's own tokens: provider none (exit 0, no request), an unknown provider (exit 3), Cloudflare Pages with no token or no account (exit 3, no request), the HEAD deploy succeeding with the CLOUDFLARE_* spellings (exit 0, URL, request path and Bearer header) and failing beside an older green one (exit 1, stage, admin URL), GitHub Actions matching only the named workflow (success 0, cancelled 1), and Netlify with a rejected token (exit 3) and a ready deploy listing the commit since the last one. Every stubbed answer is terminal on the first poll, so no test waits on the 5 s interval. Next in line: the remaining untested scripts (notify, og-card, one-pagers, touch-icon, new-skill, pulse), unless expand's window opens first.
+
+## Top 5 findings (scored)
+
+### [x] [2.1] tests: deploy-check, the post-push deploy gate, has no test
+- category: tests
+- impact: 3
+- ease: 7
+- next: node:test file running the script in a temp git repo with a stubbed fetch
+- issue: #422
+- fixed: (this commit)
+
 # Site audit — 2026-11-16 (pass 364, cloud tick)
 
 Pass 363 pinned check-assets (c9ae397). No issues wait for triage, the critique gate is closed (pass 50 ran 8 commits and about 16 hours ago), no build plan phase is pending (35 is blocked), and expand pass 33 ran 17 commits and about 31 hours ago (its window opens at 20 commits or 48 hours). Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass takes the module pass 363 named next: `check-design.mjs`, which runs in the lint leg and alone checks token contrast in both themes, tokens.css against design/tokens.json, terrain colour distance and the assets design SVGs reference (impact 3, ease 8: 2.4; below 3.0, but expand's window is still shut). `scripts/__tests__/check-design.test.mjs` builds temp repos and runs the script on each: a consistent set (a `#` reference ignored), no tokens.json (skipped), a pair under its contrast minimum, a check naming an unknown token, 2 terrains under delta E 20, tokens.css with a missing and a different value (case ignored), no tokens.css, and a design SVG with an external, a missing and an unregistered reference. Next in line: the remaining untested build scripts, unless expand's window opens first.
