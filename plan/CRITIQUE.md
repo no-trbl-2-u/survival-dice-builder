@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /debug — the Engine console says to paste a replay into a bug report but does not say where to file one
-- pass: 50 (commit 1eaf2d7)
-- viewport: desktop
-- category: navigation
-- observation: The intro says Copy replay is for a bug report; the page has no link to the issue tracker. Only /credits links to it, and only for credit errors. (/debug is a JS shell; confirmed from source.)
-- evidence: "Copy replay copies the seed and every action, to paste into a bug report." (`apps/web/src/debug/DebugPage.tsx:117-118`); the only issues link: /credits "open an issue (on GitHub)" (`CreditsPage.tsx:105`).
-- suggested fix: End the sentence with a link to the issues URL the credits page already uses: "...to paste into a bug report: open an issue (on GitHub)."
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /debug — the Engine console says to paste a replay into a bug report but does not say where to file one
+- pass: 50 (commit 1eaf2d7)
+- viewport: desktop
+- category: navigation
+- observation: The intro says Copy replay is for a bug report; the page has no link to the issue tracker. Only /credits links to it, and only for credit errors. (/debug is a JS shell; confirmed from source.)
+- evidence: "Copy replay copies the seed and every action, to paste into a bug report." (`apps/web/src/debug/DebugPage.tsx:117-118`); the only issues link: /credits "open an issue (on GitHub)" (`CreditsPage.tsx:105`).
+- suggested fix: End the sentence with a link to the issues URL the credits page already uses: "...to paste into a bug report: open an issue (on GitHub)."
+- source: web-fetch
+- issue: #419
+- fixed: (this commit)
 
 ### [x] [LOW] / — the "What you have" opening sentence moves from "each player" to "your"
 - pass: 50 (commit 1eaf2d7)

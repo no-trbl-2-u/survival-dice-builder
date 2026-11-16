@@ -8,7 +8,7 @@ import {
   type GameState,
 } from '@survival/engine'
 import { useEffect, useReducer, useRef, useState } from 'react'
-import { rulesUrl } from '../decisions/Inline.tsx'
+import { issuesUrl, rulesUrl } from '../decisions/Inline.tsx'
 import { ActionLabel } from './ActionLabel.tsx'
 import styles from './DebugPage.module.css'
 import { EventLog } from './EventLog.tsx'
@@ -115,7 +115,7 @@ export function DebugPage() {
         the standard rules, not a config saved on <a href="/config">Config</a>. Bot step lets the
         bot choose the next action. Autoplay lets the bot play up to {AUTOPLAY_LIMIT} actions,
         usually to the end of the run. Copy replay copies the seed and every action, to paste into a
-        bug report.
+        bug report: <a href={issuesUrl}>open an issue</a> (on GitHub).
       </p>
       <form
         className={styles.controls}

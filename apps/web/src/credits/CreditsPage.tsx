@@ -1,4 +1,5 @@
 import register from '../../../../ASSETS.md?raw'
+import { issuesUrl } from '../decisions/Inline.tsx'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { gameIcons } from '../icons/gameIcons.ts'
 import styles from './CreditsPage.module.css'
@@ -101,9 +102,6 @@ function CreditList({
   )
 }
 
-/** Where a visitor reports a missing or wrong credit. */
-const ISSUES_URL = 'https://github.com/no-trbl-2-u/survival-dice-builder/issues'
-
 /** `/credits`: every asset in use, generated from ASSETS.md at build time. */
 export function CreditsPage() {
   const { icons, textures } = creditGroups(assetCredits(register))
@@ -112,7 +110,7 @@ export function CreditsPage() {
     <div className={styles.page}>
       <p>
         Every asset in the game, with its license. If a credit is missing or wrong,{' '}
-        <a href={ISSUES_URL}>open an issue</a> (on GitHub).
+        <a href={issuesUrl}>open an issue</a> (on GitHub).
       </p>
       <h2>Icons</h2>
       <CreditList credits={icons} noun="icon" testId="credits-assets" />

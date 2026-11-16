@@ -7,6 +7,9 @@ export const repoFileUrl = (path: string) =>
 /** The written rules (Spec v2) on GitHub: what a cited rules section points into. */
 export const rulesUrl = repoFileUrl('spec/01-spec-v2-rules.md')
 
+/** Where a visitor reports a problem: the repository's issue tracker on GitHub. */
+export const issuesUrl = 'https://github.com/no-trbl-2-u/survival-dice-builder/issues'
+
 /**
  * A `code` span that names a repository document by its full path
  * (`docs/reports/phase-22-experiments.md`). A bare name such as `PROTOCOL.md` is relative to a

@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-16 (pass 362, cloud tick)
+
+Pass 361 opened the / "What you have" line with "You start with" (18d2dfa). No issues wait for triage, the critique gate is closed (pass 50 ran 6 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 33 ran 15 commits and under 48 hours ago. The last pass 50 row that does not wait on /oversight is the /debug bug-report link (impact 3, ease 7: 2.1; below 3.0, but expand ran 15 commits ago, so handing to it would repeat that pass). The issues URL moves from CreditsPage to `issuesUrl` beside `rulesUrl` in `decisions/Inline.tsx`, and the /debug intro now ends "...to paste into a bug report: open an issue (on GitHub)." with the link. A DebugPage unit test and the /debug e2e intro check follow. The Pending rows left in CRITIQUE.md all edit `[needs-user-call]` items, so they wait for /oversight; the next tick with nothing else due hands to /expand once its window opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.1] external-critique: /debug says to paste a replay into a bug report but not where
+- category: external-critique
+- impact: 3
+- ease: 7
+- next: link the issues URL /credits uses from the Engine console intro
+- issue: #419
+- fixed: (this commit)
+
 # Site audit — 2026-11-16 (pass 361, cloud tick)
 
 Pass 360 capitalised Countryside and Core on /config (89d3094). No issues wait for triage, the critique gate is closed (pass 50 ran 5 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 33 ran 14 commits and under 48 hours ago. The two LOW pass 50 rows that do not wait on /oversight are next; the / "What you have" person shift leads (impact 3, ease 8: 2.4; below 3.0, but expand ran 14 commits ago, so handing to it would repeat that pass). startText now opens "You start with ...", matching "Your deck holds ..." and the "your dice" in the same sentence. The ruleText and HomePage tests follow. Next in line: the /debug bug-report link.

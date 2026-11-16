@@ -99,7 +99,11 @@ test('/debug: the intro explains Bot step, Autoplay and Copy replay, and the hea
   await expect(intro).toContainText('Bot step lets the bot choose the next action.')
   await expect(intro).toContainText('Autoplay lets the bot play up to 5000 actions')
   await expect(intro).toContainText(
-    'Copy replay copies the seed and every action, to paste into a bug report.',
+    'Copy replay copies the seed and every action, to paste into a bug report: open an issue (on GitHub).',
+  )
+  await expect(intro.getByRole('link', { name: 'open an issue' })).toHaveAttribute(
+    'href',
+    'https://github.com/no-trbl-2-u/survival-dice-builder/issues',
   )
   await expect(page.getByRole('heading', { name: /^Actions you can take \(\d+\)$/ })).toBeVisible()
   await expect(page.getByText(/Legal actions/)).toHaveCount(0)

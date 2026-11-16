@@ -1,5 +1,6 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { issuesUrl } from '../decisions/Inline.tsx'
 import { SEED_ERROR } from '../play/seed.ts'
 import { DebugPage } from './DebugPage.tsx'
 
@@ -10,6 +11,17 @@ afterEach(() => {
 
 const seedField = () => screen.getByRole('textbox', { name: 'Seed' })
 const newRun = () => screen.getByRole('button', { name: 'New run' })
+
+describe('/debug intro', () => {
+  it('says where to file the bug report a copied replay goes into', () => {
+    render(<DebugPage />)
+    const link = screen.getByRole('link', { name: 'open an issue' })
+    expect(link.getAttribute('href')).toBe(issuesUrl)
+    expect(link.parentElement?.textContent).toContain(
+      'to paste into a bug report: open an issue (on GitHub).',
+    )
+  })
+})
 
 describe('/debug seed field', () => {
   it('starts on seed 1 with New run enabled and no hint', () => {
