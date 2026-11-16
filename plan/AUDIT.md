@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-16 (pass 357, cloud tick)
+
+Pass 356 pinned the bot goal helpers (1eaf2d7); critique pass 50 then filed 6 rows (3085d8a). No issues wait for triage, the critique gate is closed (pass 50 just ran), no build plan phase is pending (35 is blocked), and expand pass 33 ran 10 commits and under 48 hours ago. Pass 50's rows are the first in a while that do not wait on /oversight. Under the external-critique MED bias the two MED rows lead: the /config Figures per hex line says a player with no free base hex stays out "until the next round start" while the Knockout line says "1 more round" (impact 5, ease 9: 4.5, x1.5 = 6.8), and the / Combat step never defines an engagement (impact 6, ease 7: 4.2, x1.5 = 6.3). `returnKnockedOut` keeps such a player out until the round start after the next one, so "1 more round" is right; figuresPerHexText now ends with the Knockout line's words, and its two ruleText tests follow. Next in line: the "engagement" definition on /, then the four LOW pass 50 rows.
+
+## Top 5 findings (scored)
+
+### [x] [6.8] external-critique: the Figures per hex and Knockout lines give two accounts of a full base
+- category: external-critique
+- impact: 5
+- ease: 9
+- next: end figuresPerHexText with "stays out 1 more round."
+- issue: #414
+- fixed: (this commit)
+
+### [ ] [6.3] external-critique: / never says what an engagement is
+- category: external-critique
+- impact: 6
+- ease: 7
+- next: open the Combat step with a defining sentence; "no dice are left to place"
+
+### [ ] [3.0] external-critique: /config "Elite every rungs" label drops its number word
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: relabel in `config.meta.json`
+
 # Site audit — 2026-11-15 (pass 356, cloud tick)
 
 Pass 355 pinned /debug's seed checks and Copy replay (fcd7999). No issues wait for triage. The critique gate is closed (pass 49 ran 10 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 33 ran 8 commits ago. Every Pending critique row edits a `[needs-user-call]` /decisions item, which waits on /oversight. The web modules no test names are covered elsewhere (TileSheet by `TileView.test.tsx`, PlayPage and the shell by e2e), so this audit looked at the bot: `packages/bot/src/goals.ts`, which decides where the autoplay bot heads, had no test of its own. `goal`, `guardPost` and `threat` are reached through the policy and defender tests, but `cheapestUpgrade`'s Build level gate and its `buildLevels: "any"` branch, `buildLevel` with no Build card, `cheapestDefense` with no defenses, `edgeHex` with an empty tile deck, `onBaseTile`, `me`, the turtle goal and `atGoal` had no check. Scored 2.4 (tests: impact 3, ease 8); below 3.0, but expand ran 8 commits ago, so handing to it would repeat that pass. A new `goals.test.ts` pins those helpers. Next in line: the pending critique rows wait on /oversight; the critique window opens at 00:49 UTC on 2026-11-16 or 2 commits from now.

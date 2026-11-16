@@ -583,11 +583,11 @@ describe('rule text from config', () => {
 
   it('figures per hex: the line names the limit, on the base too (3.8, 4.6)', () => {
     expect(figuresPerHexText(base)).toBe(
-      'A hex holds at most 1 player figure, on the base too: you cannot move into a hex where another figure stands, and a knocked-out player who finds no free base hex stays out until the next round start.',
+      'A hex holds at most 1 player figure, on the base too: you cannot move into a hex where another figure stands, and a knocked-out player who finds no free base hex stays out 1 more round.',
     )
     const two = With((c) => ({ ...c, rulings: { ...c.rulings, figuresPerHex: 2 } }))
     expect(figuresPerHexText(two)).toBe(
-      'A hex holds at most 2 player figures, on the base too: you cannot move into a hex where 2 other figures stand, and a knocked-out player who finds no free base hex stays out until the next round start.',
+      'A hex holds at most 2 player figures, on the base too: you cannot move into a hex where 2 other figures stand, and a knocked-out player who finds no free base hex stays out 1 more round.',
     )
     expect(ruleLineFor('rulings.figuresPerHex', two, defaultContent)).toBe(figuresPerHexText(two))
   })

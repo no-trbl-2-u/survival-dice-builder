@@ -18,15 +18,6 @@
 - suggested fix: Open the Combat step with one defining sentence (each Engage option you play starts an engagement: one fight with the enemies next to you), and write "no dice are left to place".
 - source: web-fetch
 
-### [MED] /config — the Figures per hex line and the Knockout line give two accounts of a full base
-- pass: 50 (commit 1eaf2d7)
-- viewport: desktop
-- category: comprehension
-- observation: The Knockout line says a player who finds no free base hex stays out 1 more round. The Figures per hex line says the same player stays out "until the next round start". A knocked-out player already comes back at the next round start, so the second wording reads as if a full base costs nothing.
-- evidence: figuresPerHexText: "...and a knocked-out player who finds no free base hex stays out until the next round start." (`packages/content/src/ruleText.ts:535-538`) vs knockoutText: "If no base hex is free, they stay out 1 more round." (`ruleText.ts:38`)
-- suggested fix: End figuresPerHexText with "...stays out 1 more round.", the same words as knockoutText.
-- source: web-fetch
-
 ### [LOW] /config — the Notoriety field label "Elite every rungs" cannot be read as a phrase
 - pass: 50 (commit 1eaf2d7)
 - viewport: desktop
@@ -118,6 +109,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /config — the Figures per hex line and the Knockout line give two accounts of a full base
+- pass: 50 (commit 1eaf2d7)
+- viewport: desktop
+- category: comprehension
+- observation: The Knockout line says a player who finds no free base hex stays out 1 more round. The Figures per hex line says the same player stays out "until the next round start". A knocked-out player already comes back at the next round start, so the second wording reads as if a full base costs nothing.
+- evidence: figuresPerHexText: "...and a knocked-out player who finds no free base hex stays out until the next round start." (`packages/content/src/ruleText.ts:535-538`) vs knockoutText: "If no base hex is free, they stay out 1 more round." (`ruleText.ts:38`)
+- suggested fix: End figuresPerHexText with "...stays out 1 more round.", the same words as knockoutText.
+- source: web-fetch
+- issue: #414
+- addressed: (this commit) — the Figures per hex line now ends "...stays out 1 more round.", the same words as the Knockout line.
 
 ### [x] [LOW] /credits — "Each name links to its source", but each line has three names and only the work title links
 - pass: 49 (commit ba1eb40)

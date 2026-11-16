@@ -525,15 +525,14 @@ export function boughtCardsText(config: GameConfig): string {
 /**
  * How many player figures share a hex: "A hex holds at most 1 player figure, on the base too:
  * you cannot move into a hex where another figure stands, and a knocked-out player who finds no
- * free base hex stays out until the next round start." Above 1 it names the limit, as
+ * free base hex stays out 1 more round." Above 1 it names the limit, as
  * `blockedByFigure` and `returnKnockedOut` play it.
  *
  * @rule 3.8, 4.6, 14.4, OPEN-QUESTIONS row 16
  */
 export function figuresPerHexText(config: GameConfig): string {
   const limit = config.rulings.figuresPerHex
-  const tail =
-    'and a knocked-out player who finds no free base hex stays out until the next round start.'
+  const tail = 'and a knocked-out player who finds no free base hex stays out 1 more round.'
   if (limit === 1)
     return `A hex holds at most 1 player figure, on the base too: you cannot move into a hex where another figure stands, ${tail}`
   return `A hex holds at most ${limit} player figures, on the base too: you cannot move into a hex where ${limit} other figures stand, ${tail}`
