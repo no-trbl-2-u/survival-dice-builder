@@ -146,7 +146,7 @@ describe('rule text from config', () => {
 
   it('start: health, dice, starter Skills, deck and hand size follow config (4.7-4.10, 6.1)', () => {
     expect(startText(base, defaultContent)).toBe(
-      'Each player starts with 15 health, 1 action die and 4 Skills your dice can fire: ' +
+      'You start with 15 health, 1 action die and 4 Skills your dice can fire: ' +
         'Strike (Sword: 2 damage to 1 enemy within 1 hex), Shot (Bow: 1 damage to 1 enemy within 2 hexes), Mend (Wand: heal 1 health) and Guard (Shield: gain 2 guard). ' +
         'The Guard Skill gives you guard: points that take enemy damage before your health and are lost when the engagement ends. ' +
         'Your deck holds 10 cards: 4 Move, 4 Gather, 1 Build and 1 Rest. You draw 5 at a time. ' +

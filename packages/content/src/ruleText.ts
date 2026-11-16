@@ -861,7 +861,7 @@ export function startText(config: GameConfig, content: Pick<Content, 'cards' | '
   )
   const hand = preset ? ` You draw ${preset.handSize} at a time.` : ''
   return (
-    `Each player starts with ${maxHealth} health, ${plural(startingDice, 'action die', 'action dice')} and ${plural(skills.length, 'Skill', 'Skills')} your dice can fire: ${andList(skills)}.${guard} ` +
+    `You start with ${maxHealth} health, ${plural(startingDice, 'action die', 'action dice')} and ${plural(skills.length, 'Skill', 'Skills')} your dice can fire: ${andList(skills)}.${guard} ` +
     `Your deck holds ${plural(total, 'card', 'cards')}: ${cards}.${hand} ` +
     'Each card has two halves: the top half is for Prepare, the bottom half for Combat.'
   )

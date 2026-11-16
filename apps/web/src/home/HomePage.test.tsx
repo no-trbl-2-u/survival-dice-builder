@@ -66,7 +66,7 @@ describe('HomePage', () => {
   it('says what a player starts with and how a round turns over, before how a run goes', () => {
     render(<HomePage />)
     expect(screen.getAllByRole('heading', { name: 'What you have' })[0]).toBeTruthy()
-    const start = screen.getAllByText(/^Each player starts with 15 health, 1 action die/)[0]
+    const start = screen.getAllByText(/^You start with 15 health, 1 action die/)[0]
     expect(start?.textContent).toMatch(
       /Your deck holds 10 cards: 4 Move, 4 Gather, 1 Build and 1 Rest\./,
     )

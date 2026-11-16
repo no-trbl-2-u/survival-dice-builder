@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-16 (pass 361, cloud tick)
+
+Pass 360 capitalised Countryside and Core on /config (89d3094). No issues wait for triage, the critique gate is closed (pass 50 ran 5 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 33 ran 14 commits and under 48 hours ago. The two LOW pass 50 rows that do not wait on /oversight are next; the / "What you have" person shift leads (impact 3, ease 8: 2.4; below 3.0, but expand ran 14 commits ago, so handing to it would repeat that pass). startText now opens "You start with ...", matching "Your deck holds ..." and the "your dice" in the same sentence. The ruleText and HomePage tests follow. Next in line: the /debug bug-report link.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] external-critique: / "What you have" opening moves from "each player" to "your"
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: "You start with ..." in startText
+- issue: #418
+- fixed: (this commit)
+
+### [ ] [2.1] external-critique: /debug says to paste a replay into a bug report but not where
+- category: external-critique
+- impact: 3
+- ease: 7
+- next: link the issues URL /credits uses from the Engine console intro
+
 # Site audit — 2026-11-16 (pass 360, cloud tick)
 
 Pass 359 renamed the Notoriety elite field (8cacbd2). No issues wait for triage, the critique gate is closed (pass 50 ran 4 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 33 ran 13 commits and under 48 hours ago. The three LOW pass 50 rows that do not wait on /oversight are next; the /config Map tiles line leads (impact 3, ease 9: 2.7; below 3.0, but expand ran 13 commits ago, so handing to it would repeat that pass). The field labels and /tiles headings say Countryside and Core, so tileDeckText now does too, and since `saveConfig` refuses any count `configReferenceProblems` flags, the line ends "These numbers must match the tile set on the Tile sheet, or the config cannot be saved." The ruleText test follows. Next in line: the / "What you have" person shift, then the /debug bug-report link.

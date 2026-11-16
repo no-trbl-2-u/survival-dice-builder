@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the "What you have" opening sentence moves from "each player" to "your"
-- pass: 50 (commit 1eaf2d7)
-- viewport: desktop
-- category: voice
-- observation: The sentence starts in the third person and ends in the second person; the next sentence stays in the second person.
-- evidence: "Each player starts with 15 health, 1 action die and 4 Skills your dice can fire:" then "Your deck holds 10 cards: ..." (startText, `packages/content/src/ruleText.ts:865-866`)
-- suggested fix: "You start with 15 health, 1 action die and 4 Skills your dice can fire:".
-- source: web-fetch
-
 ### [LOW] /debug — the Engine console says to paste a replay into a bug report but does not say where to file one
 - pass: 50 (commit 1eaf2d7)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the "What you have" opening sentence moves from "each player" to "your"
+- pass: 50 (commit 1eaf2d7)
+- viewport: desktop
+- category: voice
+- observation: The sentence starts in the third person and ends in the second person; the next sentence stays in the second person.
+- evidence: "Each player starts with 15 health, 1 action die and 4 Skills your dice can fire:" then "Your deck holds 10 cards: ..." (startText, `packages/content/src/ruleText.ts:865-866`)
+- suggested fix: "You start with 15 health, 1 action die and 4 Skills your dice can fire:".
+- source: web-fetch
+- issue: #418
+- fixed: (this commit)
 
 ### [x] [LOW] /config — the Map tiles line writes "countryside tiles" and "core tiles" in lower case
 - pass: 50 (commit 1eaf2d7)
