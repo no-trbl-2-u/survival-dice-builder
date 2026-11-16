@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-16 (pass 363, cloud tick)
+
+Pass 362 linked the issue tracker from /debug (d807a9f). No issues wait for triage, the critique gate is closed (pass 50 ran 6 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 33 ran 16 commits and about 30 hours ago (its window opens at 20 commits or 48 hours). Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. A fresh sweep for untested modules finds every web source file covered (TileSheet by TileView.test.tsx, PlayPage by e2e), but of the scripts that gate the build only load-env, loop-issue and pulse-lib have tests. `check-assets.mjs` runs in the lint leg and alone keeps ASSETS.md honest, NC/ND licences included (impact 3, ease 9: 2.7; below 3.0, but expand's window is still shut). `scripts/__tests__/check-assets.test.mjs` builds temp repos and runs the script on each: a consistent register (README exempt, Project-owned with no URL, a candidate row with no file), an unregistered file, an "in use" row with no file, a missing license URL, NC, ND and "non-commercial" licences against a rejected one, and a missing ASSETS.md. Next in line: the same pin for `check-design.mjs`, unless expand's window opens first.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: check-assets, the ASSETS.md gate in lint, has no test
+- category: tests
+- impact: 3
+- ease: 9
+- next: node:test file running the script against temp repos
+- issue: #420
+- fixed: (this commit)
+
+### [ ] [2.4] tests: check-design, the token contrast and sync gate in lint, has no test
+- category: tests
+- impact: 3
+- ease: 8
+- next: node:test file running the script against temp design/tokens.json and tokens.css
+
 # Site audit — 2026-11-16 (pass 362, cloud tick)
 
 Pass 361 opened the / "What you have" line with "You start with" (18d2dfa). No issues wait for triage, the critique gate is closed (pass 50 ran 6 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 33 ran 15 commits and under 48 hours ago. The last pass 50 row that does not wait on /oversight is the /debug bug-report link (impact 3, ease 7: 2.1; below 3.0, but expand ran 15 commits ago, so handing to it would repeat that pass). The issues URL moves from CreditsPage to `issuesUrl` beside `rulesUrl` in `decisions/Inline.tsx`, and the /debug intro now ends "...to paste into a bug report: open an issue (on GitHub)." with the link. A DebugPage unit test and the /debug e2e intro check follow. The Pending rows left in CRITIQUE.md all edit `[needs-user-call]` items, so they wait for /oversight; the next tick with nothing else due hands to /expand once its window opens.
