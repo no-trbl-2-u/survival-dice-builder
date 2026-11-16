@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-15 at commit ba1eb40
-> Pass count: 49
+> Last pass: 2026-11-16 at commit 1eaf2d7
+> Pass count: 50
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — "engagement" is used many times but no sentence says what one is
+- pass: 50 (commit 1eaf2d7)
+- viewport: desktop
+- category: comprehension
+- observation: The word appears first in "What you have", before Combat is described. The Combat step says to play an Engage option and roll, but never says this starts an engagement, or that one Combat can hold several engagements. The visitor then meets "the engagement ends", "End engagement" and "between engagements" with no definition. "no dice are left" is also unclear: left to roll, or left to place.
+- evidence: "The Guard Skill gives you guard: points that take enemy damage before your health and are lost when the engagement ends." (What you have); "Play a card's Engage option (on Move and Gather) to roll your dice from where you stand..."; "When you choose End engagement or no dice are left, the enemy dice hit you at once..." (`packages/content/src/ruleText.ts`, combat text).
+- suggested fix: Open the Combat step with one defining sentence (each Engage option you play starts an engagement: one fight with the enemies next to you), and write "no dice are left to place".
+- source: web-fetch
+
+### [MED] /config — the Figures per hex line and the Knockout line give two accounts of a full base
+- pass: 50 (commit 1eaf2d7)
+- viewport: desktop
+- category: comprehension
+- observation: The Knockout line says a player who finds no free base hex stays out 1 more round. The Figures per hex line says the same player stays out "until the next round start". A knocked-out player already comes back at the next round start, so the second wording reads as if a full base costs nothing.
+- evidence: figuresPerHexText: "...and a knocked-out player who finds no free base hex stays out until the next round start." (`packages/content/src/ruleText.ts:535-538`) vs knockoutText: "If no base hex is free, they stay out 1 more round." (`ruleText.ts:38`)
+- suggested fix: End figuresPerHexText with "...stays out 1 more round.", the same words as knockoutText.
+- source: web-fetch
+
+### [LOW] /config — the Notoriety field label "Elite every rungs" cannot be read as a phrase
+- pass: 50 (commit 1eaf2d7)
+- viewport: desktop
+- category: voice
+- observation: The label drops its number word. Its neighbours "Notoriety climbs every" and "Rungs per extra enemy" read as phrases; this one does not. The help "Every this many rungs" has the same gap. Different from the pass 47 Notoriety rows (two names, vague step).
+- evidence: label "Elite every rungs"; help "Every this many rungs, 1 elite comes at the spawn node nearest the base." (`packages/content/data/config.meta.json:295-296`)
+- suggested fix: Label "Rungs per nearest-base elite", help "After this many rungs, 1 elite comes at the spawn node nearest the base."
+- source: web-fetch
+
+### [LOW] /config — the Map tiles line writes "countryside tiles" and "core tiles" in lower case
+- pass: 50 (commit 1eaf2d7)
+- viewport: desktop
+- category: voice
+- observation: The field labels and the /tiles headings capitalise Countryside and Core; the rule line under those fields does not. The line also says the numbers "must match the tile set" but not what happens if they do not.
+- evidence: tileDeckText: "The tile deck is the 3 countryside tiles, shuffled, on top of the 5 core tiles, shuffled. These numbers must match the tile set on the Tile sheet." (`packages/content/src/ruleText.ts:57-61`); /tiles H2s "Countryside tiles", "Core tiles".
+- suggested fix: Capitalise Countryside and Core in tileDeckText, and say in a few words what a mismatch does.
+- source: web-fetch
+
+### [LOW] / — the "What you have" opening sentence moves from "each player" to "your"
+- pass: 50 (commit 1eaf2d7)
+- viewport: desktop
+- category: voice
+- observation: The sentence starts in the third person and ends in the second person; the next sentence stays in the second person.
+- evidence: "Each player starts with 15 health, 1 action die and 4 Skills your dice can fire:" then "Your deck holds 10 cards: ..." (startText, `packages/content/src/ruleText.ts:865-866`)
+- suggested fix: "You start with 15 health, 1 action die and 4 Skills your dice can fire:".
+- source: web-fetch
+
+### [LOW] /debug — the Engine console says to paste a replay into a bug report but does not say where to file one
+- pass: 50 (commit 1eaf2d7)
+- viewport: desktop
+- category: navigation
+- observation: The intro says Copy replay is for a bug report; the page has no link to the issue tracker. Only /credits links to it, and only for credit errors. (/debug is a JS shell; confirmed from source.)
+- evidence: "Copy replay copies the seed and every action, to paste into a bug report." (`apps/web/src/debug/DebugPage.tsx:117-118`); the only issues link: /credits "open an issue (on GitHub)" (`CreditsPage.tsx:105`).
+- suggested fix: End the sentence with a link to the issues URL the credits page already uses: "...to paste into a bug report: open an issue (on GitHub)."
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
