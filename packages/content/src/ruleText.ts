@@ -263,7 +263,7 @@ export function combatText(
   const dice = enemyDiceText(content)
   const holders = engageCardNames(config, content)
   return (
-    `Play a card's Engage option${holders ? ` (on ${holders})` : ''} to roll your dice from where you stand, plus the enemy dice of each enemy next to you${dice ? ` (${dice})` : ''}. ` +
+    `Play a card's Engage option${holders ? ` (on ${holders})` : ''} to start an engagement, one fight with the enemies next to you: roll your dice from where you stand, plus the enemy dice of each of those enemies${dice ? ` (${dice})` : ''}. ` +
     'Put your dice on your Skills one at a time. ' +
     `${enemyDieText(config)} ${enemyHitText(config)} Any guard you have left is lost when the engagement ends. ` +
     combatEndText(config)
@@ -291,7 +291,7 @@ export function enemyHitText(config: GameConfig): string {
     config.combat.engage.defeatedDice === 'hit'
       ? 'even the dice of an enemy you defeated'
       : 'except the dice of an enemy you defeated'
-  return `When you choose End engagement or no dice are left, the enemy dice hit you at once, ${defeated}. Your guard takes the damage first, then your health.`
+  return `When you choose End engagement or no dice are left to place, the enemy dice hit you at once, ${defeated}. Your guard takes the damage first, then your health.`
 }
 
 /** Each enemy die face as the die line names it. */

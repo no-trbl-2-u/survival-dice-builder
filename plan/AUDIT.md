@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-16 (pass 358, cloud tick)
+
+Pass 357 matched the Figures per hex line to the Knockout line (f012754). No issues wait for triage, the critique gate is closed (pass 50 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 33 ran 11 commits and under 48 hours ago. Under the external-critique MED bias the / Combat step's missing definition of an engagement leads (impact 6, ease 7: 4.2, x1.5 = 6.3). Spec v2 7.8 makes each Engage option one engagement with the enemies next to you, and `engagementMoves` ends it when no die can go on a Skill, so combatText now opens "Play a card's Engage option (on Move and Gather) to start an engagement, one fight with the enemies next to you: roll your dice...", and enemyHitText says "no dice are left to place". The ruleText, HomePage, engageLabels and a11y e2e checks follow. Next in line: the four LOW pass 50 rows, led by the /config "Elite every rungs" label.
+
+## Top 5 findings (scored)
+
+### [x] [6.3] external-critique: / never says what an engagement is
+- category: external-critique
+- impact: 6
+- ease: 7
+- next: open the Combat step with a defining sentence; "no dice are left to place"
+- issue: #415
+- fixed: (this commit)
+
+### [ ] [3.0] external-critique: /config "Elite every rungs" label drops its number word
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: relabel in `config.meta.json`
+
 # Site audit — 2026-11-16 (pass 357, cloud tick)
 
 Pass 356 pinned the bot goal helpers (1eaf2d7); critique pass 50 then filed 6 rows (3085d8a). No issues wait for triage, the critique gate is closed (pass 50 just ran), no build plan phase is pending (35 is blocked), and expand pass 33 ran 10 commits and under 48 hours ago. Pass 50's rows are the first in a while that do not wait on /oversight. Under the external-critique MED bias the two MED rows lead: the /config Figures per hex line says a player with no free base hex stays out "until the next round start" while the Knockout line says "1 more round" (impact 5, ease 9: 4.5, x1.5 = 6.8), and the / Combat step never defines an engagement (impact 6, ease 7: 4.2, x1.5 = 6.3). `returnKnockedOut` keeps such a player out until the round start after the next one, so "1 more round" is right; figuresPerHexText now ends with the Knockout line's words, and its two ruleText tests follow. Next in line: the "engagement" definition on /, then the four LOW pass 50 rows.

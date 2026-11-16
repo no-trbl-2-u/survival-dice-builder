@@ -358,14 +358,18 @@ describe('rule text from config', () => {
 
   it('Combat: each model has its own text; enemy dice come from each record (Spec v2 9.6)', () => {
     expect(combatText(base, 'engage', defaultContent)).toMatch(
-      /^Play a card's Engage option \(on Move and Gather\) to roll your dice from where you stand, plus the enemy dice of each enemy next to you \(a grunt rolls 1, an elite 2\)\. /,
+      /^Play a card's Engage option \(on Move and Gather\) to start an engagement, one fight with the enemies next to you: roll your dice from where you stand, plus the enemy dice of each of those enemies \(a grunt rolls 1, an elite 2\)\. /,
     )
     const elite = {
       cards: [],
       enemies: { enemies: [{ ...defaultContent.enemies.enemies[1]!, dice: 3 }] },
     }
-    expect(combatText(base, 'engage', elite)).toMatch(/next to you \(an elite rolls 3\)\. /)
-    expect(combatText(base, 'engage', elite)).toMatch(/^Play a card's Engage option to roll/)
+    expect(combatText(base, 'engage', elite)).toMatch(
+      /each of those enemies \(an elite rolls 3\)\. /,
+    )
+    expect(combatText(base, 'engage', elite)).toMatch(
+      /^Play a card's Engage option to start an engagement/,
+    )
     expect(combatText(base, 'engage', defaultContent)).toMatch(
       /Combat ends when every hand and deck is empty/,
     )
@@ -376,7 +380,7 @@ describe('rule text from config', () => {
 
   it('enemy dice: one phrase for when they hit, whose dice, and guard first (7.8 steps 7-8, row 72)', () => {
     expect(enemyHitText(base)).toBe(
-      'When you choose End engagement or no dice are left, the enemy dice hit you at once, even the dice of an enemy you defeated. Your guard takes the damage first, then your health.',
+      'When you choose End engagement or no dice are left to place, the enemy dice hit you at once, even the dice of an enemy you defeated. Your guard takes the damage first, then your health.',
     )
     const cancelled = With((c) => ({
       ...c,

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — "engagement" is used many times but no sentence says what one is
-- pass: 50 (commit 1eaf2d7)
-- viewport: desktop
-- category: comprehension
-- observation: The word appears first in "What you have", before Combat is described. The Combat step says to play an Engage option and roll, but never says this starts an engagement, or that one Combat can hold several engagements. The visitor then meets "the engagement ends", "End engagement" and "between engagements" with no definition. "no dice are left" is also unclear: left to roll, or left to place.
-- evidence: "The Guard Skill gives you guard: points that take enemy damage before your health and are lost when the engagement ends." (What you have); "Play a card's Engage option (on Move and Gather) to roll your dice from where you stand..."; "When you choose End engagement or no dice are left, the enemy dice hit you at once..." (`packages/content/src/ruleText.ts`, combat text).
-- suggested fix: Open the Combat step with one defining sentence (each Engage option you play starts an engagement: one fight with the enemies next to you), and write "no dice are left to place".
-- source: web-fetch
-
 ### [LOW] /config — the Notoriety field label "Elite every rungs" cannot be read as a phrase
 - pass: 50 (commit 1eaf2d7)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — "engagement" is used many times but no sentence says what one is
+- pass: 50 (commit 1eaf2d7)
+- viewport: desktop
+- category: comprehension
+- observation: The word appears first in "What you have", before Combat is described. The Combat step says to play an Engage option and roll, but never says this starts an engagement, or that one Combat can hold several engagements. The visitor then meets "the engagement ends", "End engagement" and "between engagements" with no definition. "no dice are left" is also unclear: left to roll, or left to place.
+- evidence: "The Guard Skill gives you guard: points that take enemy damage before your health and are lost when the engagement ends." (What you have); "Play a card's Engage option (on Move and Gather) to roll your dice from where you stand..."; "When you choose End engagement or no dice are left, the enemy dice hit you at once..." (`packages/content/src/ruleText.ts`, combat text).
+- suggested fix: Open the Combat step with one defining sentence (each Engage option you play starts an engagement: one fight with the enemies next to you), and write "no dice are left to place".
+- source: web-fetch
+- issue: #415
+- addressed: (this commit) — the / Combat step now opens "Play a card's Engage option (on Move and Gather) to start an engagement, one fight with the enemies next to you: roll your dice...", and the hit line says "no dice are left to place".
 
 ### [x] [MED] /config — the Figures per hex line and the Knockout line give two accounts of a full base
 - pass: 50 (commit 1eaf2d7)

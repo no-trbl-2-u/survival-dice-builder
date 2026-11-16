@@ -98,7 +98,7 @@ describe('HomePage', () => {
   it('names both Combat models the start panel offers', () => {
     render(<HomePage />)
     const combat = screen.getAllByText(
-      /Play a card's Engage option \(on Move and Gather\) to roll/,
+      /Play a card's Engage option \(on Move and Gather\) to start an engagement/,
     )[0]
     expect(combat?.textContent).toMatch(/This is the Combat in the written rules \(on GitHub\)\./)
     expect(combat?.textContent).toMatch(
@@ -111,7 +111,7 @@ describe('HomePage', () => {
   it('says how the base and its defenses take damage when Combat ends', () => {
     render(<HomePage />)
     const combat = screen.getAllByText(
-      /Play a card's Engage option \(on Move and Gather\) to roll/,
+      /Play a card's Engage option \(on Move and Gather\) to start an engagement/,
     )[0]
     expect(combat?.textContent).toMatch(
       /Either way, when Combat ends, each enemy next to a Barricade/,
