@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-16 (pass 359, cloud tick)
+
+Pass 358 defined an engagement on / (20a66fd). No issues wait for triage, the critique gate is closed (pass 50 ran 2 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 33 ran 12 commits and under 48 hours ago. The four LOW pass 50 rows are next; the /config "Elite every rungs" label leads (impact 3, ease 10: 3.0). `notorietyDay` brings 1 elite each time the rung count crosses a multiple of `eliteEveryRungs`, so the field is now "Rungs per nearest-base elite", matching its neighbour "Rungs per extra enemy", and the help reads "Each time Notoriety climbs this many rungs, 1 elite comes at the spawn node nearest the base." (the suggested "After this many rungs" would read as a one-off). Next in line: the Map tiles line casing, the / "What you have" person shift, and the /debug bug-report link.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] external-critique: /config "Elite every rungs" label drops its number word
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: relabel in `config.meta.json`
+- issue: #416
+- fixed: (this commit)
+
+### [ ] [2.7] external-critique: /config Map tiles line writes countryside and core in lower case
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: capitalise in tileDeckText; say what a mismatch does
+
 # Site audit — 2026-11-16 (pass 358, cloud tick)
 
 Pass 357 matched the Figures per hex line to the Knockout line (f012754). No issues wait for triage, the critique gate is closed (pass 50 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 33 ran 11 commits and under 48 hours ago. Under the external-critique MED bias the / Combat step's missing definition of an engagement leads (impact 6, ease 7: 4.2, x1.5 = 6.3). Spec v2 7.8 makes each Engage option one engagement with the enemies next to you, and `engagementMoves` ends it when no die can go on a Skill, so combatText now opens "Play a card's Engage option (on Move and Gather) to start an engagement, one fight with the enemies next to you: roll your dice...", and enemyHitText says "no dice are left to place". The ruleText, HomePage, engageLabels and a11y e2e checks follow. Next in line: the four LOW pass 50 rows, led by the /config "Elite every rungs" label.

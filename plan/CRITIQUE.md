@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Notoriety field label "Elite every rungs" cannot be read as a phrase
-- pass: 50 (commit 1eaf2d7)
-- viewport: desktop
-- category: voice
-- observation: The label drops its number word. Its neighbours "Notoriety climbs every" and "Rungs per extra enemy" read as phrases; this one does not. The help "Every this many rungs" has the same gap. Different from the pass 47 Notoriety rows (two names, vague step).
-- evidence: label "Elite every rungs"; help "Every this many rungs, 1 elite comes at the spawn node nearest the base." (`packages/content/data/config.meta.json:295-296`)
-- suggested fix: Label "Rungs per nearest-base elite", help "After this many rungs, 1 elite comes at the spawn node nearest the base."
-- source: web-fetch
-
 ### [LOW] /config — the Map tiles line writes "countryside tiles" and "core tiles" in lower case
 - pass: 50 (commit 1eaf2d7)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the Notoriety field label "Elite every rungs" cannot be read as a phrase
+- pass: 50 (commit 1eaf2d7)
+- viewport: desktop
+- category: voice
+- observation: The label drops its number word. Its neighbours "Notoriety climbs every" and "Rungs per extra enemy" read as phrases; this one does not. The help "Every this many rungs" has the same gap. Different from the pass 47 Notoriety rows (two names, vague step).
+- evidence: label "Elite every rungs"; help "Every this many rungs, 1 elite comes at the spawn node nearest the base." (`packages/content/data/config.meta.json:295-296`)
+- suggested fix: Label "Rungs per nearest-base elite", help "After this many rungs, 1 elite comes at the spawn node nearest the base."
+- source: web-fetch
+- issue: #416
+- addressed: label "Rungs per nearest-base elite"; help "Each time Notoriety climbs this many rungs, ..." (the engine repeats the elite every N rungs, so not "After")
 
 ### [x] [MED] / — "engagement" is used many times but no sentence says what one is
 - pass: 50 (commit 1eaf2d7)

@@ -292,8 +292,8 @@
     "range": [1, 10]
   },
   "calendar.notoriety.eliteEveryRungs": {
-    "label": "Elite every rungs",
-    "help": "Every this many rungs, 1 elite comes at the spawn node nearest the base.",
+    "label": "Rungs per nearest-base elite",
+    "help": "Each time Notoriety climbs this many rungs, 1 elite comes at the spawn node nearest the base.",
     "rule": "7.3 (Event Calendar experiment)",
     "range": [1, 10]
   },
