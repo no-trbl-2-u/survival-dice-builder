@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-16 (pass 366, cloud tick)
+
+Pass 365 pinned deploy-check (c5fe205). No issues wait for triage, the critique gate is closed (pass 50 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 33 ran 19 commits and about 37 hours ago (its window opens at 20 commits or 48 hours). Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass takes the next untested script: `notify.mjs`, the pager standing rule 8 calls before any skill stops, whose one promise is to exit 0 whatever happens (impact 3, ease 9: 2.7; below 3.0, but expand's window is still shut). `scripts/__tests__/notify.test.mjs` spawns the script in an empty temp folder outside git (so load-env finds no .env) with the channel vars scrubbed and a fetch stub preloaded: no channel (prints the line, no request), the default title, ntfy (encoded topic URL, POST, Title and Priority headers, plain body), an unknown priority and a valueless flag falling back to default, the webhook JSON payload with an ISO timestamp, both channels with one answering (sent), and both failing, one by status and one by network error (stderr note, still exit 0). Next in line: the remaining untested scripts (og-card, one-pagers, touch-icon, new-skill, pulse), unless expand's window opens first.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: notify, the rule 8 pager, has no test
+- category: tests
+- impact: 3
+- ease: 9
+- next: node:test file spawning the script with a stubbed fetch
+- issue: #423
+- fixed: (this commit)
+
 # Site audit — 2026-11-16 (pass 365, cloud tick)
 
 Pass 364 pinned check-design (ccdf0b2). No issues wait for triage, the critique gate is closed (pass 50 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 33 ran 18 commits and about 32 hours ago (its window opens at 20 commits or 48 hours). Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass takes the next untested build script: `deploy-check.mjs`, the deploy gate every shipping skill runs after a push (impact 3, ease 7: 2.1; below 3.0, but expand's window is still shut). `scripts/__tests__/deploy-check.test.mjs` builds a 2-commit temp git repo, preloads a `fetch` stub with `node --import`, and runs the script there, scrubbing the runner's own tokens: provider none (exit 0, no request), an unknown provider (exit 3), Cloudflare Pages with no token or no account (exit 3, no request), the HEAD deploy succeeding with the CLOUDFLARE_* spellings (exit 0, URL, request path and Bearer header) and failing beside an older green one (exit 1, stage, admin URL), GitHub Actions matching only the named workflow (success 0, cancelled 1), and Netlify with a rejected token (exit 3) and a ready deploy listing the commit since the last one. Every stubbed answer is terminal on the first poll, so no test waits on the 5 s interval. Next in line: the remaining untested scripts (notify, og-card, one-pagers, touch-icon, new-skill, pulse), unless expand's window opens first.
