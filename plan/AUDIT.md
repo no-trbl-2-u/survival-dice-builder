@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-16 (pass 360, cloud tick)
+
+Pass 359 renamed the Notoriety elite field (8cacbd2). No issues wait for triage, the critique gate is closed (pass 50 ran 4 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 33 ran 13 commits and under 48 hours ago. The three LOW pass 50 rows that do not wait on /oversight are next; the /config Map tiles line leads (impact 3, ease 9: 2.7; below 3.0, but expand ran 13 commits ago, so handing to it would repeat that pass). The field labels and /tiles headings say Countryside and Core, so tileDeckText now does too, and since `saveConfig` refuses any count `configReferenceProblems` flags, the line ends "These numbers must match the tile set on the Tile sheet, or the config cannot be saved." The ruleText test follows. Next in line: the / "What you have" person shift, then the /debug bug-report link.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] external-critique: /config Map tiles line writes countryside and core in lower case
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: capitalise in tileDeckText; say what a mismatch does
+- issue: #417
+- fixed: (this commit)
+
+### [ ] [2.4] external-critique: / "What you have" opening moves from "each player" to "your"
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: "You start with ..." in startText
+
 # Site audit — 2026-11-16 (pass 359, cloud tick)
 
 Pass 358 defined an engagement on / (20a66fd). No issues wait for triage, the critique gate is closed (pass 50 ran 2 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 33 ran 12 commits and under 48 hours ago. The four LOW pass 50 rows are next; the /config "Elite every rungs" label leads (impact 3, ease 10: 3.0). `notorietyDay` brings 1 elite each time the rung count crosses a multiple of `eliteEveryRungs`, so the field is now "Rungs per nearest-base elite", matching its neighbour "Rungs per extra enemy", and the help reads "Each time Notoriety climbs this many rungs, 1 elite comes at the spawn node nearest the base." (the suggested "After this many rungs" would read as a one-off). Next in line: the Map tiles line casing, the / "What you have" person shift, and the /debug bug-report link.

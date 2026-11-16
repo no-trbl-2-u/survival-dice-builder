@@ -201,7 +201,7 @@ describe('rule text from config', () => {
 
   it('tile deck: the countryside and core counts come from the tile set (2.2, 4.3)', () => {
     expect(tileDeckText(defaultContent)).toBe(
-      'The map starts with the Base tile alone. The tile deck is the 3 countryside tiles, shuffled, on top of the 5 core tiles, shuffled. These numbers must match the tile set on the Tile sheet.',
+      'The map starts with the Base tile alone. The tile deck is the 3 Countryside tiles, shuffled, on top of the 5 Core tiles, shuffled. These numbers must match the tile set on the Tile sheet, or the config cannot be saved.',
     )
     const one = {
       tiles: defaultContent.tiles.filter(
@@ -210,7 +210,7 @@ describe('rule text from config', () => {
           t.id === defaultContent.tiles.find((u) => u.kind === 'countryside')?.id,
       ),
     }
-    expect(tileDeckText(one)).toMatch(/the 1 countryside tile, shuffled/)
+    expect(tileDeckText(one)).toMatch(/the 1 Countryside tile, shuffled/)
     for (const path of ['tiles.countryside', 'tiles.core'])
       expect(ruleLineFor(path, base, defaultContent)).toBe(tileDeckText(defaultContent))
   })

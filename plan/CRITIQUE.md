@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Map tiles line writes "countryside tiles" and "core tiles" in lower case
-- pass: 50 (commit 1eaf2d7)
-- viewport: desktop
-- category: voice
-- observation: The field labels and the /tiles headings capitalise Countryside and Core; the rule line under those fields does not. The line also says the numbers "must match the tile set" but not what happens if they do not.
-- evidence: tileDeckText: "The tile deck is the 3 countryside tiles, shuffled, on top of the 5 core tiles, shuffled. These numbers must match the tile set on the Tile sheet." (`packages/content/src/ruleText.ts:57-61`); /tiles H2s "Countryside tiles", "Core tiles".
-- suggested fix: Capitalise Countryside and Core in tileDeckText, and say in a few words what a mismatch does.
-- source: web-fetch
-
 ### [LOW] / — the "What you have" opening sentence moves from "each player" to "your"
 - pass: 50 (commit 1eaf2d7)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the Map tiles line writes "countryside tiles" and "core tiles" in lower case
+- pass: 50 (commit 1eaf2d7)
+- viewport: desktop
+- category: voice
+- observation: The field labels and the /tiles headings capitalise Countryside and Core; the rule line under those fields does not. The line also says the numbers "must match the tile set" but not what happens if they do not.
+- evidence: tileDeckText: "The tile deck is the 3 countryside tiles, shuffled, on top of the 5 core tiles, shuffled. These numbers must match the tile set on the Tile sheet." (`packages/content/src/ruleText.ts:57-61`); /tiles H2s "Countryside tiles", "Core tiles".
+- suggested fix: Capitalise Countryside and Core in tileDeckText, and say in a few words what a mismatch does.
+- source: web-fetch
+- issue: #417
+- fixed: (this commit)
 
 ### [x] [LOW] /config — the Notoriety field label "Elite every rungs" cannot be read as a phrase
 - pass: 50 (commit 1eaf2d7)

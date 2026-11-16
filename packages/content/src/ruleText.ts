@@ -49,16 +49,16 @@ export function revealText(config: GameConfig): string {
 
 /**
  * How the tile deck is made at setup, with the tile counts from the tile set: the /config
- * Countryside tiles and Core tiles fields' line. The counts must match the tile set, so the
- * line says where they come from.
+ * Countryside tiles and Core tiles fields' line. The counts must match the tile set (`configRefs`
+ * blocks the save otherwise), so the line says where they come from and what a mismatch does.
  *
  * @rule 2.2, 4.1, 4.3
  */
 export function tileDeckText(content: Pick<Content, 'tiles'>): string {
   const count = (kind: string) => content.tiles.filter((t) => t.kind === kind).length
-  const countryside = plural(count('countryside'), 'countryside tile', 'countryside tiles')
-  const core = plural(count('core'), 'core tile', 'core tiles')
-  return `The map starts with the Base tile alone. The tile deck is the ${countryside}, shuffled, on top of the ${core}, shuffled. These numbers must match the tile set on the Tile sheet.`
+  const countryside = plural(count('countryside'), 'Countryside tile', 'Countryside tiles')
+  const core = plural(count('core'), 'Core tile', 'Core tiles')
+  return `The map starts with the Base tile alone. The tile deck is the ${countryside}, shuffled, on top of the ${core}, shuffled. These numbers must match the tile set on the Tile sheet, or the config cannot be saved.`
 }
 
 /**
