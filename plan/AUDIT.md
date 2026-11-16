@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-16 (pass 364, cloud tick)
+
+Pass 363 pinned check-assets (c9ae397). No issues wait for triage, the critique gate is closed (pass 50 ran 8 commits and about 16 hours ago), no build plan phase is pending (35 is blocked), and expand pass 33 ran 17 commits and about 31 hours ago (its window opens at 20 commits or 48 hours). Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass takes the module pass 363 named next: `check-design.mjs`, which runs in the lint leg and alone checks token contrast in both themes, tokens.css against design/tokens.json, terrain colour distance and the assets design SVGs reference (impact 3, ease 8: 2.4; below 3.0, but expand's window is still shut). `scripts/__tests__/check-design.test.mjs` builds temp repos and runs the script on each: a consistent set (a `#` reference ignored), no tokens.json (skipped), a pair under its contrast minimum, a check naming an unknown token, 2 terrains under delta E 20, tokens.css with a missing and a different value (case ignored), no tokens.css, and a design SVG with an external, a missing and an unregistered reference. Next in line: the remaining untested build scripts, unless expand's window opens first.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] tests: check-design, the token contrast and sync gate in lint, has no test
+- category: tests
+- impact: 3
+- ease: 8
+- next: node:test file running the script against temp design/tokens.json and tokens.css
+- issue: #421
+- fixed: (this commit)
+
 # Site audit — 2026-11-16 (pass 363, cloud tick)
 
 Pass 362 linked the issue tracker from /debug (d807a9f). No issues wait for triage, the critique gate is closed (pass 50 ran 6 commits ago, under 24 hours), no build plan phase is pending (35 is blocked), and expand pass 33 ran 16 commits and about 30 hours ago (its window opens at 20 commits or 48 hours). Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. A fresh sweep for untested modules finds every web source file covered (TileSheet by TileView.test.tsx, PlayPage by e2e), but of the scripts that gate the build only load-env, loop-issue and pulse-lib have tests. `check-assets.mjs` runs in the lint leg and alone keeps ASSETS.md honest, NC/ND licences included (impact 3, ease 9: 2.7; below 3.0, but expand's window is still shut). `scripts/__tests__/check-assets.test.mjs` builds temp repos and runs the script on each: a consistent register (README exempt, Project-owned with no URL, a candidate row with no file), an unregistered file, an "in use" row with no file, a missing license URL, NC, ND and "non-commercial" licences against a rejected one, and a missing ASSETS.md. Next in line: the same pin for `check-design.mjs`, unless expand's window opens first.
