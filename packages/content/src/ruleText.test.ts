@@ -503,7 +503,7 @@ describe('rule text from config', () => {
 
   it('target order: nearest structure first, pull distance, tie-break only for ties (9.3)', () => {
     expect(targetOrderText(base)).toBe(
-      'Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer. Between equally near targets they pick a player, then a Tower, then a Barricade, then the base.',
+      'Enemies head for the nearest Barricade, Tower or base hex and turn to a player only when the player is at least 2 hexes nearer. Between equally near targets they pick a player, then a Tower, then a Barricade, then the base.',
     )
     const plain = With((c) => ({
       ...c,
@@ -514,7 +514,7 @@ describe('rule text from config', () => {
       },
     }))
     expect(targetOrderText(plain)).toBe(
-      'Enemies head for the nearest structure or player. Between equally near targets they pick the base, then a Tower, then a Barricade, then a player.',
+      'Enemies head for the nearest Barricade, Tower, base hex or player. Between equally near targets they pick the base, then a Tower, then a Barricade, then a player.',
     )
   })
 
@@ -564,7 +564,7 @@ describe('rule text from config', () => {
 
   it('target: the short form / prints names the player pull (9.3, row 56)', () => {
     expect(targetText(base)).toBe(
-      'Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer.',
+      'Enemies head for the nearest Barricade, Tower or base hex and turn to a player only when the player is at least 2 hexes nearer.',
     )
     expect(targetOrderText(base).startsWith(targetText(base))).toBe(true)
   })

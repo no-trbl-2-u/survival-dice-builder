@@ -424,7 +424,8 @@ export function enemyHealthText(content: Enemies): string {
 }
 
 /**
- * Which target an enemy heads for: the nearest structure, or a player only when much nearer.
+ * Which target an enemy heads for: the nearest Barricade, Tower or base hex, or a player only
+ * when much nearer.
  * The short form / prints; {@link targetOrderText} adds the tie-break order.
  *
  * @rule 9.3, OPEN-QUESTIONS row 56
@@ -432,8 +433,8 @@ export function enemyHealthText(content: Enemies): string {
 export function targetText(config: GameConfig): string {
   const pull = config.rulings.playerPullDistance
   return pull === 0
-    ? 'Enemies head for the nearest structure or player.'
-    : `Enemies head for the nearest structure, and turn to a player only when the player is at least ${plural(pull, 'hex', 'hexes')} nearer.`
+    ? 'Enemies head for the nearest Barricade, Tower, base hex or player.'
+    : `Enemies head for the nearest Barricade, Tower or base hex and turn to a player only when the player is at least ${plural(pull, 'hex', 'hexes')} nearer.`
 }
 
 /**

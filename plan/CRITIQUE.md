@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Enemies line says enemies head for "the nearest structure", a word no page defines
-- pass: 51 (commit 799d694)
-- viewport: desktop
-- category: comprehension
-- observation: "Structure" appears nowhere else on the home page, so a reader cannot tell if the base counts. In the engine it does: the targets are Tower, Barricade and base.
-- evidence: "Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer." (`packages/content/src/ruleText.ts:436` `targetText`; `TARGET_NAME` lists tower, barricade, base)
-- suggested fix: "Enemies head for the nearest Barricade, Tower or base hex, and turn to a player only when..."
-- source: web-fetch
-
 ### [LOW] /play — the start panel's Combat hint opens "Engagements:" for one choice but not "Exchanges" for the other
 - pass: 51 (commit 799d694)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Enemies line says enemies head for "the nearest structure", a word no page defines
+- pass: 51 (commit 799d694)
+- viewport: desktop
+- category: comprehension
+- observation: "Structure" appears nowhere else on the home page, so a reader cannot tell if the base counts. In the engine it does: the targets are Tower, Barricade and base.
+- evidence: "Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer." (`packages/content/src/ruleText.ts:436` `targetText`; `TARGET_NAME` lists tower, barricade, base)
+- suggested fix: "Enemies head for the nearest Barricade, Tower or base hex, and turn to a player only when..."
+- source: web-fetch
+- issue: #427
+- fixed: (this commit)
 
 ### [x] [LOW] / — the Skills line switches from "each player" to "you" between two sentences
 - pass: 51 (commit 799d694)

@@ -15,7 +15,7 @@ describe('HomePage', () => {
     const enemies = screen.getByText(/an elite spawn node gets 1 elite at each Combat\./)
     expect(enemies.textContent).toMatch(/^Enemies: A spawn node gets 1 grunt at each Combat; /)
     expect(enemies.textContent).toMatch(
-      /Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer\./,
+      /Enemies head for the nearest Barricade, Tower or base hex and turn to a player only when the player is at least 2 hexes nearer\./,
     )
   })
 

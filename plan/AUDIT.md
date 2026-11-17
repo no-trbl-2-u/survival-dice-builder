@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-17 (pass 370, cloud tick)
+
+Pass 369 put the / Skills line in the second person (be084fc). No issues wait for triage, the critique gate is closed (pass 51 ran 4 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 5 commits ago. The 3 LOW pass 51 rows that do not wait for /oversight score alike (impact 3, ease 9: 2.7); the Enemies row is first in the queue. `targetText` now names the targets instead of "the nearest structure", a word no page defines: "Enemies head for the nearest Barricade, Tower or base hex and turn to a player only when the player is at least 2 hexes nearer." (no comma before "and", as the home page serial comma test asks), and with a pull distance of 0 "the nearest Barricade, Tower, base hex or player". The playtest protocol is regenerated with `pnpm sim kit`; ruleText.test.ts and HomePage.test.tsx pin the new sentences. Next in line: the /play Exchanges lead and the elite spawn node credit.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] external-critique: / Enemies line says "the nearest structure" (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: name Barricade, Tower or base hex in targetText
+- issue: #427
+- fixed: (this commit)
+
+### [ ] [2.7] external-critique: /play Exchanges hint has no name lead (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "Exchanges (older rule): the older Combat..." in StartPanel and config.meta.json
+
+### [ ] [2.7] external-critique: /credits elite spawn node shares the Elite ogre icon but is not named (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "Elite and Elite spawn node: Ogre icon..." in the credits line
+
 # Site audit — 2026-11-17 (pass 369, cloud tick)
 
 Pass 368 capitalised the / Prepare step (d33e247). No issues wait for triage, the critique gate is closed (pass 51 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 4 commits ago. The 4 LOW pass 51 rows that do not wait for /oversight score alike (impact 3, ease 9-10: 2.7-3.0); the Skills line is first in the queue and cheapest. `trainingText` now speaks to the reader like `draftPoolText` after it: "you look at 2 new Skills plus your pool and keep 1 for free. The Skills you do not keep go to your pool." The /config help in config.meta.json, which describes each player, stays as it is; ruleText.test.ts pins the new sentences. Next in line: the Enemies "structure" word, the /play Exchanges lead and the elite spawn node credit.
