@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-17 (pass 368, cloud tick)
+
+Pass 367 gave the run file one name (11dbc55). No issues wait for triage, the critique gate is closed (pass 51 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 3 commits ago. The 5 LOW pass 51 rows score alike (impact 3, ease 10: 3.0); the Prepare row is first in the queue and cheapest. The Prepare step on / now opens "Play the top halves of your cards", capitalised after its label like Combat, Materials, The map, Shop and Skills; HomePage.test.tsx pins the new sentence. Next in line: the Skills line person switch, the Enemies "structure" word, the /play Exchanges lead and the elite spawn node credit.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] external-critique: / Prepare step starts lower case after its label (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: capitalise "Play" in HomePage.tsx
+- issue: #425
+- fixed: (this commit)
+
+### [ ] [3.0] external-critique: / Skills line switches from "each player" to "you" (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: second person in trainingText
+
+### [ ] [3.0] external-critique: / Enemies line says "the nearest structure" (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: name Barricade, Tower or base hex in targetText
+
 # Site audit — 2026-11-17 (pass 367, cloud tick)
 
 Pass 366 pinned notify (b8f04d0); expand pass 34 and critique pass 51 followed. No issues wait for triage, the critique gate is closed (pass 51 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 2 commits ago. Critique pass 51 filed a MED row that does not wait for /oversight: /play calls the run file three things ("Save run (file)" in the footer, "Download run (JSON)" on the summary, "Load a run file" on the start panel), never says where a run file comes from, and a wrong file gets a version number or a raw parse message (impact 6, ease 7: 4.2, x1.5 for the external-critique MED bias: 6.3). The footer and summary buttons now both read "Save run file", the start panel says "Use Save run file during a run, or on its summary, to make one.", and a wrong version, broken JSON or an illegal action all give "This file is not a run file from this game." (`NOT_A_RUN_FILE`, pinned in exportRun.test.ts; the earlier-version and config messages stay). The playtest protocol and runs README use the new name, and the e2e clicks the one on the summary. The gate also caught a flake from pass 365: the GitHub Actions "cancelled" case in deploy-check.test.mjs stubbed the first repo's HEAD but ran in a second repo, so it passed only when both were committed in the same second and otherwise polled until timeout; it now stubs the second repo's own HEAD. Next in line: the 5 LOW pass 51 voice and comprehension rows.

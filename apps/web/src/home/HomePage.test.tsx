@@ -31,7 +31,7 @@ describe('HomePage', () => {
     render(<HomePage />)
     const items = screen.getAllByRole('listitem').map((li) => li.textContent ?? '')
     expect(items).toContain(
-      'Prepare: play the top halves of your cards to move, gather materials and build Barricades and Towers.',
+      'Prepare: Play the top halves of your cards to move, gather materials and build Barricades and Towers.',
     )
     expect(items.find((text) => text.startsWith('Defenses: A Barricade costs'))).toMatch(
       /The base starts with \d+ health\.$/,

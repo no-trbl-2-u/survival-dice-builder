@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Prepare step starts in lower case after its label; Combat and every other label use a capital
-- pass: 51 (commit 799d694)
-- viewport: desktop
-- category: voice
-- observation: "Prepare: play the top halves..." vs "Combat: Play a card's Engage option...". Materials, The map, Shop and Skills all start with a capital after the label.
-- evidence: `apps/web/src/home/HomePage.tsx:50` "<strong>Prepare:</strong> play the top halves of your cards"; Combat from `combatText` (`packages/content/src/ruleText.ts`).
-- suggested fix: "Prepare: Play the top halves of your cards to move, gather materials and build Barricades and Towers."
-- source: web-fetch
-
 ### [LOW] / — the Skills line switches from "each player" to "you" between two sentences
 - pass: 51 (commit 799d694)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Prepare step starts in lower case after its label; Combat and every other label use a capital
+- pass: 51 (commit 799d694)
+- viewport: desktop
+- category: voice
+- observation: "Prepare: play the top halves..." vs "Combat: Play a card's Engage option...". Materials, The map, Shop and Skills all start with a capital after the label.
+- evidence: `apps/web/src/home/HomePage.tsx:50` "<strong>Prepare:</strong> play the top halves of your cards"; Combat from `combatText` (`packages/content/src/ruleText.ts`).
+- suggested fix: "Prepare: Play the top halves of your cards to move, gather materials and build Barricades and Towers."
+- source: web-fetch
+- issue: #425
+- fixed: (this commit)
 
 ### [x] [MED] /play — the run file has three names, and the start panel never says how to make one
 - pass: 51 (commit 799d694)

@@ -47,7 +47,7 @@ export function HomePage() {
         <p>{roundText(config)}</p>
         <ol className={styles.steps}>
           <li>
-            <strong>Prepare:</strong> play the top halves of your cards to move, gather materials
+            <strong>Prepare:</strong> Play the top halves of your cards to move, gather materials
             and build Barricades and Towers.
           </li>
           <li>
