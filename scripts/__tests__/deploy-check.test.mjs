@@ -149,8 +149,8 @@ test('Cloudflare Pages: the deploy for HEAD failing exits 1 with the stage and a
 test('GitHub Actions: only the named workflow run for HEAD counts', () => {
   const { root, head } = repo()
   const env = { DEPLOY_PROVIDER: 'github-actions', GH_TOKEN: 'tok', GH_REPO: 'o/r' }
-  const runs = (conclusion) => ({
-    [`/repos/o/r/actions/runs?head_sha=${head}`]: {
+  const runs = (conclusion, sha = head) => ({
+    [`/repos/o/r/actions/runs?head_sha=${sha}`]: {
       body: {
         workflow_runs: [
           { id: 1, path: '.github/workflows/ci.yml', status: 'completed', conclusion: 'failure', html_url: 'https://gh/ci' },
@@ -163,7 +163,9 @@ test('GitHub Actions: only the named workflow run for HEAD counts', () => {
   assert.equal(ok.status, 0, ok.err)
   assert.match(ok.out, /URL: https:\/\/gh\/deploy/)
 
-  const bad = run(repo().root, env, runs('cancelled'))
+  // A fresh repo has its own HEAD (the SHAs match only when both are made in the same second).
+  const second = repo()
+  const bad = run(second.root, env, runs('cancelled', second.head))
   assert.equal(bad.status, 1)
   assert.match(bad.err, /workflow concluded cancelled/)
 })

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — the run file has three names, and the start panel never says how to make one
-- pass: 51 (commit 799d694)
-- viewport: desktop
-- category: navigation
-- observation: The start panel offers "Load a run file" but does not say what a run file is or where one comes from. The button that makes one is "Save run (file)" during a run and "Download run (JSON)" on the run summary. A wrong file gives "This is not a version 3 or 4 run file." or a raw parse message.
-- evidence: Checked in source (/play is a JS shell): `apps/web/src/play/StartPanel.tsx:186` "Load a run file"; `PlayPage.tsx:327` "Save run (file)"; `RunSummary.tsx:62` "Download run (JSON)"; `exportRun.ts:71`, `:81` (`e.message` in the error).
-- suggested fix: Use one name ("Save run file" / "Load a run file"), add a hint "Use Save run file during a run to make one.", and replace the version and parse errors with "This file is not a run file from this game."
-- source: web-fetch
-
 ### [LOW] / — the Prepare step starts in lower case after its label; Combat and every other label use a capital
 - pass: 51 (commit 799d694)
 - viewport: desktop
@@ -118,6 +109,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — the run file has three names, and the start panel never says how to make one
+- pass: 51 (commit 799d694)
+- viewport: desktop
+- category: navigation
+- observation: The start panel offers "Load a run file" but does not say what a run file is or where one comes from. The button that makes one is "Save run (file)" during a run and "Download run (JSON)" on the run summary. A wrong file gives "This is not a version 3 or 4 run file." or a raw parse message.
+- evidence: Checked in source (/play is a JS shell): `apps/web/src/play/StartPanel.tsx:186` "Load a run file"; `PlayPage.tsx:327` "Save run (file)"; `RunSummary.tsx:62` "Download run (JSON)"; `exportRun.ts:71`, `:81` (`e.message` in the error).
+- suggested fix: Use one name ("Save run file" / "Load a run file"), add a hint "Use Save run file during a run to make one.", and replace the version and parse errors with "This file is not a run file from this game."
+- source: web-fetch
+- issue: #424
+- fixed: (this commit)
 
 ### [x] [LOW] /debug — the Engine console says to paste a replay into a bug report but does not say where to file one
 - pass: 50 (commit 1eaf2d7)

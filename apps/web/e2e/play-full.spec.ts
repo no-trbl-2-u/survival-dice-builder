@@ -69,7 +69,7 @@ test('/play: a full seeded solo run to the summary, then a replayable export', a
   )
 
   const download = page.waitForEvent('download')
-  await page.getByRole('button', { name: 'Download run (JSON)' }).click()
+  await page.getByTestId('run-summary').getByRole('button', { name: 'Save run file' }).click()
   const file = await (await download).path()
   const data = JSON.parse(fs.readFileSync(file, 'utf-8'))
   expect(data.seed).toBe(5)

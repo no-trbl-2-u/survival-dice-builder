@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-17 (pass 367, cloud tick)
+
+Pass 366 pinned notify (b8f04d0); expand pass 34 and critique pass 51 followed. No issues wait for triage, the critique gate is closed (pass 51 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 2 commits ago. Critique pass 51 filed a MED row that does not wait for /oversight: /play calls the run file three things ("Save run (file)" in the footer, "Download run (JSON)" on the summary, "Load a run file" on the start panel), never says where a run file comes from, and a wrong file gets a version number or a raw parse message (impact 6, ease 7: 4.2, x1.5 for the external-critique MED bias: 6.3). The footer and summary buttons now both read "Save run file", the start panel says "Use Save run file during a run, or on its summary, to make one.", and a wrong version, broken JSON or an illegal action all give "This file is not a run file from this game." (`NOT_A_RUN_FILE`, pinned in exportRun.test.ts; the earlier-version and config messages stay). The playtest protocol and runs README use the new name, and the e2e clicks the one on the summary. The gate also caught a flake from pass 365: the GitHub Actions "cancelled" case in deploy-check.test.mjs stubbed the first repo's HEAD but ran in a second repo, so it passed only when both were committed in the same second and otherwise polled until timeout; it now stubs the second repo's own HEAD. Next in line: the 5 LOW pass 51 voice and comprehension rows.
+
+## Top 5 findings (scored)
+
+### [x] [6.3] external-critique: /play gives the run file three names and no hint on how to make one
+- category: external-critique
+- impact: 6
+- ease: 7
+- next: one button name, a start panel hint, one plain load error
+- issue: #424
+- fixed: (this commit)
+
+### [ ] [3.0] external-critique: / Prepare step starts lower case after its label (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: capitalise "Play" in HomePage.tsx
+
+### [ ] [3.0] external-critique: / Skills line switches from "each player" to "you" (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: second person in trainingText
+
 # Site audit — 2026-11-16 (pass 366, cloud tick)
 
 Pass 365 pinned deploy-check (c5fe205). No issues wait for triage, the critique gate is closed (pass 50 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 33 ran 19 commits and about 37 hours ago (its window opens at 20 commits or 48 hours). Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass takes the next untested script: `notify.mjs`, the pager standing rule 8 calls before any skill stops, whose one promise is to exit 0 whatever happens (impact 3, ease 9: 2.7; below 3.0, but expand's window is still shut). `scripts/__tests__/notify.test.mjs` spawns the script in an empty temp folder outside git (so load-env finds no .env) with the channel vars scrubbed and a fetch stub preloaded: no channel (prints the line, no request), the default title, ntfy (encoded topic URL, POST, Title and Priority headers, plain body), an unknown priority and a valueless flag falling back to default, the webhook JSON payload with an ISO timestamp, both channels with one answering (sent), and both failing, one by status and one by network error (stderr note, still exit 0). Next in line: the remaining untested scripts (og-card, one-pagers, touch-icon, new-skill, pulse), unless expand's window opens first.

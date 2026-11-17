@@ -184,6 +184,9 @@ export function StartPanel({
       ) : null}
       <label className={styles.fileLabel}>
         Load a run file <input type="file" accept="application/json,.json" onChange={load} />
+        <span className={styles.muted}>
+          Use Save run file during a run, or on its summary, to make one.
+        </span>
       </label>
       {error ? (
         <p role="alert" className={styles.health}>

@@ -324,7 +324,7 @@ function Game({ run, dispatch, undoOn, setUndoOn, prefs, setPrefs }: GameProps) 
           {run.actions.length} {run.actions.length === 1 ? 'action' : 'actions'}
         </span>
         <button type="button" onClick={() => downloadRun(run, Date.now())}>
-          Save run (file)
+          Save run file
         </button>
         <button type="button" onClick={() => dispatch({ kind: 'reset' })}>
           New run

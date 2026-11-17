@@ -38,8 +38,7 @@ Teach these rules (generated from the game's config: `pnpm sim -- kit`):
 
 ## After
 
-1. On the run summary, press **Download run (JSON)**. During play, **Save run (file)** does the
-   same.
+1. On the run summary, press **Save run file**. During play, the same button does the same.
 2. Rename the file `YYYY-MM-DD-<who>-<seed>.json`. Put it in `docs/playtests/runs/`.
 3. Each player answers the survey (`SURVEY.md`), about 5 minutes. Paste the answers into
    `docs/playtests/sessions/YYYY-MM-DD-<who>.md` with the teach time and the notes.

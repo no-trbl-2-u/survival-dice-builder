@@ -55,6 +55,9 @@ export function exportRun(run: Run, at = run.timing.lastAt): RunExport {
   }
 }
 
+/** The error for a file that is not a run file (wrong version, not JSON, or an illegal action). */
+export const NOT_A_RUN_FILE = 'This file is not a run file from this game.'
+
 /**
  * Loads a save file: checks the version and the config, then replays every action through the
  * engine (an illegal action means a bad file). Returns the run or a plain error message. A
@@ -68,7 +71,7 @@ export function importRun(text: string, at = 0): Readonly<{ run: Run } | { error
       return { error: 'This run file is from an earlier version and cannot be replayed.' }
     }
     if (data.version !== 3 && data.version !== 4) {
-      return { error: 'This is not a version 3 or 4 run file.' }
+      return { error: NOT_A_RUN_FILE }
     }
     const config = GameConfigSchema.safeParse(withConfigDefaults(data.config))
     if (!config.success) return { error: 'The run file has an invalid config.' }
@@ -77,8 +80,8 @@ export function importRun(text: string, at = 0): Readonly<{ run: Run } | { error
     }
     const run = replay(config.data, data.seed, data.players ?? 1, data.actions)
     return { run: { ...run, timing: resumeTiming(data.timing, at) } }
-  } catch (e) {
-    return { error: `The run file cannot be loaded: ${e instanceof Error ? e.message : String(e)}` }
+  } catch {
+    return { error: NOT_A_RUN_FILE }
   }
 }
 

@@ -4,7 +4,7 @@ import { serialize, type GameEvent } from '@survival/engine'
 import { describe, expect, it } from 'vitest'
 import { baseCentre, ENGINE_ID } from '../names/pieceNames.ts'
 import { describeEvent } from './describeEvent.ts'
-import { exportFileName, exportRun, importRun, replayExport } from './exportRun.ts'
+import { NOT_A_RUN_FILE, exportFileName, exportRun, importRun, replayExport } from './exportRun.ts'
 import { newRun, step, undo, type Run } from './run.ts'
 
 const config = defaultContent.config
@@ -63,8 +63,9 @@ describe('save and load (spec 6)', () => {
   })
 
   it('a broken or foreign file gives a plain error', () => {
-    expect(importRun('not json')).toHaveProperty('error')
-    expect(importRun('{"version":5}')).toEqual({ error: 'This is not a version 3 or 4 run file.' })
+    expect(importRun('not json')).toEqual({ error: NOT_A_RUN_FILE })
+    expect(importRun('{"version":5}')).toEqual({ error: NOT_A_RUN_FILE })
+    expect(NOT_A_RUN_FILE).toBe('This file is not a run file from this game.')
     expect(importRun('{"version":2}')).toEqual({
       error: 'This run file is from an earlier version and cannot be replayed.',
     })

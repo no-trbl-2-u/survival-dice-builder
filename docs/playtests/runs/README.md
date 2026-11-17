@@ -1,7 +1,7 @@
 # Playtest run exports
 
 Put each session's run file here, named `YYYY-MM-DD-<who>-<seed>.json`. Save it from `/play`
-with **Download run (JSON)** on the summary, or **Save run (file)** during play.
+with **Save run file**, on the summary or during play.
 
 Each file replays exactly: it holds the seed, the config, and every action. It also holds the
 real timing (minutes per phase, decision type and round), which

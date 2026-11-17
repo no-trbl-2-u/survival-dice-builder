@@ -17,6 +17,13 @@ const panel = (config: GameConfig = defaultContent.config) =>
   )
 
 describe('StartPanel', () => {
+  it('says where a run file comes from, with the one button name /play uses (critique pass 51)', () => {
+    const view = panel()
+    const label = view.getByLabelText(/Load a run file/).closest('label')?.textContent ?? ''
+    expect(label).toContain('Use Save run file during a run, or on its summary, to make one.')
+    view.unmount()
+  })
+
   it('calls Exchanges the older Combat, not the written rules (Spec v2 6.10)', () => {
     panel()
     const hint = () => document.getElementById('combat-hint')?.textContent ?? ''

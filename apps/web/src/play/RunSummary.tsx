@@ -59,7 +59,7 @@ export function RunSummary({ run, baseCurve, onNewRun }: Props) {
       </ol>
       <div className={styles.row}>
         <button type="button" className={styles.primary} onClick={download}>
-          Download run (JSON)
+          Save run file
         </button>
         <button type="button" onClick={onNewRun}>
           New run
