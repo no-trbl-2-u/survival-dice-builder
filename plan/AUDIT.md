@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-17 (pass 374, cloud tick)
+
+Pass 373 pinned one-pagers (c0d18bd). No issues wait for triage, the critique gate is closed (pass 51 ran 8 commits and about 16 hours ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 9 commits and about 17 hours ago. Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass takes the next untested script pass 365 listed: `new-skill.mjs`, which writes `skills/<name>.md` and `.claude/commands/<name>.md` (impact 3, ease 8: 2.4; below 3.0, but expand's window is still shut). The script writes next to its own folder, not the current directory, so `scripts/__tests__/new-skill.test.mjs` copies it into a temp repo and runs the copy: the two files with the verb, the purpose and the seven sections; an unquoted purpose joined from the words after the name; `--template` sending both to `templates/` wherever the flag sits; usage on a missing name or purpose; lower-kebab-case names only; and the refusal to overwrite either file, writing neither. Next in line: og-card, touch-icon and pulse, unless a window opens first.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] tests: new-skill, the skill scaffolder, has no test
+- category: tests
+- impact: 3
+- ease: 8
+- next: node:test file running a copy of the script in temp repos
+- issue: #431
+- fixed: (this commit)
+
 # Site audit — 2026-11-17 (pass 373, cloud tick)
 
 Pass 372 named the elite spawn node on the /credits Ogre line (730db51). No issues wait for triage, the critique gate is closed (pass 51 ran 7 commits and about 15 hours ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 8 commits and about 16 hours ago. Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass returns to the untested scripts pass 365 listed: `one-pagers.mjs`, which checks the 15 one-page design sheets for banned words, page count, a labelled vector diagram per sheet, page furniture and external resources (impact 3, ease 7: 2.1; below 3.0, but expand's window is still shut). `scripts/__tests__/one-pagers.test.mjs` builds temp repos of sheets and runs the script on each: `check` on 15 clean sheets (no build, no merged PDF), a missing page with non-matching file names ignored, a banned word in visible text but not in comments, styles or SVG, the padded "app " and "bot " against "apple" and "bottle", unlabelled, small and commented-out diagrams and one only in the defs block; `lint` on a clean landscape sheet (word count, not rendered yet), missing furniture, and banned words with an external stylesheet and no diagram; `text` writing every page; an unknown command (exit 2); and `merge` stopping before pypdf when a page is unrendered. No test reaches Chromium, pypdf or poppler. Next in line: the remaining untested scripts (og-card, touch-icon, new-skill, pulse), unless a window opens first.
