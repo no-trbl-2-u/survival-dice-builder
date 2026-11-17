@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /credits — the elite spawn node uses the Elite ogre icon, but its credit line names only Elite
-- pass: 51 (commit 799d694)
-- viewport: desktop
-- category: comprehension
-- observation: The /tiles legend and the /play map draw the elite spawn node with the same ogre icon as an elite enemy. /credits has lines for Base, Gathering node and Spawn node, but the elite spawn node is not named; the ogre line says only "Elite".
-- evidence: `apps/web/src/icons/gameIcons.ts:46` `'elite-spawn-node': 'elite'`; /credits "Elite: Ogre icon by Delapouite, game-icons.net"; `ASSETS.md:36`.
-- suggested fix: Name both uses in the credit line ("Elite and Elite spawn node: Ogre icon..."). A distinct node icon is an art-direction call for /oversight.
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /credits — the elite spawn node uses the Elite ogre icon, but its credit line names only Elite
+- pass: 51 (commit 799d694)
+- viewport: desktop
+- category: comprehension
+- observation: The /tiles legend and the /play map draw the elite spawn node with the same ogre icon as an elite enemy. /credits has lines for Base, Gathering node and Spawn node, but the elite spawn node is not named; the ogre line says only "Elite".
+- evidence: `apps/web/src/icons/gameIcons.ts:46` `'elite-spawn-node': 'elite'`; /credits "Elite: Ogre icon by Delapouite, game-icons.net"; `ASSETS.md:36`.
+- suggested fix: Name both uses in the credit line ("Elite and Elite spawn node: Ogre icon..."). A distinct node icon is an art-direction call for /oversight.
+- source: web-fetch
+
+- issue: #429
+- fixed: (this commit)
 
 ### [x] [LOW] /play — the start panel's Combat hint opens "Engagements:" for one choice but not "Exchanges" for the other
 - pass: 51 (commit 799d694)

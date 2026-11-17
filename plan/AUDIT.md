@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-17 (pass 372, cloud tick)
+
+Pass 371 named Exchanges in the /play Combat hint (10642a5). No issues wait for triage, the critique gate is closed (pass 51 ran 6 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 7 commits ago. The elite spawn node credit is the last pass 51 row that does not wait for /oversight (impact 3, ease 9: 2.7). The ASSETS.md row for `elite.svg` is now named "Elite and Elite spawn node", so /credits reads "Elite and Elite spawn node: Ogre icon by Delapouite", matching the /tiles legend and /play map that draw the node with that icon. A distinct node icon stays an art-direction call for /oversight. CreditsPage.test.tsx pins the new line. The remaining Pending critique rows all edit `[needs-user-call]` items and wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] external-critique: /credits elite spawn node shares the Elite ogre icon but is not named (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "Elite and Elite spawn node" as the ASSETS.md asset name
+- issue: #429
+- fixed: (this commit)
+
 # Site audit — 2026-11-17 (pass 371, cloud tick)
 
 Pass 370 named the Enemies targets on / (bfba728). No issues wait for triage, the critique gate is closed (pass 51 ran 5 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 6 commits ago. The 2 LOW pass 51 rows that do not wait for /oversight score alike (impact 3, ease 9: 2.7); the /play Exchanges row is first in the queue. The /play start panel's Exchanges hint now opens with its name like the Engagements one: "Exchanges: the older Combat, kept for playtests." The /config help says "the older Combat", not "the earlier Combat", so /, /play and /config use one wording. StartPanel.test.tsx and configMetaText.test.ts pin the new sentences. Next in line: the elite spawn node credit.
