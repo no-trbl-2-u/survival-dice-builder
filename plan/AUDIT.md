@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-17 (pass 373, cloud tick)
+
+Pass 372 named the elite spawn node on the /credits Ogre line (730db51). No issues wait for triage, the critique gate is closed (pass 51 ran 7 commits and about 15 hours ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 8 commits and about 16 hours ago. Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass returns to the untested scripts pass 365 listed: `one-pagers.mjs`, which checks the 15 one-page design sheets for banned words, page count, a labelled vector diagram per sheet, page furniture and external resources (impact 3, ease 7: 2.1; below 3.0, but expand's window is still shut). `scripts/__tests__/one-pagers.test.mjs` builds temp repos of sheets and runs the script on each: `check` on 15 clean sheets (no build, no merged PDF), a missing page with non-matching file names ignored, a banned word in visible text but not in comments, styles or SVG, the padded "app " and "bot " against "apple" and "bottle", unlabelled, small and commented-out diagrams and one only in the defs block; `lint` on a clean landscape sheet (word count, not rendered yet), missing furniture, and banned words with an external stylesheet and no diagram; `text` writing every page; an unknown command (exit 2); and `merge` stopping before pypdf when a page is unrendered. No test reaches Chromium, pypdf or poppler. Next in line: the remaining untested scripts (og-card, touch-icon, new-skill, pulse), unless a window opens first.
+
+## Top 5 findings (scored)
+
+### [x] [2.1] tests: one-pagers, the design sheet checker, has no test
+- category: tests
+- impact: 3
+- ease: 7
+- next: node:test file running check, lint, text and merge in temp repos
+- issue: #430
+- fixed: (this commit)
+
 # Site audit — 2026-11-17 (pass 372, cloud tick)
 
 Pass 371 named Exchanges in the /play Combat hint (10642a5). No issues wait for triage, the critique gate is closed (pass 51 ran 6 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 7 commits ago. The elite spawn node credit is the last pass 51 row that does not wait for /oversight (impact 3, ease 9: 2.7). The ASSETS.md row for `elite.svg` is now named "Elite and Elite spawn node", so /credits reads "Elite and Elite spawn node: Ogre icon by Delapouite", matching the /tiles legend and /play map that draw the node with that icon. A distinct node icon stays an art-direction call for /oversight. CreditsPage.test.tsx pins the new line. The remaining Pending critique rows all edit `[needs-user-call]` items and wait for /oversight.
