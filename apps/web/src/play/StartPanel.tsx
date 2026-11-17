@@ -26,7 +26,7 @@ const COMBAT_LABEL = defaultConfigMeta['combat.model']?.options ?? {}
 /** The lead of each Combat choice's line. */
 const COMBAT_LEAD: Record<CombatModel, string> = {
   engage: 'Engagements:',
-  exchange: 'The older Combat, kept for playtests.',
+  exchange: 'Exchanges: the older Combat, kept for playtests.',
 }
 
 /**

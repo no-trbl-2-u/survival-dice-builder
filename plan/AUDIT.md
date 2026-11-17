@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-17 (pass 371, cloud tick)
+
+Pass 370 named the Enemies targets on / (bfba728). No issues wait for triage, the critique gate is closed (pass 51 ran 5 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 6 commits ago. The 2 LOW pass 51 rows that do not wait for /oversight score alike (impact 3, ease 9: 2.7); the /play Exchanges row is first in the queue. The /play start panel's Exchanges hint now opens with its name like the Engagements one: "Exchanges: the older Combat, kept for playtests." The /config help says "the older Combat", not "the earlier Combat", so /, /play and /config use one wording. StartPanel.test.tsx and configMetaText.test.ts pin the new sentences. Next in line: the elite spawn node credit.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] external-critique: /play Exchanges hint has no name lead (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "Exchanges: the older Combat..." in StartPanel, "older" in config.meta.json
+- issue: #428
+- fixed: (this commit)
+
+### [ ] [2.7] external-critique: /credits elite spawn node shares the Elite ogre icon but is not named (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "Elite and Elite spawn node: Ogre icon..." in the credits line
+
 # Site audit — 2026-11-17 (pass 370, cloud tick)
 
 Pass 369 put the / Skills line in the second person (be084fc). No issues wait for triage, the critique gate is closed (pass 51 ran 4 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 5 commits ago. The 3 LOW pass 51 rows that do not wait for /oversight score alike (impact 3, ease 9: 2.7); the Enemies row is first in the queue. `targetText` now names the targets instead of "the nearest structure", a word no page defines: "Enemies head for the nearest Barricade, Tower or base hex and turn to a player only when the player is at least 2 hexes nearer." (no comma before "and", as the home page serial comma test asks), and with a pull distance of 0 "the nearest Barricade, Tower, base hex or player". The playtest protocol is regenerated with `pnpm sim kit`; ruleText.test.ts and HomePage.test.tsx pin the new sentences. Next in line: the /play Exchanges lead and the elite spawn node credit.

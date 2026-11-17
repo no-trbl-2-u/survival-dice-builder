@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the start panel's Combat hint opens "Engagements:" for one choice but not "Exchanges" for the other
-- pass: 51 (commit 799d694)
-- viewport: desktop
-- category: voice
-- observation: The exchange hint reads "The older Combat, kept for playtests." with no name, while the select shows "Exchanges (older rule)". /config says "the earlier Combat" and / says "the older Combat", so one option has three wordings.
-- evidence: Checked in source (/play is a JS shell): `apps/web/src/play/StartPanel.tsx:27-30` `COMBAT_LEAD`; `packages/content/data/config.meta.json:109` "Exchanges (older rule): the earlier Combat, kept for playtests."
-- suggested fix: Make the exchange lead "Exchanges (older rule): the older Combat, kept for playtests." and use "older", not "earlier", in `config.meta.json:109`.
-- source: web-fetch
-
 ### [LOW] /credits — the elite spawn node uses the Elite ogre icon, but its credit line names only Elite
 - pass: 51 (commit 799d694)
 - viewport: desktop
@@ -82,6 +73,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the start panel's Combat hint opens "Engagements:" for one choice but not "Exchanges" for the other
+- pass: 51 (commit 799d694)
+- viewport: desktop
+- category: voice
+- observation: The exchange hint reads "The older Combat, kept for playtests." with no name, while the select shows "Exchanges (older rule)". /config says "the earlier Combat" and / says "the older Combat", so one option has three wordings.
+- evidence: Checked in source (/play is a JS shell): `apps/web/src/play/StartPanel.tsx:27-30` `COMBAT_LEAD`; `packages/content/data/config.meta.json:109` "Exchanges (older rule): the earlier Combat, kept for playtests."
+- suggested fix: Make the exchange lead "Exchanges (older rule): the older Combat, kept for playtests." and use "older", not "earlier", in `config.meta.json:109`.
+- source: web-fetch
+
+- issue: #428
+- fixed: (this commit)
 
 ### [x] [LOW] / — the Enemies line says enemies head for "the nearest structure", a word no page defines
 - pass: 51 (commit 799d694)
