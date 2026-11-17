@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-17 (pass 375, cloud tick)
+
+Pass 374 pinned new-skill (e457b29). No issues wait for triage, the critique gate is closed (pass 51 ran 9 commits and about 18 hours ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 10 commits and about 19 hours ago. Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass takes the next untested script pass 374 listed: `og-card.mjs`, which renders the committed link-preview image `apps/web/public/og-card.png` (impact 3, ease 7: 2.1; below 3.0, but expand's window is still shut). The script loads `@playwright/test` through `createRequire` from the current directory's `apps/web`, so `scripts/__tests__/og-card.test.mjs` builds temp repos with fixture tokens, stand-in font bytes and a stub `@playwright/test` whose browser logs each call and writes the page it was given: a 1200x630 page, a PNG at `apps/web/public/og-card.png` and the browser closed; the title, tagline and five light tokens (no dark one); a six-point pointy-top hex and three pips; both fonts embedded as base64 woff2 and no external resource; `PW_CHROMIUM` as the executable path; a missing light token or font file stopping before the browser starts; and the browser closing when the screenshot fails. No test starts Chromium. Next in line: touch-icon and pulse, unless a window opens first.
+
+## Top 5 findings (scored)
+
+### [x] [2.1] tests: og-card, the link-preview renderer, has no test
+- category: tests
+- impact: 3
+- ease: 7
+- next: node:test file running the script in temp repos with a stub @playwright/test
+- issue: #432
+- fixed: (this commit)
+
 # Site audit — 2026-11-17 (pass 374, cloud tick)
 
 Pass 373 pinned one-pagers (c0d18bd). No issues wait for triage, the critique gate is closed (pass 51 ran 8 commits and about 16 hours ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 9 commits and about 17 hours ago. Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass takes the next untested script pass 365 listed: `new-skill.mjs`, which writes `skills/<name>.md` and `.claude/commands/<name>.md` (impact 3, ease 8: 2.4; below 3.0, but expand's window is still shut). The script writes next to its own folder, not the current directory, so `scripts/__tests__/new-skill.test.mjs` copies it into a temp repo and runs the copy: the two files with the verb, the purpose and the seven sections; an unquoted purpose joined from the words after the name; `--template` sending both to `templates/` wherever the flag sits; usage on a missing name or purpose; lower-kebab-case names only; and the refusal to overwrite either file, writing neither. Next in line: og-card, touch-icon and pulse, unless a window opens first.
