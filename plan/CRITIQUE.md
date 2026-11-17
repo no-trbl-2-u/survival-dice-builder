@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-16 at commit 1eaf2d7
-> Pass count: 50
+> Last pass: 2026-11-17 at commit 799d694
+> Pass count: 51
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /play — the run file has three names, and the start panel never says how to make one
+- pass: 51 (commit 799d694)
+- viewport: desktop
+- category: navigation
+- observation: The start panel offers "Load a run file" but does not say what a run file is or where one comes from. The button that makes one is "Save run (file)" during a run and "Download run (JSON)" on the run summary. A wrong file gives "This is not a version 3 or 4 run file." or a raw parse message.
+- evidence: Checked in source (/play is a JS shell): `apps/web/src/play/StartPanel.tsx:186` "Load a run file"; `PlayPage.tsx:327` "Save run (file)"; `RunSummary.tsx:62` "Download run (JSON)"; `exportRun.ts:71`, `:81` (`e.message` in the error).
+- suggested fix: Use one name ("Save run file" / "Load a run file"), add a hint "Use Save run file during a run to make one.", and replace the version and parse errors with "This file is not a run file from this game."
+- source: web-fetch
+
+### [LOW] / — the Prepare step starts in lower case after its label; Combat and every other label use a capital
+- pass: 51 (commit 799d694)
+- viewport: desktop
+- category: voice
+- observation: "Prepare: play the top halves..." vs "Combat: Play a card's Engage option...". Materials, The map, Shop and Skills all start with a capital after the label.
+- evidence: `apps/web/src/home/HomePage.tsx:50` "<strong>Prepare:</strong> play the top halves of your cards"; Combat from `combatText` (`packages/content/src/ruleText.ts`).
+- suggested fix: "Prepare: Play the top halves of your cards to move, gather materials and build Barricades and Towers."
+- source: web-fetch
+
+### [LOW] / — the Skills line switches from "each player" to "you" between two sentences
+- pass: 51 (commit 799d694)
+- viewport: desktop
+- category: voice
+- observation: The How you grow > Skills item says "each player" and "their own pool", then "you" and "your pool" for the same people and pool. The rest of the page uses the second person.
+- evidence: "...each player looks at 2 new Skills plus their own pool and keeps 1 for free. The Skills you do not keep go to your pool." (`packages/content/src/ruleText.ts` `trainingText` + `draftPoolText`)
+- suggested fix: "...you look at 2 new Skills plus your pool and keep 1 for free. The Skills you do not keep go to your pool." (keep the /config helps, which describe each player, as they are).
+- source: web-fetch
+
+### [LOW] / — the Enemies line says enemies head for "the nearest structure", a word no page defines
+- pass: 51 (commit 799d694)
+- viewport: desktop
+- category: comprehension
+- observation: "Structure" appears nowhere else on the home page, so a reader cannot tell if the base counts. In the engine it does: the targets are Tower, Barricade and base.
+- evidence: "Enemies head for the nearest structure, and turn to a player only when the player is at least 2 hexes nearer." (`packages/content/src/ruleText.ts:436` `targetText`; `TARGET_NAME` lists tower, barricade, base)
+- suggested fix: "Enemies head for the nearest Barricade, Tower or base hex, and turn to a player only when..."
+- source: web-fetch
+
+### [LOW] /play — the start panel's Combat hint opens "Engagements:" for one choice but not "Exchanges" for the other
+- pass: 51 (commit 799d694)
+- viewport: desktop
+- category: voice
+- observation: The exchange hint reads "The older Combat, kept for playtests." with no name, while the select shows "Exchanges (older rule)". /config says "the earlier Combat" and / says "the older Combat", so one option has three wordings.
+- evidence: Checked in source (/play is a JS shell): `apps/web/src/play/StartPanel.tsx:27-30` `COMBAT_LEAD`; `packages/content/data/config.meta.json:109` "Exchanges (older rule): the earlier Combat, kept for playtests."
+- suggested fix: Make the exchange lead "Exchanges (older rule): the older Combat, kept for playtests." and use "older", not "earlier", in `config.meta.json:109`.
+- source: web-fetch
+
+### [LOW] /credits — the elite spawn node uses the Elite ogre icon, but its credit line names only Elite
+- pass: 51 (commit 799d694)
+- viewport: desktop
+- category: comprehension
+- observation: The /tiles legend and the /play map draw the elite spawn node with the same ogre icon as an elite enemy. /credits has lines for Base, Gathering node and Spawn node, but the elite spawn node is not named; the ogre line says only "Elite".
+- evidence: `apps/web/src/icons/gameIcons.ts:46` `'elite-spawn-node': 'elite'`; /credits "Elite: Ogre icon by Delapouite, game-icons.net"; `ASSETS.md:36`.
+- suggested fix: Name both uses in the credit line ("Elite and Elite spawn node: Ogre icon..."). A distinct node icon is an art-direction call for /oversight.
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
