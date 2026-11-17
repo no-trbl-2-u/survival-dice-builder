@@ -179,9 +179,9 @@ export function trainingText(config: GameConfig, content: Upgrades): string {
   const when = n === 1 ? 'every round' : `in rounds ${n}, ${2 * n}, ${3 * n} and so on`
   const shown =
     config.draft.unpicked === 'pool'
-      ? `${plural(config.draft.reveal, 'new Skill', 'new Skills')} plus their own pool`
+      ? `${plural(config.draft.reveal, 'new Skill', 'new Skills')} plus your pool`
       : plural(config.draft.reveal, 'Skill', 'Skills')
-  return `${open}: ${when}, each player looks at ${shown} and keeps 1 for free. ${draftPoolText(config)}`
+  return `${open}: ${when}, you look at ${shown} and keep 1 for free. ${draftPoolText(config)}`
 }
 
 /**

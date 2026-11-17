@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Skills line switches from "each player" to "you" between two sentences
-- pass: 51 (commit 799d694)
-- viewport: desktop
-- category: voice
-- observation: The How you grow > Skills item says "each player" and "their own pool", then "you" and "your pool" for the same people and pool. The rest of the page uses the second person.
-- evidence: "...each player looks at 2 new Skills plus their own pool and keeps 1 for free. The Skills you do not keep go to your pool." (`packages/content/src/ruleText.ts` `trainingText` + `draftPoolText`)
-- suggested fix: "...you look at 2 new Skills plus your pool and keep 1 for free. The Skills you do not keep go to your pool." (keep the /config helps, which describe each player, as they are).
-- source: web-fetch
-
 ### [LOW] / — the Enemies line says enemies head for "the nearest structure", a word no page defines
 - pass: 51 (commit 799d694)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Skills line switches from "each player" to "you" between two sentences
+- pass: 51 (commit 799d694)
+- viewport: desktop
+- category: voice
+- observation: The How you grow > Skills item says "each player" and "their own pool", then "you" and "your pool" for the same people and pool. The rest of the page uses the second person.
+- evidence: "...each player looks at 2 new Skills plus their own pool and keeps 1 for free. The Skills you do not keep go to your pool." (`packages/content/src/ruleText.ts` `trainingText` + `draftPoolText`)
+- suggested fix: "...you look at 2 new Skills plus your pool and keep 1 for free. The Skills you do not keep go to your pool." (keep the /config helps, which describe each player, as they are).
+- source: web-fetch
+- issue: #426
+- fixed: (this commit)
 
 ### [x] [LOW] / — the Prepare step starts in lower case after its label; Combat and every other label use a capital
 - pass: 51 (commit 799d694)

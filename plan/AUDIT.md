@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-17 (pass 369, cloud tick)
+
+Pass 368 capitalised the / Prepare step (d33e247). No issues wait for triage, the critique gate is closed (pass 51 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 4 commits ago. The 4 LOW pass 51 rows that do not wait for /oversight score alike (impact 3, ease 9-10: 2.7-3.0); the Skills line is first in the queue and cheapest. `trainingText` now speaks to the reader like `draftPoolText` after it: "you look at 2 new Skills plus your pool and keep 1 for free. The Skills you do not keep go to your pool." The /config help in config.meta.json, which describes each player, stays as it is; ruleText.test.ts pins the new sentences. Next in line: the Enemies "structure" word, the /play Exchanges lead and the elite spawn node credit.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] external-critique: / Skills line switches from "each player" to "you" (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: second person in trainingText
+- issue: #426
+- fixed: (this commit)
+
+### [ ] [2.7] external-critique: / Enemies line says "the nearest structure" (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: name Barricade, Tower or base hex in targetText
+
+### [ ] [2.7] external-critique: /play Exchanges hint has no name lead (pass 51 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: "Exchanges (older rule): the older Combat..." in StartPanel and config.meta.json
+
 # Site audit — 2026-11-17 (pass 368, cloud tick)
 
 Pass 367 gave the run file one name (11dbc55). No issues wait for triage, the critique gate is closed (pass 51 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 3 commits ago. The 5 LOW pass 51 rows score alike (impact 3, ease 10: 3.0); the Prepare row is first in the queue and cheapest. The Prepare step on / now opens "Play the top halves of your cards", capitalised after its label like Combat, Materials, The map, Shop and Skills; HomePage.test.tsx pins the new sentence. Next in line: the Skills line person switch, the Enemies "structure" word, the /play Exchanges lead and the elite spawn node credit.
