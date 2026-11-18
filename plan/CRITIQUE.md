@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-17 at commit 799d694
-> Pass count: 51
+> Last pass: 2026-11-18 at commit 83b417f
+> Pass count: 52
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — no page before a run says which faces an action die has; Star and Blank are never introduced
+- pass: 52 (commit 83b417f)
+- viewport: desktop
+- category: comprehension
+- observation: The home page names Sword, Bow, Wand and Shield only inside the Skill list and never mentions Star or Blank. Star first appears inside the engagement dialog on /play; Blank only on /credits. The enemy die faces are listed on the home page, so the player's own die is the one left unexplained.
+- evidence: Home "What you have": "4 Skills your dice can fire: Strike (Sword: ...), Shot (Bow: ...), Mend (Wand: ...) and Guard (Shield: ...)" (`packages/content/src/ruleText.ts:865`); "A Star fits any Skill slot." only in `apps/web/src/play/engageView.ts:47`; engine faces Sword, Wand, Bow, Shield, Star, Blank (`packages/engine/src/dice/dice.ts:6`).
+- suggested fix: Add one sentence to "What you have", built from content: "An action die has 6 faces: Sword, Bow, Wand, Shield, Star (fits any Skill slot) and Blank (no effect)."
+- source: web-fetch
+
+### [MED] / and /play — "roll your dice" never says you may keep dice and roll the rest again
+- pass: 52 (commit 83b417f)
+- viewport: desktop
+- category: comprehension
+- observation: The main dice mechanic (keep some dice, roll the rest, up to the roll limit) is stated only in the /config "Rolls per engagement" help and inside a running engagement on /play. The home Combat item and the /play start panel Combat hint stop at "roll your dice".
+- evidence: `packages/content/src/ruleText.ts:266` "roll your dice from where you stand ... Put your dice on your Skills one at a time." (also used by `apps/web/src/play/StartPanel.tsx:37`); `rollsText` (`ruleText.ts:474`) appears only on /config; /play mid-engagement: "Keep the dice you like. Roll the rest again, or stop and use them." (`engageView.ts:43`).
+- suggested fix: Add `rollsText(config)` after the "roll your dice" sentence in the home Combat item and the start panel Combat hint.
+- source: web-fetch
+
+### [MED] / — "one fight with the enemies next to you" hides that Engage works with no enemy near and Shot reaches 2 hexes
+- pass: 52 (commit 83b417f)
+- viewport: desktop
+- category: comprehension
+- observation: The definition reads as if an enemy must be next to you to engage. The engine lets a player engage anywhere, only adjacent enemies roll dice back, and Shot hits at 2 hexes, so shooting from range without taking enemy dice is a real choice the page never shows. Refines the pass where "engagement" got its definition.
+- evidence: Home: "to start an engagement, one fight with the enemies next to you" (`ruleText.ts:266`); "Engage anywhere, even with no enemy near" (`packages/engine/src/api/legalActions.ts:179`); only adjacent enemies roll (`packages/engine/src/combat/engage.ts:113`).
+- suggested fix: Reword to "to start an engagement: roll your dice, and each enemy next to you rolls its enemy dice. A Skill can hit any enemy in its range."
+- source: web-fetch
+
+### [LOW] /config — two help texts still say "structure", the word the home page dropped because no page defines it
+- pass: 52 (commit 83b417f)
+- viewport: desktop
+- category: voice
+- observation: The pass 51 fix replaced "the nearest structure" on the home page, but the Combat model help and the Player pull distance help on /config still use it.
+- evidence: `packages/content/data/config.meta.json:109` "enemies hit structures in the siege step"; `config.meta.json:565` "turns from the nearest structure to the player".
+- suggested fix: Write "enemies hit Barricades, Towers and the base in the siege step" and "turns from the nearest Barricade, Tower or base hex to the player".
+- source: web-fetch
+
+### [LOW] /play — the Prepare banner says "buy at the base"; the Base panel below says "the Base tile"
+- pass: 52 (commit 83b417f)
+- viewport: desktop
+- category: voice
+- observation: Same base vs Base tile wording already fixed in the /config Shop timing help, still in the /play next-step banner.
+- evidence: `apps/web/src/play/nextStep.ts:86` "', or buy at the base'"; `apps/web/src/play/BasePanel.tsx` "Buy a card while your figure is on the Base tile".
+- suggested fix: Change the banner suffix to ", or buy on the Base tile".
+- source: web-fetch
+
+### [LOW] /play — the Base panel labels the track "Training", and says nothing about what Training I opens
+- pass: 52 (commit 83b417f)
+- viewport: desktop
+- category: comprehension
+- observation: The home page and /config call it "the Training Ground". The Base panel explains the closed Shop ("The Shop opens when you buy the Shop I upgrade...") but gives no matching line for Training I or when its Skill draft happens.
+- evidence: `apps/web/src/play/BasePanel.tsx:60` `track === 'shop' ? 'Shop' : 'Training'`; Shop-only explanation at `BasePanel.tsx:113`; home: "buy Training I ... to open the Training Ground: in rounds 2, 4, 6 and so on ..." (`ruleText.ts:176-184`).
+- suggested fix: Label the track "Training Ground" and, until Training I is bought, show "Training I opens the Training Ground: a Skill draft every other round." built from config.
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
