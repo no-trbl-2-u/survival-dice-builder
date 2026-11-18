@@ -106,7 +106,7 @@
   },
   "combat.model": {
     "label": "Combat model",
-    "help": "How a Combat plays. Engagements (default): play a card's Engage option to roll from where you stand. Exchanges (older rule): the older Combat, kept for playtests. In both, enemies hit structures in the siege step at the end of Combat.",
+    "help": "How a Combat plays. Engagements (default): play a card's Engage option to roll from where you stand. Exchanges (older rule): the older Combat, kept for playtests. In both, enemies hit Barricades, Towers and the base in the siege step at the end of Combat.",
     "rule": "7.8, Combat v3",
     "options": {
       "engage": "Engagements (default)",
@@ -562,7 +562,7 @@
   },
   "rulings.playerPullDistance": {
     "label": "Player pull distance",
-    "help": "How many hexes nearer a player must be before an enemy turns from the nearest structure to the player. 0 ranks players by distance alone.",
+    "help": "How many hexes nearer a player must be before an enemy turns from the nearest Barricade, Tower or base hex to the player. 0 ranks players by distance alone.",
     "rule": "9.3, core loop v2 (open question 56)",
     "range": [0, 6]
   },

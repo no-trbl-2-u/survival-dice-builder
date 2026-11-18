@@ -114,9 +114,19 @@ describe('config.meta.json marks the Spec v2 rule as the written one', () => {
   it('7.10: the siege step ends Combat under both models, not Engagements only', () => {
     const help = defaultConfigMeta['combat.model']?.help ?? ''
     expect(help).toMatch(
-      /Exchanges \(older rule\): the older Combat, kept for playtests\. In both, enemies hit structures in the siege step at the end of Combat\.$/,
+      /Exchanges \(older rule\): the older Combat, kept for playtests\. In both, enemies hit Barricades, Towers and the base in the siege step at the end of Combat\.$/,
     )
     expect(help).not.toMatch(/stand; enemies hit structures/)
+  })
+
+  it('9.3: help names Barricades, Towers and the base, never the undefined word "structure"', () => {
+    const found = Object.entries(defaultConfigMeta)
+      .filter(([, e]) => /\bstructures?\b/i.test(`${e?.label ?? ''} ${e?.help ?? ''}`))
+      .map(([path]) => path)
+    expect(found).toEqual([])
+    expect(defaultConfigMeta['rulings.playerPullDistance']?.help ?? '').toContain(
+      'turns from the nearest Barricade, Tower or base hex to the player',
+    )
   })
 
   it('every option label writes the older-rule tag one way', () => {

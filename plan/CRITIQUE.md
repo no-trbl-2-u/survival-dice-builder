@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — two help texts still say "structure", the word the home page dropped because no page defines it
-- pass: 52 (commit 83b417f)
-- viewport: desktop
-- category: voice
-- observation: The pass 51 fix replaced "the nearest structure" on the home page, but the Combat model help and the Player pull distance help on /config still use it.
-- evidence: `packages/content/data/config.meta.json:109` "enemies hit structures in the siege step"; `config.meta.json:565` "turns from the nearest structure to the player".
-- suggested fix: Write "enemies hit Barricades, Towers and the base in the siege step" and "turns from the nearest Barricade, Tower or base hex to the player".
-- source: web-fetch
-
 ### [LOW] /play — the Prepare banner says "buy at the base"; the Base panel below says "the Base tile"
 - pass: 52 (commit 83b417f)
 - viewport: desktop
@@ -91,6 +82,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — two help texts still say "structure", the word the home page dropped because no page defines it
+- pass: 52 (commit 83b417f)
+- viewport: desktop
+- category: voice
+- observation: The pass 51 fix replaced "the nearest structure" on the home page, but the Combat model help and the Player pull distance help on /config still use it.
+- evidence: `packages/content/data/config.meta.json:109` "enemies hit structures in the siege step"; `config.meta.json:565` "turns from the nearest structure to the player".
+- suggested fix: Write "enemies hit Barricades, Towers and the base in the siege step" and "turns from the nearest Barricade, Tower or base hex to the player".
+- source: web-fetch
+
+- issue: #437
+- fixed: (this commit)
 
 ### [x] [MED] / — "one fight with the enemies next to you" hides that Engage works with no enemy near and Shot reaches 2 hexes
 - pass: 52 (commit 83b417f)
