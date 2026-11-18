@@ -5,6 +5,19 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-18 (pass 384, cloud tick)
+
+Pass 383 handed to expand, and expand pass 35 shipped (eecc0e1). No issues wait for triage, the critique gate is closed (pass 52 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand's window shut again at pass 35. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. So this pass takes the last untested script pass 383 listed: `pulse.mjs`, the offline instrument panel /oversight reads (impact 2, ease 8: 1.6; below 3.0, but expand's window is shut). Its parsers are pinned in pulse-lib.test.mjs; `scripts/__tests__/pulse.test.mjs` pins the wiring by copying both scripts into temp git repos with dated commits: every row from the plan files and git with exit 0 (pending and blocked build plan rows, open rows of the latest audit pass only, needs-user-call rows, critique pending count, a Last pass header aged by its commit's time, pending candidates without the promoted ones and the oldest proposed date); a header naming an unknown commit falling back to its date and "never" printing no age; the weighted cloud budget (a phase commit 3, a churn commit 1, a commit with no Cloud-Run trailer 0), the "ticks skip until" time when the ceiling is met and the default ceiling of 12 with no workflow; and outside git with no plan files, every row "unreadable" and still exit 0. Every script under `scripts/` now has a test.
+
+## Top 5 findings (scored)
+
+### [x] [1.6] tests: scripts/pulse.mjs has no test
+- category: tests
+- impact: 2
+- ease: 8
+- next: node:test file in scripts/__tests__
+- fixed: (this commit)
+
 # Site audit — 2026-11-18 (pass 383, cloud tick)
 
 Pass 382 shipped the /play Base panel "Training Ground" row (33b9641). No issues wait for triage, the critique gate is closed (pass 52 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 19 commits and under 48 hours ago. Every pass 51 and 52 row has shipped. The six Pending critique rows left are all on /decisions and edit `[needs-user-call]` items, which only /oversight may change. A fresh probe finds no other finding at or above 3.0: every web module but the page shells (covered by e2e) has a colocated test, and only `scripts/pulse.mjs` has no test (impact 2, ease 8: 1.6). No actionable iterate work, so the tick handed to /expand (iterate failure mode 6, bold posture): expand pass 35 filed 1 candidate and re-evidenced 2.
