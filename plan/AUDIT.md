@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-18 (pass 385, cloud tick)
+
+Pass 384 pinned pulse (566a369). No issues wait for triage, the critique gate is closed (pass 52 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 2 commits ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A fresh probe finds one untested module the script sweep missed: `tools/sim/src/cli.ts`, the `pnpm sim` entry (impact 3, ease 7: 2.1; below 3.0, but expand's window is shut). Its report builders are pinned in their own tests; `tools/sim/src/cli.test.ts` runs the real CLI in a child process with 1-2 run batches and `INIT_CWD` set to a temp folder: the batch summary and target band line; `--out` as CSV (a row per run) and JSON, relative to where `pnpm sim` was run; a partial `--config` file; `--help`; `--seats 5` and an unknown policy stopping with their messages; compare naming each side and `--b-policy` setting side B only, `--configs` writing `--out` and needing 2 or more; sweep playing a row per value and seat count and needing a `--set` and seats of 1-4; timing with no files printing the usage and exiting 1; playtests on an empty folder; odds on the default proposal writing `--json`; decisions and rules printing their markdown and `--out` writing it. `kit` stays untested here: it rewrites the committed playtest kit.
+
+## Top 5 findings (scored)
+
+### [x] [2.1] tests: tools/sim/src/cli.ts, the pnpm sim entry, has no test
+- category: tests
+- impact: 3
+- ease: 7
+- next: vitest file running the CLI in a child process
+- issue: #440
+- fixed: (this commit)
+
 # Site audit — 2026-11-18 (pass 384, cloud tick)
 
 Pass 383 handed to expand, and expand pass 35 shipped (eecc0e1). No issues wait for triage, the critique gate is closed (pass 52 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand's window shut again at pass 35. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. So this pass takes the last untested script pass 383 listed: `pulse.mjs`, the offline instrument panel /oversight reads (impact 2, ease 8: 1.6; below 3.0, but expand's window is shut). Its parsers are pinned in pulse-lib.test.mjs; `scripts/__tests__/pulse.test.mjs` pins the wiring by copying both scripts into temp git repos with dated commits: every row from the plan files and git with exit 0 (pending and blocked build plan rows, open rows of the latest audit pass only, needs-user-call rows, critique pending count, a Last pass header aged by its commit's time, pending candidates without the promoted ones and the oldest proposed date); a header naming an unknown commit falling back to its date and "never" printing no age; the weighted cloud budget (a phase commit 3, a churn commit 1, a commit with no Cloud-Run trailer 0), the "ticks skip until" time when the ceiling is met and the default ceiling of 12 with no workflow; and outside git with no plan files, every row "unreadable" and still exit 0. Every script under `scripts/` now has a test.
