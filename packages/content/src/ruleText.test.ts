@@ -373,6 +373,11 @@ describe('rule text from config', () => {
     expect(combatText(base, 'engage', defaultContent)).toMatch(
       /Combat ends when every hand and deck is empty/,
     )
+    expect(combatText(base, 'engage', defaultContent)).toContain(
+      `(a grunt rolls 1, an elite 2). ${rollsText(base)} Put your dice on your Skills one at a time.`,
+    )
+    expect(rollsText(base)).toMatch(/keep the dice you want and roll the others again/)
+    expect(combatText(base, 'exchange', defaultContent)).not.toContain(rollsText(base))
     expect(combatText(base, 'exchange', defaultContent)).toBe(
       'In each exchange you roll, play cards and fire Skills. Then each enemy next to you that targets you rolls its enemy dice at you.',
     )

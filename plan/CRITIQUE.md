@@ -18,15 +18,6 @@
 - suggested fix: Add one sentence to "What you have", built from content: "An action die has 6 faces: Sword, Bow, Wand, Shield, Star (fits any Skill slot) and Blank (no effect)."
 - source: web-fetch
 
-### [MED] / and /play — "roll your dice" never says you may keep dice and roll the rest again
-- pass: 52 (commit 83b417f)
-- viewport: desktop
-- category: comprehension
-- observation: The main dice mechanic (keep some dice, roll the rest, up to the roll limit) is stated only in the /config "Rolls per engagement" help and inside a running engagement on /play. The home Combat item and the /play start panel Combat hint stop at "roll your dice".
-- evidence: `packages/content/src/ruleText.ts:266` "roll your dice from where you stand ... Put your dice on your Skills one at a time." (also used by `apps/web/src/play/StartPanel.tsx:37`); `rollsText` (`ruleText.ts:474`) appears only on /config; /play mid-engagement: "Keep the dice you like. Roll the rest again, or stop and use them." (`engageView.ts:43`).
-- suggested fix: Add `rollsText(config)` after the "roll your dice" sentence in the home Combat item and the start panel Combat hint.
-- source: web-fetch
-
 ### [MED] / — "one fight with the enemies next to you" hides that Engage works with no enemy near and Shot reaches 2 hexes
 - pass: 52 (commit 83b417f)
 - viewport: desktop
@@ -118,6 +109,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / and /play — "roll your dice" never says you may keep dice and roll the rest again
+- pass: 52 (commit 83b417f)
+- viewport: desktop
+- category: comprehension
+- observation: The main dice mechanic (keep some dice, roll the rest, up to the roll limit) is stated only in the /config "Rolls per engagement" help and inside a running engagement on /play. The home Combat item and the /play start panel Combat hint stop at "roll your dice".
+- evidence: `packages/content/src/ruleText.ts:266` "roll your dice from where you stand ... Put your dice on your Skills one at a time." (also used by `apps/web/src/play/StartPanel.tsx:37`); `rollsText` (`ruleText.ts:474`) appears only on /config; /play mid-engagement: "Keep the dice you like. Roll the rest again, or stop and use them." (`engageView.ts:43`).
+- suggested fix: Add `rollsText(config)` after the "roll your dice" sentence in the home Combat item and the start panel Combat hint.
+- source: web-fetch
+
+- issue: #434
+- fixed: (this commit)
 
 ### [x] [LOW] /credits — the elite spawn node uses the Elite ogre icon, but its credit line names only Elite
 - pass: 51 (commit 799d694)

@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-18 (pass 377, cloud tick)
+
+Critique pass 52 (e0f3528) filed 6 rows: 3 MED and 3 LOW that do not wait for /oversight. No issues wait for triage, the critique gate is closed (pass 52 just ran), no build plan phase is pending (35 is blocked), and expand pass 34 ran 14 commits and under 48 hours ago. With the external-critique MED bias, the rolls row leads (impact 6, ease 8: 4.8, x1.5 = 7.2): the home Combat item and the /play start panel Combat hint stopped at "roll your dice" and never said you may keep dice and roll the rest. `combatText` (engage model) now places `rollsText(config)` after the roll sentence, so /, the /play start panel, the /config Combat model help and the playtest kit all read "In an engagement you roll all your dice, then keep the dice you want and roll the others again, up to 3 rolls in all. The enemy dice roll only once, and a card's Reroll does not count as a roll." The exchange text is unchanged. ruleText.test.ts pins the order; `docs/playtests/PROTOCOL.md` is regenerated with `pnpm sim -- kit`. Next in line: the action die faces row and the Engage range row (both MED).
+
+## Top 5 findings (scored)
+
+### [x] [7.2] external-critique: / and /play Combat text never says you may keep dice and roll the rest (pass 52 MED)
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: rollsText(config) inside combatText's engage line
+- issue: #434
+- fixed: (this commit)
+
+### [ ] [7.2] external-critique: / never names the action die faces; Star and Blank are never introduced (pass 52 MED)
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: one content-built sentence in the home "What you have" list
+
+### [ ] [6.3] external-critique: / engagement definition hides that Engage works with no enemy near and Shot reaches 2 hexes (pass 52 MED)
+- category: external-critique
+- impact: 6
+- ease: 7
+- next: reword the engagement definition in combatText
+
 # Site audit — 2026-11-18 (pass 376, cloud tick)
 
 Pass 375 pinned og-card (7965d95). No issues wait for triage, the critique gate is closed (pass 51 ran 10 commits and just under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 11 commits and about 24 hours ago. Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass takes the next untested script pass 375 listed: `touch-icon.mjs`, which renders the four committed home-screen icons in `apps/web/public` (impact 3, ease 8: 2.4; below 3.0, but expand's window is still shut). Like og-card it reads from the current directory and loads `@playwright/test` from `apps/web`, so `scripts/__tests__/touch-icon.test.mjs` builds temp repos with a fixture token, a stand-in favicon and a stub browser that logs each call and writes the page it was given: apple-touch-icon.png at 180, icon-192.png, icon-512.png and icon-maskable-512.png, each an opaque PNG on its own page that is closed, then the browser closed; the favicon embedded as a data URL and centred on the light background (no dark token); the die at 80% of the edge and 60% on the maskable icon; `PW_CHROMIUM` as the executable path; a missing light color-bg or favicon stopping before the browser starts; and the browser closing when the second screenshot fails, with only the first icon written. No test starts Chromium. Next in line: pulse, unless a window opens first.
