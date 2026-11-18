@@ -60,6 +60,14 @@ describe('nextStep', () => {
     expect(nextStep(next, legalActions(next)).phase).toBe('Prepare')
   })
 
+  it('the Prepare line names the Base tile when a buy is legal, like the Base panel', () => {
+    const s = createGame(config, 3)
+    const placed = applyAction(s, legalActions(s)[0]!).state
+    const buy: Action[] = [{ type: 'buyCard', card: 'c1' }]
+    expect(nextStep(placed, buy).step).toBe('Play a card from your hand, or buy on the Base tile')
+    expect(nextStep(placed, []).step).toBe('Play a card from your hand')
+  })
+
   it('a Build on the base offers the affordable upgrades in the banner', () => {
     const s = createGame(config, 3)
     const placed = applyAction(s, legalActions(s)[0]!).state

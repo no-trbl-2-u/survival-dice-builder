@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the Prepare banner says "buy at the base"; the Base panel below says "the Base tile"
-- pass: 52 (commit 83b417f)
-- viewport: desktop
-- category: voice
-- observation: Same base vs Base tile wording already fixed in the /config Shop timing help, still in the /play next-step banner.
-- evidence: `apps/web/src/play/nextStep.ts:86` "', or buy at the base'"; `apps/web/src/play/BasePanel.tsx` "Buy a card while your figure is on the Base tile".
-- suggested fix: Change the banner suffix to ", or buy on the Base tile".
-- source: web-fetch
-
 ### [LOW] /play — the Base panel labels the track "Training", and says nothing about what Training I opens
 - pass: 52 (commit 83b417f)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the Prepare banner says "buy at the base"; the Base panel below says "the Base tile"
+- pass: 52 (commit 83b417f)
+- viewport: desktop
+- category: voice
+- observation: Same base vs Base tile wording already fixed in the /config Shop timing help, still in the /play next-step banner.
+- evidence: `apps/web/src/play/nextStep.ts:86` "', or buy at the base'"; `apps/web/src/play/BasePanel.tsx` "Buy a card while your figure is on the Base tile".
+- suggested fix: Change the banner suffix to ", or buy on the Base tile".
+- source: web-fetch
+- issue: #438
+- fixed: (this commit)
 
 ### [x] [LOW] /config — two help texts still say "structure", the word the home page dropped because no page defines it
 - pass: 52 (commit 83b417f)

@@ -83,7 +83,7 @@ export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
   if (state.phase === 'combat' && state.config.combat.model === 'engage')
     return step('Combat', cardStepText(state.config, 'engage'))
   if (state.phase === 'prepare') {
-    const shop = has('buyCard') || has('buyUpgrade') ? ', or buy at the base' : ''
+    const shop = has('buyCard') || has('buyUpgrade') ? ', or buy on the Base tile' : ''
     return step('Prepare', `Play a card from your hand${shop}`)
   }
   return step(state.phase === 'combat' ? 'Combat' : 'Setup', 'Waiting')
