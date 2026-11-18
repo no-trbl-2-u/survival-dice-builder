@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — "one fight with the enemies next to you" hides that Engage works with no enemy near and Shot reaches 2 hexes
-- pass: 52 (commit 83b417f)
-- viewport: desktop
-- category: comprehension
-- observation: The definition reads as if an enemy must be next to you to engage. The engine lets a player engage anywhere, only adjacent enemies roll dice back, and Shot hits at 2 hexes, so shooting from range without taking enemy dice is a real choice the page never shows. Refines the pass where "engagement" got its definition.
-- evidence: Home: "to start an engagement, one fight with the enemies next to you" (`ruleText.ts:266`); "Engage anywhere, even with no enemy near" (`packages/engine/src/api/legalActions.ts:179`); only adjacent enemies roll (`packages/engine/src/combat/engage.ts:113`).
-- suggested fix: Reword to "to start an engagement: roll your dice, and each enemy next to you rolls its enemy dice. A Skill can hit any enemy in its range."
-- source: web-fetch
-
 ### [LOW] /config — two help texts still say "structure", the word the home page dropped because no page defines it
 - pass: 52 (commit 83b417f)
 - viewport: desktop
@@ -100,6 +91,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — "one fight with the enemies next to you" hides that Engage works with no enemy near and Shot reaches 2 hexes
+- pass: 52 (commit 83b417f)
+- viewport: desktop
+- category: comprehension
+- observation: The definition reads as if an enemy must be next to you to engage. The engine lets a player engage anywhere, only adjacent enemies roll dice back, and Shot hits at 2 hexes, so shooting from range without taking enemy dice is a real choice the page never shows. Refines the pass where "engagement" got its definition.
+- evidence: Home: "to start an engagement, one fight with the enemies next to you" (`ruleText.ts:266`); "Engage anywhere, even with no enemy near" (`packages/engine/src/api/legalActions.ts:179`); only adjacent enemies roll (`packages/engine/src/combat/engage.ts:113`).
+- suggested fix: Reword to "to start an engagement: roll your dice, and each enemy next to you rolls its enemy dice. A Skill can hit any enemy in its range."
+- source: web-fetch
+
+- issue: #436
+- fixed: (this commit)
 
 ### [x] [MED] / — no page before a run says which faces an action die has; Star and Blank are never introduced
 - pass: 52 (commit 83b417f)

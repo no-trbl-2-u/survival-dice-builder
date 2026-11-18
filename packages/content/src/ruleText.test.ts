@@ -359,14 +359,14 @@ describe('rule text from config', () => {
 
   it('Combat: each model has its own text; enemy dice come from each record (Spec v2 9.6)', () => {
     expect(combatText(base, 'engage', defaultContent)).toMatch(
-      /^Play a card's Engage option \(on Move and Gather\) to start an engagement, one fight with the enemies next to you: roll your dice from where you stand, plus the enemy dice of each of those enemies \(a grunt rolls 1, an elite 2\)\. /,
+      /^Play a card's Engage option \(on Move and Gather\) to start an engagement, even with no enemy near: roll your dice from where you stand, and each enemy next to you rolls its enemy dice \(a grunt rolls 1, an elite 2\)\. A Skill can hit any enemy within its range, not only the enemies next to you\. /,
     )
     const elite = {
       cards: [],
       enemies: { enemies: [{ ...defaultContent.enemies.enemies[1]!, dice: 3 }] },
     }
     expect(combatText(base, 'engage', elite)).toMatch(
-      /each of those enemies \(an elite rolls 3\)\. /,
+      /each enemy next to you rolls its enemy dice \(an elite rolls 3\)\. /,
     )
     expect(combatText(base, 'engage', elite)).toMatch(
       /^Play a card's Engage option to start an engagement/,
@@ -375,7 +375,7 @@ describe('rule text from config', () => {
       /Combat ends when every hand and deck is empty/,
     )
     expect(combatText(base, 'engage', defaultContent)).toContain(
-      `(a grunt rolls 1, an elite 2). ${rollsText(base)} Put your dice on your Skills one at a time.`,
+      `not only the enemies next to you. ${rollsText(base)} Put your dice on your Skills one at a time.`,
     )
     expect(rollsText(base)).toMatch(/keep the dice you want and roll the others again/)
     expect(combatText(base, 'exchange', defaultContent)).not.toContain(rollsText(base))

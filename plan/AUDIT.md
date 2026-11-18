@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-18 (pass 379, cloud tick)
+
+Pass 378 shipped the action die faces row (3b2fa56). No issues wait for triage, the critique gate is closed (pass 52 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 15 commits and under 48 hours ago. With the external-critique MED bias, the Engage range row leads (impact 6, ease 7: 4.2, x1.5 = 6.3): the engagement definition read "one fight with the enemies next to you", as if an enemy had to be adjacent, while the engine lets you Engage anywhere, only adjacent enemies roll, and Shot reaches 2 hexes. `combatText` (engage model) now reads "to start an engagement, even with no enemy near: roll your dice from where you stand, and each enemy next to you rolls its enemy dice (a grunt rolls 1, an elite 2). A Skill can hit any enemy within its range, not only the enemies next to you." It reads on /, the /play start panel Combat hint, the /config Combat model help and the playtest kit (`docs/playtests/PROTOCOL.md` regenerated with `pnpm sim -- kit`). ruleText.test.ts and the a11y e2e pin the new wording. Next in line: the /config "structure" row (LOW).
+
+## Top 5 findings (scored)
+
+### [x] [6.3] external-critique: / engagement definition hides that Engage works with no enemy near and Shot reaches 2 hexes (pass 52 MED)
+- category: external-critique
+- impact: 6
+- ease: 7
+- next: reword the engagement definition in combatText
+- issue: #436
+- fixed: (this commit)
+
+### [ ] [3.0] external-critique: /config help texts still say "structure" (pass 52 LOW)
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: swap "structure" for the named defenses in the two /config help texts
+
 # Site audit — 2026-11-18 (pass 378, cloud tick)
 
 Pass 377 shipped the rolls row (aa7f6ec). No issues wait for triage, the critique gate is closed (pass 52 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 15 commits and under 48 hours ago. With the external-critique MED bias, the action die faces row leads (impact 6, ease 8: 4.8, x1.5 = 7.2): the home "What you have" item named Sword, Bow, Wand and Shield only inside the Skill list, and no page before a run named Star or Blank. `startText` now adds a sentence built from `FaceSchema.options` after the Skill list: "An action die has 6 faces: Sword, Wand, Bow, Shield, Star (fits any Skill slot) and Blank (no effect)." It reads on / and wherever the /config start help uses startText. ruleText.test.ts pins the sentence. Next in line: the Engage range row (MED).
