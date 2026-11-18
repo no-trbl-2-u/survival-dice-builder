@@ -148,6 +148,7 @@ describe('rule text from config', () => {
     expect(startText(base, defaultContent)).toBe(
       'You start with 15 health, 1 action die and 4 Skills your dice can fire: ' +
         'Strike (Sword: 2 damage to 1 enemy within 1 hex), Shot (Bow: 1 damage to 1 enemy within 2 hexes), Mend (Wand: heal 1 health) and Guard (Shield: gain 2 guard). ' +
+        'An action die has 6 faces: Sword, Wand, Bow, Shield, Star (fits any Skill slot) and Blank (no effect). ' +
         'The Guard Skill gives you guard: points that take enemy damage before your health and are lost when the engagement ends. ' +
         'Your deck holds 10 cards: 4 Move, 4 Gather, 1 Build and 1 Rest. You draw 5 at a time. ' +
         'Each card has two halves: the top half is for Prepare, the bottom half for Combat.',
@@ -157,7 +158,7 @@ describe('rule text from config', () => {
       player: { ...c.player, maxHealth: 12, startingDice: 2, starterSkills: ['strike'] },
     }))
     expect(startText(two, defaultContent)).toMatch(
-      /12 health, 2 action dice and 1 Skill your dice can fire: Strike \(Sword: 2 damage to 1 enemy within 1 hex\)\. Your deck/,
+      /12 health, 2 action dice and 1 Skill your dice can fire: Strike \(Sword: 2 damage to 1 enemy within 1 hex\)\. An action die has 6 faces: .+ and Blank \(no effect\)\. Your deck/,
     )
     const exchange = With((c) => ({ ...c, combat: { ...c.combat, model: 'exchange' as const } }))
     expect(startText(exchange, defaultContent)).toMatch(

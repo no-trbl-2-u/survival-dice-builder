@@ -1,6 +1,7 @@
 import type { Content } from './load.ts'
 import type { GameConfig } from './schemas/config.ts'
 import type { SkillEffect } from './schemas/effects.ts'
+import { FaceSchema } from './schemas/primitives.ts'
 import type { Site } from './schemas/tiles.ts'
 
 /**
@@ -863,8 +864,14 @@ export function startText(config: GameConfig, content: Pick<Content, 'cards' | '
     ),
   )
   const hand = preset ? ` You draw ${preset.handSize} at a time.` : ''
+  const note: Partial<Record<string, string>> = {
+    Star: 'Star (fits any Skill slot)',
+    Blank: 'Blank (no effect)',
+  }
+  const faces = FaceSchema.options.map((f) => note[f] ?? f)
   return (
-    `You start with ${maxHealth} health, ${plural(startingDice, 'action die', 'action dice')} and ${plural(skills.length, 'Skill', 'Skills')} your dice can fire: ${andList(skills)}.${guard} ` +
+    `You start with ${maxHealth} health, ${plural(startingDice, 'action die', 'action dice')} and ${plural(skills.length, 'Skill', 'Skills')} your dice can fire: ${andList(skills)}. ` +
+    `An action die has ${faces.length} faces: ${andList(faces)}.${guard} ` +
     `Your deck holds ${plural(total, 'card', 'cards')}: ${cards}.${hand} ` +
     'Each card has two halves: the top half is for Prepare, the bottom half for Combat.'
   )

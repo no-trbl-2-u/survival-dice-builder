@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — no page before a run says which faces an action die has; Star and Blank are never introduced
-- pass: 52 (commit 83b417f)
-- viewport: desktop
-- category: comprehension
-- observation: The home page names Sword, Bow, Wand and Shield only inside the Skill list and never mentions Star or Blank. Star first appears inside the engagement dialog on /play; Blank only on /credits. The enemy die faces are listed on the home page, so the player's own die is the one left unexplained.
-- evidence: Home "What you have": "4 Skills your dice can fire: Strike (Sword: ...), Shot (Bow: ...), Mend (Wand: ...) and Guard (Shield: ...)" (`packages/content/src/ruleText.ts:865`); "A Star fits any Skill slot." only in `apps/web/src/play/engageView.ts:47`; engine faces Sword, Wand, Bow, Shield, Star, Blank (`packages/engine/src/dice/dice.ts:6`).
-- suggested fix: Add one sentence to "What you have", built from content: "An action die has 6 faces: Sword, Bow, Wand, Shield, Star (fits any Skill slot) and Blank (no effect)."
-- source: web-fetch
-
 ### [MED] / — "one fight with the enemies next to you" hides that Engage works with no enemy near and Shot reaches 2 hexes
 - pass: 52 (commit 83b417f)
 - viewport: desktop
@@ -109,6 +100,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — no page before a run says which faces an action die has; Star and Blank are never introduced
+- pass: 52 (commit 83b417f)
+- viewport: desktop
+- category: comprehension
+- observation: The home page names Sword, Bow, Wand and Shield only inside the Skill list and never mentions Star or Blank. Star first appears inside the engagement dialog on /play; Blank only on /credits. The enemy die faces are listed on the home page, so the player's own die is the one left unexplained.
+- evidence: Home "What you have": "4 Skills your dice can fire: Strike (Sword: ...), Shot (Bow: ...), Mend (Wand: ...) and Guard (Shield: ...)" (`packages/content/src/ruleText.ts:865`); "A Star fits any Skill slot." only in `apps/web/src/play/engageView.ts:47`; engine faces Sword, Wand, Bow, Shield, Star, Blank (`packages/engine/src/dice/dice.ts:6`).
+- suggested fix: Add one sentence to "What you have", built from content: "An action die has 6 faces: Sword, Bow, Wand, Shield, Star (fits any Skill slot) and Blank (no effect)."
+- source: web-fetch
+
+- issue: #435
+- fixed: (this commit)
 
 ### [x] [MED] / and /play — "roll your dice" never says you may keep dice and roll the rest again
 - pass: 52 (commit 83b417f)

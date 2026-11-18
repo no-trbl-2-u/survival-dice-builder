@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-18 (pass 378, cloud tick)
+
+Pass 377 shipped the rolls row (aa7f6ec). No issues wait for triage, the critique gate is closed (pass 52 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 15 commits and under 48 hours ago. With the external-critique MED bias, the action die faces row leads (impact 6, ease 8: 4.8, x1.5 = 7.2): the home "What you have" item named Sword, Bow, Wand and Shield only inside the Skill list, and no page before a run named Star or Blank. `startText` now adds a sentence built from `FaceSchema.options` after the Skill list: "An action die has 6 faces: Sword, Wand, Bow, Shield, Star (fits any Skill slot) and Blank (no effect)." It reads on / and wherever the /config start help uses startText. ruleText.test.ts pins the sentence. Next in line: the Engage range row (MED).
+
+## Top 5 findings (scored)
+
+### [x] [7.2] external-critique: / never names the action die faces; Star and Blank are never introduced (pass 52 MED)
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: one content-built sentence in the home "What you have" list
+- issue: #435
+- fixed: (this commit)
+
+### [ ] [6.3] external-critique: / engagement definition hides that Engage works with no enemy near and Shot reaches 2 hexes (pass 52 MED)
+- category: external-critique
+- impact: 6
+- ease: 7
+- next: reword the engagement definition in combatText
+
 # Site audit — 2026-11-18 (pass 377, cloud tick)
 
 Critique pass 52 (e0f3528) filed 6 rows: 3 MED and 3 LOW that do not wait for /oversight. No issues wait for triage, the critique gate is closed (pass 52 just ran), no build plan phase is pending (35 is blocked), and expand pass 34 ran 14 commits and under 48 hours ago. With the external-critique MED bias, the rolls row leads (impact 6, ease 8: 4.8, x1.5 = 7.2): the home Combat item and the /play start panel Combat hint stopped at "roll your dice" and never said you may keep dice and roll the rest. `combatText` (engage model) now places `rollsText(config)` after the roll sentence, so /, the /play start panel, the /config Combat model help and the playtest kit all read "In an engagement you roll all your dice, then keep the dice you want and roll the others again, up to 3 rolls in all. The enemy dice roll only once, and a card's Reroll does not count as a roll." The exchange text is unchanged. ruleText.test.ts pins the order; `docs/playtests/PROTOCOL.md` is regenerated with `pnpm sim -- kit`. Next in line: the action die faces row and the Engage range row (both MED).
