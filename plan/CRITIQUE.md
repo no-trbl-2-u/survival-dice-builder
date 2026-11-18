@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the Base panel labels the track "Training", and says nothing about what Training I opens
-- pass: 52 (commit 83b417f)
-- viewport: desktop
-- category: comprehension
-- observation: The home page and /config call it "the Training Ground". The Base panel explains the closed Shop ("The Shop opens when you buy the Shop I upgrade...") but gives no matching line for Training I or when its Skill draft happens.
-- evidence: `apps/web/src/play/BasePanel.tsx:60` `track === 'shop' ? 'Shop' : 'Training'`; Shop-only explanation at `BasePanel.tsx:113`; home: "buy Training I ... to open the Training Ground: in rounds 2, 4, 6 and so on ..." (`ruleText.ts:176-184`).
-- suggested fix: Label the track "Training Ground" and, until Training I is bought, show "Training I opens the Training Ground: a Skill draft every other round." built from config.
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the Base panel labels the track "Training", and says nothing about what Training I opens
+- pass: 52 (commit 83b417f)
+- viewport: desktop
+- category: comprehension
+- observation: The home page and /config call it "the Training Ground". The Base panel explains the closed Shop ("The Shop opens when you buy the Shop I upgrade...") but gives no matching line for Training I or when its Skill draft happens.
+- evidence: `apps/web/src/play/BasePanel.tsx:60` `track === 'shop' ? 'Shop' : 'Training'`; Shop-only explanation at `BasePanel.tsx:113`; home: "buy Training I ... to open the Training Ground: in rounds 2, 4, 6 and so on ..." (`ruleText.ts:176-184`).
+- suggested fix: Label the track "Training Ground" and, until Training I is bought, show "Training I opens the Training Ground: a Skill draft every other round." built from config.
+- source: web-fetch
+- issue: #439
+- fixed: (this commit)
 
 ### [x] [LOW] /play — the Prepare banner says "buy at the base"; the Base panel below says "the Base tile"
 - pass: 52 (commit 83b417f)

@@ -1,10 +1,11 @@
 import {
   milestoneIds,
   milestoneOutOfReach,
+  trainingClosedText,
   upgradesReachable,
   upgradesReachNote,
 } from '@survival/content'
-import { legalUpgrades, type Action, type GameState } from '@survival/engine'
+import { legalUpgrades, openLevel, type Action, type GameState } from '@survival/engine'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { cardPriceText } from './CardView.tsx'
 import { cardText } from './effectText.ts'
@@ -23,10 +24,11 @@ const holder = (state: GameState): string =>
   state.players.length === 1 ? 'You have' : `${seatName(state, state.current)} has`
 
 /**
- * The base board: health, the 2 upgrade tracks (bought, next, cost; Buy while a Build is active
+ * The base board: health, the 2 upgrade tracks, Shop and Training Ground (bought, next, cost; Buy while a Build is active
  * on the base, at the price the engine charges after a Mason or Engineer cut; a tier no Build
  * card can buy reads "out of reach", with the reason), and the Shop offers (Buy when the figure
- * is on the base and the price is met).
+ * is on the base and the price is met). While the Training Ground is closed, a line names the upgrade
+ * that opens it and its draft rounds (rules 10.8, 11.6).
  * When nothing can be bought but a tier is left in reach, it says how buying works, so materials
  * never look stuck. The
  * run's milestones close the panel, folded, with how many are met and how many the config and
@@ -57,7 +59,7 @@ export function BasePanel({ state, legal, act }: Props) {
       </h2>
       {(['shop', 'training'] as const).map((track) => (
         <div key={track} className={styles.track}>
-          <span className={styles.trackName}>{track === 'shop' ? 'Shop' : 'Training'}</span>
+          <span className={styles.trackName}>{track === 'shop' ? 'Shop' : 'Training Ground'}</span>
           <ol className={styles.tiers}>
             {state.content.upgrades
               .filter((u) => u.track === track)
@@ -88,6 +90,11 @@ export function BasePanel({ state, legal, act }: Props) {
           </ol>
         </div>
       ))}
+      {openLevel(state, 'training') > 0 ? null : (
+        <p className={styles.muted} data-testid="training-closed">
+          {trainingClosedText(state.config, state.content)}
+        </p>
+      )}
       {reachNote ? (
         <p className={styles.muted} data-testid="upgrade-reach">
           Out of reach: {reachNote}.

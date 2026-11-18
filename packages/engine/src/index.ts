@@ -21,6 +21,7 @@ export { enemiesInRange } from './combat/resolve.ts'
 export { stepsOutOfReach } from './movement/move.ts'
 export { legalUpgrades, upgradesInReach, type UpgradeOption } from './progression/upgrades.ts'
 export { onBase } from './progression/shop.ts'
+export { openLevel } from './progression/supplies.ts'
 export { ENGAGEMENT_END, cancelledEnemyDice } from './combat/engage.ts'
 export type {
   Assignment,

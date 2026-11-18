@@ -123,3 +123,17 @@ describe('whose materials and currency the Base panel counts (16.3)', () => {
     expect(screen.getByText('Cost 3 currency')).toBeTruthy()
   })
 })
+
+describe('the Training Ground track (rules 10.8, 11.6)', () => {
+  it('is labelled "Training Ground" and says what Training I opens until it is bought', () => {
+    const game = createGame(defaultContent.config, 1)
+    const { unmount } = render(<BasePanel state={game} legal={[]} act={() => {}} />)
+    expect(screen.getByText('Training Ground')).toBeTruthy()
+    expect(screen.getByTestId('training-closed').textContent).toBe(
+      'The Training Ground opens when you buy the Training I upgrade. Then, in rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free.',
+    )
+    unmount()
+    render(<BasePanel state={{ ...game, upgrades: ['training-1'] }} legal={[]} act={() => {}} />)
+    expect(screen.queryByTestId('training-closed')).toBeNull()
+  })
+})

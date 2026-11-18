@@ -176,13 +176,32 @@ export function trainingText(config: GameConfig, content: Upgrades): string {
   const open = training
     ? `Stand on the Base tile and buy ${training.name} (a Build card and ${plural(training.cost, 'material', 'materials')}) to open the Training Ground`
     : 'Open the Training Ground from the Base tile'
+  return `${open}: ${draftWhenText(config)}. ${draftPoolText(config)}`
+}
+
+/** "in rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free". */
+function draftWhenText(config: GameConfig): string {
   const n = config.draft.everyNRounds
   const when = n === 1 ? 'every round' : `in rounds ${n}, ${2 * n}, ${3 * n} and so on`
   const shown =
     config.draft.unpicked === 'pool'
       ? `${plural(config.draft.reveal, 'new Skill', 'new Skills')} plus your pool`
       : plural(config.draft.reveal, 'Skill', 'Skills')
-  return `${open}: ${when}, you look at ${shown} and keep 1 for free. ${draftPoolText(config)}`
+  return `${when}, you look at ${shown} and keep 1 for free`
+}
+
+/**
+ * The /play Base panel line while the Training Ground is closed: which upgrade opens it and
+ * when its Skill draft happens.
+ *
+ * @rule 10.8, 11.6, Table 6
+ */
+export function trainingClosedText(config: GameConfig, content: Upgrades): string {
+  const training = firstUpgrade('training', content)
+  const open = training
+    ? `The Training Ground opens when you buy the ${training.name} upgrade`
+    : 'The Training Ground opens from the Base tile'
+  return `${open}. Then, ${draftWhenText(config)}.`
 }
 
 /**

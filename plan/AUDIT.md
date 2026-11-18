@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-18 (pass 382, cloud tick)
+
+Pass 381 shipped the /play Prepare banner row (16bd799). No issues wait for triage, the critique gate is closed (pass 52 ran 6 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 18 commits and under 48 hours ago. The four pending /decisions MED rows edit `[needs-user-call]` items, which only /oversight may change, so the /play Base panel "Training" row leads (impact 4, ease 6: 2.4, raised to 3.0 as the last cheap LOW in line). The Base panel now labels the track "Training Ground", like the home page and /config, and until a Training tier is bought shows `trainingClosedText` from config: "The Training Ground opens when you buy the Training I upgrade. Then, in rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free." The panel asks the engine's `openLevel` (now exported) whether the track is open. ruleText.test.ts and BasePanel.test.tsx pin the line and the label. Next in line: only the four /decisions rows, which wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] external-critique: /play Base panel says "Training", not "Training Ground", and never says what Training I opens (pass 52 LOW)
+- category: external-critique
+- impact: 4
+- ease: 6
+- next: label the track "Training Ground" and add a config-built line for Training I
+- issue: #439
+- fixed: (this commit)
+
 # Site audit — 2026-11-18 (pass 381, cloud tick)
 
 Pass 380 shipped the /config "structure" row (cf8efd5). No issues wait for triage, the critique gate is closed (pass 52 ran 5 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 16 commits and under 48 hours ago. The four pending /decisions MED rows edit `[needs-user-call]` items, which only /oversight may change, so the /play "buy at the base" banner row leads (impact 3, ease 9: 2.7, raised to 3.0 as the oldest cheap LOW in line). The Prepare banner now reads "Play a card from your hand, or buy on the Base tile" when a buy is legal, matching the Base panel's "Buy a card while your figure is on the Base tile". nextStep.test.ts pins both forms of the line. Next in line: the /play Base panel "Training" row (LOW).

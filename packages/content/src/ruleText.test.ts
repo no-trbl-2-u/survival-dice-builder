@@ -55,6 +55,7 @@ import {
   startText,
   targetOrderText,
   targetText,
+  trainingClosedText,
   trainingText,
   upgradesReachable,
   upgradesReachNote,
@@ -129,6 +130,14 @@ describe('rule text from config', () => {
     expect(ruleLineFor('draft.reveal', often, defaultContent)).toBe(
       trainingText(often, defaultContent),
     )
+  })
+
+  it('training closed: names the opening upgrade and the draft rounds from config (10.8, 11.6)', () => {
+    expect(trainingClosedText(base, defaultContent)).toBe(
+      'The Training Ground opens when you buy the Training I upgrade. Then, in rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free.',
+    )
+    const rarely = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 3 } }))
+    expect(trainingClosedText(rarely, defaultContent)).toMatch(/Then, in rounds 3, 6, 9 and so on,/)
   })
 
   it('knockout: the return share and the losses follow config (Spec v2 14.2, 14.4)', () => {
