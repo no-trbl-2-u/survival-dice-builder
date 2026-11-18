@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-18 (pass 386, cloud tick)
+
+Pass 385 pinned the `pnpm sim` CLI (5a47031). No issues wait for triage, the critique gate is closed (pass 52 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 3 commits ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of engine exports finds the supply helpers in `packages/engine/src/progression/supplies.ts` with no direct test: `openLevel` is on the engine's public API (the /play Base panel calls it) yet only the web panel test reaches it, and `drawLevel`'s null case and `buildSupplies`' per-level copies and seed behaviour are reached only through whole-game tests (impact 3, ease 8: 2.4; below 3.0, but expand's window is shut). `supplies.test.ts` pins: a closed track reads 0, each track reads only its own tiers, the highest bought tier wins in any order and the level comes from the content; the draw takes the highest open level with cards, falls back past empty or missing levels (row 41), never draws above the open level and is null when every open level is empty; each level holds copiesPerCard / copiesPerSkill of every Level N card and Skill, doubling the copies doubles the stacks, the same seed builds the same stacks, and a different seed shuffles the same cards.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] tests: engine supply helpers (openLevel, drawLevel, buildSupplies) have no direct test
+- category: tests
+- impact: 3
+- ease: 8
+- next: colocated vitest file
+- issue: #441
+- fixed: (this commit)
+
 # Site audit — 2026-11-18 (pass 385, cloud tick)
 
 Pass 384 pinned pulse (566a369). No issues wait for triage, the critique gate is closed (pass 52 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 2 commits ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A fresh probe finds one untested module the script sweep missed: `tools/sim/src/cli.ts`, the `pnpm sim` entry (impact 3, ease 7: 2.1; below 3.0, but expand's window is shut). Its report builders are pinned in their own tests; `tools/sim/src/cli.test.ts` runs the real CLI in a child process with 1-2 run batches and `INIT_CWD` set to a temp folder: the batch summary and target band line; `--out` as CSV (a row per run) and JSON, relative to where `pnpm sim` was run; a partial `--config` file; `--help`; `--seats 5` and an unknown policy stopping with their messages; compare naming each side and `--b-policy` setting side B only, `--configs` writing `--out` and needing 2 or more; sweep playing a row per value and seat count and needing a `--set` and seats of 1-4; timing with no files printing the usage and exiting 1; playtests on an empty folder; odds on the default proposal writing `--json`; decisions and rules printing their markdown and `--out` writing it. `kit` stays untested here: it rewrites the committed playtest kit.
