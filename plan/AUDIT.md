@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-18 (pass 376, cloud tick)
+
+Pass 375 pinned og-card (7965d95). No issues wait for triage, the critique gate is closed (pass 51 ran 10 commits and just under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 11 commits and about 24 hours ago. Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass takes the next untested script pass 375 listed: `touch-icon.mjs`, which renders the four committed home-screen icons in `apps/web/public` (impact 3, ease 8: 2.4; below 3.0, but expand's window is still shut). Like og-card it reads from the current directory and loads `@playwright/test` from `apps/web`, so `scripts/__tests__/touch-icon.test.mjs` builds temp repos with a fixture token, a stand-in favicon and a stub browser that logs each call and writes the page it was given: apple-touch-icon.png at 180, icon-192.png, icon-512.png and icon-maskable-512.png, each an opaque PNG on its own page that is closed, then the browser closed; the favicon embedded as a data URL and centred on the light background (no dark token); the die at 80% of the edge and 60% on the maskable icon; `PW_CHROMIUM` as the executable path; a missing light color-bg or favicon stopping before the browser starts; and the browser closing when the second screenshot fails, with only the first icon written. No test starts Chromium. Next in line: pulse, unless a window opens first.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] tests: touch-icon, the home-screen icon renderer, has no test
+- category: tests
+- impact: 3
+- ease: 8
+- next: node:test file running the script in temp repos with a stub @playwright/test
+- issue: #433
+- fixed: (this commit)
+
 # Site audit — 2026-11-17 (pass 375, cloud tick)
 
 Pass 374 pinned new-skill (e457b29). No issues wait for triage, the critique gate is closed (pass 51 ran 9 commits and about 18 hours ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 10 commits and about 19 hours ago. Every Pending row left in CRITIQUE.md edits a `[needs-user-call]` item, so it waits for /oversight. This pass takes the next untested script pass 374 listed: `og-card.mjs`, which renders the committed link-preview image `apps/web/public/og-card.png` (impact 3, ease 7: 2.1; below 3.0, but expand's window is still shut). The script loads `@playwright/test` through `createRequire` from the current directory's `apps/web`, so `scripts/__tests__/og-card.test.mjs` builds temp repos with fixture tokens, stand-in font bytes and a stub `@playwright/test` whose browser logs each call and writes the page it was given: a 1200x630 page, a PNG at `apps/web/public/og-card.png` and the browser closed; the title, tagline and five light tokens (no dark one); a six-point pointy-top hex and three pips; both fonts embedded as base64 woff2 and no external resource; `PW_CHROMIUM` as the executable path; a missing light token or font file stopping before the browser starts; and the browser closing when the screenshot fails. No test starts Chromium. Next in line: touch-icon and pulse, unless a window opens first.
