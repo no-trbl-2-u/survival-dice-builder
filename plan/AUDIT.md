@@ -5,6 +5,18 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-18 (pass 383, cloud tick)
+
+Pass 382 shipped the /play Base panel "Training Ground" row (33b9641). No issues wait for triage, the critique gate is closed (pass 52 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 19 commits and under 48 hours ago. Every pass 51 and 52 row has shipped. The six Pending critique rows left are all on /decisions and edit `[needs-user-call]` items, which only /oversight may change. A fresh probe finds no other finding at or above 3.0: every web module but the page shells (covered by e2e) has a colocated test, and only `scripts/pulse.mjs` has no test (impact 2, ease 8: 1.6). No actionable iterate work, so the tick handed to /expand (iterate failure mode 6, bold posture): expand pass 35 filed 1 candidate and re-evidenced 2.
+
+## Top 5 findings (scored)
+
+### [ ] [1.6] tests: scripts/pulse.mjs has no test
+- category: tests
+- impact: 2
+- ease: 8
+- next: node:test file in scripts/__tests__, when nothing else is due
+
 # Site audit — 2026-11-18 (pass 382, cloud tick)
 
 Pass 381 shipped the /play Prepare banner row (16bd799). No issues wait for triage, the critique gate is closed (pass 52 ran 6 commits ago), no build plan phase is pending (35 is blocked), and expand pass 34 ran 18 commits and under 48 hours ago. The four pending /decisions MED rows edit `[needs-user-call]` items, which only /oversight may change, so the /play Base panel "Training" row leads (impact 4, ease 6: 2.4, raised to 3.0 as the last cheap LOW in line). The Base panel now labels the track "Training Ground", like the home page and /config, and until a Training tier is bought shows `trainingClosedText` from config: "The Training Ground opens when you buy the Training I upgrade. Then, in rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free." The panel asks the engine's `openLevel` (now exported) whether the track is open. ruleText.test.ts and BasePanel.test.tsx pin the line and the label. Next in line: only the four /decisions rows, which wait for /oversight.
