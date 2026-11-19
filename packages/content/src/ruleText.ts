@@ -191,17 +191,17 @@ function draftWhenText(config: GameConfig): string {
 }
 
 /**
- * The /play Base panel line while the Training Ground is closed: which upgrade opens it and
- * when its Skill draft happens.
+ * The /play Base panel line while the Training Ground is closed: which upgrade opens it, when
+ * its Skill draft happens, and where the unkept Skills go (so "your pool" is explained).
  *
- * @rule 10.8, 11.6, Table 6
+ * @rule 10.8, 11.6, 11.7, Table 6
  */
 export function trainingClosedText(config: GameConfig, content: Upgrades): string {
   const training = firstUpgrade('training', content)
   const open = training
     ? `The Training Ground opens when you buy the ${training.name} upgrade`
     : 'The Training Ground opens from the Base tile'
-  return `${open}. Then, ${draftWhenText(config)}.`
+  return `${open}. Then, ${draftWhenText(config)}. ${draftPoolText(config)}`
 }
 
 /**

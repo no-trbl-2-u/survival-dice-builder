@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the Base panel's Training line says "your pool" and never says what the pool is
-- pass: 53 (commit eb1fc60)
-- viewport: desktop
-- category: comprehension
-- observation: The line says "you look at 2 new Skills plus your pool and keep 1 for free". The home page follows the same sentence with what the pool is; the Base panel does not, and no /play panel shows a pool.
-- evidence: "The Training Ground opens when you buy the Training I upgrade. Then, in rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free." (`packages/content/src/ruleText.ts` trainingClosedText); home adds draftPoolText "The Skills you do not keep go to your pool. Later drafts offer them again."
-- suggested fix: Append draftPoolText(config) to the training-closed line, as the home page does.
-- source: web-fetch
-
 ### [LOW] /play — the Training line sits below all tracks, apart from the Training Ground track it explains
 - pass: 53 (commit eb1fc60)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the Base panel's Training line says "your pool" and never says what the pool is
+- pass: 53 (commit eb1fc60)
+- viewport: desktop
+- category: comprehension
+- observation: The line says "you look at 2 new Skills plus your pool and keep 1 for free". The home page follows the same sentence with what the pool is; the Base panel does not, and no /play panel shows a pool.
+- evidence: "The Training Ground opens when you buy the Training I upgrade. Then, in rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free." (`packages/content/src/ruleText.ts` trainingClosedText); home adds draftPoolText "The Skills you do not keep go to your pool. Later drafts offer them again."
+- suggested fix: Append draftPoolText(config) to the training-closed line, as the home page does.
+- source: web-fetch
+- issue: #445
+- fixed: (this commit)
 
 ### [x] [LOW] /play — once Training I is bought, nothing on /play says when the next Skill draft is
 - pass: 53 (commit eb1fc60)

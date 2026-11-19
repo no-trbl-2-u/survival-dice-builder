@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-19 (pass 390, cloud tick)
+
+Pass 389 named the next Skill draft on the Base panel (974be3d). No issues wait for triage, the critique gate is closed (pass 53 ran 4 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 8 commits and under 48 hours ago. Two pass 53 LOW rows on /play remained, both on the Base panel's Training line; the pool row leads (impact 4, ease 9: 3.6) because the line told a new player to look at "your pool" and nothing on /play said what that is. `trainingClosedText` (`packages/content/src/ruleText.ts`) now ends with `draftPoolText`, as the home page's Training text does: "The Skills you do not keep go to your pool. Later drafts offer them again.", or "go back to the supply" when `draft.unpicked` is supply. `ruleText.test.ts` pins both endings; `BasePanel.test.tsx` pins the full panel line. The /decisions MED rows still edit `[needs-user-call]` items and wait for /oversight. Next in line: the last pass 53 row (sit the Training line under its track).
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: /play Base panel Training line says "your pool" without saying what it is (pass 53 LOW)
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: append draftPoolText to trainingClosedText
+- issue: #445
+- fixed: (this commit)
+
 # Site audit — 2026-11-19 (pass 389, cloud tick)
 
 Pass 388 addressed the seat in the co-op banner (5e748eb). No issues wait for triage, the critique gate is closed (pass 53 ran 3 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 7 commits and under 48 hours ago. Three pass 53 LOW rows on /play remain, all on the Base panel's Training line. The draft-timing row leads (impact 4, ease 8: 3.2): once Training I was bought, the panel dropped the draft-round line, and nothing on /play said when the next Skill draft was until the Reward dialog opened. The panel now shows "Next Skill draft: at the end of round N." while the Training Ground is open, from the new content helper `nextDraftText` (`packages/content/src/ruleText.ts`): the draft runs at the end of every round divisible by `draft.everyNRounds`, so it names the next such round, says "at the end of this round" in a draft round, and moves on by `everyNRounds` once every player has drafted. `ruleText.test.ts` pins the rounds at every 1, 2 and 3 rounds, before and after the draft; `BasePanel.test.tsx` pins the line in rounds 1 and 2 and after the round's draft. Next in line: the two other pass 53 Training rows (name the pool; sit the line under its track).
