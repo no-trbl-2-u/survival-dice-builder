@@ -1,13 +1,58 @@
 # Critique log
 
-> Last pass: 2026-11-18 at commit 83b417f
-> Pass count: 52
+> Last pass: 2026-11-19 at commit eb1fc60
+> Pass count: 53
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /play — the banner and the Base panel give the same upgrade two labels, and only one has the price
+- pass: 53 (commit eb1fc60)
+- viewport: desktop
+- category: comprehension
+- observation: During a Build on the Base tile, the banner offers "Buy upgrade Training I" with no price, and the Base panel offers "Buy Training I (3 materials)" for the same action. The price can be lower after a Mason or Engineer cut. A first-time player can think these are two purchases, or that the banner one is free.
+- evidence: `apps/web/src/play/nextStep.ts:126-134` (bannerActions keeps buyUpgrade), labelled by `apps/web/src/debug/describeAction.ts:122-124` "Buy upgrade ${name}"; `apps/web/src/play/BasePanel.tsx:74-75` "Buy {u.name} ({materials(price)})".
+- suggested fix: Label the banner buyUpgrade button like the Base panel, "Buy Training I (3 materials)", with the same engine price.
+- source: web-fetch
+
+### [LOW] /play — once Training I is bought, nothing on /play says when the next Skill draft is
+- pass: 53 (commit eb1fc60)
+- viewport: desktop
+- category: comprehension
+- observation: The draft-round line shows only while the Training Ground is closed. After Training I is bought it goes away and the tier reads "Training I: bought"; the player learns of the draft only when the Reward dialog opens.
+- evidence: `apps/web/src/play/BasePanel.tsx:93-97` renders `training-closed` only when `openLevel(state, 'training') === 0`; no other draft-timing copy in `apps/web/src/play/` outside `DecisionDialog.tsx` and `describeEvent.ts`.
+- suggested fix: When the Training Ground is open, show "Next Skill draft: round N." from draft.everyNRounds in place of the closed line.
+- source: web-fetch
+
+### [LOW] /play — the Base panel's Training line says "your pool" and never says what the pool is
+- pass: 53 (commit eb1fc60)
+- viewport: desktop
+- category: comprehension
+- observation: The line says "you look at 2 new Skills plus your pool and keep 1 for free". The home page follows the same sentence with what the pool is; the Base panel does not, and no /play panel shows a pool.
+- evidence: "The Training Ground opens when you buy the Training I upgrade. Then, in rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free." (`packages/content/src/ruleText.ts` trainingClosedText); home adds draftPoolText "The Skills you do not keep go to your pool. Later drafts offer them again."
+- suggested fix: Append draftPoolText(config) to the training-closed line, as the home page does.
+- source: web-fetch
+
+### [LOW] /play — the Training line sits below all tracks, apart from the Training Ground track it explains
+- pass: 53 (commit eb1fc60)
+- viewport: desktop
+- category: visual
+- observation: At run start three muted paragraphs stack between the upgrade tracks and "Shop offers": the Training line, the out-of-reach line and the how-to-buy hint. The Training line is not next to its track, and the matching Shop line sits further down under "Shop offers".
+- evidence: `apps/web/src/play/BasePanel.tsx:93-108` render training-closed, upgrade-reach and upgrade-hint in that order after the track list; `:119-122` render "The Shop opens when you buy the Shop I upgrade..." under the Shop offers heading.
+- suggested fix: Render the training-closed line directly under the Training Ground track's tier list.
+- source: web-fetch
+
+### [LOW] /play — the co-op banner reads "Prepare: Player 2: Play a card", two colons in a row
+- pass: 53 (commit eb1fc60)
+- viewport: desktop
+- category: voice
+- observation: In co-op the banner puts two labels with colons before the instruction, while the phase bar above already says "Player 2's turn".
+- evidence: `apps/web/src/play/nextStep.ts:30-31` who = "Player ${n}: "; `apps/web/src/play/NextStepBanner.tsx:27` "<strong>{phase}:</strong> {step}".
+- suggested fix: Write the co-op prefix as "Player 2, " with a lower-case verb: "Prepare: Player 2, play a card from your hand".
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
