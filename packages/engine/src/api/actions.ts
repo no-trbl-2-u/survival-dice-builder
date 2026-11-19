@@ -1,4 +1,5 @@
 import type { SkillFace } from '@survival/content'
+import { sortKeys } from './serialize.ts'
 
 /**
  * A player decision. Each action is one atomic choice (bearings: step-by-step decisions);
@@ -38,9 +39,14 @@ export type Action = Readonly<
 /** Action type names. */
 export type ActionType = Action['type']
 
-/** True when two actions are the same choice. */
+/**
+ * True when two actions are the same choice. Key order does not matter, so an action read back
+ * from `serialize` output (sorted keys) matches the one `legalActions` lists.
+ *
+ * @rule core loop v2 (one atomic choice per action)
+ */
 export function sameAction(a: Action, b: Action): boolean {
-  return JSON.stringify(a) === JSON.stringify(b)
+  return JSON.stringify(sortKeys(a)) === JSON.stringify(sortKeys(b))
 }
 
 /**

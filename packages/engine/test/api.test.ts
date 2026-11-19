@@ -6,7 +6,9 @@ import {
   createGame,
   deserialize,
   legalActions,
+  sameAction,
   serialize,
+  type Action,
   type GameState,
 } from '../src/index.ts'
 import { noSpawns } from './helpers/fixtures.ts'
@@ -381,6 +383,51 @@ describe('applyAction contract', () => {
     expect(keys).toEqual([...keys].sort())
     const listed = serialize({ ...s, milestones: ['survive-round-5', 'defeat-elite'] })
     expect(listed).toContain('"milestones":["survive-round-5","defeat-elite"]')
+  })
+})
+
+describe('sameAction (one atomic choice per action)', () => {
+  it('matches the same choice whatever order its keys were written in', () => {
+    const listed: Action = { type: 'moveTo', q: 1, r: -1 }
+    expect(sameAction(listed, { r: -1, q: 1, type: 'moveTo' } as Action)).toBe(true)
+    const assign: Action = {
+      type: 'assignDie',
+      die: 0,
+      skill: 's',
+      use: 0,
+      slot: 1,
+      asFace: 'Sword',
+    }
+    const sorted = JSON.parse(
+      JSON.stringify(Object.fromEntries(Object.entries(assign).sort())),
+    ) as Action
+    expect(sameAction(assign, sorted)).toBe(true)
+  })
+
+  it('tells apart choices that differ in type or in any value', () => {
+    expect(sameAction({ type: 'moveTo', q: 1, r: -1 }, { type: 'moveTo', q: -1, r: 1 })).toBe(false)
+    expect(sameAction({ type: 'playCard', card: 'c1' }, { type: 'discardCard', card: 'c1' })).toBe(
+      false,
+    )
+    expect(sameAction({ type: 'roll' }, { type: 'roll' })).toBe(true)
+  })
+
+  it('tells a Skill use with no target from one aimed at an enemy', () => {
+    expect(
+      sameAction(
+        { type: 'resolveSkill', skill: 's', use: 0 },
+        { type: 'resolveSkill', skill: 's', use: 0, enemy: 'e1' },
+      ),
+    ).toBe(false)
+  })
+
+  it('finds every legal action again after a serialize round trip sorts its keys', () => {
+    const s = createGame(config, 1)
+    const legal = legalActions(s)
+    const text = serialize({ ...s, legal } as unknown as GameState)
+    const readBack = (JSON.parse(text) as { legal: Action[] }).legal
+    expect(readBack.map((a) => JSON.stringify(a))).not.toEqual(legal.map((a) => JSON.stringify(a)))
+    readBack.forEach((a, i) => expect(sameAction(a, legal[i]!)).toBe(true))
   })
 })
 

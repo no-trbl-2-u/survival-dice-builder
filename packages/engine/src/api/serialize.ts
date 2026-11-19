@@ -1,7 +1,9 @@
 import type { GameState } from '../state/types.ts'
 
-/** Recursively sorts object keys so equal states serialize to equal strings. */
-function sortKeys(value: unknown): unknown {
+/**
+ * Recursively sorts object keys so equal values stringify to equal text. Arrays keep their order.
+ */
+export function sortKeys(value: unknown): unknown {
   if (Array.isArray(value)) return value.map(sortKeys)
   if (value && typeof value === 'object') {
     return Object.fromEntries(

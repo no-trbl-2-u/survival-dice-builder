@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-19 (pass 393, cloud tick)
+
+Pass 392 pinned serialize key order (906a70d). No issues wait for triage, the critique gate is closed (pass 53 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 11 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the engine's public exports finds `sameAction` untested and depending on key order: it compared `JSON.stringify` text, so `{ type: 'moveTo', q: 1, r: -1 }` and the same choice with its keys in another order (as an action read back from `serialize` output comes) compared as different. No call site trips it today; the /play Hand and Dice tray write keys in the order `legalActions` does (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `sameAction` now compares the actions after the key sort `serialize` uses (`sortKeys`, now exported from `api/serialize.ts`). `api.test.ts` pins: reordered and sorted keys match; a different type or value does not; a Skill use with no `enemy` does not match one aimed at an enemy; and every legal action read back from serialize text, keys sorted, matches the one listed. Two of these tests fail on the old code. Next in line: the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: sameAction depends on key order and has no direct test
+- category: tests
+- impact: 3
+- ease: 9
+- next: compare with sorted keys; pin in api.test.ts
+- issue: #449
+- fixed: (this commit)
+
 # Site audit — 2026-11-19 (pass 392, cloud tick)
 
 Pass 391 put the Training line under the Training Ground track (ae1e86e). No issues wait for triage, the critique gate is closed (pass 53 ran 6 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 10 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of engine exports finds `serialize`'s promise untested: the same state always gives the same text because keys are sorted, and saves, bug reports and every golden hash rely on it, yet no test writes a state with its keys in another order; `deserialize` was pinned only on wrong versions (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `api.test.ts` now pins: a state rebuilt with every object's keys reversed serializes to the same text; top-level keys come out sorted while arrays keep their written order; and `deserialize` rejects a version 4 object with no players array or a non-array one, `null`, an array, a string, and throws a SyntaxError on text that is not JSON. Next in line: the /decisions rows wait for /oversight.
