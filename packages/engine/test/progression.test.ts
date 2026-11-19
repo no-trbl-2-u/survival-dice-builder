@@ -1,11 +1,13 @@
 import { defaultContent, milestoneIds, type GameConfig } from '@survival/content'
 import { describe, expect, it } from 'vitest'
 import { damageEnemy } from '../src/combat/resolve.ts'
+import { baseHexes } from '../src/map/base.ts'
 import {
   applyAction,
   createGame,
   legalActions,
   legalUpgrades,
+  onBase,
   upgradesInReach,
   type GameState,
 } from '../src/index.ts'
@@ -178,6 +180,50 @@ describe('base upgrades (11.1-11.4)', () => {
     s = applyAction(s, { type: 'buyUpgrade', upgrade: 'training-1' }).state
     expect(s.upgrades).toEqual(['shop-1', 'training-1'])
     expect(s.active).toBeNull()
+  })
+})
+
+describe('onBase (3.6, 6.8, row 16)', () => {
+  it('row 16 every hex of the Base tile counts, the centre and each neighbour on the tile', () => {
+    const s = home()
+    const hexes = baseHexes(s)
+    expect(hexes).toHaveLength(7)
+    for (const hex of hexes) expect(onBase(withPlayer(s, { hex }))).toBe(true)
+  })
+
+  it('row 16 a hex off the Base tile does not count', () => {
+    const s = home()
+    const off = { q: 2, r: 0 }
+    expect(baseHexes(s).some((h) => h.q === off.q && h.r === off.r)).toBe(false)
+    expect(onBase(withPlayer(s, { hex: off }))).toBe(false)
+  })
+
+  it('3.6 a knocked-out figure on the base hex is not on the base', () => {
+    const s = home()
+    expect(onBase(s)).toBe(true)
+    expect(onBase(withPlayer(s, { knockedOut: true }))).toBe(false)
+  })
+
+  it('3.6 a player still waiting to place a figure is not on the base', () => {
+    const s = home()
+    expect(onBase({ ...s, unplaced: [s.players[0]!.id] })).toBe(false)
+  })
+
+  it('6.8 it asks about the current player, not the first seat', () => {
+    const s = home()
+    const p1 = s.players[0]!
+    const p2 = { ...p1, id: 'p2', hex: { q: 2, r: 0 } }
+    const two: GameState = { ...s, players: [p1, p2] }
+    expect(onBase({ ...two, current: 0 })).toBe(true)
+    expect(onBase({ ...two, current: 1 })).toBe(false)
+    expect(onBase({ ...two, players: [p2, p1], current: 1 })).toBe(true)
+  })
+
+  it('leaves the state unchanged', () => {
+    const s = home()
+    const before = JSON.stringify(s)
+    onBase(s)
+    expect(JSON.stringify(s)).toBe(before)
   })
 })
 

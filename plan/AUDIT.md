@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-19 (pass 396, cloud tick)
+
+Pass 395 pinned enemiesInRange (cc2112b). No issues wait for triage, the critique gate is closed (pass 53 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 14 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the engine's public exports finds `onBase` with no direct test: the /play next-step hint and the Build action in `legalActions` read it, yet tests reach it only through whole-turn flows (the `onBase` in `spec-v2.test.ts` is a local helper of the same name) (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `progression.test.ts` now pins: all 7 Base tile hexes count; a hex off the tile does not; a knocked-out figure on the base hex is not on the base; a player still to place a figure is not; it reads the current player, not the first seat; and it leaves the state unchanged. Dropping the knocked-out check fails 1 of the new tests. Next in line: the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: onBase has no direct test
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin the Base tile hexes, knocked-out and unplaced players, and the current-player origin in progression.test.ts
+- issue: #452
+- fixed: (this commit)
+
 # Site audit — 2026-11-19 (pass 395, cloud tick)
 
 Pass 394 pinned legalUpgrades prices (541be0e). No issues wait for triage, the critique gate is closed (pass 53 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 13 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the engine's public exports finds `enemiesInRange` with no direct test: the /play Skill board marks which Skills have a target with it, the next-step hint and the bot read it too, yet tests reach it only through whole-turn flows (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `engage.test.ts` now pins: an enemy at exactly the range is in and 1 hex further is out; range 0 reaches only the figure's hex; no enemies gives an empty list; the list keeps state order, not distance order; it measures from the current player, not the first seat; and it leaves the state unchanged. Changing `<=` to `<` fails 4 of the new tests. Next in line: the /decisions rows wait for /oversight.
