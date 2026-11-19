@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-19 (pass 394, cloud tick)
+
+Pass 393 made `sameAction` ignore key order (586cf3f). No issues wait for triage, the critique gate is closed (pass 53 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 12 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the engine's public exports finds `legalUpgrades` with no direct test: the /play Base panel prices its Buy buttons with it, yet tests reach it only through `legalActions` and `applyAction`, so the costs it returns and its "never below 0" clamp on a Mason or Engineer cut were unpinned (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `progression.test.ts` now pins: the list prices (Shop I 4, Training I 3), both prices after a 1-material cut, a tier dropped when the player cannot pay the cut price, and a cut larger than the price giving cost 0, with the buy leaving materials at 0 and the `upgradeBought` event at cost 0. Removing the clamp fails the test. Next in line: the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: legalUpgrades prices and the cost clamp at 0 have no direct test
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin prices, affordability and the clamp in progression.test.ts
+- issue: #450
+- fixed: (this commit)
+
 # Site audit — 2026-11-19 (pass 393, cloud tick)
 
 Pass 392 pinned serialize key order (906a70d). No issues wait for triage, the critique gate is closed (pass 53 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 11 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the engine's public exports finds `sameAction` untested and depending on key order: it compared `JSON.stringify` text, so `{ type: 'moveTo', q: 1, r: -1 }` and the same choice with its keys in another order (as an action read back from `serialize` output comes) compared as different. No call site trips it today; the /play Hand and Dice tray write keys in the order `legalActions` does (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `sameAction` now compares the actions after the key sort `serialize` uses (`sortKeys`, now exported from `api/serialize.ts`). `api.test.ts` pins: reordered and sorted keys match; a different type or value does not; a Skill use with no `enemy` does not match one aimed at an enemy; and every legal action read back from serialize text, keys sorted, matches the one listed. Two of these tests fail on the old code. Next in line: the /decisions rows wait for /oversight.

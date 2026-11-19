@@ -5,6 +5,7 @@ import {
   applyAction,
   createGame,
   legalActions,
+  legalUpgrades,
   upgradesInReach,
   type GameState,
 } from '../src/index.ts'
@@ -146,6 +147,28 @@ describe('base upgrades (11.1-11.4)', () => {
     expect(types(building(3, 1)).has('buyUpgrade')).toBe(true)
     const { state } = applyAction(building(3, 1), { type: 'buyUpgrade', upgrade: 'shop-1' })
     expect(state.players[0]!.materials).toBe(0)
+  })
+
+  it('11.2, row 42 legalUpgrades prices each tier after the cut, never below 0', () => {
+    expect(legalUpgrades(building(4), 0, 1)).toEqual([
+      { upgrade: 'shop-1', cost: 4 },
+      { upgrade: 'training-1', cost: 3 },
+    ])
+    expect(legalUpgrades(building(3), 1, 1)).toEqual([
+      { upgrade: 'shop-1', cost: 3 },
+      { upgrade: 'training-1', cost: 2 },
+    ])
+    expect(legalUpgrades(building(2), 1, 1)).toEqual([{ upgrade: 'training-1', cost: 2 }])
+    expect(legalUpgrades(building(0), 10, 1)).toEqual([
+      { upgrade: 'shop-1', cost: 0 },
+      { upgrade: 'training-1', cost: 0 },
+    ])
+    const { state, events } = applyAction(building(0, 10), {
+      type: 'buyUpgrade',
+      upgrade: 'training-1',
+    })
+    expect(state.players[0]!.materials).toBe(0)
+    expect(events.find((e) => e.type === 'upgradeBought')).toMatchObject({ cost: 0 })
   })
 
   it('Table 8 Architect buys 2 upgrades', () => {
