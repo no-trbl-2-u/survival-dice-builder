@@ -136,4 +136,22 @@ describe('the Training Ground track (rules 10.8, 11.6)', () => {
     render(<BasePanel state={{ ...game, upgrades: ['training-1'] }} legal={[]} act={() => {}} />)
     expect(screen.queryByTestId('training-closed')).toBeNull()
   })
+
+  it('once open, names the round whose end holds the next Skill draft', () => {
+    const game = { ...createGame(defaultContent.config, 1), upgrades: ['training-1'] }
+    const id = game.players[0]?.id ?? ''
+    const line = (state: GameState) => {
+      const { unmount } = render(<BasePanel state={state} legal={[]} act={() => {}} />)
+      const text = screen.getByTestId('training-next').textContent
+      unmount()
+      return text
+    }
+    expect(line(game)).toBe('Next Skill draft: at the end of round 2.')
+    expect(line({ ...game, round: 2 })).toBe(
+      'Next Skill draft: at the end of this round (round 2).',
+    )
+    expect(line({ ...game, round: 2, draftedPlayers: [id] })).toBe(
+      'Next Skill draft: at the end of round 4.',
+    )
+  })
 })

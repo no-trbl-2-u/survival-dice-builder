@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — once Training I is bought, nothing on /play says when the next Skill draft is
-- pass: 53 (commit eb1fc60)
-- viewport: desktop
-- category: comprehension
-- observation: The draft-round line shows only while the Training Ground is closed. After Training I is bought it goes away and the tier reads "Training I: bought"; the player learns of the draft only when the Reward dialog opens.
-- evidence: `apps/web/src/play/BasePanel.tsx:93-97` renders `training-closed` only when `openLevel(state, 'training') === 0`; no other draft-timing copy in `apps/web/src/play/` outside `DecisionDialog.tsx` and `describeEvent.ts`.
-- suggested fix: When the Training Ground is open, show "Next Skill draft: round N." from draft.everyNRounds in place of the closed line.
-- source: web-fetch
-
 ### [LOW] /play — the Base panel's Training line says "your pool" and never says what the pool is
 - pass: 53 (commit eb1fc60)
 - viewport: desktop
@@ -91,6 +82,16 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — once Training I is bought, nothing on /play says when the next Skill draft is
+- pass: 53 (commit eb1fc60)
+- viewport: desktop
+- category: comprehension
+- observation: The draft-round line shows only while the Training Ground is closed. After Training I is bought it goes away and the tier reads "Training I: bought"; the player learns of the draft only when the Reward dialog opens.
+- evidence: `apps/web/src/play/BasePanel.tsx:93-97` renders `training-closed` only when `openLevel(state, 'training') === 0`; no other draft-timing copy in `apps/web/src/play/` outside `DecisionDialog.tsx` and `describeEvent.ts`.
+- suggested fix: When the Training Ground is open, show "Next Skill draft: round N." from draft.everyNRounds in place of the closed line.
+- source: web-fetch
+- issue: #444
 
 ### [x] [LOW] /play — the co-op banner reads "Prepare: Player 2: Play a card", two colons in a row
 - pass: 53 (commit eb1fc60)

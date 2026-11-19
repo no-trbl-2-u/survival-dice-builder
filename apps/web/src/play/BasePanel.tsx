@@ -1,6 +1,7 @@
 import {
   milestoneIds,
   milestoneOutOfReach,
+  nextDraftText,
   trainingClosedText,
   upgradesReachable,
   upgradesReachNote,
@@ -26,7 +27,8 @@ const holder = (state: GameState): string =>
  * on the base, at the price the engine charges after a Mason or Engineer cut; a tier no Build
  * card can buy reads "out of reach", with the reason), and the Shop offers (Buy when the figure
  * is on the base and the price is met). While the Training Ground is closed, a line names the upgrade
- * that opens it and its draft rounds (rules 10.8, 11.6).
+ * that opens it and its draft rounds; once it is open, the line names the round whose end holds
+ * the next Skill draft (rules 10.8, 11.6).
  * When nothing can be bought but a tier is left in reach, it says how buying works, so materials
  * never look stuck. The
  * run's milestones close the panel, folded, with how many are met and how many the config and
@@ -83,7 +85,15 @@ export function BasePanel({ state, legal, act }: Props) {
           </ol>
         </div>
       ))}
-      {openLevel(state, 'training') > 0 ? null : (
+      {openLevel(state, 'training') > 0 ? (
+        <p className={styles.muted} data-testid="training-next">
+          {nextDraftText(
+            state.config,
+            state.round,
+            state.players.every((p) => state.draftedPlayers.includes(p.id)),
+          )}
+        </p>
+      ) : (
         <p className={styles.muted} data-testid="training-closed">
           {trainingClosedText(state.config, state.content)}
         </p>

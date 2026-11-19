@@ -55,6 +55,7 @@ import {
   startText,
   targetOrderText,
   targetText,
+  nextDraftText,
   trainingClosedText,
   trainingText,
   upgradesReachable,
@@ -138,6 +139,23 @@ describe('rule text from config', () => {
     )
     const rarely = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 3 } }))
     expect(trainingClosedText(rarely, defaultContent)).toMatch(/Then, in rounds 3, 6, 9 and so on,/)
+  })
+
+  it('next draft: names the round whose end holds the next Skill draft (10.8, 11.6)', () => {
+    expect(nextDraftText(base, 1, false)).toBe('Next Skill draft: at the end of round 2.')
+    expect(nextDraftText(base, 2, false)).toBe(
+      'Next Skill draft: at the end of this round (round 2).',
+    )
+    expect(nextDraftText(base, 2, true)).toBe('Next Skill draft: at the end of round 4.')
+    expect(nextDraftText(base, 3, false)).toBe('Next Skill draft: at the end of round 4.')
+    const rarely = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 3 } }))
+    expect(nextDraftText(rarely, 4, false)).toBe('Next Skill draft: at the end of round 6.')
+    expect(nextDraftText(rarely, 6, true)).toBe('Next Skill draft: at the end of round 9.')
+    const often = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 1 } }))
+    expect(nextDraftText(often, 5, false)).toBe(
+      'Next Skill draft: at the end of this round (round 5).',
+    )
+    expect(nextDraftText(often, 5, true)).toBe('Next Skill draft: at the end of round 6.')
   })
 
   it('knockout: the return share and the losses follow config (Spec v2 14.2, 14.4)', () => {

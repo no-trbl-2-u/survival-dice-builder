@@ -127,6 +127,7 @@ export {
   startText,
   targetOrderText,
   targetText,
+  nextDraftText,
   trainingClosedText,
   trainingText,
   upgradesReachable,

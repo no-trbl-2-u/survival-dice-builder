@@ -205,6 +205,28 @@ export function trainingClosedText(config: GameConfig, content: Upgrades): strin
 }
 
 /**
+ * The /play Base panel line once the Training Ground is open: the round whose end holds the next
+ * Skill draft. The draft runs at the end of every round divisible by `draft.everyNRounds`; once
+ * every player has drafted in such a round, the next one is `everyNRounds` later.
+ *
+ * @param round - the current round.
+ * @param draftedThisRound - true when every player has already drafted this round.
+ * @rule 10.8, 11.6
+ */
+export function nextDraftText(
+  config: GameConfig,
+  round: number,
+  draftedThisRound: boolean,
+): string {
+  const n = config.draft.everyNRounds
+  const due = Math.ceil(round / n) * n
+  const next = due === round && draftedThisRound ? round + n : due
+  return next === round
+    ? `Next Skill draft: at the end of this round (round ${round}).`
+    : `Next Skill draft: at the end of round ${next}.`
+}
+
+/**
  * A Gather card's top half: where it gathers, what it spends, and that an enemy on the hex blocks
  * it (6.9).
  *

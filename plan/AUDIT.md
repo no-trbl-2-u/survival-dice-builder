@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-19 (pass 389, cloud tick)
+
+Pass 388 addressed the seat in the co-op banner (5e748eb). No issues wait for triage, the critique gate is closed (pass 53 ran 3 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 7 commits and under 48 hours ago. Three pass 53 LOW rows on /play remain, all on the Base panel's Training line. The draft-timing row leads (impact 4, ease 8: 3.2): once Training I was bought, the panel dropped the draft-round line, and nothing on /play said when the next Skill draft was until the Reward dialog opened. The panel now shows "Next Skill draft: at the end of round N." while the Training Ground is open, from the new content helper `nextDraftText` (`packages/content/src/ruleText.ts`): the draft runs at the end of every round divisible by `draft.everyNRounds`, so it names the next such round, says "at the end of this round" in a draft round, and moves on by `everyNRounds` once every player has drafted. `ruleText.test.ts` pins the rounds at every 1, 2 and 3 rounds, before and after the draft; `BasePanel.test.tsx` pins the line in rounds 1 and 2 and after the round's draft. Next in line: the two other pass 53 Training rows (name the pool; sit the line under its track).
+
+## Top 5 findings (scored)
+
+### [x] [3.2] external-critique: /play says nothing about the next Skill draft once Training I is bought (pass 53 LOW)
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: "Next Skill draft" line from draft.everyNRounds
+- issue: #444
+- fixed: (this commit)
+
 # Site audit — 2026-11-19 (pass 388, cloud tick)
 
 Pass 387 gave the banner and Base panel one Buy label (c28c3aa). No issues wait for triage, the critique gate is closed (pass 53 ran 2 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 6 commits and under 48 hours ago. Four pass 53 LOW rows on /play remain; the co-op banner row leads (impact 4, ease 8: 3.2) because it shows on every co-op turn: the banner read "Prepare: Player 2: Play a card from your hand", two labels with colons in a row. `nextStep` now names the seat as an address with a lower-case verb, "Prepare: Player 2, play a card from your hand"; solo runs keep the capitalised step. `nextStep.test.ts` pins the address form, a single colon in the full banner line, the solo capital, and the Player 2 Prepare line in a played 2-player run. Next in line: the three pass 53 Training Ground rows on /play.
