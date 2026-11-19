@@ -2,6 +2,7 @@ import { hexKey, type Action, type Axial, type GameState } from '@survival/engin
 import { defenseName, hexName, placeName, stepsAway } from '../map/places.ts'
 import { enemyName as namedEnemy } from '../names/pieceNames.ts'
 import { optionText } from '../play/CardView.tsx'
+import { upgradeBuyLabel } from '../play/upgradeLabel.ts'
 
 /** The printed name of a card instance in the current player's hand. */
 function cardName(state: GameState, cardId: string): string {
@@ -119,10 +120,8 @@ function label(action: Action, state: GameState): string {
       const name = state.content.cards.find((c) => c.id === def)?.name ?? action.card
       return showIds ? `Return starter ${name} [${action.card}]` : `Return starter ${name}`
     }
-    case 'buyUpgrade': {
-      const def = state.content.upgrades.find((u) => u.id === action.upgrade)
-      return `Buy upgrade ${def?.name ?? action.upgrade}`
-    }
+    case 'buyUpgrade':
+      return upgradeBuyLabel(state, action.upgrade)
     case 'draftSkill':
       return `Keep ${skillName(state, action.skill)}`
     case 'replaceSkill':

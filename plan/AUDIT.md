@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-19 (pass 387, cloud tick)
+
+Critique pass 53 ran at eb1fc60 (fbe139b) and filed 5 rows on /play. No issues wait for triage (#223 is `triage:needs-user`), the critique gate is closed (pass 53 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 5 commits and under 48 hours ago. The pass 53 MED row leads (impact 5, ease 8: 4.0, x1.5 for the external-critique MED bias: 6.0): during a Build on the Base tile, the banner button read "Buy upgrade Training I" with no price, and the Base panel read "Buy Training I (3 materials)" for the same action. Both buttons now come from one helper, `apps/web/src/play/upgradeLabel.ts` `upgradeBuyLabel`. It reads "Buy Training I (3 materials)" at the price the engine's `legalUpgrades` charges the active Build after a Mason or Engineer cut. `upgradeLabel.test.ts` pins the list price, the Engineer price with "1 material" singular, the list price when no Build is active, and the banner label (`describeAction`) matching the panel's. BasePanel.test.tsx still pins the panel buttons. Next in line: the four pass 53 LOW rows on /play.
+
+## Top 5 findings (scored)
+
+### [x] [6.0] external-critique: /play banner and Base panel label the same upgrade buy differently, only one with a price (pass 53 MED)
+- category: external-critique
+- impact: 5
+- ease: 8
+- next: one shared Buy label with the engine price
+- issue: #442
+- fixed: (this commit)
+
 # Site audit — 2026-11-18 (pass 386, cloud tick)
 
 Pass 385 pinned the `pnpm sim` CLI (5a47031). No issues wait for triage, the critique gate is closed (pass 52 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 3 commits ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of engine exports finds the supply helpers in `packages/engine/src/progression/supplies.ts` with no direct test: `openLevel` is on the engine's public API (the /play Base panel calls it) yet only the web panel test reaches it, and `drawLevel`'s null case and `buildSupplies`' per-level copies and seed behaviour are reached only through whole-game tests (impact 3, ease 8: 2.4; below 3.0, but expand's window is shut). `supplies.test.ts` pins: a closed track reads 0, each track reads only its own tiers, the highest bought tier wins in any order and the level comes from the content; the draw takes the highest open level with cards, falls back past empty or missing levels (row 41), never draws above the open level and is null when every open level is empty; each level holds copiesPerCard / copiesPerSkill of every Level N card and Skill, doubling the copies doubles the stacks, the same seed builds the same stacks, and a different seed shuffles the same cards.

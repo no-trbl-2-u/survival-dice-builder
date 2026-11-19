@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play — the banner and the Base panel give the same upgrade two labels, and only one has the price
-- pass: 53 (commit eb1fc60)
-- viewport: desktop
-- category: comprehension
-- observation: During a Build on the Base tile, the banner offers "Buy upgrade Training I" with no price, and the Base panel offers "Buy Training I (3 materials)" for the same action. The price can be lower after a Mason or Engineer cut. A first-time player can think these are two purchases, or that the banner one is free.
-- evidence: `apps/web/src/play/nextStep.ts:126-134` (bannerActions keeps buyUpgrade), labelled by `apps/web/src/debug/describeAction.ts:122-124` "Buy upgrade ${name}"; `apps/web/src/play/BasePanel.tsx:74-75` "Buy {u.name} ({materials(price)})".
-- suggested fix: Label the banner buyUpgrade button like the Base panel, "Buy Training I (3 materials)", with the same engine price.
-- source: web-fetch
-
 ### [LOW] /play — once Training I is bought, nothing on /play says when the next Skill draft is
 - pass: 53 (commit eb1fc60)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play — the banner and the Base panel give the same upgrade two labels, and only one has the price
+- pass: 53 (commit eb1fc60)
+- viewport: desktop
+- category: comprehension
+- observation: During a Build on the Base tile, the banner offers "Buy upgrade Training I" with no price, and the Base panel offers "Buy Training I (3 materials)" for the same action. The price can be lower after a Mason or Engineer cut. A first-time player can think these are two purchases, or that the banner one is free.
+- evidence: `apps/web/src/play/nextStep.ts:126-134` (bannerActions keeps buyUpgrade), labelled by `apps/web/src/debug/describeAction.ts:122-124` "Buy upgrade ${name}"; `apps/web/src/play/BasePanel.tsx:74-75` "Buy {u.name} ({materials(price)})".
+- suggested fix: Label the banner buyUpgrade button like the Base panel, "Buy Training I (3 materials)", with the same engine price.
+- source: web-fetch
+- issue: #442
+- fixed: (this commit)
 
 ### [x] [LOW] /play — the Base panel labels the track "Training", and says nothing about what Training I opens
 - pass: 52 (commit 83b417f)

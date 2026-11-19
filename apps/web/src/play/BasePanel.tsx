@@ -5,7 +5,7 @@ import {
   upgradesReachable,
   upgradesReachNote,
 } from '@survival/content'
-import { legalUpgrades, openLevel, type Action, type GameState } from '@survival/engine'
+import { openLevel, type Action, type GameState } from '@survival/engine'
 import { GameIcon } from '../icons/GameIcon.tsx'
 import { cardPriceText } from './CardView.tsx'
 import { cardText } from './effectText.ts'
@@ -13,11 +13,9 @@ import { MilestoneList } from './MilestoneList.tsx'
 import styles from './Play.module.css'
 import { seatName, whose } from './PlayerPanel.tsx'
 import { ofType } from './targets.ts'
+import { materials, upgradeBuyLabel } from './upgradeLabel.ts'
 
 type Props = Readonly<{ state: GameState; legal: readonly Action[]; act: (a: Action) => void }>
-
-/** "1 material", "4 materials". */
-const materials = (n: number) => `${n} ${n === 1 ? 'material' : 'materials'}`
 
 /** Who holds the current player's purse: "You have" solo, "Player N has" in co-op. */
 const holder = (state: GameState): string =>
@@ -36,10 +34,6 @@ const holder = (state: GameState): string =>
  */
 export function BasePanel({ state, legal, act }: Props) {
   const upgrades = ofType(legal, 'buyUpgrade')
-  const prices =
-    state.active?.kind === 'build'
-      ? legalUpgrades(state, state.active.costReduction, state.active.level)
-      : []
   const buys = ofType(legal, 'buyCard')
   const player = state.players[state.current]
   const reachable = upgradesReachable(state.config, state.content).map((u) => u.id)
@@ -67,12 +61,11 @@ export function BasePanel({ state, legal, act }: Props) {
               .map((u) => {
                 const bought = state.upgrades.includes(u.id)
                 const buy = upgrades.find((a) => a.upgrade === u.id)
-                const price = prices.find((p) => p.upgrade === u.id)?.cost ?? u.cost
                 return (
                   <li key={u.id} className={`${styles.tier} ${bought ? styles.bought : ''}`}>
                     {buy ? (
                       <button type="button" onClick={() => act(buy)}>
-                        Buy {u.name} ({materials(price)})
+                        {upgradeBuyLabel(state, u.id)}
                       </button>
                     ) : (
                       <span>
