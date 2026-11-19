@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-19 (pass 391, cloud tick)
+
+Pass 390 said what the pool is on the Training line (d9c4098). No issues wait for triage, the critique gate is closed (pass 53 ran 5 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 9 commits and under 48 hours ago. The last pass 53 row on /play leads (impact 4, ease 9: 3.6, since every run opens on this panel; the /decisions MED rows still wait for /oversight): the Training line rendered after both upgrade tracks, among the out-of-reach and how-to-buy notes, apart from the Training Ground track it explains. `BasePanel` now renders the closed and open Training lines inside the Training Ground track, after its tier list; the new `.trackNote` class takes the full flex row so the line wraps below the tiers. `BasePanel.test.tsx` pins both lines inside the Training Ground track, right after its tiers, and outside the Shop track. Next in line: the pass 53 rows are drained; the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: /play Training line sits apart from the Training Ground track (pass 53 LOW)
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: render the Training line under the Training Ground tiers
+- issue: #447
+- fixed: (this commit)
+
 # Site audit — 2026-11-19 (pass 390, cloud tick)
 
 Pass 389 named the next Skill draft on the Base panel (974be3d). No issues wait for triage, the critique gate is closed (pass 53 ran 4 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 8 commits and under 48 hours ago. Two pass 53 LOW rows on /play remained, both on the Base panel's Training line; the pool row leads (impact 4, ease 9: 3.6) because the line told a new player to look at "your pool" and nothing on /play said what that is. `trainingClosedText` (`packages/content/src/ruleText.ts`) now ends with `draftPoolText`, as the home page's Training text does: "The Skills you do not keep go to your pool. Later drafts offer them again.", or "go back to the supply" when `draft.unpicked` is supply. `ruleText.test.ts` pins both endings; `BasePanel.test.tsx` pins the full panel line. The /decisions MED rows still edit `[needs-user-call]` items and wait for /oversight. Next in line: the last pass 53 row (sit the Training line under its track).

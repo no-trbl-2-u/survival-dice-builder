@@ -728,6 +728,12 @@
   margin-bottom: 6px;
 }
 
+/* A note under a track's tiers: takes the full row so it wraps below them. */
+.trackNote {
+  flex-basis: 100%;
+  margin: 0;
+}
+
 .trackName {
   font-weight: 700;
   min-width: 5rem;

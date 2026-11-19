@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /play — the Training line sits below all tracks, apart from the Training Ground track it explains
-- pass: 53 (commit eb1fc60)
-- viewport: desktop
-- category: visual
-- observation: At run start three muted paragraphs stack between the upgrade tracks and "Shop offers": the Training line, the out-of-reach line and the how-to-buy hint. The Training line is not next to its track, and the matching Shop line sits further down under "Shop offers".
-- evidence: `apps/web/src/play/BasePanel.tsx:93-108` render training-closed, upgrade-reach and upgrade-hint in that order after the track list; `:119-122` render "The Shop opens when you buy the Shop I upgrade..." under the Shop offers heading.
-- suggested fix: Render the training-closed line directly under the Training Ground track's tier list.
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the Training line sits below all tracks, apart from the Training Ground track it explains
+- pass: 53 (commit eb1fc60)
+- viewport: desktop
+- category: visual
+- observation: At run start three muted paragraphs stack between the upgrade tracks and "Shop offers": the Training line, the out-of-reach line and the how-to-buy hint. The Training line is not next to its track, and the matching Shop line sits further down under "Shop offers".
+- evidence: `apps/web/src/play/BasePanel.tsx:93-108` render training-closed, upgrade-reach and upgrade-hint in that order after the track list; `:119-122` render "The Shop opens when you buy the Shop I upgrade..." under the Shop offers heading.
+- suggested fix: Render the training-closed line directly under the Training Ground track's tier list.
+- source: web-fetch
+- issue: #447
+- addressed: the closed and open Training lines now render inside the Training Ground track, full width under its tiers (`.trackNote`), ahead of the Shop track and the panel notes.
 
 ### [x] [LOW] /play — the Base panel's Training line says "your pool" and never says what the pool is
 - pass: 53 (commit eb1fc60)

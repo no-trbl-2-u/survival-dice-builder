@@ -137,6 +137,21 @@ describe('the Training Ground track (rules 10.8, 11.6)', () => {
     expect(screen.queryByTestId('training-closed')).toBeNull()
   })
 
+  it('sits under the Training Ground tiers, not after the Shop track or the panel notes', () => {
+    const game = createGame(defaultContent.config, 1)
+    const { unmount } = render(<BasePanel state={game} legal={[]} act={() => {}} />)
+    const track = screen.getByText('Training Ground').parentElement
+    const closed = screen.getByTestId('training-closed')
+    expect(closed.parentElement).toBe(track)
+    expect(closed.previousElementSibling?.tagName).toBe('OL')
+    expect(screen.getByText('Shop').parentElement?.contains(closed)).toBe(false)
+    unmount()
+    render(<BasePanel state={{ ...game, upgrades: ['training-1'] }} legal={[]} act={() => {}} />)
+    expect(screen.getByTestId('training-next').parentElement).toBe(
+      screen.getByText('Training Ground').parentElement,
+    )
+  })
+
   it('once open, names the round whose end holds the next Skill draft', () => {
     const game = { ...createGame(defaultContent.config, 1), upgrades: ['training-1'] }
     const id = game.players[0]?.id ?? ''

@@ -26,9 +26,9 @@ const holder = (state: GameState): string =>
  * The base board: health, the 2 upgrade tracks, Shop and Training Ground (bought, next, cost; Buy while a Build is active
  * on the base, at the price the engine charges after a Mason or Engineer cut; a tier no Build
  * card can buy reads "out of reach", with the reason), and the Shop offers (Buy when the figure
- * is on the base and the price is met). While the Training Ground is closed, a line names the upgrade
- * that opens it and its draft rounds; once it is open, the line names the round whose end holds
- * the next Skill draft (rules 10.8, 11.6).
+ * is on the base and the price is met). Under the Training Ground's tiers, while it is closed, a line
+ * names the upgrade that opens it and its draft rounds; once it is open, the line names the round
+ * whose end holds the next Skill draft (rules 10.8, 11.6).
  * When nothing can be bought but a tier is left in reach, it says how buying works, so materials
  * never look stuck. The
  * run's milestones close the panel, folded, with how many are met and how many the config and
@@ -83,21 +83,23 @@ export function BasePanel({ state, legal, act }: Props) {
                 )
               })}
           </ol>
+          {track === 'training' ? (
+            openLevel(state, 'training') > 0 ? (
+              <p className={`${styles.muted} ${styles.trackNote}`} data-testid="training-next">
+                {nextDraftText(
+                  state.config,
+                  state.round,
+                  state.players.every((p) => state.draftedPlayers.includes(p.id)),
+                )}
+              </p>
+            ) : (
+              <p className={`${styles.muted} ${styles.trackNote}`} data-testid="training-closed">
+                {trainingClosedText(state.config, state.content)}
+              </p>
+            )
+          ) : null}
         </div>
       ))}
-      {openLevel(state, 'training') > 0 ? (
-        <p className={styles.muted} data-testid="training-next">
-          {nextDraftText(
-            state.config,
-            state.round,
-            state.players.every((p) => state.draftedPlayers.includes(p.id)),
-          )}
-        </p>
-      ) : (
-        <p className={styles.muted} data-testid="training-closed">
-          {trainingClosedText(state.config, state.content)}
-        </p>
-      )}
       {reachNote ? (
         <p className={styles.muted} data-testid="upgrade-reach">
           Out of reach: {reachNote}.
