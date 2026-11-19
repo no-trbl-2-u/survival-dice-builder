@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-19 (pass 388, cloud tick)
+
+Pass 387 gave the banner and Base panel one Buy label (c28c3aa). No issues wait for triage, the critique gate is closed (pass 53 ran 2 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 6 commits and under 48 hours ago. Four pass 53 LOW rows on /play remain; the co-op banner row leads (impact 4, ease 8: 3.2) because it shows on every co-op turn: the banner read "Prepare: Player 2: Play a card from your hand", two labels with colons in a row. `nextStep` now names the seat as an address with a lower-case verb, "Prepare: Player 2, play a card from your hand"; solo runs keep the capitalised step. `nextStep.test.ts` pins the address form, a single colon in the full banner line, the solo capital, and the Player 2 Prepare line in a played 2-player run. Next in line: the three pass 53 Training Ground rows on /play.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] external-critique: /play co-op banner reads "Prepare: Player 2: Play a card", two colons (pass 53 LOW)
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: address form "Player 2, play ..."
+- issue: #443
+- fixed: (this commit)
+
 # Site audit — 2026-11-19 (pass 387, cloud tick)
 
 Critique pass 53 ran at eb1fc60 (fbe139b) and filed 5 rows on /play. No issues wait for triage (#223 is `triage:needs-user`), the critique gate is closed (pass 53 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 5 commits and under 48 hours ago. The pass 53 MED row leads (impact 5, ease 8: 4.0, x1.5 for the external-critique MED bias: 6.0): during a Build on the Base tile, the banner button read "Buy upgrade Training I" with no price, and the Base panel read "Buy Training I (3 materials)" for the same action. Both buttons now come from one helper, `apps/web/src/play/upgradeLabel.ts` `upgradeBuyLabel`. It reads "Buy Training I (3 materials)" at the price the engine's `legalUpgrades` charges the active Build after a Mason or Engineer cut. `upgradeLabel.test.ts` pins the list price, the Engineer price with "1 material" singular, the list price when no Build is active, and the banner label (`describeAction`) matching the panel's. BasePanel.test.tsx still pins the panel buttons. Next in line: the four pass 53 LOW rows on /play.

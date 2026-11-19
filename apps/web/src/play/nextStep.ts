@@ -27,8 +27,14 @@ const EXCHANGE: Record<Exclude<NonNullable<GameState['exchange']>['step'], 'card
  * engine decides what is legal; this only names it.
  */
 export function nextStep(state: GameState, legal: readonly Action[]): NextStep {
-  const who = state.players.length > 1 ? `Player ${state.current + 1}: ` : ''
-  const step = (phase: string, text: string): NextStep => ({ phase, step: `${who}${text}` })
+  // In co-op the step names the player as an address: "Player 2, play a card from your hand".
+  const coop = state.players.length > 1
+  const step = (phase: string, text: string): NextStep => ({
+    phase,
+    step: coop
+      ? `Player ${state.current + 1}, ${text.charAt(0).toLowerCase()}${text.slice(1)}`
+      : text,
+  })
   const has = (type: Action['type']) => legal.some((a) => a.type === type)
 
   if (state.phase === 'ended') return { phase: 'Run over', step: 'The base fell' }

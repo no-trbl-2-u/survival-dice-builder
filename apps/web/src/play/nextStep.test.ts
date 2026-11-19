@@ -139,9 +139,24 @@ describe('nextStep', () => {
     )
   })
 
-  it('names the seat in a multi-player run', () => {
+  it('names the seat in a multi-player run as an address, one colon only', () => {
     const s = createGame(config, 3, defaultContent, { players: 2 })
-    expect(nextStep(s, legalActions(s)).step).toMatch(/^Player 1: /)
+    const line = nextStep(s, legalActions(s))
+    expect(line.step).toMatch(/^Player 1, [a-z]/)
+    expect(`${line.phase}: ${line.step}`.match(/:/g)).toHaveLength(1)
+    const solo = createGame(config, 3)
+    expect(nextStep(solo, legalActions(solo)).step).toMatch(/^[A-Z]/)
+  })
+
+  it('co-op Prepare reads "Player 2, play a card from your hand"', () => {
+    let s = createGame(config, 3, defaultContent, { players: 2 })
+    for (let i = 0; i < 200 && !(s.phase === 'prepare' && s.current === 1 && !s.active); i++) {
+      const next = legalActions(s)[0]
+      if (!next) break
+      s = applyAction(s, next).state
+    }
+    expect([s.phase, s.current, s.active]).toEqual(['prepare', 1, null])
+    expect(nextStep(s, legalActions(s)).step).toMatch(/^Player 2, play a card from your hand/)
   })
 
   it('Combat v3: every legal action of a played-out engage run has a control', () => {

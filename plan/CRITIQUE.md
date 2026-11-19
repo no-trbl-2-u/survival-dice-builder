@@ -36,15 +36,6 @@
 - suggested fix: Render the training-closed line directly under the Training Ground track's tier list.
 - source: web-fetch
 
-### [LOW] /play — the co-op banner reads "Prepare: Player 2: Play a card", two colons in a row
-- pass: 53 (commit eb1fc60)
-- viewport: desktop
-- category: voice
-- observation: In co-op the banner puts two labels with colons before the instruction, while the phase bar above already says "Player 2's turn".
-- evidence: `apps/web/src/play/nextStep.ts:30-31` who = "Player ${n}: "; `apps/web/src/play/NextStepBanner.tsx:27` "<strong>{phase}:</strong> {step}".
-- suggested fix: Write the co-op prefix as "Player 2, " with a lower-case verb: "Prepare: Player 2, play a card from your hand".
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -100,6 +91,16 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /play — the co-op banner reads "Prepare: Player 2: Play a card", two colons in a row
+- pass: 53 (commit eb1fc60)
+- viewport: desktop
+- category: voice
+- observation: In co-op the banner puts two labels with colons before the instruction, while the phase bar above already says "Player 2's turn".
+- evidence: `apps/web/src/play/nextStep.ts:30-31` who = "Player ${n}: "; `apps/web/src/play/NextStepBanner.tsx:27` "<strong>{phase}:</strong> {step}".
+- suggested fix: Write the co-op prefix as "Player 2, " with a lower-case verb: "Prepare: Player 2, play a card from your hand".
+- source: web-fetch
+- issue: #443
 
 ### [x] [MED] /play — the banner and the Base panel give the same upgrade two labels, and only one has the price
 - pass: 53 (commit eb1fc60)

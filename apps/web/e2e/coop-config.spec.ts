@@ -11,7 +11,7 @@ test('/play: a 3-player run starts and passes the turn in seat order', async ({ 
   // Setup: each player in seat order puts their figure on a free base hex.
   for (let seat = 1; seat <= 3; seat++) {
     await expect(page.getByTestId('next-step')).toContainText(
-      `Player ${seat}: Click a highlighted base hex`,
+      `Player ${seat}, click a highlighted base hex`,
     )
     await page
       .getByRole('button', {
