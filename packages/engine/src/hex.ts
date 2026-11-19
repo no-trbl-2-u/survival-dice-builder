@@ -6,7 +6,9 @@
 export type Axial = Readonly<{ q: number; r: number }>
 
 /**
- * The 6 axial neighbour offsets, in clockwise order starting east (flat-top layout).
+ * The 6 axial neighbour offsets. Drawn with flat-top hexes they run south-east, north-east,
+ * north, north-west, south-west, south: counter-clockwise on screen, each offset next to the
+ * one after it. Tile content lists a tile's outer hexes in this order.
  *
  * @rule 3.1
  */

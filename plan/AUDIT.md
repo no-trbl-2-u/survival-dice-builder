@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-19 (pass 397, cloud tick)
+
+Pass 396 pinned onBase (8e6edb5). No issues wait for triage, the critique gate is closed (pass 53 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 15 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. Every public engine function now has a direct test except `hexKey`, and a probe of the hex module finds the TSDoc on `AXIAL_DIRECTIONS` wrong: it said "clockwise order starting east", and `TileDefSchema` said "east, then counter-clockwise". Drawn flat-top, offset (1,0) is south-east and the ring runs south-east, north-east, north, north-west, south-west, south (counter-clockwise), as /tiles' `HEX_POSITION` already says. Tile authors read these comments to order `hexes[1..6]` (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). Both comments now name the real order. `hex.test.ts` pins `hexKey`'s "q,r" form with signs, the ring shape of `AXIAL_DIRECTIONS` (each offset next to the one after it, offset i+3 opposite offset i) and that `hexNeighbors` and `tileHexes` leave the input unchanged. Swapping two directions fails the ring test. Next in line: the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: AXIAL_DIRECTIONS doc names the wrong ring order; hexKey untested
+- category: tests
+- impact: 3
+- ease: 9
+- next: correct the hex.ts and tiles.ts comments; pin hexKey and the ring in hex.test.ts
+- issue: #453
+- fixed: (this commit)
+
 # Site audit — 2026-11-19 (pass 396, cloud tick)
 
 Pass 395 pinned enemiesInRange (cc2112b). No issues wait for triage, the critique gate is closed (pass 53 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 14 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the engine's public exports finds `onBase` with no direct test: the /play next-step hint and the Build action in `legalActions` read it, yet tests reach it only through whole-turn flows (the `onBase` in `spec-v2.test.ts` is a local helper of the same name) (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `progression.test.ts` now pins: all 7 Base tile hexes count; a hex off the tile does not; a knocked-out figure on the base hex is not on the base; a player still to place a figure is not; it reads the current player, not the first seat; and it leaves the state unchanged. Dropping the knocked-out check fails 1 of the new tests. Next in line: the /decisions rows wait for /oversight.

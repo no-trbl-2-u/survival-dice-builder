@@ -57,8 +57,9 @@ const CENTER_SITE: Record<TileKind, Site | null> = {
 
 /**
  * A 7-hex map tile. `hexes[0]` is the center; `hexes[1..6]` follow `AXIAL_DIRECTIONS`
- * (east, then counter-clockwise on screen). Validated against Table 1 and the Phase 1 spec:
- * at most 1 lake-or-mountain per tile, never on the center, and no site on lake or mountain.
+ * (south-east, north-east, north, north-west, south-west, south: counter-clockwise on screen).
+ * Validated against Table 1 and the Phase 1 spec: at most 1 lake-or-mountain per tile, never on
+ * the center, and no site on lake or mountain.
  *
  * @rule 3.1, 3.3-3.6, Table 1, core loop v2 (Base tile)
  */

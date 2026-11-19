@@ -5,7 +5,7 @@ A rule implemented without a row here is a failed review (`rules-lawyer`).
 
 | Rule | Function(s) | Test(s) |
 |---|---|---|
-| 3.1 | `packages/engine/src/hex.ts` `hexNeighbors`, `tileHexes` | `packages/engine/src/hex.test.ts` "3.1 neighbours of the origin...", "3.1 a map tile has 7 hexes..."; `apps/web/src/map/HexTile.test.tsx` "3.1 renders exactly 7 hex polygons" |
+| 3.1 | `packages/engine/src/hex.ts` `hexNeighbors`, `tileHexes`, `hexKey`, `AXIAL_DIRECTIONS` | `packages/engine/src/hex.test.ts` "3.1 neighbours of the origin...", "3.1 a map tile has 7 hexes...", "3.1 hexKey writes \"q,r\"...", "3.1 the 6 directions form a ring...", "3.1 hexNeighbors and tileHexes leave the input hex unchanged"; `apps/web/src/map/HexTile.test.tsx` "3.1 renders exactly 7 hex polygons" |
 | 2.2, 4.3, core loop v2 (Base tile) | `packages/content/data/tiles.json`, `config.default.json` `tiles`; `schemas/tiles.ts` `SITE_RULES` (Base tile: no nodes) | `packages/content/src/load.test.ts` "2.2 [006]: 9 tiles..."; `schemas/tiles.test.ts` "3.6, core loop v2: the base tile is the base centre and 6 plain hexes..." |
 | 2.3-2.5 | `packages/content/src/schemas/primitives.ts` `FaceSchema`, `SkillFaceSchema` | `load.test.ts` "an unknown die face is rejected" |
 | 3.3-3.6, Table 1 | `schemas/tiles.ts` `TileDefSchema` | `schemas/tiles.test.ts` (8 tests) |
