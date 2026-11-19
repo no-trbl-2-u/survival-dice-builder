@@ -347,6 +347,40 @@ describe('applyAction contract', () => {
   it('deserialize rejects text that is not a game state', () => {
     expect(() => deserialize('{"version":3}')).toThrow(/version 4/)
     expect(() => deserialize('{"version":2,"players":[]}')).toThrow(/version 4/)
+    expect(() => deserialize('{"version":4}')).toThrow(/version 4/)
+    expect(() => deserialize('{"version":4,"players":{}}')).toThrow(/version 4/)
+    expect(() => deserialize('null')).toThrow(/version 4/)
+    expect(() => deserialize('[]')).toThrow(/version 4/)
+    expect(() => deserialize('"version 4"')).toThrow(/version 4/)
+    expect(() => deserialize('not json')).toThrow(SyntaxError)
+  })
+
+  it('serialize gives the same text whatever order the keys were written in', () => {
+    /** Rebuilds every object with its keys in reverse order; arrays keep their order. */
+    const reversed = (value: unknown): unknown => {
+      if (Array.isArray(value)) return value.map(reversed)
+      if (value && typeof value === 'object') {
+        return Object.fromEntries(
+          Object.entries(value)
+            .reverse()
+            .map(([k, v]) => [k, reversed(v)]),
+        )
+      }
+      return value
+    }
+    const s = until(withGrunt(5), (x) => x.exchange?.step === 'roll')
+    const shuffled = reversed(s) as GameState
+    expect(JSON.stringify(shuffled)).not.toBe(JSON.stringify(s))
+    expect(serialize(shuffled)).toBe(serialize(s))
+  })
+
+  it('serialize sorts object keys but keeps array order', () => {
+    const s = createGame(config, 1)
+    const text = serialize(s)
+    const keys = Object.keys(JSON.parse(text) as object)
+    expect(keys).toEqual([...keys].sort())
+    const listed = serialize({ ...s, milestones: ['survive-round-5', 'defeat-elite'] })
+    expect(listed).toContain('"milestones":["survive-round-5","defeat-elite"]')
   })
 })
 

@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-19 (pass 392, cloud tick)
+
+Pass 391 put the Training line under the Training Ground track (ae1e86e). No issues wait for triage, the critique gate is closed (pass 53 ran 6 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 10 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of engine exports finds `serialize`'s promise untested: the same state always gives the same text because keys are sorted, and saves, bug reports and every golden hash rely on it, yet no test writes a state with its keys in another order; `deserialize` was pinned only on wrong versions (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `api.test.ts` now pins: a state rebuilt with every object's keys reversed serializes to the same text; top-level keys come out sorted while arrays keep their written order; and `deserialize` rejects a version 4 object with no players array or a non-array one, `null`, an array, a string, and throws a SyntaxError on text that is not JSON. Next in line: the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: serialize key-order promise and deserialize rejections untested
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin key-order independence and each deserialize rejection in api.test.ts
+- issue: #448
+- fixed: (this commit)
+
 # Site audit — 2026-11-19 (pass 391, cloud tick)
 
 Pass 390 said what the pool is on the Training line (d9c4098). No issues wait for triage, the critique gate is closed (pass 53 ran 5 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 9 commits and under 48 hours ago. The last pass 53 row on /play leads (impact 4, ease 9: 3.6, since every run opens on this panel; the /decisions MED rows still wait for /oversight): the Training line rendered after both upgrade tracks, among the out-of-reach and how-to-buy notes, apart from the Training Ground track it explains. `BasePanel` now renders the closed and open Training lines inside the Training Ground track, after its tier list; the new `.trackNote` class takes the full flex row so the line wraps below the tiers. `BasePanel.test.tsx` pins both lines inside the Training Ground track, right after its tiers, and outside the Shop track. Next in line: the pass 53 rows are drained; the /decisions rows wait for /oversight.
