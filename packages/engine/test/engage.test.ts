@@ -9,6 +9,7 @@ import {
 import {
   applyAction,
   createGame,
+  enemiesInRange,
   legalActions,
   type Action,
   type Enemy,
@@ -46,6 +47,47 @@ function inCombat(): GameState {
     enemies: [grunt('g1', 4, 0), grunt('g2', 3, 1)],
   }
 }
+
+describe('enemiesInRange (the targets a Skill can reach)', () => {
+  // Figure on (3,0); enemies at distance 0, 1, 2 and 3, listed out of distance order.
+  const field = (): GameState => ({
+    ...inCombat(),
+    enemies: [grunt('d2', 5, 0), grunt('d0', 3, 0), grunt('d3', 6, 0), grunt('d1', 3, 1)],
+  })
+  const ids = (s: GameState, range: number) => enemiesInRange(s, range).map((e) => e.id)
+
+  it('counts an enemy at exactly the range as in range, and 1 hex further as out', () => {
+    expect(ids(field(), 2)).toEqual(['d2', 'd0', 'd1'])
+    expect(ids(field(), 1)).toEqual(['d0', 'd1'])
+  })
+
+  it('reaches only the figure hex at range 0, and nothing when no enemy is near', () => {
+    expect(ids(field(), 0)).toEqual(['d0'])
+    expect(ids({ ...field(), enemies: [] }, 3)).toEqual([])
+  })
+
+  it('keeps the state order of enemies, not distance order', () => {
+    expect(ids(field(), 3)).toEqual(['d2', 'd0', 'd3', 'd1'])
+  })
+
+  it('measures from the current player, not the first seat', () => {
+    const s = field()
+    const two: GameState = {
+      ...s,
+      players: [s.players[0]!, { ...s.players[0]!, id: 'p2', hex: { q: 6, r: 0 } }],
+      current: 1,
+    }
+    expect(ids(two, 1)).toEqual(['d2', 'd3'])
+    expect(ids({ ...two, current: 0 }, 1)).toEqual(['d0', 'd1'])
+  })
+
+  it('does not change the state it reads', () => {
+    const s = field()
+    const before = JSON.stringify(s)
+    enemiesInRange(s, 3)
+    expect(JSON.stringify(s)).toBe(before)
+  })
+})
 
 describe('Combat v3 engagements', () => {
   const engage = (s: GameState): Action => legalActions(s).find((a) => a.type === 'engage')!

@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-19 (pass 395, cloud tick)
+
+Pass 394 pinned legalUpgrades prices (541be0e). No issues wait for triage, the critique gate is closed (pass 53 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 13 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the engine's public exports finds `enemiesInRange` with no direct test: the /play Skill board marks which Skills have a target with it, the next-step hint and the bot read it too, yet tests reach it only through whole-turn flows (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `engage.test.ts` now pins: an enemy at exactly the range is in and 1 hex further is out; range 0 reaches only the figure's hex; no enemies gives an empty list; the list keeps state order, not distance order; it measures from the current player, not the first seat; and it leaves the state unchanged. Changing `<=` to `<` fails 4 of the new tests. Next in line: the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: enemiesInRange has no direct test
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin the range limit, range 0, order and the current-player origin in engage.test.ts
+- issue: #451
+- fixed: (this commit)
+
 # Site audit — 2026-11-19 (pass 394, cloud tick)
 
 Pass 393 made `sameAction` ignore key order (586cf3f). No issues wait for triage, the critique gate is closed (pass 53 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 12 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the engine's public exports finds `legalUpgrades` with no direct test: the /play Base panel prices its Buy buttons with it, yet tests reach it only through `legalActions` and `applyAction`, so the costs it returns and its "never below 0" clamp on a Mason or Engineer cut were unpinned (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `progression.test.ts` now pins: the list prices (Shop I 4, Training I 3), both prices after a 1-material cut, a tier dropped when the player cannot pay the cut price, and a cut larger than the price giving cost 0, with the buy leaving materials at 0 and the `upgradeBought` event at cost 0. Removing the clamp fails the test. Next in line: the /decisions rows wait for /oversight.
