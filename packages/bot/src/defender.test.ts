@@ -157,6 +157,28 @@ describe('the defender bot (phase 36)', () => {
     expect(botChoice(s, defender)).toEqual({ type: 'playOption', card: 'c1', option: 0 })
   })
 
+  it('off the base tile, repairs a damaged defense next to it, not one 2 hexes off', () => {
+    const base = started().base
+    const tower = (q: number, r: number, health: number) => ({
+      id: 'd1',
+      kind: 'tower',
+      hex: { q, r },
+      health,
+      builder: 'p1',
+    })
+    const repair = { type: 'playOption', card: 'c1', option: 0 }
+    const at = (patch: Partial<GameState>) =>
+      withPlayer(combat(['starter-gather', 'starter-build'], patch), { hex: { q: 2, r: 0 } })
+    // A damaged tower 1 hex away: repair it.
+    expect(botChoice(at({ defenses: [tower(2, -1, 1)] }), defender)).toEqual(repair)
+    // The same tower 2 hexes away, or 1 hex away at full health: nothing to mend here.
+    expect(botChoice(at({ defenses: [tower(4, 0, 1)] }), defender)).not.toEqual(repair)
+    expect(botChoice(at({ defenses: [tower(2, -1, 3)] }), defender)).not.toEqual(repair)
+    // A damaged base is mended only from its tile.
+    const hurtBase = { base: { ...base, health: base.maxHealth - 3 } }
+    expect(botChoice(at(hurtBase), defender)).not.toEqual(repair)
+  })
+
   it('engages with an enemy in range, keeping its Move cards', () => {
     const s = combat(['starter-move', 'starter-gather'], {
       enemies: [enemy('e1', 'grunt', 2, 2, 0)],

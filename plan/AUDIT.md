@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-20 (pass 403, cloud tick)
+
+Pass 402 lower-cased the /credits elite mid-label (7fd4970). No issues wait for triage, the critique gate is closed (pass 54 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 3 commits ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. Every public engine and content helper has a test, direct or through `ruleLineFor`. A probe of the bot finds a gap in the defender's `repairable` check, which runs before it heals or engages. The check has two branches, the base from its tile and a damaged defense within 1 hex, and only the base branch has a test (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `defender.test.ts` now pins these cases: off the base tile, a damaged Tower 1 hex away gets repaired. The same Tower 2 hexes away does not, and neither does one at full health. A damaged base is not repaired from off its tile. Changing the range to 2 fails the test, and so does dropping the base-tile check. Next in line: the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: the defender's repair of a nearby defense has no test
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin repairable's defense branch in defender.test.ts
+- issue: #459
+- fixed: (this commit)
+
 # Site audit — 2026-11-20 (pass 402, cloud tick)
 
 No issues wait for triage, the critique gate is closed (pass 54 ran 6 commits ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 2 commits ago. The top row is the pass 54 LOW: the /credits ogre line reads "Elite and Elite spawn node" while / writes "elite spawn node" (external-critique LOW, impact 3, ease 8: 2.4; listed at 3.2 since pass 398 and the last open row that does not wait for /oversight; the older MED rows edit `[needs-user-call]` items, which /oversight owns). The ASSETS.md label now reads "Elite and elite spawn node", and `CreditsPage.test.tsx` pins the new line. Next in line: every remaining Pending critique row edits a `[needs-user-call]` item and waits for /oversight.
