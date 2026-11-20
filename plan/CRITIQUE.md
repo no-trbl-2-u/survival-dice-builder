@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Copies rule line reads as one supply, the help says supplies
-- pass: 54 (commit 9400314)
-- viewport: desktop
-- category: comprehension
-- observation: The help for both Copies fields says "supplies" (one per level), but the rule line says "a supply of 2 copies of each level 1 to 3 card (28 cards)" and then "Each draws from the highest level opened", so the count of supplies is unclear.
-- evidence: Help: "Copies of each card in the card supplies."; rule line: "The Shop offers cards from a supply of 2 copies of each level 1 to 3 card (28 cards), ... Each draws from the highest level opened".
-- suggested fix: Reword the rule line to "from 3 supplies, one for each level, with 2 copies of each card (28 cards in all)", and the same for Skills.
-- source: web-fetch
-
 ### [LOW] /credits — "Elite and Elite spawn node" capitalises elite mid-label
 - pass: 54 (commit 9400314)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the Copies rule line reads as one supply, the help says supplies
+- pass: 54 (commit 9400314)
+- viewport: desktop
+- category: comprehension
+- observation: The help for both Copies fields says "supplies" (one per level), but the rule line says "a supply of 2 copies of each level 1 to 3 card (28 cards)" and then "Each draws from the highest level opened", so the count of supplies is unclear.
+- evidence: Help: "Copies of each card in the card supplies."; rule line: "The Shop offers cards from a supply of 2 copies of each level 1 to 3 card (28 cards), ... Each draws from the highest level opened".
+- suggested fix: Reword the rule line to "from 3 supplies, one for each level, with 2 copies of each card (28 cards in all)", and the same for Skills.
+- source: web-fetch
+- issue: #457
+- addressed: suppliesText now reads "The Shop offers cards from 3 supplies, one for each level from 1 to 3, with 2 copies of each card (28 cards in all), and the Training Ground draft offers Skills from 3 supplies, one for each level, with 1 copy of each Skill (14 Skills in all)." The supply count is read from the content levels. ruleText.test.ts pins it.
 
 ### [x] [LOW] /config — Enemy target order puts Tower above Barricade; the siege sentence says Barricade first
 - pass: 54 (commit 9400314)

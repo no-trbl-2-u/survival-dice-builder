@@ -732,14 +732,14 @@ describe('rule text from config', () => {
 
   it('supplies: copies per card and Skill, and the level fallback (Tables 8-9, row 18)', () => {
     expect(suppliesText(base, defaultContent)).toBe(
-      'The Shop offers cards from a supply of 2 copies of each level 1 to 3 card (28 cards), and the Training Ground draft offers Skills from a supply of 1 copy of each level 1 to 3 Skill (14 Skills). Each draws from the highest level opened, or from a lower level when that one runs out.',
+      'The Shop offers cards from 3 supplies, one for each level from 1 to 3, with 2 copies of each card (28 cards in all), and the Training Ground draft offers Skills from 3 supplies, one for each level, with 1 copy of each Skill (14 Skills in all). Each draws from the highest level opened, or from a lower level when that one runs out.',
     )
     const one = With((c) => ({ ...c, supplies: { copiesPerCard: 1, copiesPerSkill: 3 } }))
     expect(suppliesText(one, defaultContent)).toMatch(
-      /1 copy of each level 1 to 3 card \(14 cards\)/,
+      /with 1 copy of each card \(14 cards in all\)/,
     )
     expect(suppliesText(one, defaultContent)).toMatch(
-      /3 copies of each level 1 to 3 Skill \(42 Skills\)/,
+      /with 3 copies of each Skill \(42 Skills in all\)/,
     )
     expect(ruleLineFor('supplies.copiesPerSkill', one, defaultContent)).toBe(
       suppliesText(one, defaultContent),

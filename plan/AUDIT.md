@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-20 (pass 401, cloud tick)
+
+No issues wait for triage, the critique gate is closed (pass 54 ran 5 commits ago), no build plan phase is pending (35 is blocked), and expand pass 36 just ran. The top row is the pass 54 LOW: the /config Copies rule line says "a supply of 2 copies of each level 1 to 3 card" while the help says "supplies", one per level (external-critique LOW, impact 3, ease 8: 2.4; listed at 3.2 since pass 400 and the top open row with the /credits row, which it ties and precedes; the older MED rows edit `[needs-user-call]` items, which /oversight owns). `suppliesText` now reads "from 3 supplies, one for each level from 1 to 3, with 2 copies of each card (28 cards in all)", and the same for Skills, the supply count read from the content levels. `ruleText.test.ts` pins it. Next in line: the pass 54 LOW /credits "Elite spawn node" row.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] external-critique: /config Copies rule line reads as one supply
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: reword suppliesText to name one supply per level
+- issue: #457
+- fixed: (this commit)
+
+### [ ] [3.2] external-critique: /credits "Elite spawn node" capitalised mid-label
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: change the ASSETS.md label and its credits test
+
 # Site audit — 2026-11-20 (pass 400, cloud tick)
 
 No issues wait for triage, the critique gate is closed (pass 54 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 19 commits and under 48 hours ago. The top row is the pass 54 LOW: the /config Enemy target order help ranks Tower above Barricade without saying it is a moving tie-break, while the Combat help and / say an enemy hits a Barricade first (external-critique LOW, impact 3, ease 9: 2.7; listed at 3.6 since pass 398 and the top open row; the older MED rows edit `[needs-user-call]` items, which /oversight owns). The help now adds "This order is for moving only: when Combat ends, an enemy hits a Barricade first, then a Tower, then the base." `configMetaText.test.ts` pins it. Next in line: the 2 pass 54 LOW rows (Copies line, /credits "Elite spawn node").

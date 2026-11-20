@@ -1105,10 +1105,11 @@ export function buildOnNodeText(config: GameConfig): string {
 
 /**
  * Where the Shop offers and the Training Ground draft come from, for the /config Copies of each
- * card and Copies of each Skill fields. Default: "The Shop offers cards from a supply of 2 copies
- * of each level 1 to 3 card (28 cards), and the Training Ground draft offers Skills from a supply
- * of 1 copy of each level 1 to 3 Skill (14 Skills). Each draws from the highest level opened, or
- * from a lower level when that one runs out.", as `buildSupplies` and `drawLevel` play it.
+ * card and Copies of each Skill fields. Default: "The Shop offers cards from 3 supplies, one for
+ * each level from 1 to 3, with 2 copies of each card (28 cards in all), and the Training Ground
+ * draft offers Skills from 3 supplies, one for each level, with 1 copy of each Skill (14 Skills in
+ * all). Each draws from the highest level opened, or from a lower level when that one runs out.",
+ * as `buildSupplies` and `drawLevel` play it.
  *
  * @rule 2.2, 11.5, 11.8, Table 8, Table 9, OPEN-QUESTIONS row 18
  */
@@ -1116,11 +1117,13 @@ export function suppliesText(
   config: GameConfig,
   content: Pick<Content, 'cards' | 'skills'>,
 ): string {
-  const supplied = (items: readonly { level: number }[]) =>
-    items.filter((x) => x.level >= 1 && x.level <= 3).length
+  const inSupply = (items: readonly { level: number }[]) =>
+    items.filter((x) => x.level >= 1 && x.level <= 3)
+  const levels = (items: readonly { level: number }[]) =>
+    new Set(inSupply(items).map((x) => x.level)).size
   const cards = config.supplies.copiesPerCard
   const skills = config.supplies.copiesPerSkill
-  return `The Shop offers cards from a supply of ${plural(cards, 'copy', 'copies')} of each level 1 to 3 card (${plural(cards * supplied(content.cards), 'card', 'cards')}), and the Training Ground draft offers Skills from a supply of ${plural(skills, 'copy', 'copies')} of each level 1 to 3 Skill (${plural(skills * supplied(content.skills), 'Skill', 'Skills')}). Each draws from the highest level opened, or from a lower level when that one runs out.`
+  return `The Shop offers cards from ${plural(levels(content.cards), 'supply', 'supplies')}, one for each level from 1 to 3, with ${plural(cards, 'copy', 'copies')} of each card (${plural(cards * inSupply(content.cards).length, 'card', 'cards')} in all), and the Training Ground draft offers Skills from ${plural(levels(content.skills), 'supply', 'supplies')}, one for each level, with ${plural(skills, 'copy', 'copies')} of each Skill (${plural(skills * inSupply(content.skills).length, 'Skill', 'Skills')} in all). Each draws from the highest level opened, or from a lower level when that one runs out.`
 }
 
 /**
