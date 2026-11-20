@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /credits — "Elite and Elite spawn node" capitalises elite mid-label
-- pass: 54 (commit 9400314)
-- viewport: desktop
-- category: voice
-- observation: The ogre credit line writes "Elite spawn node" after "and"; / writes "elite spawn node". The voice rule keeps elite lower case except at the start of a label.
-- evidence: /credits: "Elite and Elite spawn node: Ogre icon by Delapouite, game-icons.net"; /: "an elite spawn node gets 1 elite at each Combat". Source: `ASSETS.md:36`, pinned in `apps/web/src/credits/CreditsPage.test.tsx:26`.
-- suggested fix: Change the ASSETS.md label to "Elite and elite spawn node" and update the test.
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /credits — "Elite and Elite spawn node" capitalises elite mid-label
+- pass: 54 (commit 9400314)
+- viewport: desktop
+- category: voice
+- observation: The ogre credit line writes "Elite spawn node" after "and"; / writes "elite spawn node". The voice rule keeps elite lower case except at the start of a label.
+- evidence: /credits: "Elite and Elite spawn node: Ogre icon by Delapouite, game-icons.net"; /: "an elite spawn node gets 1 elite at each Combat". Source: `ASSETS.md:36`, pinned in `apps/web/src/credits/CreditsPage.test.tsx:26`.
+- suggested fix: Change the ASSETS.md label to "Elite and elite spawn node" and update the test.
+- source: web-fetch
+- issue: #458
+- addressed: The ASSETS.md label for `elite.svg` now reads "Elite and elite spawn node", so /credits reads "Elite and elite spawn node: Ogre icon by Delapouite, game-icons.net", matching the lower-case "elite spawn node" on /. CreditsPage.test.tsx pins the new line.
 
 ### [x] [LOW] /config — the Copies rule line reads as one supply, the help says supplies
 - pass: 54 (commit 9400314)

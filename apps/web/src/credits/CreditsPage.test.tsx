@@ -23,7 +23,7 @@ describe('CreditsPage', () => {
   it('names the elite spawn node on the Ogre line, as /tiles and /play draw it with that icon', () => {
     render(<CreditsPage />)
     expect(screen.getByTestId('credits-assets').textContent).toContain(
-      'Elite and Elite spawn node: Ogre icon',
+      'Elite and elite spawn node: Ogre icon',
     )
   })
   it('excludes the icons drawn for this game from the icon license sentence', () => {

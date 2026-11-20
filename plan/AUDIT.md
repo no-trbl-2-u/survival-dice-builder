@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-20 (pass 402, cloud tick)
+
+No issues wait for triage, the critique gate is closed (pass 54 ran 6 commits ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 2 commits ago. The top row is the pass 54 LOW: the /credits ogre line reads "Elite and Elite spawn node" while / writes "elite spawn node" (external-critique LOW, impact 3, ease 8: 2.4; listed at 3.2 since pass 398 and the last open row that does not wait for /oversight; the older MED rows edit `[needs-user-call]` items, which /oversight owns). The ASSETS.md label now reads "Elite and elite spawn node", and `CreditsPage.test.tsx` pins the new line. Next in line: every remaining Pending critique row edits a `[needs-user-call]` item and waits for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] external-critique: /credits "Elite spawn node" capitalised mid-label
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: change the ASSETS.md label and its credits test
+- issue: #458
+- fixed: (this commit)
+
 # Site audit — 2026-11-20 (pass 401, cloud tick)
 
 No issues wait for triage, the critique gate is closed (pass 54 ran 5 commits ago), no build plan phase is pending (35 is blocked), and expand pass 36 just ran. The top row is the pass 54 LOW: the /config Copies rule line says "a supply of 2 copies of each level 1 to 3 card" while the help says "supplies", one per level (external-critique LOW, impact 3, ease 8: 2.4; listed at 3.2 since pass 400 and the top open row with the /credits row, which it ties and precedes; the older MED rows edit `[needs-user-call]` items, which /oversight owns). `suppliesText` now reads "from 3 supplies, one for each level from 1 to 3, with 2 copies of each card (28 cards in all)", and the same for Skills, the supply count read from the content levels. `ruleText.test.ts` pins it. Next in line: the pass 54 LOW /credits "Elite spawn node" row.
