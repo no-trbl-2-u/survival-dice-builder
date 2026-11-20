@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-20 (pass 405, cloud tick)
+
+Pass 404 pinned the bot's homeNode order (a85a993). No issues wait for triage, the critique gate is closed (pass 54 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 5 commits ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the bot goal helpers finds that `threat`, the enemy the defender comes home for, is tested only with one enemy 3 hexes off and one 6 hexes off: its range edge, its health tie-break and its id tie-break have no test (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `defender.test.ts` now pins them: an enemy 4 hexes off is a threat and one 5 off is not, a nearer enemy beats a weaker one, and at equal distance the weaker wins, then the lower id, each in both input orders. Reversing either tie-break fails the test. Next in line: the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: the defender's threat pick has no tie-break or range-edge test
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin threat's range edge and tie-breaks in defender.test.ts
+- issue: #461
+- fixed: (this commit)
+
 # Site audit — 2026-11-20 (pass 404, cloud tick)
 
 Pass 403 pinned the defender's repair of a nearby defense (dff2bb1). No issues wait for triage, the critique gate is closed (pass 54 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 4 commits ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the bot goal helpers finds that `homeNode`, the gathering node the default and defender bots head for, is tested only for the null case: its enemy filter, nearest-to-base order and hex-key tie-break have no test (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `goals.test.ts` now pins them on a map with gathering nodes 2, 2 and 3 hexes from the base. The lower hex key wins the tie, a node with an enemy on it is skipped, and so is a spent one. Dropping the enemy filter fails the test, and so does reversing the tie-break. Next in line: the /decisions rows wait for /oversight.

@@ -149,6 +149,21 @@ describe('the defender bot (phase 36)', () => {
     expect(threat(started({ enemies: [enemy('e1', 'grunt', 2, 6, 0)] }))).toBeUndefined()
   })
 
+  it('threat takes the enemy nearest the base within range 4 (ties: the weaker, then id)', () => {
+    const at = (...enemies: Enemy[]) => threat(started({ enemies }))?.id
+    // 4 hexes off is a threat; 5 is not.
+    expect(at(enemy('e1', 'grunt', 2, 4, 0))).toBe('e1')
+    expect(at(enemy('e1', 'grunt', 2, 5, 0))).toBeUndefined()
+    // Nearer wins over weaker.
+    expect(at(enemy('e1', 'grunt', 1, 3, 0), enemy('e2', 'elite', 9, 2, 0))).toBe('e2')
+    // Same distance: the weaker wins, whatever the order or id.
+    expect(at(enemy('e1', 'elite', 9, 3, 0), enemy('e2', 'grunt', 1, 0, 3))).toBe('e2')
+    expect(at(enemy('e2', 'grunt', 1, 0, 3), enemy('e1', 'elite', 9, 3, 0))).toBe('e2')
+    // Same distance and health: the lower id wins, whatever the order.
+    expect(at(enemy('e2', 'grunt', 2, 3, 0), enemy('e1', 'grunt', 2, 0, 3))).toBe('e1')
+    expect(at(enemy('e1', 'grunt', 2, 0, 3), enemy('e2', 'grunt', 2, 3, 0))).toBe('e1')
+  })
+
   it('repairs the base from its tile when the base is damaged', () => {
     const base = started().base
     const s = combat(['starter-gather', 'starter-build'], {
