@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-20 (pass 407, cloud tick)
+
+Pass 406 pinned the defender's guardPost pick (fe13d96). No issues wait for triage, the critique gate is closed (pass 54 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 7 commits ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the bot goal helpers finds that `edgeHex`, the off-map hex the default and defender bots walk to when no gathering node is left, is tested only for the empty-deck null case and for not-null: its nearest-to-figure order, hex-key tie-break and off-map filter have no test (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `goals.test.ts` now pins them. From the base centre all 12 ring 2 hexes tie and the lowest key, -1,-1, wins. From 1,0 the 3 off-map hexes 1 away beat it, and 1,1 wins on key. With a tile on 1,1, the pick moves to 2,-1. Reversing the tie-break, dropping the distance order or dropping the off-map filter each fails the test. Next in line: the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: the bot's edgeHex pick has no order or tie-break test
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin edgeHex's order, tie-break and off-map filter in goals.test.ts
+- issue: #463
+- fixed: (this commit)
+
 # Site audit — 2026-11-20 (pass 406, cloud tick)
 
 Pass 405 pinned the defender's threat pick (1c7b2f7). No issues wait for triage, the critique gate is closed (pass 54 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 6 commits ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the bot goal helpers finds that `guardPost`, the hex the defender walks to before it builds a defense, is tested only for the round 1 null case and through one goal pick with a single candidate: its ring filter, nearest-to-enemy order, enemy filter and hex-key tie-break have no test (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `defender.test.ts` now pins them on a map with 3 hexes 2 from the base and one 3 off. Toward 4,-1 the lower hex key wins a tie, the 3-off hex is no post though it is nearer, toward 3,0 the nearer post beats the lower key, and a post with an enemy on it is skipped. Reversing the tie-break, dropping the enemy filter or widening the ring each fails the test. Next in line: the /decisions rows wait for /oversight.

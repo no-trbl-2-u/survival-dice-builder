@@ -107,6 +107,21 @@ describe('the bot goal helpers', () => {
     expect(homeNode({ ...held, spentNodes: [{ q: 2, r: 0 }] })).toEqual({ q: 3, r: 0 })
   })
 
+  it('edgeHex takes the off-map hex nearest the figure (ties: hex key)', () => {
+    const s = started()
+    // From the base centre all 12 hexes of ring 2 are off the map and 2 away: the lowest key wins.
+    expect(edgeHex(s)).toEqual({ q: -1, r: -1 })
+    // From 1,0 three off-map hexes are 1 away (1,1; 2,-1; 2,0): nearer beats the lower key -1,-1.
+    const east = withPlayer(s, { hex: { q: 1, r: 0 } })
+    expect(edgeHex(east)).toEqual({ q: 1, r: 1 })
+    // A tile laid on 1,1 puts it on the map: the next of the three.
+    const laid = {
+      ...east,
+      map: { ...east.map, hexes: { ...east.map.hexes, '1,1': s.map.hexes['1,0']! } },
+    }
+    expect(edgeHex(laid)).toEqual({ q: 2, r: -1 })
+  })
+
   it('the turtle always wants the base, and atGoal follows the policy', () => {
     const away = withPlayer(started(), { hex: { q: 1, r: 0 } })
     expect(goal(away, 'turtle')).toEqual(BASE)
