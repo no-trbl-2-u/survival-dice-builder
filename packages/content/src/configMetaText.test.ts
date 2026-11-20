@@ -129,6 +129,12 @@ describe('config.meta.json marks the Spec v2 rule as the written one', () => {
     )
   })
 
+  it('9.3: the Enemy target order help says it is for moving only, and gives the siege order', () => {
+    const help = defaultConfigMeta['rulings.targetTieBreak']?.help ?? ''
+    expect(help).toContain('This order is for moving only')
+    expect(help).toContain('an enemy hits a Barricade first, then a Tower, then the base')
+  })
+
   it('every option label writes the older-rule tag one way', () => {
     const labels = Object.values(defaultConfigMeta).flatMap((entry) =>
       Object.values(entry?.options ?? {}),

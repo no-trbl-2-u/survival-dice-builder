@@ -557,7 +557,7 @@
   },
   "rulings.targetTieBreak": {
     "label": "Enemy target order",
-    "help": "Only breaks ties between equally near targets, top to bottom; see Player pull distance.",
+    "help": "Only breaks ties between equally near targets, top to bottom; see Player pull distance. This order is for moving only: when Combat ends, an enemy hits a Barricade first, then a Tower, then the base.",
     "rule": "9.3 (open question 15)"
   },
   "rulings.playerPullDistance": {

@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-20 (pass 400, cloud tick)
+
+No issues wait for triage, the critique gate is closed (pass 54 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 19 commits and under 48 hours ago. The top row is the pass 54 LOW: the /config Enemy target order help ranks Tower above Barricade without saying it is a moving tie-break, while the Combat help and / say an enemy hits a Barricade first (external-critique LOW, impact 3, ease 9: 2.7; listed at 3.6 since pass 398 and the top open row; the older MED rows edit `[needs-user-call]` items, which /oversight owns). The help now adds "This order is for moving only: when Combat ends, an enemy hits a Barricade first, then a Tower, then the base." `configMetaText.test.ts` pins it. Next in line: the 2 pass 54 LOW rows (Copies line, /credits "Elite spawn node").
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: /config Enemy target order help does not say it is for moving only
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: extend the help text in config.meta.json
+- issue: #456
+- fixed: (this commit)
+
+### [ ] [3.2] external-critique: /config Copies rule line reads as one supply
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: reword suppliesText to name one supply per level
+
+### [ ] [3.2] external-critique: /credits "Elite spawn node" capitalised mid-label
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: change the ASSETS.md label and its credits test
+
 # Site audit — 2026-11-20 (pass 399, cloud tick)
 
 No issues wait for triage, the critique gate is closed (pass 54 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 18 commits and under 48 hours ago. The top row is the pass 54 LOW: the /tiles Base legend names upgrades and the Shop but not the Skill draft that Training I opens (external-critique LOW, impact 3, ease 9; listed at 3.6 since pass 398 and the top open row; the older MED rows edit `[needs-user-call]` items, which /oversight owns). `siteText('base')` now ends with "; Training I opens the Training Ground's Skill draft", the upgrade name read from content. The wording does not say "stand on the Base tile" for the draft, since the draft runs at the end of a draft round. `ruleText.test.ts` and `TileView.test.tsx` pin the new legend. Next in line: the 3 pass 54 LOW rows (target order help, Copies line, /credits "Elite spawn node").

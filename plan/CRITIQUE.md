@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — Enemy target order puts Tower above Barricade; the siege sentence says Barricade first
-- pass: 54 (commit 9400314)
-- viewport: desktop
-- category: comprehension
-- observation: The same page ranks the defenses in two orders and does not say they are separate rules (moving tie-break versus which defense is hit).
-- evidence: Enemy target order: "1. Player, 2. Tower, 3. Barricade, 4. Base" (help: "Only breaks ties between equally near targets, top to bottom"); Combat help and /: "hits one of them (a Barricade first, then a Tower, then the base)".
-- suggested fix: Add to the Enemy target order help: "This order is for moving only. At the end of Combat an enemy hits a Barricade first, then a Tower."
-- source: web-fetch
-
 ### [LOW] /config — the Copies rule line reads as one supply, the help says supplies
 - pass: 54 (commit 9400314)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — Enemy target order puts Tower above Barricade; the siege sentence says Barricade first
+- pass: 54 (commit 9400314)
+- viewport: desktop
+- category: comprehension
+- observation: The same page ranks the defenses in two orders and does not say they are separate rules (moving tie-break versus which defense is hit).
+- evidence: Enemy target order: "1. Player, 2. Tower, 3. Barricade, 4. Base" (help: "Only breaks ties between equally near targets, top to bottom"); Combat help and /: "hits one of them (a Barricade first, then a Tower, then the base)".
+- suggested fix: Add to the Enemy target order help: "This order is for moving only. At the end of Combat an enemy hits a Barricade first, then a Tower."
+- source: web-fetch
+- issue: #456
+- addressed: the Enemy target order help in config.meta.json now adds "This order is for moving only: when Combat ends, an enemy hits a Barricade first, then a Tower, then the base." configMetaText.test.ts pins it.
 
 ### [x] [LOW] /tiles — the Base legend leaves out the Training Ground
 - pass: 54 (commit 9400314)
