@@ -1,7 +1,7 @@
 # Phase candidates
 
-> Last pass: 2026-11-18 at commit 33b9641
-> Pass count: 35
+> Last pass: 2026-11-20 at commit e78e6dd
+> Pass count: 36
 > Posture: bold
 > Discovery pass 1: 2026-10-10 at bee25b5 (18 candidates, matrix and shortlist in `plan/DISCOVERY.md`)
 
@@ -386,7 +386,8 @@
 - conflicts: OPEN-QUESTIONS row 79 is still proposed. If the designer picks one calendar, rule 9 removes the other two, and the work on their text goes with them. Building the text from one source makes that removal smaller, not larger. No rule changes.
 - ruling audit: Spec v2 7.3 (spawns), OPEN-QUESTIONS row 79 (proposed) read; Spec v2 untouched. Loop scope: in (content, rule text, tests).
 - re-evidence (expand pass 34): critique pass 50 (3085d8a) filed one more calendar row: the Notoriety field label "Elite every rungs" could not be read as a phrase (LOW), fixed by hand in `packages/content/data/config.meta.json` as 8cacbd2 ("Rungs per nearest-base elite"). Row 79 is still proposed and its /decisions check is a pending critique row waiting for /oversight. Score held at 4.0.
-- last re-evidenced: 2026-11-17
+- re-evidence (expand pass 36): the same split, a help and a rule line telling one field two ways, showed up outside the calendar. Critique pass 54 (c251252): the Enemy target order help put Tower above Barricade where the siege rule line says Barricade first, fixed by hand in `packages/content/data/config.meta.json` (e78e6dd); the Copies help says "supplies" where its rule line says "a supply" (LOW, still pending). If promoted, the phase should cover every /config help that restates its rule line, not only the calendar fields; the overlap with "Every /config field shows its rule line" grows. Score held at 4.0.
+- last re-evidenced: 2026-11-20
 
 ### [ ] [score 4.0] One word per game term across pages: a term table in content that every page reads, and a test that two pages agree
 - proposed: 2026-11-15, expand pass 33
@@ -405,9 +406,10 @@
 - ruling audit: Spec v2 7.3 (spawns) and the Shop rule text read; Spec v2 untouched. Loop scope: in (content, rule text, tests).
 - re-evidence (expand pass 34): `/iterate` closed both pending rows this candidate named, by hand, one string each: 3151eae (Shop timing says "on the Base tile") and fb417a3 (the home Enemies line gives each spawn node's count, as /tiles does). Critique pass 50 (3085d8a) then filed 2 more rows of the same class, both fixed by hand in `packages/content/src/ruleText.ts` with a phrase test each: the Figures per hex and Knockout lines gave two accounts of a full base (MED, f012754), and the Map tiles line wrote countryside and core in lower case where /tiles capitalises them (LOW, 89d3094). That is 8 rows of this class across 3 critique passes, and still no test compares two pages or two fields. Score held at 4.0.
 - re-evidence (expand pass 35): critique passes 51 (efa37cf) and 52 (e0f3528) filed 12 rows, and 7 of them are this class, each shipped by hand with its own phrase test: "structure", a word no page defines, on the / Enemies line (bfba728) and in two /config helps (cf8efd5); "buy at the base" in the /play banner against "the Base tile" in the Base panel (16bd799); "Training" on the Base panel against "Training Ground" on / and /config (33b9641); the elite spawn node unnamed on /credits (730db51); "Exchanges" without its name lead in the /play Combat hint (10642a5); the run file under three names on /play (11dbc55). That is 15 rows of this class across 5 critique passes, more than half of each pass, and still no test compares two pages or two fields. Score raised from 4.0 to 4.5.
-- last re-evidenced: 2026-11-18
+- re-evidence (expand pass 36): critique passes 53 (fbe139b) and 54 (c251252) filed 10 rows; 5 are this class. Fixed by hand: the /play banner and the Base panel gave one upgrade two labels (MED, c28c3aa, a new `upgradeLabel` helper in web code, outside content); the /tiles Base legend left out the Training Ground that / and /play name (d680fe1); the Enemy target order help and the siege line ordered Tower and Barricade two ways (e78e6dd). Still pending: "Elite and Elite spawn node" on /credits against "elite spawn node" on /; "a supply" against "supplies" for the card Copies. That is 20 rows of this class across 7 critique passes. Score held at 4.5.
+- last re-evidenced: 2026-11-20
 
-### [ ] [score 3.0] What a player reads before round 1: a checked list of the rules a first round uses, each tied to the line that says it
+### [ ] [score 3.5] What a player reads before round 1: a checked list of the rules a first round uses, each tied to the line that says it
 - proposed: 2026-11-18, expand pass 35
 - source signals:
   - Critique pass 52 (e0f3528) filed 3 MED rows on rules a player uses in round 1 that no page before the run said: the action die faces (Star and Blank never introduced; 3b2fa56), that you may keep dice and roll the rest up to the roll limit (aa7f6ec), and that you can Engage with no enemy near while a Skill reaches any enemy in range (1a9cc83).
@@ -421,6 +423,8 @@
 - estimated phases: 1
 - conflicts: overlaps "One word per game term across pages" (both add a content table read by several pages); they can ship apart. No rule changes; text built from config and content.
 - ruling audit: Spec v2 sections for dice, Engage, enemy movement and knockout read through `ruleText`; Spec v2 untouched. Loop scope: in (content, rule text, tests).
+- re-evidence (expand pass 36): critique pass 54 (c251252) filed one MED row of this class: / listed the starter deck but never said what Move, Gather, Build or Rest do in Prepare, fixed by hand in `packages/content/src/ruleText.ts` (3347d3f). Pass 53 (fbe139b) filed 2 rows on the Skill draft a player meets once Training I is bought (what "your pool" is, d9c4098; when the next draft is, 974be3d). That is 10 rows of this class across 4 passes (43, 52, 53, 54), 8 of them MED; the table should list the rules of the first Training purchase as well as round 1. Score raised from 3.0 to 3.5.
+- last re-evidenced: 2026-11-20
 
 ## Considered (below threshold)
 
