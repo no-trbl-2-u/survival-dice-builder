@@ -1,13 +1,58 @@
 # Critique log
 
-> Last pass: 2026-11-19 at commit eb1fc60
-> Pass count: 53
+> Last pass: 2026-11-20 at commit 9400314
+> Pass count: 54
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — the home page lists the starter deck but never says what Move, Gather, Build or Rest do in Prepare
+- pass: 54 (commit 9400314)
+- viewport: desktop
+- category: comprehension
+- observation: "What you have" names 4 Move, 4 Gather, 1 Build and 1 Rest, but no public page says how much movement a Move gives or what Rest does. /tiles prices a map-edge step in movement, so a stranger cannot work out how far one card goes.
+- evidence: /: "Your deck holds 10 cards: 4 Move, 4 Gather, 1 Build and 1 Rest." / "Play the top halves of your cards to move, gather materials and build Barricades and Towers."; /tiles: "the step costs 1 movement".
+- suggested fix: Add one line under "What you have" giving each starter card's Prepare half, built from the card content (e.g. "Move: N movement. Rest: heal N health.").
+- source: web-fetch
+
+### [LOW] /tiles — the Base legend leaves out the Training Ground
+- pass: 54 (commit 9400314)
+- viewport: desktop
+- category: comprehension
+- observation: The Base legend names upgrades and the Shop, but not the Skill draft that Training I opens on the same tile.
+- evidence: /tiles: "Base (the players defend it; stand on the Base tile and play a Build card to buy upgrades, and buy cards once Shop I is built)"; /: "Stand on the Base tile and buy Training I (a Build card and 3 materials) to open the Training Ground".
+- suggested fix: Append "and draft Skills once Training I is built" to the Base legend text in ruleText.
+- source: web-fetch
+
+### [LOW] /config — Enemy target order puts Tower above Barricade; the siege sentence says Barricade first
+- pass: 54 (commit 9400314)
+- viewport: desktop
+- category: comprehension
+- observation: The same page ranks the defenses in two orders and does not say they are separate rules (moving tie-break versus which defense is hit).
+- evidence: Enemy target order: "1. Player, 2. Tower, 3. Barricade, 4. Base" (help: "Only breaks ties between equally near targets, top to bottom"); Combat help and /: "hits one of them (a Barricade first, then a Tower, then the base)".
+- suggested fix: Add to the Enemy target order help: "This order is for moving only. At the end of Combat an enemy hits a Barricade first, then a Tower."
+- source: web-fetch
+
+### [LOW] /config — the Copies rule line reads as one supply, the help says supplies
+- pass: 54 (commit 9400314)
+- viewport: desktop
+- category: comprehension
+- observation: The help for both Copies fields says "supplies" (one per level), but the rule line says "a supply of 2 copies of each level 1 to 3 card (28 cards)" and then "Each draws from the highest level opened", so the count of supplies is unclear.
+- evidence: Help: "Copies of each card in the card supplies."; rule line: "The Shop offers cards from a supply of 2 copies of each level 1 to 3 card (28 cards), ... Each draws from the highest level opened".
+- suggested fix: Reword the rule line to "from 3 supplies, one for each level, with 2 copies of each card (28 cards in all)", and the same for Skills.
+- source: web-fetch
+
+### [LOW] /credits — "Elite and Elite spawn node" capitalises elite mid-label
+- pass: 54 (commit 9400314)
+- viewport: desktop
+- category: voice
+- observation: The ogre credit line writes "Elite spawn node" after "and"; / writes "elite spawn node". The voice rule keeps elite lower case except at the start of a label.
+- evidence: /credits: "Elite and Elite spawn node: Ogre icon by Delapouite, game-icons.net"; /: "an elite spawn node gets 1 elite at each Combat". Source: `ASSETS.md:36`, pinned in `apps/web/src/credits/CreditsPage.test.tsx:26`.
+- suggested fix: Change the ASSETS.md label to "Elite and elite spawn node" and update the test.
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
