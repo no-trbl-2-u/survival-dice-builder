@@ -93,6 +93,20 @@ describe('the bot goal helpers', () => {
     expect(goal({ ...s, tileDeck: [] })).toEqual(BASE)
   })
 
+  it('homeNode takes the unspent node nearest the base with no enemy on it (ties: hex key)', () => {
+    const s0 = started()
+    const node = { ...s0.map.hexes['1,0']!, site: 'gathering-node' as const }
+    const hexes = { ...s0.map.hexes, '2,0': node, '-2,0': node, '3,0': node }
+    const s = { ...s0, map: { ...s0.map, hexes } }
+    // Two nodes 2 from the base: the lower hex key wins over the 3-away node.
+    expect(homeNode(s)).toEqual({ q: -2, r: 0 })
+    // An enemy on it: the other 2-away node.
+    const held = { ...s, enemies: [{ id: 'e1', kind: 'grunt', health: 2, hex: { q: -2, r: 0 } }] }
+    expect(homeNode(held)).toEqual({ q: 2, r: 0 })
+    // That one spent too: the node 3 away.
+    expect(homeNode({ ...held, spentNodes: [{ q: 2, r: 0 }] })).toEqual({ q: 3, r: 0 })
+  })
+
   it('the turtle always wants the base, and atGoal follows the policy', () => {
     const away = withPlayer(started(), { hex: { q: 1, r: 0 } })
     expect(goal(away, 'turtle')).toEqual(BASE)

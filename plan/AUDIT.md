@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-20 (pass 404, cloud tick)
+
+Pass 403 pinned the defender's repair of a nearby defense (dff2bb1). No issues wait for triage, the critique gate is closed (pass 54 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 4 commits ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the bot goal helpers finds that `homeNode`, the gathering node the default and defender bots head for, is tested only for the null case: its enemy filter, nearest-to-base order and hex-key tie-break have no test (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `goals.test.ts` now pins them on a map with gathering nodes 2, 2 and 3 hexes from the base. The lower hex key wins the tie, a node with an enemy on it is skipped, and so is a spent one. Dropping the enemy filter fails the test, and so does reversing the tie-break. Next in line: the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: the bot's homeNode choice among gathering nodes has no test
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin homeNode's order, tie-break and enemy filter in goals.test.ts
+- issue: #460
+- fixed: (this commit)
+
 # Site audit — 2026-11-20 (pass 403, cloud tick)
 
 Pass 402 lower-cased the /credits elite mid-label (7fd4970). No issues wait for triage, the critique gate is closed (pass 54 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 3 commits ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. Every public engine and content helper has a test, direct or through `ruleLineFor`. A probe of the bot finds a gap in the defender's `repairable` check, which runs before it heals or engages. The check has two branches, the base from its tile and a damaged defense within 1 hex, and only the base branch has a test (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `defender.test.ts` now pins these cases: off the base tile, a damaged Tower 1 hex away gets repaired. The same Tower 2 hexes away does not, and neither does one at full health. A damaged base is not repaired from off its tile. Changing the range to 2 fails the test, and so does dropping the base-tile check. Next in line: the /decisions rows wait for /oversight.
