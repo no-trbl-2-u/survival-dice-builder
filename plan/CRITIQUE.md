@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — the home page lists the starter deck but never says what Move, Gather, Build or Rest do in Prepare
-- pass: 54 (commit 9400314)
-- viewport: desktop
-- category: comprehension
-- observation: "What you have" names 4 Move, 4 Gather, 1 Build and 1 Rest, but no public page says how much movement a Move gives or what Rest does. /tiles prices a map-edge step in movement, so a stranger cannot work out how far one card goes.
-- evidence: /: "Your deck holds 10 cards: 4 Move, 4 Gather, 1 Build and 1 Rest." / "Play the top halves of your cards to move, gather materials and build Barricades and Towers."; /tiles: "the step costs 1 movement".
-- suggested fix: Add one line under "What you have" giving each starter card's Prepare half, built from the card content (e.g. "Move: N movement. Rest: heal N health.").
-- source: web-fetch
-
 ### [LOW] /tiles — the Base legend leaves out the Training Ground
 - pass: 54 (commit 9400314)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — the home page lists the starter deck but never says what Move, Gather, Build or Rest do in Prepare
+- pass: 54 (commit 9400314)
+- viewport: desktop
+- category: comprehension
+- observation: "What you have" names 4 Move, 4 Gather, 1 Build and 1 Rest, but no public page says how much movement a Move gives or what Rest does. /tiles prices a map-edge step in movement, so a stranger cannot work out how far one card goes.
+- evidence: /: "Your deck holds 10 cards: 4 Move, 4 Gather, 1 Build and 1 Rest." / "Play the top halves of your cards to move, gather materials and build Barricades and Towers."; /tiles: "the step costs 1 movement".
+- suggested fix: Add one line under "What you have" giving each starter card's Prepare half, built from the card content (e.g. "Move: N movement. Rest: heal N health.").
+- source: web-fetch
+- issue: #454
+- addressed: startText now ends with "In Prepare, Move gives 2 movement (1 per step), Gather gathers 2 materials, Build builds a Barricade or Tower (or buys a base upgrade on the Base tile) and Rest heals you 2 health.", built from each preset card's top half, so / and the /config deck rule line both say it.
 
 ### [x] [LOW] /play — the Training line sits below all tracks, apart from the Training Ground track it explains
 - pass: 53 (commit eb1fc60)

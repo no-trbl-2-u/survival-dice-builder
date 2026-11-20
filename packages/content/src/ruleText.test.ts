@@ -62,6 +62,7 @@ import {
   upgradesReachNote,
 } from './ruleText.ts'
 import type { GameConfig } from './schemas/config.ts'
+import type { Content } from './load.ts'
 
 const base = defaultContent.config
 const m = base.milestones
@@ -175,6 +176,47 @@ describe('rule text from config', () => {
     )
   })
 
+  it('start: the Prepare line reads each deck card once, from its top half (6.7, 11.4)', () => {
+    const card = (id: string, name: string, top: Content['cards'][number]['top']) => ({
+      ...defaultContent.cards[0]!,
+      id,
+      name,
+      top,
+    })
+    const content = {
+      skills: defaultContent.skills,
+      cards: [
+        card('a', 'Fort', { kind: 'build', level: 2, costReduction: 0, times: 2 }),
+        card('b', 'Charge', { kind: 'engage' }),
+        card('c', 'Run', { kind: 'move', hexes: 1, ignoreEnemyCost: true }),
+        card('d', 'Dig', { kind: 'gather', amount: 1 }),
+      ],
+    }
+    const deck = With((c) => ({
+      ...c,
+      deck: {
+        ...c.deck,
+        preset: 'test',
+        presets: [
+          {
+            id: 'test',
+            handSize: 3,
+            cards: [
+              { card: 'a', quantity: 1 },
+              { card: 'b', quantity: 2 },
+              { card: 'c', quantity: 1 },
+              { card: 'a', quantity: 1 },
+              { card: 'd', quantity: 1 },
+            ],
+          },
+        ],
+      },
+    }))
+    expect(startText(deck, content)).toMatch(
+      /In Prepare, Fort builds a defense up to level 2, 2 times \(or buys a base upgrade on the Base tile\), Charge starts an engagement, Run gives 1 movement \(1 per step\) and Dig gathers 1 material\.$/,
+    )
+  })
+
   it('start: health, dice, starter Skills, deck and hand size follow config (4.7-4.10, 6.1)', () => {
     expect(startText(base, defaultContent)).toBe(
       'You start with 15 health, 1 action die and 4 Skills your dice can fire: ' +
@@ -182,7 +224,9 @@ describe('rule text from config', () => {
         'An action die has 6 faces: Sword, Wand, Bow, Shield, Star (fits any Skill slot) and Blank (no effect). ' +
         'The Guard Skill gives you guard: points that take enemy damage before your health and are lost when the engagement ends. ' +
         'Your deck holds 10 cards: 4 Move, 4 Gather, 1 Build and 1 Rest. You draw 5 at a time. ' +
-        'Each card has two halves: the top half is for Prepare, the bottom half for Combat.',
+        'Each card has two halves: the top half is for Prepare, the bottom half for Combat. ' +
+        'In Prepare, Move gives 2 movement (1 per step), Gather gathers 2 materials, ' +
+        'Build builds a Barricade or Tower (or buys a base upgrade on the Base tile) and Rest heals you 2 health.',
     )
     const two = With((c) => ({
       ...c,

@@ -5,6 +5,44 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-20 (pass 398, cloud tick)
+
+Critique pass 54 (c251252) filed 5 rows. No issues wait for triage, the critique gate is closed (pass 54 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 17 commits and under 48 hours ago. The top row is the pass 54 MED: / lists the starter deck (4 Move, 4 Gather, 1 Build, 1 Rest) but no public page says what a Move card gives or what Rest does (external-critique MED, impact 6, ease 8: 4.8, x1.5 bias: 7.2). `startText` now ends with one Prepare sentence built from each preset card's top half ("Move gives 2 movement (1 per step), ... Rest heals you 2 health"), each card named once. The /config deck rule line reads the same function. `ruleText.test.ts` pins the default sentence and a test deck covering a level 2 Build twice, Engage, Move and a 1-material Gather, with a repeated card listed once. Next in line: the 4 pass 54 LOW rows (Base legend's Training Ground, target order help, Copies line, /credits "Elite spawn node").
+
+## Top 5 findings (scored)
+
+### [x] [7.2] external-critique: / never says what each starter card does in Prepare
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: add a Prepare sentence to startText from the preset cards' top halves
+- issue: #454
+- fixed: (this commit)
+
+### [ ] [3.6] external-critique: /tiles Base legend leaves out the Training Ground
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: append the Skill draft to the Base legend in ruleText
+
+### [ ] [3.6] external-critique: /config Enemy target order help does not say it is for moving only
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: extend the help text in config.meta.json
+
+### [ ] [3.2] external-critique: /config Copies rule line reads as one supply
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: reword suppliesText to name one supply per level
+
+### [ ] [3.2] external-critique: /credits "Elite spawn node" capitalised mid-label
+- category: external-critique
+- impact: 2
+- ease: 10
+- next: fix the ASSETS.md label and the credits test
+
 # Site audit — 2026-11-19 (pass 397, cloud tick)
 
 Pass 396 pinned onBase (8e6edb5). No issues wait for triage, the critique gate is closed (pass 53 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 15 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. Every public engine function now has a direct test except `hexKey`, and a probe of the hex module finds the TSDoc on `AXIAL_DIRECTIONS` wrong: it said "clockwise order starting east", and `TileDefSchema` said "east, then counter-clockwise". Drawn flat-top, offset (1,0) is south-east and the ring runs south-east, north-east, north, north-west, south-west, south (counter-clockwise), as /tiles' `HEX_POSITION` already says. Tile authors read these comments to order `hexes[1..6]` (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). Both comments now name the real order. `hex.test.ts` pins `hexKey`'s "q,r" form with signs, the ring shape of `AXIAL_DIRECTIONS` (each offset next to the one after it, offset i+3 opposite offset i) and that `hexNeighbors` and `tileHexes` leave the input unchanged. Swapping two directions fails the ring test. Next in line: the /decisions rows wait for /oversight.

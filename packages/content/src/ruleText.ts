@@ -878,8 +878,33 @@ const skillLine = (s: Content['skills'][number], model: GameConfig['combat']['mo
 }
 
 /**
+ * What one card's top half does in Prepare, in a short clause for the starter deck line:
+ * "Move gives 2 movement (1 per step)", "Rest heals you 2 health".
+ *
+ * @rule 6.2, 6.7, 11.2, 11.4, 12.1
+ */
+const prepareClause = (name: string, top: Content['cards'][number]['top']): string => {
+  switch (top.kind) {
+    case 'move':
+      return `${name} gives ${top.hexes} movement (1 per step)`
+    case 'gather':
+      return `${name} gathers ${plural(top.amount, 'material', 'materials')}`
+    case 'build': {
+      const what = top.level === 1 ? 'a Barricade or Tower' : `a defense up to level ${top.level}`
+      const times = top.times > 1 ? `, ${top.times} times` : ''
+      return `${name} builds ${what}${times} (or buys a base upgrade on the Base tile)`
+    }
+    case 'rest':
+      return `${name} heals you ${top.amount} health`
+    case 'engage':
+      return `${name} starts an engagement`
+  }
+}
+
+/**
  * What each player starts a run with: health, action dice, starter Skills, and the starter
- * deck with its hand size and what each card half is for.
+ * deck with its hand size, what each card half is for and what each starter card does in
+ * Prepare.
  *
  * @rule 4.7-4.10, 6.1, 6.2, 7.7, Table 2, Table 3
  */
@@ -907,6 +932,15 @@ export function startText(config: GameConfig, content: Pick<Content, 'cards' | '
     ),
   )
   const hand = preset ? ` You draw ${preset.handSize} at a time.` : ''
+  const tops = [
+    ...new Map(
+      entries.flatMap((e) => {
+        const card = content.cards.find((c) => c.id === e.card)
+        return card ? [[card.id, prepareClause(card.name, card.top)] as const] : []
+      }),
+    ).values(),
+  ]
+  const prepare = tops.length > 0 ? ` In Prepare, ${andList(tops)}.` : ''
   const note: Partial<Record<string, string>> = {
     Star: 'Star (fits any Skill slot)',
     Blank: 'Blank (no effect)',
@@ -916,7 +950,8 @@ export function startText(config: GameConfig, content: Pick<Content, 'cards' | '
     `You start with ${maxHealth} health, ${plural(startingDice, 'action die', 'action dice')} and ${plural(skills.length, 'Skill', 'Skills')} your dice can fire: ${andList(skills)}. ` +
     `An action die has ${faces.length} faces: ${andList(faces)}.${guard} ` +
     `Your deck holds ${plural(total, 'card', 'cards')}: ${cards}.${hand} ` +
-    'Each card has two halves: the top half is for Prepare, the bottom half for Combat.'
+    'Each card has two halves: the top half is for Prepare, the bottom half for Combat.' +
+    prepare
   )
 }
 
