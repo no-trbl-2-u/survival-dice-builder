@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-20 (pass 399, cloud tick)
+
+No issues wait for triage, the critique gate is closed (pass 54 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 18 commits and under 48 hours ago. The top row is the pass 54 LOW: the /tiles Base legend names upgrades and the Shop but not the Skill draft that Training I opens (external-critique LOW, impact 3, ease 9; listed at 3.6 since pass 398 and the top open row; the older MED rows edit `[needs-user-call]` items, which /oversight owns). `siteText('base')` now ends with "; Training I opens the Training Ground's Skill draft", the upgrade name read from content. The wording does not say "stand on the Base tile" for the draft, since the draft runs at the end of a draft round. `ruleText.test.ts` and `TileView.test.tsx` pin the new legend. Next in line: the 3 pass 54 LOW rows (target order help, Copies line, /credits "Elite spawn node").
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: /tiles Base legend leaves out the Training Ground
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: append the Skill draft to the Base legend in ruleText
+- issue: #455
+- fixed: (this commit)
+
+### [ ] [3.6] external-critique: /config Enemy target order help does not say it is for moving only
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: extend the help text in config.meta.json
+
+### [ ] [3.2] external-critique: /config Copies rule line reads as one supply
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: reword suppliesText to name one supply per level
+
+### [ ] [3.2] external-critique: /credits "Elite spawn node" capitalised mid-label
+- category: external-critique
+- impact: 3
+- ease: 8
+- next: change the ASSETS.md label and its credits test
+
 # Site audit — 2026-11-20 (pass 398, cloud tick)
 
 Critique pass 54 (c251252) filed 5 rows. No issues wait for triage, the critique gate is closed (pass 54 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand pass 35 ran 17 commits and under 48 hours ago. The top row is the pass 54 MED: / lists the starter deck (4 Move, 4 Gather, 1 Build, 1 Rest) but no public page says what a Move card gives or what Rest does (external-critique MED, impact 6, ease 8: 4.8, x1.5 bias: 7.2). `startText` now ends with one Prepare sentence built from each preset card's top half ("Move gives 2 movement (1 per step), ... Rest heals you 2 health"), each card named once. The /config deck rule line reads the same function. `ruleText.test.ts` pins the default sentence and a test deck covering a level 2 Build twice, Engage, Move and a 1-material Gather, with a repeated card listed once. Next in line: the 4 pass 54 LOW rows (Base legend's Training Ground, target order help, Copies line, /credits "Elite spawn node").

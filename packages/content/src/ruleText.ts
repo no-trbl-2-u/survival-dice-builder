@@ -102,7 +102,8 @@ const firstUpgrade = (track: string, content: Upgrades) =>
 
 /**
  * What a printed site does, for the site legend: "gets 1 grunt at each Combat", with the seat
- * scaling and the spawn ramp named when they are on (`spawnCount`).
+ * scaling and the spawn ramp named when they are on (`spawnCount`). The Base names the upgrades,
+ * the Shop and the Training Ground's Skill draft that Training I opens.
  *
  * @rule Table 1, 6.7, 6.9, 7.3, 11.2, OPEN-QUESTIONS rows 59, 64, 66, 68, 70
  */
@@ -112,7 +113,11 @@ export function siteText(site: Site, config: GameConfig, content: Upgrades): str
     const cards = shop
       ? `, and buy cards once ${shop.name} is built`
       : ', and buy cards once the Shop opens'
-    return `the players defend it; stand on the Base tile and play a Build card to buy upgrades${cards}`
+    const training = firstUpgrade('training', content)
+    const draft = training
+      ? `; ${training.name} opens the Training Ground's Skill draft`
+      : "; a Training upgrade opens the Training Ground's Skill draft"
+    return `the players defend it; stand on the Base tile and play a Build card to buy upgrades${cards}${draft}`
   }
   if (site === 'gathering-node')
     return config.rulings.gatherNeedsNode

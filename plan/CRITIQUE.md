@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /tiles — the Base legend leaves out the Training Ground
-- pass: 54 (commit 9400314)
-- viewport: desktop
-- category: comprehension
-- observation: The Base legend names upgrades and the Shop, but not the Skill draft that Training I opens on the same tile.
-- evidence: /tiles: "Base (the players defend it; stand on the Base tile and play a Build card to buy upgrades, and buy cards once Shop I is built)"; /: "Stand on the Base tile and buy Training I (a Build card and 3 materials) to open the Training Ground".
-- suggested fix: Append "and draft Skills once Training I is built" to the Base legend text in ruleText.
-- source: web-fetch
-
 ### [LOW] /config — Enemy target order puts Tower above Barricade; the siege sentence says Barricade first
 - pass: 54 (commit 9400314)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /tiles — the Base legend leaves out the Training Ground
+- pass: 54 (commit 9400314)
+- viewport: desktop
+- category: comprehension
+- observation: The Base legend names upgrades and the Shop, but not the Skill draft that Training I opens on the same tile.
+- evidence: /tiles: "Base (the players defend it; stand on the Base tile and play a Build card to buy upgrades, and buy cards once Shop I is built)"; /: "Stand on the Base tile and buy Training I (a Build card and 3 materials) to open the Training Ground".
+- suggested fix: Append "and draft Skills once Training I is built" to the Base legend text in ruleText.
+- source: web-fetch
+- issue: #455
+- addressed: the Base legend from siteText now ends with "; Training I opens the Training Ground's Skill draft", the upgrade name read from content, so /tiles names the draft next to upgrades and the Shop.
 
 ### [x] [MED] / — the home page lists the starter deck but never says what Move, Gather, Build or Rest do in Prepare
 - pass: 54 (commit 9400314)
