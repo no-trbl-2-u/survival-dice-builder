@@ -164,6 +164,26 @@ describe('the defender bot (phase 36)', () => {
     expect(at(enemy('e1', 'grunt', 2, 0, 3), enemy('e2', 'grunt', 2, 3, 0))).toBe('e1')
   })
 
+  it('guardPost takes the free hex 2 from the base nearest the enemy (ties: hex key)', () => {
+    const s0 = started()
+    const ring = { ...s0.map.hexes['1,0']!, site: null }
+    // '2,0' is listed before '2,-1', so only the tie-break can put '2,-1' first.
+    const hexes = { ...s0.map.hexes, '2,0': ring, '2,-1': ring, '0,2': ring, '3,0': ring }
+    const s = { ...s0, map: { ...s0.map, hexes } }
+    const post = (toward: { q: number; r: number }, ...enemies: Enemy[]) =>
+      guardPost({ ...s, enemies }, toward)
+    // Toward 4,-1: '2,0' and '2,-1' are both 2 off it; the lower hex key wins. '3,0' is 1 off it
+    // but 3 from the base, so it is no post.
+    expect(post({ q: 4, r: -1 })).toEqual({ q: 2, r: -1 })
+    // Toward 3,0: '2,0' is 1 off it and beats the lower key.
+    expect(post({ q: 3, r: 0 })).toEqual({ q: 2, r: 0 })
+    // An enemy on a post: the next one; on both near posts: the far side of the ring.
+    expect(post({ q: 4, r: -1 }, enemy('e1', 'grunt', 2, 2, -1))).toEqual({ q: 2, r: 0 })
+    expect(
+      post({ q: 4, r: -1 }, enemy('e1', 'grunt', 2, 2, -1), enemy('e2', 'grunt', 2, 2, 0)),
+    ).toEqual({ q: 0, r: 2 })
+  })
+
   it('repairs the base from its tile when the base is damaged', () => {
     const base = started().base
     const s = combat(['starter-gather', 'starter-build'], {
