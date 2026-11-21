@@ -122,6 +122,18 @@ describe('the bot goal helpers', () => {
     expect(edgeHex(laid)).toEqual({ q: 2, r: -1 })
   })
 
+  it('the default bot wants the base once it can pay for an upgrade its Build level reaches (11.4)', () => {
+    const s = started()
+    // Training I costs 3: 2 materials still gathers, 3 goes home to buy it.
+    expect(goal(withPlayer(s, { materials: 2 }))).not.toEqual(BASE)
+    expect(goal(withPlayer(s, { materials: 3 }))).toEqual(BASE)
+    // Both tier 1s bought: a level 1 Build reaches no tier 2, so even 9 materials keeps gathering.
+    const tier2 = withPlayer({ ...s, upgrades: ['training-1', 'shop-1'] }, { materials: 9 })
+    expect(goal(tier2)).toEqual(edgeHex(tier2))
+    // With any Build level allowed, Training II (5) is in reach and the bot goes home.
+    expect(goal(withBuildLevels(tier2, 'any'))).toEqual(BASE)
+  })
+
   it('the turtle always wants the base, and atGoal follows the policy', () => {
     const away = withPlayer(started(), { hex: { q: 1, r: 0 } })
     expect(goal(away, 'turtle')).toEqual(BASE)

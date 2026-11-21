@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-21 (pass 414, cloud tick)
+
+Pass 413 pinned the defender bot's goal fallbacks (eb1b3b9). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 16 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` /decisions items, which only /oversight may change. A probe of the default bot's `goal` finds that its Build-level cap on upgrades (11.4) has no test: the 3-material threshold, the level 1 Build reaching no tier 2 once both tier 1s are bought, and `rulings.buildLevels: "any"` putting Training II in reach (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `goals.test.ts` now pins all three. Dropping the Build level from the check fails the test. Next in line: the /decisions rows wait for /oversight; critique pass 56 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: the default bot's goal Build-level cap has no test
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin the threshold, the level 1 cap and buildLevels "any" in goals.test.ts
+- issue: #471
+- fixed: (this commit)
+
 # Site audit — 2026-11-21 (pass 413, cloud tick)
 
 Pass 412 quoted the field labels in the /config Event Calendar help (fc43719). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 15 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` /decisions items, which only /oversight may change. A probe of the bot goal helpers finds that `defenderGoal`, reached through `goal(state, 'defender')`, is tested only for the guard post and the Combat threat: its upgrade-first order, the base when no post is revealed, the materials fallback with no threat or too few materials for a defense, and the base in Combat with no threat have no test (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `defender.test.ts` now pins each fallback. Letting the post fall through to materials, sending Combat with no threat to the map edge, or dropping the upgrade check each fails the test. Next in line: the /decisions rows wait for /oversight; critique pass 56 once its gate opens.
