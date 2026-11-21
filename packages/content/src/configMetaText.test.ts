@@ -281,11 +281,12 @@ describe('config.meta.json placeholders and help read as player text (critique p
     expect(help).not.toMatch(/\b(raids|calm days|boons|calm dawn|harvest and feast)\b/)
   })
 
-  it('the Event Calendar help names Notoriety ladder and the fields that set each step (critique pass 47)', () => {
+  it('the Event Calendar help names Notoriety ladder and the fields that set each step (critique passes 47, 55)', () => {
     const help = defaultConfigMeta['calendar.system']?.help ?? ''
     expect(help).toContain('Notoriety ladder: the threat climbs 1 rung every so many rounds')
-    expect(help).toContain('as Notoriety climbs every sets')
-    expect(help).toContain('as Add a threat die every sets')
+    expect(help).toContain('(set in "Notoriety climbs every")')
+    expect(help).toContain('(set in "Add a threat die every")')
+    expect(help).not.toMatch(/ every sets\b/)
     expect(help).toContain('1 rung at each new milestone')
     expect(help).not.toContain('every few rounds')
     expect(help).not.toMatch(/Notoriety:/)

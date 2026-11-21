@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Event Calendar help quotes field labels unmarked, so it reads as broken grammar
-- pass: 55 (commit afad010)
-- viewport: desktop
-- category: voice
-- observation: "as Add a threat die every sets" and "as Notoriety climbs every sets" read like typos rather than pointers to other fields.
-- evidence: `packages/content/data/config.meta.json:221`; labels at `config.meta.json:269` and `:283`.
-- suggested fix: Rewrite as "1 more die every few rounds (set in Add a threat die every)" or put the labels in quotes; same for Notoriety.
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] /config — the Event Calendar help quotes field labels unmarked, so it reads as broken grammar
+- pass: 55 (commit afad010)
+- viewport: desktop
+- category: voice
+- observation: "as Add a threat die every sets" and "as Notoriety climbs every sets" read like typos rather than pointers to other fields.
+- evidence: `packages/content/data/config.meta.json:221`; labels at `config.meta.json:269` and `:283`.
+- suggested fix: Rewrite as "1 more die every few rounds (set in Add a threat die every)" or put the labels in quotes; same for Notoriety.
+- source: web-fetch
+- issue: #469
+- fixed: (this commit) — both pointers now read (set in "Add a threat die every") and (set in "Notoriety climbs every"); configMetaText.test.ts pins the text.
+
 ### [x] [LOW] /config — the bad-save messages say "using the defaults" after the site settled on "the standard rules"
 - pass: 55 (commit afad010)
 - viewport: desktop

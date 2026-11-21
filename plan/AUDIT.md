@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-21 (pass 412, cloud tick)
+
+Pass 411 said "playing with the standard rules" in the /config bad-save messages (2f4345a). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 6 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 13 commits and under 48 hours ago. The /decisions rows edit `[needs-user-call]` items and wait for /oversight. The top actionable Pending critique row is the last pass 55 LOW: the /config Event Calendar help says "as Add a threat die every sets" (impact 4, ease 8: 3.2). Both pointers now read (set in "Add a threat die every") and (set in "Notoriety climbs every"). That empties the actionable critique queue; next in line is critique pass 56 once its gate opens, or expand.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] external-critique: /config Event Calendar help quotes field labels unmarked
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: quote the field labels in the calendar.system help
+- issue: #469
+- fixed: (this commit)
+
 # Site audit — 2026-11-21 (pass 411, cloud tick)
 
 Pass 410 said the Skill draft comes "at the end of rounds 2, 4, 6" (b98f8b6). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 5 commits ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 12 commits and under 48 hours ago. The /decisions MED rows edit `[needs-user-call]` items and wait for /oversight. The top actionable Pending critique rows are the two pass 55 LOW /config rows (impact 4, ease 8: 3.2 each); the bad-save messages are the cheaper fix. Both now say "playing with the standard rules". Next in line: the Event Calendar help on /config.
