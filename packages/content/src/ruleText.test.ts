@@ -213,7 +213,7 @@ describe('rule text from config', () => {
       },
     }))
     expect(startText(deck, content)).toMatch(
-      /In Prepare, Fort builds a defense up to level 2, 2 times \(or buys a base upgrade on the Base tile\), Charge starts an engagement, Run gives 1 movement \(1 per step\) and Dig gathers 1 material\.$/,
+      /In Prepare, Fort builds a defense up to level 2, 2 times \(or buys a base upgrade on the Base tile\), Charge starts an engagement, Run gives 1 movement \(1 per step\) and Dig gathers 1 material\. In Combat,/,
     )
   })
 
@@ -226,7 +226,9 @@ describe('rule text from config', () => {
         'Your deck holds 10 cards: 4 Move, 4 Gather, 1 Build and 1 Rest. You draw 5 at a time. ' +
         'Each card has two halves: the top half is for Prepare, the bottom half for Combat. ' +
         'In Prepare, Move gives 2 movement (1 per step), Gather gathers 2 materials, ' +
-        'Build builds a Barricade or Tower (or buys a base upgrade on the Base tile) and Rest heals you 2 health.',
+        'Build builds a Barricade or Tower (or buys a base upgrade on the Base tile) and Rest heals you 2 health. ' +
+        'In Combat, Move gives 2 movement or starts an engagement, Gather starts an engagement or rerolls 1 die, ' +
+        'Build repairs 2 health and Rest heals you 2 health or rerolls all your dice.',
     )
     const two = With((c) => ({
       ...c,
@@ -239,6 +241,7 @@ describe('rule text from config', () => {
     expect(startText(exchange, defaultContent)).toMatch(
       /The Guard Skill and your cards' bottom halves give you guard: points that take enemy damage before your health and are lost at the end of each exchange, after the enemy attack\./,
     )
+    expect(startText(exchange, defaultContent)).not.toMatch(/In Combat,/)
     for (const path of [
       'player.maxHealth',
       'player.startingDice',

@@ -1,6 +1,6 @@
 import type { Content } from './load.ts'
 import type { GameConfig } from './schemas/config.ts'
-import type { SkillEffect } from './schemas/effects.ts'
+import type { CombatOption, SkillEffect } from './schemas/effects.ts'
 import { FaceSchema } from './schemas/primitives.ts'
 import type { Site } from './schemas/tiles.ts'
 
@@ -907,9 +907,30 @@ const prepareClause = (name: string, top: Content['cards'][number]['top']): stri
 }
 
 /**
+ * What one Combat option of a card does, as a short verb phrase for the starter deck line:
+ * "gives 2 movement", "starts an engagement", "repairs 2 health".
+ *
+ * @rule 7.7, 12.5, Combat v3
+ */
+const combatOptionClause = (o: CombatOption): string => {
+  switch (o.kind) {
+    case 'engage':
+      return 'starts an engagement'
+    case 'move':
+      return `gives ${o.hexes} movement`
+    case 'reroll':
+      return o.dice === 'all' ? 'rerolls all your dice' : `rerolls ${plural(o.dice, 'die', 'dice')}`
+    case 'heal':
+      return `heals you ${o.amount} health`
+    case 'repair':
+      return `repairs ${o.amount} health`
+  }
+}
+
+/**
  * What each player starts a run with: health, action dice, starter Skills, and the starter
  * deck with its hand size, what each card half is for and what each starter card does in
- * Prepare.
+ * Prepare and, under the engage model, in Combat.
  *
  * @rule 4.7-4.10, 6.1, 6.2, 7.7, Table 2, Table 3
  */
@@ -946,6 +967,24 @@ export function startText(config: GameConfig, content: Pick<Content, 'cards' | '
     ).values(),
   ]
   const prepare = tops.length > 0 ? ` In Prepare, ${andList(tops)}.` : ''
+  const bottoms = exchange
+    ? []
+    : [
+        ...new Map(
+          entries.flatMap((e) => {
+            const card = content.cards.find((c) => c.id === e.card)
+            return card?.combat && card.combat.length > 0
+              ? [
+                  [
+                    card.id,
+                    `${card.name} ${card.combat.map(combatOptionClause).join(' or ')}`,
+                  ] as const,
+                ]
+              : []
+          }),
+        ).values(),
+      ]
+  const combat = bottoms.length > 0 ? ` In Combat, ${andList(bottoms)}.` : ''
   const note: Partial<Record<string, string>> = {
     Star: 'Star (fits any Skill slot)',
     Blank: 'Blank (no effect)',
@@ -956,7 +995,8 @@ export function startText(config: GameConfig, content: Pick<Content, 'cards' | '
     `An action die has ${faces.length} faces: ${andList(faces)}.${guard} ` +
     `Your deck holds ${plural(total, 'card', 'cards')}: ${cards}.${hand} ` +
     'Each card has two halves: the top half is for Prepare, the bottom half for Combat.' +
-    prepare
+    prepare +
+    combat
   )
 }
 

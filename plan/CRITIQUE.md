@@ -18,15 +18,6 @@
 - suggested fix: Keep a short engagement summary in the Combat item, move the Exchanges note and the Repair rule into their own items, and drop the second guard explanation.
 - source: web-fetch
 
-### [MED] / — the Repair sentence says "that much health" but no sentence says which card repairs or how much
-- pass: 55 (commit afad010)
-- viewport: desktop
-- category: comprehension
-- observation: "What you have" gives only the Prepare half of each starter card. Nothing on / says Build's Combat half is Repair 2 or that Rest heals 2 or rerolls all dice in Combat, so "that much" points at nothing.
-- evidence: repairText (`packages/content/src/ruleText.ts:332`): "A card's Repair option gives the base that much health when you stand on the Base tile..."; `packages/content/data/cards.json:67-72` starter-build combat repair 2; startText ends "In Prepare, Move gives 2 movement ... and Rest heals you 2 health." (`ruleText.ts:948`).
-- suggested fix: Add an "In Combat, ..." clause to startText built from each starter card's Combat options (for example "Build repairs 2").
-- source: web-fetch
-
 ### [LOW] / — the Prepare step leaves out Rest and base buying, which the starter-card line describes
 - pass: 55 (commit afad010)
 - viewport: desktop
@@ -118,6 +109,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — the Repair sentence says "that much health" but no sentence says which card repairs or how much
+- pass: 55 (commit afad010)
+- viewport: desktop
+- category: comprehension
+- observation: "What you have" gives only the Prepare half of each starter card. Nothing on / says Build's Combat half is Repair 2 or that Rest heals 2 or rerolls all dice in Combat, so "that much" points at nothing.
+- evidence: repairText (`packages/content/src/ruleText.ts:332`): "A card's Repair option gives the base that much health when you stand on the Base tile..."; `packages/content/data/cards.json:67-72` starter-build combat repair 2; startText ends "In Prepare, Move gives 2 movement ... and Rest heals you 2 health." (`ruleText.ts:948`).
+- suggested fix: Add an "In Combat, ..." clause to startText built from each starter card's Combat options (for example "Build repairs 2").
+- source: web-fetch
+- issue: #464
+- addressed: startText now ends with "In Combat, Move gives 2 movement or starts an engagement, Gather starts an engagement or rerolls 1 die, Build repairs 2 health and Rest heals you 2 health or rerolls all your dice.", built from each preset card's Combat options under the engage model, so the Repair sentence on / has an amount to point at. ruleText.test.ts pins it.
 
 ### [x] [LOW] /credits — "Elite and Elite spawn node" capitalises elite mid-label
 - pass: 54 (commit 9400314)
