@@ -251,6 +251,15 @@ describe('the defender bot (phase 36)', () => {
     expect(botChoice(s, defender)).toEqual({ type: 'playOption', card: 'c1', option: 0 })
   })
 
+  it('with no enemy on the map, engages anyway, keeping its Move cards', () => {
+    // No threat to move toward: a heal or guard Skill still works, so it engages.
+    const none = combat(['starter-move', 'starter-gather'], { enemies: [] })
+    expect(botChoice(none, defender)).toEqual({ type: 'engage', card: 'c1', option: 0 })
+    // Only a Move card: it engages with that card rather than moving or discarding.
+    const moveOnly = combat(['starter-move'], { enemies: [] })
+    expect(botChoice(moveOnly, defender)).toEqual({ type: 'engage', card: 'c0', option: 1 })
+  })
+
   it('heals when hurt, and keeps its heal cards for later when not', () => {
     const hurt = withPlayer(combat(['starter-gather', 'starter-rest']), { health: 10 })
     expect(botChoice(hurt, defender)).toEqual({ type: 'playOption', card: 'c1', option: 0 })
