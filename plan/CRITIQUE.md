@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-20 at commit 9400314
-> Pass count: 54
+> Last pass: 2026-11-21 at commit afad010
+> Pass count: 55
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — the Combat step is one list item of about 20 sentences again, and explains guard twice
+- pass: 55 (commit afad010)
+- viewport: desktop
+- category: voice
+- observation: The pass 8 fix split the Combat step into short sentences; it has grown back into one list item holding the engagement rules, roll limit, enemy die faces, hit timing, the Exchanges note with its own rules, siege damage and Repair. Guard is explained in "What you have" and again in this item. This does not match the short, plain voice in bearings.
+- evidence: `apps/web/src/home/HomePage.tsx:53-59` puts combatText('engage'), the Exchanges sentences, combatText('exchange'), siegeText and repairText into one `<li>`; combatText (`packages/content/src/ruleText.ts:315-320`) says "Your guard takes the damage first, then your health" and "Any guard you have left is lost when the engagement ends", which startText (`ruleText.ts:929`) already says.
+- suggested fix: Keep a short engagement summary in the Combat item, move the Exchanges note and the Repair rule into their own items, and drop the second guard explanation.
+- source: web-fetch
+
+### [MED] / — the Repair sentence says "that much health" but no sentence says which card repairs or how much
+- pass: 55 (commit afad010)
+- viewport: desktop
+- category: comprehension
+- observation: "What you have" gives only the Prepare half of each starter card. Nothing on / says Build's Combat half is Repair 2 or that Rest heals 2 or rerolls all dice in Combat, so "that much" points at nothing.
+- evidence: repairText (`packages/content/src/ruleText.ts:332`): "A card's Repair option gives the base that much health when you stand on the Base tile..."; `packages/content/data/cards.json:67-72` starter-build combat repair 2; startText ends "In Prepare, Move gives 2 movement ... and Rest heals you 2 health." (`ruleText.ts:948`).
+- suggested fix: Add an "In Combat, ..." clause to startText built from each starter card's Combat options (for example "Build repairs 2").
+- source: web-fetch
+
+### [LOW] / — the Prepare step leaves out Rest and base buying, which the starter-card line describes
+- pass: 55 (commit afad010)
+- viewport: desktop
+- category: comprehension
+- observation: The starter-card line says Rest heals in Prepare and Build can buy a base upgrade; the Prepare step below lists only move, gather and build.
+- evidence: `apps/web/src/home/HomePage.tsx:50-51` "Play the top halves of your cards to move, gather materials and build Barricades and Towers." vs startText "Build builds a Barricade or Tower (or buys a base upgrade on the Base tile) and Rest heals you 2 health."
+- suggested fix: "Play the top halves of your cards to move, gather materials, build Barricades and Towers, buy base upgrades and heal."
+- source: web-fetch
+
+### [LOW] / — the Skill draft is "in rounds 2, 4, 6" on / but "at the end of round 2" on /play
+- pass: 55 (commit afad010)
+- viewport: desktop
+- category: comprehension
+- observation: A reader of / may expect the draft at the start of round 2; the /play Base panel says it comes at the end of the round.
+- evidence: draftWhenText (`packages/content/src/ruleText.ts:190`) "in rounds ${n}, ${2 * n}, ${3 * n} and so on"; nextDraftText (`ruleText.ts:230-231`) "Next Skill draft: at the end of round ${next}."
+- suggested fix: Change draftWhenText to "at the end of rounds 2, 4, 6 and so on".
+- source: web-fetch
+
+### [LOW] /config — the Event Calendar help quotes field labels unmarked, so it reads as broken grammar
+- pass: 55 (commit afad010)
+- viewport: desktop
+- category: voice
+- observation: "as Add a threat die every sets" and "as Notoriety climbs every sets" read like typos rather than pointers to other fields.
+- evidence: `packages/content/data/config.meta.json:221`; labels at `config.meta.json:269` and `:283`.
+- suggested fix: Rewrite as "1 more die every few rounds (set in Add a threat die every)" or put the labels in quotes; same for Notoriety.
+- source: web-fetch
+
+### [LOW] /config — the bad-save messages say "using the defaults" after the site settled on "the standard rules"
+- pass: 55 (commit afad010)
+- viewport: desktop
+- category: voice
+- observation: Buttons and status lines say "the standard rules"; the two messages shown when a saved config cannot be loaded still say "the defaults".
+- evidence: `apps/web/src/config/configStore.ts:94` "The saved config is not valid; using the defaults." and `:105` "The saved config cannot be read; using the defaults."; compare ConfigPage.tsx "Reset to the standard rules".
+- suggested fix: "...; playing with the standard rules."
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
