@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Skill draft is "in rounds 2, 4, 6" on / but "at the end of round 2" on /play
-- pass: 55 (commit afad010)
-- viewport: desktop
-- category: comprehension
-- observation: A reader of / may expect the draft at the start of round 2; the /play Base panel says it comes at the end of the round.
-- evidence: draftWhenText (`packages/content/src/ruleText.ts:190`) "in rounds ${n}, ${2 * n}, ${3 * n} and so on"; nextDraftText (`ruleText.ts:230-231`) "Next Skill draft: at the end of round ${next}."
-- suggested fix: Change draftWhenText to "at the end of rounds 2, 4, 6 and so on".
-- source: web-fetch
-
 ### [LOW] /config — the Event Calendar help quotes field labels unmarked, so it reads as broken grammar
 - pass: 55 (commit afad010)
 - viewport: desktop
@@ -91,6 +82,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Skill draft is "in rounds 2, 4, 6" on / but "at the end of round 2" on /play
+- pass: 55 (commit afad010)
+- viewport: desktop
+- category: comprehension
+- observation: A reader of / may expect the draft at the start of round 2; the /play Base panel says it comes at the end of the round.
+- evidence: draftWhenText (`packages/content/src/ruleText.ts:190`) "in rounds ${n}, ${2 * n}, ${3 * n} and so on"; nextDraftText (`ruleText.ts:230-231`) "Next Skill draft: at the end of round ${next}."
+- suggested fix: Change draftWhenText to "at the end of rounds 2, 4, 6 and so on".
+- source: web-fetch
+- issue: #467
+- fixed: (this commit)
+- addressed: draftWhenText now says "at the end of rounds 2, 4, 6 and so on" (and "at the end of every round" at 1), matching the /play Base panel's "Next Skill draft: at the end of round N." ruleText.test.ts and BasePanel.test.tsx pin it.
 
 ### [x] [LOW] / — the Prepare step leaves out Rest and base buying, which the starter-card line describes
 - pass: 55 (commit afad010)

@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-21 (pass 410, cloud tick)
+
+Pass 409 named base upgrades and healing in the / Prepare step (193ba52). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 4 commits ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 11 commits and under 48 hours ago. The /decisions MED rows edit `[needs-user-call]` items and wait for /oversight. The top actionable Pending critique row is the pass 55 LOW: / says the Skill draft is "in rounds 2, 4, 6" while /play says it comes at the end of the round (impact 4, ease 9: 3.6). draftWhenText now says "at the end of rounds 2, 4, 6 and so on". Next in line: the /config rows from pass 55.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: the Skill draft is "in rounds 2, 4, 6" on / but "at the end of round 2" on /play
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: say "at the end of rounds 2, 4, 6" in draftWhenText
+- issue: #467
+- fixed: (this commit)
+
+### [ ] [3.2] external-critique: /config Event Calendar help quotes field labels unmarked
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: mark the field labels in the Event Calendar help
+
+### [ ] [3.2] external-critique: /config bad-save messages say "using the defaults"
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: say "playing with the standard rules" in configStore.ts
+
 # Site audit — 2026-11-21 (pass 409, cloud tick)
 
 Pass 408 split the / Combat step (bee5504). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 10 commits and under 48 hours ago. The /decisions MED rows edit `[needs-user-call]` items and wait for /oversight. The top actionable Pending critique row is the pass 55 LOW: the Prepare step on / lists move, gather and build, but the starter-card line says Build can buy a base upgrade and Rest heals in Prepare (impact 4, ease 9: 3.6). The Prepare step now names base upgrades and healing. Next in line: the draft timing wording and the /config rows from pass 55.

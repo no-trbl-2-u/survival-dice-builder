@@ -111,7 +111,7 @@ describe('rule text from config', () => {
 
   it('training: the draft round, the Skills shown and where the rest go follow config (10.8, 11.6, 11.7)', () => {
     expect(trainingText(base, defaultContent)).toBe(
-      'Stand on the Base tile and buy Training I (a Build card and 3 materials) to open the Training Ground: in rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free. The Skills you do not keep go to your pool. Later drafts offer them again.',
+      'Stand on the Base tile and buy Training I (a Build card and 3 materials) to open the Training Ground: at the end of rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free. The Skills you do not keep go to your pool. Later drafts offer them again.',
     )
     const supply = With((c) => ({ ...c, draft: { ...c.draft, unpicked: 'supply' } }))
     expect(trainingText(supply, defaultContent)).toMatch(
@@ -119,15 +119,15 @@ describe('rule text from config', () => {
     )
     const often = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 1, reveal: 3 } }))
     expect(trainingText(often, defaultContent)).toMatch(
-      /every round, you look at 3 new Skills plus your pool/,
+      /at the end of every round, you look at 3 new Skills plus your pool/,
     )
     const rarely = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 3 } }))
-    expect(trainingText(rarely, defaultContent)).toMatch(/in rounds 3, 6, 9 and so on,/)
+    expect(trainingText(rarely, defaultContent)).toMatch(/at the end of rounds 3, 6, 9 and so on,/)
     expect(ruleLineFor('draft.everyNRounds', base, defaultContent)).toBe(
       trainingText(base, defaultContent),
     )
     expect(ruleLineFor('draft.everyNRounds', rarely, defaultContent)).toMatch(
-      /in rounds 3, 6, 9 and so on,/,
+      /at the end of rounds 3, 6, 9 and so on,/,
     )
     expect(ruleLineFor('draft.reveal', often, defaultContent)).toBe(
       trainingText(often, defaultContent),
@@ -136,10 +136,12 @@ describe('rule text from config', () => {
 
   it('training closed: names the opening upgrade and the draft rounds from config (10.8, 11.6)', () => {
     expect(trainingClosedText(base, defaultContent)).toBe(
-      'The Training Ground opens when you buy the Training I upgrade. Then, in rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free. The Skills you do not keep go to your pool. Later drafts offer them again.',
+      'The Training Ground opens when you buy the Training I upgrade. Then, at the end of rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free. The Skills you do not keep go to your pool. Later drafts offer them again.',
     )
     const rarely = With((c) => ({ ...c, draft: { ...c.draft, everyNRounds: 3 } }))
-    expect(trainingClosedText(rarely, defaultContent)).toMatch(/Then, in rounds 3, 6, 9 and so on,/)
+    expect(trainingClosedText(rarely, defaultContent)).toMatch(
+      /Then, at the end of rounds 3, 6, 9 and so on,/,
+    )
     const supply = With((c) => ({ ...c, draft: { ...c.draft, unpicked: 'supply' as const } }))
     expect(trainingClosedText(supply, defaultContent)).toMatch(
       /you look at 2 Skills and keep 1 for free\. The Skills you do not keep go back to the supply\.$/,

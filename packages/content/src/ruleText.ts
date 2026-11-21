@@ -184,10 +184,13 @@ export function trainingText(config: GameConfig, content: Upgrades): string {
   return `${open}: ${draftWhenText(config)}. ${draftPoolText(config)}`
 }
 
-/** "in rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free". */
+/** "at the end of rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free". */
 function draftWhenText(config: GameConfig): string {
   const n = config.draft.everyNRounds
-  const when = n === 1 ? 'every round' : `in rounds ${n}, ${2 * n}, ${3 * n} and so on`
+  const when =
+    n === 1
+      ? 'at the end of every round'
+      : `at the end of rounds ${n}, ${2 * n}, ${3 * n} and so on`
   const shown =
     config.draft.unpicked === 'pool'
       ? `${plural(config.draft.reveal, 'new Skill', 'new Skills')} plus your pool`
