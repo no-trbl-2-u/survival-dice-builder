@@ -91,7 +91,7 @@ export function loadConfig(store: KeyValue | undefined): LoadedConfig {
     )
     const parsed = GameConfigSchema.safeParse(moved.values)
     if (!parsed.success || configReferenceProblems(parsed.data, defaultContent).length > 0) {
-      return standard('The saved config is not valid; using the defaults.')
+      return standard('The saved config is not valid; playing with the standard rules.')
     }
     const changes = changedFields(parsed.data, defaults)
     return {
@@ -102,7 +102,7 @@ export function loadConfig(store: KeyValue | undefined): LoadedConfig {
       updated: moved.updated,
     }
   } catch {
-    return standard('The saved config cannot be read; using the defaults.')
+    return standard('The saved config cannot be read; playing with the standard rules.')
   }
 }
 

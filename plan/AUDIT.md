@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-21 (pass 411, cloud tick)
+
+Pass 410 said the Skill draft comes "at the end of rounds 2, 4, 6" (b98f8b6). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 5 commits ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 12 commits and under 48 hours ago. The /decisions MED rows edit `[needs-user-call]` items and wait for /oversight. The top actionable Pending critique rows are the two pass 55 LOW /config rows (impact 4, ease 8: 3.2 each); the bad-save messages are the cheaper fix. Both now say "playing with the standard rules". Next in line: the Event Calendar help on /config.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] external-critique: /config bad-save messages say "using the defaults"
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: say "playing with the standard rules" in configStore.ts
+- issue: #468
+- fixed: (this commit)
+
+### [ ] [3.2] external-critique: /config Event Calendar help quotes field labels unmarked
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: mark the field labels in the Event Calendar help
+
 # Site audit — 2026-11-21 (pass 410, cloud tick)
 
 Pass 409 named base upgrades and healing in the / Prepare step (193ba52). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 4 commits ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 11 commits and under 48 hours ago. The /decisions MED rows edit `[needs-user-call]` items and wait for /oversight. The top actionable Pending critique row is the pass 55 LOW: / says the Skill draft is "in rounds 2, 4, 6" while /play says it comes at the end of the round (impact 4, ease 9: 3.6). draftWhenText now says "at the end of rounds 2, 4, 6 and so on". Next in line: the /config rows from pass 55.

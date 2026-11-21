@@ -18,15 +18,6 @@
 - suggested fix: Rewrite as "1 more die every few rounds (set in Add a threat die every)" or put the labels in quotes; same for Notoriety.
 - source: web-fetch
 
-### [LOW] /config — the bad-save messages say "using the defaults" after the site settled on "the standard rules"
-- pass: 55 (commit afad010)
-- viewport: desktop
-- category: voice
-- observation: Buttons and status lines say "the standard rules"; the two messages shown when a saved config cannot be loaded still say "the defaults".
-- evidence: `apps/web/src/config/configStore.ts:94` "The saved config is not valid; using the defaults." and `:105` "The saved config cannot be read; using the defaults."; compare ConfigPage.tsx "Reset to the standard rules".
-- suggested fix: "...; playing with the standard rules."
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] /config — the bad-save messages say "using the defaults" after the site settled on "the standard rules"
+- pass: 55 (commit afad010)
+- viewport: desktop
+- category: voice
+- observation: Buttons and status lines say "the standard rules"; the two messages shown when a saved config cannot be loaded still say "the defaults".
+- evidence: `apps/web/src/config/configStore.ts:94` "The saved config is not valid; using the defaults." and `:105` "The saved config cannot be read; using the defaults."; compare ConfigPage.tsx "Reset to the standard rules".
+- suggested fix: "...; playing with the standard rules."
+- source: web-fetch
+- issue: #468
+- fixed: (this commit) — both messages end "playing with the standard rules."; configStore.test.ts pins the exact text.
+
 
 ### [x] [LOW] / — the Skill draft is "in rounds 2, 4, 6" on / but "at the end of round 2" on /play
 - pass: 55 (commit afad010)

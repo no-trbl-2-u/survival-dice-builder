@@ -100,7 +100,7 @@ describe('config store (spec 6)', () => {
     expect(loadConfig(store)).toMatchObject({
       config: defaultContent.config,
       custom: false,
-      error: expect.any(String),
+      error: 'The saved config is not valid; playing with the standard rules.',
     })
   })
 
@@ -119,7 +119,10 @@ describe('config store (spec 6)', () => {
   it('reset and corrupt storage fall back to the defaults', () => {
     const store = memory()
     store.setItem(CONFIG_KEY, '{oops')
-    expect(loadConfig(store)).toMatchObject({ custom: false, error: expect.any(String) })
+    expect(loadConfig(store)).toMatchObject({
+      custom: false,
+      error: 'The saved config cannot be read; playing with the standard rules.',
+    })
     resetConfig(store)
     expect(loadConfig(store)).toEqual({
       config: defaultContent.config,
