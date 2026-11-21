@@ -27,11 +27,11 @@ describe('HomePage', () => {
     )
   })
 
-  it('keeps Prepare to the card halves; defenses, the map and enemies get their own items (critique pass 28)', () => {
+  it('keeps Prepare to the card halves, naming base upgrades and healing (critique pass 55); defenses, the map and enemies get their own items (critique pass 28)', () => {
     render(<HomePage />)
     const items = screen.getAllByRole('listitem').map((li) => li.textContent ?? '')
     expect(items).toContain(
-      'Prepare: Play the top halves of your cards to move, gather materials and build Barricades and Towers.',
+      'Prepare: Play the top halves of your cards to move, gather materials, build Barricades and Towers, buy base upgrades and heal.',
     )
     expect(items.find((text) => text.startsWith('Defenses: A Barricade costs'))).toMatch(
       /The base starts with \d+ health\.$/,

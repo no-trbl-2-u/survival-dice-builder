@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Prepare step leaves out Rest and base buying, which the starter-card line describes
-- pass: 55 (commit afad010)
-- viewport: desktop
-- category: comprehension
-- observation: The starter-card line says Rest heals in Prepare and Build can buy a base upgrade; the Prepare step below lists only move, gather and build.
-- evidence: `apps/web/src/home/HomePage.tsx:50-51` "Play the top halves of your cards to move, gather materials and build Barricades and Towers." vs startText "Build builds a Barricade or Tower (or buys a base upgrade on the Base tile) and Rest heals you 2 health."
-- suggested fix: "Play the top halves of your cards to move, gather materials, build Barricades and Towers, buy base upgrades and heal."
-- source: web-fetch
-
 ### [LOW] / — the Skill draft is "in rounds 2, 4, 6" on / but "at the end of round 2" on /play
 - pass: 55 (commit afad010)
 - viewport: desktop
@@ -100,6 +91,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Prepare step leaves out Rest and base buying, which the starter-card line describes
+- pass: 55 (commit afad010)
+- viewport: desktop
+- category: comprehension
+- observation: The starter-card line says Rest heals in Prepare and Build can buy a base upgrade; the Prepare step below lists only move, gather and build.
+- evidence: `apps/web/src/home/HomePage.tsx:50-51` "Play the top halves of your cards to move, gather materials and build Barricades and Towers." vs startText "Build builds a Barricade or Tower (or buys a base upgrade on the Base tile) and Rest heals you 2 health."
+- suggested fix: "Play the top halves of your cards to move, gather materials, build Barricades and Towers, buy base upgrades and heal."
+- source: web-fetch
+- issue: #466
+- fixed: (this commit)
+- addressed: The Prepare step on / now reads "Play the top halves of your cards to move, gather materials, build Barricades and Towers, buy base upgrades and heal.", matching the starter-card line. HomePage.test.tsx pins it.
 
 ### [x] [MED] / — the Combat step is one list item of about 20 sentences again, and explains guard twice
 - pass: 55 (commit afad010)

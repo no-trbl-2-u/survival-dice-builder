@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-21 (pass 409, cloud tick)
+
+Pass 408 split the / Combat step (bee5504). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 10 commits and under 48 hours ago. The /decisions MED rows edit `[needs-user-call]` items and wait for /oversight. The top actionable Pending critique row is the pass 55 LOW: the Prepare step on / lists move, gather and build, but the starter-card line says Build can buy a base upgrade and Rest heals in Prepare (impact 4, ease 9: 3.6). The Prepare step now names base upgrades and healing. Next in line: the draft timing wording and the /config rows from pass 55.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: the / Prepare step leaves out Rest and base buying
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: name base upgrades and healing in the Prepare step
+- issue: #466
+- fixed: (this commit)
+
+### [ ] [3.6] external-critique: the Skill draft is "in rounds 2, 4, 6" on / but "at the end of round 2" on /play
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: say "at the end of rounds 2, 4, 6" in draftWhenText
+
+### [ ] [3.2] external-critique: /config Event Calendar help quotes field labels unmarked
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: mark the field labels in the Event Calendar help
+
 # Site audit — 2026-11-21 (pass 408, cloud tick)
 
 Pass 407 pinned the bot's edgeHex pick (afad010); critique pass 55 then filed 6 rows and one shipped (fe9a48b). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 9 commits and under 48 hours ago. The top Pending critique row is the pass 55 MED: the Combat step on / is one list item of about 20 sentences holding the engagement rules, the Exchanges note, the siege and Repair, and it explains guard a second time (impact 6, ease 8: 4.8, x1.5 for the MED bias: 7.2). The Combat item now keeps the engagement rules and the siege; Repair and Exchanges get their own items; combatText and enemyHitText take `guard: false` on / so guard is explained once. Next in line: the pass 55 LOW rows (Prepare step, draft timing, /config wording).
