@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-21 (pass 415, cloud tick)
+
+Pass 414 pinned the default bot's goal Build-level cap (dcc7e02). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 17 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` /decisions items, which only /oversight may change. A probe of the bot goal helpers finds that the hex readers `siteAt`, `enemyOn` and `spent`, which keep the policy out of enemy hexes and Gathering only on an unused node, have no direct test (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `goals.test.ts` now pins each: the base site, null for a bare hex and an off-map hex, an enemy on the hex versus the same q on another r, and a spent node versus an unused one. Matching `enemyOn` or `spent` on q alone fails the test. Next in line: the /decisions rows wait for /oversight; critique pass 56 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: the bot's siteAt, enemyOn and spent have no test
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin each hex reader in goals.test.ts
+- issue: #472
+- fixed: (this commit)
+
 # Site audit — 2026-11-21 (pass 414, cloud tick)
 
 Pass 413 pinned the defender bot's goal fallbacks (eb1b3b9). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 16 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` /decisions items, which only /oversight may change. A probe of the default bot's `goal` finds that its Build-level cap on upgrades (11.4) has no test: the 3-material threshold, the level 1 Build reaching no tier 2 once both tier 1s are bought, and `rulings.buildLevels: "any"` putting Training II in reach (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `goals.test.ts` now pins all three. Dropping the Build level from the check fails the test. Next in line: the /decisions rows wait for /oversight; critique pass 56 once its gate opens.

@@ -10,8 +10,11 @@ import {
   edgeHex,
   goal,
   homeNode,
+  enemyOn,
   me,
   onBaseTile,
+  siteAt,
+  spent,
 } from './goals.ts'
 
 const config = defaultContent.config
@@ -82,6 +85,23 @@ describe('the bot goal helpers', () => {
     expect(onBaseTile(s, BASE)).toBe(true)
     expect(onBaseTile(s, { q: 1, r: -1 })).toBe(true)
     expect(onBaseTile(s, { q: 2, r: 0 })).toBe(false)
+  })
+
+  it('siteAt, enemyOn and spent read one hex: its site, an enemy on it, a used node', () => {
+    const s = started()
+    expect(siteAt(s, BASE)).toBe('base')
+    // A hex of the Base tile with no site, and a hex off the map: both null.
+    expect(siteAt(s, { q: 1, r: 0 })).toBeNull()
+    expect(siteAt(s, { q: 5, r: 0 })).toBeNull()
+    const held = { ...s, enemies: [{ id: 'e1', kind: 'grunt', health: 2, hex: { q: 1, r: 0 } }] }
+    expect(enemyOn(held, { q: 1, r: 0 })).toBe(true)
+    // Same q, other r: not the enemy's hex.
+    expect(enemyOn(held, { q: 1, r: -1 })).toBe(false)
+    expect(enemyOn(s, { q: 1, r: 0 })).toBe(false)
+    const used = { ...s, spentNodes: [{ q: 2, r: 0 }] }
+    expect(spent(used, { q: 2, r: 0 })).toBe(true)
+    expect(spent(used, { q: 2, r: -1 })).toBe(false)
+    expect(spent(s, { q: 2, r: 0 })).toBe(false)
   })
 
   it('edgeHex is null once the tile deck is empty, and homeNode null with no gathering node', () => {
