@@ -297,7 +297,8 @@ const enemyDiceText = (content: Enemies) =>
  * How a Combat plays under a Combat model, and when it ends, with each enemy's enemy dice. An
  * engagement starts anywhere; only the enemies next to you roll, and a Skill reaches any enemy
  * in its range. The Engage line says how many times you may roll (keep some dice, roll the rest), then names the
- * enemy die faces and their damage before it says when the dice hit.
+ * enemy die faces and their damage before it says when the dice hit. With `guard: false` it
+ * leaves out how guard works, for a page whose starter line already says it (/).
  *
  * @rule 7, 7.8, 9.5, 9.6, Table 4, Table 5 (Spec v2)
  */
@@ -305,6 +306,7 @@ export function combatText(
   config: GameConfig,
   model: GameConfig['combat']['model'],
   content: Enemies & Pick<Content, 'cards'>,
+  { guard = true }: Readonly<{ guard?: boolean }> = {},
 ): string {
   if (model === 'exchange') {
     return 'In each exchange you roll, play cards and fire Skills. Then each enemy next to you that targets you rolls its enemy dice at you.'
@@ -316,7 +318,7 @@ export function combatText(
     'A Skill can hit any enemy within its range, not only the enemies next to you. ' +
     `${rollsText(config)} ` +
     'Put your dice on your Skills one at a time. ' +
-    `${enemyDieText(config)} ${enemyHitText(config)} Any guard you have left is lost when the engagement ends. ` +
+    `${enemyDieText(config)} ${enemyHitText(config, { guard })}${guard ? ' Any guard you have left is lost when the engagement ends.' : ''} ` +
     combatEndText(config)
   )
 }
@@ -333,16 +335,21 @@ export function repairText(): string {
 }
 
 /**
- * When the enemy dice of an engagement hit, whose dice hit, and what takes the damage.
+ * When the enemy dice of an engagement hit, whose dice hit, and what takes the damage. With
+ * `guard: false` it leaves out that guard takes the damage first.
  *
  * @rule 7.8 steps 7-8 (Spec v2), OPEN-QUESTIONS row 72
  */
-export function enemyHitText(config: GameConfig): string {
+export function enemyHitText(
+  config: GameConfig,
+  { guard = true }: Readonly<{ guard?: boolean }> = {},
+): string {
   const defeated =
     config.combat.engage.defeatedDice === 'hit'
       ? 'even the dice of an enemy you defeated'
       : 'except the dice of an enemy you defeated'
-  return `When you choose End engagement or no dice are left to place, the enemy dice hit you at once, ${defeated}. Your guard takes the damage first, then your health.`
+  const order = guard ? ' Your guard takes the damage first, then your health.' : ''
+  return `When you choose End engagement or no dice are left to place, the enemy dice hit you at once, ${defeated}.${order}`
 }
 
 /** Each enemy die face as the die line names it. */

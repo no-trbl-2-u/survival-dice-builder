@@ -76,12 +76,21 @@ describe('HomePage', () => {
     )
   })
 
-  it('says what a Repair option heals, in the Combat step (critique pass 45)', () => {
+  it('says what a Repair option heals, in its own item (critique pass 45, 55)', () => {
     const { container } = render(<HomePage />)
     const items = [...container.querySelectorAll('li')].map((li) => li.textContent ?? '')
-    expect(items.find((text) => text.startsWith('Combat:'))).toMatch(
-      /A card's Repair option gives the base that much health when you stand on the Base tile; anywhere else it goes to the most damaged defense on or next to your hex\. Nothing heals above full health\.$/,
+    expect(items.find((text) => text.startsWith('Repair:'))).toMatch(
+      /^Repair: A card's Repair option gives the base that much health when you stand on the Base tile; anywhere else it goes to the most damaged defense on or next to your hex\. Nothing heals above full health\.$/,
     )
+    expect(items.find((text) => text.startsWith('Combat:'))).not.toMatch(/Repair option/)
+  })
+
+  it('explains guard once, in What you have, not again in the Combat step (critique pass 55)', () => {
+    const { container } = render(<HomePage />)
+    const text = container.textContent ?? ''
+    expect(text.match(/guard: points that take enemy damage before your health/g)).toHaveLength(1)
+    expect(text).not.toMatch(/Your guard takes the damage first/)
+    expect(text).not.toMatch(/Any guard you have left is lost/)
   })
 
   it('drops the serial comma, as the rest of the site does (critique pass 25)', () => {
@@ -95,28 +104,26 @@ describe('HomePage', () => {
     expect((hits ?? []).filter((hit) => !hit.endsWith('Prepare, then Combat, and'))).toEqual([])
   })
 
-  it('names both Combat models the start panel offers', () => {
-    render(<HomePage />)
-    const combat = screen.getAllByText(
-      /Play a card's Engage option \(on Move and Gather\) to start an engagement/,
-    )[0]
-    expect(combat?.textContent).toMatch(/This is the Combat in the written rules \(on GitHub\)\./)
-    expect(combat?.textContent).toMatch(
-      /\(on GitHub\)\. Before a run, you can choose Exchanges instead, the older Combat kept for playtests\. In each exchange you roll, play cards and fire Skills\. Then each enemy/,
+  it('names both Combat models the start panel offers, Exchanges in its own item (critique pass 55)', () => {
+    const { container } = render(<HomePage />)
+    const items = [...container.querySelectorAll('li')].map((li) => li.textContent ?? '')
+    const combat = items.find((text) => text.startsWith('Combat:'))
+    expect(combat).toMatch(
+      /^Combat: Play a card's Engage option \(on Move and Gather\) to start an engagement/,
     )
-    expect(combat?.textContent).not.toMatch(/[;:] (in each exchange|then each enemy)/)
-    expect(combat?.textContent).not.toMatch(/Exchanges, the Combat in the written rules/)
+    expect(combat).toMatch(/This is the Combat in the written rules \(on GitHub\)\.$/)
+    expect(combat).not.toMatch(/exchange/i)
+    expect(items.find((text) => text.startsWith('Exchanges:'))).toBe(
+      'Exchanges: Before a run, you can choose Exchanges instead, the older Combat kept for playtests. In each exchange you roll, play cards and fire Skills. Then each enemy next to you that targets you rolls its enemy dice at you. The base and its defenses take damage the same way.',
+    )
   })
 
   it('says how the base and its defenses take damage when Combat ends', () => {
-    render(<HomePage />)
-    const combat = screen.getAllByText(
-      /Play a card's Engage option \(on Move and Gather\) to start an engagement/,
-    )[0]
-    expect(combat?.textContent).toMatch(
-      /Either way, when Combat ends, each enemy next to a Barricade/,
-    )
-    expect(combat?.textContent).toMatch(/a grunt deals 1 damage, an elite 3\./)
+    const { container } = render(<HomePage />)
+    const items = [...container.querySelectorAll('li')].map((li) => li.textContent ?? '')
+    const combat = items.find((text) => text.startsWith('Combat:'))
+    expect(combat).toMatch(/ When Combat ends, each enemy next to a Barricade/)
+    expect(combat).toMatch(/a grunt deals 1 damage, an elite 3\./)
   })
 
   it('states the player count and knockout from config', () => {

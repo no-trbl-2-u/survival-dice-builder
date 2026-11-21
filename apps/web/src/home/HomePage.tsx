@@ -27,8 +27,6 @@ import styles from './HomePage.module.css'
 /** `/` describes the default rules: every rule phrase comes from `ruleText`. */
 const config = defaultContent.config
 
-const lower = (text: string) => text.charAt(0).toLowerCase() + text.slice(1)
-
 /** `/`: what the game is, what you start with, how a run goes, and the way in. */
 export function HomePage() {
   return (
@@ -51,13 +49,22 @@ export function HomePage() {
             and build Barricades and Towers.
           </li>
           <li>
-            <strong>Combat:</strong> {combatText(config, 'engage', defaultContent)} This is the
-            Combat in the <a href={rulesUrl}>written rules</a> (on GitHub). Before a run, you can
-            choose Exchanges instead, the older Combat kept for playtests.{' '}
-            {combatText(config, 'exchange', defaultContent)} Either way,{' '}
-            {lower(siegeText(defaultContent))} {repairText()}
+            <strong>Combat:</strong>{' '}
+            {combatText(config, 'engage', defaultContent, { guard: false })}{' '}
+            {siegeText(defaultContent)} This is the Combat in the{' '}
+            <a href={rulesUrl}>written rules</a> (on GitHub).
           </li>
         </ol>
+        <ul className={styles.board}>
+          <li>
+            <strong>Repair:</strong> {repairText()}
+          </li>
+          <li>
+            <strong>Exchanges:</strong> Before a run, you can choose Exchanges instead, the older
+            Combat kept for playtests. {combatText(config, 'exchange', defaultContent)} The base and
+            its defenses take damage the same way.
+          </li>
+        </ul>
         <p id="home-board">On the board, every round:</p>
         <ul className={styles.board} aria-labelledby="home-board">
           <li>

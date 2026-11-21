@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-21 (pass 408, cloud tick)
+
+Pass 407 pinned the bot's edgeHex pick (afad010); critique pass 55 then filed 6 rows and one shipped (fe9a48b). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 9 commits and under 48 hours ago. The top Pending critique row is the pass 55 MED: the Combat step on / is one list item of about 20 sentences holding the engagement rules, the Exchanges note, the siege and Repair, and it explains guard a second time (impact 6, ease 8: 4.8, x1.5 for the MED bias: 7.2). The Combat item now keeps the engagement rules and the siege; Repair and Exchanges get their own items; combatText and enemyHitText take `guard: false` on / so guard is explained once. Next in line: the pass 55 LOW rows (Prepare step, draft timing, /config wording).
+
+## Top 5 findings (scored)
+
+### [x] [7.2] external-critique: the / Combat step is one long item and explains guard twice
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: split the Combat item on /, move Repair and Exchanges to their own items, drop the second guard explanation
+- issue: #465
+- fixed: (this commit)
+
+### [ ] [3.6] external-critique: the / Prepare step leaves out Rest and base buying
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: name base upgrades and healing in the Prepare step
+
+### [ ] [3.6] external-critique: the Skill draft is "in rounds 2, 4, 6" on / but "at the end of round 2" on /play
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: say "at the end of rounds 2, 4, 6" in draftWhenText
+
 # Site audit — 2026-11-20 (pass 407, cloud tick)
 
 Pass 406 pinned the defender's guardPost pick (fe13d96). No issues wait for triage, the critique gate is closed (pass 54 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 7 commits ago. The six Pending critique rows all edit `[needs-user-call]` items, which only /oversight may change. A probe of the bot goal helpers finds that `edgeHex`, the off-map hex the default and defender bots walk to when no gathering node is left, is tested only for the empty-deck null case and for not-null: its nearest-to-figure order, hex-key tie-break and off-map filter have no test (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `goals.test.ts` now pins them. From the base centre all 12 ring 2 hexes tie and the lowest key, -1,-1, wins. From 1,0 the 3 off-map hexes 1 away beat it, and 1,1 wins on key. With a tile on 1,1, the pick moves to 2,-1. Reversing the tie-break, dropping the distance order or dropping the off-map filter each fails the test. Next in line: the /decisions rows wait for /oversight.

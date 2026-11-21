@@ -463,6 +463,13 @@ describe('rule text from config', () => {
   })
 
   it('enemy dice: one phrase for when they hit, whose dice, and guard first (7.8 steps 7-8, row 72)', () => {
+    expect(enemyHitText(base, { guard: false })).toBe(
+      'When you choose End engagement or no dice are left to place, the enemy dice hit you at once, even the dice of an enemy you defeated.',
+    )
+    expect(combatText(base, 'engage', defaultContent, { guard: false })).not.toMatch(/guard/)
+    expect(combatText(base, 'engage', defaultContent)).toContain(
+      'Your guard takes the damage first, then your health. Any guard you have left is lost when the engagement ends. ',
+    )
     expect(enemyHitText(base)).toBe(
       'When you choose End engagement or no dice are left to place, the enemy dice hit you at once, even the dice of an enemy you defeated. Your guard takes the damage first, then your health.',
     )

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — the Combat step is one list item of about 20 sentences again, and explains guard twice
-- pass: 55 (commit afad010)
-- viewport: desktop
-- category: voice
-- observation: The pass 8 fix split the Combat step into short sentences; it has grown back into one list item holding the engagement rules, roll limit, enemy die faces, hit timing, the Exchanges note with its own rules, siege damage and Repair. Guard is explained in "What you have" and again in this item. This does not match the short, plain voice in bearings.
-- evidence: `apps/web/src/home/HomePage.tsx:53-59` puts combatText('engage'), the Exchanges sentences, combatText('exchange'), siegeText and repairText into one `<li>`; combatText (`packages/content/src/ruleText.ts:315-320`) says "Your guard takes the damage first, then your health" and "Any guard you have left is lost when the engagement ends", which startText (`ruleText.ts:929`) already says.
-- suggested fix: Keep a short engagement summary in the Combat item, move the Exchanges note and the Repair rule into their own items, and drop the second guard explanation.
-- source: web-fetch
-
 ### [LOW] / — the Prepare step leaves out Rest and base buying, which the starter-card line describes
 - pass: 55 (commit afad010)
 - viewport: desktop
@@ -109,6 +100,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — the Combat step is one list item of about 20 sentences again, and explains guard twice
+- pass: 55 (commit afad010)
+- viewport: desktop
+- category: voice
+- observation: The pass 8 fix split the Combat step into short sentences; it has grown back into one list item holding the engagement rules, roll limit, enemy die faces, hit timing, the Exchanges note with its own rules, siege damage and Repair. Guard is explained in "What you have" and again in this item. This does not match the short, plain voice in bearings.
+- evidence: `apps/web/src/home/HomePage.tsx:53-59` puts combatText('engage'), the Exchanges sentences, combatText('exchange'), siegeText and repairText into one `<li>`; combatText (`packages/content/src/ruleText.ts:315-320`) says "Your guard takes the damage first, then your health" and "Any guard you have left is lost when the engagement ends", which startText (`ruleText.ts:929`) already says.
+- suggested fix: Keep a short engagement summary in the Combat item, move the Exchanges note and the Repair rule into their own items, and drop the second guard explanation.
+- source: web-fetch
+- issue: #465
+- fixed: (this commit)
+- addressed: The Combat item on / now holds the engagement rules and the siege, then "This is the Combat in the written rules (on GitHub)." Repair and Exchanges get their own items in a list under the steps. combatText and enemyHitText take `guard: false`, which / passes, so guard is explained once, in What you have; /play and /config keep the guard sentences. HomePage.test.tsx and ruleText.test.ts pin it.
 
 ### [x] [MED] / — the Repair sentence says "that much health" but no sentence says which card repairs or how much
 - pass: 55 (commit afad010)
