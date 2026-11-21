@@ -149,6 +149,29 @@ describe('the defender bot (phase 36)', () => {
     expect(threat(started({ enemies: [enemy('e1', 'grunt', 2, 6, 0)] }))).toBeUndefined()
   })
 
+  it('falls back to the base or materials when it cannot go to a post or the threat', () => {
+    const near = enemy('e1', 'grunt', 2, 3, 0)
+    const s0 = started({ enemies: [near] })
+    const ring = { ...s0.map.hexes['1,0']!, site: null }
+    const map = { ...s0.map, hexes: { ...s0.map.hexes, '2,0': ring, '2,-1': ring } }
+    const s = { ...s0, map }
+    // 2 materials pay for a Barricade, so it heads for the post toward the threat.
+    expect(goal(withPlayer(s, { materials: 2 }), 'defender')).toEqual({ q: 2, r: 0 })
+    // 3 pay for Training I as well: the upgrade comes first, so it heads for the base.
+    expect(goal(withPlayer(s, { materials: 3 }), 'defender')).toEqual({ q: 0, r: 0 })
+    // No hex 2 from the base revealed yet: no post, so the base.
+    expect(goal(withPlayer(s0, { materials: 2 }), 'defender')).toEqual({ q: 0, r: 0 })
+    // 1 material pays for no defense: it gathers as the default bot does (the map edge here).
+    const poor = withPlayer(s, { materials: 1 })
+    expect(goal(poor, 'defender')).toEqual(goal(poor))
+    expect(goal(poor, 'defender')).not.toEqual({ q: 0, r: 0 })
+    // No threat: the same, even with materials for a defense.
+    const calm = withPlayer({ ...s, enemies: [] }, { materials: 2 })
+    expect(goal(calm, 'defender')).toEqual(goal(calm))
+    // Combat with no threat: the base.
+    expect(goal({ ...calm, phase: 'combat' }, 'defender')).toEqual({ q: 0, r: 0 })
+  })
+
   it('threat takes the enemy nearest the base within range 4 (ties: the weaker, then id)', () => {
     const at = (...enemies: Enemy[]) => threat(started({ enemies }))?.id
     // 4 hexes off is a threat; 5 is not.

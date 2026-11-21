@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-21 (pass 413, cloud tick)
+
+Pass 412 quoted the field labels in the /config Event Calendar help (fc43719). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 15 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` /decisions items, which only /oversight may change. A probe of the bot goal helpers finds that `defenderGoal`, reached through `goal(state, 'defender')`, is tested only for the guard post and the Combat threat: its upgrade-first order, the base when no post is revealed, the materials fallback with no threat or too few materials for a defense, and the base in Combat with no threat have no test (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `defender.test.ts` now pins each fallback. Letting the post fall through to materials, sending Combat with no threat to the map edge, or dropping the upgrade check each fails the test. Next in line: the /decisions rows wait for /oversight; critique pass 56 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: the defender bot's goal fallbacks have no test
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin each defenderGoal fallback in defender.test.ts
+- issue: #470
+- fixed: (this commit)
+
 # Site audit — 2026-11-21 (pass 412, cloud tick)
 
 Pass 411 said "playing with the standard rules" in the /config bad-save messages (2f4345a). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 6 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 13 commits and under 48 hours ago. The /decisions rows edit `[needs-user-call]` items and wait for /oversight. The top actionable Pending critique row is the last pass 55 LOW: the /config Event Calendar help says "as Add a threat die every sets" (impact 4, ease 8: 3.2). Both pointers now read (set in "Add a threat die every") and (set in "Notoriety climbs every"). That empties the actionable critique queue; next in line is critique pass 56 once its gate opens, or expand.
