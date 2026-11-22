@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
   applyBoons,
   calendarDay,
+  nodeNearestBase,
   notorietyDay,
   notorietyRung,
   sundialDay,
@@ -196,5 +197,25 @@ describe('limits and options with the calendar on', () => {
     }
     expect(ramp('off')).toBe(5)
     expect(ramp('sundial')).toBe(1)
+  })
+})
+
+describe('nodeNearestBase', () => {
+  it('7.3, 9.8 extra elites come at the node nearest the Base tile; ties keep map order', () => {
+    const s = board('sundial')
+    const east = { id: 'east', hex: { q: 3, r: 0 } }
+    const west = { id: 'west', hex: { q: -3, r: 0 } }
+    const south = { id: 'south', hex: { q: 0, r: 2 } }
+    expect(nodeNearestBase(s, [east, west, south])).toBe(south)
+    expect(nodeNearestBase(s, [east, west])).toBe(east)
+    expect(nodeNearestBase(s, [west, east])).toBe(west)
+    expect(nodeNearestBase(s, [])).toBeUndefined()
+  })
+
+  it('7.3 with no Base tile on the map the first node in map order is the nearest', () => {
+    const s = board('sundial', { map: EMPTY_MAP })
+    const far = { id: 'far', hex: { q: 5, r: 0 } }
+    const near = { id: 'near', hex: { q: 1, r: 0 } }
+    expect(nodeNearestBase(s, [far, near])).toBe(far)
   })
 })
