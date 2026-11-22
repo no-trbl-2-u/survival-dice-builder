@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-22 (pass 427, cloud tick)
+
+Pass 426 pinned rankTargets' lowest-health and id tie-breaks (a8c8b52). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran today (10 commits ago). The Pending critique row edits a `[needs-user-call]` /decisions item, which only /oversight may change. A probe of the engine finds that the row 15 target test is titled "player, then Tower, then Barricade, then base" but places no Barricade, so neither the Tower-before-Barricade step nor `defenseKind` in `enemies/targets.ts`, which tells a Barricade from a Tower by `blocksEnemies`, has a test: swapping the two kinds left all 329 engine tests green (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `enemies.test.ts` now adds a Barricade 2 hexes away beside the Tower, with lower health and an earlier id, and expects it after the Tower. Swapping the kinds fails the test. Next in line: the /decisions row waits for /oversight; critique pass 57 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: the Tower-before-Barricade target tie-break has no test
+- category: tests
+- impact: 3
+- ease: 9
+- next: add a Barricade at the Tower's distance to the row 15 test in enemies.test.ts
+- issue: #484
+- fixed: (this commit)
+
 # Site audit — 2026-11-22 (pass 426, cloud tick)
 
 Pass 425 pinned nodeNearestBase's map-order tie-break and no-Base-tile fallback (d107233). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran today (9 commits ago). The six Pending critique rows all edit `[needs-user-call]` /decisions items, which only /oversight may change. A probe of the engine finds that `rankTargets` in `enemies/targets.ts`, which orders every enemy's targets, breaks ties of distance and kind by lowest health and then id, and no test pins either step (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `enemies.test.ts` now pins both with two Towers 2 hexes from the enemy: the weaker comes first, and at equal health "t-a" comes before "t-b" though "t-b" was built first. Dropping either sort step fails the test. Next in line: the /decisions rows wait for /oversight; critique pass 57 once its gate opens.

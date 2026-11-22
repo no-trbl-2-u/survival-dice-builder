@@ -96,6 +96,12 @@ describe('targets (9.3)', () => {
       defenses: [defense('d1', 'tower', 0, 0, 3)],
     })
     expect(rankTargets(s, { q: 2, r: 0 }).map((t) => t.id)).toEqual(['p1', 'd1', 'base'])
+    // A Barricade 2 away too comes after the Tower, though its health and id would put it first.
+    const both = board(corridor(-6, 6), { q: 4, r: 0 }, [], {
+      config: pull(0),
+      defenses: [defense('d1', 'tower', 0, 0, 3), defense('b0', 'barricade', 2, 2, 1)],
+    })
+    expect(rankTargets(both, { q: 2, r: 0 }).map((t) => t.id)).toEqual(['p1', 'd1', 'b0', 'base'])
   })
 
   it('9.3 row 15 at equal distance and kind: lowest health, then id', () => {
