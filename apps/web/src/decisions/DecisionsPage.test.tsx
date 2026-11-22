@@ -1,4 +1,4 @@
-import { defaultProposals, openQuestions, parseQuestions } from '@survival/content'
+import { defaultProposals, metaFor, openQuestions, parseQuestions } from '@survival/content'
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import questionsMd from '../../../../OPEN-QUESTIONS.md?raw'
@@ -113,6 +113,12 @@ describe('DecisionsPage', () => {
       expect(text, `row ${n}`).toContain('The Haul card')
       expect(text, `row ${n}`).not.toMatch(/\brow 20\b/i)
     }
+    // Row 59 names its /config option by label and default, not "the flag" (critique pass 56).
+    const row59 = container.querySelector('[data-decided="59"]')?.textContent ?? ''
+    expect(row59).toContain(
+      `Unticking "${metaFor('rulings.gatherNeedsNode')?.entry.label}" on /config (ticked by default)`,
+    )
+    expect(row59).not.toMatch(/\bthe flag\b/i)
     const row78 = container.querySelector('[data-question="78"] h3')?.textContent ?? ''
     expect(row78).toContain('Spec v2 levels the Build card, and')
     expect(row78).not.toMatch(/ruling \d/)

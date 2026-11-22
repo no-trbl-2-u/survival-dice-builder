@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — decided row 59 says "The flag" and never names the /config option
-- pass: 56 (commit 7240dd7)
-- viewport: desktop
-- category: voice
-- observation: Row 59 refers to "the flag" without naming it, so a visitor cannot tell which setting it is or whether it is on by default.
-- evidence: Row 59: "The flag restores that reading of Haul: off a node Gather also gives its amount and spends nothing..." (config key rulings.gatherNeedsNode: true).
-- suggested fix: Name the option by its /config label and say what its default is.
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /decisions — decided row 59 says "The flag" and never names the /config option (addressed at (this commit))
+- pass: 56 (commit 7240dd7)
+- viewport: desktop
+- category: voice
+- observation: Row 59 refers to "the flag" without naming it, so a visitor cannot tell which setting it is or whether it is on by default.
+- evidence: Row 59: "The flag restores that reading of Haul: off a node Gather also gives its amount and spends nothing..." (config key rulings.gatherNeedsNode: true).
+- suggested fix: Name the option by its /config label and say what its default is.
+- source: web-fetch
+- issue: #480
+- resolution: Row 59 now says: Unticking "Gather needs a node" on /config (ticked by default) restores that reading of Haul. A DecisionsPage test reads the label from config meta and fails when row 59 says "the flag".
 
 ### [x] [LOW] /config — the Sundial and Notoriety help say "enemy" where the site says grunt (addressed at (this commit))
 - pass: 56 (commit 7240dd7)

@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-22 (pass 423, cloud tick)
+
+Pass 422 said grunt, not enemy, in the /config Sundial and Notoriety lines (21fd1c7). No issues wait for triage, the critique gate is closed (pass 56 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran today. The Pending MED rows all edit `[needs-user-call]` items, which wait for /oversight. The top shippable Pending critique row is the pass 56 LOW on row 59 (impact 4, ease 8: 3.2): the decided reading said "The flag restores that reading of Haul" without naming the option. It now says: Unticking "Gather needs a node" on /config (ticked by default) restores that reading. `DecisionsPage.test.tsx` reads the label from config meta and fails when row 59 says "the flag". The remaining Pending critique rows all wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] external-critique: /decisions row 59 says "The flag" and never names the /config option
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: name the option by its /config label and its default in OPEN-QUESTIONS.md row 59
+- issue: #480
+- fixed: (this commit)
+
 # Site audit — 2026-11-22 (pass 422, cloud tick)
 
 Pass 421 asked what ends a Base-tile run in /decisions row 63 and named the /config group "Forced reveal" (af4ed1b). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran today. The Pending MED rows all edit `[needs-user-call]` items, which wait for /oversight. The top shippable Pending critique row is the pass 56 LOW on "enemy" (impact 4, ease 8: 3.2): the Sundial line and its lap help said "enemies or elites", as if elites were not enemies, and the Notoriety line said a spawn node spawns "1 enemy" where / and /tiles say 1 grunt. Both now say grunt. `ruleText.test.ts` fails when either line says "enemies or elites" or "spawns 1 enemy". Next in line: the pass 56 LOW on row 59 "the flag".
