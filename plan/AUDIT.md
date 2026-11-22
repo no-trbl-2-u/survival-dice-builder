@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-22 (pass 419, cloud tick)
+
+Pass 418 stated the Spec v2 answer in decided rows 30 and 50 (28a8283). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 4 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 just ran. The top Pending critique row is the pass 56 MED (biased 1.5x): readings 63 and 64 give their own recommendation and then the measured proposal's (impact 5, ease 8: 4.0, biased 6.0). Rows 66, 68 and 70 had the same duplicate, so all five readings with a proposal drop their own "Recommendation: ..." sentence, as row 67 did; the proposal block's recommendation is the only one left. `DecisionsPage.test.tsx` now fails when any reading with a proposal carries its own recommendation. Next in line: the pass 56 LOW rows (reading 79 repo paths, "Clock (experiment)", Sundial/Notoriety "enemy", row 59 "the flag").
+
+## Top 5 findings (scored)
+
+### [x] [6.0] external-critique: /decisions readings 63 and 64 state their proposal twice
+- category: external-critique
+- impact: 5
+- ease: 8
+- next: drop each proposal reading's own Recommendation sentence
+- issue: #476
+- fixed: (this commit)
+
+### [ ] [3.2] external-critique: /decisions reading 79 names repo files and a ruling number
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: drop the AUDIT date, docs/ paths and "ruling 9" from OPEN-QUESTIONS.md row 79
+
 # Site audit — 2026-11-22 (pass 418, cloud tick)
 
 Pass 417 pinned the defender bot's engage-anyway fallback (7240dd7). Critique pass 56 (38a3aca) and expand pass 37 (0c18ddb) ran this window. No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand's window is shut. Pass 56 filed two MED rows on open /decisions rows that live in `OPEN-QUESTIONS.md`, not in `[needs-user-call]` AUDIT items, so the loop may edit them. The top one (MED, biased 1.5x): decided rows 30 and 50 kept a 2026-10-04 designer note and never said what Spec v2 decided; row 50 still said "revisit". Row 30 now states the Spec v2 answer (on the base Build buys a base upgrade, other hexes take a defense, Repair is its own card; 6.7, 12.1, 12.2, 12.5), and row 50 states the lower-level fallback and the draft pool (11.6, 11.8) with the skip only when both are empty, matching `startDraft`. Next in line: the row 63/64 duplicate-proposal row.
@@ -19,11 +39,6 @@ Pass 417 pinned the defender bot's engage-anyway fallback (7240dd7). Critique pa
 - issue: #475
 - fixed: (this commit)
 
-### [ ] [6.0] external-critique: /decisions readings 63 and 64 state their proposal twice
-- category: external-critique
-- impact: 5
-- ease: 8
-- next: drop the reading's own Proposed/Recommendation text where a measured Proposal exists
 
 # Site audit — 2026-11-21 (pass 417, cloud tick)
 

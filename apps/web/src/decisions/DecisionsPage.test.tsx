@@ -73,16 +73,13 @@ describe('DecisionsPage', () => {
     for (const b of buttons) expect(b.textContent).not.toMatch(/(^|\s)\/[a-z]/)
   })
 
-  it("gives one recommendation per reading: the reading's own never contradicts its proposal (critique pass 26)", () => {
-    const words = { 'turn-on': 'turn on', playtest: 'playtest', 'keep-off': 'keep off' } as const
+  it('gives one recommendation per reading: a reading with a proposal has none of its own (critique passes 26, 56)', () => {
     const rows = parseQuestions(questionsMd)
+    expect(defaultProposals.length).toBeGreaterThan(0)
     for (const proposal of defaultProposals) {
       const reading = rows.find((r) => r.number === proposal.row)?.reading ?? ''
-      const own = reading.match(/Recommendation: ([^.]*)\./)?.[1]
-      if (own !== undefined) expect(own, `row ${proposal.row}`).toContain(words[proposal.advice])
+      expect(reading, `row ${proposal.row}`).not.toContain('Recommendation')
     }
-    // Row 67's proposal says playtest, so its old "turn on" line is gone.
-    expect(rows.find((r) => r.number === 67)?.reading).not.toContain('Recommendation')
   })
 
   it('gives one set of bot numbers per reading: a measured proposal has no older "Bot report" (critique pass 38)', () => {

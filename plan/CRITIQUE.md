@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — readings 63 and 64 state their proposal and recommendation twice
-- pass: 56 (commit 7240dd7)
-- viewport: desktop
-- category: comprehension
-- observation: Rows 63 and 64 each show "Proposed: ..." and then a measured "Proposal: ...", with two recommendation lines. Row 64's first recommendation needs "the combined set", which no page defines. Row 67 had the same problem and was fixed.
-- evidence: Row 63: "Proposed: forced reveal. At round end, if no tile was revealed..." "Recommendation: turn on." then "Proposal: Forced reveal..." "Recommendation from the bot batches: turn it on." Row 64: "Recommendation: needs a playtest with the combined set." then "Recommendation from the bot batches: it needs a playtest."
-- suggested fix: Where a measured Proposal block exists, drop the reading's own "Proposed:/Recommendation:" text, as for row 67.
-- source: web-fetch
-
 ### [LOW] /decisions — reading 79 names repo files and "ruling 9" in its heading and body
 - pass: 56 (commit 7240dd7)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [MED] /decisions — readings 63 and 64 state their proposal and recommendation twice (addressed at (this commit))
+- pass: 56 (commit 7240dd7)
+- viewport: desktop
+- category: comprehension
+- observation: Rows 63 and 64 each show "Proposed: ..." and then a measured "Proposal: ...", with two recommendation lines. Row 64's first recommendation needs "the combined set", which no page defines. Row 67 had the same problem and was fixed.
+- evidence: Row 63: "Proposed: forced reveal. At round end, if no tile was revealed..." "Recommendation: turn on." then "Proposal: Forced reveal..." "Recommendation from the bot batches: turn it on." Row 64: "Recommendation: needs a playtest with the combined set." then "Recommendation from the bot batches: it needs a playtest."
+- suggested fix: Where a measured Proposal block exists, drop the reading's own "Proposed:/Recommendation:" text, as for row 67.
+- source: web-fetch
+- issue: #476
+- resolution: Rows 63, 64, 66, 68 and 70 drop their own "Recommendation: ..." sentence (row 64's "the combined set" goes with it), so the measured proposal block gives the only recommendation, as for row 67. The reading keeps its "Proposed:" name and its rule detail, which the proposal block does not repeat. docs/DECISIONS.md is regenerated. A DecisionsPage test now fails when any reading with a proposal carries its own recommendation.
+
 ### [x] [MED] /decisions — decided rows 30 and 50 never say what was decided; row 50 still says "revisit"
 - pass: 56 (commit 7240dd7)
 - viewport: desktop
