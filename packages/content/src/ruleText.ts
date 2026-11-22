@@ -702,7 +702,7 @@ export function calendarText(calendar: Calendar, system: CalendarSystem = calend
     const { eraEvery, days } = calendar.sundial
     const names = listText(days.map(sundialDayText))
     const rest = days.some((d) => d.boon === 'respite') ? respite : ''
-    return `Sundial: 1 day each round, in a ring of ${plural(days.length, 'day', 'days')}: ${names}. After ${every(eraEvery, 'round', 'rounds')}, each number of enemies or elites a day spawns rises by 1, unless it is 0.${rest}`
+    return `Sundial: 1 day each round, in a ring of ${plural(days.length, 'day', 'days')}: ${names}. After ${every(eraEvery, 'round', 'rounds')}, each number of grunts or elites a day spawns rises by 1, unless it is 0.${rest}`
   }
   if (system === 'threat-dice') {
     const { startDice, addDieEvery, faces } = calendar.threatDice
@@ -711,7 +711,7 @@ export function calendarText(calendar: Calendar, system: CalendarSystem = calend
   }
   const { rungEvery, rungsPerGrunt, eliteEveryRungs } = calendar.notoriety
   const elite = every(eliteEveryRungs, 'rung', 'rungs')
-  return `Notoriety ladder: the threat climbs 1 rung ${every(rungEvery, 'round', 'rounds')} and 1 rung at each new milestone, and each new rung gives a Respite. Each spawn node spawns 1 enemy and each elite spawn node 1 elite, plus 1 more for ${every(rungsPerGrunt, 'rung', 'rungs')}. ${elite.charAt(0).toUpperCase() + elite.slice(1)}, 1 elite also comes to the spawn node nearest the base.${respite}`
+  return `Notoriety ladder: the threat climbs 1 rung ${every(rungEvery, 'round', 'rounds')} and 1 rung at each new milestone, and each new rung gives a Respite. Each spawn node spawns 1 grunt and each elite spawn node 1 elite, plus 1 more for ${every(rungsPerGrunt, 'rung', 'rungs')}. ${elite.charAt(0).toUpperCase() + elite.slice(1)}, 1 elite also comes to the spawn node nearest the base.${respite}`
 }
 
 /**

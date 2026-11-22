@@ -306,13 +306,13 @@ describe('rule text from config', () => {
       'A Respite gives each player who is not knocked out 3 health and the base 3 health, never above the maximum.'
     expect(respiteText(calendar)).toBe(respite)
     expect(calendarText(calendar, 'sundial')).toBe(
-      `Sundial: 1 day each round, in a ring of 8 days: Dawn (no enemies, a Respite), Raid, Raid, Harvest, Raid, Feast (a Respite), Blood Moon (1 extra elite) and Raid. After every 8 rounds, each number of enemies or elites a day spawns rises by 1, unless it is 0. ${respite}`,
+      `Sundial: 1 day each round, in a ring of 8 days: Dawn (no enemies, a Respite), Raid, Raid, Harvest, Raid, Feast (a Respite), Blood Moon (1 extra elite) and Raid. After every 8 rounds, each number of grunts or elites a day spawns rises by 1, unless it is 0. ${respite}`,
     )
     expect(calendarText(calendar, 'threat-dice')).toBe(
       `Threat dice: 1 die in round 1, and 1 more every 3 rounds. The faces are Calm, Raid, Raid, Raid, Elite and Boon. ${respite}`,
     )
     expect(calendarText(calendar, 'notoriety')).toBe(
-      `Notoriety ladder: the threat climbs 1 rung every 3 rounds and 1 rung at each new milestone, and each new rung gives a Respite. Each spawn node spawns 1 enemy and each elite spawn node 1 elite, plus 1 more for every 3 rungs. Every 3 rungs, 1 elite also comes to the spawn node nearest the base. ${respite}`,
+      `Notoriety ladder: the threat climbs 1 rung every 3 rounds and 1 rung at each new milestone, and each new rung gives a Respite. Each spawn node spawns 1 grunt and each elite spawn node 1 elite, plus 1 more for every 3 rungs. Every 3 rungs, 1 elite also comes to the spawn node nearest the base. ${respite}`,
     )
     const quick = {
       ...calendar,
@@ -340,11 +340,13 @@ describe('rule text from config', () => {
       `${calendarText(calendar, 'sundial')} Not in play: the Event Calendar is Off.`,
     )
     expect(defaultConfigMeta['calendar.sundial.eraEvery']?.help).toBe(
-      'Rounds in one lap of the Sundial. After each lap, each number of enemies or elites a day spawns rises by 1, unless it is 0.',
+      'Rounds in one lap of the Sundial. After each lap, each number of grunts or elites a day spawns rises by 1, unless it is 0.',
     )
     expect(calendarText(calendar, 'sundial')).toContain(
-      'each number of enemies or elites a day spawns rises by 1, unless it is 0.',
+      'each number of grunts or elites a day spawns rises by 1, unless it is 0.',
     )
+    for (const system of ['sundial', 'notoriety'] as const)
+      expect(calendarText(calendar, system)).not.toMatch(/enemies or elites|spawns 1 enemy/)
     expect(ruleLineFor('calendar.respite.heal', base, defaultContent)).toBe(
       `${respite} Not in play: the Event Calendar is Off.`,
     )

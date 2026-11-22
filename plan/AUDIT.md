@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-22 (pass 422, cloud tick)
+
+Pass 421 asked what ends a Base-tile run in /decisions row 63 and named the /config group "Forced reveal" (af4ed1b). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran today. The Pending MED rows all edit `[needs-user-call]` items, which wait for /oversight. The top shippable Pending critique row is the pass 56 LOW on "enemy" (impact 4, ease 8: 3.2): the Sundial line and its lap help said "enemies or elites", as if elites were not enemies, and the Notoriety line said a spawn node spawns "1 enemy" where / and /tiles say 1 grunt. Both now say grunt. `ruleText.test.ts` fails when either line says "enemies or elites" or "spawns 1 enemy". Next in line: the pass 56 LOW on row 59 "the flag".
+
+## Top 5 findings (scored)
+
+### [x] [3.2] external-critique: /config Sundial and Notoriety help say "enemy" where the site says grunt
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: write "grunts or elites" in the Sundial line and "spawns 1 grunt" in the Notoriety line
+- issue: #479
+- fixed: (this commit)
+
+### [ ] [3.2] external-critique: /decisions row 59 says "The flag" and never names the /config option
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: name the option by its /config label and its default in OPEN-QUESTIONS.md row 59
+
 # Site audit — 2026-11-22 (pass 421, cloud tick)
 
 Pass 420 dropped the AUDIT date, repo paths and ruling number from /decisions reading 79 (664f5df). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 6 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran today. The top Pending critique row is the pass 56 LOW on undefined clock words (impact 4, ease 8: 3.2): row 63 asked what replaces "the wave track as the clock" and /config headed its forced reveal field "Clock (experiment)". Row 63 now asks "What makes a run end if nobody steps off the Base tile?" and the /config group is "Forced reveal (experiment)". `DecisionsPage.test.tsx` fails when an open reading says "wave track" or "clock", and `configMetaText.test.ts` fails when any /config label says "clock". Next in line: the pass 56 LOW rows (Sundial/Notoriety "enemy", row 59 "the flag").

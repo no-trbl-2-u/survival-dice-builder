@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Sundial and Notoriety help say "enemy" where the site says grunt
-- pass: 56 (commit 7240dd7)
-- viewport: desktop
-- category: voice
-- observation: The Sundial line contrasts "enemies or elites", as if elites were not enemies. The Notoriety line says a spawn node spawns "1 enemy", while / and /tiles say a spawn node gets 1 grunt.
-- evidence: "each number of enemies or elites a day spawns rises by 1"; "Each spawn node spawns 1 enemy and each elite spawn node 1 elite" (packages/content/src/ruleText.ts:705, :714); /tiles: "Spawn node (gets 1 grunt at each Combat)".
-- suggested fix: Write "grunts or elites" in the Sundial line and "spawns 1 grunt" in the Notoriety line.
-- source: web-fetch
-
 ### [LOW] /decisions — decided row 59 says "The flag" and never names the /config option
 - pass: 56 (commit 7240dd7)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the Sundial and Notoriety help say "enemy" where the site says grunt (addressed at (this commit))
+- pass: 56 (commit 7240dd7)
+- viewport: desktop
+- category: voice
+- observation: The Sundial line contrasts "enemies or elites", as if elites were not enemies. The Notoriety line says a spawn node spawns "1 enemy", while / and /tiles say a spawn node gets 1 grunt.
+- evidence: "each number of enemies or elites a day spawns rises by 1"; "Each spawn node spawns 1 enemy and each elite spawn node 1 elite" (packages/content/src/ruleText.ts:705, :714); /tiles: "Spawn node (gets 1 grunt at each Combat)".
+- suggested fix: Write "grunts or elites" in the Sundial line and "spawns 1 grunt" in the Notoriety line.
+- source: web-fetch
+- issue: #479
+- resolution: The Sundial line and its lap help now say "each number of grunts or elites a day spawns rises by 1", and the Notoriety line says "Each spawn node spawns 1 grunt and each elite spawn node 1 elite". A ruleText test fails when either line says "enemies or elites" or "spawns 1 enemy".
 
 ### [x] [LOW] /decisions and /config — "the wave track as the clock" and "Clock (experiment)" use words no page defines (addressed at (this commit))
 - pass: 56 (commit 7240dd7)
