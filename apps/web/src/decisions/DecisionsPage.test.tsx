@@ -201,6 +201,11 @@ describe('DecisionsPage', () => {
     expect(readings).not.toMatch(
       /floor\(|measured in phase|phase \d+ bot|Report: |rulings\.|offNodeAmount/,
     )
+    // Reading 79 names no AUDIT date, docs/ path or ruling number (critique pass 56).
+    expect(readings).not.toMatch(/\(AUDIT |docs\/|\bruling \d/)
+    expect(container.querySelector('[data-question="79"]')?.textContent).toContain(
+      'Harvest (spent nodes work again).',
+    )
     expect(container.querySelector('[data-question="64"]')?.textContent).toContain(
       '1 more enemy per Combat every N rounds',
     )

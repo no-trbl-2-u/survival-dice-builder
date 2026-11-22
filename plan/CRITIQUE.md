@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — reading 79 names repo files and "ruling 9" in its heading and body
-- pass: 56 (commit 7240dd7)
-- viewport: desktop
-- category: voice
-- observation: Reading 79 came after the fix that took report paths out of open readings. Its heading cites an AUDIT date and its body cites two docs/ paths and a ruling number the visitor cannot look up. Different from the pending Checks-list rows about the Event Calendar.
-- evidence: "79. The Event Calendar experiment (AUDIT 2026-10-11): ..." "(docs/design/event-calendar.md)", "against ruling 9", "Bot sweep in docs/reports/event-calendar/."
-- suggested fix: Drop "(AUDIT 2026-10-11)" and the two docs/ paths from OPEN-QUESTIONS.md row 79, and say "spent nodes work again" without "against ruling 9".
-- source: web-fetch
-
 ### [LOW] /decisions and /config — "the wave track as the clock" and "Clock (experiment)" use words no page defines
 - pass: 56 (commit 7240dd7)
 - viewport: desktop
@@ -100,6 +91,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /decisions — reading 79 names repo files and "ruling 9" in its heading and body (addressed at (this commit))
+- pass: 56 (commit 7240dd7)
+- viewport: desktop
+- category: voice
+- observation: Reading 79 came after the fix that took report paths out of open readings. Its heading cites an AUDIT date and its body cites two docs/ paths and a ruling number the visitor cannot look up. Different from the pending Checks-list rows about the Event Calendar.
+- evidence: "79. The Event Calendar experiment (AUDIT 2026-10-11): ..." "(docs/design/event-calendar.md)", "against ruling 9", "Bot sweep in docs/reports/event-calendar/."
+- suggested fix: Drop "(AUDIT 2026-10-11)" and the two docs/ paths from OPEN-QUESTIONS.md row 79, and say "spent nodes work again" without "against ruling 9".
+- source: web-fetch
+- issue: #477
+- resolution: Row 79 drops "(AUDIT 2026-10-11)", both docs/ paths and "against ruling 9"; the bot sweep sentence now reads "A bot sweep compares the 3." docs/DECISIONS.md is regenerated. A DecisionsPage test now fails when any open reading names an AUDIT date, a docs/ path or a ruling number.
+
 ### [x] [MED] /decisions — readings 63 and 64 state their proposal and recommendation twice (addressed at (this commit))
 - pass: 56 (commit 7240dd7)
 - viewport: desktop

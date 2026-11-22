@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-22 (pass 420, cloud tick)
+
+Pass 419 dropped the duplicate recommendation from the /decisions proposal readings (1f8fc9a). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 5 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran today. The top Pending critique row is the pass 56 LOW on reading 79 (impact 4, ease 8: 3.2): its heading cited an AUDIT date and its body two docs/ paths and "ruling 9". `OPEN-QUESTIONS.md` row 79 now drops "(AUDIT 2026-10-11)", both paths and "against ruling 9", and says "A bot sweep compares the 3." `DecisionsPage.test.tsx` now fails when any open reading names an AUDIT date, a docs/ path or a ruling number. Next in line: the pass 56 LOW rows ("Clock (experiment)", Sundial/Notoriety "enemy", row 59 "the flag").
+
+## Top 5 findings (scored)
+
+### [x] [3.2] external-critique: /decisions reading 79 names repo files and a ruling number
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: drop the AUDIT date, docs/ paths and "ruling 9" from OPEN-QUESTIONS.md row 79
+- issue: #477
+- fixed: (this commit)
+
+### [ ] [3.2] external-critique: /config "Clock (experiment)" and row 63 "wave track as the clock" use undefined words
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: reword row 63 and rename the /config group "Forced reveal (experiment)"
+
 # Site audit — 2026-11-22 (pass 419, cloud tick)
 
 Pass 418 stated the Spec v2 answer in decided rows 30 and 50 (28a8283). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 4 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 just ran. The top Pending critique row is the pass 56 MED (biased 1.5x): readings 63 and 64 give their own recommendation and then the measured proposal's (impact 5, ease 8: 4.0, biased 6.0). Rows 66, 68 and 70 had the same duplicate, so all five readings with a proposal drop their own "Recommendation: ..." sentence, as row 67 did; the proposal block's recommendation is the only one left. `DecisionsPage.test.tsx` now fails when any reading with a proposal carries its own recommendation. Next in line: the pass 56 LOW rows (reading 79 repo paths, "Clock (experiment)", Sundial/Notoriety "enemy", row 59 "the flag").

@@ -108,10 +108,10 @@ Combat uses Engagements by default. A reading marked "Exchanges only" changes no
 - Reading: **As shipped:** the rule as written (Build levels: Levelled). Build levels: Any tier plays the Spec v1 rule (any Build buys the next tier) for playtests until the designer adds Build II and III cards or gives the existing cards higher levels.
 - Setting: `rulings.buildLevels` = `"levelled"`
 
-### 79. The Event Calendar experiment (AUDIT 2026-10-11): what sets the spawns at each Combat, and how does it give good days and milestone rewards with unlimited rounds? (rule 7.3, 6.7, Event Calendar)
+### 79. The Event Calendar experiment: what sets the spawns at each Combat, and how does it give good days and milestone rewards with unlimited rounds? (rule 7.3, 6.7, Event Calendar)
 
 - Status: proposed 2026-11-11
-- Reading: **Proposed: 3 calendars behind one option** from 10 modelled systems (`docs/design/event-calendar.md`): Threat dice, Sundial, Notoriety ladder. Each replaces the 7.3 count; boons are Respite (heal and repair) and Harvest (spent nodes work again, against ruling 9). Off plays the written rule. Bot sweep in `docs/reports/event-calendar/`. Recommendation: playtest Threat dice and Notoriety.
+- Reading: **Proposed: 3 calendars behind one option** from 10 modelled systems: Threat dice, Sundial, Notoriety ladder. Each replaces the 7.3 count; boons are Respite (heal and repair) and Harvest (spent nodes work again). Off plays the written rule. A bot sweep compares the 3. Recommendation: playtest Threat dice and Notoriety.
 - Setting: `calendar.system` = `"off"`
 
 ## Decided recently
