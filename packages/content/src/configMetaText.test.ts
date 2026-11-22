@@ -79,6 +79,12 @@ describe('config.meta.json marks the Spec v2 rule as the written one', () => {
     expect(help).toContain('2: the older rule, kept for playtests.')
   })
 
+  it('6.7: the forced reveal group is named for its one option, not an undefined "clock" (critique pass 56)', () => {
+    expect(defaultConfigMeta.clock?.label).toBe('Forced reveal (experiment)')
+    const labels = Object.values(defaultConfigMeta).map((entry) => entry?.label ?? '')
+    expect(labels.filter((l) => /\bclock\b/i.test(l))).toEqual([])
+  })
+
   it('14.4: the Knockout return health has a plain label and starts with the written default', () => {
     const entry = defaultConfigMeta['knockout.returnHealthDivisor']
     expect(entry?.label).toBe('Health on return: 1 part in')

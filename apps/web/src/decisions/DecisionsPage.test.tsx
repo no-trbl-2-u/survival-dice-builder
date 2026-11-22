@@ -203,6 +203,11 @@ describe('DecisionsPage', () => {
     )
     // Reading 79 names no AUDIT date, docs/ path or ruling number (critique pass 56).
     expect(readings).not.toMatch(/\(AUDIT |docs\/|\bruling \d/)
+    // The open readings name no wave track or clock, words no page defines (critique pass 56).
+    expect(readings).not.toMatch(/wave track|\bclock\b/i)
+    expect(container.querySelector('[data-question="63"]')?.textContent).toContain(
+      'What makes a run end if nobody steps off the Base tile?',
+    )
     expect(container.querySelector('[data-question="79"]')?.textContent).toContain(
       'Harvest (spent nodes work again).',
     )

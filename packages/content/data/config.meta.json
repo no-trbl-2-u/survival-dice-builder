@@ -176,7 +176,7 @@
     "range": [1, 60]
   },
   "clock": {
-    "label": "Clock (experiment)"
+    "label": "Forced reveal (experiment)"
   },
   "clock.forcedRevealEvery": {
     "label": "Forced reveal every",

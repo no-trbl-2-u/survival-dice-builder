@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions and /config — "the wave track as the clock" and "Clock (experiment)" use words no page defines
-- pass: 56 (commit 7240dd7)
-- viewport: desktop
-- category: comprehension
-- observation: Row 63 asks what replaces "the wave track as the clock". No page mentions a wave track or says what the clock is. /config uses "Clock (experiment)" as the heading over a single "Forced reveal every" field.
-- evidence: /decisions row 63: "What replaces the wave track as the clock?"; /config group label "Clock (experiment)" (packages/content/data/config.meta.json:179).
-- suggested fix: Reword row 63 to "What makes a run end if nobody steps off the Base tile?" and rename the /config group "Forced reveal (experiment)".
-- source: web-fetch
-
 ### [LOW] /config — the Sundial and Notoriety help say "enemy" where the site says grunt
 - pass: 56 (commit 7240dd7)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /decisions and /config — "the wave track as the clock" and "Clock (experiment)" use words no page defines (addressed at (this commit))
+- pass: 56 (commit 7240dd7)
+- viewport: desktop
+- category: comprehension
+- observation: Row 63 asks what replaces "the wave track as the clock". No page mentions a wave track or says what the clock is. /config uses "Clock (experiment)" as the heading over a single "Forced reveal every" field.
+- evidence: /decisions row 63: "What replaces the wave track as the clock?"; /config group label "Clock (experiment)" (packages/content/data/config.meta.json:179).
+- suggested fix: Reword row 63 to "What makes a run end if nobody steps off the Base tile?" and rename the /config group "Forced reveal (experiment)".
+- source: web-fetch
+- issue: #478
+- resolution: Row 63 now asks "What makes a run end if nobody steps off the Base tile?" and drops "No clock:"; the /config group is renamed "Forced reveal (experiment)". docs/DECISIONS.md is regenerated. A DecisionsPage test fails when an open reading says "wave track" or "clock", and a config meta test fails when any label says "clock".
 
 ### [x] [LOW] /decisions — reading 79 names repo files and "ruling 9" in its heading and body (addressed at (this commit))
 - pass: 56 (commit 7240dd7)

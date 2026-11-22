@@ -66,7 +66,7 @@ Combat uses Engagements by default. A reading marked "Exchanges only" changes no
 - Reading: **The tile is placed and the step's cost is paid; the figure stays where it was** (3.4) and may keep moving.
 - Setting: engine code `moveTo`
 
-### 63. No clock: enemies spawn only on revealed tiles, and only players reveal tiles. The score is rounds survived. A run where nobody steps off the Base tile never ends (row 62). What replaces the wave track as the clock? (rule Core loop v2)
+### 63. Enemies spawn only on revealed tiles, and only players reveal tiles. The score is rounds survived. A run where nobody steps off the Base tile never ends (row 62). What makes a run end if nobody steps off the Base tile? (rule Core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
 - Reading: **Proposed: forced reveal**. At round end, if no tile was revealed in the last N rounds and the tile deck is not empty, the top tile is revealed in the open slot nearest the base (ties: slot order).
