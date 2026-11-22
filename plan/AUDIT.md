@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-22 (pass 424, cloud tick)
+
+Pass 423 named the "Gather needs a node" option in /decisions row 59 (8ef7cf9). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran today. The six Pending critique rows all edit `[needs-user-call]` /decisions items, which only /oversight may change. A probe of the engine finds that `nearestBaseHex` in `map/base.ts`, which places the base on every enemy's target list, breaks distance ties by hex key and falls back to the base centre when the map has no Base tile, and no test pins either (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `enemies.test.ts` now pins both: from (1,1) the nearest Base tile hex is (0,1), not (1,0), and an empty map gives (0,0). Dropping the hex-key tie-break fails the test. Next in line: the /decisions rows wait for /oversight; critique pass 57 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: nearestBaseHex tie-break and fallback have no test
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin the hex-key tie-break and the empty-map fallback in enemies.test.ts
+- issue: #481
+- fixed: (this commit)
+
 # Site audit — 2026-11-22 (pass 423, cloud tick)
 
 Pass 422 said grunt, not enemy, in the /config Sundial and Notoriety lines (21fd1c7). No issues wait for triage, the critique gate is closed (pass 56 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran today. The Pending MED rows all edit `[needs-user-call]` items, which wait for /oversight. The top shippable Pending critique row is the pass 56 LOW on row 59 (impact 4, ease 8: 3.2): the decided reading said "The flag restores that reading of Haul" without naming the option. It now says: Unticking "Gather needs a node" on /config (ticked by default) restores that reading. `DecisionsPage.test.tsx` reads the label from config meta and fails when row 59 says "the flag". The remaining Pending critique rows all wait for /oversight.

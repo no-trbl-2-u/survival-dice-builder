@@ -7,6 +7,7 @@ import { siege } from '../src/combat/engage.ts'
 import { towerAttacks } from '../src/enemies/structures.ts'
 import { rankTargets } from '../src/enemies/targets.ts'
 import { hexKey, type Axial } from '../src/hex.ts'
+import { nearestBaseHex } from '../src/map/base.ts'
 import { applyAction, createGame, legalActions, type GameState } from '../src/index.ts'
 import { miniatureCount, spawnEnemy } from '../src/map/spawn.ts'
 import { EMPTY_MAP, placeTile } from '../src/map/tiles.ts'
@@ -370,6 +371,19 @@ describe('the Base tile is the base (row 16)', () => {
     const s = board(twoTiles(), { q: -1, r: 0 }, [grunt('e1', 3, 0)])
     const base = rankTargets(s, { q: 3, r: 0 }).find((t) => t.kind === 'base')!
     expect(base.hex).toEqual({ q: 1, r: 0 })
+  })
+
+  it('row 16 at equal distance the nearest Base tile hex is the one with the lower hex key', () => {
+    // (1,1) is 1 step from both (1,0) and (0,1); "0,1" sorts before "1,0".
+    const s = board(twoTiles(), { q: -1, r: 0 }, [])
+    const from = { q: 1, r: 1 }
+    expect(nearestBaseHex(s, from)).toEqual({ q: 0, r: 1 })
+    expect(from).toEqual({ q: 1, r: 1 })
+  })
+
+  it('row 16 with no Base tile on the map the nearest base hex is the base centre', () => {
+    const s = board(EMPTY_MAP, { q: -1, r: 0 }, [])
+    expect(nearestBaseHex(s, { q: 3, r: 0 })).toEqual({ q: 0, r: 0 })
   })
 })
 
