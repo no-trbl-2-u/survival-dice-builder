@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-22 (pass 426, cloud tick)
+
+Pass 425 pinned nodeNearestBase's map-order tie-break and no-Base-tile fallback (d107233). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran today (9 commits ago). The six Pending critique rows all edit `[needs-user-call]` /decisions items, which only /oversight may change. A probe of the engine finds that `rankTargets` in `enemies/targets.ts`, which orders every enemy's targets, breaks ties of distance and kind by lowest health and then id, and no test pins either step (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `enemies.test.ts` now pins both with two Towers 2 hexes from the enemy: the weaker comes first, and at equal health "t-a" comes before "t-b" though "t-b" was built first. Dropping either sort step fails the test. Next in line: the /decisions rows wait for /oversight; critique pass 57 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: rankTargets health and id tie-breaks have no test
+- category: tests
+- impact: 3
+- ease: 9
+- next: pin the lowest-health and id tie-breaks in enemies.test.ts
+- issue: #483
+- fixed: (this commit)
+
 # Site audit — 2026-11-22 (pass 425, cloud tick)
 
 Pass 424 pinned nearestBaseHex's hex-key tie-break and empty-map fallback (adc90e3). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran today (8 commits ago). The six Pending critique rows all edit `[needs-user-call]` /decisions items, which only /oversight may change. A probe of the engine finds that `nodeNearestBase` in `enemies/calendar.ts`, which picks the spawn node where a calendar day's extra elites come, breaks distance ties by map order and returns the first node when the map has no Base tile, and no test pins either (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `calendar.test.ts` now pins the nearest node, the map-order tie-break both ways, the empty list and the no-Base-tile fallback. Reversing the nodes before the sort fails both tests. Next in line: the /decisions rows wait for /oversight; critique pass 57 once its gate opens.

@@ -98,6 +98,24 @@ describe('targets (9.3)', () => {
     expect(rankTargets(s, { q: 2, r: 0 }).map((t) => t.id)).toEqual(['p1', 'd1', 'base'])
   })
 
+  it('9.3 row 15 at equal distance and kind: lowest health, then id', () => {
+    // From (3,0) both Towers are 2 away, the base 3 and the player far off.
+    const weaker = board(corridor(-6, 6), { q: -5, r: 0 }, [], {
+      defenses: [defense('t-a', 'tower', 5, 0, 3), defense('t-b', 'tower', 1, 0, 1)],
+    })
+    expect(rankTargets(weaker, { q: 3, r: 0 }).map((t) => t.id)).toEqual([
+      't-b',
+      't-a',
+      'base',
+      'p1',
+    ])
+    // Equal health: id order, not the order the defenses were built.
+    const even = board(corridor(-6, 6), { q: -5, r: 0 }, [], {
+      defenses: [defense('t-b', 'tower', 1, 0, 3), defense('t-a', 'tower', 5, 0, 3)],
+    })
+    expect(rankTargets(even, { q: 3, r: 0 }).map((t) => t.id)).toEqual(['t-a', 't-b', 'base', 'p1'])
+  })
+
   it('core loop v2 row 56 enemies prefer a structure unless a player is 2 hexes nearer', () => {
     // From (3,0): the base is 3 away. A player 2 away (1 nearer) does not pull the enemy.
     const near = board(corridor(-6, 6), { q: 5, r: 0 }, [])
