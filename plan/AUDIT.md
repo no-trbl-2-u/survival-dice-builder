@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-22 (pass 418, cloud tick)
+
+Pass 417 pinned the defender bot's engage-anyway fallback (7240dd7). Critique pass 56 (38a3aca) and expand pass 37 (0c18ddb) ran this window. No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand's window is shut. Pass 56 filed two MED rows on open /decisions rows that live in `OPEN-QUESTIONS.md`, not in `[needs-user-call]` AUDIT items, so the loop may edit them. The top one (MED, biased 1.5x): decided rows 30 and 50 kept a 2026-10-04 designer note and never said what Spec v2 decided; row 50 still said "revisit". Row 30 now states the Spec v2 answer (on the base Build buys a base upgrade, other hexes take a defense, Repair is its own card; 6.7, 12.1, 12.2, 12.5), and row 50 states the lower-level fallback and the draft pool (11.6, 11.8) with the skip only when both are empty, matching `startDraft`. Next in line: the row 63/64 duplicate-proposal row.
+
+## Top 5 findings (scored)
+
+### [x] [7.2] external-critique: /decisions decided rows 30 and 50 never say what was decided
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: state the Spec v2 ruling in OPEN-QUESTIONS.md rows 30 and 50
+- issue: #475
+- fixed: (this commit)
+
+### [ ] [6.0] external-critique: /decisions readings 63 and 64 state their proposal twice
+- category: external-critique
+- impact: 5
+- ease: 8
+- next: drop the reading's own Proposed/Recommendation text where a measured Proposal exists
+
 # Site audit — 2026-11-21 (pass 417, cloud tick)
 
 Pass 416 pinned the bot's ofType action filter (3525d7d). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 55 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 36 ran 19 commits and under 48 hours ago. The six Pending critique rows all edit `[needs-user-call]` /decisions items, which only /oversight may change. A probe of the defender bot finds that the last fallback in `betweenEngagements`, which engages anyway when no enemy is in Skill range and no threat is there to move toward (a heal or guard Skill still works) and keeps its Move cards, has no test: no case in `defender.test.ts` has an empty map (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `defender.test.ts` now pins it: with no enemy it engages with the Gather card over the Move card, and with only a Move card it engages with that card's engage option. Dropping the engage fallback (to discard) or the Move-last order each fails the test. Next in line: the /decisions rows wait for /oversight; critique pass 56 once its gate opens.

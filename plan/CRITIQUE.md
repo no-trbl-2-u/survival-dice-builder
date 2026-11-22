@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — decided rows 30 and 50 never say what was decided; row 50 still says "revisit"
-- pass: 56 (commit 7240dd7)
-- viewport: desktop
-- category: comprehension
-- observation: Rows 30 and 50 sit under "Decided recently" (decided 2026-10-11), but each shows only the current engine behaviour and a 2026-10-04 designer note. Row 50's note says the question is still to be revisited, so the row reads as open.
-- evidence: Row 30: "Current engine: on the base hex Build means a base upgrade." / "Designer 2026-10-04: separate Build from Repair; see row 49." Row 50: "Designer 2026-10-04: the Skills are placeholders still to design; revisit with the Skill design." (status "decided 2026-10-11 (Spec v2, ruling 28)").
-- suggested fix: Give each of rows 30 and 50 a one-line "Decided:" statement of the 2026-10-11 ruling taken from spec/01-spec-v2-rules.md, and drop the "revisit" wording from row 50.
-- source: web-fetch
-
 ### [MED] /decisions — readings 63 and 64 state their proposal and recommendation twice
 - pass: 56 (commit 7240dd7)
 - viewport: desktop
@@ -118,6 +109,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [MED] /decisions — decided rows 30 and 50 never say what was decided; row 50 still says "revisit"
+- pass: 56 (commit 7240dd7)
+- viewport: desktop
+- category: comprehension
+- observation: Rows 30 and 50 sit under "Decided recently" (decided 2026-10-11), but each shows only the current engine behaviour and a 2026-10-04 designer note. Row 50's note says the question is still to be revisited, so the row reads as open.
+- evidence: Row 30: "Current engine: on the base hex Build means a base upgrade." / "Designer 2026-10-04: separate Build from Repair; see row 49." Row 50: "Designer 2026-10-04: the Skills are placeholders still to design; revisit with the Skill design." (status "decided 2026-10-11 (Spec v2, ruling 28)").
+- suggested fix: Give each of rows 30 and 50 a one-line "Decided:" statement of the 2026-10-11 ruling taken from spec/01-spec-v2-rules.md, and drop the "revisit" wording from row 50.
+- source: web-fetch
+- issue: #475
+- fixed: (this commit)
+
 ### [x] [LOW] /config — the Event Calendar help quotes field labels unmarked, so it reads as broken grammar
 - pass: 55 (commit afad010)
 - viewport: desktop
