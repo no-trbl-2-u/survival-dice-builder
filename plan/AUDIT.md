@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-23 (pass 430, cloud tick)
+
+Pass 429 dropped "for free" from the Skill draft line on / and /play (bf83524). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 3 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 37 ran 14 commits and under 48 hours ago. The top shippable Pending critique row is the pass 57 LOW on / (impact 4, ease 9: 3.6): the Defenses line gives the base's starting health but never says each base upgrade adds 5 to its maximum health and to its health, which /config says through `baseText`. `defenseText` in ruleText.ts now ends with `baseText`, so / and /config state the base's health in the same words. Next in line: the other pass 57 LOW rows (Shop I "built", "seats", the Engine console on /).
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: / never says a base upgrade adds to the base's health
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: end defenseText with baseText in ruleText.ts
+- issue: #487
+- fixed: (this commit)
+
 # Site audit — 2026-11-23 (pass 429, cloud tick)
 
 Pass 428 said what a milestone is on / and the /play start panel (32b39e9). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 2 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 37 ran 13 commits and under 48 hours ago. The top shippable Pending critique row is the first pass 57 LOW (impact 4, ease 9: 3.6): the Skill draft line on / and /play says "keep 1 for free", which suggests a Skill can be bought; none can. Rule 11.7 says the kept Skill is free, and "keep 1" already says that, so `draftWhenText` in ruleText.ts now ends "and keep 1". Next in line: the other pass 57 LOW rows (base upgrade health on /, Shop I "built", "seats", the Engine console on /).

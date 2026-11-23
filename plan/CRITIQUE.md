@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Defenses line gives the base's starting health but not that upgrades add to it
-- pass: 57 (commit e6c7c76)
-- viewport: desktop
-- category: comprehension
-- observation: / says "The base starts with 20 health." and tells you to buy base upgrades, but never says each upgrade adds 5 to the base's maximum health and health. /config states it through baseText, so the two pages tell the base's survival differently.
-- evidence: / Defenses line via `defenseText` ends "The base starts with 20 health."; /config Health per upgrade: "Each base upgrade adds this much to the maximum base health and to the base health." (`config.meta.json` base.healthPerUpgrade, default 5); the earlier /config fix kept defenseText on / on purpose.
-- suggested fix: Append the upgrade half of baseText to the / Defenses line: "Each base upgrade adds 5 to its maximum health and to its health."
-- source: web-fetch
-
 ### [LOW] /tiles — the Base legend says Shop I is "built"; every other page says upgrades are bought
 - pass: 57 (commit e6c7c76)
 - viewport: desktop
@@ -100,6 +91,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the Defenses line gives the base's starting health but not that upgrades add to it
+- pass: 57 (commit e6c7c76)
+- viewport: desktop
+- category: comprehension
+- observation: / says "The base starts with 20 health." and tells you to buy base upgrades, but never says each upgrade adds 5 to the base's maximum health and health. /config states it through baseText, so the two pages tell the base's survival differently.
+- evidence: / Defenses line via `defenseText` ends "The base starts with 20 health."; /config Health per upgrade: "Each base upgrade adds this much to the maximum base health and to the base health." (`config.meta.json` base.healthPerUpgrade, default 5); the earlier /config fix kept defenseText on / on purpose.
+- suggested fix: Append the upgrade half of baseText to the / Defenses line: "Each base upgrade adds 5 to its maximum health and to its health."
+- source: web-fetch
+- issue: #487
+- fixed: (this commit)
+
 ### [x] [LOW] / and /play — the Skill draft says "keep 1 for free", but no Skill has a price
 - pass: 57 (commit e6c7c76)
 - viewport: desktop

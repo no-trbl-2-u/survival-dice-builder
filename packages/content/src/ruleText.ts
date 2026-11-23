@@ -418,10 +418,10 @@ export function siegeText(content: Enemies): string {
  * What each defense costs and does (a Tower attacks after the enemies move and spawn, as
  * `startCombat` chains them), that no enemy can enter a defense hex (as `enemyCanEnter`
  * plays it, for every defense, not only those with `blocksEnemies`), who gets the currency
- * when an attacking defense defeats an enemy, and the base's starting health: the Defenses
- * line on /.
+ * when an attacking defense defeats an enemy, and the base's health as `baseText` states it
+ * (its starting health and what each base upgrade adds): the Defenses line on /.
  *
- * @rule 8.2, 9.8, 12.1, 12.3, Table 7, 11, OPEN-QUESTIONS rows 27, 40, 53
+ * @rule 8.2, 9.8, 11.3, 12.1, 12.3, Table 7, 11, OPEN-QUESTIONS rows 27, 40, 53
  */
 export function defenseText(config: GameConfig, content: Pick<Content, 'defenses'>): string {
   const lines = content.defenses.map((d) => {
@@ -436,7 +436,7 @@ export function defenseText(config: GameConfig, content: Pick<Content, 'defenses
     return `${/^[aeiou]/i.test(d.name) ? 'An' : 'A'} ${d.name} costs ${plural(d.cost, 'material', 'materials')} and has ${d.health} health${effect}.${pays}`
   })
   if (content.defenses.length > 0) lines.push('No enemy can enter a hex with a defense on it.')
-  return [...lines, `The base starts with ${config.base.startingHealth} health.`].join(' ')
+  return [...lines, baseText(config)].join(' ')
 }
 
 /**
@@ -1242,7 +1242,8 @@ export function milestoneOutOfReach(
 }
 
 /**
- * The base's starting health and what each base upgrade adds: the /config Base fields' line.
+ * The base's starting health and what each base upgrade adds: the /config Base fields' line,
+ * and the end of the Defenses line on /.
  *
  * @rule 8.2, 11.3
  */
