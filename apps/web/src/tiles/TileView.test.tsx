@@ -192,7 +192,7 @@ describe('TileSheet site legend', () => {
     expect(legend.querySelectorAll('li')).toHaveLength(4)
     expect(legend.querySelectorAll('svg[data-icon]')).toHaveLength(4)
     expect([...legend.querySelectorAll('li')].map((li) => li.textContent)).toEqual([
-      "Base (the players defend it; stand on the Base tile and play a Build card to buy upgrades, and buy cards once Shop I is built; Training I opens the Training Ground's Skill draft)",
+      "Base (the players defend it; stand on the Base tile and play a Build card to buy upgrades, and buy cards once Shop I is bought; Training I opens the Training Ground's Skill draft)",
       "Gathering node (a card's Gather option played here with no enemy on the node gets its materials once; then the node is spent for the rest of the run)",
       'Spawn node (gets 1 grunt at each Combat)',
       'Elite spawn node (gets 1 elite at each Combat)',

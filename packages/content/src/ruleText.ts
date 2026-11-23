@@ -111,7 +111,7 @@ export function siteText(site: Site, config: GameConfig, content: Upgrades): str
   if (site === 'base') {
     const shop = firstUpgrade('shop', content)
     const cards = shop
-      ? `, and buy cards once ${shop.name} is built`
+      ? `, and buy cards once ${shop.name} is bought`
       : ', and buy cards once the Shop opens'
     const training = firstUpgrade('training', content)
     const draft = training

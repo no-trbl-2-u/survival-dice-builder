@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /tiles — the Base legend says Shop I is "built"; every other page says upgrades are bought
-- pass: 57 (commit e6c7c76)
-- viewport: desktop
-- category: voice
-- observation: "built" is the verb for Barricades and Towers. Used for Shop I, it reads as if Shop I were a defense.
-- evidence: `ruleText.ts` siteText: "... play a Build card to buy upgrades, and buy cards once Shop I is built"; / shopText: "Stand on the Base tile and buy Shop I (a Build card and 4 materials) to open the Shop".
-- suggested fix: "... and buy cards once Shop I is bought" (or "once the Shop is open").
-- source: web-fetch
-
 ### [LOW] /config — the spawn-scaling option counts "seats", a word no page defines
 - pass: 57 (commit e6c7c76)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /tiles — the Base legend says Shop I is "built"; every other page says upgrades are bought
+- pass: 57 (commit e6c7c76)
+- viewport: desktop
+- category: voice
+- observation: "built" is the verb for Barricades and Towers. Used for Shop I, it reads as if Shop I were a defense.
+- evidence: `ruleText.ts` siteText: "... play a Build card to buy upgrades, and buy cards once Shop I is built"; / shopText: "Stand on the Base tile and buy Shop I (a Build card and 4 materials) to open the Shop".
+- suggested fix: "... and buy cards once Shop I is bought" (or "once the Shop is open").
+- source: web-fetch
+- issue: #488
+- fixed: (this commit)
 
 ### [x] [LOW] / — the Defenses line gives the base's starting health but not that upgrades add to it
 - pass: 57 (commit e6c7c76)

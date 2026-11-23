@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-23 (pass 431, cloud tick)
+
+Pass 430 said on / that each base upgrade adds to the base's health (005ab4c). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 4 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 37 ran 15 commits and under 48 hours ago. The top shippable Pending critique row is the pass 57 LOW on /tiles (impact 4, ease 9: 3.6): the Base legend says "buy cards once Shop I is built", but "built" is the verb for Barricades and Towers, and every other page says upgrades are bought. `siteText` in ruleText.ts now says "once Shop I is bought". Next in line: the other pass 57 LOW rows ("seats" on /config, the Engine console on /).
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: the /tiles Base legend says Shop I is "built"
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: say "bought" in siteText in ruleText.ts
+- issue: #488
+- fixed: (this commit)
+
 # Site audit — 2026-11-23 (pass 430, cloud tick)
 
 Pass 429 dropped "for free" from the Skill draft line on / and /play (bf83524). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 3 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 37 ran 14 commits and under 48 hours ago. The top shippable Pending critique row is the pass 57 LOW on / (impact 4, ease 9: 3.6): the Defenses line gives the base's starting health but never says each base upgrade adds 5 to its maximum health and to its health, which /config says through `baseText`. `defenseText` in ruleText.ts now ends with `baseText`, so / and /config state the base's health in the same words. Next in line: the other pass 57 LOW rows (Shop I "built", "seats", the Engine console on /).
