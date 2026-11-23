@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-23 (pass 433, cloud tick)
+
+Pass 432 said players, not seats, in the /config spawn-scaling option (058b2c0). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 6 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 37 ran 17 commits and under 48 hours ago. The top shippable Pending critique row is the last pass 57 LOW on / (impact 4, ease 9: 3.6): the nav lists the Engine console under Design tools, but the Also line on / describes every other page and not that one. The Also line now adds "the Engine console (play the rules engine one action at a time)", the words the console's own intro opens with. The pass 57 rows are drained; the remaining Pending rows edit `[needs-user-call]` items and wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: the Also line on / never says what the Engine console is for
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: add the Engine console to the Also line in HomePage.tsx
+- issue: #490
+- fixed: (this commit)
+
 # Site audit — 2026-11-23 (pass 432, cloud tick)
 
 Pass 431 said Shop I is bought, not built, in the /tiles Base legend (36424ac). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 5 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 37 ran 16 commits and under 48 hours ago. The top shippable Pending critique row is the pass 57 LOW on /config (impact 4, ease 9: 3.6): the spawn-scaling option counts "seats", while / and the /play start panel count players. The option's label and help in config.meta.json, the spawn rule line in ruleText.ts, and the proposal's label and measured line now say players. Next in line: the last pass 57 LOW row (the Engine console on /).

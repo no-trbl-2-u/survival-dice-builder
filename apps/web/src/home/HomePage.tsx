@@ -100,7 +100,8 @@ export function HomePage() {
         <p className={styles.more}>
           Also: the <a href="/tiles">Tile sheet</a> (every map tile, hex by hex), the{' '}
           <a href="/config">Config</a> page (change a rule for your next runs),{' '}
-          <a href="/decisions">the Decisions page</a> (rule readings that wait on the designer) and{' '}
+          <a href="/decisions">the Decisions page</a> (rule readings that wait on the designer), the{' '}
+          <a href="/debug">Engine console</a> (play the rules engine one action at a time) and{' '}
           <a href="/credits">Credits</a> (every asset and its license).
         </p>
       </div>

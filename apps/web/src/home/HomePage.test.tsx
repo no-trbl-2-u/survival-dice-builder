@@ -174,12 +174,13 @@ describe('HomePage', () => {
     expect(text).toContain('Tile sheet (every map tile, hex by hex)')
     expect(text).toContain('Config page (change a rule for your next runs)')
     expect(text).toContain('Credits (every asset and its license).')
+    expect(text).toContain('Engine console (play the rules engine one action at a time)')
   })
 
   it('names the pages on the Also line by their nav labels and headings', () => {
     render(<HomePage />)
     for (const [path, label] of NAV) {
-      if (path === '/tiles' || path === '/config' || path === '/credits') {
+      if (path === '/tiles' || path === '/config' || path === '/credits' || path === '/debug') {
         const link = screen.getAllByRole('link', { name: label })[0]
         expect(link?.getAttribute('href')).toBe(path)
       }

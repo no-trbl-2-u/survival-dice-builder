@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the "Also:" line describes every nav page except the Engine console
-- pass: 57 (commit e6c7c76)
-- viewport: desktop
-- category: navigation
-- observation: The nav lists "Design tools: Tile sheet, Decisions, Engine console", but the closing line on / names only the Tile sheet, Config, Decisions and Credits. The Engine console is the one page a visitor sees with no description.
-- evidence: `apps/web/src/home/HomePage.tsx:100-103` "Also: the Tile sheet (every map tile, hex by hex), the Config page (...), the Decisions page (...) and Credits (every asset and its license)."; `routes.tsx` NAV.
-- suggested fix: Add "the Engine console (play the rules engine one action at a time)" to the Also line.
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — the "Also:" line describes every nav page except the Engine console
+- pass: 57 (commit e6c7c76)
+- viewport: desktop
+- category: navigation
+- observation: The nav lists "Design tools: Tile sheet, Decisions, Engine console", but the closing line on / names only the Tile sheet, Config, Decisions and Credits. The Engine console is the one page a visitor sees with no description.
+- evidence: `apps/web/src/home/HomePage.tsx:100-103` "Also: the Tile sheet (every map tile, hex by hex), the Config page (...), the Decisions page (...) and Credits (every asset and its license)."; `routes.tsx` NAV.
+- suggested fix: Add "the Engine console (play the rules engine one action at a time)" to the Also line.
+- source: web-fetch
+- issue: #490
+- fixed: (this commit)
 
 ### [x] [LOW] /config — the spawn-scaling option counts "seats", a word no page defines
 - pass: 57 (commit e6c7c76)
