@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-22 at commit 7240dd7
-> Pass count: 56
+> Last pass: 2026-11-23 at commit e6c7c76
+> Pass count: 57
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /play and / — milestones appear on /play and /config, but no page says what one is
+- pass: 57 (commit e6c7c76)
+- viewport: desktop
+- category: comprehension
+- observation: The /play Base panel folds a milestone count and the run summary lists milestones; /config uses "each new milestone" as a trigger for Notoriety and Threat dice. The goal line on / and the /play start panel names only the base, so a stranger meets "milestone" as an undefined game term. The pass 18 fix left "name milestones in one start-panel line" for a later tick; it never shipped.
+- evidence: `apps/web/src/play/BasePanel.tsx:158` "Milestones: {met} of {total} met"; `RunSummary.tsx:44` heading "Milestones"; goalText "Keep the base standing for as many rounds as you can. The run ends when the base falls."; `config.meta.json` calendar.system "... and 1 rung at each new milestone".
+- suggested fix: Add one content-driven sentence after goalText on / and the /play start panel naming 2 milestones from config and saying the run summary lists them.
+- source: web-fetch
+
+### [LOW] / and /play — the Skill draft says "keep 1 for free", but no Skill has a price
+- pass: 57 (commit e6c7c76)
+- viewport: desktop
+- category: voice
+- observation: "for free" suggests a Skill can also be bought. The engine has no Skill purchase and no page names a Skill price.
+- evidence: `packages/content/src/ruleText.ts:198` "`${when}, you look at ${shown} and keep 1 for free`" (draftWhenText, used by trainingText on / and trainingClosedText on /play); no Skill cost in `packages/engine/src` or `config.default.json`.
+- suggested fix: Drop "for free": "... you look at 2 new Skills plus your pool and keep 1."
+- source: web-fetch
+
+### [LOW] / — the Defenses line gives the base's starting health but not that upgrades add to it
+- pass: 57 (commit e6c7c76)
+- viewport: desktop
+- category: comprehension
+- observation: / says "The base starts with 20 health." and tells you to buy base upgrades, but never says each upgrade adds 5 to the base's maximum health and health. /config states it through baseText, so the two pages tell the base's survival differently.
+- evidence: / Defenses line via `defenseText` ends "The base starts with 20 health."; /config Health per upgrade: "Each base upgrade adds this much to the maximum base health and to the base health." (`config.meta.json` base.healthPerUpgrade, default 5); the earlier /config fix kept defenseText on / on purpose.
+- suggested fix: Append the upgrade half of baseText to the / Defenses line: "Each base upgrade adds 5 to its maximum health and to its health."
+- source: web-fetch
+
+### [LOW] /tiles — the Base legend says Shop I is "built"; every other page says upgrades are bought
+- pass: 57 (commit e6c7c76)
+- viewport: desktop
+- category: voice
+- observation: "built" is the verb for Barricades and Towers. Used for Shop I, it reads as if Shop I were a defense.
+- evidence: `ruleText.ts` siteText: "... play a Build card to buy upgrades, and buy cards once Shop I is built"; / shopText: "Stand on the Base tile and buy Shop I (a Build card and 4 materials) to open the Shop".
+- suggested fix: "... and buy cards once Shop I is bought" (or "once the Shop is open").
+- source: web-fetch
+
+### [LOW] /config — the spawn-scaling option counts "seats", a word no page defines
+- pass: 57 (commit e6c7c76)
+- viewport: desktop
+- category: comprehension
+- observation: / and the /play start panel count players ("1 to 4 players", "When 2 or more play"). /config switches to "seats" for the same count.
+- evidence: `config.meta.json:205-206` label "Spawns scale with seats", help "each spawn node spawns 1 enemy per 2 seats, rounded up (1 for 1-2 seats, 2 for 3-4)"; `ruleText.ts` spawnSiteText "gets 1 grunt for each 2 seats, rounded up".
+- suggested fix: Say players in the label, help and rule line: "Spawns scale with players", "1 enemy per 2 players, rounded up".
+- source: web-fetch
+
+### [LOW] / — the "Also:" line describes every nav page except the Engine console
+- pass: 57 (commit e6c7c76)
+- viewport: desktop
+- category: navigation
+- observation: The nav lists "Design tools: Tile sheet, Decisions, Engine console", but the closing line on / names only the Tile sheet, Config, Decisions and Credits. The Engine console is the one page a visitor sees with no description.
+- evidence: `apps/web/src/home/HomePage.tsx:100-103` "Also: the Tile sheet (every map tile, hex by hex), the Config page (...), the Decisions page (...) and Credits (every asset and its license)."; `routes.tsx` NAV.
+- suggested fix: Add "the Engine console (play the rules engine one action at a time)" to the Also line.
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
