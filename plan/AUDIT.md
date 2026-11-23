@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-23 (pass 436, cloud tick)
+
+Pass 435 pinned that the game log keeps the last 200 events (e1a6091); expand pass 38 then filed 0 candidates (06e125e). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 just ran. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `progression/experience.ts` finds that `raiseLevel`, which gives every player 1 action die for each level a gain reaches (8.3, 8.4), has no test of a gain that passes 2 levels: raising only 1 level per gain leaves all 332 engine tests green, golden replays included. The default numbers never cross 2 levels in one defeat, but the row 17 elite bonus on /config can (impact 3, ease 9: 2.7; below 3.0, but expand just ran). A new progression test sets the elite bonus to 3, defeats an elite at 2 experience, and expects 9 experience, level 3, levelReached for 2 and 3, and 3 dice. Both the 1-level mutation and a 1-die-in-total mutation fail it. (A probe of `canAttackBase` found its "on an outer base hex" clause redundant, since every outer base hex touches the centre; no test was added.) Next in line: the /decisions rows wait for /oversight; critique pass 58 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: no test pins that a 2-level jump gives a die per level
+- category: tests
+- impact: 3
+- ease: 9
+- next: add a 2-level elite-bonus test to progression.test.ts
+- issue: #493
+- fixed: (this commit)
+
 # Site audit — 2026-11-23 (pass 435, cloud tick)
 
 Pass 434 pinned that enemies move oldest first by id number (a6a6e9e). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran 19 commits and under 48 hours ago. The Pending critique row edits a `[needs-user-call]` /decisions item, which only /oversight may change. A probe of the engine finds that `withLog` in `state/helpers.ts`, which every engine step uses to append its events to the game log and keep the last `LOG_LIMIT` (200), has no direct test: dropping the trim leaves every engine test green except the golden replay hashes, and keeping the first 200 instead of the last is pinned by nothing direct (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new colocated `helpers.test.ts` adds 3 events to a log of 199 and expects 200 events, the 2 oldest dropped, in order, with the input log unchanged, and expects the same state back when there are no events. Both mutations fail the test. Next in line: the /decisions row waits for /oversight; critique pass 58 and expand pass 38 once their gates open.

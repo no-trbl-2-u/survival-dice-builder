@@ -69,6 +69,22 @@ describe('experience and levels (8.1-8.5)', () => {
     expect(events).toContainEqual(expect.objectContaining({ type: 'levelReached', level: 2 }))
   })
 
+  it('8.3-8.4 a defeat that crosses 2 levels gives every player 1 action die for each level', () => {
+    // An elite bonus of 3 makes an elite worth 7: from 2 experience to 9 passes level 2 (3)
+    // and level 3 (9) in one defeat.
+    const bonus = { ...config, experience: { ...config.experience, eliteBonus: 3 } }
+    const elite = { ...grunt, kind: 'elite', health: 1 }
+    const [s, events] = damageEnemy(home({ enemies: [elite], experience: 2 }, bonus), 'e1', 1, 'p1')
+    expect(s.experience).toBe(9)
+    expect(s.level).toBe(3)
+    expect(s.players[0]!.dice).toBe(3)
+    const levels = events.filter((e) => e.type === 'levelReached')
+    expect(levels).toEqual([
+      expect.objectContaining({ level: 2 }),
+      expect.objectContaining({ level: 3 }),
+    ])
+  })
+
   it('18.1 a maximum level stops the level and the dice', () => {
     const capped = { ...config, options: { ...config.options, maxLevel: 1 } }
     const [s] = damageEnemy(home({ enemies: [grunt], experience: 4 }, capped), 'e1', 2, 'p1')
