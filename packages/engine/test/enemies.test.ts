@@ -166,6 +166,16 @@ describe('enemy movement (7.5, 9.4, 9.7)', () => {
     expect(at(moveEnemies(s)[0], 'e1')).toEqual({ q: 1, r: 0 })
   })
 
+  it('7.5 [row 34] enemies move oldest first, by id number: e9 before e10', () => {
+    // Listed e10 first, on opposite sides of the base; a text sort of the ids would also put e10 first.
+    const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e10', -4, 0), grunt('e9', 5, 0)])
+    const [after, events] = moveEnemies(s)
+    expect(events.map((e) => e.type === 'enemyMoved' && e.enemy)).toEqual(['e9', 'e10'])
+    expect(at(after, 'e9')).toEqual({ q: 3, r: 0 })
+    expect(at(after, 'e10')).toEqual({ q: -5, r: 0 })
+    expect(s.enemies.map((e) => e.id)).toEqual(['e10', 'e9'])
+  })
+
   it('9.4 an enemy next to a target does not move', () => {
     const s = board(corridor(-6, 6), { q: -6, r: 0 }, [grunt('e1', 1, 0)])
     expect(moveEnemies(s)[1]).toEqual([])

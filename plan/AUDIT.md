@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-23 (pass 434, cloud tick)
+
+Pass 433 said on / what the Engine console is for (1eb6190). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran 18 commits and under 48 hours ago. The Pending critique row edits a `[needs-user-call]` /decisions item, which only /oversight may change. A probe of the engine finds that `byAge` in `enemies/movement.ts`, which sets the order enemies move and Towers attack in (oldest first, by id number, row 34), has no direct test: sorting the ids as text, so e10 comes before e9, or not sorting at all, leaves every enemy test green, and only the golden replay hashes catch it (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `enemies.test.ts` now lists e10 before e9 on opposite sides of the base and expects e9 to move first. Both mutations fail the test. Next in line: the /decisions row waits for /oversight; critique pass 58 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: no test pins that enemies move oldest first by id number
+- category: tests
+- impact: 3
+- ease: 9
+- next: add an e9-before-e10 move order test to enemies.test.ts
+- issue: #491
+- fixed: (this commit)
+
 # Site audit — 2026-11-23 (pass 433, cloud tick)
 
 Pass 432 said players, not seats, in the /config spawn-scaling option (058b2c0). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 6 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 37 ran 17 commits and under 48 hours ago. The top shippable Pending critique row is the last pass 57 LOW on / (impact 4, ease 9: 3.6): the nav lists the Engine console under Design tools, but the Also line on / describes every other page and not that one. The Also line now adds "the Engine console (play the rules engine one action at a time)", the words the console's own intro opens with. The pass 57 rows are drained; the remaining Pending rows edit `[needs-user-call]` items and wait for /oversight.
