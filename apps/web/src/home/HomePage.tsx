@@ -5,6 +5,7 @@ import {
   enemyHealthText,
   enemyMoveText,
   goalText,
+  milestoneText,
   knockoutText,
   levelText,
   materialsText,
@@ -82,7 +83,7 @@ export function HomePage() {
           </li>
         </ul>
         <p>
-          {goalText()} {knockoutText(config)}
+          {goalText()} {milestoneText(config, defaultContent)} {knockoutText(config)}
         </p>
         <h2 className={styles.heading}>How you grow</h2>
         <ul className={styles.steps}>

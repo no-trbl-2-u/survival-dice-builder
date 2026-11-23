@@ -98,6 +98,7 @@ export {
   milestoneIds,
   milestoneLabel,
   milestoneOutOfReach,
+  milestoneText,
   miniatureLimitText,
   playersText,
   returnStarterText,

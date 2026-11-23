@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /play and / — milestones appear on /play and /config, but no page says what one is
-- pass: 57 (commit e6c7c76)
-- viewport: desktop
-- category: comprehension
-- observation: The /play Base panel folds a milestone count and the run summary lists milestones; /config uses "each new milestone" as a trigger for Notoriety and Threat dice. The goal line on / and the /play start panel names only the base, so a stranger meets "milestone" as an undefined game term. The pass 18 fix left "name milestones in one start-panel line" for a later tick; it never shipped.
-- evidence: `apps/web/src/play/BasePanel.tsx:158` "Milestones: {met} of {total} met"; `RunSummary.tsx:44` heading "Milestones"; goalText "Keep the base standing for as many rounds as you can. The run ends when the base falls."; `config.meta.json` calendar.system "... and 1 rung at each new milestone".
-- suggested fix: Add one content-driven sentence after goalText on / and the /play start panel naming 2 milestones from config and saying the run summary lists them.
-- source: web-fetch
-
 ### [LOW] / and /play — the Skill draft says "keep 1 for free", but no Skill has a price
 - pass: 57 (commit e6c7c76)
 - viewport: desktop
@@ -118,6 +109,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /play and / — milestones appear on /play and /config, but no page says what one is (addressed at (this commit))
+- pass: 57 (commit e6c7c76)
+- viewport: desktop
+- category: comprehension
+- observation: The /play Base panel folds a milestone count and the run summary lists milestones; /config uses "each new milestone" as a trigger for Notoriety and Threat dice. The goal line on / and the /play start panel names only the base, so a stranger meets "milestone" as an undefined game term. The pass 18 fix left "name milestones in one start-panel line" for a later tick; it never shipped.
+- evidence: `apps/web/src/play/BasePanel.tsx:158` "Milestones: {met} of {total} met"; `RunSummary.tsx:44` heading "Milestones"; goalText "Keep the base standing for as many rounds as you can. The run ends when the base falls."; `config.meta.json` calendar.system "... and 1 rung at each new milestone".
+- suggested fix: Add one content-driven sentence after goalText on / and the /play start panel naming 2 milestones from config and saying the run summary lists them.
+- source: web-fetch
+- issue: #485
+- resolution: New `milestoneText` in ruleText.ts follows goalText on / and the round line on the /play start panel: "Along the way the run tracks 8 milestones, such as Survive to round 5 and Defeat an elite. The run summary lists each one, met or not." Count and labels come from config.milestones; ruleText and StartPanel tests pin it.
 
 ### [x] [LOW] /decisions — decided row 59 says "The flag" and never names the /config option (addressed at (this commit))
 - pass: 56 (commit 7240dd7)

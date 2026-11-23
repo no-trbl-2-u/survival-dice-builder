@@ -25,6 +25,7 @@ import {
   milestoneIds,
   milestoneLabel,
   milestoneOutOfReach,
+  milestoneText,
   miniatureLimitText,
   playersText,
   returnStarterText,
@@ -857,6 +858,18 @@ describe('rule text from config', () => {
     expect(milestoneLabel(`fire-${m.skillFired}`, custom, defaultContent)).toBe(
       `Fire ${skill.name}`,
     )
+  })
+
+  it('milestones: the goal line names the count and 2 kinds from config (17)', () => {
+    expect(milestoneText(base, defaultContent)).toBe(
+      'Along the way the run tracks 8 milestones, such as Survive to round 5 and Defeat an elite. The run summary lists each one, met or not.',
+    )
+    const one = With((c) => ({ ...c, milestones: { ...c.milestones, surviveRounds: [7] } }))
+    expect(milestoneText(one, defaultContent)).toMatch(
+      /tracks 6 milestones, such as Survive to round 7 and Defeat an elite\./,
+    )
+    const none = With((c) => ({ ...c, milestones: { ...c.milestones, surviveRounds: [] } }))
+    expect(milestoneText(none, defaultContent)).toMatch(/such as Defeat an elite and Fire /)
   })
 
   it('milestones: "Buy 3 base upgrades" is marked out of reach while every Build is Build I (row 78)', () => {

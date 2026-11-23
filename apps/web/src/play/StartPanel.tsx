@@ -5,6 +5,7 @@ import {
   defaultContent,
   enemyMoveText,
   goalText,
+  milestoneText,
   knockoutText,
   roundText,
   siegeText,
@@ -87,7 +88,8 @@ export function StartPanel({
         New run
       </h2>
       <p>
-        {goalText()} {roundText(config)} {knockoutText(config)}
+        {goalText()} {roundText(config)} {milestoneText(config, defaultContent)}{' '}
+        {knockoutText(config)}
       </p>
       <form
         className={styles.startForm}

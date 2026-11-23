@@ -1085,6 +1085,23 @@ export function milestoneLabel(
 }
 
 /**
+ * What a milestone is, with the count and 2 of a different kind from the config: "Along the way the run
+ * tracks 8 milestones, such as Survive to round 5 and Defeat an elite. The run summary lists
+ * each one, met or not."
+ *
+ * @rule 17
+ */
+export function milestoneText(config: GameConfig, content: Pick<Content, 'skills'>): string {
+  const m = config.milestones
+  const ids = milestoneIds(m)
+  const other = Math.max(1, m.surviveRounds.length)
+  const shown = ids
+    .filter((_, i) => i === 0 || i === other)
+    .map((id) => milestoneLabel(id, m, content))
+  return `Along the way the run tracks ${plural(ids.length, 'milestone', 'milestones')}, such as ${shown.join(' and ')}. The run summary lists each one, met or not.`
+}
+
+/**
  * The base upgrades a run can buy: every one with `rulings.buildLevels: "any"`, else only the
  * tiers no higher than the highest Build card level in the content (Build I buys tier I).
  *

@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-23 (pass 428, cloud tick)
+
+Pass 427 pinned the Tower-before-Barricade target tie-break (e6c7c76); critique pass 57 then filed 6 rows (5e30218). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran this morning), no build plan phase is pending (35 is blocked), and expand pass 37 ran 12 commits and under 48 hours ago. The top row is pass 57's MED: / and the /play start panel never say what a milestone is, though the Base panel counts them, the run summary lists them and /config uses them as a calendar trigger (impact 6, ease 8: 4.8, x1.5 MED bias: 7.2). A new `milestoneText` in ruleText.ts follows goalText on both pages with the count and 2 labels from config.milestones and says the run summary lists each one. Next in line: the pass 57 LOW rows (Skill draft "for free", base upgrade health on /, Shop I "built", "seats", the Engine console on /).
+
+## Top 5 findings (scored)
+
+### [x] [7.2] external-critique: no page says what a milestone is
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: add milestoneText after goalText on / and the /play start panel
+- issue: #485
+- fixed: (this commit)
+
 # Site audit — 2026-11-22 (pass 427, cloud tick)
 
 Pass 426 pinned rankTargets' lowest-health and id tie-breaks (a8c8b52). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 56 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 37 ran today (10 commits ago). The Pending critique row edits a `[needs-user-call]` /decisions item, which only /oversight may change. A probe of the engine finds that the row 15 target test is titled "player, then Tower, then Barricade, then base" but places no Barricade, so neither the Tower-before-Barricade step nor `defenseKind` in `enemies/targets.ts`, which tells a Barricade from a Tower by `blocksEnemies`, has a test: swapping the two kinds left all 329 engine tests green (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). `enemies.test.ts` now adds a Barricade 2 hexes away beside the Tower, with lower health and an earlier id, and expects it after the Tower. Swapping the kinds fails the test. Next in line: the /decisions row waits for /oversight; critique pass 57 once its gate opens.

@@ -72,6 +72,7 @@ describe('StartPanel', () => {
     const intro = view.getByTestId('start-panel').querySelector('p')?.textContent ?? ''
     expect(intro).toMatch(/They lose all their materials\./)
     expect(intro).not.toMatch(/currency/)
+    expect(intro).toMatch(/tracks 8 milestones, such as Survive to round 5/)
   })
 
   it('asks before the reset clears the saved config, with the /config labels', () => {
