@@ -130,7 +130,7 @@ describe('the Training Ground track (rules 10.8, 11.6)', () => {
     const { unmount } = render(<BasePanel state={game} legal={[]} act={() => {}} />)
     expect(screen.getByText('Training Ground')).toBeTruthy()
     expect(screen.getByTestId('training-closed').textContent).toBe(
-      'The Training Ground opens when you buy the Training I upgrade. Then, at the end of rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1 for free. The Skills you do not keep go to your pool. Later drafts offer them again.',
+      'The Training Ground opens when you buy the Training I upgrade. Then, at the end of rounds 2, 4, 6 and so on, you look at 2 new Skills plus your pool and keep 1. The Skills you do not keep go to your pool. Later drafts offer them again.',
     )
     unmount()
     render(<BasePanel state={{ ...game, upgrades: ['training-1'] }} legal={[]} act={() => {}} />)

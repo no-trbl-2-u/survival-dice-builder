@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / and /play — the Skill draft says "keep 1 for free", but no Skill has a price
-- pass: 57 (commit e6c7c76)
-- viewport: desktop
-- category: voice
-- observation: "for free" suggests a Skill can also be bought. The engine has no Skill purchase and no page names a Skill price.
-- evidence: `packages/content/src/ruleText.ts:198` "`${when}, you look at ${shown} and keep 1 for free`" (draftWhenText, used by trainingText on / and trainingClosedText on /play); no Skill cost in `packages/engine/src` or `config.default.json`.
-- suggested fix: Drop "for free": "... you look at 2 new Skills plus your pool and keep 1."
-- source: web-fetch
-
 ### [LOW] / — the Defenses line gives the base's starting health but not that upgrades add to it
 - pass: 57 (commit e6c7c76)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] / and /play — the Skill draft says "keep 1 for free", but no Skill has a price
+- pass: 57 (commit e6c7c76)
+- viewport: desktop
+- category: voice
+- observation: "for free" suggests a Skill can also be bought. The engine has no Skill purchase and no page names a Skill price.
+- evidence: `packages/content/src/ruleText.ts:198` "`${when}, you look at ${shown} and keep 1 for free`" (draftWhenText, used by trainingText on / and trainingClosedText on /play); no Skill cost in `packages/engine/src` or `config.default.json`.
+- suggested fix: Drop "for free": "... you look at 2 new Skills plus your pool and keep 1."
+- source: web-fetch
+- issue: #486
+- fixed: (this commit)
+
 
 ### [x] [MED] /play and / — milestones appear on /play and /config, but no page says what one is (addressed at (this commit))
 - pass: 57 (commit e6c7c76)

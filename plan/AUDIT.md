@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-23 (pass 429, cloud tick)
+
+Pass 428 said what a milestone is on / and the /play start panel (32b39e9). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 2 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 37 ran 13 commits and under 48 hours ago. The top shippable Pending critique row is the first pass 57 LOW (impact 4, ease 9: 3.6): the Skill draft line on / and /play says "keep 1 for free", which suggests a Skill can be bought; none can. Rule 11.7 says the kept Skill is free, and "keep 1" already says that, so `draftWhenText` in ruleText.ts now ends "and keep 1". Next in line: the other pass 57 LOW rows (base upgrade health on /, Shop I "built", "seats", the Engine console on /).
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: the Skill draft says "keep 1 for free", but no Skill has a price
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: drop "for free" from draftWhenText in ruleText.ts
+- issue: #486
+- fixed: (this commit)
+
 # Site audit — 2026-11-23 (pass 428, cloud tick)
 
 Pass 427 pinned the Tower-before-Barricade target tie-break (e6c7c76); critique pass 57 then filed 6 rows (5e30218). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran this morning), no build plan phase is pending (35 is blocked), and expand pass 37 ran 12 commits and under 48 hours ago. The top row is pass 57's MED: / and the /play start panel never say what a milestone is, though the Base panel counts them, the run summary lists them and /config uses them as a calendar trigger (impact 6, ease 8: 4.8, x1.5 MED bias: 7.2). A new `milestoneText` in ruleText.ts follows goalText on both pages with the count and 2 labels from config.milestones and says the run summary lists each one. Next in line: the pass 57 LOW rows (Skill draft "for free", base upgrade health on /, Shop I "built", "seats", the Engine console on /).
