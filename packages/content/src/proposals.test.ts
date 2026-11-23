@@ -100,7 +100,7 @@ describe('proposals (rule 18.1)', () => {
     expect(reveal).toContain('Runs stopped with the base still standing: 26, now 1.')
     for (const p of defaultProposals)
       expect(measuredText(p), p.id).not.toMatch(/middle half|sim cap|;/)
-    expect(measuredText(byId('seat-scaling'))).toContain('4 seats')
+    expect(measuredText(byId('seat-scaling'))).toContain('4 players')
     expect(BOTS_TEXT).toContain('The default bot gathers')
     expect(BOTS_TEXT).toContain('The defender bot stays near the base')
     expect(BOTS_TEXT).not.toMatch(/, and /)

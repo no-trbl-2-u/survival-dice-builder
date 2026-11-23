@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the spawn-scaling option counts "seats", a word no page defines
-- pass: 57 (commit e6c7c76)
-- viewport: desktop
-- category: comprehension
-- observation: / and the /play start panel count players ("1 to 4 players", "When 2 or more play"). /config switches to "seats" for the same count.
-- evidence: `config.meta.json:205-206` label "Spawns scale with seats", help "each spawn node spawns 1 enemy per 2 seats, rounded up (1 for 1-2 seats, 2 for 3-4)"; `ruleText.ts` spawnSiteText "gets 1 grunt for each 2 seats, rounded up".
-- suggested fix: Say players in the label, help and rule line: "Spawns scale with players", "1 enemy per 2 players, rounded up".
-- source: web-fetch
-
 ### [LOW] / — the "Also:" line describes every nav page except the Engine console
 - pass: 57 (commit e6c7c76)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the spawn-scaling option counts "seats", a word no page defines
+- pass: 57 (commit e6c7c76)
+- viewport: desktop
+- category: comprehension
+- observation: / and the /play start panel count players ("1 to 4 players", "When 2 or more play"). /config switches to "seats" for the same count.
+- evidence: `config.meta.json:205-206` label "Spawns scale with seats", help "each spawn node spawns 1 enemy per 2 seats, rounded up (1 for 1-2 seats, 2 for 3-4)"; `ruleText.ts` spawnSiteText "gets 1 grunt for each 2 seats, rounded up".
+- suggested fix: Say players in the label, help and rule line: "Spawns scale with players", "1 enemy per 2 players, rounded up".
+- source: web-fetch
+- issue: #489
+- fixed: (this commit)
 
 ### [x] [LOW] /tiles — the Base legend says Shop I is "built"; every other page says upgrades are bought
 - pass: 57 (commit e6c7c76)

@@ -397,7 +397,7 @@ describe('rule text from config', () => {
       spawn: { ...c.spawn, perSeat: true, newTileDelay: 1, nodeRange: 3 },
     }))
     expect(siteText('spawn-node', varied, defaultContent)).toBe(
-      'gets 1 grunt for each 2 seats, rounded up, at each Combat, from 1 round after its tile is revealed, if a player figure, a Barricade, a Tower or the base is within 3 hexes',
+      'gets 1 grunt for each 2 players, rounded up, at each Combat, from 1 round after its tile is revealed, if a player figure, a Barricade, a Tower or the base is within 3 hexes',
     )
     const ramped = With((c) => ({ ...c, spawn: { ...c.spawn, rampEvery: 3 } }))
     expect(siteText('elite-spawn-node', ramped, defaultContent)).toBe(
@@ -405,7 +405,7 @@ describe('rule text from config', () => {
     )
     const both = With((c) => ({ ...c, spawn: { ...c.spawn, rampEvery: 1, perSeat: true } }))
     expect(siteText('spawn-node', both, defaultContent)).toBe(
-      'gets 1 grunt for each 2 seats, rounded up, at each Combat, and 1 more each round after round 1',
+      'gets 1 grunt for each 2 players, rounded up, at each Combat, and 1 more each round after round 1',
     )
     for (const path of [
       'spawn.rampEvery',
@@ -417,7 +417,7 @@ describe('rule text from config', () => {
         'A spawn node gets 1 grunt at each Combat; an elite spawn node gets 1 elite at each Combat.',
       )
     expect(ruleLineFor('spawn.nodeRange', varied, defaultContent)).toMatch(
-      /^A spawn node gets 1 grunt for each 2 seats, rounded up, at each Combat, .* within 3 hexes; an elite spawn node gets 1 elite for each 2 seats, /,
+      /^A spawn node gets 1 grunt for each 2 players, rounded up, at each Combat, .* within 3 hexes; an elite spawn node gets 1 elite for each 2 players, /,
     )
   })
 

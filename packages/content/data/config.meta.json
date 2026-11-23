@@ -202,8 +202,8 @@
     "range": [0, 6]
   },
   "spawn.perSeat": {
-    "label": "Spawns scale with seats",
-    "help": "When ticked, each spawn node spawns 1 enemy per 2 seats, rounded up (1 for 1-2 seats, 2 for 3-4). Not ticked (default): as in the written rules.",
+    "label": "Spawns scale with players",
+    "help": "When ticked, each spawn node spawns 1 enemy per 2 players, rounded up (1 for 1-2 players, 2 for 3-4). Not ticked (default): as in the written rules.",
     "rule": "7.3, 16 (open question 68)"
   },
   "spawn.nodeRange": {

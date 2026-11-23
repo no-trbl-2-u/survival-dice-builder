@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-23 (pass 432, cloud tick)
+
+Pass 431 said Shop I is bought, not built, in the /tiles Base legend (36424ac). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 5 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 37 ran 16 commits and under 48 hours ago. The top shippable Pending critique row is the pass 57 LOW on /config (impact 4, ease 9: 3.6): the spawn-scaling option counts "seats", while / and the /play start panel count players. The option's label and help in config.meta.json, the spawn rule line in ruleText.ts, and the proposal's label and measured line now say players. Next in line: the last pass 57 LOW row (the Engine console on /).
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: the /config spawn-scaling option says "seats", not players
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: say players in spawn.perSeat's label and help, spawnSiteText and the seat-scaling proposal
+- issue: #489
+- fixed: (this commit)
+
 # Site audit — 2026-11-23 (pass 431, cloud tick)
 
 Pass 430 said on / that each base upgrade adds to the base's health (005ab4c). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 4 commits ago, today), no build plan phase is pending (35 is blocked), and expand pass 37 ran 15 commits and under 48 hours ago. The top shippable Pending critique row is the pass 57 LOW on /tiles (impact 4, ease 9: 3.6): the Base legend says "buy cards once Shop I is built", but "built" is the verb for Barricades and Towers, and every other page says upgrades are bought. `siteText` in ruleText.ts now says "once Shop I is bought". Next in line: the other pass 57 LOW rows ("seats" on /config, the Engine console on /).

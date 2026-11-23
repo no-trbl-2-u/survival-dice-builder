@@ -158,7 +158,7 @@ export function measuredText(
 ): string {
   if (!measured)
     return 'Not measured with Engagements Combat: this option changes nothing until Combat uses Exchanges.'
-  const seats = measured.seats === 1 ? 'solo' : `${measured.seats} seats`
+  const seats = measured.seats === 1 ? 'solo' : `${measured.seats} players`
   return [
     `Measured with Engagements Combat, ${measured.runs} bot runs each, ${seats}.`,
     batchText('Default bot', measured.bots.default.standard, measured.bots.default.proposal),

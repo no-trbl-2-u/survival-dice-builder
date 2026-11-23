@@ -76,7 +76,7 @@ export function spawnText(config: GameConfig): string {
 /** What one kind of spawn node gets: "gets 1 grunt at each Combat", with the spawn options named. */
 function spawnSiteText(enemy: 'grunt' | 'elite', config: GameConfig): string {
   const s = config.spawn
-  const seats = s.perSeat ? ' for each 2 seats, rounded up,' : ''
+  const seats = s.perSeat ? ' for each 2 players, rounded up,' : ''
   const ramp =
     s.rampEvery === null
       ? ''

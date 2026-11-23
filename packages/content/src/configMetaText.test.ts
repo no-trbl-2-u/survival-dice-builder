@@ -21,7 +21,7 @@ const BUILD_WORD = /\b(?:rows? \d+|phases? \d+|Combat v\d|core loop v\d|Spec v\d
  */
 const ALLOWED: Readonly<Record<string, readonly string[]>> = {
   'experience.levelPerEliteSpawn': ['1 level'],
-  'spawn.perSeat': ['1 enemy', '2 seats', '1-2 seats'],
+  'spawn.perSeat': ['1 enemy', '2 players', '1-2 players'],
   'rulings.structureDamage': ['1 die'],
   'calendar.threatDice.faces': ['1 enemy'],
 }
