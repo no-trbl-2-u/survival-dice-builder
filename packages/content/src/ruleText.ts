@@ -1085,20 +1085,27 @@ export function milestoneLabel(
 }
 
 /**
- * What a milestone is, with the count and 2 of a different kind from the config: "Along the way the run
- * tracks 8 milestones, such as Survive to round 5 and Defeat an elite. The run summary lists
- * each one, met or not."
+ * What a milestone is, with the count, how many `milestoneOutOfReach` rules out, and 2 of a
+ * different kind from the config: "Along the way the run tracks 8 milestones (3 are out of reach
+ * with these rules), such as Survive to round 5 and Defeat an elite. The run summary lists each
+ * one, met or not." The bracket is dropped when every milestone is in reach.
  *
- * @rule 17
+ * @rule 17, OPEN-QUESTIONS row 78
  */
-export function milestoneText(config: GameConfig, content: Pick<Content, 'skills'>): string {
+export function milestoneText(
+  config: GameConfig,
+  content: Pick<Content, 'cards' | 'upgrades' | 'tiles' | 'skills'>,
+): string {
   const m = config.milestones
   const ids = milestoneIds(m)
   const other = Math.max(1, m.surviveRounds.length)
   const shown = ids
     .filter((_, i) => i === 0 || i === other)
     .map((id) => milestoneLabel(id, m, content))
-  return `Along the way the run tracks ${plural(ids.length, 'milestone', 'milestones')}, such as ${shown.join(' and ')}. The run summary lists each one, met or not.`
+  const out = ids.filter((id) => milestoneOutOfReach(id, config, content) !== null).length
+  const reach =
+    out === 0 ? '' : ` (${out} ${out === 1 ? 'is' : 'are'} out of reach with these rules)`
+  return `Along the way the run tracks ${plural(ids.length, 'milestone', 'milestones')}${reach}, such as ${shown.join(' and ')}. The run summary lists each one, met or not.`
 }
 
 /**

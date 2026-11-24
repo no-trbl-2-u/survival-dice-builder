@@ -85,7 +85,7 @@ test('/play: the start panel says what a run is and what the seed does', async (
     'Keep the base standing for as many rounds as you can. The run ends when the base falls. Each round is Prepare, then Combat, and each phase goes once through your deck.',
   )
   await expect(panel).toContainText(
-    'Along the way the run tracks 8 milestones, such as Survive to round 5 and Defeat an elite. The run summary lists each one, met or not.',
+    'Along the way the run tracks 8 milestones (3 are out of reach with these rules), such as Survive to round 5 and Defeat an elite. The run summary lists each one, met or not.',
   )
   await expect(panel).toContainText('A player at 0 health is knocked out')
   await expect(panel.getByRole('textbox', { name: /Seed/ })).toHaveAccessibleDescription(

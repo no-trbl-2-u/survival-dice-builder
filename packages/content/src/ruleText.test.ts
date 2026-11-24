@@ -864,11 +864,23 @@ describe('rule text from config', () => {
 
   it('milestones: the goal line names the count and 2 kinds from config (17)', () => {
     expect(milestoneText(base, defaultContent)).toBe(
-      'Along the way the run tracks 8 milestones, such as Survive to round 5 and Defeat an elite. The run summary lists each one, met or not.',
+      'Along the way the run tracks 8 milestones (3 are out of reach with these rules), such as Survive to round 5 and Defeat an elite. The run summary lists each one, met or not.',
+    )
+    const any = With((c) => ({
+      ...c,
+      rulings: { ...c.rulings, buildLevels: 'any' as const },
+      milestones: { ...c.milestones, tilesRevealed: 8 },
+    }))
+    expect(milestoneText(any, defaultContent)).toMatch(
+      /^Along the way the run tracks 8 milestones, such as /,
+    )
+    const tiles = With((c) => ({ ...c, rulings: { ...c.rulings, buildLevels: 'any' as const } }))
+    expect(milestoneText(tiles, defaultContent)).toMatch(
+      /tracks 8 milestones \(1 is out of reach with these rules\), such as /,
     )
     const one = With((c) => ({ ...c, milestones: { ...c.milestones, surviveRounds: [7] } }))
     expect(milestoneText(one, defaultContent)).toMatch(
-      /tracks 6 milestones, such as Survive to round 7 and Defeat an elite\./,
+      /tracks 6 milestones \(3 are out of reach with these rules\), such as Survive to round 7 and Defeat an elite\./,
     )
     const none = With((c) => ({ ...c, milestones: { ...c.milestones, surviveRounds: [] } }))
     expect(milestoneText(none, defaultContent)).toMatch(/such as Defeat an elite and Fire /)

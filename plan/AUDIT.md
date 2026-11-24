@@ -5,6 +5,38 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-24 (pass 438, cloud tick)
+
+Critique pass 58 filed 4 findings (289cac7). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 just ran), no build plan phase is pending (35 is blocked), and expand pass 38 ran 5 commits ago. The top finding is pass 58's MED row: / and the /play start panel say the run tracks 8 milestones, while /config marks 3 of them out of reach under the default rules (impact 6, ease 7: 4.2, times 1.5 for the external-critique MED bias: 6.3). `milestoneText` now counts the milestones `milestoneOutOfReach` rules out, the same check /config and /play use, and adds "(3 are out of reach with these rules)", dropped when every milestone is in reach. The 3 LOW pass 58 rows on / and /config are next in line; the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [6.3] external-critique: / counts 8 milestones but not that 3 are out of reach
+- category: external-critique
+- impact: 6
+- ease: 7
+- next: count out-of-reach milestones in milestoneText
+- issue: #495
+- fixed: (this commit)
+
+### [ ] [3.2] external-critique: / says "the currency" before saying what currency is
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: name the per-enemy currency in the Tower line
+
+### [ ] [3.2] external-critique: /config "Skills revealed" help stacks Skill level, open level and supply
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: add "Each Training Ground level opens the Skill supply of that level."
+
+### [ ] [2.7] external-critique: /config Knockout help says "the next round start"
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: match the rule line, "the start of the next round"
+
 # Site audit — 2026-11-24 (pass 437, cloud tick)
 
 Pass 436 pinned that a 2-level jump gives a die for each level (b1b7d1c). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 1 commit ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `gather/gather.ts` finds that the `spent` flag on the `gathered` event, which makes the /play log add "the node is spent", has no test off a node: reporting `spent: allowed` instead of `allowed && onNode` leaves all 1128 tests green. With `rulings.gatherNeedsNode` off (row 59), a Gather off any node would then log a spent node that does not exist (impact 3, ease 9: 2.7; below 3.0, but expand just ran). The row 59 test in `world.test.ts` now also expects the `gathered` event to carry `amount: 3, spent: false`, and the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 58 once its gate opens.

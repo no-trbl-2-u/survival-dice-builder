@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — the home page counts 8 milestones but not that 3 are out of reach under the default rules
-- pass: 58 (commit 7821593)
-- viewport: desktop
-- category: comprehension
-- observation: The home page gives the milestone count and two reachable examples. /config marks 3 of the 8 out of reach with the shipped values, so a first-time player on / expects 8 goals they can meet.
-- evidence: /: "Along the way the run tracks 8 milestones, such as Survive to round 5 and Defeat an elite." /config: "Buy 3 base upgrades (out of reach: Build cards can buy only Shop I and Training I)", "Reveal 10 tiles (out of reach: the tile deck holds 8 tiles)", "Fire Arcane Rain (out of reach: a level 3 Skill needs Training III, and Build cards can buy only Training I)."
-- suggested fix: Build the home line from the same out-of-reach check /config uses, e.g. "8 milestones (3 are out of reach with the standard rules), such as ...".
-- source: web-fetch
-
 ### [LOW] / — "the currency" appears twice before any line says what currency is
 - pass: 58 (commit 7821593)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] / — the home page counts 8 milestones but not that 3 are out of reach under the default rules
+- pass: 58 (commit 7821593)
+- viewport: desktop
+- category: comprehension
+- observation: The home page gives the milestone count and two reachable examples. /config marks 3 of the 8 out of reach with the shipped values, so a first-time player on / expects 8 goals they can meet.
+- evidence: /: "Along the way the run tracks 8 milestones, such as Survive to round 5 and Defeat an elite." /config: "Buy 3 base upgrades (out of reach: Build cards can buy only Shop I and Training I)", "Reveal 10 tiles (out of reach: the tile deck holds 8 tiles)", "Fire Arcane Rain (out of reach: a level 3 Skill needs Training III, and Build cards can buy only Training I)."
+- suggested fix: Build the home line from the same out-of-reach check /config uses, e.g. "8 milestones (3 are out of reach with the standard rules), such as ...".
+- source: web-fetch
+- issue: #495
+- fixed: (this commit)
 
 ### [x] [LOW] / — the "Also:" line describes every nav page except the Engine console
 - pass: 57 (commit e6c7c76)
