@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-24 (pass 437, cloud tick)
+
+Pass 436 pinned that a 2-level jump gives a die for each level (b1b7d1c). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 1 commit ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `gather/gather.ts` finds that the `spent` flag on the `gathered` event, which makes the /play log add "the node is spent", has no test off a node: reporting `spent: allowed` instead of `allowed && onNode` leaves all 1128 tests green. With `rulings.gatherNeedsNode` off (row 59), a Gather off any node would then log a spent node that does not exist (impact 3, ease 9: 2.7; below 3.0, but expand just ran). The row 59 test in `world.test.ts` now also expects the `gathered` event to carry `amount: 3, spent: false`, and the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 58 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: nothing pins that an off-node Gather says no node was spent
+- category: tests
+- impact: 3
+- ease: 9
+- next: expect spent: false on the row 59 gathered event in world.test.ts
+- issue: #494
+- fixed: (this commit)
+
 # Site audit — 2026-11-23 (pass 436, cloud tick)
 
 Pass 435 pinned that the game log keeps the last 200 events (e1a6091); expand pass 38 then filed 0 candidates (06e125e). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 57 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 just ran. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `progression/experience.ts` finds that `raiseLevel`, which gives every player 1 action die for each level a gain reaches (8.3, 8.4), has no test of a gain that passes 2 levels: raising only 1 level per gain leaves all 332 engine tests green, golden replays included. The default numbers never cross 2 levels in one defeat, but the row 17 elite bonus on /config can (impact 3, ease 9: 2.7; below 3.0, but expand just ran). A new progression test sets the elite bonus to 3, defeats an elite at 2 experience, and expects 9 experience, level 3, levelReached for 2 and 3, and 3 dice. Both the 1-level mutation and a 1-die-in-total mutation fail it. (A probe of `canAttackBase` found its "on an outer base hex" clause redundant, since every outer base hex touches the centre; no test was added.) Next in line: the /decisions rows wait for /oversight; critique pass 58 once its gate opens.

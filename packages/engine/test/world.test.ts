@@ -315,9 +315,13 @@ describe('Gather (6.7, Table 1, core loop v2)', () => {
   it('row 59 with gatherNeedsNode off, Gather works off a node and spends nothing', () => {
     const loose = { ...config, rulings: { ...config.rulings, gatherNeedsNode: false } }
     const s = { ...gathering('haul', 0, 1), config: loose }
-    const { state } = applyAction(s, { type: 'playCard', card: 'x1' })
+    const { state, events } = applyAction(s, { type: 'playCard', card: 'x1' })
     expect(state.players[0]!.materials).toBe(3)
     expect(state.spentNodes).toEqual([])
+    // The /play log says "the node is spent" only when the event says so.
+    expect(events).toContainEqual(
+      expect.objectContaining({ type: 'gathered', amount: 3, spent: false }),
+    )
   })
 
   it('6.7 Gather off a node gives nothing', () => {
