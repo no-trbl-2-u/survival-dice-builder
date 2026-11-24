@@ -324,6 +324,16 @@ describe('Gather (6.7, Table 1, core loop v2)', () => {
     )
   })
 
+  it('6.9 an enemy on a live gathering node blocks Gather and leaves the node unspent', () => {
+    const s = { ...gathering('starter-gather'), enemies: [grunt('e1', 1, 2)] }
+    const { state, events } = applyAction(s, { type: 'playCard', card: 'x1' })
+    expect(state.players[0]!.materials).toBe(0)
+    expect(state.spentNodes).toEqual([])
+    expect(events).toContainEqual(
+      expect.objectContaining({ type: 'gathered', amount: 0, spent: false }),
+    )
+  })
+
   it('6.7 Gather off a node gives nothing', () => {
     const s = withPlayer(world(), {
       hex: { q: 0, r: 1 },
