@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-24 (pass 443, cloud tick)
+
+Pass 442 pinned that the forced reveal picks the nearest open slot (d36ce49). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 6 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 9 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `combat/knockout.ts` finds that `returnKnockedOut` (4.6, row 55), which takes one free Base tile place for each returning player so that, with fewer places than knocked-out players, the first in seat order returns and the rest wait, has no test with more knocked-out players than places: changing `free -= 1` to `free -= 0` leaves all 1130 unit tests green (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new test knocks out both players with only the base centre free and expects p1 back with 8 health and a `returnDelayed` event for p2; the mutation fails it. The same probe finds that knockOut's `guard: 0` is unpinned (the 14.2 test's player starts with 0 guard). Next in line: pin the guard loss on knockout; the /decisions rows wait for /oversight; critique pass 59 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: nothing pins that a knocked-out player waits when no place is left
+- category: tests
+- impact: 3
+- ease: 9
+- next: knock out both players with only the base centre free; expect p1 back, p2 `returnDelayed`
+- issue: #500
+- fixed: (this commit)
+
+### [ ] [2.4] tests: nothing pins that a knockout removes guard
+- category: tests
+- impact: 3
+- ease: 8
+- next: give p1 guard before the 14.2 knockout test; dropping `guard: 0` leaves all 1130 tests green
+
 # Site audit — 2026-11-24 (pass 442, cloud tick)
 
 Pass 441 made the /config Knockout help say "the start of the next round" (7caa64d). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 5 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 8 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `explore/explore.ts` finds that `forcedReveal` (row 63, the clock option on /config), which puts the forced tile in the open slot nearest the base with ties to slot order, has no test of the "nearest" part: the existing test starts from the Base tile alone, where all 6 open slots are 3 hexes away, so sorting by slot order only leaves all 333 engine tests green (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new row 63 test fills the 6 slots around the Base tile, so the first open slot in slot order, (4,2), is 6 hexes away, and expects the forced tile at (1,4), the first of the open slots 5 hexes away. The slot-order-only mutation and a reversed tie-break both fail it. Next in line: the /decisions rows wait for /oversight; critique pass 59 once its gate opens.

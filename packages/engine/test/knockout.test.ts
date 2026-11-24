@@ -91,6 +91,28 @@ describe('knockout (core loop v2, row 55)', () => {
     expect(back.unplaced).toEqual(['p1', 'p2'])
   })
 
+  it('4.6 with 1 free Base tile place two knocked-out players: the first in seat order returns, the next waits', () => {
+    const outer = [
+      [1, 0],
+      [1, -1],
+      [0, -1],
+      [-1, 0],
+      [-1, 1],
+      [0, 1],
+    ] as const
+    const [one] = knockOut(duo(), 'p1')
+    const [both] = knockOut(one, 'p2')
+    // Only the base centre is free: an enemy on each of the 6 outer Base tile hexes.
+    const full: GameState = { ...both, enemies: outer.map(([q, r], i) => grunt(`e${i + 1}`, q, r)) }
+    const [back, events] = returnKnockedOut(full)
+    expect(back.unplaced).toEqual(['p1'])
+    expect(back.players.map((p) => p.knockedOut)).toEqual([false, true])
+    expect(events).toEqual([
+      { type: 'playerReturned', rule: '4.6', player: 'p1', health: 8 },
+      { type: 'returnDelayed', rule: '4.6', player: 'p2' },
+    ])
+  })
+
   it('row 55 at the round start a knocked-out player comes back with half health, rounded up', () => {
     const [out] = knockOut(duo(), 'p1')
     const [back, events] = returnKnockedOut(out)
