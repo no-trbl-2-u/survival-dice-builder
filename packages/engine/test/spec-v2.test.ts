@@ -247,13 +247,14 @@ describe('change 7: levelled Build (Spec v2 11.4, 12.1; ruling 25)', () => {
         ...s.content,
         defenses: s.content.defenses.map((d) => (d.id === 'tower' ? { ...d, level: 2 } : d)),
       },
-      players: [{ ...s.players[0]!, hex: { q: 1, r: 0 }, materials: 20 }],
+      // Off the base: on a base hex the Build offers base upgrades, not defenses (row 30).
+      players: [{ ...s.players[0]!, hex: { q: 1, r: 1 }, materials: 20 }],
       active: { kind: 'build' as const, buildsLeft: 1, costReduction: 0, level: 1 },
     }
     const kinds = new Set(
       legalActions(high).flatMap((a) => (a.type === 'build' ? [a.defense] : [])),
     )
-    expect(kinds.has('tower')).toBe(false)
+    expect(kinds).toEqual(new Set(['barricade']))
   })
 
   it('rulings.buildLevels "any" keeps the Spec v1 rule: any next tier', () => {

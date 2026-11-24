@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-24 (pass 445, cloud tick)
+
+Pass 444 pinned that a knockout removes guard (44de584). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 11 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `build/defenses.ts` finds that the Spec v2 12.1 test "a defense above the Build level is not offered" cannot fail: its player stands on (1,0), a base hex, where a Build offers base upgrades and no defenses (row 30), so the build list is empty and "no Tower" holds trivially. Deleting the `buildReaches` check from `legalBuilds` leaves every unit test green (impact 4, ease 9: 3.6). The test now stands the player at (1,1) and expects exactly the Barricade when the Tower is made level 2; the mutation fails it. The same probe finds 3 more survivors: `buildCost`'s floor at 0 (no default reduction exceeds a cost) and the health floor in `damageDefense` (the removal event always says 0) change nothing a player sees; the 0-damage early return in `damageDefense` is unpinned (1.8). Next in line: the /decisions rows wait for /oversight; critique pass 59 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] tests: the 12.1 Build-level test offers no defense, so it cannot fail
+- category: tests
+- impact: 4
+- ease: 9
+- next: stand the player at (1,1); expect exactly the Barricade with a level 2 Tower
+- issue: #502
+- fixed: (this commit)
+
+### [ ] [1.8] tests: `damageDefense` with 0 damage is unpinned
+- category: tests
+- impact: 2
+- ease: 9
+- next: expect no event and the same state for 0 damage
+
 # Site audit — 2026-11-24 (pass 444, cloud tick)
 
 Pass 443 pinned that a knocked-out player waits when no Base tile place is left (72dcb2b). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 9 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. The top finding is pass 443's runner-up: `knockOut` (14.2) sets guard to 0, but the 14.2 test's player starts with 0 guard, so deleting `guard: 0` leaves all unit tests green (impact 3, ease 8: 2.4; below 3.0, but expand's window is shut). The test now gives p1 3 guard before the knockout and still expects 0; the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 59 once its gate opens.
@@ -17,7 +37,7 @@ Pass 443 pinned that a knocked-out player waits when no Base tile place is left 
 - ease: 8
 - next: give p1 guard before the 14.2 knockout test; expect guard 0
 - issue: #501
-- fixed: (this commit)
+- fixed: 44de584
 
 # Site audit — 2026-11-24 (pass 443, cloud tick)
 
