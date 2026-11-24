@@ -22,11 +22,11 @@ const grunt = (id: string, q: number, r: number) => ({
 })
 
 describe('knockout (core loop v2, row 55)', () => {
-  it('Spec v2 14.2 a knocked-out player loses all materials and all currency and puts every card on the discard pile', () => {
+  it('Spec v2 14.2 a knocked-out player loses all guard, materials and currency and puts every card on the discard pile', () => {
     const s = duo()
     const p1 = s.players[0]!
     const [out, events] = knockOut(
-      { ...s, players: [{ ...p1, materials: 4, currency: 5 }, s.players[1]!] },
+      { ...s, players: [{ ...p1, guard: 3, materials: 4, currency: 5 }, s.players[1]!] },
       'p1',
     )
     expect(out.players[0]).toMatchObject({

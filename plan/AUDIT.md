@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-24 (pass 444, cloud tick)
+
+Pass 443 pinned that a knocked-out player waits when no Base tile place is left (72dcb2b). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 9 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. The top finding is pass 443's runner-up: `knockOut` (14.2) sets guard to 0, but the 14.2 test's player starts with 0 guard, so deleting `guard: 0` leaves all unit tests green (impact 3, ease 8: 2.4; below 3.0, but expand's window is shut). The test now gives p1 3 guard before the knockout and still expects 0; the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 59 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.4] tests: nothing pins that a knockout removes guard
+- category: tests
+- impact: 3
+- ease: 8
+- next: give p1 guard before the 14.2 knockout test; expect guard 0
+- issue: #501
+- fixed: (this commit)
+
 # Site audit — 2026-11-24 (pass 443, cloud tick)
 
 Pass 442 pinned that the forced reveal picks the nearest open slot (d36ce49). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 6 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 9 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `combat/knockout.ts` finds that `returnKnockedOut` (4.6, row 55), which takes one free Base tile place for each returning player so that, with fewer places than knocked-out players, the first in seat order returns and the rest wait, has no test with more knocked-out players than places: changing `free -= 1` to `free -= 0` leaves all 1130 unit tests green (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new test knocks out both players with only the base centre free and expects p1 back with 8 health and a `returnDelayed` event for p2; the mutation fails it. The same probe finds that knockOut's `guard: 0` is unpinned (the 14.2 test's player starts with 0 guard). Next in line: pin the guard loss on knockout; the /decisions rows wait for /oversight; critique pass 59 once its gate opens.
@@ -19,11 +33,12 @@ Pass 442 pinned that the forced reveal picks the nearest open slot (d36ce49). No
 - issue: #500
 - fixed: (this commit)
 
-### [ ] [2.4] tests: nothing pins that a knockout removes guard
+### [x] [2.4] tests: nothing pins that a knockout removes guard
 - category: tests
 - impact: 3
 - ease: 8
 - next: give p1 guard before the 14.2 knockout test; dropping `guard: 0` leaves all 1130 tests green
+- fixed: pass 444
 
 # Site audit — 2026-11-24 (pass 442, cloud tick)
 

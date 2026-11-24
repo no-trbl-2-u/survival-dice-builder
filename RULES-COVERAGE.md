@@ -100,6 +100,6 @@ The 10 changes Spec v2 made to the engine (`docs/spec-v2-draft/RULINGS.md`).
 | 8.5 (ruling 20) | `config.default.json` `experience`; `progression/levels.ts` | `test/spec-v2.test.ts` "change 6: ..." |
 | 11.4, 12.1 (ruling 25) | `progression/upgrades.ts` `buildReaches`, `upgradesInReach`, `legalUpgrades`; `build/defenses.ts` `legalBuilds`; `rulings.buildLevels` | `test/spec-v2.test.ts` "change 7: ..." (4 tests); `test/progression.test.ts` "Spec v2 11.4 a Build I card buys tier I upgrades only; a Build II card buys tier II", "Spec v2 11.4 upgradesInReach names the next tiers a Build may buy, whatever they cost" |
 | 11.6-11.8 (rulings 26, 28) | `progression/draft.ts` `startDraft`; `progression/supplies.ts` `drawLevel` | `test/spec-v2.test.ts` "change 8: ..." (2 tests) |
-| 14.2 (ruling 30) | `combat/knockout.ts` `knockOut`; `knockout.loseCurrency` | `test/spec-v2.test.ts` "change 9: ..." (2 tests); `test/knockout.test.ts` "Spec v2 14.2 a knocked-out player loses all materials and all currency..." |
+| 14.2 (ruling 30) | `combat/knockout.ts` `knockOut`; `knockout.loseCurrency` | `test/spec-v2.test.ts` "change 9: ..." (2 tests); `test/knockout.test.ts` "Spec v2 14.2 a knocked-out player loses all guard, materials and currency..." |
 | 7.8 step 5, 18.1 (ruling 31) | `skills/assign.ts` `openUses` | `test/spec-v2.test.ts` "change 10: ..." |
 | 7.9, 12.5 | `combat/engage.ts` `startEngagement`, `repair` | `test/spec-v2.test.ts` "7.9 a top-half Engage with no adjacent enemy rolls no enemy dice...", "12.5 Repair on the base heals the base up to its maximum..." |
