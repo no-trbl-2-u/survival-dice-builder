@@ -122,6 +122,29 @@ describe('row 63 forced reveal (clock.forcedRevealEvery)', () => {
     expect(forcedRevealDue({ ...after, round: 6 })).toBe(true)
   })
 
+  it('picks the nearest open slot, not the first in slot order; ties go to slot order', () => {
+    // Fill the 6 slots around the Base tile: the open slots are then 5 or 6 hexes away, and the
+    // first in slot order, (4,2), is 6 away.
+    const s0 = createGame(clock(3), 1)
+    const ring = s0.tileDeck.slice(0, 6)
+    const map = emptySlots(s0.map).reduce(
+      (m, center, i) => placeTile(m, tile(ring[i]!), center, 0),
+      s0.map,
+    )
+    const s = { ...s0, map, tileDeck: s0.tileDeck.slice(6), round: 3 }
+    const open = emptySlots(map)
+    expect(open[0]).toEqual({ q: 4, r: 2 })
+    expect(hexDistance(open[0]!, BASE_HEX)).toBe(6)
+    const [after] = forcedReveal(s)
+    // (1,4) is the first of the 6 open slots 5 hexes away.
+    expect(after.map.tiles.at(-1)).toEqual({
+      tile: s.tileDeck[0],
+      center: { q: 1, r: 4 },
+      revealedRound: 3,
+    })
+    expect(hexDistance({ q: 1, r: 4 }, BASE_HEX)).toBe(5)
+  })
+
   it('a player reveal in the last N rounds holds the clock; an empty tile deck stops it', () => {
     const s0 = createGame(clock(3), 1)
     expect(

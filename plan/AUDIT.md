@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-24 (pass 442, cloud tick)
+
+Pass 441 made the /config Knockout help say "the start of the next round" (7caa64d). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 5 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 8 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `explore/explore.ts` finds that `forcedReveal` (row 63, the clock option on /config), which puts the forced tile in the open slot nearest the base with ties to slot order, has no test of the "nearest" part: the existing test starts from the Base tile alone, where all 6 open slots are 3 hexes away, so sorting by slot order only leaves all 333 engine tests green (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new row 63 test fills the 6 slots around the Base tile, so the first open slot in slot order, (4,2), is 6 hexes away, and expects the forced tile at (1,4), the first of the open slots 5 hexes away. The slot-order-only mutation and a reversed tie-break both fail it. Next in line: the /decisions rows wait for /oversight; critique pass 59 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: nothing pins that the forced reveal picks the nearest open slot
+- category: tests
+- impact: 3
+- ease: 9
+- next: fill the Base tile's ring in a row 63 test and expect the tile at (1,4)
+- issue: #499
+- fixed: (this commit)
+
 # Site audit — 2026-11-24 (pass 441, cloud tick)
 
 Pass 440 said on /config which upgrade opens each Skill supply level (bede975). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 4 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 7 commits and under 48 hours ago. The top finding is pass 58's last LOW row: the /config Knockout help says a knocked-out player "comes back at the next round start", while the rule line in the same section, which / shares, says "the start of the next round" (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). The help now reads "comes back at the start of the next round with half their maximum health, rounded up". The configMetaText Knockout test pins the new phrase and rejects the old one. Next in line: the /decisions rows wait for /oversight; critique pass 59 once its gate opens.
