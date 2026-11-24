@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-24 (pass 440, cloud tick)
+
+Pass 439 made the Tower line on / say how much currency a kill gives (6eda85c). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 6 commits and under 48 hours ago. The top finding is pass 58's LOW row: the /config "Skills revealed" help says "the highest open level Skill supply" without saying what opens a level (impact 4, ease 8: 3.2). The help now adds "Each Training upgrade (I, II, III) opens the Skill supply of its level.", which matches the `opensLevel` of the three Training upgrades. The configMetaText test pins both phrases. Next in line: the Knockout help wording on /config; the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] external-critique: /config "Skills revealed" help stacks Skill level, open level and supply
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: add "Each Training upgrade (I, II, III) opens the Skill supply of its level."
+- issue: #497
+- fixed: (this commit)
+
+### [ ] [2.7] external-critique: /config Knockout help says "the next round start"
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: match the rule line, "the start of the next round"
+
 # Site audit — 2026-11-24 (pass 439, cloud tick)
 
 Pass 438 made / say how many milestones are out of reach (62a5d04). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 5 commits and under 48 hours ago. The top finding is pass 58's LOW row: the Tower line on / says "the player who built it gets the currency" before any line says what currency is or how much an enemy gives (impact 4, ease 8: 3.2). `defenseText` now reads the enemy records and says "gets that enemy's currency (a grunt 1, an elite 4)", through a `currencyGains` helper that the Shop line shares, so the two lines cannot drift. The ruleText test pins the default line and a changed-currency elite. Next in line: the 2 LOW pass 58 rows on /config; the /decisions rows wait for /oversight.

@@ -151,6 +151,14 @@ describe('config.meta.json marks the Spec v2 rule as the written one', () => {
 })
 
 describe('config.meta.json names the baseline one way', () => {
+  it('11.6: the Skills revealed help says what opens a Skill supply level', () => {
+    const help = defaultConfigMeta['draft.reveal']?.help ?? ''
+    expect(help).toContain('highest open level Skill supply')
+    expect(help).toContain(
+      'Each Training upgrade (I, II, III) opens the Skill supply of its level.',
+    )
+  })
+
   it('no help says "the current rule" or promises later content with "until ..."', () => {
     const found = Object.entries(defaultConfigMeta).flatMap(([path, entry]) =>
       (entry.help?.match(/\bthe current rule\b|\buntil each\b|\buntil elites?\b/gi) ?? []).map(

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the "Skills revealed" help says "highest open level Skill supply", but no page says Skills have levels or what opens one
-- pass: 58 (commit 7821593)
-- viewport: desktop
-- category: comprehension
-- observation: The help keeps the rule 11.6 wording (a fix from an earlier pass) but stacks three ideas the visitor has not met: a Skill level, an open level, and a Skill supply. The Arcane Rain milestone line on the same page then relies on "a level 3 Skill needs Training III".
-- evidence: "New Skills each player looks at in a draft, from the top of the highest open level Skill supply. Rule 11.6."
-- suggested fix: Keep the rule phrase and add one plain clause, e.g. "... Skill supply. Each Training Ground level opens the Skill supply of that level."
-- source: web-fetch
-
 ### [LOW] /config — the Knockout help says "the next round start"; the rule line says "the start of the next round"
 - pass: 58 (commit 7821593)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the "Skills revealed" help says "highest open level Skill supply", but no page says Skills have levels or what opens one
+- pass: 58 (commit 7821593)
+- viewport: desktop
+- category: comprehension
+- observation: The help keeps the rule 11.6 wording (a fix from an earlier pass) but stacks three ideas the visitor has not met: a Skill level, an open level, and a Skill supply. The Arcane Rain milestone line on the same page then relies on "a level 3 Skill needs Training III".
+- evidence: "New Skills each player looks at in a draft, from the top of the highest open level Skill supply. Rule 11.6."
+- suggested fix: Keep the rule phrase and add one plain clause, e.g. "... Skill supply. Each Training Ground level opens the Skill supply of that level."
+- source: web-fetch
+- issue: #497
+- fixed: (this commit)
 
 ### [x] [LOW] / — "the currency" appears twice before any line says what currency is
 - pass: 58 (commit 7821593)
