@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — "the currency" appears twice before any line says what currency is
-- pass: 58 (commit 7821593)
-- viewport: desktop
-- category: comprehension
-- observation: Under "How a run goes", the Tower line and the knockout line both name currency with "the"; currency is first explained later, in the Shop line under "How you grow".
-- evidence: "When a Tower defeats an enemy, the player who built it gets the currency." ... "They lose all their materials and currency." Defined later: "Pay for cards with currency, which you get for each enemy you defeat (a grunt 1, an elite 4)".
-- suggested fix: Say "gets the currency for that enemy (a grunt 1, an elite 4)" in the Tower line, or name currency next to materials where the page first lists what a player has.
-- source: web-fetch
-
 ### [LOW] /config — the "Skills revealed" help says "highest open level Skill supply", but no page says Skills have levels or what opens one
 - pass: 58 (commit 7821593)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] / — "the currency" appears twice before any line says what currency is
+- pass: 58 (commit 7821593)
+- viewport: desktop
+- category: comprehension
+- observation: Under "How a run goes", the Tower line and the knockout line both name currency with "the"; currency is first explained later, in the Shop line under "How you grow".
+- evidence: "When a Tower defeats an enemy, the player who built it gets the currency." ... "They lose all their materials and currency." Defined later: "Pay for cards with currency, which you get for each enemy you defeat (a grunt 1, an elite 4)".
+- suggested fix: Say "gets the currency for that enemy (a grunt 1, an elite 4)" in the Tower line, or name currency next to materials where the page first lists what a player has.
+- source: web-fetch
+- issue: #496
+- fixed: (this commit) — the Tower line on / now reads "gets that enemy's currency (a grunt 1, an elite 4)", built from the enemy records by the same helper as the Shop line
 
 ### [x] [MED] / — the home page counts 8 milestones but not that 3 are out of reach under the default rules
 - pass: 58 (commit 7821593)

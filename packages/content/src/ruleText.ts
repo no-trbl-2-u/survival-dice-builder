@@ -165,10 +165,19 @@ export function shopText(config: GameConfig, content: Upgrades & Enemies): strin
     config.rulings.shopTiming === 'prepare-only'
       ? 'while you stand on the Base tile in the Prepare phase'
       : 'at any time you stand on the Base tile'
-  const gains = content.enemies.enemies
+  return `${open} with ${plural(config.shop.offers, 'card offer', 'card offers')}. Pay for cards with currency, which you get for each enemy you defeat (${currencyGains(content)}); buy ${when}.`
+}
+
+/**
+ * Each enemy's currency from the enemy records ("a grunt 1, an elite 4"), shared by the Shop
+ * and Defenses lines so neither names the currency without its amounts.
+ *
+ * @rule 8.2, Table 6
+ */
+function currencyGains(content: Pick<Content, 'enemies'>): string {
+  return content.enemies.enemies
     .map((e) => `${withArticle(e.name.toLowerCase())} ${e.currency}`)
     .join(', ')
-  return `${open} with ${plural(config.shop.offers, 'card offer', 'card offers')}. Pay for cards with currency, which you get for each enemy you defeat (${gains}); buy ${when}.`
 }
 
 /**
@@ -417,13 +426,17 @@ export function siegeText(content: Enemies): string {
 /**
  * What each defense costs and does (a Tower attacks after the enemies move and spawn, as
  * `startCombat` chains them), that no enemy can enter a defense hex (as `enemyCanEnter`
- * plays it, for every defense, not only those with `blocksEnemies`), who gets the currency
- * when an attacking defense defeats an enemy, and the base's health as `baseText` states it
- * (its starting health and what each base upgrade adds): the Defenses line on /.
+ * plays it, for every defense, not only those with `blocksEnemies`), who gets the enemy's
+ * currency, and how much, when an attacking defense defeats an enemy, and the base's health
+ * as `baseText` states it (its starting health and what each base upgrade adds): the
+ * Defenses line on /.
  *
  * @rule 8.2, 9.8, 11.3, 12.1, 12.3, Table 7, 11, OPEN-QUESTIONS rows 27, 40, 53
  */
-export function defenseText(config: GameConfig, content: Pick<Content, 'defenses'>): string {
+export function defenseText(
+  config: GameConfig,
+  content: Pick<Content, 'defenses' | 'enemies'>,
+): string {
   const lines = content.defenses.map((d) => {
     const effects = [
       d.attack &&
@@ -431,7 +444,7 @@ export function defenseText(config: GameConfig, content: Pick<Content, 'defenses
     ].filter(Boolean)
     const effect = effects.length > 0 ? `; ${effects.join(', and ')}` : ''
     const pays = d.attack
-      ? ` When ${withArticle(d.name)} defeats an enemy, the player who built it gets the currency.`
+      ? ` When ${withArticle(d.name)} defeats an enemy, the player who built it gets that enemy's currency (${currencyGains(content)}).`
       : ''
     return `${/^[aeiou]/i.test(d.name) ? 'An' : 'A'} ${d.name} costs ${plural(d.cost, 'material', 'materials')} and has ${d.health} health${effect}.${pays}`
   })

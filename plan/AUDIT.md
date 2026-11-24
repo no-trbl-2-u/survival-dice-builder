@@ -5,6 +5,32 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-24 (pass 439, cloud tick)
+
+Pass 438 made / say how many milestones are out of reach (62a5d04). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 5 commits and under 48 hours ago. The top finding is pass 58's LOW row: the Tower line on / says "the player who built it gets the currency" before any line says what currency is or how much an enemy gives (impact 4, ease 8: 3.2). `defenseText` now reads the enemy records and says "gets that enemy's currency (a grunt 1, an elite 4)", through a `currencyGains` helper that the Shop line shares, so the two lines cannot drift. The ruleText test pins the default line and a changed-currency elite. Next in line: the 2 LOW pass 58 rows on /config; the /decisions rows wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.2] external-critique: / says "the currency" before saying what currency is
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: name the per-enemy currency in the Tower line
+- issue: #496
+- fixed: (this commit)
+
+### [ ] [3.2] external-critique: /config "Skills revealed" help stacks Skill level, open level and supply
+- category: external-critique
+- impact: 4
+- ease: 8
+- next: add "Each Training Ground level opens the Skill supply of that level."
+
+### [ ] [2.7] external-critique: /config Knockout help says "the next round start"
+- category: external-critique
+- impact: 3
+- ease: 9
+- next: match the rule line, "the start of the next round"
+
 # Site audit — 2026-11-24 (pass 438, cloud tick)
 
 Critique pass 58 filed 4 findings (289cac7). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 just ran), no build plan phase is pending (35 is blocked), and expand pass 38 ran 5 commits ago. The top finding is pass 58's MED row: / and the /play start panel say the run tracks 8 milestones, while /config marks 3 of them out of reach under the default rules (impact 6, ease 7: 4.2, times 1.5 for the external-critique MED bias: 6.3). `milestoneText` now counts the milestones `milestoneOutOfReach` rules out, the same check /config and /play use, and adds "(3 are out of reach with these rules)", dropped when every milestone is in reach. The 3 LOW pass 58 rows on / and /config are next in line; the /decisions rows wait for /oversight.
