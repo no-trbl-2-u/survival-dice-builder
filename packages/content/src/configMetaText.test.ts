@@ -90,6 +90,8 @@ describe('config.meta.json marks the Spec v2 rule as the written one', () => {
     expect(entry?.label).toBe('Health on return: 1 part in')
     expect(entry?.label).not.toMatch(/divisor/i)
     expect(entry?.help).toMatch(/^2 \(default\): .*half their maximum health, rounded up/)
+    expect(entry?.help).toContain('comes back at the start of the next round with half')
+    expect(entry?.help).not.toContain('next round start')
   })
 
   it('7.5: the Enemy move help says up to, oldest first, before the spawns, and the stop next to the target', () => {

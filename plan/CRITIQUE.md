@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Knockout help says "the next round start"; the rule line says "the start of the next round"
-- pass: 58 (commit 7821593)
-- viewport: desktop
-- category: voice
-- observation: Two lines in the same Knockout section word the same moment differently. The rule line, which / shares, uses "the start of the next round".
-- evidence: Help: "2 (default): a knocked-out player comes back at the next round start with half their maximum health, rounded up, as in the written rules." Rule line: "A player at 0 health is knocked out and comes back at the start of the next round on a free base hex".
-- suggested fix: Change the help to "comes back at the start of the next round with half their maximum health, rounded up".
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /config — the Knockout help says "the next round start"; the rule line says "the start of the next round"
+- pass: 58 (commit 7821593)
+- viewport: desktop
+- category: voice
+- observation: Two lines in the same Knockout section word the same moment differently. The rule line, which / shares, uses "the start of the next round".
+- evidence: Help: "2 (default): a knocked-out player comes back at the next round start with half their maximum health, rounded up, as in the written rules." Rule line: "A player at 0 health is knocked out and comes back at the start of the next round on a free base hex".
+- suggested fix: Change the help to "comes back at the start of the next round with half their maximum health, rounded up".
+- source: web-fetch
+- issue: #498
+- fixed: (this commit)
 
 ### [x] [LOW] /config — the "Skills revealed" help says "highest open level Skill supply", but no page says Skills have levels or what opens one
 - pass: 58 (commit 7821593)

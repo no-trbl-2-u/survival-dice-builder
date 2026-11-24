@@ -311,7 +311,7 @@
   },
   "knockout.returnHealthDivisor": {
     "label": "Health on return: 1 part in",
-    "help": "2 (default): a knocked-out player comes back at the next round start with half their maximum health, rounded up, as in the written rules. 1: full health. 3: one third. 4: one quarter.",
+    "help": "2 (default): a knocked-out player comes back at the start of the next round with half their maximum health, rounded up, as in the written rules. 1: full health. 3: one third. 4: one quarter.",
     "rule": "14.4",
     "range": [1, 4]
   },
