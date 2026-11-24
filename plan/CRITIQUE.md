@@ -1,13 +1,49 @@
 # Critique log
 
-> Last pass: 2026-11-23 at commit e6c7c76
-> Pass count: 57
+> Last pass: 2026-11-24 at commit 7821593
+> Pass count: 58
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — the home page counts 8 milestones but not that 3 are out of reach under the default rules
+- pass: 58 (commit 7821593)
+- viewport: desktop
+- category: comprehension
+- observation: The home page gives the milestone count and two reachable examples. /config marks 3 of the 8 out of reach with the shipped values, so a first-time player on / expects 8 goals they can meet.
+- evidence: /: "Along the way the run tracks 8 milestones, such as Survive to round 5 and Defeat an elite." /config: "Buy 3 base upgrades (out of reach: Build cards can buy only Shop I and Training I)", "Reveal 10 tiles (out of reach: the tile deck holds 8 tiles)", "Fire Arcane Rain (out of reach: a level 3 Skill needs Training III, and Build cards can buy only Training I)."
+- suggested fix: Build the home line from the same out-of-reach check /config uses, e.g. "8 milestones (3 are out of reach with the standard rules), such as ...".
+- source: web-fetch
+
+### [LOW] / — "the currency" appears twice before any line says what currency is
+- pass: 58 (commit 7821593)
+- viewport: desktop
+- category: comprehension
+- observation: Under "How a run goes", the Tower line and the knockout line both name currency with "the"; currency is first explained later, in the Shop line under "How you grow".
+- evidence: "When a Tower defeats an enemy, the player who built it gets the currency." ... "They lose all their materials and currency." Defined later: "Pay for cards with currency, which you get for each enemy you defeat (a grunt 1, an elite 4)".
+- suggested fix: Say "gets the currency for that enemy (a grunt 1, an elite 4)" in the Tower line, or name currency next to materials where the page first lists what a player has.
+- source: web-fetch
+
+### [LOW] /config — the "Skills revealed" help says "highest open level Skill supply", but no page says Skills have levels or what opens one
+- pass: 58 (commit 7821593)
+- viewport: desktop
+- category: comprehension
+- observation: The help keeps the rule 11.6 wording (a fix from an earlier pass) but stacks three ideas the visitor has not met: a Skill level, an open level, and a Skill supply. The Arcane Rain milestone line on the same page then relies on "a level 3 Skill needs Training III".
+- evidence: "New Skills each player looks at in a draft, from the top of the highest open level Skill supply. Rule 11.6."
+- suggested fix: Keep the rule phrase and add one plain clause, e.g. "... Skill supply. Each Training Ground level opens the Skill supply of that level."
+- source: web-fetch
+
+### [LOW] /config — the Knockout help says "the next round start"; the rule line says "the start of the next round"
+- pass: 58 (commit 7821593)
+- viewport: desktop
+- category: voice
+- observation: Two lines in the same Knockout section word the same moment differently. The rule line, which / shares, uses "the start of the next round".
+- evidence: Help: "2 (default): a knocked-out player comes back at the next round start with half their maximum health, rounded up, as in the written rules." Rule line: "A player at 0 health is knocked out and comes back at the start of the next round on a free base hex".
+- suggested fix: Change the help to "comes back at the start of the next round with half their maximum health, rounded up".
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
