@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — reading 12 names the Renewal and Purify Skills, which no public page introduces, and leaves "N hexes" undefined
-- pass: 59 (commit a81abd5)
-- viewport: desktop
-- category: comprehension
-- observation: The heading lists Renewal and Purify next to Mend and Rest with no word that they are Skills; the home page names only Strike, Shot, Mend and Guard. The body's "within N hexes" never says what N is.
-- evidence: "12. Heal targets in co-op (Mend, Rest, Renewal, Purify). (rule Table 3, 6.7)" / "each heal effect names its target: self, an ally within N hexes or an ally on the same tile."
-- suggested fix: Write "the Renewal and Purify Skills" and replace "within N hexes" with the configured distance or "within a set number of hexes".
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] /decisions — reading 12 names the Renewal and Purify Skills, which no public page introduces, and leaves "N hexes" undefined
+- pass: 59 (commit a81abd5)
+- viewport: desktop
+- category: comprehension
+- observation: The heading lists Renewal and Purify next to Mend and Rest with no word that they are Skills; the home page names only Strike, Shot, Mend and Guard. The body's "within N hexes" never says what N is.
+- evidence: "12. Heal targets in co-op (Mend, Rest, Renewal, Purify). (rule Table 3, 6.7)" / "each heal effect names its target: self, an ally within N hexes or an ally on the same tile."
+- suggested fix: Write "the Renewal and Purify Skills" and replace "within N hexes" with the configured distance or "within a set number of hexes".
+- source: web-fetch
+- issue: #511
+- fixed: (this commit) — the row 12 question names "the Mend, Renewal and Purify Skills and the Rest card"; the reading says "an ally within a set number of hexes" (no distance is assigned yet).
+
 
 ### [x] [LOW] /decisions — decided row 72 leads with "Playtest build:", a repo file path and an "enemy attack phase" no page names (addressed at (this commit))
 - pass: 59 (commit a81abd5)

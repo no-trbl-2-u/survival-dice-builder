@@ -24,10 +24,10 @@ Combat uses Engagements by default. A reading marked "Exchanges only" changes no
 - Reading: The 4 starter Skills are fixed; at most 6 drafted Skills; when full, the kept Skill replaces one (current engine). **Designer 2026-10-04:** experiment with Skill caps, and add upgraded Skill tiers (for example Fireball III) so a late draft is never wasted. The Skills themselves are placeholders still to design. **Bot report:** caps of 4, 6 and 8 give identical batches; runs are too short for a cap to bind (keep 6, re-run with longer runs).
 - Setting: `player.draftSlots` = `6`; `rulings.fullBoardDraft` = `"swap"`
 
-### 12. Heal targets in co-op (Mend, Rest, Renewal, Purify) (rule Table 3, 6.7)
+### 12. Heal targets in co-op (the Mend, Renewal and Purify Skills and the Rest card) (rule Table 3, 6.7)
 
 - Status: pending-spec 2026-10-04 (per-card targets)
-- Reading: **Per action** (designer 2026-10-04): each heal effect names its target: self, an ally within N hexes or an ally on the same tile. The value for each card is still to assign; until then the engine keeps self only.
+- Reading: **Per action** (designer 2026-10-04): each heal effect names its target: self, an ally within a set number of hexes or an ally on the same tile. The value for each card is still to assign; until then the engine keeps self only.
 - Setting: `rulings.healTargets` = `"self"`
 
 ### 17. "Each next level needs 3 more than the last step (3, 9, 18, 30)." Does the step stay a playtest option? (rule 8.5)

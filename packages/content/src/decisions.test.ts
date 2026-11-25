@@ -301,6 +301,10 @@ describe('decisions', () => {
     const row72 = rows.find((r) => r.number === 72)!
     expect(splitReading(row72.reading).reading).toBe('')
     expect(row72.reading).not.toMatch(/Playtest build|docs\/design|enemy attack phase/)
+    // Row 12 says which heals are Skills and gives no undefined N (critique pass 59).
+    const row12 = rows.find((r) => r.number === 12)!
+    expect(row12.question).toContain('the Mend, Renewal and Purify Skills and the Rest card')
+    expect(row12.reading).not.toMatch(/within N hexes/)
     // Row 7 gives only the Spec v2 siege reading, not the v1 one (critique pass 17).
     expect(rows.find((r) => r.number === 7)?.reading).not.toMatch(/v1 reading|elite 6 dice/)
     expect(rows.find((r) => r.number === 75)?.reading).not.toContain('stays an option')

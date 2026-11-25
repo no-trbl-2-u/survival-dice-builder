@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-25 (pass 454, cloud tick)
+
+Pass 453 led row 72 with the written Combat rule (7893f0b). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 7 commits ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 2 commits ago. The open MED rows from passes 20 and 21 edit `[needs-user-call]` items and wait for /oversight. The top row is pass 59's reading 12 on /decisions: the heading listed Renewal and Purify with no word that they are Skills, and the reading said "within N hexes" with no N (impact 4, ease 9: 3.6). The row 12 question in OPEN-QUESTIONS.md now names "the Mend, Renewal and Purify Skills and the Rest card", and the reading says "within a set number of hexes" (the distance is not assigned yet); docs/DECISIONS.md is regenerated and a decisions test pins the new shape. Next in line: only the pass 20, 21, 25 and 46 rows that edit `[needs-user-call]` items and wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: /decisions reading 12 names unintroduced Skills and an undefined N
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: name the Skills and the Rest card in the row 12 question; say "within a set number of hexes"
+- issue: #511
+- fixed: (this commit)
+
 # Site audit — 2026-11-25 (pass 453, cloud tick)
 
 Pass 452 led row 55 with the written knockout rule (e085814). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 6 commits ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 1 commit ago. The open MED rows from passes 20 and 21 edit `[needs-user-call]` items and wait for /oversight. The top row is pass 59's row 72 on /decisions: a decided row now in the written rules opened with "Playtest build:", pointed at the repo path docs/design/combat-v3.md, and named an "enemy attack phase" no page names (impact 4, ease 9: 3.6). Row 72 in OPEN-QUESTIONS.md now opens with the written rule (Combat is engagements, 7.7-7.13) and keeps the engagement summary without the playtest label, the path or the attack phase; docs/DECISIONS.md is regenerated and a decisions test pins the new shape. Next in line: pass 59's reading 12 rows on /decisions.
