@@ -36,15 +36,6 @@
 - suggested fix: Write "the Renewal and Purify Skills" and replace "within N hexes" with the configured distance or "within a set number of hexes".
 - source: web-fetch
 
-### [LOW] /tiles — the terrain legend says "no effect on moves"; every other line on the site counts movement
-- pass: 59 (commit a81abd5)
-- viewport: desktop
-- category: voice
-- observation: "Moves" can mean Move cards, steps or movement points. The /tiles lede, the home page and /config all say "movement".
-- evidence: /tiles legend: "Plains (no effect on moves)", "Forest (no effect on moves)" (4 lines). Lede: "the step costs 1 movement." Home: "Move gives 2 movement (1 per step)".
-- suggested fix: Change the four legend lines to "(no effect on movement)".
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -100,6 +91,16 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /tiles — the terrain legend says "no effect on moves"; every other line on the site counts movement (addressed at (this commit))
+- pass: 59 (commit a81abd5)
+- viewport: desktop
+- category: voice
+- observation: "Moves" can mean Move cards, steps or movement points. The /tiles lede, the home page and /config all say "movement".
+- evidence: /tiles legend: "Plains (no effect on moves)", "Forest (no effect on moves)" (4 lines). Lede: "the step costs 1 movement." Home: "Move gives 2 movement (1 per step)".
+- suggested fix: Change the four legend lines to "(no effect on movement)".
+- source: web-fetch
+- issue: #508
 
 ### [x] [MED] /decisions — reading 66 says players do not move in Combat, but Combat uses Engagements by default and Move works there (addressed at (this commit))
 - pass: 59 (commit a81abd5)

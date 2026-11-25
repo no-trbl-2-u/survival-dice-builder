@@ -86,7 +86,7 @@ export function TileSheet() {
           <li key={t}>
             <span className={`${styles.swatch} ${styles[t] ?? ''}`} aria-hidden="true" />
             {capitalize(t)}
-            {IMPASSABLE.includes(t) ? ' (impassable)' : ' (no effect on moves)'}
+            {IMPASSABLE.includes(t) ? ' (impassable)' : ' (no effect on movement)'}
           </li>
         ))}
       </ul>

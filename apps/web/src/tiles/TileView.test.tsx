@@ -166,10 +166,10 @@ describe('TileSheet terrain legend', () => {
     const legend = container.querySelector('[aria-label="Terrain legend"]')!
     const names = [...legend.querySelectorAll('li')].map((li) => li.textContent)
     expect(names).toEqual([
-      'Plains (no effect on moves)',
-      'Forest (no effect on moves)',
-      'Hills (no effect on moves)',
-      'Wasteland (no effect on moves)',
+      'Plains (no effect on movement)',
+      'Forest (no effect on movement)',
+      'Hills (no effect on movement)',
+      'Wasteland (no effect on movement)',
       'Lake (impassable)',
       'Mountain (impassable)',
     ])

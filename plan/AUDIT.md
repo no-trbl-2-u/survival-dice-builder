@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-25 (pass 451, cloud tick)
+
+Pass 450 rewrote the reading 66 question (e6dc71a). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 17 commits and under 48 hours ago. The open MED rows from passes 20 and 21 edit `[needs-user-call]` items and wait for /oversight. Of pass 59's LOW rows, the /tiles legend is the cheapest: the four terrain lines say "no effect on moves" while the lede, home and /config say "movement" (impact 4, ease 9: 3.6). The legend now says "(no effect on movement)" and the TileView test pins it. Next in line: pass 59's row 55, row 72 and reading 12 rows on /decisions.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: /tiles legend says "no effect on moves"
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: change the four legend lines to "(no effect on movement)"
+- issue: #508
+- fixed: (this commit)
+
+### [ ] [3.6] external-critique: /decisions row 55 opens with the materials-only knockout loss
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: lead row 55 in OPEN-QUESTIONS.md with the current rule; regenerate docs/DECISIONS.md
+
 # Site audit — 2026-11-25 (pass 450, cloud tick)
 
 Pass 449 stated each /decisions proposal once (9a502e1). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 17 commits and under 48 hours ago. The top row is pass 59's MED: the reading 66 question on /decisions says players do not move in Combat and that the explorer is pinned for every exchange, which is the Exchanges Combat; Combat is Engagements by default and Move works there (impact 6, ease 9: 5.4, x1.5 for the external-critique MED bias: 8.1). The question in OPEN-QUESTIONS.md now says only that a tile revealed in Prepare spawns at that round's Combat and the explorer starts Combat next to the new spawns; docs/DECISIONS.md is regenerated. Next in line: pass 59's LOW rows (row 55, row 72, reading 12, the /tiles legend).
