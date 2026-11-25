@@ -297,6 +297,10 @@ describe('decisions', () => {
     expect(splitReading(row55.reading).reading).toBe('')
     expect(row55.reading).not.toMatch(/materials they carried are lost/)
     expect(row55.question).not.toContain('next round start')
+    // Row 72 opens with the written rule, not the playtest note or a repo path (critique pass 59).
+    const row72 = rows.find((r) => r.number === 72)!
+    expect(splitReading(row72.reading).reading).toBe('')
+    expect(row72.reading).not.toMatch(/Playtest build|docs\/design|enemy attack phase/)
     // Row 7 gives only the Spec v2 siege reading, not the v1 one (critique pass 17).
     expect(rows.find((r) => r.number === 7)?.reading).not.toMatch(/v1 reading|elite 6 dice/)
     expect(rows.find((r) => r.number === 75)?.reading).not.toContain('stays an option')

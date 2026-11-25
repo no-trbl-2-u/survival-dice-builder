@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — decided row 72 leads with "Playtest build:", a repo file path and an "enemy attack phase" no page names
-- pass: 59 (commit a81abd5)
-- viewport: desktop
-- category: voice
-- observation: Row 72 is decided and now in the written rules, but it opens as a playtest note, sends the visitor to a repo file, and names a phase that does not exist on any page.
-- evidence: "Playtest build: each Engage card option starts an engagement from anywhere; ... no enemy attack phase; a siege step at the end of Combat. Readings for the open points: docs/design/combat-v3.md. Now in the written rules: Combat is engagements (7.7-7.13)."
-- suggested fix: Lead row 72 with the "Now in the written rules" sentence; drop "Playtest build", the docs/design/combat-v3.md path and "no enemy attack phase".
-- source: web-fetch
-
 ### [LOW] /decisions — reading 12 names the Renewal and Purify Skills, which no public page introduces, and leaves "N hexes" undefined
 - pass: 59 (commit a81abd5)
 - viewport: desktop
@@ -82,6 +73,16 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /decisions — decided row 72 leads with "Playtest build:", a repo file path and an "enemy attack phase" no page names (addressed at (this commit))
+- pass: 59 (commit a81abd5)
+- viewport: desktop
+- category: voice
+- observation: Row 72 is decided and now in the written rules, but it opens as a playtest note, sends the visitor to a repo file, and names a phase that does not exist on any page.
+- evidence: "Playtest build: each Engage card option starts an engagement from anywhere; ... no enemy attack phase; a siege step at the end of Combat. Readings for the open points: docs/design/combat-v3.md. Now in the written rules: Combat is engagements (7.7-7.13)."
+- suggested fix: Lead row 72 with the "Now in the written rules" sentence; drop "Playtest build", the docs/design/combat-v3.md path and "no enemy attack phase".
+- source: web-fetch
+- issue: #510
 
 ### [x] [LOW] /decisions — decided row 55 opens with the old materials-only knockout loss, and only its last line adds currency (addressed at (this commit))
 - pass: 59 (commit a81abd5)
