@@ -59,11 +59,22 @@ describe('DecisionsPage', () => {
   it('shows each proposal with its measured effect and a Try button (phase 39)', () => {
     const { container } = render(<DecisionsPage />)
     const row63 = container.querySelector('[data-question="63"] [data-proposal]')
-    expect(row63?.textContent).toContain('Proposal: Forced reveal.')
     expect(row63?.textContent).toContain('Measured with Engagements Combat')
     expect(row63?.textContent).toContain('Recommendation from the bot batches')
     expect(row63?.querySelector('button')?.textContent).toBe('Try this on the Play page')
     expect(container.querySelectorAll('[data-proposal]').length).toBe(6)
+  })
+
+  it('states each proposal once: its reading says "Proposed:" and the block does not restate it (critique pass 59)', () => {
+    const rows = parseQuestions(questionsMd)
+    const { container } = render(<DecisionsPage />)
+    for (const proposal of defaultProposals) {
+      const reading = rows.find((r) => r.number === proposal.row)?.reading ?? ''
+      expect(reading, `row ${proposal.row}`).toContain('Proposed:')
+      const block = container.querySelector(`[data-proposal="${proposal.id}"]`)
+      expect(block?.textContent, `row ${proposal.row}`).not.toContain('Proposal:')
+      expect(block?.textContent, `row ${proposal.row}`).not.toContain(proposal.about)
+    }
   })
 
   it('names pages, not URL paths, on its buttons (audit pass 264)', () => {

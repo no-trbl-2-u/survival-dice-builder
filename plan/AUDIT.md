@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-25 (pass 449, cloud tick)
+
+Critique pass 59 (63ebef5) filed 6 rows. No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 16 commits and under 48 hours ago. The top row is pass 59's MED: every reading with a proposal block on /decisions states its proposal twice, once in the reading's "Proposed:" line and again as "Proposal: <label>. <about>" in the block (impact 6, ease 9: 5.4, x1.5 for the external-critique MED bias: 8.1). All 6 proposal rows (63, 64, 66, 67, 68, 70) carry a "Proposed:" line, so the block drops its lead-in and keeps the measured effect, the recommendation and the Try button; the `about` text stays on /config. A DecisionsPage test now fails when a proposal row lacks "Proposed:" or its block restates the proposal. Next in line: pass 59's reading 66 heading (MED).
+
+## Top 5 findings (scored)
+
+### [x] [8.1] external-critique: /decisions states each proposal twice, as "Proposed:" and "Proposal:"
+- category: external-critique
+- impact: 6
+- ease: 9
+- next: drop the "Proposal: <label>. <about>" paragraph from ProposalTry
+- issue: #506
+- fixed: (this commit)
+
+### [ ] [8.1] external-critique: /decisions reading 66 says players do not move in Combat
+- category: external-critique
+- impact: 6
+- ease: 9
+- next: rewrite the reading 66 heading in OPEN-QUESTIONS.md for Engagements Combat; regenerate docs/DECISIONS.md
+
 # Site audit — 2026-11-25 (pass 448, cloud tick)
 
 Pass 447 pinned that a defense hit for 0 damage is unchanged (7d18190). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 14 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `progression/upgrades.ts` kills 8 of 9 mutations (the materials boundary, the cost floor, the tier step, the Build-level reach, both health adds, the track list and the Shop refill). The survivor is the `baseHealth` field of the `upgradeBought` event: reporting the health from before the upgrade leaves all 1133 unit tests green, and the /play game log prints that number (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new progression test buys Shop I on a base at 12 of 20 and expects the event to say 17; the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 59 once its gate opens.

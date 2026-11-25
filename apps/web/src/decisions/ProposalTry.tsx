@@ -5,9 +5,10 @@ import { useClient } from '../useClient.ts'
 import styles from './DecisionsPage.module.css'
 
 /**
- * A reading's proposal on /decisions: what it does, its measured effect under engagements, the
- * recommendation, and "Try this on the Play page", which sets it in this browser's config (the other
- * changes stay) and opens /play. An option that acts only under exchanges has no button.
+ * A reading's proposal on /decisions: its measured effect under engagements, the recommendation,
+ * and "Try this on the Play page", which sets it in this browser's config (the other changes stay)
+ * and opens /play. An option that acts only under exchanges has no button. The reading's own
+ * "Proposed:" line says what the proposal does, so the block does not restate it (critique pass 59).
  */
 export function ProposalTry({ proposal }: Readonly<{ proposal: Proposal }>) {
   const [error, setError] = useState<string | null>(null)
@@ -25,9 +26,6 @@ export function ProposalTry({ proposal }: Readonly<{ proposal: Proposal }>) {
   }
   return (
     <div className={styles.proposal} data-proposal={proposal.id}>
-      <p>
-        <strong>Proposal: {proposal.label}.</strong> {proposal.about}
-      </p>
       <p className={styles.muted}>{measuredText(proposal)}</p>
       <p>{adviceText(proposal)}</p>
       {proposal.measured ? (

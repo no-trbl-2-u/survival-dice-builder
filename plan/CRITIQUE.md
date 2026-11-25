@@ -18,15 +18,6 @@
 - suggested fix: Rewrite the reading 66 heading for Engagements Combat ("A tile revealed in Prepare spawns at that same round's Combat.") and drop "players do not move in Combat" and "every exchange".
 - source: web-fetch
 
-### [MED] /decisions — readings with a "Try this" block state their proposal twice, as "Proposed:" and again as "Proposal:"
-- pass: 59 (commit a81abd5)
-- viewport: desktop
-- category: voice
-- observation: Each reading that has a ProposalTry block (63, 66 and others, 4 "Proposal:" lines on the page) gives the proposed reading once in bold "Proposed:" and again in bold "Proposal:" after the Setting line. The Done row for readings 63 and 64 covered this; the duplication is back, and it is generated for every such reading.
-- evidence: Reading 66: "Proposed: new tiles wait one round. A tile's nodes first spawn at the Combat of the round after its reveal;" then "Proposal: New tiles wait a round. The nodes of a new tile first spawn at the Combat of the next round,". Reading 63: "Proposed: forced reveal. At round end, if no tile was revealed in the last N rounds..." then "Proposal: Forced reveal. When no tile was revealed for a while...". Source: `apps/web/src/decisions/ProposalTry.tsx:29`.
-- suggested fix: Keep one statement per proposed reading: drop the "Proposal: <label>." lead-in from ProposalTry (or its `about` sentence) where the row already has a "Proposed:" line.
-- source: web-fetch
-
 ### [LOW] /decisions — decided row 55 opens with the old materials-only knockout loss, and only its last line adds currency
 - pass: 59 (commit a81abd5)
 - viewport: desktop
@@ -118,6 +109,18 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — readings with a "Try this" block state their proposal twice, as "Proposed:" and again as "Proposal:" (addressed at (this commit))
+- pass: 59 (commit a81abd5)
+- viewport: desktop
+- category: voice
+- observation: Each reading that has a ProposalTry block (63, 66 and others, 4 "Proposal:" lines on the page) gives the proposed reading once in bold "Proposed:" and again in bold "Proposal:" after the Setting line. The Done row for readings 63 and 64 covered this; the duplication is back, and it is generated for every such reading.
+- evidence: Reading 66: "Proposed: new tiles wait one round. A tile's nodes first spawn at the Combat of the round after its reveal;" then "Proposal: New tiles wait a round. The nodes of a new tile first spawn at the Combat of the next round,". Reading 63: "Proposed: forced reveal. At round end, if no tile was revealed in the last N rounds..." then "Proposal: Forced reveal. When no tile was revealed for a while...". Source: `apps/web/src/decisions/ProposalTry.tsx:29`.
+- suggested fix: Keep one statement per proposed reading: drop the "Proposal: <label>." lead-in from ProposalTry (or its `about` sentence) where the row already has a "Proposed:" line.
+- source: web-fetch
+- issue: #506
+- resolution: ProposalTry drops its "Proposal: <label>. <about>" paragraph; each of the 6 proposal rows already says what it proposes in its "Proposed:" line, so the block now gives only the measured effect, the recommendation and the Try button. The `about` text stays on /config. A DecisionsPage test now fails when a proposal row lacks "Proposed:" or its block says "Proposal:" or repeats the `about` text.
+
 
 ### [x] [LOW] /config — the Knockout help says "the next round start"; the rule line says "the start of the next round"
 - pass: 58 (commit 7821593)
