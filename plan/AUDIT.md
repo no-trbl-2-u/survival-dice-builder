@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-25 (pass 447, cloud tick)
+
+Pass 446 pinned that an enemy on a live node blocks Gather (596f5b8). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 13 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. Mutation probes of `progression/milestones.ts` (7 mutations), `progression/levels.ts` (4), `progression/supplies.ts` (4) and `skills/canFire.ts` (2) find no survivors. A probe of `damageDefense` in `build/defenses.ts` kills 3 of 4 mutations; the survivor is the 0-damage guard: deleting `amount <= 0` leaves all 1132 unit tests green (impact 2, ease 9: 1.8; below 3.0, but expand's window is shut). A new enemies test hits a Barricade for 0 damage and expects the same state and no events; the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 59 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [1.8] tests: `damageDefense` with 0 damage is unpinned
+- category: tests
+- impact: 2
+- ease: 9
+- next: hit a Barricade for 0 damage; expect the same state and no events
+- issue: #504
+- fixed: (this commit)
+
 # Site audit — 2026-11-24 (pass 446, cloud tick)
 
 Pass 445 made the 12.1 Build-level test offer a defense (5ad24ae). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 12 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `gather/gather.ts` finds that Spec v2 6.9 ("you cannot gather on a hex that has an enemy") is unpinned on a live node: the only 6.9 Gather test is the row 67 experiment, which stands the player off any node, so deleting `!blocked &&` from `allowed`, or making the event's `spent` read `onNode`, leaves every engine and /play test green (impact 4, ease 9: 3.6). A new world test puts a grunt on the live node at (1,2) and expects 0 materials, no spent node, and a `gathered` event with amount 0 and spent false; both mutations fail it. The other 3 gather mutations were already killed. Next in line: pass 445's runner-up (`damageDefense` with 0 damage, 1.8); the /decisions rows wait for /oversight; critique pass 59 once its gate opens.

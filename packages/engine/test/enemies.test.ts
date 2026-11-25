@@ -4,6 +4,7 @@ import { exchangeAttackers } from '../src/combat/resolve.ts'
 import { currentTarget, moveEnemies } from '../src/enemies/movement.ts'
 import { spawnAtNodes, spawnNodes } from '../src/enemies/spawning.ts'
 import { siege } from '../src/combat/engage.ts'
+import { damageDefense } from '../src/build/defenses.ts'
 import { towerAttacks } from '../src/enemies/structures.ts'
 import { rankTargets } from '../src/enemies/targets.ts'
 import { hexKey, type Axial } from '../src/hex.ts'
@@ -379,6 +380,15 @@ describe('Towers and structures (7.6, 7.11-7.12, 12.3, 14.1)', () => {
     const [after, events] = siege(s)
     expect(after.defenses).toEqual([])
     expect(events.map((e) => e.type)).toContain('defenseRemoved')
+  })
+
+  it('7.11 a defense hit for 0 damage is unchanged and nothing is logged', () => {
+    const s = board(corridor(-6, 6), { q: -6, r: 0 }, [], {
+      defenses: [defense('d1', 'barricade', 2, 0, 4)],
+    })
+    const [after, events] = damageDefense(s, 'd1', 0)
+    expect(after).toBe(s)
+    expect(events).toEqual([])
   })
 
   it('14.1 the run ends when the base reaches 0 health', () => {
