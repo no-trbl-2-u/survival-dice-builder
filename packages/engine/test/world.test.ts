@@ -274,6 +274,16 @@ describe('exploring off the map edge (10.1, core loop v2)', () => {
     expect(moves(atEdge([]))).not.toContain('2,0')
     expect(moves(atEdge(['stony-fields'], 1))).toContain('2,0')
   })
+
+  it('6.9 row 76 a step off the edge that costs too much is not named as out of reach', () => {
+    const base = atEdge(['stony-fields'], 1)
+    const s = {
+      ...base,
+      config: { ...base.config, tiles: { ...base.config.tiles, revealMoveCost: 2 } },
+    }
+    expect(moves(s)).not.toContain('2,0')
+    expect(stepsOutOfReach(s, 1, false)).toEqual([])
+  })
 })
 
 describe('figures on the Base tile (3.8, row 16)', () => {

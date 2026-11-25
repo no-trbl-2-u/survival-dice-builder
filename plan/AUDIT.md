@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-25 (pass 455, cloud tick)
+
+Pass 454 named the heal Skills in reading 12 (bb122a7). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 3 commits ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `movement/move.ts` kills 9 of 11 mutations (the reveal cost boundary, the empty tile deck, the figures-per-hex limit, the enemy hex, the move cost boundary, the Blink bypass, both placed-player filters and the surcharge). One survivor is equivalent: dropping `p.id !== playerId` in `blockedByFigure` changes nothing, because the moving player never stands on a neighbour hex and a knocked-out player being put back on the Base tile is not counted among the placed figures. The other is real: dropping `!m.reveal` in `stepsOutOfReach` leaves all 1135 unit tests green, and the /play banner would then blame an enemy surcharge for a step off the map edge (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new world test sets the reveal cost to 2, leaves the figure on the map edge with 1 movement and no enemies, and expects no step named out of reach; the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 60 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: nothing pins that reveal steps are left out of `stepsOutOfReach`
+- category: tests
+- impact: 3
+- ease: 9
+- next: reveal cost 2, figure on the map edge with 1 movement, no enemies; expect no step named out of reach
+- issue: #512
+- fixed: (this commit)
+
 # Site audit — 2026-11-25 (pass 454, cloud tick)
 
 Pass 453 led row 72 with the written Combat rule (7893f0b). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 7 commits ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 2 commits ago. The open MED rows from passes 20 and 21 edit `[needs-user-call]` items and wait for /oversight. The top row is pass 59's reading 12 on /decisions: the heading listed Renewal and Purify with no word that they are Skills, and the reading said "within N hexes" with no N (impact 4, ease 9: 3.6). The row 12 question in OPEN-QUESTIONS.md now names "the Mend, Renewal and Purify Skills and the Rest card", and the reading says "within a set number of hexes" (the distance is not assigned yet); docs/DECISIONS.md is regenerated and a decisions test pins the new shape. Next in line: only the pass 20, 21, 25 and 46 rows that edit `[needs-user-call]` items and wait for /oversight.
