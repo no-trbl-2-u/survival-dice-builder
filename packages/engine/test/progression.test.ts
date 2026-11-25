@@ -133,6 +133,20 @@ describe('base upgrades (11.1-11.4)', () => {
     expect(events.filter((e) => e.type === 'offerAdded').every((e) => e.level === '1')).toBe(true)
   })
 
+  it('11.2, 11.3 the upgradeBought event gives the base health after the upgrade', () => {
+    const hurt = { ...building(4), base: { health: 12, maxHealth: 20 } }
+    const { state, events } = applyAction(hurt, { type: 'buyUpgrade', upgrade: 'shop-1' })
+    expect(state.base).toEqual({ health: 17, maxHealth: 25 })
+    expect(events.find((e) => e.type === 'upgradeBought')).toEqual({
+      type: 'upgradeBought',
+      rule: '11.2',
+      player: hurt.players[0]!.id,
+      upgrade: 'shop-1',
+      cost: 4,
+      baseHealth: 17,
+    })
+  })
+
   it('11.4 tier II is offered only after tier I (buildLevels "any")', () => {
     const any = { ...config, rulings: { ...config.rulings, buildLevels: 'any' as const } }
     const s = { ...building(10), upgrades: ['shop-1'], config: any }

@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-25 (pass 448, cloud tick)
+
+Pass 447 pinned that a defense hit for 0 damage is unchanged (7d18190). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 14 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `progression/upgrades.ts` kills 8 of 9 mutations (the materials boundary, the cost floor, the tier step, the Build-level reach, both health adds, the track list and the Shop refill). The survivor is the `baseHealth` field of the `upgradeBought` event: reporting the health from before the upgrade leaves all 1133 unit tests green, and the /play game log prints that number (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new progression test buys Shop I on a base at 12 of 20 and expects the event to say 17; the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 59 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: the `upgradeBought` event's base health is unpinned
+- category: tests
+- impact: 3
+- ease: 9
+- next: buy Shop I on a base at 12 of 20; expect the event to say base health 17
+- issue: #505
+- fixed: (this commit)
+
 # Site audit — 2026-11-25 (pass 447, cloud tick)
 
 Pass 446 pinned that an enemy on a live node blocks Gather (596f5b8). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 58 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 13 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. Mutation probes of `progression/milestones.ts` (7 mutations), `progression/levels.ts` (4), `progression/supplies.ts` (4) and `skills/canFire.ts` (2) find no survivors. A probe of `damageDefense` in `build/defenses.ts` kills 3 of 4 mutations; the survivor is the 0-damage guard: deleting `amount <= 0` leaves all 1132 unit tests green (impact 2, ease 9: 1.8; below 3.0, but expand's window is shut). A new enemies test hits a Barricade for 0 damage and expects the same state and no events; the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 59 once its gate opens.
