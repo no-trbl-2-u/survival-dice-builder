@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-24 at commit 7821593
-> Pass count: 58
+> Last pass: 2026-11-25 at commit a81abd5
+> Pass count: 59
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /decisions — reading 66 says players do not move in Combat, but Combat uses Engagements by default and Move works there
+- pass: 59 (commit a81abd5)
+- viewport: desktop
+- category: comprehension
+- observation: The reading 66 heading describes the Exchanges Combat as today's game. The page intro says Engagements is the default, and the home page says Move gives 2 movement in Combat, so the heading states a false rule.
+- evidence: /decisions: "66. A tile revealed in Prepare spawns at that same round's Combat, and players do not move in Combat. The explorer ends Prepare on a fresh tile and is pinned next to new spawns for every exchange." Intro: "Combat uses Engagements by default." Home: "In Combat, Move gives 2 movement or starts an engagement".
+- suggested fix: Rewrite the reading 66 heading for Engagements Combat ("A tile revealed in Prepare spawns at that same round's Combat.") and drop "players do not move in Combat" and "every exchange".
+- source: web-fetch
+
+### [MED] /decisions — readings with a "Try this" block state their proposal twice, as "Proposed:" and again as "Proposal:"
+- pass: 59 (commit a81abd5)
+- viewport: desktop
+- category: voice
+- observation: Each reading that has a ProposalTry block (63, 66 and others, 4 "Proposal:" lines on the page) gives the proposed reading once in bold "Proposed:" and again in bold "Proposal:" after the Setting line. The Done row for readings 63 and 64 covered this; the duplication is back, and it is generated for every such reading.
+- evidence: Reading 66: "Proposed: new tiles wait one round. A tile's nodes first spawn at the Combat of the round after its reveal;" then "Proposal: New tiles wait a round. The nodes of a new tile first spawn at the Combat of the next round,". Reading 63: "Proposed: forced reveal. At round end, if no tile was revealed in the last N rounds..." then "Proposal: Forced reveal. When no tile was revealed for a while...". Source: `apps/web/src/decisions/ProposalTry.tsx:29`.
+- suggested fix: Keep one statement per proposed reading: drop the "Proposal: <label>." lead-in from ProposalTry (or its `about` sentence) where the row already has a "Proposed:" line.
+- source: web-fetch
+
+### [LOW] /decisions — decided row 55 opens with the old materials-only knockout loss, and only its last line adds currency
+- pass: 59 (commit a81abd5)
+- viewport: desktop
+- category: comprehension
+- observation: The row body first says only materials are lost, then its last line says the written rule takes currency too. The home page says both are lost. The heading also keeps "the next round start", wording a Done row fixed on /config.
+- evidence: "55. A knocked-out player (0 health) returns to a free base hex at the next round start." / "Half health (rounded up), and the materials they carried are lost." / "Now in the written rules: a knocked-out player loses all their materials and all their currency (14.2)." Home: "They lose all their materials and currency."
+- suggested fix: Open row 55 with the current rule (materials and currency lost, return at the start of the next round) and remove the materials-only sentence.
+- source: web-fetch
+
+### [LOW] /decisions — decided row 72 leads with "Playtest build:", a repo file path and an "enemy attack phase" no page names
+- pass: 59 (commit a81abd5)
+- viewport: desktop
+- category: voice
+- observation: Row 72 is decided and now in the written rules, but it opens as a playtest note, sends the visitor to a repo file, and names a phase that does not exist on any page.
+- evidence: "Playtest build: each Engage card option starts an engagement from anywhere; ... no enemy attack phase; a siege step at the end of Combat. Readings for the open points: docs/design/combat-v3.md. Now in the written rules: Combat is engagements (7.7-7.13)."
+- suggested fix: Lead row 72 with the "Now in the written rules" sentence; drop "Playtest build", the docs/design/combat-v3.md path and "no enemy attack phase".
+- source: web-fetch
+
+### [LOW] /decisions — reading 12 names the Renewal and Purify Skills, which no public page introduces, and leaves "N hexes" undefined
+- pass: 59 (commit a81abd5)
+- viewport: desktop
+- category: comprehension
+- observation: The heading lists Renewal and Purify next to Mend and Rest with no word that they are Skills; the home page names only Strike, Shot, Mend and Guard. The body's "within N hexes" never says what N is.
+- evidence: "12. Heal targets in co-op (Mend, Rest, Renewal, Purify). (rule Table 3, 6.7)" / "each heal effect names its target: self, an ally within N hexes or an ally on the same tile."
+- suggested fix: Write "the Renewal and Purify Skills" and replace "within N hexes" with the configured distance or "within a set number of hexes".
+- source: web-fetch
+
+### [LOW] /tiles — the terrain legend says "no effect on moves"; every other line on the site counts movement
+- pass: 59 (commit a81abd5)
+- viewport: desktop
+- category: voice
+- observation: "Moves" can mean Move cards, steps or movement points. The /tiles lede, the home page and /config all say "movement".
+- evidence: /tiles legend: "Plains (no effect on moves)", "Forest (no effect on moves)" (4 lines). Lede: "the step costs 1 movement." Home: "Move gives 2 movement (1 per step)".
+- suggested fix: Change the four legend lines to "(no effect on movement)".
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
