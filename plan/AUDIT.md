@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-25 (pass 452, cloud tick)
+
+Pass 451 fixed the /tiles terrain legend (84a6bee). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 4 commits ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 19 commits and under 48 hours ago. The open MED rows from passes 20 and 21 edit `[needs-user-call]` items and wait for /oversight. The top row is pass 59's row 55 on /decisions: it opened with the older materials-only knockout loss and the heading said "the next round start" (impact 4, ease 9: 3.6). Row 55 in OPEN-QUESTIONS.md now opens with the written rule (materials and currency lost at the knockout, 14.2; half maximum health, rounded up, at the start of the next round, 14.4), following rows 30 and 50; docs/DECISIONS.md is regenerated and a decisions test pins the new shape. Next in line: pass 59's row 72 and reading 12 rows on /decisions.
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: /decisions row 55 opens with the materials-only knockout loss
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: lead row 55 in OPEN-QUESTIONS.md with the current rule; regenerate docs/DECISIONS.md
+- issue: #509
+- fixed: (this commit)
+
+### [ ] [3.6] external-critique: /decisions row 72 leads with "Playtest build:" and a repo path
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: lead row 72 with the written-rules sentence; drop "Playtest build", the docs path and "no enemy attack phase"
+
 # Site audit — 2026-11-25 (pass 451, cloud tick)
 
 Pass 450 rewrote the reading 66 question (e6dc71a). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 17 commits and under 48 hours ago. The open MED rows from passes 20 and 21 edit `[needs-user-call]` items and wait for /oversight. Of pass 59's LOW rows, the /tiles legend is the cheapest: the four terrain lines say "no effect on moves" while the lede, home and /config say "movement" (impact 4, ease 9: 3.6). The legend now says "(no effect on movement)" and the TileView test pins it. Next in line: pass 59's row 55, row 72 and reading 12 rows on /decisions.

@@ -292,6 +292,11 @@ describe('decisions', () => {
     ))
       expect(splitReading(r.reading).specV2, `row ${r.number}`).not.toBeNull()
     expect(note(55)).toContain('currency')
+    // Row 55 opens with the written rule, not the older materials-only loss (critique pass 59).
+    const row55 = rows.find((r) => r.number === 55)!
+    expect(splitReading(row55.reading).reading).toBe('')
+    expect(row55.reading).not.toMatch(/materials they carried are lost/)
+    expect(row55.question).not.toContain('next round start')
     // Row 7 gives only the Spec v2 siege reading, not the v1 one (critique pass 17).
     expect(rows.find((r) => r.number === 7)?.reading).not.toMatch(/v1 reading|elite 6 dice/)
     expect(rows.find((r) => r.number === 75)?.reading).not.toContain('stays an option')

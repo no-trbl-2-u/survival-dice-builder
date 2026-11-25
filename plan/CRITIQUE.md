@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — decided row 55 opens with the old materials-only knockout loss, and only its last line adds currency
-- pass: 59 (commit a81abd5)
-- viewport: desktop
-- category: comprehension
-- observation: The row body first says only materials are lost, then its last line says the written rule takes currency too. The home page says both are lost. The heading also keeps "the next round start", wording a Done row fixed on /config.
-- evidence: "55. A knocked-out player (0 health) returns to a free base hex at the next round start." / "Half health (rounded up), and the materials they carried are lost." / "Now in the written rules: a knocked-out player loses all their materials and all their currency (14.2)." Home: "They lose all their materials and currency."
-- suggested fix: Open row 55 with the current rule (materials and currency lost, return at the start of the next round) and remove the materials-only sentence.
-- source: web-fetch
-
 ### [LOW] /decisions — decided row 72 leads with "Playtest build:", a repo file path and an "enemy attack phase" no page names
 - pass: 59 (commit a81abd5)
 - viewport: desktop
@@ -91,6 +82,16 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [LOW] /decisions — decided row 55 opens with the old materials-only knockout loss, and only its last line adds currency (addressed at (this commit))
+- pass: 59 (commit a81abd5)
+- viewport: desktop
+- category: comprehension
+- observation: The row body first says only materials are lost, then its last line says the written rule takes currency too. The home page says both are lost. The heading also keeps "the next round start", wording a Done row fixed on /config.
+- evidence: "55. A knocked-out player (0 health) returns to a free base hex at the next round start." / "Half health (rounded up), and the materials they carried are lost." / "Now in the written rules: a knocked-out player loses all their materials and all their currency (14.2)." Home: "They lose all their materials and currency."
+- suggested fix: Open row 55 with the current rule (materials and currency lost, return at the start of the next round) and remove the materials-only sentence.
+- source: web-fetch
+- issue: #509
 
 ### [x] [LOW] /tiles — the terrain legend says "no effect on moves"; every other line on the site counts movement (addressed at (this commit))
 - pass: 59 (commit a81abd5)
