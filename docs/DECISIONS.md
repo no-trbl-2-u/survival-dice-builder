@@ -78,7 +78,7 @@ Combat uses Engagements by default. A reading marked "Exchanges only" changes no
 - Reading: **Proposed: spawn ramp**. Each node spawns 1 more enemy per Combat every N rounds, with the usual spill-over and miniature limit.
 - Setting: `spawn.rampEvery` = `empty`
 
-### 66. A tile revealed in Prepare spawns at that same round's Combat, and players do not move in Combat. The explorer ends Prepare on a fresh tile and is pinned next to new spawns for every exchange. Is that the intended cost of exploring? (rule Core loop v2)
+### 66. A tile revealed in Prepare spawns at that same round's Combat. The explorer ends Prepare on that fresh tile and starts Combat next to the new spawns. Is that the intended cost of exploring? (rule Core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
 - Reading: **Proposed: new tiles wait one round**. A tile's nodes first spawn at the Combat of the round after its reveal; /play names the node "spawns from round N".

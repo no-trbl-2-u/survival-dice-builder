@@ -5,6 +5,26 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-25 (pass 450, cloud tick)
+
+Pass 449 stated each /decisions proposal once (9a502e1). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 17 commits and under 48 hours ago. The top row is pass 59's MED: the reading 66 question on /decisions says players do not move in Combat and that the explorer is pinned for every exchange, which is the Exchanges Combat; Combat is Engagements by default and Move works there (impact 6, ease 9: 5.4, x1.5 for the external-critique MED bias: 8.1). The question in OPEN-QUESTIONS.md now says only that a tile revealed in Prepare spawns at that round's Combat and the explorer starts Combat next to the new spawns; docs/DECISIONS.md is regenerated. Next in line: pass 59's LOW rows (row 55, row 72, reading 12, the /tiles legend).
+
+## Top 5 findings (scored)
+
+### [x] [8.1] external-critique: /decisions reading 66 says players do not move in Combat
+- category: external-critique
+- impact: 6
+- ease: 9
+- next: rewrite the reading 66 question in OPEN-QUESTIONS.md for Engagements Combat; regenerate docs/DECISIONS.md
+- issue: #507
+- fixed: (this commit)
+
+### [ ] [3.6] external-critique: /tiles legend says "no effect on moves"
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: change the four legend lines to "(no effect on movement)"
+
 # Site audit — 2026-11-25 (pass 449, cloud tick)
 
 Critique pass 59 (63ebef5) filed 6 rows. No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand pass 38 ran 16 commits and under 48 hours ago. The top row is pass 59's MED: every reading with a proposal block on /decisions states its proposal twice, once in the reading's "Proposed:" line and again as "Proposal: <label>. <about>" in the block (impact 6, ease 9: 5.4, x1.5 for the external-critique MED bias: 8.1). All 6 proposal rows (63, 64, 66, 67, 68, 70) carry a "Proposed:" line, so the block drops its lead-in and keeps the measured effect, the recommendation and the Try button; the `about` text stays on /config. A DecisionsPage test now fails when a proposal row lacks "Proposed:" or its block restates the proposal. Next in line: pass 59's reading 66 heading (MED).

@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /decisions — reading 66 says players do not move in Combat, but Combat uses Engagements by default and Move works there
-- pass: 59 (commit a81abd5)
-- viewport: desktop
-- category: comprehension
-- observation: The reading 66 heading describes the Exchanges Combat as today's game. The page intro says Engagements is the default, and the home page says Move gives 2 movement in Combat, so the heading states a false rule.
-- evidence: /decisions: "66. A tile revealed in Prepare spawns at that same round's Combat, and players do not move in Combat. The explorer ends Prepare on a fresh tile and is pinned next to new spawns for every exchange." Intro: "Combat uses Engagements by default." Home: "In Combat, Move gives 2 movement or starts an engagement".
-- suggested fix: Rewrite the reading 66 heading for Engagements Combat ("A tile revealed in Prepare spawns at that same round's Combat.") and drop "players do not move in Combat" and "every exchange".
-- source: web-fetch
-
 ### [LOW] /decisions — decided row 55 opens with the old materials-only knockout loss, and only its last line adds currency
 - pass: 59 (commit a81abd5)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+
+### [x] [MED] /decisions — reading 66 says players do not move in Combat, but Combat uses Engagements by default and Move works there (addressed at (this commit))
+- pass: 59 (commit a81abd5)
+- viewport: desktop
+- category: comprehension
+- observation: The reading 66 heading describes the Exchanges Combat as today's game. The page intro says Engagements is the default, and the home page says Move gives 2 movement in Combat, so the heading states a false rule.
+- evidence: /decisions: "66. A tile revealed in Prepare spawns at that same round's Combat, and players do not move in Combat. The explorer ends Prepare on a fresh tile and is pinned next to new spawns for every exchange." Intro: "Combat uses Engagements by default." Home: "In Combat, Move gives 2 movement or starts an engagement".
+- suggested fix: Rewrite the reading 66 heading for Engagements Combat ("A tile revealed in Prepare spawns at that same round's Combat.") and drop "players do not move in Combat" and "every exchange".
+- source: web-fetch
+- issue: #507
+- resolution: The reading 66 question in OPEN-QUESTIONS.md now reads "A tile revealed in Prepare spawns at that same round's Combat. The explorer ends Prepare on that fresh tile and starts Combat next to the new spawns." It no longer says players do not move in Combat or names exchanges; docs/DECISIONS.md is regenerated.
 
 ### [x] [MED] /decisions — readings with a "Try this" block state their proposal twice, as "Proposed:" and again as "Proposal:" (addressed at (this commit))
 - pass: 59 (commit a81abd5)
