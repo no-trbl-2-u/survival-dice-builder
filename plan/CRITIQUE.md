@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /tiles — the reveal rule does not say what happens when the step lands on Lake or Mountain
-- pass: 60 (commit ae79ca3)
-- viewport: desktop
-- category: comprehension
-- observation: The legend marks Lake and Mountain impassable and several tiles carry one on an edge hex, but the reveal line only gives the cost. The engine places the tile, pays the step and keeps the figure in place (row 61), and no public page says so.
-- evidence: /tiles: "Step off the edge of the map to reveal a new tile; the step costs 1 movement." "Lake (impassable)". Row 61: "The tile is placed and the step's cost is paid; the figure stays where it was".
-- suggested fix: Add to the reveal line: "If the hex you step onto is Lake or Mountain, the tile is still placed and the step still paid, but you stay where you were."
-- source: web-fetch
-
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
 - viewport: desktop
@@ -73,6 +64,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] /tiles — the reveal rule does not say what happens when the step lands on Lake or Mountain
+- pass: 60 (commit ae79ca3)
+- viewport: desktop
+- category: comprehension
+- observation: The legend marks Lake and Mountain impassable and several tiles carry one on an edge hex, but the reveal line only gives the cost. The engine places the tile, pays the step and keeps the figure in place (row 61), and no public page says so.
+- evidence: /tiles: "Step off the edge of the map to reveal a new tile; the step costs 1 movement." "Lake (impassable)". Row 61: "The tile is placed and the step's cost is paid; the figure stays where it was".
+- suggested fix: Add to the reveal line: "If the hex you step onto is Lake or Mountain, the tile is still placed and the step still paid, but you stay where you were."
+- source: web-fetch
+- issue: #520
+- fixed: (this commit) — `revealText` now ends "If the hex you step onto is Lake or Mountain, the tile is still placed and the step still paid, but you stay where you were." on /tiles, / and the playtest protocol; a ruleText test pins the sentence.
+
 ### [x] [LOW] /config — the Forced reveal proposal and help place the tile "in the open slot nearest the base"; no page defines a slot
 - pass: 60 (commit ae79ca3)
 - viewport: desktop

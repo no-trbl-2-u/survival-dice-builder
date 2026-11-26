@@ -282,6 +282,12 @@ describe('rule text from config', () => {
     expect(revealText(two)).toMatch(/costs 2 movement\./)
   })
 
+  it('reveal: a step onto Lake or Mountain places the tile, pays the step and stays put (row 61)', () => {
+    expect(revealText(base)).toMatch(
+      /If the hex you step onto is Lake or Mountain, the tile is still placed and the step still paid, but you stay where you were\.$/,
+    )
+  })
+
   it('tile deck: the countryside and core counts come from the tile set (2.2, 4.3)', () => {
     expect(tileDeckText(defaultContent)).toBe(
       'The map starts with the Base tile alone. The tile deck is the 3 Countryside tiles, shuffled, on top of the 5 Core tiles, shuffled. These numbers must match the tile set on the Tile sheet, or the config cannot be saved.',

@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-26 (pass 463, cloud tick)
+
+Pass 462 placed the forced tile in the free tile space nearest the base (56d238e). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 6 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 12 commits and under 48 hours ago. The last pass 60 LOW row leads the queue: the /tiles reveal line gives the step cost but not what happens when the hex under the step is Lake or Mountain, which the legend marks impassable (impact 3, ease 10: 3.0). The engine places the tile, pays the step and keeps the figure in place (row 61, `moveTo`), so `revealText` now ends "If the hex you step onto is Lake or Mountain, the tile is still placed and the step still paid, but you stay where you were." The line reaches /tiles, / and the regenerated playtest protocol. Next in line: only the pass 20, 21, 25 and 46 rows that edit `[needs-user-call]` items and wait for /oversight.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] external-critique: /tiles reveal line does not say what a step onto Lake or Mountain does
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: end `revealText` with the row 61 outcome
+- issue: #520
+- fixed: (this commit)
+
 # Site audit — 2026-11-26 (pass 462, cloud tick)
 
 Pass 461 ended the Exchanges note with the siege step (5f73b9a). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 5 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 11 commits and under 48 hours ago. The 2 remaining pass 60 LOW rows lead the queue; the cheapest is the Forced reveal "open slot" (impact 3, ease 10: 3.0): the proposal on /decisions, its /config help and `forcedRevealText` place the tile "in the open slot nearest the base", a term no page defines. All three now say the top tile "is placed next to the map, in the free tile space nearest the base". Next in line: the Lake or Mountain reveal row.

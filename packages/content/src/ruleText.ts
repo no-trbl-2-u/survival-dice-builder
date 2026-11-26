@@ -40,12 +40,13 @@ export function knockoutText(config: GameConfig): string {
 }
 
 /**
- * How the map grows: stepping off its edge.
+ * How the map grows: stepping off its edge. A step onto Lake or Mountain still places the tile and
+ * pays the step, but the figure stays where it was (`moveTo`, OPEN-QUESTIONS row 61).
  *
- * @rule core loop v2 (exploring), 10.1
+ * @rule core loop v2 (exploring), 10.1, 3.4, OPEN-QUESTIONS row 61
  */
 export function revealText(config: GameConfig): string {
-  return `Step off the edge of the map to reveal a new tile; the step costs ${config.tiles.revealMoveCost} movement.`
+  return `Step off the edge of the map to reveal a new tile; the step costs ${config.tiles.revealMoveCost} movement. If the hex you step onto is Lake or Mountain, the tile is still placed and the step still paid, but you stay where you were.`
 }
 
 /**
