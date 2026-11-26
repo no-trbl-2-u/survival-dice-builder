@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-26 (pass 461, cloud tick)
+
+Pass 460 opened the Combat step with the board order (38461f2). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 4 commits ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 10 commits and under 48 hours ago. The 3 remaining pass 60 LOW rows lead the queue; the cheapest is the Exchanges note (impact 3, ease 10: 3.0): the item on / ends "The base and its defenses take damage the same way." without saying which way. Both Combat models end with the same siege step (`advance` runs `siege` after the last exchange), so the note now ends "When the exchanges end, each enemy next to a Barricade, a Tower or the base hits it, as in the Combat step." Next in line: the 2 other pass 60 LOW rows (the Forced reveal "open slot" and the Lake or Mountain reveal).
+
+## Top 5 findings (scored)
+
+### [x] [3.0] external-critique: / Exchanges note ends with "the same way" instead of naming the siege
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: end the Exchanges item with the siege step
+- issue: #518
+- fixed: (this commit)
+
 # Site audit — 2026-11-26 (pass 460, cloud tick)
 
 Pass 459 said the Tower's builder picks between equally near enemies (fcbeb11). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 9 commits and under 48 hours ago. The 4 remaining pass 60 LOW rows lead the queue; the cheapest is the Combat step order (impact 3, ease 10: 3.0): the numbered Combat step on / opens with the player's Engage option, though `startCombat` first moves the enemies, spawns at the nodes and fires each Tower, and that order sits only in the board list further down. A new `combatOpenText` opens the step with "First the enemies move, then the spawn nodes spawn and each Tower shoots.", naming each defense that attacks from defenses.json. Next in line: the 3 other pass 60 LOW rows.

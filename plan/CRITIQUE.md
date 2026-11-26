@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Exchanges note says enemies "that target you" before targeting is explained, and ends "the same way"
-- pass: 60 (commit ae79ca3)
-- viewport: desktop
-- category: voice
-- observation: The playtest-only Exchanges note sits among the core Combat rules, uses targeting before the Enemies item defines it, and ends with "the same way" without saying which way.
-- evidence: "Then each enemy next to you that targets you rolls its enemy dice at you. The base and its defenses take damage the same way." (`apps/web/src/home/HomePage.tsx`, pinned in `HomePage.test.tsx`).
-- suggested fix: Replace "the same way" with the concrete step (for example "in the siege step when Combat ends"), or cut the note to one line that points to /config.
-- source: web-fetch
-
 ### [LOW] /config — the Forced reveal proposal and help place the tile "in the open slot nearest the base"; no page defines a slot
 - pass: 60 (commit ae79ca3)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] / — the Exchanges note says enemies "that target you" before targeting is explained, and ends "the same way"
+- pass: 60 (commit ae79ca3)
+- viewport: desktop
+- category: voice
+- observation: The playtest-only Exchanges note sits among the core Combat rules, uses targeting before the Enemies item defines it, and ends with "the same way" without saying which way.
+- evidence: "Then each enemy next to you that targets you rolls its enemy dice at you. The base and its defenses take damage the same way." (`apps/web/src/home/HomePage.tsx`, pinned in `HomePage.test.tsx`).
+- suggested fix: Replace "the same way" with the concrete step (for example "in the siege step when Combat ends"), or cut the note to one line that points to /config.
+- source: web-fetch
+- issue: #518
+- fixed: (this commit) — the Exchanges item on / now ends "When the exchanges end, each enemy next to a Barricade, a Tower or the base hits it, as in the Combat step.", the siege step `advance` runs after the last exchange.
+
 ### [x] [LOW] / — the Combat step opens with your Engage option; enemy moves, spawns and Tower shots come first but sit lower on the page
 - pass: 60 (commit ae79ca3)
 - viewport: desktop
