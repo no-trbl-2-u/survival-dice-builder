@@ -278,6 +278,17 @@ describe('Shop (6.8, 11.5, 13.1, 18.1)', () => {
     expect(legalActions(s)[0]!.type).not.toBe('buyCard')
   })
 
+  it('6.8 two offers of the same card give one buy action', () => {
+    const s = shopping(3)
+    const [a, b] = s.shopOffers
+    const twice = { ...s, shopOffers: [a!, a!, b!] }
+    const buys = legalActions(twice).filter((x) => x.type === 'buyCard')
+    expect(buys).toEqual([
+      { type: 'buyCard', card: a },
+      { type: 'buyCard', card: b },
+    ])
+  })
+
   it('6.8 not off the base, and not without enough currency', () => {
     expect(types(shopping(2)).has('buyCard')).toBe(false)
     expect(types(withPlayer(shopping(3), { hex: { q: 2, r: 0 } })).has('buyCard')).toBe(false)

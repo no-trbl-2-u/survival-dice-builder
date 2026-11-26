@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-26 (pass 465, cloud tick)
+
+Pass 464 pinned which cards `returnableStarters` counts and offers (d98eb71). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 14 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. Of the `legalBuys` survivors, the `shopTiming` "prepare-only" guard is left alone: that option lost rows 11, 43 and 52 and its prune waits in the rule 9 backlog candidate. The dedupe guard is real: supplies hold 2 copies of each card, so the Shop can show one card twice, and dropping `new Set` leaves all 342 engine tests green though the TSDoc says "Each offer once" (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new progression test offers a card twice beside a third and expects one buy action for each; the mutation fails it. Next in line: the `refillOffers` closed-Shop return and empty-card break, the setup, ended, pendingReturn and draft guards in `legalBuys` (likely equivalent through `legalActions`) and the `cardsBought` count.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: nothing pins that `legalBuys` offers a repeated card once
+- category: tests
+- impact: 3
+- ease: 9
+- next: offers [a, a, b]; expect one buyCard action for a and one for b
+- issue: #522
+- fixed: (this commit)
+
 # Site audit — 2026-11-26 (pass 464, cloud tick)
 
 Pass 463 said a reveal step onto Lake or Mountain places the tile and stays put (6463791). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 7 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 13 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `progression/shop.ts` (25 mutations) kills 12 in the engine suite and 2 more in the engine, bot and sim suites. Of the survivors, 3 sit in `returnableStarters`, which decides what replace-starter mode (18.1) lets a player return and when the minimum deck stops it: dropping the hand count, dropping the table count, and widening the starter filter to level 1 all stay green (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new progression test gives the player min - 2 starters and 1 bought card in the discard pile, 1 card in hand and 1 on the table, expects only the starters, and expects nothing once the table card is gone; all 3 mutations fail it. Next in line: the other shop survivors (the `refillOffers` closed-Shop return and empty-card break, the setup, ended, pendingReturn, draft and dedupe guards in `legalBuys`, the `cardsBought` count), checked for equivalence one at a time.
