@@ -1,13 +1,67 @@
 # Critique log
 
-> Last pass: 2026-11-25 at commit a81abd5
-> Pass count: 59
+> Last pass: 2026-11-26 at commit ae79ca3
+> Pass count: 60
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] / — "base upgrade" is never tied to Shop I and Training I, so the base health gain looks like a third purchase
+- pass: 60 (commit ae79ca3)
+- viewport: desktop
+- category: comprehension
+- observation: The home page says "buy base upgrades" in Prepare and "Each base upgrade adds 5 to its maximum health" under Defenses, but Shop I and Training I are only described as opening the Shop and the Training Ground. A visitor cannot tell that buying Shop I also raises base health; the engine adds base.healthPerUpgrade on every buyUpgrade (`packages/engine/src/progression/upgrades.ts`).
+- evidence: Prepare: "build Barricades and Towers, buy base upgrades and heal." Defenses: "Each base upgrade adds 5 to its maximum health and to its health." Shop: "buy Shop I (a Build card and 4 materials) to open the Shop".
+- suggested fix: Name the upgrades once: "The base upgrades are the Shop and Training tiers; each adds 5 to the base's maximum health and to its health."
+- source: web-fetch
+
+### [LOW] / — the Combat step opens with your Engage option; enemy moves, spawns and Tower shots come first but sit lower on the page
+- pass: 60 (commit ae79ca3)
+- viewport: desktop
+- category: comprehension
+- observation: Read in order, the numbered Combat step suggests Combat begins with the player's card. The move, spawn and Tower order is only under "On the board, every round" further down. Different from the pass rows that split the Combat item and moved board items out of Prepare.
+- evidence: Combat: "Play a card's Engage option (on Move and Gather) to start an engagement". Enemies: "At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 2 hexes". Defenses: "at each Combat, after the enemies move and spawn, it deals 2 damage".
+- suggested fix: Open the Combat step with one short sentence: "First the enemies move, the spawn nodes spawn and each Tower shoots."
+- source: web-fetch
+
+### [LOW] / — the Exchanges note says enemies "that target you" before targeting is explained, and ends "the same way"
+- pass: 60 (commit ae79ca3)
+- viewport: desktop
+- category: voice
+- observation: The playtest-only Exchanges note sits among the core Combat rules, uses targeting before the Enemies item defines it, and ends with "the same way" without saying which way.
+- evidence: "Then each enemy next to you that targets you rolls its enemy dice at you. The base and its defenses take damage the same way." (`apps/web/src/home/HomePage.tsx`, pinned in `HomePage.test.tsx`).
+- suggested fix: Replace "the same way" with the concrete step (for example "in the siege step when Combat ends"), or cut the note to one line that points to /config.
+- source: web-fetch
+
+### [LOW] / — the Tower line says it hits "the nearest enemy"; /play asks the builder to choose when 2 are equally near
+- pass: 60 (commit ae79ca3)
+- viewport: desktop
+- category: comprehension
+- observation: The home page makes the Tower shot automatic. On a tie the engine pauses for a choice (12.3, decided row 35), and /play shows a banner no page has explained.
+- evidence: /: "it deals 2 damage to the nearest enemy within 2 hexes." /play banner (`apps/web/src/play/nextStep.ts`): "Choose which enemy the ${defenseName} shoots". Engine: `legalActions.ts` "12.3, row 35: the Tower's builder chooses between equally near enemies."
+- suggested fix: Add "(when 2 are equally near, the player who built it chooses)" to the Tower clause.
+- source: web-fetch
+
+### [LOW] /config — the Forced reveal proposal and help place the tile "in the open slot nearest the base"; no page defines a slot
+- pass: 60 (commit ae79ca3)
+- viewport: desktop
+- category: comprehension
+- observation: /tiles and / only say that stepping off the map edge reveals a tile. "Open slot" appears nowhere else, so a visitor cannot picture where the forced tile goes.
+- evidence: `packages/content/data/proposals.json`: "the top tile is revealed in the open slot nearest the base, so a run cannot stall." `config.meta.json` help: "the top tile of the tile deck is revealed in the open slot nearest the base."
+- suggested fix: Write "next to the map, in the free tile space nearest the base" in both strings.
+- source: web-fetch
+
+### [LOW] /tiles — the reveal rule does not say what happens when the step lands on Lake or Mountain
+- pass: 60 (commit ae79ca3)
+- viewport: desktop
+- category: comprehension
+- observation: The legend marks Lake and Mountain impassable and several tiles carry one on an edge hex, but the reveal line only gives the cost. The engine places the tile, pays the step and keeps the figure in place (row 61), and no public page says so.
+- evidence: /tiles: "Step off the edge of the map to reveal a new tile; the step costs 1 movement." "Lake (impassable)". Row 61: "The tile is placed and the step's cost is paid; the figure stays where it was".
+- suggested fix: Add to the reveal line: "If the hex you step onto is Lake or Mountain, the tile is still placed and the step still paid, but you stay where you were."
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
