@@ -14,6 +14,7 @@ import {
 import { advance } from '../src/phases/advance.ts'
 import { draftDue, startDraft } from '../src/progression/draft.ts'
 import { checkMilestones } from '../src/progression/milestones.ts'
+import { returnableStarters } from '../src/progression/shop.ts'
 import { noSpawns } from './helpers/fixtures.ts'
 
 const config = defaultContent.config
@@ -351,6 +352,27 @@ describe('Shop (6.8, 11.5, 13.1, 18.1)', () => {
     const { state } = applyAction(small, { type: 'buyCard', card: small.shopOffers[0]! })
     expect(state.pendingReturn).toBeNull()
     expect(state.players[0]!.discard).toHaveLength(9)
+  })
+
+  it('18.1 core loop v2 returnableStarters counts hand and table cards and offers only starters', () => {
+    const s = home()
+    const min = s.config.deck.minimumSize
+    const bought = s.supplies.cards['1']![0]!
+    const starters = Array.from({ length: min - 2 }, (_, i) => ({
+      id: `s${i}`,
+      def: 'starter-move',
+    }))
+    // min - 2 starters + 1 bought card in the discard pile, 1 in hand, 1 on the table: min + 1.
+    const player = {
+      ...s.players[0]!,
+      deck: [],
+      discard: [...starters, { id: 'b1', def: bought }],
+      hand: [{ id: 'h1', def: 'starter-move' }],
+      inPlay: [{ id: 't1', def: 'starter-gather' }],
+    }
+    expect(returnableStarters(player, s)).toEqual(starters.map((c) => c.id))
+    // Without the table card the player is at the minimum: nothing is returned.
+    expect(returnableStarters({ ...player, inPlay: [] }, s)).toEqual([])
   })
 })
 
