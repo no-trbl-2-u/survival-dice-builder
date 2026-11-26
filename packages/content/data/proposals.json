@@ -3,7 +3,7 @@
     "id": "forced-reveal",
     "row": 63,
     "label": "Forced reveal",
-    "about": "When no tile was revealed for a while, the top tile is revealed in the open slot nearest the base, so a run cannot stall.",
+    "about": "When no tile was revealed for a while, the top tile is placed next to the map, in the free tile space nearest the base, so a run cannot stall.",
     "options": [
       {
         "path": "clock.forcedRevealEvery",

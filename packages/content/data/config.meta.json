@@ -180,7 +180,7 @@
   },
   "clock.forcedRevealEvery": {
     "label": "Forced reveal every",
-    "help": "At round end, if no tile was revealed in this many rounds, the top tile of the tile deck is revealed in the open slot nearest the base. Off (default): as in the written rules.",
+    "help": "At round end, if no tile was revealed in this many rounds, the top tile of the tile deck is placed next to the map, in the free tile space nearest the base. Off (default): as in the written rules.",
     "rule": "6.7 (open question 63)",
     "empty": "Off",
     "range": [1, 10]

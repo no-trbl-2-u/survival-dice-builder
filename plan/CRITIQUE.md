@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /config — the Forced reveal proposal and help place the tile "in the open slot nearest the base"; no page defines a slot
-- pass: 60 (commit ae79ca3)
-- viewport: desktop
-- category: comprehension
-- observation: /tiles and / only say that stepping off the map edge reveals a tile. "Open slot" appears nowhere else, so a visitor cannot picture where the forced tile goes.
-- evidence: `packages/content/data/proposals.json`: "the top tile is revealed in the open slot nearest the base, so a run cannot stall." `config.meta.json` help: "the top tile of the tile deck is revealed in the open slot nearest the base."
-- suggested fix: Write "next to the map, in the free tile space nearest the base" in both strings.
-- source: web-fetch
-
 ### [LOW] /tiles — the reveal rule does not say what happens when the step lands on Lake or Mountain
 - pass: 60 (commit ae79ca3)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] /config — the Forced reveal proposal and help place the tile "in the open slot nearest the base"; no page defines a slot
+- pass: 60 (commit ae79ca3)
+- viewport: desktop
+- category: comprehension
+- observation: /tiles and / only say that stepping off the map edge reveals a tile. "Open slot" appears nowhere else, so a visitor cannot picture where the forced tile goes.
+- evidence: `packages/content/data/proposals.json`: "the top tile is revealed in the open slot nearest the base, so a run cannot stall." `config.meta.json` help: "the top tile of the tile deck is revealed in the open slot nearest the base."
+- suggested fix: Write "next to the map, in the free tile space nearest the base" in both strings.
+- source: web-fetch
+- issue: #519
+- fixed: (this commit) — the Forced reveal proposal, its /config help and `forcedRevealText` now say the top tile "is placed next to the map, in the free tile space nearest the base"; the ruleText test pins the new sentence.
+
 ### [x] [LOW] / — the Exchanges note says enemies "that target you" before targeting is explained, and ends "the same way"
 - pass: 60 (commit ae79ca3)
 - viewport: desktop

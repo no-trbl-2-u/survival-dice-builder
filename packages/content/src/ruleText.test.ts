@@ -732,7 +732,7 @@ describe('rule text from config', () => {
     )
     const three = With((c) => ({ ...c, clock: { forcedRevealEvery: 3 } }))
     expect(forcedRevealText(three)).toBe(
-      'At round end, if no tile was revealed in the last 3 rounds and the tile deck is not empty, the top tile is revealed in the open slot nearest the base.',
+      'At round end, if no tile was revealed in the last 3 rounds and the tile deck is not empty, the top tile is placed next to the map, in the free tile space nearest the base.',
     )
     const one = With((c) => ({ ...c, clock: { forcedRevealEvery: 1 } }))
     expect(forcedRevealText(one)).toMatch(/in the last 1 round and/)

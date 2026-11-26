@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-26 (pass 462, cloud tick)
+
+Pass 461 ended the Exchanges note with the siege step (5f73b9a). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 5 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 11 commits and under 48 hours ago. The 2 remaining pass 60 LOW rows lead the queue; the cheapest is the Forced reveal "open slot" (impact 3, ease 10: 3.0): the proposal on /decisions, its /config help and `forcedRevealText` place the tile "in the open slot nearest the base", a term no page defines. All three now say the top tile "is placed next to the map, in the free tile space nearest the base". Next in line: the Lake or Mountain reveal row.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] external-critique: /config Forced reveal says "open slot", which no page defines
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: say "next to the map, in the free tile space nearest the base" in the proposal, the help and `forcedRevealText`
+- issue: #519
+- fixed: (this commit)
+
 # Site audit — 2026-11-26 (pass 461, cloud tick)
 
 Pass 460 opened the Combat step with the board order (38461f2). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 4 commits ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 10 commits and under 48 hours ago. The 3 remaining pass 60 LOW rows lead the queue; the cheapest is the Exchanges note (impact 3, ease 10: 3.0): the item on / ends "The base and its defenses take damage the same way." without saying which way. Both Combat models end with the same siege step (`advance` runs `siege` after the last exchange), so the note now ends "When the exchanges end, each enemy next to a Barricade, a Tower or the base hits it, as in the Combat step." Next in line: the 2 other pass 60 LOW rows (the Forced reveal "open slot" and the Lake or Mountain reveal).

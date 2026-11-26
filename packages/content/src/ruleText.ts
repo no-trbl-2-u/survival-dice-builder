@@ -646,8 +646,9 @@ export function blockedPathText(config: GameConfig): string {
 /**
  * When a tile is revealed without a step: off (the default), "A tile is revealed only when a
  * player steps off the edge of the map."; with `clock.forcedRevealEvery` N, "At round end, if no
- * tile was revealed in the last N rounds and the tile deck is not empty, the top tile is revealed
- * in the open slot nearest the base.", as `forcedRevealDue` and `forcedReveal` play it.
+ * tile was revealed in the last N rounds and the tile deck is not empty, the top tile is placed
+ * next to the map, in the free tile space nearest the base.", as `forcedRevealDue` and
+ * `forcedReveal` play it.
  *
  * @rule 6.7, OPEN-QUESTIONS row 63
  */
@@ -655,7 +656,7 @@ export function forcedRevealText(config: GameConfig): string {
   const every = config.clock.forcedRevealEvery
   return every === null
     ? 'A tile is revealed only when a player steps off the edge of the map.'
-    : `At round end, if no tile was revealed in the last ${plural(every, 'round', 'rounds')} and the tile deck is not empty, the top tile is revealed in the open slot nearest the base.`
+    : `At round end, if no tile was revealed in the last ${plural(every, 'round', 'rounds')} and the tile deck is not empty, the top tile is placed next to the map, in the free tile space nearest the base.`
 }
 
 type Calendar = NonNullable<GameConfig['calendar']>
