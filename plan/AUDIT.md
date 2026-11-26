@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-26 (pass 457, cloud tick)
+
+Pass 456 pinned the discard order `clearPlayed` leaves (dfaa275). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 5 commits ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `skills/assign.ts` kills 7 of 9 mutations (the used-die filter, the same-face dedupe, the taken-slot filter, the Star fit, `asFace`, the full-use check in `firedUses` and the `openUses` loop). One survivor is equivalent: dropping the Blank check in `legalPlacements` changes nothing, because no Skill slot face can be Blank (`SkillFaceSchema` is Sword, Wand, Bow, Shield). The other is real: dropping the `.sort()` in `firedUses` leaves all 1137 unit tests green, though its TSDoc says full uses fire in use order and `unassignDie` can leave a use 1 die ahead of a use 0 die in the list (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new assign test lists the use 1 die first and expects use 0, then use 1; the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 60 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: nothing pins that `firedUses` returns full uses in use order
+- category: tests
+- impact: 3
+- ease: 9
+- next: list a use 1 Strike die before a use 0 one; expect firedUses to return use 0, then use 1
+- issue: #514
+- fixed: (this commit)
+
 # Site audit — 2026-11-26 (pass 456, cloud tick)
 
 Pass 455 pinned that reveal steps stay out of `stepsOutOfReach` (cd96b8a). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 4 commits ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. Mutation probes of 5 more engine modules find them tight: `progression/levels.ts` (7 of 7 killed; dropping the level cap hangs the suite on a config with no level cost), `skills/canFire.ts` (2 of 2), `progression/supplies.ts` (5 of 5), `progression/milestones.ts` (8 of 9; the survivor drops the no-news early return, which returns an equal state) and `enemies/pathing.ts` (4 of 5; the survivor lets a step land on the goal, which the search can never reach before a hex next to it). In `deck/deck.ts` one survivor is real: dropping `.reverse()` in `clearPlayed` leaves all 1136 unit tests green, though Explore turns the discard pile into the deck without a shuffle (10.6), so the order after an engagement decides the next draws (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new deck test plays c1 then c2 and expects the discard pile c2, c1, c100 with c3 still in hand; the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 60 once its gate opens.

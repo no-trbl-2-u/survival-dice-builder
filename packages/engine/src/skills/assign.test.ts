@@ -48,4 +48,16 @@ describe('Skill assignment', () => {
       { skill: 'strike', use: 0 },
     ])
   })
+
+  it('7.8 step 7 full uses fire in use order, whatever order the dice were placed in', () => {
+    // Unassigning the use 0 die and placing a new one leaves use 1 first in the list.
+    const placed: Assignment[] = [
+      { die: 1, skill: 'strike', use: 1, slot: 0, asFace: 'Sword' },
+      { die: 2, skill: 'strike', use: 0, slot: 0, asFace: 'Sword' },
+    ]
+    expect(firedUses([skill('strike')], placed)).toEqual([
+      { skill: 'strike', use: 0 },
+      { skill: 'strike', use: 1 },
+    ])
+  })
 })
