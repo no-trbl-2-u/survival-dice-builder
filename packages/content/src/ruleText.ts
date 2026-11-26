@@ -425,13 +425,14 @@ export function siegeText(content: Enemies): string {
 
 /**
  * What each defense costs and does (a Tower attacks after the enemies move and spawn, as
- * `startCombat` chains them), that no enemy can enter a defense hex (as `enemyCanEnter`
+ * `startCombat` chains them, and its builder picks between equally near enemies, as
+ * `chooseTowerTarget` plays it), that no enemy can enter a defense hex (as `enemyCanEnter`
  * plays it, for every defense, not only those with `blocksEnemies`), who gets the enemy's
  * currency, and how much, when an attacking defense defeats an enemy, and the base's health
  * as `baseText` states it (its starting health and what each base upgrade adds): the
  * Defenses line on /.
  *
- * @rule 8.2, 9.8, 11.3, 12.1, 12.3, Table 7, 11, OPEN-QUESTIONS rows 27, 40, 53
+ * @rule 8.2, 9.8, 11.3, 12.1, 12.3, Table 7, 11, OPEN-QUESTIONS rows 27, 35, 40, 53
  */
 export function defenseText(
   config: GameConfig,
@@ -440,7 +441,7 @@ export function defenseText(
   const lines = content.defenses.map((d) => {
     const effects = [
       d.attack &&
-        `at each Combat, after the enemies move and spawn, it deals ${d.attack.damage} damage to the nearest enemy within ${plural(d.attack.range, 'hex', 'hexes')}`,
+        `at each Combat, after the enemies move and spawn, it deals ${d.attack.damage} damage to the nearest enemy within ${plural(d.attack.range, 'hex', 'hexes')} (when 2 are equally near, the player who built it chooses)`,
     ].filter(Boolean)
     const effect = effects.length > 0 ? `; ${effects.join(', and ')}` : ''
     const pays = d.attack

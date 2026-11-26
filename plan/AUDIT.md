@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-26 (pass 459, cloud tick)
+
+Pass 458 named the Shop and Training tiers as the base upgrades (ab32669). No issues wait for triage, the critique gate is closed (pass 60 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 8 commits and under 48 hours ago. The 5 pass 60 LOW rows lead the queue; the cheapest is the Tower line (impact 3, ease 10: 3.0): / says a Tower hits "the nearest enemy", but on a tie the engine pauses for the builder's choice (12.3, decided row 35) and /play shows a banner no page explains. `defenseText` now adds "(when 2 are equally near, the player who built it chooses)" to each attacking defense's clause. Next in line: the 4 other pass 60 LOW rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] external-critique: / Tower line omits the builder's choice between equally near enemies
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: add the tie clause to the attack effect in `defenseText`
+- issue: #516
+- fixed: (this commit)
+
 # Site audit — 2026-11-26 (pass 458, cloud tick)
 
 Pass 457 pinned that `firedUses` returns full uses in use order (ae79ca3), and critique pass 60 filed 6 rows (a6a547a). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 1 commit ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 7 commits ago. The pass 60 MED row tops the queue (impact 6, ease 9: 5.4, times 1.5 for the external-critique MED bias, capped: 8.1): the home page says "buy base upgrades" and "each base upgrade adds 5", but never says Shop I and Training I are those upgrades, so their base health gain reads as a third purchase. `baseText` now takes the upgrades content and names each track's tier-1 name without its numeral: "The base upgrades are the Shop and Training tiers; each adds 5 to the base's maximum health and to its health." With no upgrades it keeps the plain sentence. The line feeds the Defenses item on / and the /config Base fields' line. Next in line: the 5 pass 60 LOW rows.

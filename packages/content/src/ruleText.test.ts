@@ -537,7 +537,7 @@ describe('rule text from config', () => {
 
   it('defenses: each cost, health, and effect from defenses.json, a Tower kill paying its builder by enemy, and the no enemy entering any defense hex, and the base health (Table 7, 12.3, 8.2, 9.8)', () => {
     expect(defenseText(base, defaultContent)).toBe(
-      "A Barricade costs 2 materials and has 4 health. A Tower costs 4 materials and has 3 health; at each Combat, after the enemies move and spawn, it deals 2 damage to the nearest enemy within 2 hexes. When a Tower defeats an enemy, the player who built it gets that enemy's currency (a grunt 1, an elite 4). No enemy can enter a hex with a defense on it. The base starts with 20 health. The base upgrades are the Shop and Training tiers; each adds 5 to the base's maximum health and to its health.",
+      "A Barricade costs 2 materials and has 4 health. A Tower costs 4 materials and has 3 health; at each Combat, after the enemies move and spawn, it deals 2 damage to the nearest enemy within 2 hexes (when 2 are equally near, the player who built it chooses). When a Tower defeats an enemy, the player who built it gets that enemy's currency (a grunt 1, an elite 4). No enemy can enter a hex with a defense on it. The base starts with 20 health. The base upgrades are the Shop and Training tiers; each adds 5 to the base's maximum health and to its health.",
     )
     const tower = defaultContent.defenses[1]!
     const elite = { ...defaultContent.enemies.enemies[1]!, currency: 6 }
@@ -547,7 +547,7 @@ describe('rule text from config', () => {
       upgrades: defaultContent.upgrades,
     }
     expect(defenseText({ ...base, base: { ...base.base, startingHealth: 9 } }, cheap)).toBe(
-      "A Tower costs 1 material and has 3 health; at each Combat, after the enemies move and spawn, it deals 3 damage to the nearest enemy within 1 hex. When a Tower defeats an enemy, the player who built it gets that enemy's currency (an elite 6). No enemy can enter a hex with a defense on it. The base starts with 9 health. The base upgrades are the Shop and Training tiers; each adds 5 to the base's maximum health and to its health.",
+      "A Tower costs 1 material and has 3 health; at each Combat, after the enemies move and spawn, it deals 3 damage to the nearest enemy within 1 hex (when 2 are equally near, the player who built it chooses). When a Tower defeats an enemy, the player who built it gets that enemy's currency (an elite 6). No enemy can enter a hex with a defense on it. The base starts with 9 health. The base upgrades are the Shop and Training tiers; each adds 5 to the base's maximum health and to its health.",
     )
     expect(defenseText(base, { defenses: [], enemies: defaultContent.enemies, upgrades: [] })).toBe(
       "The base starts with 20 health. Each base upgrade adds 5 to the base's maximum health and to its health.",

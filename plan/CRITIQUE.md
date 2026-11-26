@@ -27,15 +27,6 @@
 - suggested fix: Replace "the same way" with the concrete step (for example "in the siege step when Combat ends"), or cut the note to one line that points to /config.
 - source: web-fetch
 
-### [LOW] / — the Tower line says it hits "the nearest enemy"; /play asks the builder to choose when 2 are equally near
-- pass: 60 (commit ae79ca3)
-- viewport: desktop
-- category: comprehension
-- observation: The home page makes the Tower shot automatic. On a tie the engine pauses for a choice (12.3, decided row 35), and /play shows a banner no page has explained.
-- evidence: /: "it deals 2 damage to the nearest enemy within 2 hexes." /play banner (`apps/web/src/play/nextStep.ts`): "Choose which enemy the ${defenseName} shoots". Engine: `legalActions.ts` "12.3, row 35: the Tower's builder chooses between equally near enemies."
-- suggested fix: Add "(when 2 are equally near, the player who built it chooses)" to the Tower clause.
-- source: web-fetch
-
 ### [LOW] /config — the Forced reveal proposal and help place the tile "in the open slot nearest the base"; no page defines a slot
 - pass: 60 (commit ae79ca3)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] / — the Tower line says it hits "the nearest enemy"; /play asks the builder to choose when 2 are equally near
+- pass: 60 (commit ae79ca3)
+- viewport: desktop
+- category: comprehension
+- observation: The home page makes the Tower shot automatic. On a tie the engine pauses for a choice (12.3, decided row 35), and /play shows a banner no page has explained.
+- evidence: /: "it deals 2 damage to the nearest enemy within 2 hexes." /play banner (`apps/web/src/play/nextStep.ts`): "Choose which enemy the ${defenseName} shoots". Engine: `legalActions.ts` "12.3, row 35: the Tower's builder chooses between equally near enemies."
+- suggested fix: Add "(when 2 are equally near, the player who built it chooses)" to the Tower clause.
+- source: web-fetch
+- issue: #516
+- fixed: (this commit) — `defenseText` adds "(when 2 are equally near, the player who built it chooses)" to each attacking defense's clause (the Defenses line on /).
+
 ### [x] [MED] / — "base upgrade" is never tied to Shop I and Training I, so the base health gain looks like a third purchase
 - pass: 60 (commit ae79ca3)
 - viewport: desktop
