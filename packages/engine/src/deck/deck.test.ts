@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { Player } from '../state/types.ts'
 import {
+  clearPlayed,
   clearTable,
   discardFromHand,
   drawHand,
@@ -57,6 +58,14 @@ describe('deck', () => {
     expect(after.hand).toHaveLength(0)
     expect(after.inPlay).toHaveLength(0)
     expect(after.discard).toHaveLength(3)
+  })
+
+  it('6.3 the end of an engagement puts played cards on the discard pile, the last one on top', () => {
+    const [p] = drawHand(player(3, 1), 3)
+    const after = clearPlayed(playToTable(playToTable(p, 'c1'), 'c2'))
+    expect(after.discard.map((c) => c.id)).toEqual(['c2', 'c1', 'c100'])
+    expect(after.hand.map((c) => c.id)).toEqual(['c3'])
+    expect(after.inPlay).toHaveLength(0)
   })
 
   it('10.6 turns the discard pile 180 degrees without a shuffle', () => {

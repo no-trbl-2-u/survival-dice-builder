@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-26 (pass 456, cloud tick)
+
+Pass 455 pinned that reveal steps stay out of `stepsOutOfReach` (cd96b8a). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 4 commits ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. Mutation probes of 5 more engine modules find them tight: `progression/levels.ts` (7 of 7 killed; dropping the level cap hangs the suite on a config with no level cost), `skills/canFire.ts` (2 of 2), `progression/supplies.ts` (5 of 5), `progression/milestones.ts` (8 of 9; the survivor drops the no-news early return, which returns an equal state) and `enemies/pathing.ts` (4 of 5; the survivor lets a step land on the goal, which the search can never reach before a hex next to it). In `deck/deck.ts` one survivor is real: dropping `.reverse()` in `clearPlayed` leaves all 1136 unit tests green, though Explore turns the discard pile into the deck without a shuffle (10.6), so the order after an engagement decides the next draws (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new deck test plays c1 then c2 and expects the discard pile c2, c1, c100 with c3 still in hand; the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 60 once its gate opens.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: nothing pins the discard order `clearPlayed` leaves
+- category: tests
+- impact: 3
+- ease: 9
+- next: play c1 then c2 with c3 in hand and c100 discarded; expect discard c2, c1, c100 and hand c3
+- issue: #513
+- fixed: (this commit)
+
 # Site audit — 2026-11-25 (pass 455, cloud tick)
 
 Pass 454 named the heal Skills in reading 12 (bb122a7). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 59 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 3 commits ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. A mutation probe of `movement/move.ts` kills 9 of 11 mutations (the reveal cost boundary, the empty tile deck, the figures-per-hex limit, the enemy hex, the move cost boundary, the Blink bypass, both placed-player filters and the surcharge). One survivor is equivalent: dropping `p.id !== playerId` in `blockedByFigure` changes nothing, because the moving player never stands on a neighbour hex and a knocked-out player being put back on the Base tile is not counted among the placed figures. The other is real: dropping `!m.reveal` in `stepsOutOfReach` leaves all 1135 unit tests green, and the /play banner would then blame an enemy surcharge for a step off the map edge (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new world test sets the reveal cost to 2, leaves the figure on the map edge with 1 movement and no enemies, and expects no step named out of reach; the mutation fails it. Next in line: the /decisions rows wait for /oversight; critique pass 60 once its gate opens.
