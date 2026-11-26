@@ -1,4 +1,5 @@
 import {
+  combatOpenText,
   combatText,
   defaultContent,
   defenseText,
@@ -50,7 +51,7 @@ export function HomePage() {
             build Barricades and Towers, buy base upgrades and heal.
           </li>
           <li>
-            <strong>Combat:</strong>{' '}
+            <strong>Combat:</strong> {combatOpenText(defaultContent)}{' '}
             {combatText(config, 'engage', defaultContent, { guard: false })}{' '}
             {siegeText(defaultContent)} This is the Combat in the{' '}
             <a href={rulesUrl}>written rules</a> (on GitHub).

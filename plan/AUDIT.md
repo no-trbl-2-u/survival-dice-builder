@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-26 (pass 460, cloud tick)
+
+Pass 459 said the Tower's builder picks between equally near enemies (fcbeb11). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 9 commits and under 48 hours ago. The 4 remaining pass 60 LOW rows lead the queue; the cheapest is the Combat step order (impact 3, ease 10: 3.0): the numbered Combat step on / opens with the player's Engage option, though `startCombat` first moves the enemies, spawns at the nodes and fires each Tower, and that order sits only in the board list further down. A new `combatOpenText` opens the step with "First the enemies move, then the spawn nodes spawn and each Tower shoots.", naming each defense that attacks from defenses.json. Next in line: the 3 other pass 60 LOW rows.
+
+## Top 5 findings (scored)
+
+### [x] [3.0] external-critique: / Combat step opens with Engage; the board order comes first
+- category: external-critique
+- impact: 3
+- ease: 10
+- next: open the Combat step with `combatOpenText`
+- issue: #517
+- fixed: (this commit)
+
 # Site audit — 2026-11-26 (pass 459, cloud tick)
 
 Pass 458 named the Shop and Training tiers as the base upgrades (ab32669). No issues wait for triage, the critique gate is closed (pass 60 ran 2 commits ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 8 commits and under 48 hours ago. The 5 pass 60 LOW rows lead the queue; the cheapest is the Tower line (impact 3, ease 10: 3.0): / says a Tower hits "the nearest enemy", but on a tie the engine pauses for the builder's choice (12.3, decided row 35) and /play shows a banner no page explains. `defenseText` now adds "(when 2 are equally near, the player who built it chooses)" to each attacking defense's clause. Next in line: the 4 other pass 60 LOW rows.

@@ -109,7 +109,7 @@ describe('HomePage', () => {
     const items = [...container.querySelectorAll('li')].map((li) => li.textContent ?? '')
     const combat = items.find((text) => text.startsWith('Combat:'))
     expect(combat).toMatch(
-      /^Combat: Play a card's Engage option \(on Move and Gather\) to start an engagement/,
+      /^Combat: First the enemies move, then the spawn nodes spawn and each Tower shoots\. Play a card's Engage option \(on Move and Gather\) to start an engagement/,
     )
     expect(combat).toMatch(/This is the Combat in the written rules \(on GitHub\)\.$/)
     expect(combat).not.toMatch(/exchange/i)

@@ -113,6 +113,7 @@ export {
   sundialDayGloss,
   sundialDayText,
   repairText,
+  combatOpenText,
   revealText,
   tileDeckText,
   roundText,

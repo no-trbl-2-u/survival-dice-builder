@@ -6,6 +6,7 @@ import { defaultProposals } from './proposals.ts'
 import {
   cardStepText,
   combatEndText,
+  combatOpenText,
   combatText,
   defenseText,
   enemyDieText,
@@ -525,6 +526,14 @@ describe('rule text from config', () => {
       `one at a time. ${enemyDieText(base)} ${enemyHitText(base)} `,
     )
     expect(combatText(base, 'exchange', defaultContent)).not.toContain(enemyDieText(base))
+  })
+
+  it('Combat opens on the board: enemies move, spawn nodes spawn, then each Tower shoots (7.5, 7.3, 7.6)', () => {
+    expect(combatOpenText(defaultContent)).toBe(
+      'First the enemies move, then the spawn nodes spawn and each Tower shoots.',
+    )
+    const unarmed = { defenses: defaultContent.defenses.filter((d) => !d.attack) }
+    expect(combatOpenText(unarmed)).toBe('First the enemies move, then the spawn nodes spawn.')
   })
 
   it("siege: when Combat ends, structures take each enemy record's siege damage (7.10-7.12)", () => {

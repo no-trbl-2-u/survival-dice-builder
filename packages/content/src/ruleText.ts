@@ -336,6 +336,19 @@ export function combatText(
 }
 
 /**
+ * What happens on the board as Combat opens, before any card is played: the enemies move, the
+ * spawn nodes spawn, then each attacking defense shoots, as `startCombat` chains them. It opens
+ * the Combat step on /, so the step reads in the order the engine plays it.
+ *
+ * @rule 7.5, 7.3, 7.6, 12.3 (Spec v2)
+ */
+export function combatOpenText(content: Pick<Content, 'defenses'>): string {
+  const shooters = content.defenses.filter((d) => d.attack).map((d) => d.name)
+  const shoot = shooters.length > 0 ? ` and each ${shooters.join(' and each ')} shoots` : ''
+  return `First the enemies move, then the spawn nodes spawn${shoot}.`
+}
+
+/**
  * What a card's Repair option heals, as `repair` plays it: the base when the player stands on
  * the Base tile, otherwise the most damaged defense on or next to the player's hex, never above
  * full health. The Combat line on /.

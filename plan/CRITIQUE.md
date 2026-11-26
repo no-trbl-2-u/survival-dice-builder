@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Combat step opens with your Engage option; enemy moves, spawns and Tower shots come first but sit lower on the page
-- pass: 60 (commit ae79ca3)
-- viewport: desktop
-- category: comprehension
-- observation: Read in order, the numbered Combat step suggests Combat begins with the player's card. The move, spawn and Tower order is only under "On the board, every round" further down. Different from the pass rows that split the Combat item and moved board items out of Prepare.
-- evidence: Combat: "Play a card's Engage option (on Move and Gather) to start an engagement". Enemies: "At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 2 hexes". Defenses: "at each Combat, after the enemies move and spawn, it deals 2 damage".
-- suggested fix: Open the Combat step with one short sentence: "First the enemies move, the spawn nodes spawn and each Tower shoots."
-- source: web-fetch
-
 ### [LOW] / — the Exchanges note says enemies "that target you" before targeting is explained, and ends "the same way"
 - pass: 60 (commit ae79ca3)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] / — the Combat step opens with your Engage option; enemy moves, spawns and Tower shots come first but sit lower on the page
+- pass: 60 (commit ae79ca3)
+- viewport: desktop
+- category: comprehension
+- observation: Read in order, the numbered Combat step suggests Combat begins with the player's card. The move, spawn and Tower order is only under "On the board, every round" further down. Different from the pass rows that split the Combat item and moved board items out of Prepare.
+- evidence: Combat: "Play a card's Engage option (on Move and Gather) to start an engagement". Enemies: "At each Combat, before the spawn nodes spawn, each enemy, oldest first, moves up to 2 hexes". Defenses: "at each Combat, after the enemies move and spawn, it deals 2 damage".
+- suggested fix: Open the Combat step with one short sentence: "First the enemies move, the spawn nodes spawn and each Tower shoots."
+- source: web-fetch
+- issue: #517
+- fixed: (this commit) — `combatOpenText` opens the Combat step on / with "First the enemies move, then the spawn nodes spawn and each Tower shoots.", in the order `startCombat` chains them.
+
 ### [x] [LOW] / — the Tower line says it hits "the nearest enemy"; /play asks the builder to choose when 2 are equally near
 - pass: 60 (commit ae79ca3)
 - viewport: desktop
