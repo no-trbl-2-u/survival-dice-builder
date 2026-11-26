@@ -435,7 +435,7 @@ export function siegeText(content: Enemies): string {
  */
 export function defenseText(
   config: GameConfig,
-  content: Pick<Content, 'defenses' | 'enemies'>,
+  content: Pick<Content, 'defenses' | 'enemies' | 'upgrades'>,
 ): string {
   const lines = content.defenses.map((d) => {
     const effects = [
@@ -449,7 +449,7 @@ export function defenseText(
     return `${/^[aeiou]/i.test(d.name) ? 'An' : 'A'} ${d.name} costs ${plural(d.cost, 'material', 'materials')} and has ${d.health} health${effect}.${pays}`
   })
   if (content.defenses.length > 0) lines.push('No enemy can enter a hex with a defense on it.')
-  return [...lines, baseText(config)].join(' ')
+  return [...lines, baseText(config, content)].join(' ')
 }
 
 /**
@@ -1262,14 +1262,23 @@ export function milestoneOutOfReach(
 }
 
 /**
- * The base's starting health and what each base upgrade adds: the /config Base fields' line,
- * and the end of the Defenses line on /.
+ * The base's starting health, which tracks are the base upgrades (each tier-1 name without its
+ * numeral, "Shop" and "Training", so buying Shop I reads as a base upgrade too) and what each
+ * one adds: the /config Base fields' line, and the end of the Defenses line on /.
  *
  * @rule 8.2, 11.3
  */
-export function baseText(config: GameConfig): string {
+export function baseText(config: GameConfig, content: Upgrades): string {
   const { startingHealth, healthPerUpgrade } = config.base
-  return `The base starts with ${startingHealth} health. Each base upgrade adds ${healthPerUpgrade} to its maximum health and to its health.`
+  const tracks = content.upgrades
+    .filter((u) => u.tier === 1)
+    .map((u) => u.name.replace(/\s+[IVX]+$/, ''))
+  const gain = `adds ${healthPerUpgrade} to the base's maximum health and to its health.`
+  const upgrades =
+    tracks.length === 0
+      ? `Each base upgrade ${gain}`
+      : `The base upgrades are the ${tracks.join(' and ')} tiers; each ${gain}`
+  return `The base starts with ${startingHealth} health. ${upgrades}`
 }
 
 /**
@@ -1293,7 +1302,7 @@ export function ruleLineFor(
     path === 'deck.preset'
   )
     return startText(config, content)
-  if (group === 'base') return baseText(config)
+  if (group === 'base') return baseText(config, content)
   if (path === 'tiles.revealMoveCost') return revealText(config)
   if (path === 'tiles.countryside' || path === 'tiles.core') return tileDeckText(content)
   if (group === 'spawn') return spawnText(config)

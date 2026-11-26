@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] / — "base upgrade" is never tied to Shop I and Training I, so the base health gain looks like a third purchase
-- pass: 60 (commit ae79ca3)
-- viewport: desktop
-- category: comprehension
-- observation: The home page says "buy base upgrades" in Prepare and "Each base upgrade adds 5 to its maximum health" under Defenses, but Shop I and Training I are only described as opening the Shop and the Training Ground. A visitor cannot tell that buying Shop I also raises base health; the engine adds base.healthPerUpgrade on every buyUpgrade (`packages/engine/src/progression/upgrades.ts`).
-- evidence: Prepare: "build Barricades and Towers, buy base upgrades and heal." Defenses: "Each base upgrade adds 5 to its maximum health and to its health." Shop: "buy Shop I (a Build card and 4 materials) to open the Shop".
-- suggested fix: Name the upgrades once: "The base upgrades are the Shop and Training tiers; each adds 5 to the base's maximum health and to its health."
-- source: web-fetch
-
 ### [LOW] / — the Combat step opens with your Engage option; enemy moves, spawns and Tower shots come first but sit lower on the page
 - pass: 60 (commit ae79ca3)
 - viewport: desktop
@@ -118,6 +109,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [MED] / — "base upgrade" is never tied to Shop I and Training I, so the base health gain looks like a third purchase
+- pass: 60 (commit ae79ca3)
+- viewport: desktop
+- category: comprehension
+- observation: The home page says "buy base upgrades" in Prepare and "Each base upgrade adds 5 to its maximum health" under Defenses, but Shop I and Training I are only described as opening the Shop and the Training Ground. A visitor cannot tell that buying Shop I also raises base health; the engine adds base.healthPerUpgrade on every buyUpgrade (`packages/engine/src/progression/upgrades.ts`).
+- evidence: Prepare: "build Barricades and Towers, buy base upgrades and heal." Defenses: "Each base upgrade adds 5 to its maximum health and to its health." Shop: "buy Shop I (a Build card and 4 materials) to open the Shop".
+- suggested fix: Name the upgrades once: "The base upgrades are the Shop and Training tiers; each adds 5 to the base's maximum health and to its health."
+- source: web-fetch
+- issue: #515
+- fixed: (this commit) — `baseText` names the tier-1 tracks: "The base upgrades are the Shop and Training tiers; each adds 5 to the base's maximum health and to its health." (the Defenses line on / and the /config Base fields' line).
+
 ### [x] [LOW] /decisions — reading 12 names the Renewal and Purify Skills, which no public page introduces, and leaves "N hexes" undefined
 - pass: 59 (commit a81abd5)
 - viewport: desktop
