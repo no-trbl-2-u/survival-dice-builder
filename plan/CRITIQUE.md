@@ -1,13 +1,58 @@
 # Critique log
 
-> Last pass: 2026-11-26 at commit ae79ca3
-> Pass count: 60
+> Last pass: 2026-11-27 at commit 968ac44
+> Pass count: 61
 
 > External-observer feedback for Survival Dice-Builder. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [MED] /config — the Skills revealed help names Training I, II and III as live tiers; Build cards buy only Training I
+- pass: 61 (commit 968ac44)
+- viewport: desktop
+- category: comprehension
+- observation: The Skills revealed help says each Training upgrade I, II and III opens a Skill supply and that the draft takes from "the highest open level". The Milestones section on the same page says Build cards buy only Shop I and Training I. On /, "the Shop and Training tiers" each add 5 base health, so a reader expects more than two upgrades. Different from the pass 27 row (the /play Base panel prices).
+- evidence: /config: "Each Training upgrade (I, II, III) opens the Skill supply of its level. Rule 11.6." vs "Buy 3 base upgrades (out of reach: Build cards can buy only Shop I and Training I)." (`packages/content/data/config.meta.json:342`); /: "The base upgrades are the Shop and Training tiers; each adds 5 to the base's maximum health and to its health."
+- suggested fix: End the Skills revealed help and the / base-upgrade line with the `upgradesReachNote` sentence ("Build cards can buy only Shop I and Training I").
+- source: web-fetch
+
+### [LOW] / — the Exchanges note says each enemy next to a defense "hits it"; the Combat step says it hits one of them, in an order
+- pass: 61 (commit 968ac44)
+- viewport: desktop
+- category: comprehension
+- observation: After a list of three defenses, "it" reads as the last one named, or all of them. The Combat step it points to says the enemy hits one of them, a Barricade first. The pass 60 fix wrote this ending.
+- evidence: "When the exchanges end, each enemy next to a Barricade, a Tower or the base hits it, as in the Combat step." vs "When Combat ends, each enemy next to a Barricade, a Tower or the base hits one of them" (`apps/web/src/home/HomePage.tsx:67`)
+- suggested fix: Write "... hits one of them, as in the Combat step." and update `HomePage.test.tsx:117`.
+- source: web-fetch
+
+### [LOW] /decisions — row 63 still places the forced tile "in the open slot nearest the base (ties: slot order)"; /config now says "free tile space"
+- pass: 61 (commit 968ac44)
+- viewport: desktop
+- category: comprehension
+- observation: The pass 60 fix for the undefined word "slot" changed only the /config proposal and help. The rule reading for the same forced reveal still says "slot" and adds a "slot order" tie rule that no page defines.
+- evidence: /decisions row 63: "the top tile is revealed in the open slot nearest the base (ties: slot order)" (`OPEN-QUESTIONS.md:78`); /config: "in the free tile space nearest the base, so a run cannot stall."
+- suggested fix: Reword row 63 to the /config words ("in the free tile space nearest the base") and name the tie rule the engine uses, or drop it.
+- source: web-fetch
+
+### [LOW] /decisions — rows 7 and 73 say "structure", the word / and /config replaced with "a Barricade, a Tower or the base"
+- pass: 61 (commit 968ac44)
+- viewport: desktop
+- category: voice
+- observation: No player page defines "structure". Two siege readings on /decisions still use it, and row 73 writes the damage as "(1; an elite 3)" with no subject for the 1.
+- evidence: Row 73: "at the end of Combat every enemy next to a structure, oldest first, deals the siege damage (1; an elite 3)"; row 7: "each enemy next to a structure hits one structure next to it" (`OPEN-QUESTIONS.md:22`, `:88`)
+- suggested fix: Write "next to a Barricade, a Tower or the base" and "(a grunt 1, an elite 3)" in the reading text of rows 7 and 73; leave the decided ruling itself unchanged.
+- source: web-fetch
+
+### [LOW] /config — the Skills kept field changes nothing, and its note says "yet" where the Exchange range note does not
+- pass: 61 (commit 968ac44)
+- viewport: desktop
+- category: comprehension
+- observation: A visitor can edit Skills kept, but the help says nothing changes, while / says the draft keeps 1. The two do-nothing notes on the page are worded two ways.
+- evidence: "Skills each player keeps from a draft. Not used by the engine yet: changing it changes nothing. Rule 11.7." vs Exchange range: "Not used by the engine: changing it changes nothing. Rule 7.9." (`apps/web/src/config/ConfigPage.tsx:307`)
+- suggested fix: Word both notes the same way, or show Skills kept as fixed at 1 under the default rules.
+- source: web-fetch
 
 ### [LOW] /decisions — the "Write the Event Calendar experiment" check is done; reading 79 says it shipped (waits for /oversight)
 - pass: 46 (commit cf41877)
