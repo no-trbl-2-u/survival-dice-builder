@@ -447,6 +447,29 @@ describe('Skill draft (10.8, 11.6-11.9)', () => {
     expect(after.players[0]!.draftPool).toEqual([n1, n2])
   })
 
+  it('11.7 keeping 1 of 2 revealed copies of a Skill leaves the other copy unkept', () => {
+    const base = due()
+    const rest = base.supplies.skills['1']!.filter((s) => s !== 'cleave')
+    const twin = {
+      ...base,
+      supplies: {
+        ...base.supplies,
+        skills: { ...base.supplies.skills, '1': ['cleave', 'cleave', ...rest] },
+      },
+    }
+    const [s] = startDraft(twin)
+    expect(s.draft!.options).toEqual(['cleave', 'cleave'])
+    const pooled = applyAction(s, { type: 'draftSkill', skill: 'cleave' }).state
+    expect(pooled.players[0]!.skills.at(-1)).toBe('cleave')
+    expect(pooled.players[0]!.draftPool).toEqual(['cleave'])
+
+    const supply = { ...config, draft: { ...config.draft, unpicked: 'supply' as const } }
+    const [t] = startDraft({ ...twin, config: supply })
+    const bottom = applyAction(t, { type: 'draftSkill', skill: 'cleave' }).state
+    expect(bottom.supplies.skills['1']!.at(-1)).toBe('cleave')
+    expect(bottom.supplies.skills['1']).toHaveLength(rest.length + 1)
+  })
+
   it('draft pool: with the supply empty, the pool alone is offered', () => {
     const base = withPlayer(due(), { draftPool: ['cleave', 'dodge'] })
     const s = {

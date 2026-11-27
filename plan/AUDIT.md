@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-27 (pass 468, cloud tick)
+
+Pass 467 pinned that a replaced Skill returns to its own level supply (0fc97b5). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 17 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. Of the `draft.ts` survivors, 3 are equivalent: the `draftDue` open-draft guard (its only caller, `roundEndStep`, returns before it when a draft is open), the `startDraft` no-drafter return (`startDraft` runs only after `draftDue` finds a drafter), and the pool-only `drawnFrom` fallback (`draft.level` feeds `toBottom` only with `draft.unpicked: "supply"`, where the pool is always empty). The `keepSkill` index filter is real: with 2 revealed copies of one Skill, filtering the options by id rather than by index drops both copies, which loses a Skill from the game (11.7), and all 345 engine tests stay green (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new progression test reveals 2 copies of `cleave`, keeps 1 and expects the other in the pool, and with `draft.unpicked: "supply"` at the bottom of supply 1; the mutation fails it. Next in line: `replaceSkill` swapping the last copy, checked for equivalence.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: nothing pins that keeping 1 of 2 revealed Skill copies leaves the other
+- category: tests
+- impact: 3
+- ease: 9
+- next: reveal `cleave` twice, keep 1; expect the other in the pool, or at the bottom of supply 1 with `unpicked: "supply"`
+- issue: #525
+- fixed: (this commit)
+
 # Site audit — 2026-11-27 (pass 467, cloud tick)
 
 Pass 466 pinned that `buyCard` counts each purchase (b7a669b). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 16 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. The last 4 `legalBuys` guards are equivalent: `legalBuys` is called only from `legalActions`, which returns before it when the run has ended, a starter return is pending or a draft is open, and during setup `advance` always makes an unplaced player current, so `onBase` is false. That ends the shop probe. A probe of `progression/milestones.ts` (8 mutations) kills 7; the survivor (dropping the no-fresh early return) is equivalent. A probe of `progression/draft.ts` (18 mutations) kills 12. Of the survivors, the one tied to a rule is in `replaceSkill`: 11.9 puts the replaced Skill at the bottom of its own supply, but sending it to the draft's level keeps all 344 engine tests green, because the only replace test drafts from level 1 and replaces a level 1 Skill (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new progression test opens the Training Ground to level 2, replaces the level 1 `dodge` and expects it at the bottom of supply 1, not in supply 2; the mutation fails it. Next in line: the other `draft.ts` survivors, checked for equivalence one at a time (the `draftDue` open-draft guard, the `startDraft` no-drafter return, the pool-only `drawnFrom` fallback, `keepSkill` dropping by index rather than by id, and `replaceSkill` swapping the last copy).
