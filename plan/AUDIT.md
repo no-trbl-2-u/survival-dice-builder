@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-27 (pass 466, cloud tick)
+
+Pass 465 pinned that `legalBuys` offers a repeated card once (eb706b1). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 15 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. Of the remaining shop survivors, the 2 `refillOffers` guards are equivalent: with the Shop closed `drawLevel(cards, 0)` returns null, and `drawLevel` only returns a level with cards left, so the empty-card break never fires. The `cardsBought` count is real: only the 5.4 conservation property reads it, its random walks do not reach a buy, and changing the increment to 0 leaves all 343 engine tests green (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new progression test buys 2 cards and expects the count to rise by 1, then by 2; the mutation fails it. Next in line: the setup, ended, pendingReturn and draft guards in `legalBuys` (likely equivalent through `legalActions`), checked one at a time.
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: nothing pins that `buyCard` counts each purchase
+- category: tests
+- impact: 3
+- ease: 9
+- next: buy 2 cards; expect `progress.cardsBought` to rise by 1, then by 2
+- issue: #523
+- fixed: (this commit)
+
 # Site audit — 2026-11-26 (pass 465, cloud tick)
 
 Pass 464 pinned which cards `returnableStarters` counts and offers (d98eb71). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 8 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 14 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. Of the `legalBuys` survivors, the `shopTiming` "prepare-only" guard is left alone: that option lost rows 11, 43 and 52 and its prune waits in the rule 9 backlog candidate. The dedupe guard is real: supplies hold 2 copies of each card, so the Shop can show one card twice, and dropping `new Set` leaves all 342 engine tests green though the TSDoc says "Each offer once" (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new progression test offers a card twice beside a third and expects one buy action for each; the mutation fails it. Next in line: the `refillOffers` closed-Shop return and empty-card break, the setup, ended, pendingReturn and draft guards in `legalBuys` (likely equivalent through `legalActions`) and the `cardsBought` count.

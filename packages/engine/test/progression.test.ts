@@ -309,6 +309,14 @@ describe('Shop (6.8, 11.5, 13.1, 18.1)', () => {
     expect(state.shopOffers).not.toContain(card)
   })
 
+  it('13.1 each buy adds 1 to the cards bought count', () => {
+    const s = shopping(6)
+    const once = applyAction(s, { type: 'buyCard', card: s.shopOffers[0]! }).state
+    expect(once.progress.cardsBought).toBe(s.progress.cardsBought + 1)
+    const twice = applyAction(once, { type: 'buyCard', card: once.shopOffers[0]! }).state
+    expect(twice.progress.cardsBought).toBe(s.progress.cardsBought + 2)
+  })
+
   it('11.5 with Shop II open, new offers come from Level 2', () => {
     const s = shopping(3, ['shop-1', 'shop-2'])
     const { events } = applyAction(s, { type: 'buyCard', card: s.shopOffers[0]! })
