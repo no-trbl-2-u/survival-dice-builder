@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [MED] /config — the Skills revealed help names Training I, II and III as live tiers; Build cards buy only Training I
-- pass: 61 (commit 968ac44)
-- viewport: desktop
-- category: comprehension
-- observation: The Skills revealed help says each Training upgrade I, II and III opens a Skill supply and that the draft takes from "the highest open level". The Milestones section on the same page says Build cards buy only Shop I and Training I. On /, "the Shop and Training tiers" each add 5 base health, so a reader expects more than two upgrades. Different from the pass 27 row (the /play Base panel prices).
-- evidence: /config: "Each Training upgrade (I, II, III) opens the Skill supply of its level. Rule 11.6." vs "Buy 3 base upgrades (out of reach: Build cards can buy only Shop I and Training I)." (`packages/content/data/config.meta.json:342`); /: "The base upgrades are the Shop and Training tiers; each adds 5 to the base's maximum health and to its health."
-- suggested fix: End the Skills revealed help and the / base-upgrade line with the `upgradesReachNote` sentence ("Build cards can buy only Shop I and Training I").
-- source: web-fetch
-
 ### [LOW] / — the Exchanges note says each enemy next to a defense "hits it"; the Combat step says it hits one of them, in an order
 - pass: 61 (commit 968ac44)
 - viewport: desktop
@@ -109,6 +100,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [MED] /config — the Skills revealed help names Training I, II and III as live tiers; Build cards buy only Training I
+- pass: 61 (commit 968ac44)
+- viewport: desktop
+- category: comprehension
+- observation: The Skills revealed help says each Training upgrade I, II and III opens a Skill supply and that the draft takes from "the highest open level". The Milestones section on the same page says Build cards buy only Shop I and Training I. On /, "the Shop and Training tiers" each add 5 base health, so a reader expects more than two upgrades. Different from the pass 27 row (the /play Base panel prices).
+- evidence: /config: "Each Training upgrade (I, II, III) opens the Skill supply of its level. Rule 11.6." vs "Buy 3 base upgrades (out of reach: Build cards can buy only Shop I and Training I)." (`packages/content/data/config.meta.json:342`); /: "The base upgrades are the Shop and Training tiers; each adds 5 to the base's maximum health and to its health."
+- suggested fix: End the Skills revealed help and the / base-upgrade line with the `upgradesReachNote` sentence ("Build cards can buy only Shop I and Training I").
+- source: web-fetch
+- issue: #526
+- fixed: (this commit) — the Skills revealed help drops "(I, II, III)"; its live line and the base line (/ Defenses, /config Base fields) end with "Build cards can buy only Shop I and Training I.", dropped when every upgrade is in reach
+
 ### [x] [LOW] /tiles — the reveal rule does not say what happens when the step lands on Lake or Mountain
 - pass: 60 (commit ae79ca3)
 - viewport: desktop

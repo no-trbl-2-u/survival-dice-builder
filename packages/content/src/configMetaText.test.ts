@@ -156,9 +156,7 @@ describe('config.meta.json names the baseline one way', () => {
   it('11.6: the Skills revealed help says what opens a Skill supply level', () => {
     const help = defaultConfigMeta['draft.reveal']?.help ?? ''
     expect(help).toContain('highest open level Skill supply')
-    expect(help).toContain(
-      'Each Training upgrade (I, II, III) opens the Skill supply of its level.',
-    )
+    expect(help).toContain('Each Training upgrade opens the Skill supply of its level.')
   })
 
   it('no help says "the current rule" or promises later content with "until ..."', () => {

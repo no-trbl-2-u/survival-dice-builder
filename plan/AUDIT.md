@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-27 (pass 469, cloud tick)
+
+Pass 468 pinned that keeping 1 of 2 revealed Skill copies leaves the other (968ac44); critique pass 61 then filed 5 rows (2a9a1b5). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 61 ran this morning at 968ac44), no build plan phase is pending (35 is blocked), and expand pass 39 ran 19 commits and under 48 hours ago. The pass 61 MED row is the top finding (impact 6, ease 8: 4.8; with the external-critique MED bias, 7.2): the /config Skills revealed help names Training I, II and III as upgrades that open Skill supplies, while Build cards can buy only Shop I and Training I. The help now drops "(I, II, III)"; the Skills revealed live line and `baseText` (the / Defenses line and the /config Base fields' line) end with the `upgradesReachNote` sentence, which drops out when every upgrade is in reach. Next in line: the 4 pass 61 LOW rows (the Exchanges note "hits it", /decisions row 63 "slot", rows 7 and 73 "structure", the Skills kept note wording).
+
+## Top 5 findings (scored)
+
+### [x] [7.2] external-critique: the Skills revealed help names Training I, II and III; Build cards buy only Training I
+- category: external-critique
+- impact: 6
+- ease: 8
+- next: drop "(I, II, III)" from the help; end the Skills revealed and base lines with `upgradesReachNote`
+- issue: #526
+- fixed: (this commit)
+
 # Site audit — 2026-11-27 (pass 468, cloud tick)
 
 Pass 467 pinned that a replaced Skill returns to its own level supply (0fc97b5). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 11 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 17 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. Of the `draft.ts` survivors, 3 are equivalent: the `draftDue` open-draft guard (its only caller, `roundEndStep`, returns before it when a draft is open), the `startDraft` no-drafter return (`startDraft` runs only after `draftDue` finds a drafter), and the pool-only `drawnFrom` fallback (`draft.level` feeds `toBottom` only with `draft.unpicked: "supply"`, where the pool is always empty). The `keepSkill` index filter is real: with 2 revealed copies of one Skill, filtering the options by id rather than by index drops both copies, which loses a Skill from the game (11.7), and all 345 engine tests stay green (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new progression test reveals 2 copies of `cleave`, keeps 1 and expects the other in the pool, and with `draft.unpicked: "supply"` at the bottom of supply 1; the mutation fails it. Next in line: `replaceSkill` swapping the last copy, checked for equivalence.

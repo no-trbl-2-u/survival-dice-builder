@@ -34,7 +34,7 @@ describe('HomePage', () => {
       'Prepare: Play the top halves of your cards to move, gather materials, build Barricades and Towers, buy base upgrades and heal.',
     )
     expect(items.find((text) => text.startsWith('Defenses: A Barricade costs'))).toMatch(
-      /The base starts with \d+ health\. The base upgrades are the Shop and Training tiers; each adds \d+ to the base's maximum health and to its health\.$/,
+      /The base starts with \d+ health\. The base upgrades are the Shop and Training tiers; each adds \d+ to the base's maximum health and to its health\. Build cards can buy only Shop I and Training I\.$/,
     )
     expect(items.find((text) => text.startsWith('The map: Step off the edge'))).toBeTruthy()
     expect(items.find((text) => text.startsWith('Enemies: A spawn node gets'))).toBeTruthy()

@@ -450,7 +450,7 @@ export function siegeText(content: Enemies): string {
  */
 export function defenseText(
   config: GameConfig,
-  content: Pick<Content, 'defenses' | 'enemies' | 'upgrades'>,
+  content: Pick<Content, 'defenses' | 'enemies' | 'cards' | 'upgrades'>,
 ): string {
   const lines = content.defenses.map((d) => {
     const effects = [
@@ -1280,11 +1280,12 @@ export function milestoneOutOfReach(
 /**
  * The base's starting health, which tracks are the base upgrades (each tier-1 name without its
  * numeral, "Shop" and "Training", so buying Shop I reads as a base upgrade too) and what each
- * one adds: the /config Base fields' line, and the end of the Defenses line on /.
+ * one adds, then which of them Build cards can buy (`upgradesReachNote`, dropped when every
+ * upgrade is in reach): the /config Base fields' line, and the end of the Defenses line on /.
  *
- * @rule 8.2, 11.3
+ * @rule 8.2, 11.3, 11.4, OPEN-QUESTIONS row 78
  */
-export function baseText(config: GameConfig, content: Upgrades): string {
+export function baseText(config: GameConfig, content: Pick<Content, 'cards' | 'upgrades'>): string {
   const { startingHealth, healthPerUpgrade } = config.base
   const tracks = content.upgrades
     .filter((u) => u.tier === 1)
@@ -1294,7 +1295,9 @@ export function baseText(config: GameConfig, content: Upgrades): string {
     tracks.length === 0
       ? `Each base upgrade ${gain}`
       : `The base upgrades are the ${tracks.join(' and ')} tiers; each ${gain}`
-  return `The base starts with ${startingHealth} health. ${upgrades}`
+  const note = upgradesReachNote(config, content)
+  const reach = note ? ` ${note}.` : ''
+  return `The base starts with ${startingHealth} health. ${upgrades}${reach}`
 }
 
 /**
@@ -1330,7 +1333,11 @@ export function ruleLineFor(
     return `${gatherText(2, config)}.`
   if (path === 'player.draftSlots' || path === 'rulings.fullBoardDraft')
     return draftSlotsText(config)
-  if (path === 'draft.everyNRounds' || path === 'draft.reveal') return trainingText(config, content)
+  if (path === 'draft.everyNRounds') return trainingText(config, content)
+  if (path === 'draft.reveal') {
+    const note = upgradesReachNote(config, content)
+    return `${trainingText(config, content)}${note ? ` ${note}.` : ''}`
+  }
   if (path === 'shop.offers' || path === 'rulings.shopTiming') return shopText(config, content)
   if (path === 'rulings.coopPrepareOrder') return roundText(config)
   if (path === 'draft.unpicked') return draftPoolText(config)
