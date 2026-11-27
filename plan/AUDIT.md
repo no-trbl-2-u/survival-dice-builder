@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-27 (pass 471, cloud tick)
+
+Pass 470 made the / Exchanges note end "hits one of them, as in the Combat step." (bd3cc76). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 61 ran 4 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 40 ran 3 commits ago. The first pass 61 LOW row is the top finding (impact 4, ease 9: 3.6): /decisions row 63 still places the forced tile "in the open slot nearest the base (ties: slot order)", while /config says "free tile space" and no page defines slot order. The reading now says the top tile "is placed next to the map, in the free tile space nearest the base (ties: the space beside the tile placed first, then a fixed order around that tile)", which is the `emptySlots` order `forcedReveal` breaks ties by. Next in line: the 2 other pass 61 LOW rows (rows 7 and 73 "structure", the Skills kept note wording).
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: /decisions row 63 says "open slot" and "slot order"; /config says "free tile space"
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: reword the row 63 reading to the /config words and name the tie rule `forcedReveal` uses
+- issue: #528
+- fixed: (this commit)
+
 # Site audit — 2026-11-27 (pass 470, cloud tick)
 
 Pass 469 dropped "(I, II, III)" from the Skills revealed help (40d9801); expand pass 40 then filed 1 candidate (7a16548). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 61 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 40 just ran. The first pass 61 LOW row is the top finding (impact 4, ease 9: 3.6): the / Exchanges note ends "each enemy next to a Barricade, a Tower or the base hits it", where "it" reads as the last one named or all three, while the Combat step it points to says the enemy hits one of them. The note now ends "hits one of them, as in the Combat step." Next in line: the 3 other pass 61 LOW rows (/decisions row 63 "slot", rows 7 and 73 "structure", the Skills kept note wording).

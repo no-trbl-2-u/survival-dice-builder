@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — row 63 still places the forced tile "in the open slot nearest the base (ties: slot order)"; /config now says "free tile space"
-- pass: 61 (commit 968ac44)
-- viewport: desktop
-- category: comprehension
-- observation: The pass 60 fix for the undefined word "slot" changed only the /config proposal and help. The rule reading for the same forced reveal still says "slot" and adds a "slot order" tie rule that no page defines.
-- evidence: /decisions row 63: "the top tile is revealed in the open slot nearest the base (ties: slot order)" (`OPEN-QUESTIONS.md:78`); /config: "in the free tile space nearest the base, so a run cannot stall."
-- suggested fix: Reword row 63 to the /config words ("in the free tile space nearest the base") and name the tie rule the engine uses, or drop it.
-- source: web-fetch
-
 ### [LOW] /decisions — rows 7 and 73 say "structure", the word / and /config replaced with "a Barricade, a Tower or the base"
 - pass: 61 (commit 968ac44)
 - viewport: desktop
@@ -91,6 +82,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] /decisions — row 63 still places the forced tile "in the open slot nearest the base (ties: slot order)"; /config now says "free tile space"
+- pass: 61 (commit 968ac44)
+- viewport: desktop
+- category: comprehension
+- observation: The pass 60 fix for the undefined word "slot" changed only the /config proposal and help. The rule reading for the same forced reveal still says "slot" and adds a "slot order" tie rule that no page defines.
+- evidence: /decisions row 63: "the top tile is revealed in the open slot nearest the base (ties: slot order)" (`OPEN-QUESTIONS.md:78`); /config: "in the free tile space nearest the base, so a run cannot stall."
+- suggested fix: Reword row 63 to the /config words ("in the free tile space nearest the base") and name the tie rule the engine uses, or drop it.
+- source: web-fetch
+- issue: #528
+- fixed: (this commit) — row 63 now places the tile "next to the map, in the free tile space nearest the base" and names the tie rule the engine uses
+
 ### [x] [LOW] / — the Exchanges note says each enemy next to a defense "hits it"; the Combat step says it hits one of them, in an order
 - pass: 61 (commit 968ac44)
 - viewport: desktop

@@ -69,7 +69,7 @@ Combat uses Engagements by default. A reading marked "Exchanges only" changes no
 ### 63. Enemies spawn only on revealed tiles, and only players reveal tiles. The score is rounds survived. A run where nobody steps off the Base tile never ends (row 62). What makes a run end if nobody steps off the Base tile? (rule Core loop v2)
 
 - Status: proposed 2026-10-05 (structural; option measured in phase 22)
-- Reading: **Proposed: forced reveal**. At round end, if no tile was revealed in the last N rounds and the tile deck is not empty, the top tile is revealed in the open slot nearest the base (ties: slot order).
+- Reading: **Proposed: forced reveal**. At round end, if no tile was revealed in the last N rounds and the tile deck is not empty, the top tile is placed next to the map, in the free tile space nearest the base (ties: the space beside the tile placed first, then a fixed order around that tile).
 - Setting: `clock.forcedRevealEvery` = `empty`
 
 ### 64. Difficulty is a function of map state, not time: spawns per Combat equal revealed spawn nodes (0 to 13 with 8 tiles), chosen by the players. How does pressure ramp with the round? (rule Core loop v2)
