@@ -64,8 +64,8 @@ export function HomePage() {
           <li>
             <strong>Exchanges:</strong> Before a run, you can choose Exchanges instead, the older
             Combat kept for playtests. {combatText(config, 'exchange', defaultContent)} When the
-            exchanges end, each enemy next to a Barricade, a Tower or the base hits it, as in the
-            Combat step.
+            exchanges end, each enemy next to a Barricade, a Tower or the base hits one of them, as
+            in the Combat step.
           </li>
         </ul>
         <p id="home-board">On the board, every round:</p>

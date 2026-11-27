@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-27 (pass 470, cloud tick)
+
+Pass 469 dropped "(I, II, III)" from the Skills revealed help (40d9801); expand pass 40 then filed 1 candidate (7a16548). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 61 ran 3 commits ago), no build plan phase is pending (35 is blocked), and expand pass 40 just ran. The first pass 61 LOW row is the top finding (impact 4, ease 9: 3.6): the / Exchanges note ends "each enemy next to a Barricade, a Tower or the base hits it", where "it" reads as the last one named or all three, while the Combat step it points to says the enemy hits one of them. The note now ends "hits one of them, as in the Combat step." Next in line: the 3 other pass 61 LOW rows (/decisions row 63 "slot", rows 7 and 73 "structure", the Skills kept note wording).
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: the / Exchanges note says each enemy next to a defense "hits it"
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: end the note "hits one of them, as in the Combat step." and update `HomePage.test.tsx`
+- issue: #527
+- fixed: (this commit)
+
 # Site audit — 2026-11-27 (pass 469, cloud tick)
 
 Pass 468 pinned that keeping 1 of 2 revealed Skill copies leaves the other (968ac44); critique pass 61 then filed 5 rows (2a9a1b5). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 61 ran this morning at 968ac44), no build plan phase is pending (35 is blocked), and expand pass 39 ran 19 commits and under 48 hours ago. The pass 61 MED row is the top finding (impact 6, ease 8: 4.8; with the external-critique MED bias, 7.2): the /config Skills revealed help names Training I, II and III as upgrades that open Skill supplies, while Build cards can buy only Shop I and Training I. The help now drops "(I, II, III)"; the Skills revealed live line and `baseText` (the / Defenses line and the /config Base fields' line) end with the `upgradesReachNote` sentence, which drops out when every upgrade is in reach. Next in line: the 4 pass 61 LOW rows (the Exchanges note "hits it", /decisions row 63 "slot", rows 7 and 73 "structure", the Skills kept note wording).

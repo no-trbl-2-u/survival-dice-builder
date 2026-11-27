@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] / — the Exchanges note says each enemy next to a defense "hits it"; the Combat step says it hits one of them, in an order
-- pass: 61 (commit 968ac44)
-- viewport: desktop
-- category: comprehension
-- observation: After a list of three defenses, "it" reads as the last one named, or all of them. The Combat step it points to says the enemy hits one of them, a Barricade first. The pass 60 fix wrote this ending.
-- evidence: "When the exchanges end, each enemy next to a Barricade, a Tower or the base hits it, as in the Combat step." vs "When Combat ends, each enemy next to a Barricade, a Tower or the base hits one of them" (`apps/web/src/home/HomePage.tsx:67`)
-- suggested fix: Write "... hits one of them, as in the Combat step." and update `HomePage.test.tsx:117`.
-- source: web-fetch
-
 ### [LOW] /decisions — row 63 still places the forced tile "in the open slot nearest the base (ties: slot order)"; /config now says "free tile space"
 - pass: 61 (commit 968ac44)
 - viewport: desktop
@@ -100,6 +91,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] / — the Exchanges note says each enemy next to a defense "hits it"; the Combat step says it hits one of them, in an order
+- pass: 61 (commit 968ac44)
+- viewport: desktop
+- category: comprehension
+- observation: After a list of three defenses, "it" reads as the last one named, or all of them. The Combat step it points to says the enemy hits one of them, a Barricade first. The pass 60 fix wrote this ending.
+- evidence: "When the exchanges end, each enemy next to a Barricade, a Tower or the base hits it, as in the Combat step." vs "When Combat ends, each enemy next to a Barricade, a Tower or the base hits one of them" (`apps/web/src/home/HomePage.tsx:67`)
+- suggested fix: Write "... hits one of them, as in the Combat step." and update `HomePage.test.tsx:117`.
+- source: web-fetch
+- issue: #527
+- fixed: (this commit) — the Exchanges note ends "hits one of them, as in the Combat step."
+
 ### [x] [MED] /config — the Skills revealed help names Training I, II and III as live tiers; Build cards buy only Training I
 - pass: 61 (commit 968ac44)
 - viewport: desktop
