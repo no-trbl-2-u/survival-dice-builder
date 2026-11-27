@@ -480,6 +480,20 @@ describe('Skill draft (10.8, 11.6-11.9)', () => {
     expect(state.supplies.skills['1']!.at(-1)).toBe('dodge')
   })
 
+  it('11.9 the replaced Skill goes to the bottom of its own level supply, not the drafted level', () => {
+    const drafted = ['cleave', 'bulwark', 'renewal', 'aimed-shot', 'spellblade', 'dodge']
+    const s0 = withPlayer(due({ upgrades: ['training-1', 'training-2'] }), {
+      skills: ['strike', 'shot', 'mend', 'guard', ...drafted],
+    })
+    const [s] = startDraft(s0)
+    expect(s.draft!.level).toBe('2')
+    const kept = s.draft!.options[0]!
+    const waiting = applyAction(s, { type: 'draftSkill', skill: kept }).state
+    const { state } = applyAction(waiting, { type: 'replaceSkill', skill: 'dodge' })
+    expect(state.supplies.skills['1']!.at(-1)).toBe('dodge')
+    expect(state.supplies.skills['2']).not.toContain('dodge')
+  })
+
   it('11.9 with 0 draft slots there is no draft (nothing to replace)', () => {
     const cfg = { ...config, player: { ...config.player, draftSlots: 0 } }
     const [s, events] = startDraft({ ...due(), config: cfg })

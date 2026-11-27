@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-27 (pass 467, cloud tick)
+
+Pass 466 pinned that `buyCard` counts each purchase (b7a669b). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 10 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 16 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. The last 4 `legalBuys` guards are equivalent: `legalBuys` is called only from `legalActions`, which returns before it when the run has ended, a starter return is pending or a draft is open, and during setup `advance` always makes an unplaced player current, so `onBase` is false. That ends the shop probe. A probe of `progression/milestones.ts` (8 mutations) kills 7; the survivor (dropping the no-fresh early return) is equivalent. A probe of `progression/draft.ts` (18 mutations) kills 12. Of the survivors, the one tied to a rule is in `replaceSkill`: 11.9 puts the replaced Skill at the bottom of its own supply, but sending it to the draft's level keeps all 344 engine tests green, because the only replace test drafts from level 1 and replaces a level 1 Skill (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new progression test opens the Training Ground to level 2, replaces the level 1 `dodge` and expects it at the bottom of supply 1, not in supply 2; the mutation fails it. Next in line: the other `draft.ts` survivors, checked for equivalence one at a time (the `draftDue` open-draft guard, the `startDraft` no-drafter return, the pool-only `drawnFrom` fallback, `keepSkill` dropping by index rather than by id, and `replaceSkill` swapping the last copy).
+
+## Top 5 findings (scored)
+
+### [x] [2.7] tests: nothing pins that a replaced Skill returns to its own level supply
+- category: tests
+- impact: 3
+- ease: 9
+- next: Training Ground at level 2, full slots, keep a level 2 Skill, replace the level 1 `dodge`; expect it at the bottom of supply 1, not in supply 2
+- issue: #524
+- fixed: (this commit)
+
 # Site audit — 2026-11-27 (pass 466, cloud tick)
 
 Pass 465 pinned that `legalBuys` offers a repeated card once (eb706b1). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 60 ran 9 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 39 ran 15 commits and under 48 hours ago. The Pending critique rows edit `[needs-user-call]` /decisions items, which only /oversight may change. Of the remaining shop survivors, the 2 `refillOffers` guards are equivalent: with the Shop closed `drawLevel(cards, 0)` returns null, and `drawLevel` only returns a level with cards left, so the empty-card break never fires. The `cardsBought` count is real: only the 5.4 conservation property reads it, its random walks do not reach a buy, and changing the increment to 0 leaves all 343 engine tests green (impact 3, ease 9: 2.7; below 3.0, but expand's window is shut). A new progression test buys 2 cards and expects the count to rise by 1, then by 2; the mutation fails it. Next in line: the setup, ended, pendingReturn and draft guards in `legalBuys` (likely equivalent through `legalActions`), checked one at a time.
