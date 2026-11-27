@@ -5,6 +5,20 @@
 
 > Bias: external-critique MED (set via oversight 2026-10-11)
 
+# Site audit — 2026-11-27 (pass 472, cloud tick)
+
+Pass 471 placed the forced tile in the free tile space in /decisions row 63 (16a48ee). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 61 ran 5 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 40 ran 4 commits ago. The first pass 61 LOW row is the top finding (impact 4, ease 9: 3.6): /decisions rows 7 and 73 still say "structure", a word no player page defines, and row 73 gives the siege damage as "(1; an elite 3)" with no subject for the 1. Row 7 now says each enemy "next to a Barricade, a Tower or the base hits one of them", and row 73 says every such enemy "deals its siege damage (a grunt 1, an elite 3)"; the decided rulings are unchanged. Next in line: the last pass 61 LOW row (the Skills kept note wording).
+
+## Top 5 findings (scored)
+
+### [x] [3.6] external-critique: /decisions rows 7 and 73 say "structure" and "(1; an elite 3)"
+- category: external-critique
+- impact: 4
+- ease: 9
+- next: name the defenses in the row 7 and 73 readings and give the grunt damage a subject
+- issue: #529
+- fixed: (this commit)
+
 # Site audit — 2026-11-27 (pass 471, cloud tick)
 
 Pass 470 made the / Exchanges note end "hits one of them, as in the Combat step." (bd3cc76). No issues wait for triage (#223 waits for the user), the critique gate is closed (pass 61 ran 4 commits and under 24 hours ago), no build plan phase is pending (35 is blocked), and expand pass 40 ran 3 commits ago. The first pass 61 LOW row is the top finding (impact 4, ease 9: 3.6): /decisions row 63 still places the forced tile "in the open slot nearest the base (ties: slot order)", while /config says "free tile space" and no page defines slot order. The reading now says the top tile "is placed next to the map, in the free tile space nearest the base (ties: the space beside the tile placed first, then a fixed order around that tile)", which is the `emptySlots` order `forcedReveal` breaks ties by. Next in line: the 2 other pass 61 LOW rows (rows 7 and 73 "structure", the Skills kept note wording).

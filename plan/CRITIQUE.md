@@ -9,15 +9,6 @@
 
 ## Pending
 
-### [LOW] /decisions — rows 7 and 73 say "structure", the word / and /config replaced with "a Barricade, a Tower or the base"
-- pass: 61 (commit 968ac44)
-- viewport: desktop
-- category: voice
-- observation: No player page defines "structure". Two siege readings on /decisions still use it, and row 73 writes the damage as "(1; an elite 3)" with no subject for the 1.
-- evidence: Row 73: "at the end of Combat every enemy next to a structure, oldest first, deals the siege damage (1; an elite 3)"; row 7: "each enemy next to a structure hits one structure next to it" (`OPEN-QUESTIONS.md:22`, `:88`)
-- suggested fix: Write "next to a Barricade, a Tower or the base" and "(a grunt 1, an elite 3)" in the reading text of rows 7 and 73; leave the decided ruling itself unchanged.
-- source: web-fetch
-
 ### [LOW] /config — the Skills kept field changes nothing, and its note says "yet" where the Exchange range note does not
 - pass: 61 (commit 968ac44)
 - viewport: desktop
@@ -82,6 +73,17 @@
 - source: web-fetch
 
 ## Done
+### [x] [LOW] /decisions — rows 7 and 73 say "structure", the word / and /config replaced with "a Barricade, a Tower or the base"
+- pass: 61 (commit 968ac44)
+- viewport: desktop
+- category: voice
+- observation: No player page defines "structure". Two siege readings on /decisions still use it, and row 73 writes the damage as "(1; an elite 3)" with no subject for the 1.
+- evidence: Row 73: "at the end of Combat every enemy next to a structure, oldest first, deals the siege damage (1; an elite 3)"; row 7: "each enemy next to a structure hits one structure next to it" (`OPEN-QUESTIONS.md:22`, `:88`)
+- suggested fix: Write "next to a Barricade, a Tower or the base" and "(a grunt 1, an elite 3)" in the reading text of rows 7 and 73; leave the decided ruling itself unchanged.
+- source: web-fetch
+- issue: #529
+- fixed: (this commit) — rows 7 and 73 now say "next to a Barricade, a Tower or the base", and row 73 gives "(a grunt 1, an elite 3)"
+
 ### [x] [LOW] /decisions — row 63 still places the forced tile "in the open slot nearest the base (ties: slot order)"; /config now says "free tile space"
 - pass: 61 (commit 968ac44)
 - viewport: desktop
